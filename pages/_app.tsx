@@ -72,7 +72,7 @@ export default function MyApp({ Component, pageProps }: AppProps<MyAppProps>) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <TopNav>
-        <Link href="/docs">Docs</Link>
+        <Link href="https://github.com/csia-pme/a-guide-to-mlops">GitHub</Link>
       </TopNav>
       <div className="page">
         <SideNav />
