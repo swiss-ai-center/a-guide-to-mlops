@@ -1,0 +1,15 @@
+## Node
+
+# Logs
+logs
+*.log
+
+# Coverage directory
+coverage
+
+# Dependency directories
+node_modules/
+
+# Next.js builds / generated outputs
+.next
+out
