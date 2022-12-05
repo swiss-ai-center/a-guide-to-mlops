@@ -12,6 +12,7 @@ export function AppLink(props) {
       target={target}
       rel={target === "_blank" ? "noreferrer" : undefined}
       className={props.className}
+      legacyBehavior
     >
       {props.children}
     </Link>

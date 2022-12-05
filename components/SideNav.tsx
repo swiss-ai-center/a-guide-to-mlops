@@ -1,53 +1,107 @@
-import React from 'react';
-import { useRouter } from 'next/router';
-import Link from 'next/link';
+import React from "react";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 const items = [
   {
-    title: 'Get started',
+    title: "Get started",
     links: [
-      { href: '/docs/overview', children: 'What is Markdoc?' },
-      { href: '/docs/getting-started', children: 'Installation' },
-      { href: '/docs/faq', children: 'FAQ' },
-      { href: '/sandbox', children: 'Try it out' }
-    ]
-  },
-  {
-    title: 'Core concepts',
-    links: [
-      { href: '/docs/syntax', children: 'Syntax and schema' },
-      { href: '/docs/nodes', children: 'Nodes' },
-      { href: '/docs/tags', children: 'Tags' },
-      { href: '/docs/attributes', children: 'Attributes' },
-      { href: '/docs/variables', children: 'Variables' },
-      { href: '/docs/functions', children: 'Functions' },
+      { href: "/get-started/what-is-mlops", children: "What is MLOps?" },
       {
-        href: '/docs/render',
-        children: 'Rendering'
+        href: "/get-started/what-problems-is-mlops-trying-to-solve",
+        children: "What problems is MLOps trying to solve?",
       },
       {
-        href: '/docs/config',
-        children: 'Config objects'
+        href: "/get-started/why-would-mlops-be-useful-for-me",
+        children: "Why would MLOps be useful for me?",
       },
-      { href: '/docs/validation', children: 'Validation' }
-    ]
+      {
+        href: "/get-started/the-tools-used-in-this-guide",
+        children: "The tools used in this guide",
+      },
+    ],
   },
   {
-    title: 'Integration guides',
+    title: "The guide",
     links: [
-      { href: '/docs/examples', children: 'Common examples' },
-      { href: '/docs/examples/html', children: 'Using with HTML' },
-      { href: '/docs/nextjs', children: 'Using with Next.js' },
-      { href: '/docs/examples/react', children: 'Using with React' }
-    ]
+      { href: "/the-guide/introduction", children: "Introduction" },
+      {
+        href: "/the-guide/step-1-run-a-simple-ml-experiment",
+        children: "Step 1: Run a simple ML experiment",
+      },
+      {
+        href: "/the-guide/step-2-share-your-ml-experiment-code-with-git",
+        children: "Step 2: Share your ML experiment code with Git",
+      },
+      {
+        href: "/the-guide/step-3-share-your-ml-experiment-data-with-dvc",
+        children: "Step 3: Share your ML experiment data with DVC",
+      },
+      {
+        href: "/the-guide/step-4-reproduce-the-experiment-with-dvc",
+        children: "Step 4: Reproduce the experiment with DVC",
+      },
+      {
+        href: "/the-guide/step-5-track-model-evolutions-with-dvc",
+        children: "Step 5: Track model evolutions with DVC",
+      },
+      {
+        href: "/the-guide/step-6-orchestrate-the-workflow-with-a-cicd-pipeline",
+        children: "Step 6: Orchestrate the workflow with a CI/CD pipeline",
+      },
+      {
+        href: "/the-guide/step-7-visualize-model-evolutions-with-cml",
+        children: "Step 7: Visualize model evolutions with CML",
+      },
+      {
+        href: "/the-guide/step-8-share-and-deploy-model-with-mlem",
+        children: "Step 8: Share and deploy model with MLEM",
+      },
+    ],
   },
   {
-    title: 'Advanced concepts',
+    title: "Labelization",
     links: [
-      { href: '/docs/frontmatter', children: 'Frontmatter' },
-      { href: '/docs/partials', children: 'Partials' }
-    ]
-  }
+      { href: "/label-studio/introduction", children: "Introduction" },
+      {
+        href: "/label-studio/create-a-label-studio-project",
+        children: "Create a Label Studio project",
+      },
+      {
+        href: "/label-studio/convert-and-import-existing-data-to-label-studio",
+        children: "Convert and import existing data to Label Studio",
+      },
+      {
+        href: "/label-studio/annotate-new-data-with-label-studio",
+        children: "Annotate new data with Label Studio",
+      },
+      {
+        href: "/label-studio/export-data-from-label-studio",
+        children: "Export data from Label Studio",
+      },
+    ],
+  },
+  {
+    title: "Advanced concepts",
+    links: [
+      {
+        href: "/advanced-concepts/deploy-minio",
+        children: "Deploy MinIO",
+      },
+      {
+        href: "/advanced-concepts/deploy-label-studio",
+        children: "Deploy Label Studio",
+      },
+      {
+        href: "/advanced-concepts/link-your-ml-model-with-label-studio",
+        children: "Link your ML model with Label Studio",
+      },
+      {
+        href: "/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml",
+        children: "Train the model on a Kubernetes cluster with CML",
+      },
+    ],
+  },
 ];
 
 export function SideNav() {
@@ -63,7 +117,7 @@ export function SideNav() {
               const active = router.pathname === link.href;
               return (
                 <li key={link.href} className={active ? 'active' : ''}>
-                  <Link {...link}>
+                  <Link {...link} legacyBehavior>
                     <a href={link.href}>{link.children}</a>
                   </Link>
                 </li>
