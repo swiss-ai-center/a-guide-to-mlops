@@ -1,5 +1,5 @@
 ---
-title: "What is MLOps?"
+title: "Create a Label Studio project"
 ---
 
 # {% $markdoc.frontmatter.title %}

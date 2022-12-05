@@ -1,5 +1,5 @@
 ---
-title: "What is MLOps?"
+title: "Introduction"
 ---
 
 # {% $markdoc.frontmatter.title %}

@@ -1,44 +1,53 @@
 ---
-title: Get started with Markdoc
-description: How to get started with Markdoc
+title: A guide to MLOps
+description: A simple yet complete guide to MLOps tools and practices - from a conventional way to a modern approach of working with ML projects. 
 ---
 
-# Full Next.js example
+# {% $markdoc.frontmatter.title %}
 
-{% callout %}
+{% $markdoc.frontmatter.description %}
+
+{% callout type="note" %}
 This is a full-featured boilerplate for a creating a documentation website using Markdoc and Next.js.
 {% /callout %}
 
-## Setup
-
-First, clone this repo and install the dependencies required:
-
 ```bash
-npm install
-# or
-yarn install
+# Hello
+echo "Hi"
+
+ls /my-app
 ```
 
-Then, run the development server:
+## Get started
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+- [What is MLOps?]()
+- [What problems is MLOps trying to solve?]()
+- [Why would MLOps be useful for me?]()
+- [The tools used in this guide]()
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## The guide
 
-You can start editing the page by modifying `index.md`. The page auto-updates as you edit the file.
+- [Prerequesties]()
+- [Step 1: Run a simple ML experiment]()
+- [Step 2: Share your ML experiment code with Git]()
+- [Step 3: Share your ML experiment data with DVC]()
+- [Step 4: Save the commands to run the experiment in DVC]()
+- [Step 5: Track the changes made to a model with DVC]()
+- [Step 6: Orchestrate the workflow with A CI/CD pipeline]()
+- [Step 7: Visualize model evolutions with CML]()
+- [Step 8: Share and deploy model with MLEM]()
 
-## Deploy
+## Labelization
 
-The quickest way to deploy your own version of this boilerplate is by deploying it with [Vercel](https://vercel.com) or [Netlify](https://www.netlify.com/) by clicking one of the buttons below.
+- [Label Studio presentation]()
+- [Create a Label Studio project]()
+- [Convert and import existing data to Label Studio]()
+- [Annotate new data with Label Studio]()
+- [Export data from Label Studio]()
+- [Link your ML model with Label Studio]()
 
-### Deploy with Vercel
+## Advanced concepts
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/markdoc/next.js-starter)
-
-### Deploy to Netlify
-
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/markdoc/next.js-starter)
+- [Train the model on a Kubernetes cluster with CML]()
+- [Deploy MinIO]()
+- [Deploy Label Studio]()

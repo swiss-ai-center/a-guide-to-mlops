@@ -1,75 +1,53 @@
-import React from "react";
-import { useRouter } from "next/router";
-import Link from "next/link";
+import React from 'react';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 const items = [
   {
-    title: "Get started",
+    title: 'Get started',
     links: [
-      { href: "/", children: "What is MLOps?" },
-      { href: "/", children: "What problems is MLOps trying to solve?" },
-      { href: "/", children: "Why would MLOps be useful for me?" },
-      { href: "/", children: "The tools used in this guide" },
-    ],
+      { href: '/docs/overview', children: 'What is Markdoc?' },
+      { href: '/docs/getting-started', children: 'Installation' },
+      { href: '/docs/faq', children: 'FAQ' },
+      { href: '/sandbox', children: 'Try it out' }
+    ]
   },
   {
-    title: "The guide",
+    title: 'Core concepts',
     links: [
-      { href: "/", children: "Prerequesties" },
-      { href: "/", children: "Step 1: Run a simple ML experiment" },
-      { href: "/", children: "Step 2: Share your ML experiment code with Git" },
+      { href: '/docs/syntax', children: 'Syntax and schema' },
+      { href: '/docs/nodes', children: 'Nodes' },
+      { href: '/docs/tags', children: 'Tags' },
+      { href: '/docs/attributes', children: 'Attributes' },
+      { href: '/docs/variables', children: 'Variables' },
+      { href: '/docs/functions', children: 'Functions' },
       {
-        href: "/",
-        children:
-          "Step 3: Share your ML experiment data with DVC",
+        href: '/docs/render',
+        children: 'Rendering'
       },
       {
-        href: "/",
-        children: "Step 4: Save the commands to run the experiment in DVC",
+        href: '/docs/config',
+        children: 'Config objects'
       },
-      {
-        href: "/",
-        children: "Step 5: Track the changes made to a model with DVC",
-      },
-      {
-        href: "/",
-        children: "Step 6: Orchestrate the workflow with A CI/CD pipeline",
-      },
-      { href: "/", children: "Step 7: Visualize model evolutions with CML" },
-      { href: "/", children: "Step 8: Share and deploy model with MLEM" },
-    ],
+      { href: '/docs/validation', children: 'Validation' }
+    ]
   },
   {
-    title: "Labelization",
+    title: 'Integration guides',
     links: [
-      { href: "/", children: "Label Studio presentation" },
-      { href: "/", children: "Create a Label Studio project" },
-      {
-        href: "/",
-        children: "Convert and import existing data to Label Studio",
-      },
-      { href: "/", children: "Annotate new data with Label Studio" },
-      { href: "/", children: "Export data from Label Studio" },
-      { href: "/", children: "Link your ML model with Label Studio" },
-    ],
+      { href: '/docs/examples', children: 'Common examples' },
+      { href: '/docs/examples/html', children: 'Using with HTML' },
+      { href: '/docs/nextjs', children: 'Using with Next.js' },
+      { href: '/docs/examples/react', children: 'Using with React' }
+    ]
   },
   {
-    title: "Advanced concepts",
+    title: 'Advanced concepts',
     links: [
-      {
-        href: "/",
-        children: "Train the model on a Kubernetes cluster with CML",
-      },
-      {
-        href: "/",
-        children: "Deploy MinIO",
-      },
-      {
-        href: "/",
-        children: "Deploy Label Studio",
-      },
-    ],
-  },
+      { href: '/docs/frontmatter', children: 'Frontmatter' },
+      { href: '/docs/partials', children: 'Partials' }
+    ]
+  }
 ];
 
 export function SideNav() {
@@ -79,13 +57,15 @@ export function SideNav() {
     <nav className="sidenav">
       {items.map((item) => (
         <div key={item.title}>
-          <span>{item.title}</span>
+          <h3>{item.title}</h3>
           <ul className="flex column">
             {item.links.map((link) => {
               const active = router.pathname === link.href;
               return (
-                <li key={link.href} className={active ? "active" : ""}>
-                  <Link {...link} />
+                <li key={link.href} className={active ? 'active' : ''}>
+                  <Link {...link}>
+                    <a href={link.href}>{link.children}</a>
+                  </Link>
                 </li>
               );
             })}
@@ -95,32 +75,40 @@ export function SideNav() {
       <style jsx>
         {`
           nav {
+            /* https://stackoverflow.com/questions/66898327/how-to-keep-footer-from-pushing-up-sticky-sidebar */
             position: sticky;
-            top: var(--top-nav-height);
-            height: calc(100vh - var(--top-nav-height));
-            flex: 0 0 auto;
+            top: var(--nav-height);
+            height: calc(100vh - var(--nav-height));
+            flex: 0 0 240px;
             overflow-y: auto;
-            padding: 2.5rem 2rem 2rem;
-            border-right: 1px solid var(--border-color);
+            padding: 2rem 0 2rem 2rem;
           }
-          span {
-            font-size: larger;
+          h3 {
             font-weight: 500;
-            padding: 0.5rem 0 0.5rem;
+            margin: 0.5rem 0 0;
+            padding-bottom: 0.5rem;
           }
           ul {
+            margin: 0;
             padding: 0;
           }
           li {
-            list-style: none;
-            margin: 0;
+            list-style-type: none;
+            margin: 0 0 0.7rem 0.7rem;
+            font-size: 14px;
+            font-weight: 400;
           }
-          li :global(a) {
+          li a {
             text-decoration: none;
           }
-          li :global(a:hover),
-          li.active :global(a) {
+          li a:hover,
+          li.active > a {
             text-decoration: underline;
+          }
+          @media screen and (max-width: 600px) {
+            nav {
+              display: none;
+            }
           }
         `}
       </style>

@@ -1,5 +1,5 @@
 ---
-title: "What is MLOps?"
+title: "Deploy MinIO"
 ---
 
 # {% $markdoc.frontmatter.title %}

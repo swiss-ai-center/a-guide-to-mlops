@@ -9,6 +9,7 @@
   "dependencies": {
     "@markdoc/markdoc": "latest",
     "@markdoc/next.js": "latest",
+    "copy-to-clipboard": "^3.3.3",
     "next": "latest",
     "prismjs": "latest",
     "react": "latest",
