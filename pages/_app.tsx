@@ -1,7 +1,8 @@
 import React from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
 
-import { AppLink as Link, Footer, SideNav, TableOfContents, TopNav } from '../components';
+import { Footer, SideNav, TableOfContents, TopNav } from '../components';
 
 import 'prismjs';
 // Import other Prism themes here

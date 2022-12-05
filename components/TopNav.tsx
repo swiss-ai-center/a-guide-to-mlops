@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppLink as Link } from './AppLink';
+import Link from 'next/link';
 
 export function TopNav({children}) {
   const [showMobileNav, setShowMobileNav] = React.useState(false);

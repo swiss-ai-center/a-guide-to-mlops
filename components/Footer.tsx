@@ -1,10 +1,10 @@
 import React from 'react';
+import Link from 'next/link';
 import { ThemeToggle } from './ThemeToggle';
-import { AppLink as Link } from './AppLink';
 
 export function Footer() {
   const copyright = (
-    <Link href="https://github.com/csia-pme/csia-pme" style={{ 'text-decoration': 'none' }}>
+    <Link href="https://github.com/csia-pme/csia-pme" style={{ textDecoration: 'none' }}>
       CSIA-PME
     </Link>
   );

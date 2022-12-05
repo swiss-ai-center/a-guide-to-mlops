@@ -58,7 +58,6 @@
   --magenta: #dc34dc;
 
   --theme: var(--yellow);
-  --stripe: #0a2540;
 
   --light: var(--white);
   --dark: var(--black);
@@ -75,8 +74,6 @@
 }
 
 .dark {
-  --stripe: var(--white);
-
   --light: var(--black);
   --dark: var(--white);
   --text: var(--dark);
