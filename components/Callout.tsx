@@ -1,24 +1,24 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { Icon } from './Icon';
+import { Icon } from "./Icon";
 
 const TYPE_MAP = {
-  note: {
-    icon: 'information-circle',
-    iconColor: '#8792a2'
-  },
-  warning: {
-    icon: 'warning',
-    iconColor: '#d97917'
-  },
   check: {
-    icon: 'checkmark-circle',
-    iconColor: 'var(--black)'
+    icon: "checkmark-circle",
+    iconColor: "var(--black)",
   },
   error: {
-    icon: 'warning',
-    iconColor: '#ed5f74'
-  }
+    icon: "warning",
+    iconColor: "#ed5f74",
+  },
+  note: {
+    icon: "information-circle",
+    iconColor: "#8792a2",
+  },
+  warning: {
+    icon: "warning",
+    iconColor: "#d97917",
+  },
 };
 
 export function Callout({ title, children, type }) {

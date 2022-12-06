@@ -1,9 +1,9 @@
-import Prism from 'prismjs';
+import Prism from "prismjs";
 
-import * as React from 'react';
-import copy from 'copy-to-clipboard';
+import * as React from "react";
+import copy from "copy-to-clipboard";
 
-import { Icon } from './Icon';
+import { Icon } from "./Icon";
 
 Prism.languages.markdoc = {
   tag: {
@@ -11,7 +11,7 @@ Prism.languages.markdoc = {
     inside: {
       tagType: {
         pattern: /^({%\s*\/?)(\w*|-)*\b/i,
-        lookbehind: true
+        lookbehind: true,
       },
       id: /#(\w|-)*\b/,
       string: /".*?"/,
@@ -20,23 +20,23 @@ Prism.languages.markdoc = {
       variable: {
         pattern: /\$[\w.]+/i,
         inside: {
-          punctuation: /\./i
-        }
+          punctuation: /\./i,
+        },
       },
       function: /\b\w+(?=\()/,
       punctuation: /({%|\/?%})/i,
-      boolean: /false|true/
-    }
+      boolean: /false|true/,
+    },
   },
   variable: {
-    pattern: /\$\w+/i
+    pattern: /\$\w+/i,
   },
   function: {
-    pattern: /\b\w+(?=\()/i
-  }
+    pattern: /\b\w+(?=\()/i,
+  },
 };
 
-export function CodeBlock({ children, 'data-language': language }) {
+export function CodeBlock({ children, "data-language": language }) {
   const [copied, setCopied] = React.useState(false);
   const ref = React.useRef(null);
 
@@ -52,10 +52,10 @@ export function CodeBlock({ children, 'data-language': language }) {
     }
   }, [copied]);
 
-  const lang = language === 'md' ? 'markdoc' : language || 'markdoc';
+  const lang = language === "md" ? "markdoc" : language || "markdoc";
 
   const lines =
-    typeof children === 'string' ? children.split('\n').filter(Boolean) : [];
+    typeof children === "string" ? children.split("\n").filter(Boolean) : [];
 
   return (
     <div className="code" aria-live="polite">
@@ -69,7 +69,7 @@ export function CodeBlock({ children, 'data-language': language }) {
         {children}
       </pre>
       <button onClick={() => setCopied(true)}>
-        <Icon icon={copied ? 'copied' : 'copy'} />
+        <Icon icon={copied ? "copied" : "copy"} />
       </button>
       <style jsx>
         {`
@@ -81,7 +81,7 @@ export function CodeBlock({ children, 'data-language': language }) {
             position: absolute;
             color: inherit;
             background: var(--code-background);
-            top: ${lines.length === 1 ? '17px' : '13px'};
+            top: ${lines.length === 1 ? "17px" : "13px"};
             right: 11px;
             border-radius: 4px;
             border: none;

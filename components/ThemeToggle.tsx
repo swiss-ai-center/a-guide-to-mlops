@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const BODY_TRANSITION = `color 400ms ease, background 300ms ease`;
 
@@ -90,7 +90,7 @@ export function ThemeToggle() {
   function setPreferredTheme(newTheme) {
     setTheme(newTheme);
     try {
-      localStorage.setItem('theme', newTheme);
+      localStorage.setItem("theme", newTheme);
     } catch (err) {
       //
     }
@@ -99,15 +99,17 @@ export function ThemeToggle() {
   React.useEffect(() => {
     let preferredTheme;
     try {
-      preferredTheme = localStorage.getItem('theme');
+      preferredTheme = localStorage.getItem("theme");
     } catch (err) {
       //
     }
 
-    const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    darkQuery.addEventListener('change', (e) => setTheme(e.matches ? 'dark' : 'light'));
+    const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    darkQuery.addEventListener("change", (e) =>
+      setTheme(e.matches ? "dark" : "light")
+    );
 
-    setTheme(preferredTheme || (darkQuery.matches ? 'dark' : 'light'));
+    setTheme(preferredTheme || (darkQuery.matches ? "dark" : "light"));
   }, []);
 
   React.useEffect(() => {
@@ -116,7 +118,7 @@ export function ThemeToggle() {
     }
   }, [theme]);
 
-  const isDark = theme === 'dark'; // ? !hovering : hovering;
+  const isDark = theme === "dark"; // ? !hovering : hovering;
 
   return (
     <div
@@ -127,15 +129,15 @@ export function ThemeToggle() {
       onBlur={() => setHovering(false)}
     >
       <button
-        className={isDark ? 'dark' : 'light'}
+        className={isDark ? "dark" : "light"}
         onClick={() => {
           // Don't transition body styles on initial load, when toggled
           document.body.style.transition = BODY_TRANSITION;
-          setPreferredTheme(theme === 'dark' ? 'light' : 'dark');
+          setPreferredTheme(theme === "dark" ? "light" : "dark");
         }}
       >
         {isDark ? moon : sun}
-        <span>{isDark ? 'Dark mode' : 'Light mode'}</span>
+        <span>{isDark ? "Dark mode" : "Light mode"}</span>
       </button>
       <style jsx>
         {`

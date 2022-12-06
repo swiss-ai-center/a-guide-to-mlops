@@ -1,7 +1,7 @@
-import React from 'react';
-import Link from 'next/link';
+import React from "react";
+import { AppLink as Link } from ".";
 
-export function TopNav({children}) {
+export function TopNav({ children }) {
   const [showMobileNav, setShowMobileNav] = React.useState(false);
   return (
     <div className="nav-bar">
@@ -27,9 +27,7 @@ export function TopNav({children}) {
             </svg>
           </button>
         </div>
-        <section className={showMobileNav ? 'active' : ''}>
-          {children}
-        </section>
+        <section className={showMobileNav ? "active" : ""}>{children}</section>
       </nav>
       <style jsx>
         {`

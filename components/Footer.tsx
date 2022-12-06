@@ -1,20 +1,21 @@
-import React from 'react';
-import Link from 'next/link';
-import { ThemeToggle } from './ThemeToggle';
+import React from "react";
+import { AppLink as Link } from ".";
+import { ThemeToggle } from "./ThemeToggle";
 
 export function Footer() {
   const copyright = (
-    <Link href="https://github.com/csia-pme/csia-pme" style={{ textDecoration: 'none' }}>
+    <Link
+      href="https://github.com/csia-pme/csia-pme"
+      style={{ textDecoration: "none" }}
+    >
       CSIA-PME
     </Link>
   );
 
   const disclaimer = (
     <span className="disclaimer">
-      This site was{' '}
-      <Link href="https://markdoc.dev">
-        built using Markdoc and its theme
-      </Link>
+      This site was{" "}
+      <Link href="https://markdoc.dev">built using Markdoc and its theme</Link>
       <style jsx>
         {`
           .disclaimer {

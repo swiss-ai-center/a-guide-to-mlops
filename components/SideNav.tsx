@@ -19,6 +19,10 @@ const items = [
         href: "/get-started/the-tools-used-in-this-guide",
         children: "The tools used in this guide",
       },
+      {
+        href: "/get-started/known-limitations",
+        children: "Known limitations",
+      },
     ],
   },
   {
@@ -116,7 +120,7 @@ export function SideNav() {
             {item.links.map((link) => {
               const active = router.pathname === link.href;
               return (
-                <li key={link.href} className={active ? 'active' : ''}>
+                <li key={link.href} className={active ? "active" : ""}>
                   <Link {...link} legacyBehavior>
                     <a href={link.href}>{link.children}</a>
                   </Link>

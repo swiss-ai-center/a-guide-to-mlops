@@ -1,32 +1,34 @@
-import React from 'react';
-import Head from 'next/head';
-import Link from 'next/link';
-
-import { Footer, SideNav, TableOfContents, TopNav } from '../components';
-
-import 'prismjs';
+import React from "react";
+import Head from "next/head";
+import "prismjs";
 // Import other Prism themes here
-import 'prismjs/components/prism-bash.min';
-import 'prismjs/themes/prism.css';
+import "prismjs/components/prism-bash.min";
+import "prismjs/themes/prism.css";
+import "../public/globals.css";
+import {
+  AppLink as Link,
+  Footer,
+  SideNav,
+  TableOfContents,
+  TopNav,
+} from "../components";
 
-import '../public/globals.css'
+import type { AppProps } from "next/app";
+import type { MarkdocNextJsPageProps } from "@markdoc/next.js";
 
-import type { AppProps } from 'next/app'
-import type { MarkdocNextJsPageProps } from '@markdoc/next.js'
-
-const TITLE = 'Markdoc';
-const DESCRIPTION = 'A powerful, flexible, Markdown-based authoring framework';
-const FONTS_BASE_URL = process.env.NEXT_PUBLIC_FONTS_BASE_URL || '/fonts';
+const TITLE = "A guide to MLOps";
+const DESCRIPTION =
+  "A simple yet complete guide to MLOps tools and practices - from a conventional way to a modern approach of working with ML projects.";
 
 function collectHeadings(node, sections = []) {
   if (node) {
-    if (node.name === 'Heading') {
+    if (node.name === "Heading") {
       const title = node.children[0];
 
-      if (typeof title === 'string') {
+      if (typeof title === "string") {
         sections.push({
           ...node.attributes,
-          title
+          title,
         });
       }
     }
@@ -41,7 +43,7 @@ function collectHeadings(node, sections = []) {
   return sections;
 }
 
-export type MyAppProps = MarkdocNextJsPageProps
+export type MyAppProps = MarkdocNextJsPageProps;
 
 export default function MyApp({ Component, pageProps }: AppProps<MyAppProps>) {
   const { markdoc } = pageProps;
@@ -64,34 +66,13 @@ export default function MyApp({ Component, pageProps }: AppProps<MyAppProps>) {
   return (
     <>
       <Head>
-        <title>{title}</title>
+        <title>{`${title} | ${TITLE}`}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="referrer" content="strict-origin" />
         <meta name="title" content={title} />
         <meta name="description" content={description} />
         <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="icon" href="/favicon.ico" />
-        <link
-          rel="preload"
-          as="font"
-          href={`${FONTS_BASE_URL}/GT-America-Mono-Regular.otf`}
-          crossOrigin=""
-          type="font/otf"
-        />
-        <link
-          rel="preload"
-          as="font"
-          href={`${FONTS_BASE_URL}/GT-America-Mono-Medium.otf`}
-          crossOrigin=""
-          type="font/otf"
-        />
-        <link
-          rel="preload"
-          as="font"
-          href={`${FONTS_BASE_URL}/tiempos-headline-light.woff2`}
-          crossOrigin=""
-          type="font/woff2"
-        />
       </Head>
       {/* https://webaim.org/techniques/skipnav/ */}
       <a href="#skip-nav" className="skip-nav">
@@ -112,26 +93,6 @@ export default function MyApp({ Component, pageProps }: AppProps<MyAppProps>) {
       </div>
       <style jsx global>
         {`
-          @font-face {
-            font-family: 'GT America Mono';
-            font-style: normal;
-            font-weight: normal;
-            src: url('${FONTS_BASE_URL}/GT-America-Mono-Regular.otf')
-              format('opentype');
-          }
-          @font-face {
-            font-family: 'GT America Mono';
-            font-style: normal;
-            font-weight: 500;
-            src: url('${FONTS_BASE_URL}/GT-America-Mono-Medium.otf')
-              format('opentype');
-          }
-          @font-face {
-            font-family: 'Tiempos';
-            font-style: normal;
-            src: url('${FONTS_BASE_URL}/tiempos-headline-light.woff2');
-            font-display: block;
-          }
           .page {
             display: flex;
             flex-grow: 1;
