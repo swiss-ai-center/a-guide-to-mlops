@@ -32,16 +32,17 @@ Download the source code for this simple ML experiment.
 
 ```sh
 # Download the archive containing the code
-wget https://git-ext.iict.ch/aii4.0/ml-ops-example/-/archive/00-code/ml-ops-example-00-code.zip -O code.zip
+wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/code.zip -O code.zip
 
 # Extract the code
 unzip code.zip
 
 # Move the subdirectory files to the working directory
-mv ml-ops-example-00-code/* .
+mv a-guide-to-mlops-code/src ./src
+mv a-guide-to-mlops-code/params.yaml ./params.yaml
 
 # Remove the archive directory
-rm -rf ml-ops-example-00-code
+rm -rf a-guide-to-mlops-code
 
 # Remove the archive
 rm -f code.zip
@@ -60,14 +61,15 @@ The working directory should look like this.
     └── train.py
 ```
 
-| File                                          | Description                                       | Input                                 | Output                                                          |
-|-----------------------------------------------|---------------------------------------------------|---------------------------------------|-----------------------------------------------------------------|
-| [`requirements.txt`](./src/requirements.txt)  | The Python dependencies to run the ML experiment  | -                                     | -                                                               |
-| [`params.yaml`](./params.yaml)                | The parameters to run the ML experiment           | -                                     | -                                                               |
-| [`prepare.py`](./src/prepare.py)              | Prepare the dataset to run the ML experiment      | The dataset to prepare as an XML file | The prepared data in `data/prepared` directory                  |
-| [`featurization.py`](./src/featurization.py)  | Extract the features from the dataset             | The prepared dataset                  | The extracted features in `data/features` directory             |
-| [`train.py`](./src/train.py)                  | Train the ML model                                | The extracted features                | The model trained with the dataset                              |
-| [`evaluate.py`](./src/evaluate.py)            | Evaluate the ML model                             | The model to evaluate                 | The results of the model evaluation in `evaluation` directory   |
+
+| **File**              | **Description**                                   | **Input**                             | **Output**                                                        |
+|-----------------------|---------------------------------------------------|---------------------------------------|-------------------------------------------------------------------|
+| `requirements.txt`    | The Python dependencies to run the ML experiment  | -                                     | -                                                                 |
+| `params.yaml`         | The parameters to run the ML experiment           | -                                     | -                                                                 |
+| `prepare.py`          | Prepare the dataset to run the ML experiment      | The dataset to prepare as an XML file | The prepared data in `data/prepared` directory                    |
+| `featurization.py`    | Extract the features from the dataset             | The prepared dataset                  | The extracted features in `data/features` directory               |
+| `train.py`            | Train the ML model                                | The extracted features                | The model trained with the dataset                                |
+| `evaluate.py`         | Evaluate the ML model                             | The model to evaluate                 | The results of the model evaluation in `evaluation` directory     |
 
 Generate the virtual environment and install the dependencies.
 
@@ -86,7 +88,7 @@ Download the dataset to run this simple ML experiment.
 
 ```sh
 # Download the archive containing the dataset
-wget https://git-ext.iict.ch/aii4.0/ml-ops-example/-/archive/00-data/ml-ops-example-00-data.zip -O data.zip
+wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/data.zip -O data.zip
 
 # Extract the dataset
 unzip data.zip
@@ -95,10 +97,10 @@ unzip data.zip
 mkdir data
 
 # Move the `data.xml` file to the working directory
-mv ml-ops-example-00-data/data.xml data/data.xml
+mv a-guide-to-mlops-data/data.xml data/data.xml
 
 # Remove the archive directory
-rm -rf ml-ops-example-00-data
+rm -rf a-guide-to-mlops-data
 
 # Remove the archive
 rm -f data.zip
@@ -120,7 +122,11 @@ python src/train.py data/features model.pkl
 python src/evaluate.py model.pkl data/features
 ```
 
-Congrats! You have now a running experiment.
+Congrats! You have now a running experiment. This step is done.
+
+{% callout type="note" %}
+Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-1-run-a-simple-ml-experiment](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-1-run-a-simple-ml-experiment)
+{% /callout %}
 
 ## State of the MLOps process
 
