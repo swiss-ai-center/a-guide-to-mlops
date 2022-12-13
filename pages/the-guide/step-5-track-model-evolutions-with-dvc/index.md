@@ -8,6 +8,10 @@ title: "Step 5: Track model evolutions with DVC"
 
 ## Instructions
 
+{% callout type="note" %}
+Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-5-track-model-evolutions-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-5-track-model-evolutions-with-dvc)
+{% /callout %}
+
 ## State of the MLOps process
 
 ## Next & Previous steps

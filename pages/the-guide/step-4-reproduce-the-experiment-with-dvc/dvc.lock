@@ -1,0 +1,87 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python src/prepare.py data/data.xml
+    deps:
+    - path: data/data.xml
+      md5: 22a1a2931c8370d3aeedd7183606fd7f
+      size: 14445097
+    - path: src/prepare.py
+      md5: f09ea0c15980b43010257ccb9f0055e2
+      size: 1576
+    params:
+      params.yaml:
+        prepare.seed: 20170428
+        prepare.split: 0.2
+    outs:
+    - path: data/prepared
+      md5: 153aad06d376b6595932470e459ef42a.dir
+      size: 8437363
+      nfiles: 2
+  featurize:
+    cmd: python src/featurization.py data/prepared data/features
+    deps:
+    - path: data/prepared
+      md5: 153aad06d376b6595932470e459ef42a.dir
+      size: 8437363
+      nfiles: 2
+    - path: src/featurization.py
+      md5: e0265fc22f056a4b86d85c3056bc2894
+      size: 2490
+    params:
+      params.yaml:
+        featurize.max_features: 100
+        featurize.ngrams: 1
+    outs:
+    - path: data/features
+      md5: f8f5cbc3188008a7542d02d63054d9d2.dir
+      size: 1556290
+      nfiles: 2
+  train:
+    cmd: python src/train.py data/features model.pkl
+    deps:
+    - path: data/features
+      md5: f8f5cbc3188008a7542d02d63054d9d2.dir
+      size: 1556290
+      nfiles: 2
+    - path: src/train.py
+      md5: c3961d777cfbd7727f9fde4851896006
+      size: 967
+    params:
+      params.yaml:
+        train.min_split: 2
+        train.n_est: 50
+        train.seed: 20170428
+    outs:
+    - path: model.pkl
+      md5: 3cb45102ef80332ffb3ff8854efdef38
+      size: 7185202
+  evaluate:
+    cmd: python src/evaluate.py model.pkl data/features
+    deps:
+    - path: data/features
+      md5: f8f5cbc3188008a7542d02d63054d9d2.dir
+      size: 1556290
+      nfiles: 2
+    - path: model.pkl
+      md5: 3cb45102ef80332ffb3ff8854efdef38
+      size: 7185202
+    - path: src/evaluate.py
+      md5: 0968c425c3660f7a956b8ebe3ae1da63
+      size: 2347
+    outs:
+    - path: evaluation/plots/metrics/avg_prec.tsv
+      md5: 02a56299280bb8f26179b41038640fe7
+      size: 35
+    - path: evaluation/plots/metrics/roc_auc.tsv
+      md5: 48ef96674ea7141cae1a8fd0e6164e57
+      size: 34
+    - path: evaluation/plots/sklearn/confusion_matrix.json
+      md5: 203610eec6c89dc956422b4fcb9263a7
+      size: 122246
+    - path: evaluation/plots/sklearn/precision_recall.json
+      md5: 8e37e766483dd38170b26ed4a4c0ff52
+      size: 25320
+    - path: evaluation/plots/sklearn/roc.json
+      md5: 9d04bca037999ed26d4b0bfddefe8270
+      size: 16123

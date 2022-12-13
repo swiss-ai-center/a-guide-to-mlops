@@ -1,0 +1,15 @@
+## Custom experiment
+
+# The models evaluations
+evaluation/importance.png
+
+## Python
+
+# Environments
+.venv
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+## DVC
+/model.pkl

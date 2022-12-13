@@ -8,6 +8,10 @@ title: "Step 7: Visualize model evolutions with CML"
 
 ## Instructions
 
+{% callout type="note" %}
+Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-7-visualize-model-evolutions-with-cml](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-7-visualize-model-evolutions-with-cml)
+{% /callout %}
+
 ## State of the MLOps process
 
 ## Next & Previous steps

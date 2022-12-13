@@ -56,14 +56,14 @@ git commit -m "My first ML experiment shared on GitLab"
 git push
 ```
 
+Congrats! You now have a codebase that can be used and shared among the team.
+
 When used by another member of the team, they can easily clone the experiment from Git.
 
 ```sh
 # Clone the Git repository
-git clone <the Git repository URL>
+git clone <the git repository url>
 ```
-
-Congrats! You now have a shared codebase that can be used and shared among the team.
 
 {% callout type="note" %}
 Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-2-share-your-ml-experiment-code-with-git](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-2-share-your-ml-experiment-code-with-git).

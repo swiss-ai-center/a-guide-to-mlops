@@ -74,6 +74,16 @@ evaluation
 __pycache__/
 ```
 
+Install DVC.
+
+```sh
+# Install DVC
+pip install dvc==2.37.0
+
+# If using Google Cloud Storage, install DVC with Google Cloud Storage support
+pip install dvc-gs==2.20.0
+```
+
 Initialize and configure DVC.
 
 ```sh
@@ -82,6 +92,9 @@ dvc init
 
 # Add the Google remote storage bucket
 dvc remote add -d data gs://mlopsdemo/dvcstore
+
+# Optional: You can enable auto stage DVC files to Git
+dvc config core.autostage true
 ```
 
 DVC logs into Google Cloud using the Google Cloud CLI credentials.
@@ -111,14 +124,14 @@ git commit -m "My ML experiment data is saved with DVC"
 git push
 ```
 
+Congrats! You now have a dataset that can be used and shared among the team.
+
 When used by another member of the team, they can easily pull the experiment data from DVC.
 
 ```sh
 # Pull the data from DVC
 dvc pull
 ```
-
-Congrats! You now have a shared codebase that can be used and shared among the team.
 
 {% callout type="note" %}
 Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-3-share-your-ml-experiment-data-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-3-share-your-ml-experiment-data-with-dvc)
