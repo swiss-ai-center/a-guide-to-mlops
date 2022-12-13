@@ -146,6 +146,7 @@ Want to see what the result of this step should look like? Have a look at the Gi
 - The codebase can be shared among the developers. The codebase can be improved collaboratively.
 - The dataset can be shared among the developers and is placed in the right directory in order to run the experiment.
 - The steps used to create the model can be forgotten.
+- The changes done to a model cannot be visualized and improvements and/or deteriorations are hard to identify.
 
 ## Next & Previous steps
 

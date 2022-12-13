@@ -139,6 +139,7 @@ Want to see what the result of this step should look like? Have a look at the Gi
 - The codebase still needs to be downloaded and set up locally in order to run the experiment.
 - The dataset still needs to be downloaded and placed in the right directory in order to run the experiment.
 - The steps used to create the model can be forgotten.
+- The changes done to a model cannot be visualized and improvements and/or deteriorations are hard to identify.
 
 ## Next & Previous steps
 

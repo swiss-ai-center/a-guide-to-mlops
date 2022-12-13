@@ -13,7 +13,7 @@ This guide has been written for macOS and Linux operating systems in mind. If yo
 {% /callout %}
 
 {% callout type="note" %}
-Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-8-share-and-deploy-model-with-mlem](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-8-share-and-deploy-model-with-mlem)
+Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-6-share-and-deploy-model-with-mlem](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-6-share-and-deploy-model-with-mlem)
 {% /callout %}
 
 ## State of the MLOps process

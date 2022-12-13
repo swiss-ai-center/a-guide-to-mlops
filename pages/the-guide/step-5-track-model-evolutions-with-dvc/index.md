@@ -38,7 +38,6 @@ dvc_plots
 
 # Files added by DVC
 /model.pkl
-
 ```
 
 Store the command to evaluate the model in DVC.
@@ -111,6 +110,26 @@ dvc plots modify evaluation/plots/sklearn/roc.json -x fpr -y tpr
 dvc plots modify evaluation/plots/sklearn/confusion_matrix.json -x actual -y predicted -t confusion
 ```
 
+Push the changes to DVC and git.
+
+```sh
+# Upload the experiment data and cache to the remote bucket
+dvc push
+
+# Add all the files
+git add .
+
+# Commit the changes
+git commit -m "Set the baseline model metrics and parameters"
+
+# Push the changes
+git push
+```
+
+{% callout type="note" %}
+This is necessary so the next commands can display a difference between the current workspace and the `HEAD` of the Git repository.
+{% /callout %}
+
 Update the parameters to run the experiment in the `params.yaml` file.
 
 ```yaml
@@ -154,9 +173,9 @@ dvc metrics diff
 ```
 
 ```
-Path             Metric    HEAD     workspace    Change
-evaluation.json  avg_prec  0.89668  0.95815      0.06148
-evaluation.json  roc_auc   0.92729  0.9701       0.04281
+Path                     Metric    HEAD     workspace    Change
+evaluation/metrics.json  avg_prec  0.89668  0.9202       0.02353
+evaluation/metrics.json  roc_auc   0.92729  0.94096      0.01368
 ```
 
 ```sh
@@ -191,6 +210,11 @@ Want to see what the result of this step should look like? Have a look at the Gi
 {% /callout %}
 
 ## State of the MLOps process
+
+- The codebase can be shared among the developers. The codebase can be improved collaboratively.
+- The dataset can be shared among the developers and is placed in the right directory in order to run the experiment.
+- The steps used to create the model are documented and can be re-executed.
+- The changes done to a model can be visualized with parameters, metrics and plots to identify differences between iterations.
 
 ## Next & Previous steps
 
