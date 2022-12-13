@@ -7,7 +7,7 @@ title: "Step 1: Run a simple ML experiment"
 ## Summary
 
 {% callout type="note" %}
-Highly inspired by the [Get Started: Data Pipelines](https://dvc.org/doc/start/data-management/pipelines) guide.
+Highly inspired by the [_Get Started: Data Pipelines_ - dvc.org](https://dvc.org/doc/start/data-management/pipelines) guide.
 {% /callout %}
 
 The purpose of this step is to run a simple ML experiment locally.
