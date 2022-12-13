@@ -1,8 +1,5 @@
 ## Custom experiment
 
-# The models evaluations
-evaluation
-
 ## Python
 
 # Environments
@@ -12,4 +9,9 @@ evaluation
 __pycache__/
 
 ## DVC
+
+# The plots created by DVC
+dvc_plots
+
+# Files added by DVC
 /model.pkl

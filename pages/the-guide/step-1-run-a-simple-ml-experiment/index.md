@@ -71,7 +71,7 @@ The working directory should look like this.
 | `prepare.py`          | Prepare the dataset to run the ML experiment      | The dataset to prepare as an XML file | The prepared data in `data/prepared` directory                    |
 | `featurization.py`    | Extract the features from the dataset             | The prepared dataset                  | The extracted features in `data/features` directory               |
 | `train.py`            | Train the ML model                                | The extracted features                | The model trained with the dataset                                |
-| `evaluate.py`         | Evaluate the ML model                             | The model to evaluate                 | The results of the model evaluation in `evaluation` directory     |
+| `evaluate.py`         | Evaluate the ML model using DVC                   | The model to evaluate                 | The results of the model evaluation in `evaluation` directory     |
 
 Generate the virtual environment and install the dependencies.
 
@@ -120,9 +120,13 @@ python src/featurization.py data/prepared data/features
 # Train the model with the extracted features and save it
 python src/train.py data/features model.pkl
 
-# Evaluate the model performances
+# Evaluate the model performances - see below note
 python src/evaluate.py model.pkl data/features
 ```
+
+{% callout type="note" %}
+The `evaluate.py` Python script will display a warning as it uses DVC. You can safely ignore it for now.
+{% /callout %}
 
 Congrats! You have now a running experiment. This step is done.
 

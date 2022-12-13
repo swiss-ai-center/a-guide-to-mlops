@@ -10,6 +10,10 @@ The purpose of this step is to share the code of the simple ML experiment with t
 
 ## Instructions
 
+{% callout type="warning" %}
+This guide has been written for macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use a decent terminal ([GitBash](https://gitforwindows.org/) for instance) or a Windows Subsystem for Linux (WSL) for optimal results.
+{% /callout %}
+
 Create a new repository on your favorite Git service. Clone the repository and switch to your newly cloned repository.
 
 {% callout type="note" %}

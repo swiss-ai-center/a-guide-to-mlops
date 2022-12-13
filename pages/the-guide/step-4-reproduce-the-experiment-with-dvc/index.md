@@ -30,13 +30,17 @@ python src/evaluate.py model.pkl data/features
 
 ## Instructions
 
+{% callout type="warning" %}
+This guide has been written for macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use a decent terminal ([GitBash](https://gitforwindows.org/) for instance) or a Windows Subsystem for Linux (WSL) for optimal results.
+{% /callout %}
+
 Update the `.gitignore` file. DVC will automatically add new lines at the end of the file.
 
 ```sh
 ## Custom experiment
 
 # The models evaluations
-evaluation/importance.png
+evaluation
 
 ## Python
 
@@ -110,34 +114,16 @@ The output of this command is `model.pkl`.
 The parameters `train.seed`, `train.n_est` and `train.min_split` will be discussed later.
 {% /callout %}
 
-Store the command to evaluate the model in DVC.
-
-```sh
-dvc stage add -n evaluate \
-  -d src/evaluate.py -d model.pkl -d data/features \
-  --metrics-no-cache evaluation/plots/metrics/avg_prec.tsv \
-  --metrics-no-cache evaluation/plots/metrics/roc_auc.tsv \
-  --plots-no-cache evaluation/plots/sklearn/confusion_matrix.json \
-  --plots-no-cache evaluation/plots/sklearn/precision_recall.json \
-  --plots-no-cache evaluation/plots/sklearn/roc.json \
-  python src/evaluate.py model.pkl data/features
-```
-
-This command adds a new stage called _evaluate_ that has the `src/evaluate.py`, `model.pkl` and `data/features` files as a dependency.
-
-If any of these files change, DVC will run the command `python src/evaluate.py model.pkl data/features` when using `dvc repro`.
-
-This command writes the model's average precision to `evaluation/plots/metrics/avg_prec.tsv` and ROC-AUC to `evaluation/plots/metrics/roc_auc.tsv` that are marked as metrics. It writes the `confusion_matrix` to `evaluation/plots/sklearn/confusion_matrix.json`, the `precision_recall_curve` to `evaluation/plots/sklearn/precision_recall.json` and the `roc_curve` to `evaluation/plots/sklearn/roc.json` that will be used to create plots.
-
 Execute the pipeline.
 
 ```sh
 # Execute only the required pipeline steps (if files or parameters changed)
 dvc repro
-
-# Force the execution of the entire pipeline
-dvc repro --force
 ```
+
+{% callout type="note" %}
+You can force the execution of the entire pipeline with the command `dvc repro --force`.
+{% /callout %}
 
 Visualize the pipeline.
 
@@ -147,33 +133,27 @@ dvc dag
 ```
 
 ```
-    +-------------------+
-    | data/data.xml.dvc |
-    +-------------------+
-              *
-              *
-              *
-         +---------+
-         | prepare |
-         +---------+
-              *
-              *
-              *
-        +-----------+
-        | featurize |
-        +-----------+
-         **        **
-       **            *
-      *               **
-+-------+               *
-| train |             **
-+-------+            *
-         **        **
-           **    **
-             *  *
-        +----------+
-        | evaluate |
-        +----------+
++-------------------+
+| data/data.xml.dvc |
++-------------------+
+          *
+          *
+          *
+     +---------+
+     | prepare |
+     +---------+
+          *
+          *
+          *
+    +-----------+
+    | featurize |
+    +-----------+
+          *
+          *
+          *
+      +-------+
+      | train |
+      +-------+
 ```
 
 Push the changes to DVC and git.
@@ -192,7 +172,7 @@ git commit -m "My ML experiment commands are saved with DVC"
 git push
 ```
 
-The parameters discussed before, defined in the `params.yaml` file can be edited to re-run the experiment. DVC will track all these parameters and store the outputs' results in its cache so it will not re-run the experiment if not needed.
+The parameters discussed before - defined in the `params.yaml` file - can be edited to re-run the experiment. DVC will track all these parameters and store the outputs' results in its cache so it will not re-run the experiment if not needed.
 
 Congrats! You now have a defined and common way to reproduce the pipeline to create a model. The steps will be run only if files or parameters change.
 

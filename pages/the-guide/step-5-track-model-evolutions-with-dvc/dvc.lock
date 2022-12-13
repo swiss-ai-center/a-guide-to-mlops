@@ -81,7 +81,7 @@ stages:
       size: 69
       nfiles: 2
     - path: evaluation/plots/prc.json
-      md5: 8e37e766483dd38170b26ed4a4c0ff52
+      md5: b2f973cf399593e4f458c4ce7c954753
       size: 25320
     - path: evaluation/plots/sklearn/confusion_matrix.json
       md5: 203610eec6c89dc956422b4fcb9263a7

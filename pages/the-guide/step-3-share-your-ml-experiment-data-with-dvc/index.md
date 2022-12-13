@@ -23,6 +23,10 @@ Want to self-host your storage? Check out the [Deploy MinIO](/advanced-concepts/
 
 ## Instructions
 
+{% callout type="warning" %}
+This guide has been written for macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use a decent terminal ([GitBash](https://gitforwindows.org/) for instance) or a Windows Subsystem for Linux (WSL) for optimal results.
+{% /callout %}
+
 Create a Google Cloud Project by going to the [Google Cloud console](https://console.cloud.google.com/), select **Select a project** in the upper right corner of the screen and select **New project**.
 
 Name your project (_mlopsdemo_ - The name is unique for all projects on Google Cloud, you might need to choose another one while following this guide) and select **Create**. Save the project ID, it will be used later.
