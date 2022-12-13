@@ -25,3 +25,5 @@ git commit -m "Add the code"
 # Push the changes
 git push
 ```
+
+As of 2022-12-13, some new Git repositories [_DVC Get Started_ - github.com](https://github.com/iterative/example-get-started) and [_Get Started Tutorial (sources)_ - github.com](https://github.com/iterative/example-repos-dev) have been created that contains the code used in the MLOps guide.
