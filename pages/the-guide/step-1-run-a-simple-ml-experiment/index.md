@@ -10,6 +10,8 @@ title: "Step 1: Run a simple ML experiment"
 Highly inspired by the [Get Started: Data Pipelines](https://dvc.org/doc/start/data-management/pipelines) guide.
 {% /callout %}
 
+The purpose of this step is to run a simple ML experiment locally.
+
 The purpose of this ML experiment is to:
 
 - Use 10K posts from StackOverflow

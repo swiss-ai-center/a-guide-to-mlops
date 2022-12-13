@@ -6,9 +6,71 @@ title: "Step 2: Share your ML experiment code with Git"
 
 ## Summary
 
+{% callout type="note" %}
+Highly inspired by the [Create a project](https://docs.gitlab.com/ee/user/project/working_with_projects.html#create-a-project) guide.
+{% /callout %}
+
+The purpose of this step is to share the code of the simple ML experiment with the rest of the team using Git.
+
 ## Instructions
 
+Create a new repository on your favorite Git service. Clone the repository and switch to your newly cloned repository.
+
+{% callout type="note" %}
+Using GitHub? Follow the [related documentation](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository) to create a new GitHub repository for this step.
+{% /callout %}
+
+{% callout type="note" %}
+Using GitLab? Follow the [related documentation](https://docs.gitlab.com/ee/user/project/working_with_projects.html#create-a-project) to create a new GitLab project for this step.
+{% /callout %}
+
+Create a `.gitignore` file to ignore the experiment results and some files related to Python.
+
+```sh
+## Custom experiment
+
+# Data used to train the models
+data
+
+# The models
+*.pkl
+
+# The models evaluations
+evaluation
+
+## Python
+
+# Environments
+.venv
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+```
+
+Push the changes to Git.
+
+```sh
+# Add all the files
+git add .
+
+# Commit the changes
+git commit -m "My first ML experiment shared on GitLab"
+
+# Push the changes
+git push
+```
+
+Congrats! You now have a shared codebase that can be used and shared among the team.
+
+{% callout type="note" %}
+Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-2-share-your-ml-experiment-code-with-git](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-2-share-your-ml-experiment-code-with-git)
+{% /callout %}
+
 ## State of the MLOps process
+
+- The codebase can be shared and cloned among the different developers. The codebase can be improved collaboratively.
+- The dataset still needs to be downloaded and placed in the right directory in order to run the experiment.
+- The steps used to create the model can be forgotten.
 
 ## Next & Previous steps
 

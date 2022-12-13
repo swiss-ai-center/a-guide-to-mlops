@@ -38,7 +38,7 @@ export function Callout({ title, children, type }) {
       <style jsx>
         {`
           .callout {
-            padding: 0.5rem 0 2rem;
+            padding: 0 0 1rem;
           }
           .content {
             color: var(--dark);

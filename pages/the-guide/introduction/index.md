@@ -10,6 +10,11 @@ This guide assumes that the steps to be performed are done in a working director
 
 The tools and approach must be adapted to your specific use-case and experiments as well.
 
+## Requirements
+
+- [Python 3](https://www.python.org/downloads/) must be installed to follow this guide;
+- Standard *nix utilities such as wget, unzip, etc. must be installed.
+
 ## Next & Previous steps
 
 - **Next**: [Step 1: Run a simple ML experiment](/the-guide/step-1-run-a-simple-ml-experiment)
