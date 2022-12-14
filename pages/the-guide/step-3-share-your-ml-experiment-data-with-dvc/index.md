@@ -8,12 +8,12 @@ title: "Step 3: Share your ML experiment data with DVC"
 
 {% callout type="note" %}
 Highly inspired by the [_Get Started_ - dvc.org](https://dvc.org/doc/start), [_Supported storage types_ - dvc.org
-](https://dvc.org/doc/command-reference/remote/add#supported-storage-types) [_Get Started: Data Versioning_ - dvc.org](https://dvc.org/doc/start/data-management), [_Using service accounts_ - dvc.org](https://dvc.org/doc/user-guide/setup-google-drive-remote#using-service-accounts), [_Install the Google Cloud CLI_ - cloud.google.com](https://cloud.google.com/sdk/docs/install-sdk) and [_Create storage buckets_ - cloud.google.com](https://cloud.google.com/storage/docs/creating-buckets) guides.
+](https://dvc.org/doc/command-reference/remote/add#supported-storage-types) [_Get Started: Data Versioning_ - dvc.org](https://dvc.org/doc/start/data-management), [_Install the Google Cloud CLI_ - cloud.google.com](https://cloud.google.com/sdk/docs/install-sdk) and [_Create storage buckets_ - cloud.google.com](https://cloud.google.com/storage/docs/creating-buckets) guides.
 {% /callout %}
 
 The purpose of this step is to share the data of the simple ML experiment with the rest of the team using DVC.
 
-## Prerequisites
+## Requirements
 
 For this demo, a Google Storage Bucket will be used to store the dataset. The [Google Cloud CLI (`gcloud`)](https://cloud.google.com/sdk/docs/install-sdk) must be installed.
 
@@ -29,13 +29,7 @@ This guide has been written for macOS and Linux operating systems in mind. If yo
 
 Create a Google Cloud Project by going to the [Google Cloud console](https://console.cloud.google.com/), select **Select a project** in the upper right corner of the screen and select **New project**.
 
-Name your project (_mlopsdemo_ - The name is unique for all projects on Google Cloud, you might need to choose another one while following this guide) and select **Create**. Save the project ID, it will be used later.
-
-Create a Google Service Account by going to **IAM & Admin > Service Accounts**  on the left sidebar.
-
-Select **Create Service Account**, name the Service Account Key (_mlopsdemo_) select **Create and continue**, select the _Viewer_ Role, select **Continue** and select **Done**.
-
-Select the newly created service account, select **Keys** and add a new key (JSON format). Save the key under the name `google-service-account-key.json`, it will be used later.
+Name your project (_mlopsdemo_ - The name is unique for all projects on Google Cloud, you might need to choose another one while following this guide) and select **Create**.
 
 Locally, login to Google Cloud using gcloud and select the project.
 

@@ -1,0 +1,33 @@
+name: MLOps
+
+on:
+  # Runs on pushes targeting all branches
+  push:
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+      - uses: iterative/setup-dvc@v1
+        with:
+          version: '2.37.0'
+      - uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
+      - name: Train model
+        working-directory: pages/the-guide/step-6-orchestrate-the-workflow-with-a-cicd-pipeline
+        run: |
+          # Install dependencies
+          pip install --requirement src/requirements.txt
+          # Pull data from DVC
+          dvc pull
+          # Run the experiment
+          dvc repro

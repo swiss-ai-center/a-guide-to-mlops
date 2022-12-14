@@ -6,6 +6,12 @@ title: "Step 7: Visualize model evolutions with CML"
 
 ## Summary
 
+{% callout type="note" %}
+Highly inspired by the []() guide.
+{% /callout %}
+
+The purpose of this step is to
+
 ## Instructions
 
 {% callout type="warning" %}

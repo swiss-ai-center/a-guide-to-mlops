@@ -6,6 +6,12 @@ title: "Step 8: Share and deploy model with MLEM"
 
 ## Summary
 
+{% callout type="note" %}
+Highly inspired by the []() guide.
+{% /callout %}
+
+The purpose of this step is to
+
 ## Instructions
 
 {% callout type="warning" %}
