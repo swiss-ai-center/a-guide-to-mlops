@@ -1,11 +1,18 @@
 name: MLOps Step 7
 
 on:
-  # Runs on pushes targeting all branches
+  # Runs on pushes targeting main branch
   push:
+    branches:
+      - main
     paths:
       - pages/the-guide/step-7-track-model-evolutions-in-cicd-pipeline-with-cml/**/*
-
+  
+  # Runs on pull requests
+  pull_request:
+    paths:
+      - pages/the-guide/step-7-track-model-evolutions-in-cicd-pipeline-with-cml/**/*
+  
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -44,8 +51,9 @@ jobs:
           retention-days: 5
 
   report:
-    runs-on: ubuntu-latest
+    needs: train
     if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3

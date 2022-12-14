@@ -1,8 +1,10 @@
 name: MLOps Step 6
 
 on:
-  # Runs on pushes targeting all branches
+  # Runs on pushes targeting main branch
   push:
+    branches:
+      - main
     paths:
       - pages/the-guide/step-6-orchestrate-the-workflow-with-a-cicd-pipeline/**/*
 

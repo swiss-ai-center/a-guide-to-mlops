@@ -40,7 +40,7 @@ Update the `.github/workflows/mlops.yml` file.
 
 ```
 
-This GitHub Workflow will create CML reports on each pushes that are related to a Pull Request.
+This GitHub Workflow will create CML reports on each pushes that are related to a pull request.
 
 Push the changes to Git.
 
@@ -59,6 +59,8 @@ Create a new issue by going to the **Issues** section from the top header of you
 
 The issue opens. Select **Create a branch for this issue or link a pull request** from the right sidebar. Create the branch by selecting **Create branch**. A new pop-up opens with the name of the branch you want to checkout to.
 
+Go to the **Code** section from the top header of your GitHub repository. Select **_N_ branches** (where _N_ is the current number of branches your repository has). Next to the newly created branch, select **New pull request**. Select **Create pull request** to create the pull request.
+
 {% callout type="note" %}
 Finished? Go to the [Make the changes to the model](#make-the-changes-to-the-model) section!
 {% /callout %}
@@ -74,54 +76,6 @@ Highly inspired by the [_Using CML on GitLab_ - cml.dev](https://cml.dev/doc/sta
 {% /callout %}
 
 _TODO_
-
-
-```
-
-report:
-  stage: report
-  image: iterativeai/cml:0-dvc2-base1
-  needs:
-    - job: run-ml-experiment
-      artifacts: true
-  script:
-    # Compare params to default branch
-    - echo "# Params" >> report.md
-    - echo >> report.md
-    # In a production settings, the next line should use $CI_DEFAULT_BRANCH instead of the 05-track-the-changes-made-to-a-model branch used in this guide
-    - dvc params diff --show-md 05-track-the-changes-made-to-a-model >> report.md
-    - echo >> report.md
-
-    # Compare metrics to default branch
-    - echo "# Metrics" >> report.md
-    - echo >> report.md
-    # In a production settings, the next line should use $CI_DEFAULT_BRANCH instead of the 05-track-the-changes-made-to-a-model branch used in this guide
-    - dvc metrics diff --show-md 05-track-the-changes-made-to-a-model >> report.md
-    - echo >> report.md
-
-    # Visualize precision_recall diff
-    - echo "# Precision-Recall" >> report.md
-    - echo >> report.md
-    # In a production settings, the next line should use $CI_DEFAULT_BRANCH instead of the 05-track-the-changes-made-to-a-model branch used in this guide
-    - dvc plots diff --target evaluation/plots/precision_recall.json --show-vega 05-track-the-changes-made-to-a-model > vega.json
-    - vl2png vega.json > precision_recall.png
-    - cml-publish precision_recall.png --md --title 'precision_recall' >> report.md
-    - echo >> report.md
-
-    # Visualize roc diff
-    - echo "# Receiver operating characteristic (ROC)" >> report.md
-    - echo >> report.md
-    # In a production settings, the next line should use $CI_DEFAULT_BRANCH instead of the 05-track-the-changes-made-to-a-model branch used in this guide
-    - dvc plots diff --target evaluation/plots/roc.json --show-vega 05-track-the-changes-made-to-a-model > vega.json
-    - vl2png vega.json > roc.png
-    - cml-publish roc.png --md --title 'roc' >> report.md
-    - echo >> report.md
-
-    # Publish the CML report
-    - cml send-comment report.md
-```
-```
-
 
 {% callout type="note" %}
 Finished? Go to the [Make the changes to the model](#make-the-changes-to-the-model) section!

@@ -59,8 +59,10 @@ At the root level of your Git repository, create a GitHub Workflow configuration
 name: MLOps
 
 on:
-  # Runs on pushes targeting all branches
+  # Runs on pushes targeting main branch
   push:
+    branches:
+      - main
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
