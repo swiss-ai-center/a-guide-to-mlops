@@ -51,7 +51,7 @@ Store the Google Service Account made earlier in GitLab CI variables.
 cat google-service-account-key.json
 ```
 
-Store the output as a CI/CD Variable by going to **Settings** from the top header of your GitHub repository. Select **Secrets > Actions** and select **New repository secret**. Create a new variable named `GCP_SERVICE_ACCOUNT_KEY` with the output value of the Google Service Account key file as its value.Save the variable by selecting "Add secret".
+Store the output as a CI/CD variable by going to the **Settings** section from the top header of your GitHub repository. Select **Secrets > Actions** and select **New repository secret**. Create a new variable named `GCP_SERVICE_ACCOUNT_KEY` with the output value of the Google Service Account key file as its value.Save the variable by selecting "Add secret".
 
 At the root level of your Git repository, create a GitHub Workflow configuration file `.github/workflows/mlops.yml`.
 
@@ -147,7 +147,7 @@ Finished? Go to the [Push to the Git repository](#push-to-the-git-repository) se
 
 ### Push to the Git repository
 
-Push the changes to git.
+Push the changes to Git.
 
 ```sh
 # Add all the files
@@ -160,7 +160,7 @@ git commit -m "A pipeline will run my experiment on each push"
 git push
 ```
 
-Congrats! From now on, a CI/CD pipeline will run the experiment on each commit to ensure the whole experiment can still be reproduced using the data and the commmands to run using DVC.
+Congrats! You now have a CI/CD pipeline that will run the experiment on each commit to ensure the whole experiment can still be reproduced using the data and the commmands to run using DVC.
 
 {% callout type="note" %}
 Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-6-orchestrate-the-workflow-with-a-cicd-pipeline](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-6-orchestrate-the-workflow-with-a-cicd-pipeline)
@@ -177,4 +177,4 @@ Want to see what the result of this step should look like? Have a look at the Gi
 ## Next & Previous steps
 
 - **Previous**: [Step 5: Track model evolutions with DVC](/the-guide/step-6-orchestrate-the-workflow-with-a-cicd-pipeline)
-- **Next**: [Step 7: Visualize model evolutions with CML](/the-guide/step-7-visualize-model-evolutions-with-cml)
+- **Next**: [Step 7: Track model evolutions in CI/CD pipeline with CML](/the-guide/step-7-track-model-evolutions-in-cicd-pipeline-with-cml)

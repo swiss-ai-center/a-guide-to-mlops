@@ -26,4 +26,4 @@ Want to see what the result of this step should look like? Have a look at the Gi
 
 ## Next & Previous steps
 
-- **Previous**: [Step 7: Visualize model evolutions with CML](/the-guide/step-7-visualize-model-evolutions-with-cml)
+- **Previous**: [Step 7: Track model evolutions in CI/CD pipeline with CML](/the-guide/step-7-track-model-evolutions-in-cicd-pipeline-with-cml)
