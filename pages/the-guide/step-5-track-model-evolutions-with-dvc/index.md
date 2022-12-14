@@ -203,7 +203,7 @@ git commit -m "I did improve the model performance"
 git push
 ```
 
-We now have a simple way to compare the models with the used parameters and metrics.
+Congrats! You now have a simple way to compare the models with the used parameters and metrics.
 
 {% callout type="note" %}
 Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-5-track-model-evolutions-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-5-track-model-evolutions-with-dvc)
@@ -211,10 +211,11 @@ Want to see what the result of this step should look like? Have a look at the Gi
 
 ## State of the MLOps process
 
-- The codebase can be shared among the developers. The codebase can be improved collaboratively.
-- The dataset can be shared among the developers and is placed in the right directory in order to run the experiment.
-- The steps used to create the model are documented and can be re-executed.
-- The changes done to a model can be visualized with parameters, metrics and plots to identify differences between iterations.
+- The codebase can be shared among the developers. The codebase can be improved collaboratively;
+- The dataset can be shared among the developers and is placed in the right directory in order to run the experiment;
+- The steps used to create the model are documented and can be re-executed;
+- The changes done to a model can be visualized with parameters, metrics and plots to identify differences between iterations;
+- There is no guarantee that the experiment can be executed on another machine.
 
 ## Next & Previous steps
 

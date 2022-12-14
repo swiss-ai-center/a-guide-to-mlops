@@ -174,7 +174,7 @@ git push
 
 The parameters discussed before - defined in the `params.yaml` file - can be edited to re-run the experiment. DVC will track all these parameters and store the outputs' results in its cache so it will not re-run the experiment if not needed.
 
-Congrats! You now have a defined and common way to reproduce the pipeline to create a model. The steps will be run only if files or parameters change.
+Congrats! You now have a defined and common way to reproduce the pipeline to create a model. The steps will be ran only if files or parameters change.
 
 {% callout type="note" %}
 Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-4-reproduce-the-experiment-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-4-reproduce-the-experiment-with-dvc)
@@ -182,10 +182,11 @@ Want to see what the result of this step should look like? Have a look at the Gi
 
 ## State of the MLOps process
 
-- The codebase can be shared among the developers. The codebase can be improved collaboratively.
-- The dataset can be shared among the developers and is placed in the right directory in order to run the experiment.
-- The steps used to create the model are documented and can be re-executed.
-- The changes done to a model cannot be visualized and improvements and/or deteriorations are hard to identify.
+- The codebase can be shared among the developers. The codebase can be improved collaboratively;
+- The dataset can be shared among the developers and is placed in the right directory in order to run the experiment;
+- The steps used to create the model are documented and can be re-executed;
+- The changes done to a model cannot be visualized and improvements and/or deteriorations are hard to identify;
+- There is no guarantee that the experiment can be executed on another machine.
 
 ## Next & Previous steps
 

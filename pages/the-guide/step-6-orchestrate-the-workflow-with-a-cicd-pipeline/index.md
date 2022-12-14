@@ -56,12 +56,43 @@ Store the output as a CI/CD Variable by going to **Settings** from the top heade
 At the root level of your Git repository, create a GitHub Workflow configuration file `.github/workflows/mlops.yml`.
 
 ```yaml
+name: MLOps
 
+on:
+  # Runs on pushes targeting all branches
+  push:
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+      - name: Setup DVC
+        uses: iterative/setup-dvc@v1
+        with:
+          version: '2.37.0'
+      - name: Login to Google Cloud
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
+      - name: Train model
+        run: |
+          # Install dependencies
+          pip install --requirement src/requirements.txt
+          # Pull data from DVC
+          dvc pull
+          # Run the experiment
+          dvc repro
 ```
-
-{% callout type="note" %}
-You might want to see a real example here: <url to the real GitHub Workflow file on the repository>
-{% /callout %}
 
 {% callout type="note" %}
 Finished? Go to the [Push to the Git repository](#push-to-the-git-repository) section!
@@ -90,10 +121,10 @@ At the root level of your Git repository, create a GitLab CI configuration file 
 
 ```yaml
 stages:
-  - repro
+  - train
 
 run-ml-experiment:
-  stage: repro
+  stage: train
   image: iterativeai/cml:0-dvc2-base1
   variables:
     # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
@@ -129,13 +160,19 @@ git commit -m "A pipeline will run my experiment on each push"
 git push
 ```
 
-From now on, a pipeline will run the experiment on each commit to ensure the whole experiment can still be reproduced using the data and the commmands to run using DVC.
+Congrats! From now on, a CI/CD pipeline will run the experiment on each commit to ensure the whole experiment can still be reproduced using the data and the commmands to run using DVC.
 
 {% callout type="note" %}
 Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-6-orchestrate-the-workflow-with-a-cicd-pipeline](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-6-orchestrate-the-workflow-with-a-cicd-pipeline)
 {% /callout %}
 
 ## State of the MLOps process
+
+- The codebase can be shared among the developers. The codebase can be improved collaboratively;
+- The dataset can be shared among the developers and is placed in the right directory in order to run the experiment;
+- The steps used to create the model are documented and can be re-executed;
+- The changes done to a model can be visualized with parameters, metrics and plots to identify differences between iterations;
+- The experiment can be executed on a clean machine with the help of the CI/CD pipeline.
 
 ## Next & Previous steps
 

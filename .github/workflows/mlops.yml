@@ -11,15 +11,19 @@ jobs:
   train:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
           python-version: '3.10'
           cache: 'pip'
-      - uses: iterative/setup-dvc@v1
+      - name: Setup DVC
+        uses: iterative/setup-dvc@v1
         with:
           version: '2.37.0'
-      - uses: 'google-github-actions/auth@v1'
+      - name: Login to Google Cloud
+        uses: 'google-github-actions/auth@v1'
         with:
           credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
       - name: Train model
