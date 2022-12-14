@@ -59,7 +59,7 @@ Create a new issue by going to the **Issues** section from the top header of you
 
 The issue opens. Select **Create a branch for this issue or link a pull request** from the right sidebar. Create the branch by selecting **Create branch**. A new pop-up opens with the name of the branch you want to checkout to.
 
-Go to the **Code** section from the top header of your GitHub repository. Select **_N_ branches** (where _N_ is the current number of branches your repository has). Next to the newly created branch, select **New pull request**. Select **Create pull request** to create the pull request.
+Go to the **Code** section from the top header of your GitHub repository. Select **_N_ branches** (where _N_ is the current number of branches your repository has). Next to the newly created branch, select **New pull request**. Name the pull request and select **Create pull request** to create the pull request.
 
 {% callout type="note" %}
 Finished? Go to the [Make the changes to the model](#make-the-changes-to-the-model) section!
@@ -140,6 +140,8 @@ Want to see what the result of this step should look like? Have a look at the Gi
 {% /callout %}
 
 ## State of the MLOps process
+
+_TODO_
 
 ## Next & Previous steps
 
