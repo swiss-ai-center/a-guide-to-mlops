@@ -54,8 +54,8 @@ const items = [
         children: "Step 6: Orchestrate the workflow with a CI/CD pipeline",
       },
       {
-        href: "/the-guide/step-7-track-model-evolutions-in-cicd-pipeline-with-cml",
-        children: "Step 7: Track model evolutions in CI/CD pipeline with CML",
+        href: "/the-guide/step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml",
+        children: "Step 7: Track model evolutions in the CI/CD pipeline with CML",
       },
       {
         href: "/the-guide/step-8-share-and-deploy-model-with-mlem",

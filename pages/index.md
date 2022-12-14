@@ -43,7 +43,7 @@ Not sure where to start? Check the following links to get started!
 - [Step 4: Reproduce the experiment with DVC](/the-guide/step-4-reproduce-the-experiment-with-dvc)
 - [Step 5: Track model evolutions with DVC](/the-guide/step-5-track-model-evolutions-with-dvc)
 - [Step 6: Orchestrate the workflow with a CI/CD pipeline](/the-guide/step-6-orchestrate-the-workflow-with-a-cicd-pipeline)
-- [Step 7: Track model evolutions in CI/CD pipeline with CML](/the-guide/step-7-track-model-evolutions-in-cicd-pipeline-with-cml)
+- [Step 7: Track model evolutions in the CI/CD pipeline with CML](/the-guide/step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml)
 - [Step 8: Share and deploy model with MLEM](/the-guide/step-8-share-and-deploy-model-with-mlem)
 
 ## Label Studio
