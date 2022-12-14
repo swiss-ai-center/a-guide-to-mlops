@@ -69,9 +69,9 @@ When used by another member of the team, they can easily clone the experiment fr
 git clone <the git repository url>
 ```
 
-{% callout type="note" %}
+## Check the results
+
 Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-2-share-your-ml-experiment-code-with-git](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-2-share-your-ml-experiment-code-with-git).
-{% /callout %}
 
 ## State of the MLOps process
 

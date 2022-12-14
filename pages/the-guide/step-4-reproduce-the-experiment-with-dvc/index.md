@@ -176,9 +176,9 @@ The parameters discussed before - defined in the `params.yaml` file - can be edi
 
 Congrats! You now have a defined and common way to reproduce the pipeline to create a model. The steps will be ran only if files or parameters change.
 
-{% callout type="note" %}
-Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-4-reproduce-the-experiment-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-4-reproduce-the-experiment-with-dvc)
-{% /callout %}
+## Check the results
+
+Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-4-reproduce-the-experiment-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-4-reproduce-the-experiment-with-dvc).
 
 ## State of the MLOps process
 

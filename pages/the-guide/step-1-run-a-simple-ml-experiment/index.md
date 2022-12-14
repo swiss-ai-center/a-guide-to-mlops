@@ -128,11 +128,11 @@ python src/evaluate.py model.pkl data/features
 The `evaluate.py` Python script will display a warning as it uses DVC. You can safely ignore it for now.
 {% /callout %}
 
-Congrats! You have now a running experiment. This step is done.
+Congrats! You have now a running experiment.
 
-{% callout type="note" %}
-Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-1-run-a-simple-ml-experiment](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-1-run-a-simple-ml-experiment)
-{% /callout %}
+## Check the results
+
+Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-1-run-a-simple-ml-experiment](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-1-run-a-simple-ml-experiment).
 
 ## State of the MLOps process
 
