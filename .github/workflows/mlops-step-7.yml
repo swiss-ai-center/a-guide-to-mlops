@@ -6,11 +6,13 @@ on:
     branches:
       - main
     paths:
+      - .github/workflows/mlops-step-7.yml
       - pages/the-guide/step-7-track-model-evolutions-in-cicd-pipeline-with-cml/**/*
   
   # Runs on pull requests
   pull_request:
     paths:
+      - .github/workflows/mlops-step-7.yml
       - pages/the-guide/step-7-track-model-evolutions-in-cicd-pipeline-with-cml/**/*
   
   # Allows you to run this workflow manually from the Actions tab
@@ -21,6 +23,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
         uses: actions/checkout@v3
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -59,6 +63,10 @@ jobs:
         uses: actions/checkout@v3
       - name: Download evaluation results
         uses: actions/download-artifact@v3
+      - name: Copy evaluation results
+        shell: bash
+        run:
+          mv artifact pages/the-guide/step-7-track-model-evolutions-in-cicd-pipeline-with-cml/evaluation
       - name: Setup DVC
         uses: iterative/setup-dvc@v1
         with:
