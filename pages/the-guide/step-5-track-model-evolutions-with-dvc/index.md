@@ -205,9 +205,9 @@ git push
 
 Congrats! You now have a simple way to compare the models with the used parameters and metrics.
 
-{% callout type="note" %}
-Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-5-track-model-evolutions-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-5-track-model-evolutions-with-dvc)
-{% /callout %}
+## Check the results
+
+Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-5-track-model-evolutions-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-5-track-model-evolutions-with-dvc).
 
 ## State of the MLOps process
 

@@ -164,9 +164,9 @@ git push
 
 Congrats! You now have a CI/CD pipeline that will run the experiment on each commit to ensure the whole experiment can still be reproduced using the data and the commmands to run using DVC.
 
-{% callout type="note" %}
-Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-6-orchestrate-the-workflow-with-a-cicd-pipeline](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-6-orchestrate-the-workflow-with-a-cicd-pipeline)
-{% /callout %}
+## Check the results
+
+Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-6-orchestrate-the-workflow-with-a-cicd-pipeline](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-6-orchestrate-the-workflow-with-a-cicd-pipeline).
 
 ## State of the MLOps process
 
