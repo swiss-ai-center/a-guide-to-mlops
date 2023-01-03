@@ -1,9 +1,9 @@
 stages:
   - train
 
-# Change pip's cache directory to be inside the project directory since we can
-# only cache local items.
 variables:
+  # Change pip's cache directory to be inside the project directory since we can
+  # only cache local items.
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 
 # Pip's cache doesn't store the python packages

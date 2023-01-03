@@ -37,7 +37,7 @@ Highly inspired by the [_Get Started with CML on GitHub_ - cml.dev](https://cml.
 Update the `.github/workflows/mlops.yml` file.
 
 ```yaml
-name: MLOps Step 7
+name: MLOps
 
 on:
   # Runs on pushes targeting main branch
@@ -118,13 +118,13 @@ jobs:
           git fetch --depth=1 origin main:main
 
           # Compare parameters to main branch
-          echo "# Params: workflow vs. main" >> report.md
+          echo "# Params workflow vs. main" >> report.md
           echo >> report.md
           dvc params diff main --show-md >> report.md
           echo >> report.md
 
           # Compare metrics to main branch
-          echo "# Metrics: workflow vs. main" >> report.md
+          echo "# Metrics workflow vs. main" >> report.md
           echo >> report.md
           dvc metrics diff main --show-md >> report.md
           echo >> report.md
@@ -206,7 +206,139 @@ Using GitHub? Go to the [Update GitHub Actions and create a pull request](#updat
 Highly inspired by the [_Using CML on GitLab_ - cml.dev](https://cml.dev/doc/start/gitlab) and [_Personal access tokens_ - docs.gitlab.com](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html) guides and the [`example_cml` - gitlab.com](https://gitlab.com/iterative.ai/example_cml) and the [`cml-dvc-case` - gitlab.com](https://gitlab.com/iterative.ai/cml-dvc-case) GitLab repositories.
 {% /callout %}
 
-_TODO_
+In order to allow CML to generate reports, a Personal Access Token (PAT) must be created. A Project or a Group Access Token are not sufficient for the usage of CML's runners that will be used in the next steps.
+
+In your profile preferences, create a PAT with `api`, `read_repository` and `write_repository` scopes and name it _"CML"_.
+
+Store the PAT as a CI/CD Variable by going to **Settings > CI/CD** from the left sidebar of your GitLab project. Select **Variables** and select **Add variable**. Create a new variable named `CML_PAT_TOKEN` with the PAT value as its value. Check the _"Mask variable"_ box, uncheck _"Protect variable"_ and save the variable by selecting "Add variable".
+
+Update the `.gitlab-ci.yml` file.
+
+```yaml
+stages:
+  - train
+  - report
+
+variables:
+  # Change pip's cache directory to be inside the project directory since we can
+  # only cache local items.
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
+  GIT_DEPTH: '0'
+
+# Pip's cache doesn't store the python packages
+# https://pip.pypa.io/en/stable/reference/pip_install/#caching
+cache:
+  paths:
+    - .cache/pip
+
+train:
+  stage: train
+  image: iterativeai/cml:0-dvc2-base1
+  variables:
+    # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
+    GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
+  before_script:
+    # Set the Google Service Account key
+    - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+    # Install dependencies
+    - pip install --requirement src/requirements.txt
+  script:
+    # Pull data from DVC
+    - dvc pull
+    # Run the experiment
+    - dvc repro
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - "evaluation"
+
+report:
+  stage: report
+  image: iterativeai/cml:0-dvc2-base1
+  needs:
+    - job: train
+      artifacts: true
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  variables:
+    REPO_TOKEN: $CML_PAT_TOKEN
+  script:
+    - |
+      # Compare parameters to main branch
+      echo "# Params workflow vs. main" >> report.md
+      echo >> report.md
+      dvc params diff main --show-md >> report.md
+      echo >> report.md
+
+      # Compare metrics to main branch
+      echo "# Metrics workflow vs. main" >> report.md
+      echo >> report.md
+      dvc metrics diff main --show-md >> report.md
+      echo >> report.md
+
+      # Create plots
+      echo "# Plots" >> report.md
+      echo >> report.md
+
+      echo "## Precision recall curve" >> report.md
+      echo >> report.md
+      dvc plots diff \
+        --target evaluation/plots/prc.json \
+        -x recall \
+        -y precision \
+        --show-vega main > vega.json
+      vl2png vega.json > prc.png
+      echo '![](./prc.png "Precision recall curve")' >> report.md
+      echo >> report.md
+
+      echo "## Roc curve" >> report.md
+      echo >> report.md
+      dvc plots diff \
+        --target evaluation/plots/sklearn/roc.json \
+        -x fpr \
+        -y tpr \
+        --show-vega main > vega.json
+      vl2png vega.json > roc.png
+      echo '![](./roc.png "Roc curve")' >> report.md
+      echo >> report.md
+
+      echo "## Confusion matrix" >> report.md
+      echo >> report.md
+      dvc plots diff \
+        --target evaluation/plots/sklearn/confusion_matrix.json \
+        --template confusion \
+        -x actual \
+        -y predicted \
+        --show-vega main > vega.json
+      vl2png vega.json > confusion_matrix.png
+      echo '![](./confusion_matrix.png "Confusion Matrix")' >> report.md
+      echo >> report.md
+
+      # Publish the CML report
+      cml comment create --target=pr --publish report.md
+```
+
+This GitLab CI will create CML reports on each pushes that are related to a merge request.
+
+Push the changes to Git.
+
+```sh
+# Add the updated workflow
+git add .gitlab-ci.yml
+
+# Commit the changes
+git commit -m "Enable CML reports on merge requests"
+
+# Push the changes
+git push
+```
+
+Create a new issue by going to the **Issues** section from the left sidebar of your GitLab project. Select **New issue** and describe the work/improvements/ideas that you want to integrate to the codebase. In this guide, we will name the issue _Demonstrate step 7_. Create the issue by selecting **Submit new issue**.
+
+The issue opens.
+
+Select **Create merge request** and change the merge request configuration if needed. Create the merge request by selecting **Create merge request**.
 
 {% callout type="note" %}
 Finished? Go to the [Make changes to the model](#make-changes-to-the-model) section!
@@ -274,7 +406,9 @@ Using GitLab? Go to the [GitLab: Merge the changes](#gitlab-merge-the-changes) s
 
 Go back to the pull request. At the end of the page, select **Merge pull request**. Confirm the merge by selecting **Confirm merge**.
 
-The associated issue will be automatically closed as well and you can iterate on your model while keeping a trace of the improvements made to it.
+The associated issue will be automatically closed as well.
+
+Congrats! You can now iterate on your model while keeping a trace of the improvements made to it.
 
 {% callout type="note" %}
 Finished? Go to the [Check the results](#check-the-results) section!
@@ -286,7 +420,11 @@ Finished? Go to the [Check the results](#check-the-results) section!
 Using GitHub? Go to the [GitHub: Merge the changes](#github-merge-the-changes) section!
 {% /callout %}
 
-_TODO_
+Go back to the merge request. Select **Mark as ready**. This will allow to merge the changes. Confirm the merge by selecting **Confirm merge**.
+
+The associated issue will be automatically closed as well.
+
+Congrats! You can now iterate on your model while keeping a trace of the improvements made to it.
 
 {% callout type="note" %}
 Finished? Go to the [Check the results](#check-the-results) section!
@@ -298,7 +436,11 @@ Want to see what the result of this step should look like? Have a look at the Gi
 
 ## State of the MLOps process
 
-_TODO_
+- The codebase can be shared among the developers. The codebase can be improved collaboratively;
+- The dataset can be shared among the developers and is placed in the right directory in order to run the experiment;
+- The steps used to create the model are documented and can be re-executed;
+- The experiment can be executed on a clean machine with the help of the CI/CD pipeline;
+- The changes done to a model can be visualized with parameters, metrics and plots to identify differences between iterations with the help of the CI/CD pipeline.
 
 ## Next & Previous steps
 

@@ -87,13 +87,13 @@ jobs:
           git fetch --depth=1 origin main:main
 
           # Compare parameters to main branch
-          echo "# Params: workflow vs. main" >> report.md
+          echo "# Params workflow vs. main" >> report.md
           echo >> report.md
           dvc params diff main --show-md >> report.md
           echo >> report.md
 
           # Compare metrics to main branch
-          echo "# Metrics: workflow vs. main" >> report.md
+          echo "# Metrics workflow vs. main" >> report.md
           echo >> report.md
           dvc metrics diff main --show-md >> report.md
           echo >> report.md
@@ -137,4 +137,4 @@ jobs:
           echo >> report.md
 
           # Publish the CML report
-          cml comment create --pr --publish report.md
+          cml comment create --target=pr --publish report.md
