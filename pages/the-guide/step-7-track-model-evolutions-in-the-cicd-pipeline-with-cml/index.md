@@ -24,10 +24,10 @@ The target reference can be a specific commit (what are the differences between 
 
 Many workflows exist to discuss and integrate the work done to a target reference. For the sake of simplicity, in this guide, we will present two methods that are commonly used on GitHub - Pull Requests (PRs) - and GitLab - Merge Requests (MRs) - to integrate the work done to the `main` branch.
 
-### Update GitHub Actions and create pull request
+### Update GitHub Actions and create a pull request
 
 {% callout type="note" %}
-Using GitLab? Go to the [Update GitLab CI and create merge request](#update-gitlab-ci-and-create-merge-request) section!
+Using GitLab? Go to the [Update GitLab CI and create a merge request](#update-gitlab-ci-and-create-a-merge-request) section!
 {% /callout %}
 
 {% callout type="note" %}
@@ -196,10 +196,10 @@ Go to the **Code** section from the top header of your GitHub repository. Select
 Finished? Go to the [Make changes to the model](#make-changes-to-the-model) section!
 {% /callout %}
 
-### Update GitLab CI and create merge request
+### Update GitLab CI and create a merge request
 
 {% callout type="note" %}
-Using GitHub? Go to the [Update GitHub Actions and create pull request](#update-github-actions-and-create-pull-request) section!
+Using GitHub? Go to the [Update GitHub Actions and create a pull request](#update-github-actions-and-create-a-pull-request) section!
 {% /callout %}
 
 {% callout type="note" %}

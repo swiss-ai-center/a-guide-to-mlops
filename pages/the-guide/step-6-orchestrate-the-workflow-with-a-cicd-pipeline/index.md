@@ -125,6 +125,17 @@ At the root level of your Git repository, create a GitLab CI configuration file 
 stages:
   - train
 
+# Change pip's cache directory to be inside the project directory since we can
+# only cache local items.
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+# Pip's cache doesn't store the python packages
+# https://pip.pypa.io/en/stable/reference/pip_install/#caching
+cache:
+  paths:
+    - .cache/pip
+
 run-ml-experiment:
   stage: train
   image: iterativeai/cml:0-dvc2-base1
