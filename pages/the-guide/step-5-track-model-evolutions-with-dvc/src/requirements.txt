@@ -1,5 +1,5 @@
 dvc==2.37.0
-dvc-gs==2.20.0
+dvc[gs]==2.37.0
 dvclive==1.0.0
 pandas==1.5.1
 pyaml==21.10.1

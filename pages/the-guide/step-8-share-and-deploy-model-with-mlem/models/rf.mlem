@@ -1,0 +1,55 @@
+artifacts:
+  data:
+    hash: d9423eac528c7cb7dc20479d210005a1
+    size: 5145721
+    type: dvc
+    uri: rf
+call_orders:
+  predict:
+  - - model
+    - predict
+  predict_proba:
+  - - model
+    - predict_proba
+object_type: model
+processors:
+  model:
+    methods:
+      predict:
+        args:
+        - name: X
+          type_:
+            dtype: float64
+            shape:
+            - null
+            - 500
+            type: ndarray
+        name: predict
+        returns:
+          dtype: float64
+          shape:
+          - null
+          type: ndarray
+      predict_proba:
+        args:
+        - name: X
+          type_:
+            dtype: float64
+            shape:
+            - null
+            - 500
+            type: ndarray
+        name: predict_proba
+        returns:
+          dtype: float64
+          shape:
+          - null
+          - 2
+          type: ndarray
+    type: sklearn
+requirements:
+- module: sklearn
+  package_name: scikit-learn
+  version: 1.1.3
+- module: numpy
+  version: 1.24.1

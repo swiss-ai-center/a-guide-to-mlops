@@ -61,6 +61,10 @@ const items = [
         href: "/the-guide/step-8-share-and-deploy-model-with-mlem",
         children: "Step 8: Share and deploy model with MLEM",
       },
+      {
+        href: "/the-guide/conclusion",
+        children: "Conclusion",
+      },
     ],
   },
   {

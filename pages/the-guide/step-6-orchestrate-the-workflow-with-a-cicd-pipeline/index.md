@@ -189,5 +189,5 @@ Want to see what the result of this step should look like? Have a look at the Gi
 
 ## Next & Previous steps
 
-- **Previous**: [Step 5: Track model evolutions with DVC](/the-guide/step-6-orchestrate-the-workflow-with-a-cicd-pipeline)
+- **Previous**: [Step 5: Track model evolutions with DVC](/the-guide/step-5-track-model-evolutions-with-dvc)
 - **Next**: [Step 7: Track model evolutions in the CI/CD pipeline with CML](/the-guide/step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml)

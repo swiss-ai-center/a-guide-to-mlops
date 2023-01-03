@@ -420,7 +420,7 @@ Finished? Go to the [Check the results](#check-the-results) section!
 Using GitHub? Go to the [GitHub: Merge the changes](#github-merge-the-changes) section!
 {% /callout %}
 
-Go back to the merge request. Select **Mark as ready**. This will allow to merge the changes. Confirm the merge by selecting **Confirm merge**.
+Go back to the merge request. Select **Mark as ready**. This will allow to merge the changes. Confirm the merge by selecting **Merge** (you might need to refresh the page to see this button).
 
 The associated issue will be automatically closed as well.
 

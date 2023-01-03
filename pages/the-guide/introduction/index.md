@@ -31,6 +31,6 @@ git diff --no-index \
     pages/the-guide/step-2-share-your-ml-experiment-code-with-git
 ```
 
-## Next & Previous steps
+## Next step
 
 - **Next**: [Step 1: Run a simple ML experiment](/the-guide/step-1-run-a-simple-ml-experiment)

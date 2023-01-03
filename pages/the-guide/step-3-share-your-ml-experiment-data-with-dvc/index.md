@@ -79,7 +79,20 @@ Install DVC.
 pip install dvc==2.37.0
 
 # If using Google Cloud Storage, install DVC with Google Cloud Storage support
-pip install dvc-gs==2.20.0
+pip install dvc[gs]==2.37.0
+```
+
+Update the `src/requirements.txt` file to include the added packages.
+
+```
+dvc==2.37.0
+dvc[gs]==2.37.0
+dvclive==1.0.0
+pandas==1.5.1
+pyaml==21.10.1
+scikit-learn==1.1.3
+scipy==1.9.3
+matplotlib==3.6.2
 ```
 
 Initialize and configure DVC.

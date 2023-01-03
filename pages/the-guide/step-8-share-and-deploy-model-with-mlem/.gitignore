@@ -1,0 +1,17 @@
+## Custom experiment
+
+## Python
+
+# Environments
+.venv
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+## DVC
+
+# The plots created by DVC
+dvc_plots
+
+# Files added by DVC
+/model.pkl
