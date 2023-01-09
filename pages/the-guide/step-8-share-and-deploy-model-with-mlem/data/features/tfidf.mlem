@@ -1,0 +1,38 @@
+artifacts:
+  data.pkl:
+    hash: ece11c09d2890c889053cd652f7f9f74
+    size: 8646
+    type: dvc
+    uri: tfidf
+call_orders:
+  __call__:
+  - - model
+    - __call__
+object_type: model
+processors:
+  model:
+    io:
+      type: pickle
+    methods:
+      __call__:
+        args:
+        - name: X
+          type_:
+            type: unspecified
+        - default: true
+          name: copy
+          required: false
+          type_:
+            type: unspecified
+        name: __call__
+        returns:
+          type: unspecified
+    type: callable
+requirements:
+- module: sklearn
+  package_name: scikit-learn
+  version: 1.1.3
+- module: numpy
+  version: 1.24.1
+- module: scipy
+  version: 1.9.3

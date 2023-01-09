@@ -80,7 +80,7 @@ Store the command to perform the features extraction in DVC.
 dvc stage add -n featurize \
   -p featurize.max_features,featurize.ngrams \
   -d src/featurization.py -d data/prepared \
-  -o data/features \
+  -o data/features/test.pkl -o data/features/train.pkl \
   python src/featurization.py data/prepared data/features
 ```
 
@@ -88,7 +88,7 @@ This command adds a new stage called _featurize_ that has the `src/featurization
 
 If any of these files change, DVC will run the command `python src/featurization.py data/prepared data/features` when using `dvc repro`.
 
-The output of this command is `data/features`.
+The outputs of this command are `data/features/test.pkl` and `data/features/train.pkl` files.
 
 {% callout type="note" %}
 The parameters `featurize.max_features` and `featurize.ngrams` will be discussed later.

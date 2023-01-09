@@ -18,7 +18,10 @@ stages:
     - featurize.max_features
     - featurize.ngrams
     outs:
-    - data/features
+    - data/features/test.pkl
+    - data/features/tfidf
+    - data/features/train.pkl
+    - data/features/vectorizer
   train:
     cmd: python src/train.py data/features models/rf
     deps:

@@ -6,7 +6,7 @@ import numpy as np
 import yaml
 from sklearn.ensemble import RandomForestClassifier
 
-from mlem.api import save
+from mlem.api import load, save
 
 params = yaml.safe_load(open("params.yaml"))["train"]
 
@@ -37,8 +37,12 @@ clf = RandomForestClassifier(
 
 clf.fit(x, labels)
 
+tfidf = load("data/features/tfidf")
+vectorizer = load("data/features/vectorizer")
+
 save(
     clf,
     output,
-    sample_data=x,
+    preprocess=lambda x: tfidf(vectorizer(x)).toarray(),
+    sample_data=["This is a sample text."]
 )

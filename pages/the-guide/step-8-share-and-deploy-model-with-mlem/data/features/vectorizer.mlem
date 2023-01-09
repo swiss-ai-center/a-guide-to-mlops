@@ -1,0 +1,29 @@
+artifacts:
+  data.pkl:
+    hash: d34a823fef9e044137a548a8a8c3e53f
+    size: 16588301
+    type: dvc
+    uri: vectorizer
+call_orders:
+  __call__:
+  - - model
+    - __call__
+object_type: model
+processors:
+  model:
+    io:
+      type: pickle
+    methods:
+      __call__:
+        args:
+        - name: raw_documents
+          type_:
+            type: unspecified
+        name: __call__
+        returns:
+          type: unspecified
+    type: callable
+requirements:
+- module: sklearn
+  package_name: scikit-learn
+  version: 1.1.3

@@ -6,7 +6,7 @@ title: "A guide to MLOps"
 
 ## Introduction & Problematic
 
-This guide will help you through incremental steps from a traditional approach of managing ML projects to a modern ML Ops approach designed to improve team collaboration and reproductibility.
+This guide will help you through incremental steps from a traditional approach of managing ML projects to a modern ML Ops approach designed to improve team collaboration and reproducibility.
 
 It will try to address the following issues that are common to most ML projects:
 
@@ -37,6 +37,7 @@ Not sure where to start? Check the following links to get started!
 
 ## The guide
 
+- [Introduction](/the-guide/introduction)
 - [Step 1: Run a simple ML experiment](/the-guide/step-1-run-a-simple-ml-experiment)
 - [Step 2: Share your ML experiment code with Git](/the-guide/step-2-share-your-ml-experiment-code-with-git)
 - [Step 3: Share your ML experiment data with DVC](/the-guide/step-3-share-your-ml-experiment-data-with-dvc)
@@ -45,6 +46,7 @@ Not sure where to start? Check the following links to get started!
 - [Step 6: Orchestrate the workflow with a CI/CD pipeline](/the-guide/step-6-orchestrate-the-workflow-with-a-cicd-pipeline)
 - [Step 7: Track model evolutions in the CI/CD pipeline with CML](/the-guide/step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml)
 - [Step 8: Share and deploy model with MLEM](/the-guide/step-8-share-and-deploy-model-with-mlem)
+- [Conclusion](/the-guide/conclusion)
 
 ## Label Studio
 

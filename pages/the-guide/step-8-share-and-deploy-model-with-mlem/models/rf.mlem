@@ -1,14 +1,23 @@
 artifacts:
-  data:
+  model/data:
     hash: d9423eac528c7cb7dc20479d210005a1
     size: 5145721
     type: dvc
-    uri: rf
+    uri: rf/model
+  preprocess/data.pkl:
+    hash: 45c8ae3f69166dc0a65963648b1eee21
+    size: 16597704
+    type: dvc
+    uri: rf/preprocess
 call_orders:
   predict:
+  - - preprocess
+    - __call__
   - - model
     - predict
   predict_proba:
+  - - preprocess
+    - __call__
   - - model
     - predict_proba
 object_type: model
@@ -47,9 +56,37 @@ processors:
           - 2
           type: ndarray
     type: sklearn
+  preprocess:
+    io:
+      type: pickle
+    methods:
+      __call__:
+        args:
+        - name: x
+          type_:
+            items:
+            - ptype: str
+              type: primitive
+            type: list
+        name: __call__
+        returns:
+          dtype: float64
+          shape:
+          - null
+          - 500
+          type: ndarray
+    type: callable
 requirements:
+- module: numpy
+  version: 1.24.1
+- is_package: false
+  module: __main__
+  name: __main__
+  source64zip: eJx9U01v2zAMvetXcD7ZgKGi3S2AD8OAAbsOG7AhDQImphu11sdEpU067L+PlpIma5cFOUiPfCIfH21s8DGBZ2XKKZj1w0jHG+9ZHc9ua8MekMGFI7RHO6ohegssJIxOk2Oyq5HgkPEFXe/tJx+J08cRmc1gKKpCsiNZjcEck0ePfQuMj6RUwIiWocs1NONAyylc+0CurkpUT7GqaeZVimhctZBeBxglQfrWGO8eG3jXwfuZAvlNGKeeYtRP0SSqqw/xbmvJJQYBfdTwjfGOZreuai4wblPYp413kAtqmcdAmLaiDqzvafyLSjuT6utGmnJhm0TKsav59UL5bXoF3iwUE/UCFXXzarqKKLeU4Z3B+S64NW7JYTTnsRdsGsaTSRvIA/OsA6aNvvfG1bmdFqqDhgcZodziqmomd4e+jMtiimbXwnJ6PS+FzgYMvSgacUXj5I4Lmn9uiZ6pLoT5rIXrhU4eY8R93TRqJ2mn2M3sLKjU2xF/zsMqBGDzTPDrt4xVDz4KeKiieYOB5PG3/O+Xuf+j/bhMK2JfuGo9DiLp35td59llh4xwfeQuX1rIzqANI3FxqHvxqhXCvV9xd9NCzM8uOWGibloAVSrqQZZJ7CjNCJYG0099ZFOqHhNeHXfxKsdkEx9pLS2IoHgh8ZRQTWbIl1cESME2H8qalnOIFKJfE3M3ol31CLsZ5FL16Z161zQngwuxyF5Opbt59XVjGOSPBxwS7ZKWfW3UH/uRjqE=
+  type: custom
+- module: yaml
+  package_name: PyYAML
+  version: '6.0'
 - module: sklearn
   package_name: scikit-learn
   version: 1.1.3
-- module: numpy
-  version: 1.24.1

@@ -26,27 +26,35 @@ stages:
       size: 8437363
       nfiles: 2
     - path: src/featurization.py
-      md5: e0265fc22f056a4b86d85c3056bc2894
-      size: 2490
+      md5: 51712e6e0059f249e24634d9ac0a2ca7
+      size: 2620
     params:
       params.yaml:
         featurize.max_features: 500
         featurize.ngrams: 3
     outs:
-    - path: data/features
-      md5: a57f4b78064c3cde2e7afa8f098970e5.dir
-      size: 3204268
-      nfiles: 2
+    - path: data/features/test.pkl
+      md5: 480a3a41f731ec7d31bdbeb8bdf48b80
+      size: 803722
+    - path: data/features/tfidf
+      md5: ece11c09d2890c889053cd652f7f9f74
+      size: 8646
+    - path: data/features/train.pkl
+      md5: c72480f26465f79e94b2bef3df64bf66
+      size: 2400546
+    - path: data/features/vectorizer
+      md5: d34a823fef9e044137a548a8a8c3e53f
+      size: 16588301
   train:
     cmd: python src/train.py data/features models/rf
     deps:
     - path: data/features
-      md5: a57f4b78064c3cde2e7afa8f098970e5.dir
-      size: 3204268
-      nfiles: 2
+      md5: 5366eb4e95d31eb9956be62ee51eba54.dir
+      size: 19801255
+      nfiles: 5
     - path: src/train.py
-      md5: 51427b909561ae78332d3b3889084d6a
-      size: 1001
+      md5: 101955915f1ea031d126cd36291c5d9c
+      size: 1166
     params:
       params.yaml:
         train.min_split: 3
@@ -54,18 +62,20 @@ stages:
         train.seed: 20170428
     outs:
     - path: models/rf
-      md5: d9423eac528c7cb7dc20479d210005a1
-      size: 5145721
+      md5: 43ea1981758013eb7e69c4ab5cefd4bb.dir
+      size: 21743425
+      nfiles: 2
   evaluate:
     cmd: python src/evaluate.py models/rf data/features
     deps:
     - path: data/features
-      md5: a57f4b78064c3cde2e7afa8f098970e5.dir
-      size: 3204268
-      nfiles: 2
+      md5: 5366eb4e95d31eb9956be62ee51eba54.dir
+      size: 19801255
+      nfiles: 5
     - path: models/rf
-      md5: d9423eac528c7cb7dc20479d210005a1
-      size: 5145721
+      md5: 43ea1981758013eb7e69c4ab5cefd4bb.dir
+      size: 21743425
+      nfiles: 2
     - path: src/evaluate.py
       md5: 116d7619c56ede68f2c413615d7ded12
       size: 2657
