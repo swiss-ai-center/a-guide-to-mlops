@@ -53,8 +53,8 @@ stages:
       size: 19801255
       nfiles: 5
     - path: src/train.py
-      md5: 101955915f1ea031d126cd36291c5d9c
-      size: 1166
+      md5: 6355ca2e5f8595662880c754832aaa50
+      size: 1272
     params:
       params.yaml:
         train.min_split: 3
@@ -62,7 +62,7 @@ stages:
         train.seed: 20170428
     outs:
     - path: models/rf
-      md5: 43ea1981758013eb7e69c4ab5cefd4bb.dir
+      md5: 8672846f8218e6deaf218197824b5862.dir
       size: 21743425
       nfiles: 2
   evaluate:
@@ -73,7 +73,7 @@ stages:
       size: 19801255
       nfiles: 5
     - path: models/rf
-      md5: 43ea1981758013eb7e69c4ab5cefd4bb.dir
+      md5: 8672846f8218e6deaf218197824b5862.dir
       size: 21743425
       nfiles: 2
     - path: src/evaluate.py

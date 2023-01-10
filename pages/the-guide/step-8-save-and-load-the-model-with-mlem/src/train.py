@@ -43,6 +43,7 @@ vectorizer = load("data/features/vectorizer")
 save(
     clf,
     output,
+    # Remove the `.toarray()` when the following PR is merged: https://github.com/iterative/mlem/pull/538
     preprocess=lambda x: tfidf(vectorizer(x)).toarray(),
     sample_data=["This is a sample text."]
 )

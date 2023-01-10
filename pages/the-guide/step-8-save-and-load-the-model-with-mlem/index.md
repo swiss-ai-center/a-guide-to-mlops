@@ -1,5 +1,5 @@
 ---
-title: "Step 8: Share and deploy model with MLEM"
+title: "Step 8: Save and load the model with MLEM"
 ---
 
 # {% $markdoc.frontmatter.title %}
@@ -22,7 +22,7 @@ Install MLEM.
 
 ```sh
 # Install MLEM
-pip install mlem[fastapi]==0.4.1
+pip install mlem==0.4.1
 ```
 
 Update the `src/requirements.txt` file to include the added packages.
@@ -36,7 +36,7 @@ pyaml==21.10.1
 scikit-learn==1.1.3
 scipy==1.9.3
 matplotlib==3.6.2
-mlem[fastapi]==0.4.1
+mlem==0.4.1
 ```
 
 Initialize and configure MLEM.
@@ -52,7 +52,7 @@ mlem config set core.storage.type dvc
 echo "/**/?*.mlem" >> .dvcignore
 ```
 
-## Store and load the model with MLEM
+## Save the model and its artifacts with MLEM
 
 Update the `src/featurization.py` file to save the `CountVectorizer` and the `TfidfTransformer` with MLEM.
 
@@ -144,7 +144,7 @@ test_words_tfidf_matrix = tfidf.transform(test_words_binary_matrix)
 save_matrix(df_test, test_words_tfidf_matrix, feature_names, test_output)
 ```
 
-Update the `src/train.py` file to save the model with MLEM.
+Update the `src/train.py` file to save the model with its artifacts with MLEM.
 
 ```py
 import os
@@ -192,11 +192,17 @@ vectorizer = load("data/features/vectorizer")
 save(
     clf,
     output,
+    # Remove the `.toarray()` when the following PR is merged: https://github.com/iterative/mlem/pull/538
     preprocess=lambda x: tfidf(vectorizer(x)).toarray(),
     sample_data=["This is a sample text."]
 )
-
 ```
+
+{% callout type="note" %}
+Did you pay attention to the last lines? The `preprocess` lambda loads the `TfidfTransformer` with the `CountVectorizer`. These will be saved along the model for future predictions. The `sample_data` will be used to generate the right input for when the model is deployed (seen later on). MLEM will store the model's metadata in the `models/rf.mlem` file.
+{% /callout %}
+
+## Load the model and its artifacts from MLEM
 
 Update the `src/evaluate.py` file to load the model from MLEM.
 
@@ -282,7 +288,13 @@ with Live("evaluation") as live:
     fig.savefig(os.path.join("evaluation", "plots", "importance.png"))
 ```
 
-Update the DVC pipeline.
+{% callout type="note" %}
+When a MLEM model is loaded with `mlem.api.load`, it will automatically load the artifacts as well. In this case, `mlem.api.load("models/rf")` will automatically load the `preprocess` lambda described earlier.
+{% /callout %}
+
+## Update the DVC pipeline
+
+Update the DVC pipeline to include the new files.
 
 ```sh
 # Update the featurization stage
@@ -323,17 +335,23 @@ dvc repro
 
 The experiment now uses MLEM to save and load the model. DVC stores the model and its metadata.
 
-MLEM will store the model's metadata in the `models/rf.mlem` file.
+Congrats! You now have a simple way to save and load the model with all its artifacts.
 
 ## Check the results
 
 {% callout type="note" %}
-Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-8-share-and-deploy-model-with-mlem](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-8-share-and-deploy-model-with-mlem)
+Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-8-save-and-load-the-model-with-mlem](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-8-save-and-load-the-model-with-mlem)
 {% /callout %}
 
 ## State of the MLOps process
 
-_TODO_
+- The codebase can be shared among the developers. The codebase can be improved collaboratively;
+- The dataset can be shared among the developers and is placed in the right directory in order to run the experiment;
+- The steps used to create the model are documented and can be re-executed;
+- The experiment can be executed on a clean machine with the help of the CI/CD pipeline;
+- The changes done to a model can be visualized with parameters, metrics and plots to identify differences between iterations with the help of the CI/CD pipeline;
+- The model can be saved and loaded with all have required artifacts for future usage;
+- There is no easy way to serve and distribute the model outside of the experiment.
 
 ## Next & Previous steps
 

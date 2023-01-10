@@ -21,8 +21,6 @@ This guide has been written for macOS and Linux operating systems in mind. If yo
 Update the `.gitignore` file.
 
 ```sh
-## Custom experiment
-
 ## Python
 
 # Environments
@@ -215,7 +213,9 @@ Want to see what the result of this step should look like? Have a look at the Gi
 - The dataset can be shared among the developers and is placed in the right directory in order to run the experiment;
 - The steps used to create the model are documented and can be re-executed;
 - The changes done to a model can be visualized with parameters, metrics and plots to identify differences between iterations;
-- There is no guarantee that the experiment can be executed on another machine.
+- There is no guarantee that the experiment can be executed on another machine;
+- The model might have required artifacts that can be forgotten or omitted when saving/loading the model for future usage;
+- There is no easy way to serve and distribute the model outside of the experiment.
 
 ## Next & Previous steps
 

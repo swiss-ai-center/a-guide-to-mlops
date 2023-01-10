@@ -58,8 +58,12 @@ const items = [
         children: "Step 7: Track model evolutions in the CI/CD pipeline with CML",
       },
       {
-        href: "/the-guide/step-8-share-and-deploy-model-with-mlem",
-        children: "Step 8: Share and deploy model with MLEM",
+        href: "/the-guide/step-8-save-and-load-the-model-with-mlem",
+        children: "Step 8: Save and load the model with MLEM",
+      },
+      {
+        href: "/the-guide/step-9-serve-and-distribute-the-model-with-mlem",
+        children: "Step 9: Serve and distribute the model with MLEM",
       },
       {
         href: "/the-guide/conclusion",

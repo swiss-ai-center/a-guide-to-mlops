@@ -5,7 +5,7 @@ artifacts:
     type: dvc
     uri: rf/model
   preprocess/data.pkl:
-    hash: 45c8ae3f69166dc0a65963648b1eee21
+    hash: 8a361ae716bd92e670541954c1fa983b
     size: 16597704
     type: dvc
     uri: rf/preprocess
@@ -79,14 +79,14 @@ processors:
 requirements:
 - module: numpy
   version: 1.24.1
+- module: sklearn
+  package_name: scikit-learn
+  version: 1.1.3
 - is_package: false
   module: __main__
   name: __main__
-  source64zip: eJx9U01v2zAMvetXcD7ZgKGi3S2AD8OAAbsOG7AhDQImphu11sdEpU067L+PlpIma5cFOUiPfCIfH21s8DGBZ2XKKZj1w0jHG+9ZHc9ua8MekMGFI7RHO6ohegssJIxOk2Oyq5HgkPEFXe/tJx+J08cRmc1gKKpCsiNZjcEck0ePfQuMj6RUwIiWocs1NONAyylc+0CurkpUT7GqaeZVimhctZBeBxglQfrWGO8eG3jXwfuZAvlNGKeeYtRP0SSqqw/xbmvJJQYBfdTwjfGOZreuai4wblPYp413kAtqmcdAmLaiDqzvafyLSjuT6utGmnJhm0TKsav59UL5bXoF3iwUE/UCFXXzarqKKLeU4Z3B+S64NW7JYTTnsRdsGsaTSRvIA/OsA6aNvvfG1bmdFqqDhgcZodziqmomd4e+jMtiimbXwnJ6PS+FzgYMvSgacUXj5I4Lmn9uiZ6pLoT5rIXrhU4eY8R93TRqJ2mn2M3sLKjU2xF/zsMqBGDzTPDrt4xVDz4KeKiieYOB5PG3/O+Xuf+j/bhMK2JfuGo9DiLp35td59llh4xwfeQuX1rIzqANI3FxqHvxqhXCvV9xd9NCzM8uOWGibloAVSrqQZZJ7CjNCJYG0099ZFOqHhNeHXfxKsdkEx9pLS2IoHgh8ZRQTWbIl1cESME2H8qalnOIFKJfE3M3ol31CLsZ5FL16Z161zQngwuxyF5Opbt59XVjGOSPBxwS7ZKWfW3UH/uRjqE=
+  source64zip: eJx9VE2L2zAQvetXTN2LDUZmdymUgA+lUOitLC20pCGrxONYu/qqJOdjS/97x1Ky2XabhhykGT3Ne29GltpZH8EGJvPKyfWDwtMuHAI7rc2o3QFEAONOoYPQivXeaggEEt5wNAH1SiEcT9wK01n9wXoM8b0SIcheomcZpBVqLpw8HVZWdDUEsUXGnPBCB2hTDR5Ej8spXVqHpixylk+5oqrmRfRCmmJBXHtQdIB4c+E32wpetXAzY0C/KRZih97znZcRy+Kd34waTQxAQes5fAlig7PvpqguIL5Hd4iDNZAKcvKjRxFHUgfadqj+gOJexvKqIlLGjZGknFjNrxbMjvGv4PWCBcSOQlndvJi2JMosybxn4bSnuJZmGZySz3NPscmMnYwDJMNs4E7Egd9bacpEp4biqOGBLKSdXxXV1N2+y3ZpEb3c17Ccbk9DwVMD+o4UKbFCNXXHOB5+jIiPWGbAfFbD1YJHK7wXh7Kq2J6OnXPXs2dJxl5a/DGZlQEQ5CPCz19kK++tp+CxCg+DcEiXv8R/vYz9H+zbZVgW+4Rla9WTpH9Pdpm8Sx2ShLU+tGlTQ+qM0E5hyB1qn3pVE+DerkJ7XYNP1y5DFBHbaQBYrsh7GiZqRyZDsdjLbuKRmlJ0IormNItNytEkbnFNFEiQv3DwfKCYmkEvLwuggnVa5DHN69dwi9puEeKAcHfu4h3sBjQp2lul7E6aDXy6BUmPAv0GuxkMMbowa5oNTeS44murG3Ldiyi32EyfgcaNSjVvbt6mSs6j83aNIbRK6FUnYD+DJKo8My73VXUmkSlmg5eTyHZefB6IAv3FMQ4R95HTy6jYb9O0sro=
   type: custom
 - module: yaml
   package_name: PyYAML
   version: '6.0'
-- module: sklearn
-  package_name: scikit-learn
-  version: 1.1.3
