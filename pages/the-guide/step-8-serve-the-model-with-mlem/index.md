@@ -1,5 +1,5 @@
 ---
-title: "Step 8: Save and load the model with MLEM"
+title: "Step 8: Serve the model with MLEM"
 ---
 
 # {% $markdoc.frontmatter.title %}
@@ -7,10 +7,10 @@ title: "Step 8: Save and load the model with MLEM"
 ## Summary
 
 {% callout type="note" %}
-Highly inspired by the [_Get Started_ - mlem.ai](https://mlem.ai/doc/get-started), [_Saving models_ - mlem.ai](https://mlem.ai/doc/get-started/saving), [_Working with Data_ - mlem.ai](https://mlem.ai/doc/user-guide/data), [_Versioning MLEM objects with DVC_ - mlem.ai](https://mlem.ai/doc/use-cases/dvc), [_`mlem.api.save()`_ - mlem.ai](https://mlem.ai/doc/api-reference/save) and [_`mlem.api.load()`_ - mlem.ai](https://mlem.ai/doc/api-reference/load) guides.
+Highly inspired by the [_Get Started_ - mlem.ai](https://mlem.ai/doc/get-started), [_Saving models_ - mlem.ai](https://mlem.ai/doc/get-started/saving), [_Working with Data_ - mlem.ai](https://mlem.ai/doc/user-guide/data), [_Serving models_ - mlem.ai](https://mlem.ai/doc/user-guide/serving), [_Versioning MLEM objects with DVC_ - mlem.ai](https://mlem.ai/doc/use-cases/dvc), [_`mlem.api.save()`_ - mlem.ai](https://mlem.ai/doc/api-reference/save) and [_`mlem.api.load()`_ - mlem.ai](https://mlem.ai/doc/api-reference/load) guides.
 {% /callout %}
 
-The purpose of this step is to share the model with other parties. MLEM allows to save the model with metadata information that can be used to easily share and distribute the model in other contextes (Docker, REST server, other Python apps, etc.).
+The purpose of this step is to serve and use the model for usage outside of the experiment context with the help of MLEM. MLEM allows to do this by saving the model with metadata information that can be used to load the model for future usage.
 
 ## Instructions
 
@@ -18,11 +18,13 @@ The purpose of this step is to share the model with other parties. MLEM allows t
 This guide has been written for macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use a decent terminal ([GitBash](https://gitforwindows.org/) for instance) or a Windows Subsystem for Linux (WSL) for optimal results.
 {% /callout %}
 
+### Setup MLEM
+
 Install MLEM.
 
 ```sh
 # Install MLEM
-pip install mlem==0.4.1
+pip install "mlem==0.4.1"
 ```
 
 Update the `src/requirements.txt` file to include the added packages.
@@ -52,7 +54,7 @@ mlem config set core.storage.type dvc
 echo "/**/?*.mlem" >> .dvcignore
 ```
 
-## Save the model and its artifacts with MLEM
+### Update the experiment
 
 Update the `src/featurization.py` file to save the `CountVectorizer` and the `TfidfTransformer` with MLEM.
 
@@ -202,8 +204,6 @@ save(
 Did you pay attention to the last lines? The `preprocess` lambda loads the `TfidfTransformer` with the `CountVectorizer`. These will be saved along the model for future predictions. The `sample_data` will be used to generate the right input for when the model is deployed (seen later on). MLEM will store the model's metadata in the `models/rf.mlem` file.
 {% /callout %}
 
-## Load the model and its artifacts from MLEM
-
 Update the `src/evaluate.py` file to load the model from MLEM.
 
 ```py
@@ -292,7 +292,7 @@ with Live("evaluation") as live:
 When a MLEM model is loaded with `mlem.api.load`, it will automatically load the artifacts as well. In this case, `mlem.api.load("models/rf")` will automatically load the `preprocess` lambda described earlier.
 {% /callout %}
 
-## Update the DVC pipeline
+### Update the DVC pipeline
 
 Update the DVC pipeline to include the new files.
 
@@ -335,23 +335,197 @@ dvc repro
 
 The experiment now uses MLEM to save and load the model. DVC stores the model and its metadata.
 
-Congrats! You now have a simple way to save and load the model with all its artifacts.
+### Install additional dependencies
+
+Install the additional MLEM dependencies to serve.
+
+```sh
+# Install MLEM
+pip install "mlem[fastapi]==0.4.1"
+```
+
+Update the `src/requirements.txt` file to include the added packages.
+
+```
+dvc==2.37.0
+dvc[gs]==2.37.0
+dvclive==1.0.0
+pandas==1.5.1
+pyaml==21.10.1
+scikit-learn==1.1.3
+scipy==1.9.3
+matplotlib==3.6.2
+mlem==0.4.1
+mlem[fastapi]==0.4.1
+```
+
+### Serve the model with FastAPI
+
+Now that the model has been saved with MLEM, we will serve it with [FastAPI](https://fastapi.tiangolo.com/).
+
+FastAPI will generate a REST API with [FastAPI](https://fastapi.tiangolo.com/) that we can use to get predictions from our model.
+
+{% callout type="note" %}
+FastAPI is only one of the available backends that MLEM can use to serve the model. Check out their official documentation for more options. 
+{% /callout %}
+
+Serve the model with FastAPI.
+
+```sh
+# Serve the model with FastAPI
+mlem serve fastapi --model models/rf
+```
+
+MLEM will load the model, create the FastAPI app and start it. You can then access the auto-generated model documentation on <http://0.0.0.0:8080/docs>.
+
+{% callout type="note" %}
+Remember the `sample_data` variable discussed above? This will be used by MLEM to generate the FastAPI endpoints with the right OpenAPI/Swagger specifications.
+{% /callout %}
+
+The following endpoints have been created:
+
+- `predict`: Get a string as the input and display the prediction of the input as true (1) if it is related to the R programming language or as false (0) if it is is not related to the R programming language.
+- `predict_proba`: Get a string as the input and display the probability of the input as a array of two numbers. The first number is the probability from 0 to 1 of the input as not related to the R programming language. The second number is the probability from 0 to 1 of the input as related to the R programming language.
+
+You can try out predictions by inputing some sentences to the model through the REST API!
+
+Here are some request bodies you can use as examples.
+
+{% callout type="warning" %}
+Please be aware the model is a very simple model. Some inputs may be incorrectly predicted.
+{% /callout %}
+
+**Request body**
+
+```json
+{
+  "data": [
+    "Is this related to the R programming language?"
+  ]
+}
+```
+
+**Prediction output**
+
+This output means that the input is related to the R programming language.
+
+```json
+[
+  1
+]
+```
+
+**Probablities output**
+
+This output means a 55% probability that the input is related to the R programming language.
+
+```json
+[
+  [
+    0.45,
+    0.55
+  ]
+]
+```
+
+**Request body**
+
+```json
+{
+  "data": [
+    "This should not be related as I talk about dogs"
+  ]
+}
+```
+
+**Prediction output**
+
+This output means that the input is not related to the R programming language.
+
+```json
+[
+  0
+]
+```
+
+**Probablities output**
+
+This output means a 0% probability that the input is related to the R programming language.
+
+```json
+[
+  [
+    1,
+    0
+  ]
+]
+```
+
+**Request body**
+
+```json
+{
+  "data": [
+    "My favorite programming language is Python!"
+  ]
+}
+```
+
+**Prediction output**
+
+This output means that the input is not related to the R programming language.
+
+```json
+[
+  0
+]
+```
+
+**Probablities output**
+
+This output means a 33% probability that the input is related to the R programming language.
+
+```json
+[
+  [
+    0.6616666666666666,
+    0.33833333333333326
+  ]
+]
+```
+
+### Push the changes to DVC and Git
+
+Push the changes to DVC and Git.
+
+```sh
+# Upload the experiment data and cache to the remote bucket
+dvc push
+
+# Add all the files
+git add .
+
+# Commit the changes
+git commit -m "MLEM can save, load and serve the model"
+
+# Push the changes
+git push
+```
+
+Congrats! You now have a model served over a REST API! You could serve this model from anywhere. Additional services could submit predictions to your model. The usage of FastAPI creates endpoints that are automatically documented to interact with the model. Check the next step of this guide concluding your journey for the next things you could do with your model.
 
 ## Check the results
 
-{% callout type="note" %}
-Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-8-save-and-load-the-model-with-mlem](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-8-save-and-load-the-model-with-mlem)
-{% /callout %}
+Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-8-serve-the-model-with-mlem](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-8-serve-the-model-with-mlem).
 
 ## State of the MLOps process
 
-- The codebase can be shared among the developers. The codebase can be improved collaboratively;
-- The dataset can be shared among the developers and is placed in the right directory in order to run the experiment;
-- The steps used to create the model are documented and can be re-executed;
-- The experiment can be executed on a clean machine with the help of the CI/CD pipeline;
-- The changes done to a model can be visualized with parameters, metrics and plots to identify differences between iterations with the help of the CI/CD pipeline;
-- The model can be saved and loaded with all have required artifacts for future usage;
-- There is no easy way to serve and distribute the model outside of the experiment.
+- ✅ The codebase can be shared among the developers. The codebase can be improved collaboratively;
+- ✅ The dataset can be shared among the developers and is placed in the right directory in order to run the experiment;
+- ✅ The steps used to create the model are documented and can be re-executed;
+- ✅ The experiment can be executed on a clean machine with the help of the CI/CD pipeline;
+- ✅ The changes done to a model can be visualized with parameters, metrics and plots to identify differences between iterations with the help of the CI/CD pipeline;
+- ✅ The model can be saved and loaded with all have required artifacts for future usage. The model can be served outside of the experiment context.
 
 ## Next & Previous steps
 

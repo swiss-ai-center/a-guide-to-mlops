@@ -181,13 +181,12 @@ Want to see what the result of this step should look like? Have a look at the Gi
 
 ## State of the MLOps process
 
-- The codebase can be shared among the developers. The codebase can be improved collaboratively;
-- The dataset can be shared among the developers and is placed in the right directory in order to run the experiment;
-- The steps used to create the model are documented and can be re-executed;
-- The changes done to a model can be visualized with parameters, metrics and plots to identify differences between iterations;
-- The experiment can be executed on a clean machine with the help of the CI/CD pipeline;
-- The model might have required artifacts that can be forgotten or omitted when saving/loading the model for future usage;
-- There is no easy way to serve and distribute the model outside of the experiment.
+- ✅ The codebase can be shared among the developers. The codebase can be improved collaboratively;
+- ✅ The dataset can be shared among the developers and is placed in the right directory in order to run the experiment;
+- ✅ The steps used to create the model are documented and can be re-executed;
+- ✅ The changes done to a model can be visualized with parameters, metrics and plots to identify differences between iterations;
+- ✅ The experiment can be executed on a clean machine with the help of the CI/CD pipeline;
+- ❌ The model might have required artifacts that can be forgotten or omitted when saving/loading the model for future usage. There is no easy way to use the model outside of the experiment context.
 
 ## Next & Previous steps
 

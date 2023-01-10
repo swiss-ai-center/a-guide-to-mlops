@@ -46,7 +46,7 @@ These are alternatives to GitLab + CML.
 
 ### Data annotation
 
-At the moment, Label Studio is the only solution that allows to annotate many kinds of data. Other competitors only allow a certain kind of data. Have a look at the [`awesome-data-labeling`](https://github.com/heartexlabs/awesome-data-labeling) git repository for specific alternatives.
+At the moment, Label Studio is the only solution that allows to annotate many kinds of data. Other competitors only allow a certain kind of data. Have a look at the [`awesome-data-labeling`](https://github.com/heartexlabs/awesome-data-labeling) Git repository for specific alternatives.
 
 ### Model management/deployment
 

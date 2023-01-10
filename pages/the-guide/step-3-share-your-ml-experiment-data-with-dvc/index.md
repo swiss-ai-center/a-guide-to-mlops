@@ -76,10 +76,10 @@ Install DVC.
 
 ```sh
 # Install DVC
-pip install dvc==2.37.0
+pip install "dvc==2.37.0"
 
 # If using Google Cloud Storage, install DVC with Google Cloud Storage support
-pip install dvc[gs]==2.37.0
+pip install "dvc[gs]==2.37.0"
 ```
 
 Update the `src/requirements.txt` file to include the added packages.
@@ -150,13 +150,12 @@ Want to see what the result of this step should look like? Have a look at the Gi
 
 ## State of the MLOps process
 
-- The codebase can be shared among the developers. The codebase can be improved collaboratively;
-- The dataset can be shared among the developers and is placed in the right directory in order to run the experiment;
-- The steps used to create the model can be forgotten;
-- The changes done to a model cannot be visualized and improvements and/or deteriorations are hard to identify;
-- There is no guarantee that the experiment can be executed on another machine;
-- The model might have required artifacts that can be forgotten or omitted when saving/loading the model for future usage;
-- There is no easy way to serve and distribute the model outside of the experiment.
+- ✅ The codebase can be shared among the developers. The codebase can be improved collaboratively;
+- ✅ The dataset can be shared among the developers and is placed in the right directory in order to run the experiment;
+- ❌ The steps used to create the model can be forgotten;
+- ❌ The changes done to a model cannot be visualized and improvements and/or deteriorations are hard to identify;
+- ❌ There is no guarantee that the experiment can be executed on another machine;
+- ❌ The model might have required artifacts that can be forgotten or omitted when saving/loading the model for future usage. There is no easy way to use the model outside of the experiment context.
 
 ## Next & Previous steps
 

@@ -58,12 +58,8 @@ const items = [
         children: "Step 7: Track model evolutions in the CI/CD pipeline with CML",
       },
       {
-        href: "/the-guide/step-8-save-and-load-the-model-with-mlem",
-        children: "Step 8: Save and load the model with MLEM",
-      },
-      {
-        href: "/the-guide/step-9-serve-and-distribute-the-model-with-mlem",
-        children: "Step 9: Serve and distribute the model with MLEM",
+        href: "/the-guide/step-8-serve-the-model-with-mlem",
+        children: "Step 8: Serve the model with MLEM",
       },
       {
         href: "/the-guide/conclusion",
@@ -80,8 +76,8 @@ const items = [
         children: "Create a Label Studio project",
       },
       {
-        href: "/label-studio/convert-and-import-existing-data-to-label-studio",
-        children: "Convert and import existing data to Label Studio",
+        href: "/label-studio/import-existing-data-to-label-studio",
+        children: "Import existing data to Label Studio",
       },
       {
         href: "/label-studio/annotate-new-data-with-label-studio",
@@ -96,6 +92,11 @@ const items = [
   {
     title: "Advanced concepts",
     links: [
+      
+      {
+        href: "/advanced-concepts/convert-the-experiment-data-from-the-guide-for-label-studio",
+        children: "Convert the experiment data from the guide for Label Studio",
+      },
       {
         href: "/advanced-concepts/deploy-minio",
         children: "Deploy MinIO",

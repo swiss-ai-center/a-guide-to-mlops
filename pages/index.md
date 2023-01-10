@@ -45,20 +45,20 @@ Not sure where to start? Check the following links to get started!
 - [Step 5: Track model evolutions with DVC](/the-guide/step-5-track-model-evolutions-with-dvc)
 - [Step 6: Orchestrate the workflow with a CI/CD pipeline](/the-guide/step-6-orchestrate-the-workflow-with-a-cicd-pipeline)
 - [Step 7: Track model evolutions in the CI/CD pipeline with CML](/the-guide/step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml)
-- [Step 8: Save and load the model with MLEM](/the-guide/step-8-save-and-load-the-model-with-mlem)
-- [Step 9: Serve and distribute the model with MLEM](/the-guide/step-9-serve-and-distribute-the-model-with-mlem)
+- [Step 8: Serve the model with MLEM](/the-guide/step-8-serve-the-model-with-mlem)
 - [Conclusion](/the-guide/conclusion)
 
 ## Label Studio
 
 - [Introduction](/label-studio/introduction)
 - [Create a Label Studio project](/label-studio/create-a-label-studio-project)
-- [Convert and import existing data to Label Studio](/label-studio/convert-and-import-existing-data-to-label-studio)
+- [Import existing data to Label Studio](/label-studio/import-existing-data-to-label-studio)
 - [Annotate new data with Label Studio](/label-studio/annotate-new-data-with-label-studio)
 - [Export data from Label Studio](/label-studio/export-data-from-label-studio)
 
 ## Advanced concepts
 
+- [Convert the experiment data from the guide for Label Studio](/advanced-concepts/convert-the-experiment-data-from-the-guide-for-label-studio)
 - [Deploy MinIO](/advanced-concepts/deploy-minio)
 - [Deploy Label Studio](/advanced-concepts/deploy-label-studio)
 - [Link your ML model with Label Studio](/advanced-concepts/link-your-ml-model-with-label-studio)
