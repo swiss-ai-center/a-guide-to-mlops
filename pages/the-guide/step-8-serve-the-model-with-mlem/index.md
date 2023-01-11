@@ -24,7 +24,7 @@ Install MLEM.
 
 ```sh
 # Install MLEM
-pip install "mlem==0.4.1"
+pip install "mlem[fastapi]==0.4.1"
 ```
 
 Update the `src/requirements.txt` file to include the added packages.
@@ -38,7 +38,7 @@ pyaml==21.10.1
 scikit-learn==1.1.3
 scipy==1.9.3
 matplotlib==3.6.2
-mlem==0.4.1
+mlem[fastapi]==0.4.1
 ```
 
 Initialize and configure MLEM.
