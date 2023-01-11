@@ -19,10 +19,6 @@ const items = [
         href: "/get-started/the-tools-used-in-this-guide",
         children: "The tools used in this guide",
       },
-      {
-        href: "/get-started/known-limitations",
-        children: "Known limitations",
-      },
     ],
   },
   {
@@ -112,6 +108,39 @@ const items = [
       {
         href: "/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml",
         children: "Train the model on a Kubernetes cluster with CML",
+      },
+    ],
+  },
+  {
+    title: "Known limitations",
+    links: [
+      {
+        href: "/known-limitations/cml-cannot-create-a-runner-every-time",
+        children: "CML: Cannot create a runner every time",
+      },
+      {
+        href: "/known-limitations/cml-cannot-specify-an-affinity-to-run-the-pod-on-kubernetes",
+        children: "CML: Cannot specify an affinity to run the pod on Kubernetes",
+      },
+      {
+        href: "/known-limitations/dvc-git-data-and-code-cannot-evolve-independently",
+        children: "DVC & Git: Data and code cannot evolve independently",
+      },
+      {
+        href: "/known-limitations/global-missing-elements-in-comparison-to-other-user-friendly-solutions",
+        children: "Global: Missing elements in comparison to other user-friendly solutions",
+      },
+      {
+        href: "/known-limitations/label-studio-does-the-predictions-made-by-our-ml-model-really-help-the-person-annotating-the-dataset",
+        children: "Label Studio: Does the predictions made by our ML model really help the person annotating the dataset",
+      },
+      {
+        href: "/known-limitations/label-studio-the-export-of-the-dataset-is-manual",
+        children: "Label Studio: The export of the dataset is manual",
+      },
+      {
+        href: "/known-limitations/label-studio-the-retraining-of-the-ml-model-is-difficult",
+        children: "Label Studio: The retraining of the ML model is difficult",
       },
     ],
   },

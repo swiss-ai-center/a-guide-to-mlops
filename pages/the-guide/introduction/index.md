@@ -4,6 +4,16 @@ title: "Introduction"
 
 # {% $markdoc.frontmatter.title %}
 
+## Welcome
+
+Welcome! We are glad that you are here. :)
+
+This guide will help you through incremental steps from a traditional approach of managing ML projects to a modern ML Ops approach designed to improve team collaboration and reproducibility.
+
+For the rest of the guide, an _experiment_ is a ML learning project.
+
+We chose the term _experiment_ to address the experimental nature of the machine learning field before finding a suitable model.
+
 ## Disclaimer
 
 This guide has been written for macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use a decent terminal ([GitBash](https://gitforwindows.org/) for instance) or a Windows Subsystem for Linux (WSL) for optimal results.

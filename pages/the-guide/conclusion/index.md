@@ -34,11 +34,12 @@ Thanks to MLEM, the model can be served and be used outside of the experiment co
 
 ## What is left to be done?
 
-Distribution and deployment of the model is out of scope for this guide. However, MLEM greatly helps for this aspect. Check out the [_Building models_ - mlem.ai](https://mlem.ai/doc/user-guide/building) and [Deploying models_ - mlem.ai](https://mlem.ai/doc/user-guide/deploying) guides for more details.
+Distribution and deployment of the model is out of scope for this guide. However, MLEM greatly helps for this aspect. Check out the [_Building models_ - mlem.ai](https://mlem.ai/doc/user-guide/building) and [_Deploying models_ - mlem.ai](https://mlem.ai/doc/user-guide/deploying) guides for more details.
 
-We have advanced concepts and labelization topics that might interest you. Check out the left sidebar for more content regarding MLOps!
+## End of your journey
+
+Thank you for staying with us! We hope you had a great time following this guide. We have advanced concepts and labelization topics that might interest you. Check out the left sidebar for more content regarding MLOps! Please contact us on [GitHub](https://github.com/csia-pme/a-guide-to-mlops) if you have any issues. :)
 
 ## Previous step
 
-- **Previous**: [Step 9: Serve the model with MLEM](/the-guide/step-9-serve-the-model-with-mlem)
-
+- **Previous**: [Step 8: Serve the model with MLEM](/the-guide/step-8-serve-the-model-with-mlem)
