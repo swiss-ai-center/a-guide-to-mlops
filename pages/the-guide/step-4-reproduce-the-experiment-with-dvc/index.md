@@ -38,7 +38,7 @@ in dvc, to make them easily reproductible.
 ## Instructions
 
 {% callout type="warning" %}
-This guide has been written for macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use a decent terminal ([GitBash](https://gitforwindows.org/) for instance) or a Windows Subsystem for Linux (WSL) for optimal results.
+This guide has been written for macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use [GitBash](https://gitforwindows.org/) or a Windows Subsystem for Linux (WSL) for optimal results.
 {% /callout %}
 
 Update the `.gitignore` file. DVC will automatically add new lines at the end of the file.
