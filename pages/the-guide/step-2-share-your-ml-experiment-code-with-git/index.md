@@ -6,21 +6,21 @@ title: "Step 2: Share your ML experiment code with Git"
 
 ## Introduction
 
-Now that we have a running ML experiment , it's time to add some MLOps to it.
+Now that we have a running ML experiment, it's time to add some MLOps to it.
 
 Our first improvement will only concern the experiment code and will ensure it is versioned and can be shared with the team.
 
-To do so we will create a new Git repository, and push our existing code to it. An important part of this step is to configure the .gitignore correctly to avoid pushing our data to the repository.
+To do so we will create a new Git repository, and push our existing code to it. An important part of this step is to configure the `.gitignore` correctly to avoid pushing our data to the repository.
 
 At the end of this step we will have a versioned codebase we can share with our team !
 
 ## Instructions
 
 {% callout type="warning" %}
-This guide has been written for macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. 
-// TODO remove "a decent terminal"
-Please use [GitBash](https://gitforwindows.org/) or a Windows Subsystem for Linux (WSL) for optimal results.
+This guide has been written for macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use [GitBash](https://gitforwindows.org/) or a Windows Subsystem for Linux (WSL) for optimal results.
 {% /callout %}
+
+### Create a new Git repository
 
 Create a new repository on your favorite Git service. Clone the repository and switch to your newly cloned repository.
 
@@ -32,7 +32,9 @@ Using GitHub? Follow the related documentation [_Creating a new repository_ - do
 Using GitLab? Follow the related documentation [_Create a project_ - docs.gitlab.com](https://docs.gitlab.com/ee/user/project/working_with_projects.html#create-a-project) to create a new GitLab project for this step.
 {% /callout %}
 
-Create a `.gitignore` file to ignore the experiment results and some files related to Python.
+#### Create a `.gitignore` file
+
+Create a `.gitignore` file to ignore the experiment results, the data, the models and the Python environment.
 
 ```sh
 ## Custom experiment
