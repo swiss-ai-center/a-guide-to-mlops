@@ -1,5 +1,5 @@
 ---
-title: "Step 3: Share your ML experiment data with DVC"
+title: "Chapter 3: Share your ML experiment data with DVC"
 ---
 
 # {% $markdoc.frontmatter.title %}
@@ -11,12 +11,11 @@ Highly inspired by the [_Get Started_ - dvc.org](https://dvc.org/doc/start), [_S
 ](https://dvc.org/doc/command-reference/remote/add#supported-storage-types) [_Get Started: Data Versioning_ - dvc.org](https://dvc.org/doc/start/data-management), [_Install the Google Cloud CLI_ - cloud.google.com](https://cloud.google.com/sdk/docs/install-sdk) and [_Create storage buckets_ - cloud.google.com](https://cloud.google.com/storage/docs/creating-buckets) guides.
 {% /callout %}
 
+At this point, the codebase is distributed to team members using Git. 
 
-The objective of this step is to distribute the experiment data with the team using [DVC](https://dvc.org/). DVC is a version control system for your data. Dataset files are generally too large to be stored in Git. DVC allows you to store the dataset in a remote storage and to version it. DVC also allows you to track the changes done to the dataset and to the codebase.
+The objective of this chapter is to distribute the experiment DATA with the team using [DVC](https://dvc.org/). DVC is a version control system for your data. Dataset files are generally too large to be stored in Git. DVC allows you to store the dataset in a remote storage and to version it. DVC also allows you to track the changes done to the dataset and to the codebase.
 
-At this point, the codebase is distrobuted to team members using Git. The point of this step is to distribute the dataset to the team members using DVC.
-
-This will be done in the following steps:
+This will be achived with following steps:
 
 1. Create a Google Storage Bucket to hold the data.
 2. Install and configure DVC as a tool to push and pull the data on our newly created bucket.
@@ -49,7 +48,7 @@ Authenticate to Google Cloud using the Google Cloud CLI.
 
 This will open a browser window to authenticate to Google Cloud and create a credentials file in `~/.config/gcloud/application_default_credentials.json`.
 
-This file will be used by DVC to authenticate to Google Cloud.
+In this exemple, DVC will use Google Cloud CLI credentials to authenticate to Google Cloud.
 
 Alternatively, you can set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable to the path of the credentials file.
 
@@ -99,7 +98,9 @@ data/prepared
 #### Install DVC
 
 Update the `src/requirements.txt` file to include some additional packages.
+
 We will need dvc, pandas, pyaml, scikit-learn, scipy, and matplotlib to run the experiment.
+
 Here, the `dvc[gs]` package enables support for Google Cloud Storage.
 
 ```
@@ -114,6 +115,7 @@ matplotlib==3.6.2
 ```
 
 You can now install the required packages from the `src/requirements.txt` file.
+
 
 ```sh
 # Install the required packages
@@ -133,9 +135,10 @@ dvc remote add -d data gs://<your bucket>/<your path>
 dvc config core.autostage true
 ```
 
-DVC logs into Google Cloud using the Google Cloud CLI credentials.
+The effect of the `dvc init` command is to create a `.dvc` directory in the working directory. This directory contains the configuration of DVC.
 
-Move the experiment data to DVC.
+
+#### Move the experiment data to DVC.
 
 ```sh
 # Add the experiment data to DVC
@@ -145,9 +148,11 @@ dvc add data/data.xml
 dvc push
 ```
 
+This will create a `data/data.xml.dvc` file in the working directory. This file contains the metadata of the experiment data that DVC uses to track the data. This file will be stored in Git.
+
 DVC automatically adds files to be ignored, such as the ones described in the `data/.gitignore` file.
 
-Push the changes to Git.
+#### Push the changes to Git.
 
 ```sh
 # Add all the files
@@ -171,7 +176,7 @@ dvc pull
 
 ## Check the results
 
-Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-3-share-your-ml-experiment-data-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-3-share-your-ml-experiment-data-with-dvc).
+Want to see what the result of this chaoter should look like? Have a look at the Git repository directory here: [chapter-3-share-your-ml-experiment-data-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-3-share-your-ml-experiment-data-with-dvc).
 
 ## State of the MLOps process
 
@@ -182,7 +187,7 @@ Want to see what the result of this step should look like? Have a look at the Gi
 - ❌ There is no guarantee that the experiment can be executed on another machine;
 - ❌ The model might have required artifacts that can be forgotten or omitted when saving/loading the model for future usage. There is no easy way to use the model outside of the experiment context.
 
-## Next & Previous steps
+## Next & Previous chaoter
 
-- **Previous**: [Step 2: Share your ML experiment code with Git](/the-guide/step-2-share-your-ml-experiment-code-with-git)
-- **Next**: [Step 4: Reproduce the experiment with DVC](/the-guide/step-4-reproduce-the-experiment-with-dvc)
+- **Previous**: [Chapter 2: Share your ML experiment code with Git](/the-guide/chapter-2-share-your-ml-experiment-code-with-git)
+- **Next**: [Chapter 4: Reproduce the experiment with DVC](/the-guide/chapter-4-reproduce-the-experiment-with-dvc)

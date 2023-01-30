@@ -30,8 +30,8 @@ const items = [
         children: "Chapter 1: Run a simple ML experiment",
       },
       {
-        href: "/the-guide/step-2-share-your-ml-experiment-code-with-git",
-        children: "Step 2: Share your ML experiment code with Git",
+        href: "/the-guide/chapter-2-share-your-ml-experiment-code-with-git",
+        children: "Chapter 2: Share your ML experiment code with Git",
       },
       {
         href: "/the-guide/step-3-share-your-ml-experiment-data-with-dvc",
@@ -88,7 +88,7 @@ const items = [
   {
     title: "Advanced concepts",
     links: [
-      
+
       {
         href: "/advanced-concepts/convert-the-experiment-data-from-the-guide-for-label-studio",
         children: "Convert the experiment data from the guide for Label Studio",

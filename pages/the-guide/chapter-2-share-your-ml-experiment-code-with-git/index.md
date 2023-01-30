@@ -1,5 +1,5 @@
 ---
-title: "Step 2: Share your ML experiment code with Git"
+title: "Chapter 2: Share your ML experiment code with Git"
 ---
 
 # {% $markdoc.frontmatter.title %}
@@ -10,9 +10,9 @@ Now that we have a running ML experiment, it's time to add some MLOps to it.
 
 Our first improvement will only concern the experiment code and will ensure it is versioned and can be shared with the team.
 
-To do so we will create a new Git repository, and push our existing code to it. An important part of this step is to configure the `.gitignore` correctly to avoid pushing our data to the repository.
+To do so we will create a new Git repository, and push our existing code to it. An important part of this chapter is to configure the `.gitignore` correctly to avoid pushing large dataset files to the repository. In future chapters, we will see how we can use DVC to version the data and avoid this issue.
 
-At the end of this step we will have a versioned codebase we can share with our team !
+By the conclusion of this chapter, we'll have established a version-controlled codebase that can be shared with our team !
 
 ## Instructions
 
@@ -25,11 +25,11 @@ This guide has been written with macOS and Linux operating systems in mind. If y
 Create a new repository on your favorite Git service. Clone the repository and switch to your newly cloned repository.
 
 {% callout type="note" %}
-Using GitHub? Follow the related documentation [_Creating a new repository_ - docs.github.com](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository) to create a new GitHub repository for this step.
+Using GitHub? Follow the related documentation [_Creating a new repository_ - docs.github.com](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository) to create a new GitHub repository for this chapter.
 {% /callout %}
 
 {% callout type="note" %}
-Using GitLab? Follow the related documentation [_Create a project_ - docs.gitlab.com](https://docs.gitlab.com/ee/user/project/working_with_projects.html#create-a-project) to create a new GitLab project for this step.
+Using GitLab? Follow the related documentation [_Create a project_ - docs.gitlab.com](https://docs.gitlab.com/ee/user/project/working_with_projects.html#create-a-project) to create a new GitLab project for this chapter.
 {% /callout %}
 
 #### Create a `.gitignore` file
@@ -88,7 +88,7 @@ git clone <the git repository url>
 
 ## Check the results
 
-Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-2-share-your-ml-experiment-code-with-git](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-2-share-your-ml-experiment-code-with-git).
+Want to see what the result of this step should look like? Have a look at the Git repository directory here: [chapter-2-share-your-ml-experiment-code-with-git](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-2-share-your-ml-experiment-code-with-git).
 
 ## State of the MLOps process
 
@@ -99,7 +99,7 @@ Want to see what the result of this step should look like? Have a look at the Gi
 - ❌ There is no guarantee that the experiment can be executed on another machine;
 - ❌ The model might have required artifacts that can be forgotten or omitted when saving/loading the model for future usage. There is no easy way to use the model outside of the experiment context.
 
-## Next & Previous steps
+## Next & Previous chapters
 
 - **Previous**: [Chapter 1: Run a simple ML experiment](/the-guide/chapter-1-run-a-simple-ml-experiment)
-- **Next**: [Step 3: Share your ML experiment data with DVC](/the-guide/step-3-share-your-ml-experiment-data-with-dvc)
+- **Next**: [Chapter 3: Share your ML experiment data with DVC](/the-guide/chapter-3-share-your-ml-experiment-data-with-dvc)
