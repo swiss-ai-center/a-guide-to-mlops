@@ -45,9 +45,13 @@ Create a Google Cloud Project by going to the [Google Cloud console](https://con
 
 Name your project (_mlopsdemo_ - The name is unique for all projects on Google Cloud, you might need to choose another one while following this guide) and select **Create**.
 
-#### Setup the Google Cloud CLI
+Authenticate to Google Cloud using the Google Cloud CLI. 
 
-Locally, login to Google Cloud using gcloud and select the project.
+This will open a browser window to authenticate to Google Cloud and create a credentials file in `~/.config/gcloud/application_default_credentials.json`.
+
+This file will be used by DVC to authenticate to Google Cloud.
+
+Alternatively, you can set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable to the path of the credentials file.
 
 ```sh
 # Initialize and login to Google Cloud
@@ -76,43 +80,27 @@ Create the Google Storage Bucket by going to **Cloud Storage** on the left sideb
 - **Access control** : _Uniform_
 - **Projection tools** : _None_
 
-Select **Create**.
+Select **Create** to create the bucket.
 
 #### Update the gitignore file
 
-Update the `.gitignore` file to ignore the data files. As previously mentioned, the data files are too large to be stored in Git. 
-
+Update the `.gitignore` file by changing 'data' to 'data/features' and 'data/prepared. As previously mentioned, the data files are too large to be stored in Git. 
 
 // TODO ajouter des "steps" pour mieux délimiter les étapes et pouvoir spécifier le but et la cause de chacune
 ### update gitignore <why>
 
-Update the `.gitignore` file by changing 'data' to 'data/features' and 'data/prepared.
-
+TODO
 ```sh
-## Custom experiment
-
 # Data used to train the models
 data/features
 data/prepared
-
-# The models
-*.pkl
-
-# The models evaluations
-evaluation
-
-## Python
-
-# Environments
-.venv
-
-# Byte-compiled / optimized / DLL files
-__pycache__/
 ```
 
-#### Install DVC.
+#### Install DVC
 
-Update the `src/requirements.txt` file to include the DVC and DVC Google Cloud Storage dependencies.
+Update the `src/requirements.txt` file to include some additional packages.
+We will need dvc, pandas, pyaml, scikit-learn, scipy, and matplotlib to run the experiment.
+Here, the `dvc[gs]` package enables support for Google Cloud Storage.
 
 ```
 dvc==2.37.0
@@ -125,20 +113,21 @@ scipy==1.9.3
 matplotlib==3.6.2
 ```
 
-```sh
-# Install the new requirements
+You can now install the required packages from the `src/requirements.txt` file.
 
+```sh
+# Install the required packages
 pip install -r src/requirements.txt
 ```
 
-#### Initialize and configure DVC.
+#### Initialize and configure DVC
 
 ```sh
 # Initialize DVC in the working directory
 dvc init
 
 # Add the Google remote storage bucket
-dvc remote add -d data gs://mlopsdemo/dvcstore
+dvc remote add -d data gs://<your bucket>/<your path>
 
 # Optional: You can enable auto stage DVC files to Git
 dvc config core.autostage true

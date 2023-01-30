@@ -85,6 +85,7 @@ jobs:
           retention-days: 5
 
   report:
+    permissions: write-all
     needs: train
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
