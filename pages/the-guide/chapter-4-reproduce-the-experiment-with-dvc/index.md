@@ -148,7 +148,7 @@ The parameters `train.seed`, `train.n_est` and `train.min_split` will be discuss
 ###### Execute the pipeline.
 
 ```sh
-# Execute only the required pipeline steps (if files or parameters changed)
+# Execute only the required pipeline stages (if files or parameters changed)
 dvc repro
 ```
 
@@ -205,11 +205,11 @@ git push
 
 The parameters discussed before - defined in the `params.yaml` file - can be edited to re-run the experiment. DVC will track all these parameters and store the outputs' results in its cache so it will not re-run the experiment if not needed.
 
-Congrats! You now have a defined and common way to reproduce the pipeline to create a model. The steps will be ran only if files or parameters change.
+Congrats! You now have a defined and common way to reproduce the pipeline to create a model. The stages will be ran only if files or parameters change.
 
 ## Check the results
 
-Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-4-reproduce-the-experiment-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-4-reproduce-the-experiment-with-dvc).
+Want to see what the result of this chapter should look like? Have a look at the Git repository directory here: [chapter-4-reproduce-the-experiment-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-4-reproduce-the-experiment-with-dvc).
 
 ## State of the MLOps process
 
@@ -220,7 +220,7 @@ Want to see what the result of this step should look like? Have a look at the Gi
 - ❌ There is no guarantee that the experiment can be executed on another machine;
 - ❌ The model might have required artifacts that can be forgotten or omitted when saving/loading the model for future usage. There is no easy way to use the model outside of the experiment context.
 
-## Next & Previous steps
+## Next & Previous Chapter
 
-- **Previous**: [Step 3: Share your ML experiment data with DVC](/the-guide/step-3-share-your-ml-experiment-data-with-dvc)
-- **Next**: [Step 5: Track model evolutions with DVC](/the-guide/step-5-track-model-evolutions-with-dvc)
+- **Previous**: [Chapter 3: Share your ML experiment data with DVC](/the-guide/chapter-3-share-your-ml-experiment-data-with-dvc)
+- **Next**: [Chapter 5: Track model evolutions with DVC](/the-guide/chapter-5-track-model-evolutions-with-dvc)
