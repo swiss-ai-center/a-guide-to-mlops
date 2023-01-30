@@ -31,7 +31,7 @@ Create a Google Cloud Project by going to the [Google Cloud console](https://con
 
 Name your project (_mlopsdemo_ - The name is unique for all projects on Google Cloud, you might need to choose another one while following this guide) and select **Create**.
 
-Locally, login to Google Cloud using gcloud and select the project.
+Configure the Google Cloud CLI to use the `mlopsdemo` project.
 
 ```sh
 # Initialize and login to Google Cloud
@@ -42,6 +42,16 @@ gcloud projects list
 
 # Select the `mlopsdemo` project
 gcloud config set project <id of the gcp project>
+```
+
+Authenticate to Google Cloud using the Google Cloud CLI. 
+This will open a browser window to authenticate to Google Cloud and create a credentials file in `~/.config/gcloud/application_default_credentials.json`.
+This file will be used by DVC to authenticate to Google Cloud.
+Alternatively, you can set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable to the path of the credentials file.
+
+```sh
+# Login to Google Cloud
+gcloud auth application-default login
 ```
 
 Create the Google Storage Bucket by going to **Cloud Storage** on the left sidebar. Select **Create a Bucket**.
@@ -85,7 +95,7 @@ Initialize and configure DVC.
 dvc init
 
 # Add the Google remote storage bucket
-dvc remote add -d data gs://mlopsdemo/dvcstore
+dvc remote add -d data gs://<your bucket>/<your path>
 
 # Optional: You can enable auto stage DVC files to Git
 dvc config core.autostage true
