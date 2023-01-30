@@ -5,8 +5,8 @@ artifacts:
     type: dvc
     uri: rf/model
   preprocess/data.pkl:
-    hash: 8a361ae716bd92e670541954c1fa983b
-    size: 16597704
+    hash: 7b55c9c9cd20b5e323f238c02ec9e3a9
+    size: 16597745
     type: dvc
     uri: rf/preprocess
 call_orders:
@@ -64,10 +64,11 @@ processors:
         args:
         - name: x
           type_:
-            items:
-            - ptype: str
+            dtype:
+              ptype: str
               type: primitive
-            type: list
+            size: 2
+            type: array
         name: __call__
         returns:
           dtype: float64
@@ -85,7 +86,7 @@ requirements:
 - is_package: false
   module: __main__
   name: __main__
-  source64zip: eJx9VE2L2zAQvetXTN2LDUZmdymUgA+lUOitLC20pCGrxONYu/qqJOdjS/97x1Ky2XabhhykGT3Ne29GltpZH8EGJvPKyfWDwtMuHAI7rc2o3QFEAONOoYPQivXeaggEEt5wNAH1SiEcT9wK01n9wXoM8b0SIcheomcZpBVqLpw8HVZWdDUEsUXGnPBCB2hTDR5Ej8spXVqHpixylk+5oqrmRfRCmmJBXHtQdIB4c+E32wpetXAzY0C/KRZih97znZcRy+Kd34waTQxAQes5fAlig7PvpqguIL5Hd4iDNZAKcvKjRxFHUgfadqj+gOJexvKqIlLGjZGknFjNrxbMjvGv4PWCBcSOQlndvJi2JMosybxn4bSnuJZmGZySz3NPscmMnYwDJMNs4E7Egd9bacpEp4biqOGBLKSdXxXV1N2+y3ZpEb3c17Ccbk9DwVMD+o4UKbFCNXXHOB5+jIiPWGbAfFbD1YJHK7wXh7Kq2J6OnXPXs2dJxl5a/DGZlQEQ5CPCz19kK++tp+CxCg+DcEiXv8R/vYz9H+zbZVgW+4Rla9WTpH9Pdpm8Sx2ShLU+tGlTQ+qM0E5hyB1qn3pVE+DerkJ7XYNP1y5DFBHbaQBYrsh7GiZqRyZDsdjLbuKRmlJ0IormNItNytEkbnFNFEiQv3DwfKCYmkEvLwuggnVa5DHN69dwi9puEeKAcHfu4h3sBjQp2lul7E6aDXy6BUmPAv0GuxkMMbowa5oNTeS44murG3Ldiyi32EyfgcaNSjVvbt6mSs6j83aNIbRK6FUnYD+DJKo8My73VXUmkSlmg5eTyHZefB6IAv3FMQ4R95HTy6jYb9O0sro=
+  source64zip: eJx9VNtq3DAQffdXTN0XG4xMEgrF4IdSKPSthBZaNstGux6vlehWSd5LSv+9Y2kvSdPtsg/SzBzPOWfGFsoaF8D4TKSTFatHiceb3/vseNajsnvgHrQ9hvZcyax3RoEnEHeaofaolhLhUHHLdWfUJ+PQh4+Sey96gS5LICVRMW7FsVga3lXg+QazzHLHlYc29mCe97iY0oWxqIs8ZdmUy8tylgfHhc7nxLUHSQXEm3G33pTwpoWbJgP6TTEfOnSObZ0IWOQf3HpUqIMHChrH4Jvna2zudF5eQNwFuw+D0RAbMvKjRx5GUgfKdChfQHEnQnFVEiltx0BSjqxmV/PMjOGv4PU884gdhZK6WT5dSZRekHnPwvFOcSX0wlspnudOscmMrQgDRMOMZ5aHgT0YoYtIp4L8oOGRLKSbW+blNN2+S3YpHpzYVbCYnh6XgsUB9B0pknyJcpqOtsz/HBGfsEiAWVPB1ZwFw53j+6Issx2VnXPXzbNklr22+HM0KwHAiyeEX7/JVtYbR8FDF+YHbpEe/hr//TL2f7Afl2FJ7AmbrWRPkv692UX0Lk5IENY438ZLBXEyXFmJPk2oPc2qIsCDWfr2ugIXH7vwgQdspwXIUkfW0zLROBIZioVedBOPOJS844HXx12sY442cYMrokCC3IXCc0E+DYPevCSAGlbxkNY0nd/CLSqzQQgDwv15ivewHVDHaG+kNFuh1/DlFgS9FOjW2DUwhGB9U9dr2shxyVZG1eS640FssJ4+A7Udpazf3byPnaxD68wKvW8lV8uOw66BKKo4My52ZXkmkSgmgxeTyHaWfx2IAv35IQ4Bd4HltOynjDZE273Mz8nyP/IMvaQ=
   type: custom
 - module: yaml
   package_name: PyYAML

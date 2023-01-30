@@ -6,13 +6,20 @@ title: "Step 1: Run a simple ML experiment"
 
 ## Summary
 
-{% callout type="note" %}
-Highly inspired by the [_Get Started: Data Pipelines_ - dvc.org](https://dvc.org/doc/start/data-management/pipelines) guide.
-{% /callout %}
+The purpose of this step is to run a simple ML experiment on a local machine. 
 
-The purpose of this step is to run a simple ML experiment locally.
+<<<<<<< Updated upstream
+Ok, so we need a starting point for this workshop : a ML app we can run locally that will be gradually improve through the different steps we will go through.
 
-The purpose of this ML experiment is to:
+As I explained in the introduction, the app we will use as an example is a simple text classification ML experiment to answer the simple question :
+> Does this text talk about R ?
+
+In this first step we will download the `code` and the `dataset` and we should end up with a ML experiment we can run locally. 
+
+More information on the goal of the ML experiment :
+=======
+It is a simple ML experiment that will:
+>>>>>>> Stashed changes
 
 - Use 10K posts from StackOverflow
 - Mark those that are related to the R programming language with `1`, the others with `0`
@@ -24,11 +31,17 @@ The purpose of this ML experiment is to:
     - Measure the Receiver operating characteristic of the R posts vs. the non-R posts
     - Measure the most important words characterising the R posts vs. the non-R posts
 
-## Instructions
+## Steps
 
 {% callout type="warning" %}
-This guide has been written for macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use a decent terminal ([GitBash](https://gitforwindows.org/) for instance) or a Windows Subsystem for Linux (WSL) for optimal results.
+This guide has been written for macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use [GitBash](https://gitforwindows.org/) or a Windows Subsystem for Linux (WSL) for optimal results.
 {% /callout %}
+
+<<<<<<< Updated upstream
+// TODO expliquer que chaque commande doit être exécuté dans le root folder du workshop
+=======
+### Download and set up the codebase
+>>>>>>> Stashed changes
 
 Download the source code for this simple ML experiment.
 
@@ -39,6 +52,7 @@ wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/code.zip -O
 # Extract the code
 unzip code.zip
 
+// TODO expliquer pourquoi on fait ça. Sans explications on a l'impression qu'ils ont mal préparé le zip.
 # Move the subdirectory files to the working directory
 mv a-guide-to-mlops-code/src ./src
 mv a-guide-to-mlops-code/params.yaml ./params.yaml
@@ -51,6 +65,7 @@ rm -f code.zip
 ```
 
 The working directory should look like this.
+// TODO leur donner la commande "tree" et leur dire qu'ils peuvent contrôler que leur arborescence est bonne. C'est rassurant
 
 ```
 .
@@ -63,28 +78,18 @@ The working directory should look like this.
     └── train.py
 ```
 
+Explore the codebase and try to understand the content of the files. You have a summary of each file in the the directory.
 
-| **File**              | **Description**                                   | **Input**                             | **Output**                                                        |
-|-----------------------|---------------------------------------------------|---------------------------------------|-------------------------------------------------------------------|
-| `requirements.txt`    | The Python dependencies to run the ML experiment  | -                                     | -                                                                 |
-| `params.yaml`         | The parameters to run the ML experiment           | -                                     | -                                                                 |
-| `prepare.py`          | Prepare the dataset to run the ML experiment      | The dataset to prepare as an XML file | The prepared data in `data/prepared` directory                    |
-| `featurization.py`    | Extract the features from the dataset             | The prepared dataset                  | The extracted features in `data/features` directory               |
-| `train.py`            | Train the ML model                                | The extracted features                | The model trained with the dataset                                |
-| `evaluate.py`         | Evaluate the ML model using DVC                   | The model to evaluate                 | The results of the model evaluation in `evaluation` directory     |
+| **File**           | **Description**                                  | **Input**                             | **Output**                                                    |
+| ------------------ | ------------------------------------------------ | ------------------------------------- | ------------------------------------------------------------- |
+| `requirements.txt` | The Python dependencies to run the ML experiment | -                                     | -                                                             |
+| `params.yaml`      | The parameters to run the ML experiment          | -                                     | -                                                             |
+| `prepare.py`       | Prepare the dataset to run the ML experiment     | The dataset to prepare as an XML file | The prepared data in `data/prepared` directory                |
+| `featurization.py` | Extract the features from the dataset            | The prepared dataset                  | The extracted features in `data/features` directory           |
+| `train.py`         | Train the ML model                               | The extracted features                | The model trained with the dataset                            |
+| `evaluate.py`      | Evaluate the ML model using DVC                  | The model to evaluate                 | The results of the model evaluation in `evaluation` directory |
 
-Generate the virtual environment and install the dependencies.
-
-```sh
-# Generate the virtual environment
-python3 -m venv .venv
-
-# Activate the virtual environment
-source .venv/bin/activate
-
-# Install the requirements
-pip install --requirement src/requirements.txt
-```
+### Download and set up the dataset
 
 Download the dataset to run this simple ML experiment.
 
@@ -108,6 +113,21 @@ rm -rf a-guide-to-mlops-data
 rm -f data.zip
 ```
 
+### Run the experiment
+
+Generate the virtual environment and install the dependencies.
+
+```sh
+# Generate the virtual environment
+python3 -m venv .venv
+
+# Activate the virtual environment
+source .venv/bin/activate
+
+# Install the requirements
+pip install --requirement src/requirements.txt
+```
+
 Run the experiment.
 
 ```sh
@@ -125,13 +145,14 @@ python src/evaluate.py model.pkl data/features
 ```
 
 {% callout type="note" %}
-The `evaluate.py` Python script will display a warning as it uses DVC. You can safely ignore it for now.
+The `evaluate.py` Python script might display a warning regarding DVC. You can safely ignore it for now.
 {% /callout %}
+
+## Check the results and summary
 
 Congrats! You have now a running experiment.
 
-## Check the results
-
+// TODO utiliser tree plutôt. A minima dire que il faut comparer notre structure obtenue avec celle du repository
 Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-1-run-a-simple-ml-experiment](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-1-run-a-simple-ml-experiment).
 
 ## State of the MLOps process
@@ -142,6 +163,10 @@ Want to see what the result of this step should look like? Have a look at the Gi
 - ❌ The changes done to a model cannot be visualized and improvements and/or deteriorations are hard to identify;
 - ❌ There is no guarantee that the experiment can be executed on another machine;
 - ❌ The model might have required artifacts that can be forgotten or omitted when saving/loading the model for future usage. There is no easy way to use the model outside of the experiment context.
+
+## Sources
+
+Highly inspired by the [_Get Started: Data Pipelines_ - dvc.org](https://dvc.org/doc/start/data-management/pipelines) guide.
 
 ## Next & Previous steps
 

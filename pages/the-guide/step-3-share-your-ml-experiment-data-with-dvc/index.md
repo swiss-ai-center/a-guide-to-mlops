@@ -11,9 +11,21 @@ Highly inspired by the [_Get Started_ - dvc.org](https://dvc.org/doc/start), [_S
 ](https://dvc.org/doc/command-reference/remote/add#supported-storage-types) [_Get Started: Data Versioning_ - dvc.org](https://dvc.org/doc/start/data-management), [_Install the Google Cloud CLI_ - cloud.google.com](https://cloud.google.com/sdk/docs/install-sdk) and [_Create storage buckets_ - cloud.google.com](https://cloud.google.com/storage/docs/creating-buckets) guides.
 {% /callout %}
 
-The purpose of this step is to share the data of the simple ML experiment with the rest of the team using DVC.
+
+The objective of this step is to distribute the experiment data with the team using [DVC](https://dvc.org/). DVC is a version control system for your data. Dataset files are generally too large to be stored in Git. DVC allows you to store the dataset in a remote storage and to version it. DVC also allows you to track the changes done to the dataset and to the codebase.
+
+At this point, the codebase is distrobuted to team members using Git. The point of this step is to distribute the dataset to the team members using DVC.
+
+This will be done in the following steps:
+
+1. Create a Google Storage Bucket to hold the data.
+2. Install and configure DVC as a tool to push and pull the data on our newly created bucket.
+3. Adapt the .gitignore file to exclude the data from our codebase.
+
 
 ## Requirements
+
+It is required to have a cloud storage for DVC to store the dataset. DVC is compatible with many cloud storage providers.
 
 For this demo, a Google Storage Bucket will be used to store the dataset. The [Google Cloud CLI (`gcloud`)](https://cloud.google.com/sdk/docs/install-sdk) must be installed.
 
@@ -24,18 +36,31 @@ Want to self-host your storage? Check out the [Deploy MinIO](/advanced-concepts/
 ## Instructions
 
 {% callout type="warning" %}
-This guide has been written for macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use a decent terminal ([GitBash](https://gitforwindows.org/) for instance) or a Windows Subsystem for Linux (WSL) for optimal results.
+This guide has been written for macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use [GitBash](https://gitforwindows.org/) or a Windows Subsystem for Linux (WSL) for optimal results.
 {% /callout %}
+
+#### Create a Google Cloud Project
 
 Create a Google Cloud Project by going to the [Google Cloud console](https://console.cloud.google.com/), select **Select a project** in the upper right corner of the screen and select **New project**.
 
 Name your project (_mlopsdemo_ - The name is unique for all projects on Google Cloud, you might need to choose another one while following this guide) and select **Create**.
 
-Configure the Google Cloud CLI to use the `mlopsdemo` project.
+Authenticate to Google Cloud using the Google Cloud CLI. 
+
+This will open a browser window to authenticate to Google Cloud and create a credentials file in `~/.config/gcloud/application_default_credentials.json`.
+
+This file will be used by DVC to authenticate to Google Cloud.
+
+Alternatively, you can set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable to the path of the credentials file.
 
 ```sh
 # Initialize and login to Google Cloud
 gcloud init
+
+# Set authentication for our ML experiment
+# https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
+# https://cloud.google.com/sdk/gcloud/reference/auth/application-default/login
+gcloud auth application-default login
 
 # List all available projects
 gcloud projects list
@@ -44,33 +69,40 @@ gcloud projects list
 gcloud config set project <id of the gcp project>
 ```
 
-Authenticate to Google Cloud using the Google Cloud CLI. 
-This will open a browser window to authenticate to Google Cloud and create a credentials file in `~/.config/gcloud/application_default_credentials.json`.
-This file will be used by DVC to authenticate to Google Cloud.
-Alternatively, you can set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable to the path of the credentials file.
-
-```sh
-# Login to Google Cloud
-gcloud auth application-default login
-```
+#### Create the Google Storage Bucket
 
 Create the Google Storage Bucket by going to **Cloud Storage** on the left sidebar. Select **Create a Bucket**.
 
-Name the bucket (_mlopsdemo_), select _europe-west6 (Zurich)_ for the **Location type**, select _Standard_ for the **Default storage class**, check the _Enforce public access prevention on this bucket_ option and select _Uniform_ for the **Access control**, select _None_ for the **Projection tools** and select **Create**.
+- **Bucket Name** : _mlopsdemo_
+- **Location type** : _europe-west6 (Zurich)_
+- **Default storage class** : _Standard_
+- **Enforce public access prevention on this bucket** : _Checked_
+- **Access control** : _Uniform_
+- **Projection tools** : _None_
 
-Add the following lines to the `.gitignore` file. These files will be ignored by Git and managed by DVC to store the experiment data.
+Select **Create** to create the bucket.
 
+#### Update the gitignore file
+
+Update the `.gitignore` file by changing 'data' to 'data/features' and 'data/prepared. As previously mentioned, the data files are too large to be stored in Git. 
+
+// TODO ajouter des "steps" pour mieux délimiter les étapes et pouvoir spécifier le but et la cause de chacune
+### update gitignore <why>
+
+TODO
 ```sh
 # Data used to train the models
 data/features
 data/prepared
 ```
 
+#### Install DVC
+
 Update the `src/requirements.txt` file to include some additional packages.
 We will need dvc, pandas, pyaml, scikit-learn, scipy, and matplotlib to run the experiment.
 Here, the `dvc[gs]` package enables support for Google Cloud Storage.
 
-```sh
+```
 dvc==2.37.0
 dvc[gs]==2.37.0
 dvclive==1.0.0
@@ -88,7 +120,7 @@ You can now install the required packages from the `src/requirements.txt` file.
 pip install -r src/requirements.txt
 ```
 
-Initialize and configure DVC.
+#### Initialize and configure DVC
 
 ```sh
 # Initialize DVC in the working directory
