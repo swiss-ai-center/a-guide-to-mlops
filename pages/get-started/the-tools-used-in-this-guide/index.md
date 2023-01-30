@@ -14,6 +14,8 @@ In this guide, the following tools are selected to demonstrate the MLOps process
 - Model serving, distributing and deploying: [MLEM](#mlem)
 - Data annotation: [Label Studio](#label-studio)
 
+We did try to find and use the tools that cause the less friction in established workflows and teams.
+
 ## The tools
 
 ### Git
@@ -97,3 +99,7 @@ These tools can be used to manage the entire lifecycle of the ML experiment. The
 
 - [MLFlow](https://mlflow.org/) - An open source platform for the machine learning lifecycle
 - [MLRun](https://www.mlrun.org/) - An open source framework to orchestrate MLOps from the research stage to production-ready AI applications
+
+## Next
+
+- [The guide - Introduction](/the-guide/introduction)

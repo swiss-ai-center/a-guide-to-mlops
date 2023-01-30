@@ -10,7 +10,13 @@ title: "Step 6: Orchestrate the workflow with a CI/CD pipeline"
 Highly inspired by the [_Using service accounts_ - dvc.org](https://dvc.org/doc/user-guide/setup-google-drive-remote#using-service-accounts) guide.
 {% /callout %}
 
-The purpose of this step is to set up a CI/CD pipeline to execute the ML experiment remotely, to ensure it can always be executed and to avoid the "but it works on my machine." effect.
+At this stage, we have our code, our data and our execution process that are shared through git and dvc. 
+
+We will now add  CI/CD pipeline to execute the ML experiment remotely, to ensure it can always be executed and to avoid the "but it works on my machine." effect.
+
+To do so we will start by creating an IAM Service Account to grant access to the google project. Then we will create and configure the `CI/CD Pipeline` to run the `dvc pipeline` each time there is a push to main.
+
+At the end of this step, our pipeline will prove the experiment runs in a "blank" environment after each push to main.
 
 More functionalities offered by the CI/CD pipeline will be added in the next steps.
 
@@ -21,7 +27,7 @@ Self-hosting your storage with MinIO? Check out the [Deploy MinIO](/advanced-con
 ## Instructions
 
 {% callout type="warning" %}
-This guide has been written for macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use a decent terminal ([GitBash](https://gitforwindows.org/) for instance) or a Windows Subsystem for Linux (WSL) for optimal results.
+This guide has been written for macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use [GitBash](https://gitforwindows.org/) or a Windows Subsystem for Linux (WSL) for optimal results.
 {% /callout %}
 
 On the [Google Cloud console](https://console.cloud.google.com/), select **Select a project** in the upper right corner of the screen and select the project that was created in [Step 3: Share your ML experiment data with DVC](/the-guide/step-3-share-your-ml-experiment-data-with-dvc).
