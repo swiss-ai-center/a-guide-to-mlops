@@ -1,35 +1,31 @@
 ---
-title: "Step 1: Run a simple ML experiment"
+title: "Chapter 1: Run a simple ML experiment"
 ---
 
 # {% $markdoc.frontmatter.title %}
 
 ## Summary
 
-The purpose of this step is to run a simple ML experiment on a local machine. 
+Let's imagine you arrive in a new ML team. They have a very nice ML experiment that you have to take on. This experiment is quite simple:
 
-<<<<<<< Updated upstream
-Ok, so we need a starting point for this workshop : a ML app we can run locally that will be gradually improve through the different steps we will go through.
-
-As I explained in the introduction, the app we will use as an example is a simple text classification ML experiment to answer the simple question :
-> Does this text talk about R ?
-
-In this first step we will download the `code` and the `dataset` and we should end up with a ML experiment we can run locally. 
-
-More information on the goal of the ML experiment :
-=======
-It is a simple ML experiment that will:
->>>>>>> Stashed changes
-
-- Use 10K posts from StackOverflow
-- Mark those that are related to the R programming language with `1`, the others with `0`
-- Split all of them into training/testing datasets
-- Make bags of words matrixes from the title and the description of all posts
-- Train the model to classify the R posts vs. the non-R posts from the training dataset
-- Evaluate the performance of the model using the testing dataset
+- It uses 10K posts from StackOverflow
+- It marks the posts that are related to the R programming language with `1`, the others with `0`
+- It splits all of them into training/testing datasets
+- It makes bags of words matrixes from the title and the description of all posts
+- It trains the model to classify the R posts vs. the non-R posts from the training dataset
+- It evaluates the performance of the model using the testing dataset with the following metrics:
     - Measure the Precision-Recall of the R posts vs. the non-R posts
     - Measure the Receiver operating characteristic of the R posts vs. the non-R posts
     - Measure the most important words characterising the R posts vs. the non-R posts
+
+You job is to set up MLOps tools to inmprove the team efficiency, help the documentation of the workflow and track changes made to a model. When the team is happy with the model's performances, you can easily serve the model to the rest of the world.
+
+In this chapter, you will:
+
+1. Download the codebase
+2. Download the dataset
+3. Set up a Python environment to run the experiment
+4. Run the experiment locally for the first time
 
 ## Steps
 
@@ -37,13 +33,13 @@ It is a simple ML experiment that will:
 This guide has been written for macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use [GitBash](https://gitforwindows.org/) or a Windows Subsystem for Linux (WSL) for optimal results.
 {% /callout %}
 
-<<<<<<< Updated upstream
-// TODO expliquer que chaque commande doit être exécuté dans le root folder du workshop
-=======
 ### Download and set up the codebase
->>>>>>> Stashed changes
 
-Download the source code for this simple ML experiment.
+In this team, one of your colleague might have given you their codebase on a USB stick to start the code so you don't start everything from scratch.
+
+On your computer, create 
+
+To simulate the USB stick, you can download the source code for this simple ML experiment from GitHub.
 
 ```sh
 # Download the archive containing the code
@@ -52,7 +48,6 @@ wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/code.zip -O
 # Extract the code
 unzip code.zip
 
-// TODO expliquer pourquoi on fait ça. Sans explications on a l'impression qu'ils ont mal préparé le zip.
 # Move the subdirectory files to the working directory
 mv a-guide-to-mlops-code/src ./src
 mv a-guide-to-mlops-code/params.yaml ./params.yaml
@@ -65,29 +60,28 @@ rm -f code.zip
 ```
 
 The working directory should look like this.
-// TODO leur donner la commande "tree" et leur dire qu'ils peuvent contrôler que leur arborescence est bonne. C'est rassurant
 
 ```
 .
-├── params.yaml
-└── src
-    ├── evaluate.py
-    ├── featurization.py
-    ├── prepare.py
-    ├── requirements.txt
-    └── train.py
+├── src
+│   ├── evaluate.py
+│   ├── featurization.py
+│   ├── prepare.py
+│   ├── requirements.txt
+│   └── train.py
+└── params.yaml
 ```
 
 Explore the codebase and try to understand the content of the files. You have a summary of each file in the the directory.
 
-| **File**           | **Description**                                  | **Input**                             | **Output**                                                    |
-| ------------------ | ------------------------------------------------ | ------------------------------------- | ------------------------------------------------------------- |
-| `requirements.txt` | The Python dependencies to run the ML experiment | -                                     | -                                                             |
-| `params.yaml`      | The parameters to run the ML experiment          | -                                     | -                                                             |
-| `prepare.py`       | Prepare the dataset to run the ML experiment     | The dataset to prepare as an XML file | The prepared data in `data/prepared` directory                |
-| `featurization.py` | Extract the features from the dataset            | The prepared dataset                  | The extracted features in `data/features` directory           |
-| `train.py`         | Train the ML model                               | The extracted features                | The model trained with the dataset                            |
-| `evaluate.py`      | Evaluate the ML model using DVC                  | The model to evaluate                 | The results of the model evaluation in `evaluation` directory |
+| **File**              | **Description**                                   | **Input**                             | **Output**                                                        |
+|-----------------------|---------------------------------------------------|---------------------------------------|-------------------------------------------------------------------|
+| `requirements.txt`    | The Python dependencies to run the ML experiment  | -                                     | -                                                                 |
+| `params.yaml`         | The parameters to run the ML experiment           | -                                     | -                                                                 |
+| `prepare.py`          | Prepare the dataset to run the ML experiment      | The dataset to prepare as an XML file | The prepared data in `data/prepared` directory                    |
+| `featurization.py`    | Extract the features from the dataset             | The prepared dataset                  | The extracted features in `data/features` directory               |
+| `train.py`            | Train the ML model                                | The extracted features                | The model trained with the dataset                                |
+| `evaluate.py`         | Evaluate the ML model using DVC                   | The model to evaluate                 | The results of the model evaluation in `evaluation` directory     |
 
 ### Download and set up the dataset
 
@@ -111,6 +105,21 @@ rm -rf a-guide-to-mlops-data
 
 # Remove the archive
 rm -f data.zip
+```
+
+The working directory should look like this.
+
+```
+.
+├── data
+│   └── data.xml
+├── src
+│   ├── evaluate.py
+│   ├── featurization.py
+│   ├── prepare.py
+│   ├── requirements.txt
+│   └── train.py
+└── params.yaml
 ```
 
 ### Run the experiment
@@ -148,11 +157,12 @@ python src/evaluate.py model.pkl data/features
 The `evaluate.py` Python script might display a warning regarding DVC. You can safely ignore it for now.
 {% /callout %}
 
-## Check the results and summary
+You have now a running experiment. Check the summary.
 
-Congrats! You have now a running experiment.
+## Summary
 
-// TODO utiliser tree plutôt. A minima dire que il faut comparer notre structure obtenue avec celle du repository
+Congrats! You have now a running experiment. 
+
 Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-1-run-a-simple-ml-experiment](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-1-run-a-simple-ml-experiment).
 
 ## State of the MLOps process
