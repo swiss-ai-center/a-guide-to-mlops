@@ -11,7 +11,11 @@ Highly inspired by the [_Get Started_ - dvc.org](https://dvc.org/doc/start), [_S
 ](https://dvc.org/doc/command-reference/remote/add#supported-storage-types) [_Get Started: Data Versioning_ - dvc.org](https://dvc.org/doc/start/data-management), [_Install the Google Cloud CLI_ - cloud.google.com](https://cloud.google.com/sdk/docs/install-sdk) and [_Create storage buckets_ - cloud.google.com](https://cloud.google.com/storage/docs/creating-buckets) guides.
 {% /callout %}
 
-The purpose of this step is to share the data of the simple ML experiment with the rest of the team using DVC.
+Ok, now that our codebase is safe and easily sharable with the team it's time to upgrade our data with the same features.
+
+In this step, we will first create a Google Storage Bucket to hold the data. Then install and configure DVC as a tool to push and pull the data on our newly created bucket. Doing so will again force us to adapt our .gitignore file to exclude the data from our codebase.
+
+At the end of this step, we will have a dataset that can be used and shared among the team.
 
 ## Requirements
 
@@ -37,6 +41,9 @@ Locally, login to Google Cloud using gcloud and select the project.
 # Initialize and login to Google Cloud
 gcloud init
 
+# TODO describe what happens here
+gcloud auth application-default login 
+
 # List all available projects
 gcloud projects list
 
@@ -44,11 +51,15 @@ gcloud projects list
 gcloud config set project <id of the gcp project>
 ```
 
+// TODO doit être globalement unique
 Create the Google Storage Bucket by going to **Cloud Storage** on the left sidebar. Select **Create a Bucket**.
 
 Name the bucket (_mlopsdemo_), select _europe-west6 (Zurich)_ for the **Location type**, select _Standard_ for the **Default storage class**, check the _Enforce public access prevention on this bucket_ option and select _Uniform_ for the **Access control**, select _None_ for the **Projection tools** and select **Create**.
 
-Update the `.gitignore` file.
+// TODO ajouter des "steps" pour mieux délimiter les étapes et pouvoir spécifier le but et la cause de chacune
+### update gitignore <why>
+
+Update the `.gitignore` file by changing 'data' to 'data/features' and 'data/prepared.
 
 ```sh
 ## Custom experiment
@@ -82,7 +93,7 @@ pip install "dvc==2.37.0"
 pip install "dvc[gs]==2.37.0"
 ```
 
-Update the `src/requirements.txt` file to include the added packages.
+Update the `src/requirements.txt` file to include the new dependencies : 'dvc==2.37.0' and 'dvc[gs]==2.37.0'
 
 ```
 dvc==2.37.0

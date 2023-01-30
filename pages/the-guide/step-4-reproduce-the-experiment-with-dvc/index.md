@@ -10,9 +10,9 @@ title: "Step 4: Reproduce the experiment with DVC"
 Highly inspired by the [_Get Started: Data Pipelines_ - dvc.org](https://dvc.org/doc/start/data-management/pipelines) guide.
 {% /callout %}
 
-The purpose of this step is to store the commands to execute the simple ML experiment in DVC to easily reproduce the experiment in its entirety.
+Now that both our code and our data can be shared and manipulated by our team, it's time to procedurize our experiment's steps using DVC to make them easily reproductible and standardized.
 
-As a reminder, the steps to run the experiment is as follow:
+As a reminder, the current steps to run the experiment are as follow:
 
 ```sh
 # Prepare the dataset
@@ -27,6 +27,13 @@ python src/train.py data/features model.pkl
 # Evaluate the model performances
 python src/evaluate.py model.pkl data/features
 ```
+
+Based on this, we want to create the 3 steps :
+- prepare
+- featurize
+- train
+in dvc, to make them easily reproductible.
+
 
 ## Instructions
 

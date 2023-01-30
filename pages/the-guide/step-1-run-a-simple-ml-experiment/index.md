@@ -10,9 +10,14 @@ title: "Step 1: Run a simple ML experiment"
 Highly inspired by the [_Get Started: Data Pipelines_ - dvc.org](https://dvc.org/doc/start/data-management/pipelines) guide.
 {% /callout %}
 
-The purpose of this step is to run a simple ML experiment locally.
+Ok, so we need a starting point for this workshop : a ML app we can run locally that will be gradually improve through the different steps we will go through.
 
-The purpose of this ML experiment is to:
+As I explained in the introduction, the app we will use as an example is a simple text classification ML experiment to answer the simple question :
+> Does this text talk about R ?
+
+In this first step we will download the `code` and the `dataset` and we should end up with a ML experiment we can run locally. 
+
+More information on the goal of the ML experiment :
 
 - Use 10K posts from StackOverflow
 - Mark those that are related to the R programming language with `1`, the others with `0`
@@ -30,6 +35,8 @@ The purpose of this ML experiment is to:
 This guide has been written for macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use a decent terminal ([GitBash](https://gitforwindows.org/) for instance) or a Windows Subsystem for Linux (WSL) for optimal results.
 {% /callout %}
 
+// TODO expliquer que chaque commande doit être exécuté dans le root folder du workshop
+
 Download the source code for this simple ML experiment.
 
 ```sh
@@ -39,6 +46,7 @@ wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/code.zip -O
 # Extract the code
 unzip code.zip
 
+// TODO expliquer pourquoi on fait ça. Sans explications on a l'impression qu'ils ont mal préparé le zip.
 # Move the subdirectory files to the working directory
 mv a-guide-to-mlops-code/src ./src
 mv a-guide-to-mlops-code/params.yaml ./params.yaml
@@ -51,6 +59,7 @@ rm -f code.zip
 ```
 
 The working directory should look like this.
+// TODO leur donner la commande "tree" et leur dire qu'ils peuvent contrôler que leur arborescence est bonne. C'est rassurant
 
 ```
 .
@@ -64,14 +73,14 @@ The working directory should look like this.
 ```
 
 
-| **File**              | **Description**                                   | **Input**                             | **Output**                                                        |
-|-----------------------|---------------------------------------------------|---------------------------------------|-------------------------------------------------------------------|
-| `requirements.txt`    | The Python dependencies to run the ML experiment  | -                                     | -                                                                 |
-| `params.yaml`         | The parameters to run the ML experiment           | -                                     | -                                                                 |
-| `prepare.py`          | Prepare the dataset to run the ML experiment      | The dataset to prepare as an XML file | The prepared data in `data/prepared` directory                    |
-| `featurization.py`    | Extract the features from the dataset             | The prepared dataset                  | The extracted features in `data/features` directory               |
-| `train.py`            | Train the ML model                                | The extracted features                | The model trained with the dataset                                |
-| `evaluate.py`         | Evaluate the ML model using DVC                   | The model to evaluate                 | The results of the model evaluation in `evaluation` directory     |
+| **File**           | **Description**                                  | **Input**                             | **Output**                                                    |
+| ------------------ | ------------------------------------------------ | ------------------------------------- | ------------------------------------------------------------- |
+| `requirements.txt` | The Python dependencies to run the ML experiment | -                                     | -                                                             |
+| `params.yaml`      | The parameters to run the ML experiment          | -                                     | -                                                             |
+| `prepare.py`       | Prepare the dataset to run the ML experiment     | The dataset to prepare as an XML file | The prepared data in `data/prepared` directory                |
+| `featurization.py` | Extract the features from the dataset            | The prepared dataset                  | The extracted features in `data/features` directory           |
+| `train.py`         | Train the ML model                               | The extracted features                | The model trained with the dataset                            |
+| `evaluate.py`      | Evaluate the ML model using DVC                  | The model to evaluate                 | The results of the model evaluation in `evaluation` directory |
 
 Generate the virtual environment and install the dependencies.
 
@@ -132,6 +141,7 @@ Congrats! You have now a running experiment.
 
 ## Check the results
 
+// TODO utiliser tree plutôt. A minima dire que il faut comparer notre structure obtenue avec celle du repository
 Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-1-run-a-simple-ml-experiment](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-1-run-a-simple-ml-experiment).
 
 ## State of the MLOps process

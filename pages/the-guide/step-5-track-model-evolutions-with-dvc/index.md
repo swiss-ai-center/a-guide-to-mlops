@@ -10,7 +10,13 @@ title: "Step 5: Track model evolutions with DVC"
 Highly inspired by the [_Get Started: Metrics, Parameters, and Plots_ - dvc.org](https://dvc.org/doc/start/data-management/metrics-parameters-plots) guide.
 {% /callout %}
 
-The purpose of this step is to visualize the improvements/changes made to a model between multiple iterations.
+Now that the 3 first steps, `prepare`, `extract` and ` train` are executable from DVC, we will add the last step `evauate` and configure dvc plots to display it.
+
+Our `evaluate` step generates a `metrics.json` file used to store performance indicators of our model with it's new parameters.
+
+We will configure a DVC stage that evaluates the model and enables us to compare the result of the unstaged evaluation with the last commited evaluation.
+
+Once this step is created, we will be able to change our model's configruation, evaluate the new configuration and compare it's performance with the last commited ones with. 
 
 ## Instructions
 

@@ -10,7 +10,13 @@ title: "Step 6: Orchestrate the workflow with a CI/CD pipeline"
 Highly inspired by the [_Using service accounts_ - dvc.org](https://dvc.org/doc/user-guide/setup-google-drive-remote#using-service-accounts) guide.
 {% /callout %}
 
-The purpose of this step is to set up a CI/CD pipeline to execute the ML experiment remotely, to ensure it can always be executed and to avoid the "but it works on my machine." effect.
+At this stage, we have our code, our data and our execution process that are shared through git and dvc. 
+
+We will now add  CI/CD pipeline to execute the ML experiment remotely, to ensure it can always be executed and to avoid the "but it works on my machine." effect.
+
+To do so we will start by creating an IAM Service Account to grant access to the google project. Then we will create and configure the `CI/CD Pipeline` to run the `dvc pipeline` each time there is a push to main.
+
+At the end of this step, our pipeline will prove the experiment runs in a "blank" environment after each push to main.
 
 More functionalities offered by the CI/CD pipeline will be added in the next steps.
 

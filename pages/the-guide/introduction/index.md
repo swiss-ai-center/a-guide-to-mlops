@@ -30,6 +30,8 @@ The following tools must be installed to follow this guide.
 - [Git](https://git-scm.com/);
 - Standard *nix utilities such as wget, unzip, etc.
 
+// TODO mettre a plat tout les utilitaires, insister que ils doivent les installer (avec brew ou apt-get) éventuellement leur donner les commandes avec --version pour vérifier.
+
 ## Tips
 
 If the Git repository is cloned locally, you can use the following command to compare two directories.

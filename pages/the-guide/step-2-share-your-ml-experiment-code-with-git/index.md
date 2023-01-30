@@ -4,14 +4,22 @@ title: "Step 2: Share your ML experiment code with Git"
 
 # {% $markdoc.frontmatter.title %}
 
-## Summary
+## Introduction
 
-The purpose of this step is to share the code of the simple ML experiment with the rest of the team using Git.
+Now that we have a running ML experiment , it's time to add some MLOps to it.
+
+Our first improvement will only concern the experiment code and will ensure it is versioned and can be shared with the team.
+
+To do so we will create a new Git repository, and push our existing code to it. An important part of this step is to configure the .gitignore correctly to avoid pushing our data to the repository.
+
+At the end of this step we will have a versioned codebase we can share with our team !
 
 ## Instructions
 
 {% callout type="warning" %}
-This guide has been written for macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use a decent terminal ([GitBash](https://gitforwindows.org/) for instance) or a Windows Subsystem for Linux (WSL) for optimal results.
+This guide has been written for macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. 
+// TODO remove "a decent terminal"
+Please use [GitBash](https://gitforwindows.org/) or a Windows Subsystem for Linux (WSL) for optimal results.
 {% /callout %}
 
 Create a new repository on your favorite Git service. Clone the repository and switch to your newly cloned repository.
