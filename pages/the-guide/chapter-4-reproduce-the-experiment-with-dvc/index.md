@@ -1,5 +1,5 @@
 ---
-title: "Step 4: Reproduce the experiment with DVC"
+title: "Chapter 4: Reproduce the experiment with DVC"
 ---
 
 # {% $markdoc.frontmatter.title %}
@@ -11,6 +11,8 @@ Highly inspired by the [_Get Started: Data Pipelines_ - dvc.org](https://dvc.org
 {% /callout %}
 
 Now that both our code and our data can be shared and manipulated by our team, it's time to procedurize our experiment's steps using DVC to make them easily reproductible and standardized.
+
+We will be using DVC stages to create a pipeline that will be executed by `dvc repro`. A stage in DVC is a command that is executed to produce a result. The result of a stage is a file or a directory. The command of a stage is executed only if the stage's dependencies have changed.
 
 As a reminder, the current steps to run the experiment are as follow:
 
@@ -28,11 +30,10 @@ python src/train.py data/features model.pkl
 python src/evaluate.py model.pkl data/features
 ```
 
-Based on this, we want to create the 3 steps :
+We will split these steps into 3 stages :
 - prepare
 - featurize
 - train
-in dvc, to make them easily reproductible.
 
 
 ## Instructions
@@ -41,7 +42,12 @@ in dvc, to make them easily reproductible.
 This guide has been written with macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use [GitBash](https://gitforwindows.org/) or a Windows Subsystem for Linux (WSL) for optimal results.
 {% /callout %}
 
-Update the `.gitignore` file. DVC will automatically add new lines at the end of the file.
+#### Update the `.gitignore` file. 
+
+Various DVC commands will automatically include the files and directories that should be ignored by Git. We need to take care of files and folders that are outside of the DVC scope. 
+
+Please update the `.gitignore` file with the following content:
+
 
 ```sh
 ## Custom experiment
@@ -61,7 +67,21 @@ __pycache__/
 /model.pkl
 ```
 
+#### Setup the DVC pipeline
+
+Each step of the experiment will be stored as a DVC stage.  
+
+A pipeline is a set of stages that are executed in a specific order based on the dependencies between the stages (deps and outs).
+
+The pipeline will be executed by `dvc repro` to reproduce the experiment. 
+
+Each `dvc stage add` command will create a new stage in the `dvc.yaml` file. 
+
+`dvc.yaml` file can also be edited manually.
+
 Store the command to prepare the dataset in DVC.
+
+###### Prepare stage
 
 ```sh
 dvc stage add -n prepare \
@@ -80,6 +100,8 @@ The output of this command is `data/prepared`.
 {% callout type="note" %}
 The parameters `prepare.seed` and `prepare.split` will be discussed later.
 {% /callout %}
+
+###### Featurize stage
 
 Store the command to perform the features extraction in DVC.
 
@@ -101,6 +123,8 @@ The outputs of this command are `data/features/test.pkl` and `data/features/trai
 The parameters `featurize.max_features` and `featurize.ngrams` will be discussed later.
 {% /callout %}
 
+###### Train stage
+
 Store the command to train the model in DVC.
 
 ```sh
@@ -121,7 +145,7 @@ The output of this command is `model.pkl`.
 The parameters `train.seed`, `train.n_est` and `train.min_split` will be discussed later.
 {% /callout %}
 
-Execute the pipeline.
+###### Execute the pipeline.
 
 ```sh
 # Execute only the required pipeline steps (if files or parameters changed)
@@ -132,7 +156,7 @@ dvc repro
 You can force the execution of the entire pipeline with the command `dvc repro --force`.
 {% /callout %}
 
-Visualize the pipeline.
+###### Visualize the pipeline.
 
 ```sh
 # Display the Directed Acyclic Graph of the pipeline
@@ -163,7 +187,7 @@ dvc dag
       +-------+
 ```
 
-Push the changes to DVC and Git.
+###### Push the changes to DVC and Git.
 
 ```sh
 # Upload the experiment data and cache to the remote bucket

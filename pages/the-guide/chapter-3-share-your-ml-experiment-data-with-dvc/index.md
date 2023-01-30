@@ -88,7 +88,15 @@ Update the `.gitignore` file by changing 'data' to 'data/features' and 'data/pre
 // TODO ajouter des "steps" pour mieux délimiter les étapes et pouvoir spécifier le but et la cause de chacune
 ### update gitignore <why>
 
-TODO
+TODO : please check 
+
+Various DVC commands will automatically include the files and directories that should be ignored by Git. We need to take care of files and folders that are outside of the DVC scope. 
+
+By the end of this chapter, the data.json will be in the scope of DVC. However, the data/features and data/prepared folders will not be in the scope of DVC as they are the result of the `prepare` and `features` steps. These steps take `data.json` as input and produce `data/features` and `data/prepared` as output.
+
+As result, we still must manually ignore the `data/features` and `data/prepared` folders while the `data.json` file will be added to gitignore by DVC commands.
+
+
 ```sh
 # Data used to train the models
 data/features

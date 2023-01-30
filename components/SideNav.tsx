@@ -34,12 +34,12 @@ const items = [
         children: "Chapter 2: Share your ML experiment code with Git",
       },
       {
-        href: "/the-guide/step-3-share-your-ml-experiment-data-with-dvc",
-        children: "Step 3: Share your ML experiment data with DVC",
+        href: "/the-guide/chapter-3-share-your-ml-experiment-data-with-dvc",
+        children: "Chapter 3: Share your ML experiment data with DVC",
       },
       {
-        href: "/the-guide/step-4-reproduce-the-experiment-with-dvc",
-        children: "Step 4: Reproduce the experiment with DVC",
+        href: "/the-guide/chapter-4-reproduce-the-experiment-with-dvc",
+        children: "Chapter 4: Reproduce the experiment with DVC",
       },
       {
         href: "/the-guide/step-5-track-model-evolutions-with-dvc",
