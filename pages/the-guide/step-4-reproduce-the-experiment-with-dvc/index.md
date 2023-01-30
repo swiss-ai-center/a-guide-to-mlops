@@ -104,7 +104,7 @@ dvc stage add -n train \
   python src/train.py data/features model.pkl
 ```
 
-This command adds a new stage called _train_ that has the `src/train.py` and `data/features` files as a dependency.
+This command adds a new stage called _train_ that has the `src/train.py` and `data/features` files as a dependency of the DVC pipeline.
 
 If any of these files change, DVC will run the command `python src/train.py data/features model.pkl` when using `dvc repro`.
 
