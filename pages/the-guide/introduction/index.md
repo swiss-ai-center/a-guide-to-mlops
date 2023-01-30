@@ -16,7 +16,7 @@ We chose the term _experiment_ to address the experimental nature of the machine
 
 ## Disclaimer
 
-This guide has been written for macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use [GitBash](https://gitforwindows.org/) or a Windows Subsystem for Linux (WSL) for optimal results.
+This guide has been written with macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use [GitBash](https://gitforwindows.org/) or a Windows Subsystem for Linux (WSL) for optimal results.
 
 This guide assumes that the steps to be performed are done in a working directory independently of it.
 

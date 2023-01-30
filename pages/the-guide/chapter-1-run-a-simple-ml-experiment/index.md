@@ -9,7 +9,7 @@ title: "Chapter 1: Run a simple ML experiment"
 Let's imagine you recently arrived in a new ML team. They have a very nice ML experiment that you have to take on. This experiment is quite simple:
 
 - It uses 10K posts from StackOverflow
-- It marks the posts that are related to the R programming language with `1`, the others with `0`
+    - The posts that are related to the R programming language are marked with `1`, the others with `0`
 - It splits all of them into training/testing datasets
 - It makes bags of words matrixes from the title and the description of all posts
 - It trains the model to classify the R posts vs. the non-R posts from the training dataset
@@ -18,7 +18,7 @@ Let's imagine you recently arrived in a new ML team. They have a very nice ML ex
     - Measure the Receiver operating characteristic of the R posts vs. the non-R posts
     - Measure the most important words characterising the R posts vs. the non-R posts
 
-You job is to set up MLOps tools to improve the team efficiency, help the documentation of the workflow and track changes made to a model. When the team is happy with the model's performance, you can easily serve the model to the rest of the world.
+Your job is to set up MLOps tools to improve the team efficiency, help the documentation of the workflow, track changes made to a model and easily serve the model to the rest of the world.
 
 In this chapter, you will:
 
@@ -33,7 +33,7 @@ Let's start!
 ## Steps
 
 {% callout type="warning" %}
-This guide has been written for macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use [GitBash](https://gitforwindows.org/) or a Windows Subsystem for Linux (WSL) for optimal results.
+This guide has been written with macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use [GitBash](https://gitforwindows.org/) or a Windows Subsystem for Linux (WSL) for optimal results.
 {% /callout %}
 
 ### Set up the working directory
@@ -44,11 +44,11 @@ If it's the first time you follow this guide, we recommend you to check the [Int
 
 As you started as a new collaborator, create a directory on your computer that you will use for the this new awesome ML experiment. This directory will be your working directory for the rest of the guide.
 
-### Download the codebase
+### Download and set up the codebase
 
-One of your colleague has given you their codebase on a USB stick to start the code so you don't start everything from scratch (how nice of they). It's still an old way to share files with colleagues but you weren't hired for nothing right?
+One of your colleague has given you their codebase on a USB stick so you don't start everything from scratch (how nice of them). It's still an old way to share files with colleagues but you weren't hired for nothing right?
 
-Their work has to be saved in your working directory that you will use for the rest of the guide.
+Their work has to be copied in your working directory.
 
 _To simulate the USB stick, you can download the source code for this simple ML experiment from GitHub with the following commands._
 
@@ -70,6 +70,10 @@ rm -rf a-guide-to-mlops-code
 rm -f code.zip
 ```
 
+### Explore the codebase
+
+Explore the codebase and try to understand the content of the files. You have a summary for each file below.
+
 Your working directory should look like this.
 
 ```
@@ -82,8 +86,6 @@ Your working directory should look like this.
 │   └── train.py
 └── params.yaml
 ```
-
-Explore the codebase and try to understand the content of the files. You have a summary of each file in the working directory.
 
 | **File**              | **Description**                                   | **Input**                             | **Output**                                                        |
 |-----------------------|---------------------------------------------------|---------------------------------------|-------------------------------------------------------------------|
@@ -98,7 +100,7 @@ Explore the codebase and try to understand the content of the files. You have a 
 
 The same colleague that gave you the codebase told you that you can get the dataset from the company's NAS. This is where all data is stored and you can get a copy of it there.
 
-They told you that the data must be saved as `data/data.xml` in your working directory. Otherwise, the experiment cannot be run (without their advice, you couldn't run the experiment on your machine).
+They told you that the data must be saved as `data/data.xml` in your working directory. Otherwise, the experiment cannot be run.
 
 _To simulate the download of the dataset from the NAS, you can download the dataset for this simple ML experiment from GitHub with the following commands._
 
@@ -122,7 +124,11 @@ rm -rf a-guide-to-mlops-data
 rm -f data.zip
 ```
 
-Your working directory should look like this.
+### Explore the dataset
+
+Explore the dataset and try to understand the content of the file.
+
+Your working directory should now look like this.
 
 ```
 .
@@ -154,7 +160,7 @@ source .venv/bin/activate
 pip install --requirement src/requirements.txt
 ```
 
-Run the experiment.
+The same nice colleague knows by heart how to run the experiment. They give you the steps.
 
 ```sh
 # Prepare the dataset
@@ -174,9 +180,13 @@ python src/evaluate.py model.pkl data/features
 The `evaluate.py` Python script might display a warning regarding DVC. You can safely ignore it for now.
 {% /callout %}
 
-Congrats! You have now a running experiment on your machine.
+### Check the results
 
-Your working directory should look like this.
+Congrats! You have now a running experiment on your machine. Thanks to your dear colleague, you were able to run the experiment. Without their advice, you wouldn't know how to run the experiment on your machine.
+
+Explore the outputs and try to understand the content of the files.
+
+Your working directory should now look like this.
 
 ```
 .
@@ -226,15 +236,15 @@ You have spotted the following issues:
 
 - ❌ The codebase still needs to be downloaded and set up locally in order to run the experiment;
 - ❌ The dataset still needs to be downloaded and placed in the right directory in order to run the experiment;
-- ❌ Someone had to told you the steps used to create the model.
+- ❌ Someone had to tell you the steps used to create the model.
 
-You will improve the workflow for better efficiency and team work in the next steps. You can now safely continue the guide.
+You will improve the workflow for better efficiency and teamwork in the next steps. You can now safely continue the guide.
 
 ## State of the MLOps process
 
 - ❌ The codebase still needs to be downloaded and set up locally in order to run the experiment;
 - ❌ The dataset still needs to be downloaded and placed in the right directory in order to run the experiment;
-- ❌ The steps used to create the model can be forgotten;
+- ❌ Someone has to tell you the steps used to create the model and they can be forgotten/undocumented;
 - ❌ The changes done to a model cannot be visualized and improvements and/or deteriorations are hard to identify;
 - ❌ There is no guarantee that the experiment can be executed on another machine;
 - ❌ The model might have required artifacts that can be forgotten or omitted when saving/loading the model for future usage. There is no easy way to use the model outside of the experiment context.

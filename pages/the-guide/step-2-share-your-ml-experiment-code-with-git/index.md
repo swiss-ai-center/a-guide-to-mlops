@@ -17,7 +17,7 @@ At the end of this step we will have a versioned codebase we can share with our 
 ## Instructions
 
 {% callout type="warning" %}
-This guide has been written for macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use [GitBash](https://gitforwindows.org/) or a Windows Subsystem for Linux (WSL) for optimal results.
+This guide has been written with macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use [GitBash](https://gitforwindows.org/) or a Windows Subsystem for Linux (WSL) for optimal results.
 {% /callout %}
 
 ### Create a new Git repository
@@ -94,7 +94,7 @@ Want to see what the result of this step should look like? Have a look at the Gi
 
 - ✅ The codebase can be shared among the developers. The codebase can be improved collaboratively;
 - ❌ The dataset still needs to be downloaded and placed in the right directory in order to run the experiment;
-- ❌ The steps used to create the model can be forgotten;
+- ❌ Someone has to tell you the steps used to create the model and they can be forgotten/undocumented;
 - ❌ The changes done to a model cannot be visualized and improvements and/or deteriorations are hard to identify;
 - ❌ There is no guarantee that the experiment can be executed on another machine;
 - ❌ The model might have required artifacts that can be forgotten or omitted when saving/loading the model for future usage. There is no easy way to use the model outside of the experiment context.
