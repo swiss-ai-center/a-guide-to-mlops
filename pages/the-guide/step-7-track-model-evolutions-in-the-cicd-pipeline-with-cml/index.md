@@ -8,6 +8,14 @@ title: "Step 7: Track model evolutions in the CI/CD pipeline with CML"
 
 The purpose of this step is to track the model evolutions and generate reports directly in the CI/CD pipeline so it can be discussed collectively online before commiting the changes to the codebase.
 
+We will start by updating our pipeline description to add a step that will generate a report and upload it as an artifact. Then, we will update the pipeline to generate a report and create a pull request with the report as a comment. Then we will trigger the report generation by :
+- creating an issue in our issue tracker
+- make a branch associated to the issue
+- make a change in the new branch
+- push everything and open a pull request
+
+After this step each successfull run of the pipeline will comment the associated pull request with a report.
+
 {% callout type="note" %}
 CML can do much more than just generating reports. Have a look to the [Train the model on a Kubernetes cluster with CML](/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml) guide.
 {% /callout %}
@@ -189,6 +197,8 @@ git push
 Create a new issue by going to the **Issues** section from the top header of your GitHub repository. Select **New issue** and describe the work/improvements/ideas that you want to integrate to the codebase. In this guide, we will name the issue _Demonstrate step 7_. Create the issue by selecting **Submit new issue**.
 
 The issue opens. Select **Create a branch for this issue or link a pull request** from the right sidebar. Create the branch by selecting **Create branch**. A new pop-up opens with the name of the branch you want to checkout to.
+
+// TODO ici ça fonctionne bien sur Gitlab mais pas top sur Github
 
 Go to the **Code** section from the top header of your GitHub repository. Select **_N_ branches** (where _N_ is the current number of branches your repository has). Next to the newly created branch, select **New pull request**. Name the pull request and select **Create pull request** to create the pull request.
 
