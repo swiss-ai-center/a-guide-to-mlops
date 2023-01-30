@@ -6,7 +6,7 @@ title: "Chapter 1: Run a simple ML experiment"
 
 ## Summary
 
-Let's imagine you arrive in a new ML team. They have a very nice ML experiment that you have to take on. This experiment is quite simple:
+Let's imagine you recently arrived in a new ML team. They have a very nice ML experiment that you have to take on. This experiment is quite simple:
 
 - It uses 10K posts from StackOverflow
 - It marks the posts that are related to the R programming language with `1`, the others with `0`
@@ -18,14 +18,17 @@ Let's imagine you arrive in a new ML team. They have a very nice ML experiment t
     - Measure the Receiver operating characteristic of the R posts vs. the non-R posts
     - Measure the most important words characterising the R posts vs. the non-R posts
 
-You job is to set up MLOps tools to inmprove the team efficiency, help the documentation of the workflow and track changes made to a model. When the team is happy with the model's performances, you can easily serve the model to the rest of the world.
+You job is to set up MLOps tools to improve the team efficiency, help the documentation of the workflow and track changes made to a model. When the team is happy with the model's performance, you can easily serve the model to the rest of the world.
 
 In this chapter, you will:
 
-1. Download the codebase
-2. Download the dataset
-3. Set up a Python environment to run the experiment
-4. Run the experiment locally for the first time
+1. Set up the working directory
+2. Download the codebase
+3. Download the dataset
+4. Set up a Python environment to run the experiment
+5. Run the experiment locally for the first time
+
+Let's start!
 
 ## Steps
 
@@ -33,13 +36,21 @@ In this chapter, you will:
 This guide has been written for macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use [GitBash](https://gitforwindows.org/) or a Windows Subsystem for Linux (WSL) for optimal results.
 {% /callout %}
 
-### Download and set up the codebase
+### Set up the working directory
 
-In this team, one of your colleague might have given you their codebase on a USB stick to start the code so you don't start everything from scratch.
+{% callout type="note" %}
+If it's the first time you follow this guide, we recommend you to check the [Introduction - Requirements](/the-guide/introduction#requirements).
+{% /callout %}
 
-On your computer, create 
+As you started as a new collaborator, create a directory on your computer that you will use for the this new awesome ML project. This directory will be your working directory for the rest of the guide.
 
-To simulate the USB stick, you can download the source code for this simple ML experiment from GitHub.
+### Download the codebase
+
+One of your colleague have given you their codebase on a USB stick to start the code so you don't start everything from scratch (how nice of they). It's still an old way to share files with colleagues but you weren't hired for nothing right?
+
+Their work has to be saved in your working directory that you will use for the rest of the guide.
+
+_To simulate the USB stick, you can download the source code for this simple ML experiment from GitHub with the following commands._
 
 ```sh
 # Download the archive containing the code
@@ -59,7 +70,7 @@ rm -rf a-guide-to-mlops-code
 rm -f code.zip
 ```
 
-The working directory should look like this.
+Your working directory should look like this.
 
 ```
 .
@@ -72,7 +83,7 @@ The working directory should look like this.
 └── params.yaml
 ```
 
-Explore the codebase and try to understand the content of the files. You have a summary of each file in the the directory.
+Explore the codebase and try to understand the content of the files. You have a summary of each file in the working directory.
 
 | **File**              | **Description**                                   | **Input**                             | **Output**                                                        |
 |-----------------------|---------------------------------------------------|---------------------------------------|-------------------------------------------------------------------|
@@ -85,7 +96,11 @@ Explore the codebase and try to understand the content of the files. You have a 
 
 ### Download and set up the dataset
 
-Download the dataset to run this simple ML experiment.
+The same colleague that gave you the codebase told you that you can get the dataset from the company's NAS. This is where all data is stored and you can get a copy of it there.
+
+They told you that the data must be saved as `data/data.xml` in your working directory. Otherwise, the experiment cannot be run (without their advice, you couldn't run the experiment on your machine).
+
+_To simulate the download of the dataset from the NAS, you can download the dataset for this simple ML experiment from GitHub with the following commands._
 
 ```sh
 # Download the archive containing the dataset
@@ -107,7 +122,7 @@ rm -rf a-guide-to-mlops-data
 rm -f data.zip
 ```
 
-The working directory should look like this.
+Your working directory should look like this.
 
 ```
 .
@@ -124,7 +139,9 @@ The working directory should look like this.
 
 ### Run the experiment
 
-Generate the virtual environment and install the dependencies.
+Great! You now have everything you need to run the experiment: the codebase is set up, the dataset is in the right place and you can finally try the experiment for the first time.
+
+Generate the virtual environment and install the dependencies in your working directory with the following commands.
 
 ```sh
 # Generate the virtual environment
@@ -157,13 +174,61 @@ python src/evaluate.py model.pkl data/features
 The `evaluate.py` Python script might display a warning regarding DVC. You can safely ignore it for now.
 {% /callout %}
 
-You have now a running experiment. Check the summary.
+Congrats! You have now a running experiment on your machine.
+
+Your working directory should look like this.
+
+```
+.
+├── data
+│   ├── features
+│   │   ├── test.pkl
+│   │   └── train.pkl
+│   ├── prepared
+│   │   ├── test.tsv
+│   │   └── train.tsv
+│   └── data.xml
+├── evaluation
+│   ├── plots
+│   │   ├── metrics
+│   │   │   ├── avg_prec.tsv
+│   │   │   └── roc_auc.tsv
+│   │   ├── sklearn
+│   │   │   ├── confusion_matrix.json
+│   │   │   └── roc.json
+│   │   ├── importance.png
+│   │   └── prc.json
+│   ├── metrics.json
+│   └── report.html
+├── src
+│   ├── evaluate.py
+│   ├── featurization.py
+│   ├── prepare.py
+│   ├── requirements.txt
+│   └── train.py
+├── model.pkl
+└── params.yaml
+```
+
+This chapter is done, you can check the summary.
 
 ## Summary
 
-Congrats! You have now a running experiment. 
+In this chapter, you were able to:
 
-Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-1-run-a-simple-ml-experiment](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-1-run-a-simple-ml-experiment).
+1. Set up the working directory
+2. Download the codebase
+3. Download the dataset
+4. Set up a Python environment to run the experiment
+5. Run the experiment locally for the first time
+
+You have spotted the following issues:
+
+- ❌ The codebase still needs to be downloaded and set up locally in order to run the experiment;
+- ❌ The dataset still needs to be downloaded and placed in the right directory in order to run the experiment;
+- ❌ Someone had to told you the steps used to create the model.
+
+You will improve the workflow for better efficiency and team work in the next steps. You can now safely continue the guide.
 
 ## State of the MLOps process
 
@@ -177,6 +242,8 @@ Want to see what the result of this step should look like? Have a look at the Gi
 ## Sources
 
 Highly inspired by the [_Get Started: Data Pipelines_ - dvc.org](https://dvc.org/doc/start/data-management/pipelines) guide.
+
+Want to see what the result of this step should look like? Have a look at the Git repository directory here: [chapter-1-run-a-simple-ml-experiment](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-1-run-a-simple-ml-experiment).
 
 ## Next & Previous steps
 

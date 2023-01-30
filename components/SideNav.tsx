@@ -26,8 +26,8 @@ const items = [
     links: [
       { href: "/the-guide/introduction", children: "Introduction" },
       {
-        href: "/the-guide/step-1-run-a-simple-ml-experiment",
-        children: "Step 1: Run a simple ML experiment",
+        href: "/the-guide/chapter-1-run-a-simple-ml-experiment",
+        children: "Chapter 1: Run a simple ML experiment",
       },
       {
         href: "/the-guide/step-2-share-your-ml-experiment-code-with-git",

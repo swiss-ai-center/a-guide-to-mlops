@@ -23,7 +23,7 @@ Not sure where to start? Check the following links to get started!
 ## The guide
 
 - [Introduction](/the-guide/introduction)
-- [Step 1: Run a simple ML experiment](/the-guide/step-1-run-a-simple-ml-experiment)
+- [Chapter 1: Run a simple ML experiment](/the-guide/chapter-1-run-a-simple-ml-experiment)
 - [Step 2: Share your ML experiment code with Git](/the-guide/step-2-share-your-ml-experiment-code-with-git)
 - [Step 3: Share your ML experiment data with DVC](/the-guide/step-3-share-your-ml-experiment-data-with-dvc)
 - [Step 4: Reproduce the experiment with DVC](/the-guide/step-4-reproduce-the-experiment-with-dvc)

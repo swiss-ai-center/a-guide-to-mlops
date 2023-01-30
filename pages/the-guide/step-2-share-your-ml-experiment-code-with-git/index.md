@@ -101,5 +101,5 @@ Want to see what the result of this step should look like? Have a look at the Gi
 
 ## Next & Previous steps
 
-- **Previous**: [Step 1: Run a simple ML experiment](/the-guide/step-1-run-a-simple-ml-experiment)
+- **Previous**: [Chapter 1: Run a simple ML experiment](/the-guide/chapter-1-run-a-simple-ml-experiment)
 - **Next**: [Step 3: Share your ML experiment data with DVC](/the-guide/step-3-share-your-ml-experiment-data-with-dvc)
