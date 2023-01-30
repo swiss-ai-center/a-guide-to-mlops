@@ -48,43 +48,19 @@ Create the Google Storage Bucket by going to **Cloud Storage** on the left sideb
 
 Name the bucket (_mlopsdemo_), select _europe-west6 (Zurich)_ for the **Location type**, select _Standard_ for the **Default storage class**, check the _Enforce public access prevention on this bucket_ option and select _Uniform_ for the **Access control**, select _None_ for the **Projection tools** and select **Create**.
 
-Update the `.gitignore` file.
+Add the following lines to the `.gitignore` file. These files will be ignored by Git and managed by DVC to store the experiment data.
 
 ```sh
-## Custom experiment
-
 # Data used to train the models
 data/features
 data/prepared
-
-# The models
-*.pkl
-
-# The models evaluations
-evaluation
-
-## Python
-
-# Environments
-.venv
-
-# Byte-compiled / optimized / DLL files
-__pycache__/
 ```
 
-Install DVC.
+Update the `src/requirements.txt` file to include some additional packages.
+We will need dvc, pandas, pyaml, scikit-learn, scipy, and matplotlib to run the experiment.
+Here, the `dvc[gs]` package enables support for Google Cloud Storage.
 
 ```sh
-# Install DVC
-pip install "dvc==2.37.0"
-
-# If using Google Cloud Storage, install DVC with Google Cloud Storage support
-pip install "dvc[gs]==2.37.0"
-```
-
-Update the `src/requirements.txt` file to include the added packages.
-
-```
 dvc==2.37.0
 dvc[gs]==2.37.0
 dvclive==1.0.0
@@ -93,6 +69,13 @@ pyaml==21.10.1
 scikit-learn==1.1.3
 scipy==1.9.3
 matplotlib==3.6.2
+```
+
+You can now install the required packages from the `src/requirements.txt` file.
+
+```sh
+# Install the required packages
+pip install -r src/requirements.txt
 ```
 
 Initialize and configure DVC.
