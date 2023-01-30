@@ -42,11 +42,11 @@ This guide has been written for macOS and Linux operating systems in mind. If yo
 If it's the first time you follow this guide, we recommend you to check the [Introduction - Requirements](/the-guide/introduction#requirements).
 {% /callout %}
 
-As you started as a new collaborator, create a directory on your computer that you will use for the this new awesome ML project. This directory will be your working directory for the rest of the guide.
+As you started as a new collaborator, create a directory on your computer that you will use for the this new awesome ML experiment. This directory will be your working directory for the rest of the guide.
 
 ### Download the codebase
 
-One of your colleague have given you their codebase on a USB stick to start the code so you don't start everything from scratch (how nice of they). It's still an old way to share files with colleagues but you weren't hired for nothing right?
+One of your colleague has given you their codebase on a USB stick to start the code so you don't start everything from scratch (how nice of they). It's still an old way to share files with colleagues but you weren't hired for nothing right?
 
 Their work has to be saved in your working directory that you will use for the rest of the guide.
 
