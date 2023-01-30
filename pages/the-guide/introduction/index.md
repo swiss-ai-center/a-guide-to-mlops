@@ -30,7 +30,7 @@ The following tools must be installed to follow this guide.
 - [Git](https://git-scm.com/)
 - [wget](https://linux.die.net/man/1/wget)
 - [unzip](https://linux.die.net/man/1/unzip)
-- Optional: [Google Cloud CLI (`gcloud`)](https://cloud.google.com/sdk/docs/install-sdk)
+- [Google Cloud CLI (`gcloud`)](https://cloud.google.com/sdk/docs/install-sdk)
 
 We recommend to use [Visual Studio Code](https://code.visualstudio.com/) to follow this guide.
 
