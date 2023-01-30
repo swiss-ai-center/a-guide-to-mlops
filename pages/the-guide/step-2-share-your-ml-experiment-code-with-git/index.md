@@ -27,8 +27,6 @@ Using GitLab? Follow the related documentation [_Create a project_ - docs.gitlab
 Create a `.gitignore` file to ignore the experiment results and some files related to Python.
 
 ```sh
-## Custom experiment
-
 # Data used to train the models
 data
 
@@ -50,14 +48,23 @@ __pycache__/
 Push the changes to Git.
 
 ```sh
+# Initialize the repository
+git init
+
+# Rename the master branch
+git branch -M main
+
 # Add all the files
 git add .
 
 # Commit the changes
 git commit -m "My first ML experiment shared on GitLab"
 
+# Add your remote repository
+git remote add origin <git@example.com:username/repository.git>
+
 # Push the changes
-git push
+git push --set-upstream origin main
 ```
 
 Congrats! You now have a codebase that can be used and shared among the team.
