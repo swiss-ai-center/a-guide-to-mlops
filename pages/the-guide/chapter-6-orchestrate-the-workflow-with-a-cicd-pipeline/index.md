@@ -1,5 +1,5 @@
 ---
-title: "Step 6: Orchestrate the workflow with a CI/CD pipeline"
+title: "Chapter 6: Orchestrate the workflow with a CI/CD pipeline"
 ---
 
 # {% $markdoc.frontmatter.title %}
@@ -10,15 +10,15 @@ title: "Step 6: Orchestrate the workflow with a CI/CD pipeline"
 Highly inspired by the [_Using service accounts_ - dvc.org](https://dvc.org/doc/user-guide/setup-google-drive-remote#using-service-accounts) guide.
 {% /callout %}
 
-At this stage, we have our code, our data and our execution process that are shared through git and dvc. 
+At this point, we have our code, our data and our execution process that are shared through git and dvc. 
 
-We will now add  CI/CD pipeline to execute the ML experiment remotely, to ensure it can always be executed and to avoid the "but it works on my machine." effect.
+One of great advantages of using a DVC pipeline is the facility to reproduce the experiment. We will now add CI/CD pipeline to execute the ML experiment remotely, to ensure it can always be executed and to avoid the "but it works on my machine." effect.
 
 To do so we will start by creating an IAM Service Account to grant access to the google project. Then we will create and configure the `CI/CD Pipeline` to run the `dvc pipeline` each time there is a push to main.
 
-At the end of this step, our pipeline will prove the experiment runs in a "blank" environment after each push to main.
+At the end of this chapter, our pipeline will prove the experiment runs in a "blank" environment after each push to main.
 
-More functionalities offered by the CI/CD pipeline will be added in the next steps.
+More functionalities offered by the CI/CD pipeline will be added in the next chapters.
 
 {% callout type="note" %}
 Self-hosting your storage with MinIO? Check out the [Deploy MinIO](/advanced-concepts/deploy-minio) guide!
@@ -30,7 +30,9 @@ Self-hosting your storage with MinIO? Check out the [Deploy MinIO](/advanced-con
 This guide has been written with macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use [GitBash](https://gitforwindows.org/) or a Windows Subsystem for Linux (WSL) for optimal results.
 {% /callout %}
 
-On the [Google Cloud console](https://console.cloud.google.com/), select **Select a project** in the upper right corner of the screen and select the project that was created in [Step 3: Share your ML experiment data with DVC](/the-guide/step-3-share-your-ml-experiment-data-with-dvc).
+#### Create a Google Service Account to be used by the CI/CD pipeline
+
+On the [Google Cloud console](https://console.cloud.google.com/), select **Select a project** in the upper right corner of the screen and select the project that was created in [Chapter 3: Share your ML experiment data with DVC](/the-guide/chapter-3-share-your-ml-experiment-data-with-dvc).
 
 On the frontpage, note the project ID, it will be used later.
 
@@ -40,7 +42,14 @@ Select **Create Service Account**, name the Service Account Key (_mlopsdemo_) se
 
 Select the newly created service account, select **Keys** and add a new key (JSON format). Save the key under the name `google-service-account-key.json`, it will be used later.
 
-### GitHub Actions
+#### Setup your repository CI/CD workflow and store the Google Service Account key
+
+We are about the setup the CI/CD pipeline to run the experiment each time there is a push to main. 
+
+Please refer to the correct instructions based on your Git repository provider. The instructions are slightly different for GitHub and GitLab.
+
+###### GitHub Actions
+
 
 {% callout type="note" %}
 Using GitLab? Go to the [GitLab CI](#gitlab-ci) section!
@@ -50,7 +59,6 @@ Using GitLab? Go to the [GitLab CI](#gitlab-ci) section!
 Highly inspired by the [_Creating encrypted secrets for a repository_ - docs.github.com](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository) guide.
 {% /callout %}
 
-Store the Google Service Account made earlier in GitHub Secrets.
 
 ```sh
 # Display the Google Service Account key
@@ -58,6 +66,7 @@ cat google-service-account-key.json
 ```
 
 Store the output as a CI/CD variable by going to the **Settings** section from the top header of your GitHub repository. Select **Secrets > Actions** and select **New repository secret**. Create a new variable named `GCP_SERVICE_ACCOUNT_KEY` with the output value of the Google Service Account key file as its value.Save the variable by selecting "Add secret".
+
 
 At the root level of your Git repository, create a GitHub Workflow configuration file `.github/workflows/mlops.yml`.
 
@@ -106,7 +115,7 @@ jobs:
 Finished? Go to the [Push to the Git repository](#push-to-the-git-repository) section!
 {% /callout %}
 
-### GitLab CI
+###### GitLab CI
 
 {% callout type="note" %}
 Using GitHub? Go to the [GitHub Actions](#github-actions) section!
@@ -164,7 +173,7 @@ run-ml-experiment:
 Finished? Go to the [Push to the Git repository](#push-to-the-git-repository) section!
 {% /callout %}
 
-### Push to the Git repository
+#### Push to the Git repository
 
 Push the changes to Git.
 
@@ -181,9 +190,13 @@ git push
 
 Congrats! You now have a CI/CD pipeline that will run the experiment on each commit to ensure the whole experiment can still be reproduced using the data and the commmands to run using DVC.
 
+For GitLab, you can see the pipeline running on the **CI/CD > Pipelines** page.
+
+For GitHub, you can see the pipeline running on the **Actions** page.
+
 ## Check the results
 
-Want to see what the result at the end of this chapter should look like? Have a look at the Git repository directory here: [step-6-orchestrate-the-workflow-with-a-cicd-pipeline](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-6-orchestrate-the-workflow-with-a-cicd-pipeline).
+Want to see what the result at the end of this chapter should look like? Have a look at the Git repository directory here: [chapter-6-orchestrate-the-workflow-with-a-cicd-pipeline](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-6-orchestrate-the-workflow-with-a-cicd-pipeline).
 
 ## State of the MLOps process
 
@@ -194,7 +207,7 @@ Want to see what the result at the end of this chapter should look like? Have a 
 - ✅ The experiment can be executed on a clean machine with the help of the CI/CD pipeline;
 - ❌ The model might have required artifacts that can be forgotten or omitted when saving/loading the model for future usage. There is no easy way to use the model outside of the experiment context.
 
-## Next & Previous steps
+## Next & Previous chapters
 
-- **Previous**: [Step 5: Track model evolutions with DVC](/the-guide/step-5-track-model-evolutions-with-dvc)
-- **Next**: [Step 7: Track model evolutions in the CI/CD pipeline with CML](/the-guide/step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml)
+- **Previous**: [Chapter 5: Track model evolutions with DVC](/the-guide/chapter-5-track-model-evolutions-with-dvc)
+- **Next**: [Chapter 7: Track model evolutions in the CI/CD pipeline with CML](/the-guide/chapter-7-track-model-evolutions-in-the-cicd-pipeline-with-cml)

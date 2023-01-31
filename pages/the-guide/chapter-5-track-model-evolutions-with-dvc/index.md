@@ -1,5 +1,5 @@
 ---
-title: "Step 5: Track model evolutions with DVC"
+title: "Chapter 5: Track model evolutions with DVC"
 ---
 
 # {% $markdoc.frontmatter.title %}
@@ -10,13 +10,13 @@ title: "Step 5: Track model evolutions with DVC"
 Highly inspired by the [_Get Started: Metrics, Parameters, and Plots_ - dvc.org](https://dvc.org/doc/start/data-management/metrics-parameters-plots) guide.
 {% /callout %}
 
-Now that the 3 first steps, `prepare`, `extract` and ` train` are executable from DVC, we will add the last step `evauate` and configure dvc plots to display it.
+Now that the first 3 steps of the experiment are configured as the stages of a DVC pipeline, we will add the last step `evaluate` and configure dvc plots to display it.
 
 Our `evaluate` step generates a `metrics.json` file used to store performance indicators of our model with it's new parameters.
 
 We will configure a DVC stage that evaluates the model and enables us to compare the result of the unstaged evaluation with the last commited evaluation.
 
-Once this step is created, we will be able to change our model's configruation, evaluate the new configuration and compare it's performance with the last commited ones with. 
+Once this stage is created, we will be able to change our model's configruation, evaluate the new configuration and compare it's performance with the last commited ones with. 
 
 ## Instructions
 
@@ -44,6 +44,8 @@ dvc_plots
 /model.pkl
 ```
 
+#### Create a DVC stage to evaluate the model
+
 Store the command to evaluate the model in DVC.
 
 ```sh
@@ -64,7 +66,7 @@ If any of these files change, DVC will run the command `python src/evaluate.py m
 
 This command writes the model's metrics to `evaluation/metrics.json`. It writes the `confusion_matrix` to `evaluation/plots/sklearn/confusion_matrix.json`, the `precision_recall_curve` to `evaluation/plots/prc.json ` and the `roc_curve` to `evaluation/plots/sklearn/roc.json` that will be used to create plots.
 
-Visualize the pipeline.
+#### Visualize the pipeline.
 
 ```sh
 # Display the Directed Acyclic Graph of the pipeline
@@ -101,6 +103,8 @@ dvc dag
         +----------+
 ```
 
+#### Setup the plots
+
 Set the plots axes with the following commands. This is only done once.
 
 ```sh
@@ -114,7 +118,8 @@ dvc plots modify evaluation/plots/sklearn/roc.json -x fpr -y tpr
 dvc plots modify evaluation/plots/sklearn/confusion_matrix.json -x actual -y predicted -t confusion
 ```
 
-Push the changes to DVC and Git.
+#### Push the changes to DVC and Git.
+
 
 ```sh
 # Upload the experiment data and cache to the remote bucket
@@ -134,7 +139,10 @@ git push
 This is necessary so the next commands can display a difference between the current workspace and the `HEAD` of the Git repository.
 {% /callout %}
 
-Update the parameters to run the experiment in the `params.yaml` file.
+#### A new experiment
+
+Create a new experiment with the following parameters.
+
 
 ```yaml
 prepare:
@@ -154,11 +162,11 @@ train:
 Run the experiment.
 
 ```sh
-# Run the experiment. DVC will automatically run all required steps
+# Run the experiment. DVC will automatically run all required stages
 dvc repro
 ```
 
-Compare the two iterations.
+#### Compare the two iterations.
 
 ```sh
 # Compare the parameters' difference
@@ -188,10 +196,11 @@ dvc plots diff
 ```
 
 {% callout type="note" %}
-Remember? We did set the parameters, metrics and plots in the previous step: [Step 4: Reproduce the experiment with DVC](/the-guide/step-4-reproduce-the-experiment-with-dvc).
+Remember? We did set the parameters, metrics and plots in the previous chapter: [Chapter 4: Reproduce the experiment with DVC](/the-guide/chapter-4-reproduce-the-experiment-with-dvc).
 {% /callout %}
 
-Push the changes to DVC and Git.
+#### Push the changes to DVC and Git.
+
 
 ```sh
 # Upload the experiment data and cache to the remote bucket
@@ -222,7 +231,7 @@ Want to see what the result at the end of this chapter should look like? Have a 
 - ❌ There is no guarantee that the experiment can be executed on another machine;
 - ❌ The model might have required artifacts that can be forgotten or omitted when saving/loading the model for future usage. There is no easy way to use the model outside of the experiment context.
 
-## Next & Previous steps
+## Next & Previous chapters
 
-- **Previous**: [Step 4: Reproduce the experiment with DVC](/the-guide/step-4-reproduce-the-experiment-with-dvc)
-- **Next**: [Step 6: Orchestrate the workflow with a CI/CD pipeline](/the-guide/step-6-orchestrate-the-workflow-with-a-cicd-pipeline)
+- **Previous**: [Chapter 4: Reproduce the experiment with DVC](/the-guide/chapter-4-reproduce-the-experiment-with-dvc)
+- **Next**: [Chapter 6: Orchestrate the workflow with a CI/CD pipeline](/the-guide/chapter-6-orchestrate-the-workflow-with-a-cicd-pipeline)

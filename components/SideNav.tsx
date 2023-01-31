@@ -42,12 +42,12 @@ const items = [
         children: "Chapter 4: Reproduce the experiment with DVC",
       },
       {
-        href: "/the-guide/step-5-track-model-evolutions-with-dvc",
-        children: "Step 5: Track model evolutions with DVC",
+        href: "/the-guide/chapter-5-track-model-evolutions-with-dvc",
+        children: "Chapter 5: Track model evolutions with DVC",
       },
       {
-        href: "/the-guide/step-6-orchestrate-the-workflow-with-a-cicd-pipeline",
-        children: "Step 6: Orchestrate the workflow with a CI/CD pipeline",
+        href: "/the-guide/chapter-6-orchestrate-the-workflow-with-a-cicd-pipeline",
+        children: "Chapter 6: Orchestrate the workflow with a CI/CD pipeline",
       },
       {
         href: "/the-guide/step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml",
