@@ -236,7 +236,7 @@ However, you have identified the following areas for improvement:
 
 In the next chapters, you will enhance the workflow for better efficiency and teamwork.
 
-You can safely continue to the next chapter.
+You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 

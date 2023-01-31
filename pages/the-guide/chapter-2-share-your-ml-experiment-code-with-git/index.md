@@ -16,7 +16,7 @@ In this chapter, you'll cover:
 4. Excluding experiment results, data, models and Python environment files from Git commits
 5. Pushing your changes to the Git repository
 
-Let's get started!"
+Let's get started!
 
 ## Steps
 
@@ -154,11 +154,11 @@ When used by another member of the team, they can easily clone the experiment fr
 git clone <your git repository url>
 ```
 
-You can safely continue to the next chapter.
+You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
-- ✅ Codebase can be shared and improved by multiple developers;
+- ✅ The codebase can be shared and improved by multiple developers;
 - ❌ Dataset requires manual download and placement;
 - ❌ Model steps rely on verbal communication and may be undocumented;
 - ❌ Changes to model are not easily visualized;

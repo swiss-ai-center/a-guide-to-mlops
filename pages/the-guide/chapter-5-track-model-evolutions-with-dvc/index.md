@@ -8,13 +8,15 @@ title: "Chapter 5: Track model evolutions with DVC"
 
 In the previous chapter, you did set up a DVC pipeline to reproduce your experiment.
 
+Once this stage is created, you'll be able to change our model's configruation, evaluate the new configuration and compare it's performance with the last commited ones. 
+
 In this chapter, you'll cover:
 
 - Updating the experiment parameters
-- Reproduce the experiment
+- Reproducing the experiment
 - Visualizing the changes made to the model
 
-Once this stage is created, we will be able to change our model's configruation, evaluate the new configuration and compare it's performance with the last commited ones with. 
+Let's get started!
 
 ## Steps
 
@@ -109,6 +111,8 @@ DVC shows you the differences so you can easily compare the two iterations.
 
 You should notice the improvements made to the model thanks to the DVC reports. These improvements are very small but illustrate the workflow. Try to tweak the parameters to improve the model and play with the reports to see how your model's performance changes.
 
+Do not push the improved version of your model yet, it will be done in a future chapter.
+
 ### Check the results
 
 Congrats! You now have a simple way to compare the models with the used parameters and metrics.
@@ -119,11 +123,21 @@ This chapter is done, you can check the summary.
 
 In this chapter, you have successfully:
 
-You can safely continue to the next chapter.
+- Updated the experiment parameters
+- Reproducing the experiment
+- Visualizing the changes made to the model
+
+You did fix some of the previous issues:
+
+- ✅ The changes done to a model can be visualized with parameters, metrics and plots to identify differences between iterations
+
+You have solid metrics to evaluate the changes before intergrating your work in the code codebase.
+
+You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
-- ✅ Codebase can be shared and improved by multiple developers;
+- ✅ The codebase can be shared and improved by multiple developers;
 - ✅ The dataset can be shared among the developers and is placed in the right directory in order to run the experiment;
 - ✅ The steps used to create the model are documented and can be re-executed;
 - ✅ The changes done to a model can be visualized with parameters, metrics and plots to identify differences between iterations;

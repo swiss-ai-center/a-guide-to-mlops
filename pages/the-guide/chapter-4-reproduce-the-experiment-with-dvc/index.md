@@ -38,6 +38,8 @@ python src/train.py data/features model.pkl
 python src/evaluate.py model.pkl data/features
 ```
 
+Let's get started!
+
 ## Steps
 
 {% callout type="warning" %}
@@ -354,11 +356,18 @@ dvc repro
 
 It will only run the required stages thanks to DVC cache.
 
-You can safely continue to the next chapter.
+However, you might have identified the following areas for improvement:
+
+- ❌ How can I ensure my changes helps to improve the model?
+- ❌ How can I ensure my model still can be run on someone's computer?
+
+In the next chapters, you will enhance the workflow for better efficiency and teamwork.
+
+You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
-- ✅ Codebase can be shared and improved by multiple developers;
+- ✅ The codebase can be shared and improved by multiple developers;
 - ✅ The dataset can be shared among the developers and is placed in the right directory in order to run the experiment;
 - ✅ The steps used to create the model are documented and can be re-executed;
 - ❌ Changes to model are not easily visualized;

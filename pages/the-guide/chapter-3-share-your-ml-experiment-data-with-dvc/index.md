@@ -23,10 +23,11 @@ In this chapter, you'll cover:
 7. Pushing the data files to DVC
 8. Pushing the metadata files to Git
 
-
 {% callout type="note" %}
 Want to self-host your storage? Check out the [Deploy MinIO](/advanced-concepts/deploy-minio) guide!
 {% /callout %}
+
+Let's get started!
 
 ## Steps
 
@@ -133,7 +134,7 @@ pip install -r src/requirements.txt
 # Initialize DVC in the working directory
 dvc init
 
-# Add the Google remote storage bucket
+# Add the Google remote storage bucket (`mlopsdemo-bucket`)
 dvc remote add -d data gs://<your bucket>/<your path>
 
 # Enable auto stage DVC files to Git
@@ -269,11 +270,11 @@ When used by another member of the team, they can easily get a copy of the exper
 dvc pull
 ```
 
-You can safely continue to the next chapter.
+You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
-- ✅ Codebase can be shared and improved by multiple developers;
+- ✅ The codebase can be shared and improved by multiple developers;
 - ✅ The dataset can be shared among the developers and is placed in the right directory in order to run the experiment;
 - ❌ Model steps rely on verbal communication and may be undocumented;
 - ❌ Changes to model are not easily visualized;
