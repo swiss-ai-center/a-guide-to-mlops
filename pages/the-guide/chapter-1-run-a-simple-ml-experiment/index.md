@@ -238,7 +238,7 @@ You have spotted the following issues:
 - ❌ The dataset still needs to be downloaded and placed in the right directory in order to run the experiment;
 - ❌ Someone had to tell you the steps used to create the model.
 
-You will improve the workflow for better efficiency and teamwork in the next steps. You can now safely continue the guide.
+You will improve the workflow for better efficiency and teamwork in the next chapter. You can now safely continue the guide.
 
 ## State of the MLOps process
 
@@ -253,9 +253,9 @@ You will improve the workflow for better efficiency and teamwork in the next ste
 
 Highly inspired by the [_Get Started: Data Pipelines_ - dvc.org](https://dvc.org/doc/start/data-management/pipelines) guide.
 
-Want to see what the result of this step should look like? Have a look at the Git repository directory here: [chapter-1-run-a-simple-ml-experiment](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-1-run-a-simple-ml-experiment).
+Want to see what the result at the end of this chapter should look like? Have a look at the Git repository directory here: [chapter-1-run-a-simple-ml-experiment](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-1-run-a-simple-ml-experiment).
 
-## Next & Previous steps
+## Next & Previous chapters
 
 - **Previous**: [Introduction](/the-guide/introduction)
-- **Next**: [Step 2: Share your ML experiment code with Git](/the-guide/step-2-share-your-ml-experiment-code-with-git)
+- **Next**: [Chapter 2: Share your ML experiment code with Git](/the-guide/chapter-2-share-your-ml-experiment-code-with-git)

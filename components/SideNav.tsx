@@ -30,16 +30,16 @@ const items = [
         children: "Chapter 1: Run a simple ML experiment",
       },
       {
-        href: "/the-guide/step-2-share-your-ml-experiment-code-with-git",
-        children: "Step 2: Share your ML experiment code with Git",
+        href: "/the-guide/chapter-2-share-your-ml-experiment-code-with-git",
+        children: "Chapter 2: Share your ML experiment code with Git",
       },
       {
-        href: "/the-guide/step-3-share-your-ml-experiment-data-with-dvc",
-        children: "Step 3: Share your ML experiment data with DVC",
+        href: "/the-guide/chapter-3-share-your-ml-experiment-data-with-dvc",
+        children: "Chapter 3: Share your ML experiment data with DVC",
       },
       {
-        href: "/the-guide/step-4-reproduce-the-experiment-with-dvc",
-        children: "Step 4: Reproduce the experiment with DVC",
+        href: "/the-guide/chapter-4-reproduce-the-experiment-with-dvc",
+        children: "Chapter 4: Reproduce the experiment with DVC",
       },
       {
         href: "/the-guide/step-5-track-model-evolutions-with-dvc",
@@ -88,7 +88,7 @@ const items = [
   {
     title: "Advanced concepts",
     links: [
-      
+
       {
         href: "/advanced-concepts/convert-the-experiment-data-from-the-guide-for-label-studio",
         children: "Convert the experiment data from the guide for Label Studio",
