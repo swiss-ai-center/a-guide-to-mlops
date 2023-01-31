@@ -12,6 +12,12 @@ Highly inspired by the [_Get Started_ - mlem.ai](https://mlem.ai/doc/get-started
 
 The purpose of this step is to serve and use the model for usage outside of the experiment context with the help of MLEM. MLEM allows to do this by saving the model with metadata information that can be used to load the model for future usage.
 
+In this step, we will install MLEM and update our experiment's to save and load the model with MLEM instead of using the `pickle` module to save and load it from the file system.
+
+Finally we will run a fastapi server to test the model in action.
+
+A the end of this step you will have a working model that can be used outside of the experiment context.
+
 ## Instructions
 
 {% callout type="warning" %}
