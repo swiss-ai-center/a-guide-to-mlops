@@ -10,7 +10,7 @@ Now that you have a good understanding of how the experiment operates, it's time
 
 In this chapter, you'll cover:
 
-1. Setting up a new Git repository
+1. Setting up a new [Git](/get-started/the-tools-used-in-this-guide#git) repository
 2. Initializing Git in your project directory
 3. Verifying Git tracking for your files
 4. Excluding experiment results, data, models and Python environment files from Git commits
@@ -28,13 +28,13 @@ This guide has been written with macOS and Linux operating systems in mind. If y
 
 Create a Git repository to collaborate with peers on your preferred Git service.
 
-{% callout type="note" %}
-Using GitHub? Follow the related documentation [_Creating a new repository_ - docs.github.com](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository) to create a new GitHub repository for this chapter.
-{% /callout %}
+#### GitHub
 
-{% callout type="note" %}
+Using GitHub? Follow the related documentation [_Creating a new repository_ - docs.github.com](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository) to create a new GitHub repository for this chapter.
+
+#### GitLab
+
 Using GitLab? Follow the related documentation [_Create a project_ - docs.gitlab.com](https://docs.gitlab.com/ee/user/project/working_with_projects.html#create-a-project) to create a new GitLab project for this chapter.
-{% /callout %}
 
 ### Initialize Git in your working directory
 
@@ -77,7 +77,7 @@ As you can see, no files have been added to Git yet but all available files are 
 
 #### Create a `.gitignore` file
 
-Create a `.gitignore` file to exclude data, models and Python environment to improve repository size and clone time. The data and models will be managed by DVC in the next chapters.
+Create a `.gitignore` file to exclude data, models and Python environment to improve repository size and clone time. The data and models will be managed by DVC in the next chapters. You keep the model's evaluation as it doesn't take much space and you can have a history of the improvements made to your model.
 
 ```sh
 # Data used to train the models
@@ -114,7 +114,7 @@ Untracked files:
         params.yaml
 ```
 
-### Push the changes to Git
+### Push the metadata to Git
 
 ```sh
 # Add all the available files
@@ -137,13 +137,13 @@ This chapter is done, you can check the summary.
 
 ## Summary
 
-In this chapter, you successfully:
+In this chapter, you have successfully:
 
-1. Setting up a new Git repository
-2. Initializing Git in your project directory
-3. Verifying Git tracking for your files
-4. Excluding experiment results, data, models and Python environment files from Git commits
-5. Pushing your changes to the Git repository
+1. Set up a new Git repository
+2. Initialized Git in your project directory
+3. Verified Git tracking for your files
+4. Excluded experiment results, data, models and Python environment files from Git commits
+5. Pushed your changes to the Git repository
 
 You did fix some of the previous issues:
 
@@ -156,6 +156,8 @@ When used by another member of the team, they can easily clone the experiment fr
 git clone <your git repository url>
 ```
 
+You can safely continue to the next chapter.
+
 ## State of the MLOps process
 
 - ✅ Codebase can be shared and improved by multiple developers;
@@ -164,6 +166,8 @@ git clone <your git repository url>
 - ❌ Changes to model are not easily visualized;
 - ❌ Experiment may not be reproducible on other machines;
 - ❌ Model may have required artifacts that are forgotten or omitted in saved/loaded state. There is no easy way to use the model outside of the experiment context.
+
+You will address these issues in the next chapters for improved efficiency and collaboration. Continue the guide to learn how.
 
 ## Sources
 

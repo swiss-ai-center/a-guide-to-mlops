@@ -183,6 +183,8 @@ Congratulations! You've successfully run the experiment on your machine, with gu
 
 ```
 .
+├── .venv <- this is new
+│   └── ...
 ├── data
 │   ├── features <- this is new
 │   │   ├── test.pkl
@@ -217,7 +219,7 @@ This chapter is done, you can check the summary.
 
 ## Summary
 
-In this chapter, you successfully:
+In this chapter, you have successfully:
 
 1. Created the working directory
 2. Acquired the codebase
@@ -231,7 +233,9 @@ However, you have identified the following areas for improvement:
 - ❌ Dataset still needs manual download and placement
 - ❌ Steps to run the experiment were not documented
 
-In the next chapters, you will enhance the workflow for better efficiency and teamwork. Let's move on.
+In the next chapters, you will enhance the workflow for better efficiency and teamwork.
+
+You can safely continue to the next chapter.
 
 ## State of the MLOps process
 

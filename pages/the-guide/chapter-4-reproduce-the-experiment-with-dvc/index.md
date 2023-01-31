@@ -220,7 +220,7 @@ Want to see what the result at the end of this chapter should look like? Have a 
 - ❌ There is no guarantee that the experiment can be executed on another machine;
 - ❌ The model might have required artifacts that can be forgotten or omitted when saving/loading the model for future usage. There is no easy way to use the model outside of the experiment context.
 
-## Next & Previous Chapter
+## Next & Previous chapters
 
 - **Previous**: [Chapter 3: Share your ML experiment data with DVC](/the-guide/chapter-3-share-your-ml-experiment-data-with-dvc)
 - **Next**: [Chapter 5: Track model evolutions with DVC](/the-guide/chapter-5-track-model-evolutions-with-dvc)
