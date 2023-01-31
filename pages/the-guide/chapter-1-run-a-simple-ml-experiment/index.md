@@ -4,7 +4,8 @@ title: "Chapter 1: Run a simple ML experiment"
 
 # {% $markdoc.frontmatter.title %}
 
-## Summary
+## Introduction
+
 You've just joined a new ML team with a promising ML experiment in hand. The experiment is straightforward using 10,000 StackOverflow posts:
 
 - Mark the R-related posts posts as `1` and the others as `0`.

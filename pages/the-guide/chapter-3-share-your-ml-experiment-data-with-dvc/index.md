@@ -4,7 +4,7 @@ title: "Chapter 3: Share your ML experiment data with DVC"
 
 # {% $markdoc.frontmatter.title %}
 
-## Summary
+## Introduction
 
 At this point, the codebase is distributed to team members using Git. 
 
@@ -107,7 +107,7 @@ git diff src/requirements.txt
 
 The output should be similar to this.
 
-```
+```diff
 diff --git a/src/requirements.txt b/src/requirements.txt
 index c8fa80f..ff173a7 100644
 --- a/src/requirements.txt
@@ -189,7 +189,7 @@ git diff .gitignore
 
 The output should be similar to this.
 
-```
+```diff
 diff --git a/.gitignore b/.gitignore
 index f1cbfa9..2b092ce 100644
 --- a/.gitignore
@@ -247,13 +247,6 @@ This chapter is done, you can check the summary.
 
 ## Summary
 
-When used by another member of the team, they can easily pull the experiment data from DVC.
-
-```sh
-# Pull the data from DVC
-dvc pull
-```
-
 In this chapter, you have successfully:
 
 1. Created a new project on Google Cloud
@@ -286,6 +279,8 @@ You can safely continue to the next chapter.
 - ❌ Changes to model are not easily visualized;
 - ❌ Experiment may not be reproducible on other machines;
 - ❌ Model may have required artifacts that are forgotten or omitted in saved/loaded state. There is no easy way to use the model outside of the experiment context.
+
+You will address these issues in the next chapters for improved efficiency and collaboration. Continue the guide to learn how.
 
 ## Sources
 
