@@ -50,12 +50,12 @@ const items = [
         children: "Chapter 6: Orchestrate the workflow with a CI/CD pipeline",
       },
       {
-        href: "/the-guide/step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml",
-        children: "Step 7: Track model evolutions in the CI/CD pipeline with CML",
+        href: "/the-guide/chapter-7-track-model-evolutions-in-the-cicd-pipeline-with-cml",
+        children: "Chapter 7: Track model evolutions in the CI/CD pipeline with CML",
       },
       {
-        href: "/the-guide/step-8-serve-the-model-with-mlem",
-        children: "Step 8: Serve the model with MLEM",
+        href: "/the-guide/chapter-8-serve-the-model-with-mlem",
+        children: "Chapter 8: Serve the model with MLEM",
       },
       {
         href: "/the-guide/conclusion",

@@ -10,7 +10,7 @@ At this point, the codebase is distributed to team members using Git.
 
 The objective of this chapter is to distribute the experiment data with the team using [DVC](/get-started/the-tools-used-in-this-guide#dvc). DVC is a version control system for your data. Dataset files are generally too large to be stored in Git. DVC allows you to store the dataset in a remote storage and version it.
 
-For this guide, a Google Storage Bucket will be used to store the dataset. Although, DVC is compatible with many cloud storage providers as well
+For this guide, a Google Storage Bucket will be used to store the dataset. Although, DVC is compatible with many other cloud storage providers as well
 
 In this chapter, you'll cover:
 
@@ -22,6 +22,7 @@ In this chapter, you'll cover:
 6. Updating the gitignore file and adding the experiment data to DVC
 7. Pushing the data files to DVC
 8. Pushing the metadata files to Git
+
 
 {% callout type="note" %}
 Want to self-host your storage? Check out the [Deploy MinIO](/advanced-concepts/deploy-minio) guide!

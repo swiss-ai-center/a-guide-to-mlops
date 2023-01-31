@@ -1,5 +1,5 @@
 ---
-title: "Step 8: Serve the model with MLEM"
+title: "Chapter 8: Serve the model with MLEM"
 ---
 
 # {% $markdoc.frontmatter.title %}
@@ -10,13 +10,13 @@ title: "Step 8: Serve the model with MLEM"
 Highly inspired by the [_Get Started_ - mlem.ai](https://mlem.ai/doc/get-started), [_Saving models_ - mlem.ai](https://mlem.ai/doc/get-started/saving), [_Working with Data_ - mlem.ai](https://mlem.ai/doc/user-guide/data), [_Serving models_ - mlem.ai](https://mlem.ai/doc/user-guide/serving), [_Versioning MLEM objects with DVC_ - mlem.ai](https://mlem.ai/doc/use-cases/dvc), [_`mlem.api.save()`_ - mlem.ai](https://mlem.ai/doc/api-reference/save) and [_`mlem.api.load()`_ - mlem.ai](https://mlem.ai/doc/api-reference/load) guides.
 {% /callout %}
 
-The purpose of this step is to serve and use the model for usage outside of the experiment context with the help of MLEM. MLEM allows to do this by saving the model with metadata information that can be used to load the model for future usage.
+The purpose of this chapter is to serve and use the model for usage outside of the experiment context with the help of MLEM. MLEM allows to do this by saving the model with metadata information that can be used to load the model for future usage.
 
-In this step, we will install MLEM and update our experiment's to save and load the model with MLEM instead of using the `pickle` module to save and load it from the file system.
+In this chapter, we will install MLEM and update our experiment's to save and load the model with MLEM instead of using the `pickle` module to save and load it from the file system.
 
 Finally we will run a fastapi server to test the model in action.
 
-A the end of this step you will have a working model that can be used outside of the experiment context.
+A the end of this chapter you will have a working model that can be used outside of the experiment context.
 
 ## Instructions
 
@@ -24,16 +24,9 @@ A the end of this step you will have a working model that can be used outside of
 This guide has been written with macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use [GitBash](https://gitforwindows.org/) or a Windows Subsystem for Linux (WSL) for optimal results.
 {% /callout %}
 
-### Setup MLEM
+### Install MLEM
 
-Install MLEM.
-
-```sh
-# Install MLEM
-pip install "mlem[fastapi]==0.4.1"
-```
-
-Update the `src/requirements.txt` file to include the added packages.
+Update the `src/requirements.txt` file to include mlem and its dependencies.
 
 ```
 dvc==2.37.0
@@ -47,7 +40,13 @@ matplotlib==3.6.2
 mlem[fastapi]==0.4.1
 ```
 
-Initialize and configure MLEM.
+```sh
+# Install all the requirements
+pip install -r src/requirements.txt
+
+```
+
+### Initialize and configure MLEM.
 
 ```sh
 # Initialize MLEM
@@ -300,7 +299,7 @@ When a MLEM model is loaded with `mlem.api.load`, it will automatically load the
 
 ### Update the DVC pipeline
 
-Update the DVC pipeline to include the new files.
+Update the DVC pipeline to reflect the changes in the stages. 
 
 ```sh
 # Update the featurization stage
@@ -332,10 +331,10 @@ dvc stage add --force \
   python src/evaluate.py models/rf data/features
 ```
 
-Run the experiment.
+### Run the experiment.
 
 ```sh
-# Run the experiment. DVC will automatically run all required steps
+# Run the experiment. DVC will automatically run all required stages
 dvc repro
 ```
 
@@ -344,11 +343,6 @@ The experiment now uses MLEM to save and load the model. DVC stores the model an
 ### Install additional dependencies
 
 Install the additional MLEM dependencies to serve.
-
-```sh
-# Install MLEM
-pip install "mlem[fastapi]==0.4.1"
-```
 
 Update the `src/requirements.txt` file to include the added packages.
 
@@ -363,6 +357,11 @@ scipy==1.9.3
 matplotlib==3.6.2
 mlem==0.4.1
 mlem[fastapi]==0.4.1
+```
+
+```sh
+# Install the additional dependencies
+pip install -r src/requirements.txt
 ```
 
 ### Serve the model with FastAPI
@@ -518,11 +517,11 @@ git commit -m "MLEM can save, load and serve the model"
 git push
 ```
 
-Congrats! You now have a model served over a REST API! You could serve this model from anywhere. Additional services could submit predictions to your model. The usage of FastAPI creates endpoints that are automatically documented to interact with the model. Check the next step of this guide concluding your journey for the next things you could do with your model.
+Congrats! You now have a model served over a REST API! You could serve this model from anywhere. Additional services could submit predictions to your model. The usage of FastAPI creates endpoints that are automatically documented to interact with the model. Check the next chapter of this guide concluding your journey for the next things you could do with your model.
 
 ## Check the results
 
-Want to see what the result at the end of this chapter should look like? Have a look at the Git repository directory here: [step-8-serve-the-model-with-mlem](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-8-serve-the-model-with-mlem).
+Want to see what the result at the end of this chapter should look like? Have a look at the Git repository directory here: [chapter-8-serve-the-model-with-mlem](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-8-serve-the-model-with-mlem).
 
 ## State of the MLOps process
 
@@ -533,7 +532,7 @@ Want to see what the result at the end of this chapter should look like? Have a 
 - ✅ The changes done to a model can be visualized with parameters, metrics and plots to identify differences between iterations with the help of the CI/CD pipeline;
 - ✅ The model can be saved and loaded with all have required artifacts for future usage. The model can be served outside of the experiment context.
 
-## Next & Previous steps
+## Next & Previous chapters
 
-- **Previous**: [Step 7: Track model evolutions in the CI/CD pipeline with CML](/the-guide/step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml)
+- **Previous**: [Chapter 7: Track model evolutions in the CI/CD pipeline with CML](/the-guide/chapter-7-track-model-evolutions-in-the-cicd-pipeline-with-cml)
 - **Next**: [Conclusion](/the-guide/conclusion)
