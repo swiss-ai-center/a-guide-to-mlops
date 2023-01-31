@@ -184,7 +184,7 @@ dvc pull
 
 ## Check the results
 
-Want to see what the result of this chaoter should look like? Have a look at the Git repository directory here: [chapter-3-share-your-ml-experiment-data-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-3-share-your-ml-experiment-data-with-dvc).
+Want to see what the result at the end of this chapter should look like? Have a look at the Git repository directory here: [chapter-3-share-your-ml-experiment-data-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-3-share-your-ml-experiment-data-with-dvc).
 
 ## State of the MLOps process
 

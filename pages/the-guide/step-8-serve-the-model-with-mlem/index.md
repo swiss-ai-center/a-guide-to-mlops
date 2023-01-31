@@ -522,7 +522,7 @@ Congrats! You now have a model served over a REST API! You could serve this mode
 
 ## Check the results
 
-Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-8-serve-the-model-with-mlem](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-8-serve-the-model-with-mlem).
+Want to see what the result at the end of this chapter should look like? Have a look at the Git repository directory here: [step-8-serve-the-model-with-mlem](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-8-serve-the-model-with-mlem).
 
 ## State of the MLOps process
 

@@ -1,13 +1,8 @@
-## Custom experiment
-
 # Data used to train the models
 data
 
 # The models
 *.pkl
-
-# The models evaluations
-evaluation
 
 ## Python
 

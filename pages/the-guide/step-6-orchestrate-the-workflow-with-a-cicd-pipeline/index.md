@@ -183,7 +183,7 @@ Congrats! You now have a CI/CD pipeline that will run the experiment on each com
 
 ## Check the results
 
-Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-6-orchestrate-the-workflow-with-a-cicd-pipeline](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-6-orchestrate-the-workflow-with-a-cicd-pipeline).
+Want to see what the result at the end of this chapter should look like? Have a look at the Git repository directory here: [step-6-orchestrate-the-workflow-with-a-cicd-pipeline](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-6-orchestrate-the-workflow-with-a-cicd-pipeline).
 
 ## State of the MLOps process
 

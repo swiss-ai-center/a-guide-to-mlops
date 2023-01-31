@@ -211,7 +211,7 @@ Congrats! You now have a simple way to compare the models with the used paramete
 
 ## Check the results
 
-Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-5-track-model-evolutions-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-5-track-model-evolutions-with-dvc).
+Want to see what the result at the end of this chapter should look like? Have a look at the Git repository directory here: [step-5-track-model-evolutions-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-5-track-model-evolutions-with-dvc).
 
 ## State of the MLOps process
 

@@ -5,30 +5,25 @@ title: "Chapter 1: Run a simple ML experiment"
 # {% $markdoc.frontmatter.title %}
 
 ## Summary
+You've just joined a new ML team with a promising ML experiment in hand. The experiment is straightforward using 10,000 StackOverflow posts:
 
-Let's imagine you recently arrived in a new ML team. They have a very nice ML experiment that you have to take on. This experiment is quite simple:
+- Mark the R-related posts posts as `1` and the others as `0`.
+- Split the posts into training/testing datasets.
+- Create bag-of-words matrices from the post titles and descriptions.
+- Train a model to classify R vs. non-R posts using the training dataset.
+- Evaluate the model's performance using the following metrics: precision-recall, Receiver operating characteristic (ROC), and key words.
 
-- It uses 10K posts from StackOverflow
-    - The posts that are related to the R programming language are marked with `1`, the others with `0`
-- It splits all of them into training/testing datasets
-- It makes bags of words matrixes from the title and the description of all posts
-- It trains the model to classify the R posts vs. the non-R posts from the training dataset
-- It evaluates the performance of the model using the testing dataset with the following metrics:
-    - Measure the Precision-Recall of the R posts vs. the non-R posts
-    - Measure the Receiver operating characteristic of the R posts vs. the non-R posts
-    - Measure the most important words characterising the R posts vs. the non-R posts
-
-Your job is to set up MLOps tools to improve the team efficiency, help the documentation of the workflow, track changes made to a model and easily serve the model to the rest of the world.
+Your goal is to streamline the team's workflow by setting up MLOps tools, documenting the process, tracking changes, and making the model accessible to others.
 
 In this chapter, you will:
 
-1. Set up the working directory
-2. Download the codebase
-3. Download the dataset
-4. Set up a Python environment to run the experiment
-5. Run the experiment locally for the first time
+1. Set up the project directory
+2. Acquire the codebase
+3. Obtain the dataset
+4. Create a Python environment to run the experiment
+5. Launch the experiment locally for the first time.
 
-Let's start!
+Let's get started!
 
 ## Steps
 
@@ -36,21 +31,21 @@ Let's start!
 This guide has been written with macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use [GitBash](https://gitforwindows.org/) or a Windows Subsystem for Linux (WSL) for optimal results.
 {% /callout %}
 
-### Set up the working directory
+### Set up the project directory
 
 {% callout type="note" %}
 If it's the first time you follow this guide, we recommend you to check the [Introduction - Requirements](/the-guide/introduction#requirements).
 {% /callout %}
 
-As you started as a new collaborator, create a directory on your computer that you will use for the this new awesome ML experiment. This directory will be your working directory for the rest of the guide.
+As a new team member, set up a project directory on your computer for this exciting ML experiment. This directory will serve as your working directory for the duration of the guide.
 
 ### Download and set up the codebase
 
-One of your colleague has given you their codebase on a USB stick so you don't start everything from scratch (how nice of them). It's still an old way to share files with colleagues but you weren't hired for nothing right?
+Your colleague has generously provided you with their codebase on a USB stick. Although this may be an outdated method of sharing files, you're ready to tackle the task.
 
-Their work has to be copied in your working directory.
+Copy the codebase into your working directory.
 
-_To simulate the USB stick, you can download the source code for this simple ML experiment from GitHub with the following commands._
+_As an alternative to the USB stick, you can also download the source code for this simple ML experiment from GitHub using these commands._
 
 ```sh
 # Download the archive containing the code
@@ -72,19 +67,19 @@ rm -f code.zip
 
 ### Explore the codebase
 
-Explore the codebase and try to understand the content of the files. You have a summary for each file below.
+Take some time to familiarize yourself with the codebase by examining its contents. The following is a summary of each file.
 
-Your working directory should look like this.
+This is what your working directory should look like.
 
 ```
 .
-├── src
+├── src <- this is new
 │   ├── evaluate.py
 │   ├── featurization.py
 │   ├── prepare.py
 │   ├── requirements.txt
 │   └── train.py
-└── params.yaml
+└── params.yaml  <- this is new
 ```
 
 | **File**              | **Description**                                   | **Input**                             | **Output**                                                        |
@@ -98,11 +93,11 @@ Your working directory should look like this.
 
 ### Download and set up the dataset
 
-The same colleague that gave you the codebase told you that you can get the dataset from the company's NAS. This is where all data is stored and you can get a copy of it there.
+Your colleague informed you that you can obtain the dataset from the company's Network Attached Storage (NAS). This is the centralized location for all data and you can easily retrieve a copy from there.
 
-They told you that the data must be saved as `data/data.xml` in your working directory. Otherwise, the experiment cannot be run.
+They told you the dataset must be saved as `data/data.xml` in your working directory for the experiment to run correctly.
 
-_To simulate the download of the dataset from the NAS, you can download the dataset for this simple ML experiment from GitHub with the following commands._
+_As an alternative to accessing the NAS, you can download the dataset for this simple ML experiment from GitHub using these commands._
 
 ```sh
 # Download the archive containing the dataset
@@ -126,13 +121,13 @@ rm -f data.zip
 
 ### Explore the dataset
 
-Explore the dataset and try to understand the content of the file.
+Examine the dataset to get a better understanding of its contents.
 
-Your working directory should now look like this.
+Your working directory should now look like this
 
 ```
 .
-├── data
+├── data <- this is new
 │   └── data.xml
 ├── src
 │   ├── evaluate.py
@@ -145,12 +140,12 @@ Your working directory should now look like this.
 
 ### Run the experiment
 
-Great! You now have everything you need to run the experiment: the codebase is set up, the dataset is in the right place and you can finally try the experiment for the first time.
+Awesome! You have everything you need to run the experiment: the codebase is ready, the dataset is in place, and you're ready to run the experiment for the first time.
 
-Generate the virtual environment and install the dependencies in your working directory with the following commands.
+Create the virtual environment and install necessary dependencies in your working directory using these commands.
 
 ```sh
-# Generate the virtual environment
+# Create the virtual environment
 python3 -m venv .venv
 
 # Activate the virtual environment
@@ -160,7 +155,7 @@ source .venv/bin/activate
 pip install --requirement src/requirements.txt
 ```
 
-The same nice colleague knows by heart how to run the experiment. They give you the steps.
+Your helpful colleague provided you with the steps to run the experiment.
 
 ```sh
 # Prepare the dataset
@@ -180,25 +175,23 @@ python src/evaluate.py model.pkl data/features
 The `evaluate.py` Python script might display a warning regarding DVC. You can safely ignore it for now.
 {% /callout %}
 
+Examine the experiment results to gain insights into the output files.
+
 ### Check the results
 
-Congrats! You have now a running experiment on your machine. Thanks to your dear colleague, you were able to run the experiment. Without their advice, you wouldn't know how to run the experiment on your machine.
-
-Explore the outputs and try to understand the content of the files.
-
-Your working directory should now look like this.
+Congratulations! You've successfully run the experiment on your machine, with guidance from your colleague. Your working directory should now appear as follows.
 
 ```
 .
 ├── data
-│   ├── features
+│   ├── features <- this is new
 │   │   ├── test.pkl
 │   │   └── train.pkl
-│   ├── prepared
+│   ├── prepared <- this is new
 │   │   ├── test.tsv
 │   │   └── train.tsv
 │   └── data.xml
-├── evaluation
+├── evaluation <- this is new
 │   ├── plots
 │   │   ├── metrics
 │   │   │   ├── avg_prec.tsv
@@ -216,7 +209,7 @@ Your working directory should now look like this.
 │   ├── prepare.py
 │   ├── requirements.txt
 │   └── train.py
-├── model.pkl
+├── model.pkl <- this is new
 └── params.yaml
 ```
 
@@ -224,30 +217,32 @@ This chapter is done, you can check the summary.
 
 ## Summary
 
-In this chapter, you were able to:
+In this chapter, you successfully:
 
-1. Set up the working directory
-2. Download the codebase
-3. Download the dataset
+1. Created the working directory
+2. Acquired the codebase
+3. Obtained the dataset
 4. Set up a Python environment to run the experiment
-5. Run the experiment locally for the first time
+5. Executed the experiment locally for the first time
 
-You have spotted the following issues:
+However, you have identified the following areas for improvement:
 
-- ❌ The codebase still needs to be downloaded and set up locally in order to run the experiment;
-- ❌ The dataset still needs to be downloaded and placed in the right directory in order to run the experiment;
-- ❌ Someone had to tell you the steps used to create the model.
+- ❌ Codebase still needs manual download
+- ❌ Dataset still needs manual download and placement
+- ❌ Steps to run the experiment were not documented
 
-You will improve the workflow for better efficiency and teamwork in the next chapter. You can now safely continue the guide.
+In the next chapters, you will enhance the workflow for better efficiency and teamwork. Let's move on.
 
 ## State of the MLOps process
 
-- ❌ The codebase still needs to be downloaded and set up locally in order to run the experiment;
-- ❌ The dataset still needs to be downloaded and placed in the right directory in order to run the experiment;
-- ❌ Someone has to tell you the steps used to create the model and they can be forgotten/undocumented;
-- ❌ The changes done to a model cannot be visualized and improvements and/or deteriorations are hard to identify;
-- ❌ There is no guarantee that the experiment can be executed on another machine;
-- ❌ The model might have required artifacts that can be forgotten or omitted when saving/loading the model for future usage. There is no easy way to use the model outside of the experiment context.
+- ❌ Codebase requires manual download and setup;
+- ❌ Dataset requires manual download and placement;
+- ❌ Model steps rely on verbal communication and may be undocumented;
+- ❌ Changes to model are not easily visualized;
+- ❌ Experiment may not be reproducible on other machines;
+- ❌ Model may have required artifacts that are forgotten or omitted in saved/loaded state. There is no easy way to use the model outside of the experiment context.
+
+You will address these issues in the next chapters for improved efficiency and collaboration. Continue the guide to learn how.
 
 ## Sources
 

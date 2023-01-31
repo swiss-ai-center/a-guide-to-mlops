@@ -209,7 +209,7 @@ Congrats! You now have a defined and common way to reproduce the pipeline to cre
 
 ## Check the results
 
-Want to see what the result of this chapter should look like? Have a look at the Git repository directory here: [chapter-4-reproduce-the-experiment-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-4-reproduce-the-experiment-with-dvc).
+Want to see what the result at the end of this chapter should look like? Have a look at the Git repository directory here: [chapter-4-reproduce-the-experiment-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-4-reproduce-the-experiment-with-dvc).
 
 ## State of the MLOps process
 

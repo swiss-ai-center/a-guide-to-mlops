@@ -447,7 +447,7 @@ Finished? Go to the [Check the results](#check-the-results) section!
 
 ## Check the results
 
-Want to see what the result of this step should look like? Have a look at the Git repository directory here: [step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml).
+Want to see what the result at the end of this chapter should look like? Have a look at the Git repository directory here: [step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml).
 
 ## State of the MLOps process
 

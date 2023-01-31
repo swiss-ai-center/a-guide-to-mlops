@@ -6,15 +6,19 @@ title: "Chapter 2: Share your ML experiment code with Git"
 
 ## Introduction
 
-Now that we have a running ML experiment, it's time to add some MLOps to it.
+Now that you have a good understanding of how the experiment operates, it's time to streamline the codebase sharing process. Instead of relying on outdated methods like transferring from a USB stick, we'll create a Git repository to enable easy collaboration with the rest of the team.
 
-Our first improvement will only concern the experiment code and will ensure it is versioned and can be shared with the team.
+In this chapter, you'll cover:
 
-To do so we will create a new Git repository, and push our existing code to it. An important part of this chapter is to configure the `.gitignore` correctly to avoid pushing large dataset files to the repository. In future chapters, we will see how we can use DVC to version the data and avoid this issue.
+1. Setting up a new Git repository
+2. Initializing Git in your project directory
+3. Verifying Git tracking for your files
+4. Excluding experiment results, data, models and Python environment files from Git commits
+5. Pushing your changes to the Git repository
 
-By the conclusion of this chapter, we'll have established a version-controlled codebase that can be shared with our team !
+Let's get started!"
 
-## Instructions
+## Steps
 
 {% callout type="warning" %}
 This guide has been written with macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use [GitBash](https://gitforwindows.org/) or a Windows Subsystem for Linux (WSL) for optimal results.
@@ -22,7 +26,7 @@ This guide has been written with macOS and Linux operating systems in mind. If y
 
 ### Create a new Git repository
 
-Create a new repository on your favorite Git service. Clone the repository and switch to your newly cloned repository.
+Create a Git repository to collaborate with peers on your preferred Git service.
 
 {% callout type="note" %}
 Using GitHub? Follow the related documentation [_Creating a new repository_ - docs.github.com](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository) to create a new GitHub repository for this chapter.
@@ -32,9 +36,48 @@ Using GitHub? Follow the related documentation [_Creating a new repository_ - do
 Using GitLab? Follow the related documentation [_Create a project_ - docs.gitlab.com](https://docs.gitlab.com/ee/user/project/working_with_projects.html#create-a-project) to create a new GitLab project for this chapter.
 {% /callout %}
 
+### Initialize Git in your working directory
+
+Use the following commands to set up a local Git repository in your working directory. Your Git service should provide instructions for initializing the repository.
+
+```sh
+# Initialize Git in your working directory with `main` as the initial branch
+git init --initial-branch=main
+
+# Add the remote origin to your newly created repository
+git remote add origin <your git repository url>
+```
+
+### Check if Git tracks your files
+
+Initialize Git in your working directory. Verify available files for committing with these commands.
+
+```sh
+# Check Git status
+git status
+```
+
+The output of this command should look similar to this.
+
+```
+> git status
+On branch main
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        .venv/
+        data/
+        evaluation/
+        src/
+        model.pkl
+        params.yaml
+```
+
+As you can see, no files have been added to Git yet but all available files are shown here to add them.
+
 #### Create a `.gitignore` file
 
-Create a `.gitignore` file to ignore the experiment results, the data, the models and the Python environment.
+Create a `.gitignore` file to exclude data, models and Python environment to improve repository size and clone time. The data and models will be managed by DVC in the next chapters.
 
 ```sh
 # Data used to train the models
@@ -42,9 +85,6 @@ data
 
 # The models
 *.pkl
-
-# The models evaluations
-evaluation
 
 ## Python
 
@@ -55,49 +95,81 @@ evaluation
 __pycache__/
 ```
 
-Push the changes to Git.
+Verify available files for committing with these commands.
 
 ```sh
-# Initialize the repository
-git init
+# Check Git status
+git status
+```
 
-# Rename the master branch
-git branch -M main
+The output of this command should now look similar to this.
 
-# Add all the files
+```
+> git status
+On branch main
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        src/
+        params.yaml
+```
+
+### Push the changes to Git
+
+```sh
+# Add all the available files
 git add .
 
 # Commit the changes
-git commit -m "My first ML experiment shared on GitLab"
-
-# Add your remote repository
-git remote add origin <git@example.com:username/repository.git>
+git commit -m "My first ML experiment shared on Git"
 
 # Push the changes
 git push --set-upstream origin main
 ```
 
+If you go on your online Git repository, you should see the files.
+
+### Check the results
+
 Congrats! You now have a codebase that can be used and shared among the team.
 
-When used by another member of the team, they can easily clone the experiment from Git.
+This chapter is done, you can check the summary.
+
+## Summary
+
+In this chapter, you successfully:
+
+1. Setting up a new Git repository
+2. Initializing Git in your project directory
+3. Verifying Git tracking for your files
+4. Excluding experiment results, data, models and Python environment files from Git commits
+5. Pushing your changes to the Git repository
+
+You did fix some of the previous issues:
+
+- ✅ Codebase no longer needs manual download and is versioned
+
+When used by another member of the team, they can easily clone the experiment from Git with the following commands.
 
 ```sh
 # Clone the Git repository
-git clone <the git repository url>
+git clone <your git repository url>
 ```
-
-## Check the results
-
-Want to see what the result of this step should look like? Have a look at the Git repository directory here: [chapter-2-share-your-ml-experiment-code-with-git](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-2-share-your-ml-experiment-code-with-git).
 
 ## State of the MLOps process
 
-- ✅ The codebase can be shared among the developers. The codebase can be improved collaboratively;
-- ❌ The dataset still needs to be downloaded and placed in the right directory in order to run the experiment;
-- ❌ Someone has to tell you the steps used to create the model and they can be forgotten/undocumented;
-- ❌ The changes done to a model cannot be visualized and improvements and/or deteriorations are hard to identify;
-- ❌ There is no guarantee that the experiment can be executed on another machine;
-- ❌ The model might have required artifacts that can be forgotten or omitted when saving/loading the model for future usage. There is no easy way to use the model outside of the experiment context.
+- ✅ Codebase can be shared and improved by multiple developers;
+- ❌ Dataset requires manual download and placement;
+- ❌ Model steps rely on verbal communication and may be undocumented;
+- ❌ Changes to model are not easily visualized;
+- ❌ Experiment may not be reproducible on other machines;
+- ❌ Model may have required artifacts that are forgotten or omitted in saved/loaded state. There is no easy way to use the model outside of the experiment context.
+
+## Sources
+
+Highly inspired by the [_Creating a new repository_ - docs.github.com](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository) and [_Create a project_ - docs.gitlab.com](https://docs.gitlab.com/ee/user/project/working_with_projects.html#create-a-project) guides.
+
+Want to see what the result at the end of this chapter should look like? Have a look at the Git repository directory here: [chapter-2-share-your-ml-experiment-code-with-git](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-2-share-your-ml-experiment-code-with-git).
 
 ## Next & Previous chapters
 
