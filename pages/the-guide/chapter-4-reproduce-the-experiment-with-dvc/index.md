@@ -224,6 +224,8 @@ dvc plots modify evaluation/plots/sklearn/roc.json -x fpr -y tpr
 dvc plots modify evaluation/plots/sklearn/confusion_matrix.json -x actual -y predicted -t confusion
 ```
 
+You will go deeper about the evaluation in the next chapter.
+
 #### Summary of the DVC pipeline
 
 The pipeline is now entirely defined. You can explore the `dvc.yaml` file to understand how the pipeline is defined.
@@ -362,6 +364,8 @@ You can safely continue to the next chapter.
 - ❌ Changes to model are not easily visualized;
 - ❌ Experiment may not be reproducible on other machines;
 - ❌ Model may have required artifacts that are forgotten or omitted in saved/loaded state. There is no easy way to use the model outside of the experiment context.
+
+You will address these issues in the next chapters for improved efficiency and collaboration. Continue the guide to learn how.
 
 ## Sources
 

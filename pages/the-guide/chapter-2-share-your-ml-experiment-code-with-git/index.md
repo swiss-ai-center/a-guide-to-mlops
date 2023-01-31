@@ -57,7 +57,7 @@ Initialize Git in your working directory. Verify available files for committing 
 git status
 ```
 
-The output of this command should look similar to this.
+The output should be similar to this.
 
 ```
 On branch main
@@ -101,7 +101,7 @@ Verify available files for committing with these commands.
 git status
 ```
 
-The output of this command should now look similar to this.
+The output should now be similar to this.
 
 ```
 On branch main
