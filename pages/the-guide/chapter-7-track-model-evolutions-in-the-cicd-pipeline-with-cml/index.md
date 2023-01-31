@@ -1,14 +1,18 @@
 ---
-title: "Step 7: Track model evolutions in the CI/CD pipeline with CML"
+title: "Chapter 7: Track model evolutions in the CI/CD pipeline with CML"
 ---
 
 # {% $markdoc.frontmatter.title %}
 
 ## Summary
 
-The purpose of this step is to track the model evolutions and generate reports directly in the CI/CD pipeline so it can be discussed collectively online before commiting the changes to the codebase.
+The purpose of this chapter is to track the model evolutions and generate reports directly in the CI/CD pipeline so it can be discussed collectively online before commiting the changes to the codebase.
 
-We will start by updating our pipeline description to add a step that will generate a report and upload it as an artifact. Then, we will update the pipeline to generate a report and create a pull request with the report as a comment. Then we will trigger the report generation by :
+We will start by updating our pipeline description to add a step that will generate a report and upload it as an artifact. 
+
+Then, we will update the pipeline to generate a report and create a pull request with the report as a comment. 
+
+Then we will trigger the report generation by :
 - creating an issue in our issue tracker
 - make a branch associated to the issue
 - make a change in the new branch
@@ -41,6 +45,13 @@ Using GitLab? Go to the [Update GitLab CI and create a merge request](#update-gi
 {% callout type="note" %}
 Highly inspired by the [_Get Started with CML on GitHub_ - cml.dev](https://cml.dev/doc/start/github) [_Creating an issue_ - docs.github.com](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue) and [_Creating a branch to work on an issue_ - docs.github.com](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-a-branch-for-an-issue) guides and the [`example_cml` - github.com](https://github.com/iterative/example_cml) and [`cml_dvc_case` - github.com](https://github.com/iterative/cml_dvc_case) GitHub repositories.
 {% /callout %}
+
+#### Update the workflow 
+
+The new "report" job is responsible for reporting the results of the model evaluation and comparing it with the main branch. 
+This job is triggered only when a pull request is opened. 
+
+The job checks out the repository, downloads the evaluation results, sets up DVC and CML in the container, creates a report using the data obtained from the training job, and finally publishes the report as a pull request comment.
 
 Update the `.github/workflows/mlops.yml` file.
 
@@ -182,7 +193,7 @@ jobs:
 
 This GitHub Workflow will create CML reports on each pushes that are related to a pull request.
 
-Push the changes to Git.
+##### Push the changes to Git.
 
 ```sh
 # Add the updated workflow
@@ -194,6 +205,8 @@ git commit -m "Enable CML reports on pull requests"
 # Push the changes
 git push
 ```
+
+##### Create an issue and a pull request.
 
 Create a new issue by going to the **Issues** section from the top header of your GitHub repository. Select **New issue** and describe the work/improvements/ideas that you want to integrate to the codebase. In this guide, we will name the issue _Demonstrate step 7_. Create the issue by selecting **Submit new issue**.
 
@@ -223,7 +236,15 @@ In your profile preferences, create a PAT with `api`, `read_repository` and `wri
 
 Store the PAT as a CI/CD Variable by going to **Settings > CI/CD** from the left sidebar of your GitLab project. Select **Variables** and select **Add variable**. Create a new variable named `CML_PAT_TOKEN` with the PAT value as its value. Check the _"Mask variable"_ box, uncheck _"Protect variable"_ and save the variable by selecting "Add variable".
 
+#### Update the workflow 
+
+The new "report" job is responsible for reporting the results of the model evaluation and comparing it with the main branch. 
+This job is triggered only when a pull request is opened. 
+
+The job checks out the repository, downloads the evaluation results, sets up DVC and CML in the container, creates a report using the data obtained from the training job, and finally publishes the report as a pull request comment.
+
 Update the `.gitlab-ci.yml` file.
+
 
 ```yaml
 stages:
@@ -336,7 +357,7 @@ report:
 
 This GitLab CI will create CML reports on each pushes that are related to a merge request.
 
-Push the changes to Git.
+#### Push the changes to Git.
 
 ```sh
 # Add the updated workflow
@@ -348,6 +369,8 @@ git commit -m "Enable CML reports on merge requests"
 # Push the changes
 git push
 ```
+
+#### Create a merge request
 
 Create a new issue by going to the **Issues** section from the left sidebar of your GitLab project. Select **New issue** and describe the work/improvements/ideas that you want to integrate to the codebase. In this guide, we will name the issue _Demonstrate step 7_. Create the issue by selecting **Submit new issue**.
 
@@ -361,7 +384,9 @@ Finished? Go to the [Make changes to the model](#make-changes-to-the-model) sect
 
 ### Make changes to the model
 
-Checkout the branch locally.
+The goal of this section is to make changes to the model and to compare the results with the previous version.
+
+#### Checkout the branch locally.
 
 ```sh
 # Get the latest updates from the remote origin
@@ -371,7 +396,9 @@ git fetch origin
 git checkout <the name of the new branch>
 ```
 
-Update the parameters to run the experiment in the `params.yaml` file.
+#### Update the parameters to run the experiment.
+
+In the `params.yaml` file.
 
 ```yaml
 prepare:
@@ -388,14 +415,14 @@ train:
   min_split: 3
 ```
 
-Run the experiment.
+#### Run the experiment.
 
 ```sh
-# Run the experiment. DVC will automatically run all required steps
+# Run the experiment. DVC will automatically run all required stages
 dvc repro
 ```
 
-Push the changes to DVC and Git.
+#### Push the changes to DVC and Git.
 
 ```sh
 # Upload the experiment data and cache to the remote bucket
@@ -447,7 +474,7 @@ Finished? Go to the [Check the results](#check-the-results) section!
 
 ## Check the results
 
-Want to see what the result at the end of this chapter should look like? Have a look at the Git repository directory here: [step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml).
+Want to see what the result at the end of this chapter should look like? Have a look at the Git repository directory here: [chapter-7-track-model-evolutions-in-the-cicd-pipeline-with-cml](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-7-track-model-evolutions-in-the-cicd-pipeline-with-cml).
 
 ## State of the MLOps process
 
@@ -458,7 +485,7 @@ Want to see what the result at the end of this chapter should look like? Have a 
 - ✅ The changes done to a model can be visualized with parameters, metrics and plots to identify differences between iterations with the help of the CI/CD pipeline;
 - ❌ The model might have required artifacts that can be forgotten or omitted when saving/loading the model for future usage. There is no easy way to use the model outside of the experiment context.
 
-## Next & Previous steps
+## Next & Previous chapters
 
-- **Previous**: [Step 6: Orchestrate the workflow with a CI/CD pipeline](/the-guide/step-6-orchestrate-the-workflow-with-a-cicd-pipeline)
-- **Next**: [Step 8: Serve the model with MLEM](/the-guide/step-8-serve-the-model-with-mlem)
+- **Previous**: [Chapter 6: Orchestrate the workflow with a CI/CD pipeline](/the-guide/chapter-6-orchestrate-the-workflow-with-a-cicd-pipeline)
+- **Next**: [Chapter 8: Serve the model with MLEM](/the-guide/chapter-8-serve-the-model-with-mlem)

@@ -24,13 +24,13 @@ Not sure where to start? Check the following links to get started!
 
 - [Introduction](/the-guide/introduction)
 - [Chapter 1: Run a simple ML experiment](/the-guide/chapter-1-run-a-simple-ml-experiment)
-- [Step 2: Share your ML experiment code with Git](/the-guide/step-2-share-your-ml-experiment-code-with-git)
-- [Step 3: Share your ML experiment data with DVC](/the-guide/step-3-share-your-ml-experiment-data-with-dvc)
-- [Step 4: Reproduce the experiment with DVC](/the-guide/step-4-reproduce-the-experiment-with-dvc)
-- [Step 5: Track model evolutions with DVC](/the-guide/step-5-track-model-evolutions-with-dvc)
-- [Step 6: Orchestrate the workflow with a CI/CD pipeline](/the-guide/step-6-orchestrate-the-workflow-with-a-cicd-pipeline)
-- [Step 7: Track model evolutions in the CI/CD pipeline with CML](/the-guide/step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml)
-- [Step 8: Serve the model with MLEM](/the-guide/step-8-serve-the-model-with-mlem)
+- [Chapter 2: Share your ML experiment code with Git](/the-guide/chapter-2-share-your-ml-experiment-code-with-git)
+- [Chapter 3: Share your ML experiment data with DVC](/the-guide/chapter-3-share-your-ml-experiment-data-with-dvc)
+- [Chapter 4: Reproduce the experiment with DVC](/the-guide/chapter-4-reproduce-the-experiment-with-dvc)
+- [Chapter 5: Track model evolutions with DVC](/the-guide/chapter-5-track-model-evolutions-with-dvc)
+- [Chapter 6: Orchestrate the workflow with a CI/CD pipeline](/the-guide/chapter-6-orchestrate-the-workflow-with-a-cicd-pipeline)
+- [Chapter 7: Track model evolutions in the CI/CD pipeline with CML](/the-guide/chapter-7-track-model-evolutions-in-the-cicd-pipeline-with-cml)
+- [Chapter 8: Serve the model with MLEM](/the-guide/chapter-8-serve-the-model-with-mlem)
 - [Conclusion](/the-guide/conclusion)
 
 ## Label Studio
