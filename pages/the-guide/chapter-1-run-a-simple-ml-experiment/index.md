@@ -6,7 +6,13 @@ title: "Chapter 1: Run a simple ML experiment"
 
 ## Introduction
 
-You've just joined a new ML team with a promising ML experiment in hand. The experiment is straightforward using 10,000 StackOverflow posts:
+You've just joined a new ML team with a promising ML experiment in hand. 
+
+The experiment is training a binary text classification model to classify text into two categories: "related to R programming language" and "not related to R programming language. 
+
+The dataset consists of 10,000 posts from StackOverflow.
+
+The training process is as follows: 
 
 - Mark the R-related posts posts as `1` and the others as `0`.
 - Split the posts into training/testing datasets.
@@ -14,7 +20,7 @@ You've just joined a new ML team with a promising ML experiment in hand. The exp
 - Train a model to classify R vs. non-R posts using the training dataset.
 - Evaluate the model's performance using the following metrics: precision-recall, Receiver operating characteristic (ROC), and key words.
 
-Your goal is to streamline the team's workflow by setting up MLOps tools, documenting the process, tracking changes, and making the model accessible to others.
+Your goal is to streamline the team's workflow by setting up MLOps tools, documenting the process, tracking changes, and making the model accessible to others. 
 
 In this chapter, you will:
 
