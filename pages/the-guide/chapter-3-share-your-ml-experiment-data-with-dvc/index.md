@@ -155,7 +155,6 @@ dvc add data/data.xml
 When executing this command, the following output occurs.
 
 ```sh
-> dvc add data/data.xml 
 ERROR: bad DVC file name 'data/data.xml' is git-ignored.
 ```
 
