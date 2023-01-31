@@ -4,27 +4,29 @@ title: "Chapter 7: Track model evolutions in the CI/CD pipeline with CML"
 
 # {% $markdoc.frontmatter.title %}
 
-## Summary
+## Introduction
 
 The purpose of this chapter is to track the model evolutions and generate reports directly in the CI/CD pipeline so it can be discussed collectively online before commiting the changes to the codebase.
 
-We will start by updating our pipeline description to add a step that will generate a report and upload it as an artifact. 
+In this chapter, you'll cover:
 
-Then, we will update the pipeline to generate a report and create a pull request with the report as a comment. 
-
-Then we will trigger the report generation by :
-- creating an issue in our issue tracker
-- make a branch associated to the issue
-- make a change in the new branch
-- push everything and open a pull request
-
-After this step each successfull run of the pipeline will comment the associated pull request with a report.
+- Updating the CI/CD configuration file to generate a CML report
+- Pushing the updated CI/CD configuration file to Git
+- Opening an issue in your issue tracker
+- Creating a new branch to add your changes
+- Swithing to the new branch
+- Commiting and pushing the changes that were not commited in [Chapter 5: Track model evolutions with DVC](/the-guide/chapter-5-track-model-evolutions-with-dvc)
+- Creating a Pull Request/Merge Request
+- Visualizing the execution of the CI/CD pipeline
+- Visualizing the CML report that is added to your Pull Request/Merge Request
+- Merging the Pull Request/Merge Request to the main branch
+- Switching back to the main branch and pulling latest changes
 
 {% callout type="note" %}
 CML can do much more than just generating reports. Have a look to the [Train the model on a Kubernetes cluster with CML](/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml) guide.
 {% /callout %}
 
-## Instructions
+## Steps
 
 {% callout type="warning" %}
 This guide has been written with macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use [GitBash](https://gitforwindows.org/) or a Windows Subsystem for Linux (WSL) for optimal results.
@@ -36,17 +38,13 @@ The target reference can be a specific commit (what are the differences between 
 
 Many workflows exist to discuss and integrate the work done to a target reference. For the sake of simplicity, in this guide, we will present two methods that are commonly used on GitHub - Pull Requests (PRs) - and GitLab - Merge Requests (MRs) - to integrate the work done to the `main` branch.
 
-### Update GitHub Actions and create a pull request
+### GitHub
 
 {% callout type="note" %}
-Using GitLab? Go to the [Update GitLab CI and create a merge request](#update-gitlab-ci-and-create-a-merge-request) section!
+Using GitLab? Go to the [GitLab](#gitlab) section!
 {% /callout %}
 
-{% callout type="note" %}
-Highly inspired by the [_Get Started with CML on GitHub_ - cml.dev](https://cml.dev/doc/start/github) [_Creating an issue_ - docs.github.com](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue) and [_Creating a branch to work on an issue_ - docs.github.com](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-a-branch-for-an-issue) guides and the [`example_cml` - github.com](https://github.com/iterative/example_cml) and [`cml_dvc_case` - github.com](https://github.com/iterative/cml_dvc_case) GitHub repositories.
-{% /callout %}
-
-#### Update the workflow 
+#### Update GitHub Actions configuration file
 
 The new "report" job is responsible for reporting the results of the model evaluation and comparing it with the main branch. 
 This job is triggered only when a pull request is opened. 
@@ -193,7 +191,7 @@ jobs:
 
 This GitHub Workflow will create CML reports on each pushes that are related to a pull request.
 
-##### Push the changes to Git.
+#### Push the changes to GitHub
 
 ```sh
 # Add the updated workflow
@@ -206,28 +204,105 @@ git commit -m "Enable CML reports on pull requests"
 git push
 ```
 
-##### Create an issue and a pull request.
+#### Open an issue on GitHub
 
 Create a new issue by going to the **Issues** section from the top header of your GitHub repository. Select **New issue** and describe the work/improvements/ideas that you want to integrate to the codebase. In this guide, we will name the issue _Demonstrate step 7_. Create the issue by selecting **Submit new issue**.
 
-The issue opens. Select **Create a branch for this issue or link a pull request** from the right sidebar. Create the branch by selecting **Create branch**. A new pop-up opens with the name of the branch you want to checkout to.
+#### Create a branch on GitHub
+
+On the newly created issue, select **Create a branch for this issue or link a pull request** from the right sidebar. Create the branch by selecting **Create branch**. A new pop-up opens with the name of the branch you want to checkout to.
+
+#### Checkout the new GitHub branch
+
+On your machine, check out the new branch.
+
+```sh
+# Get the latest updates from the remote origin
+git fetch origin
+
+# Check to the new branch
+git checkout <the name of the new branch>
+```
+
+#### Commit and push the experiment changes to GitHub
+
+Remember
+
+#### Create a Pull Request on GitHub
+
+#### Visualize the execution of the CI/CD pipeline on GitHub
+
+#### Visualize the CML report on GitHub
+
+#### Merging the Pull Request on GitHub
+
+{% callout type="note" %}
+Finished? Go to the [Switch back to the main branch](#switch-back-to-the-main-branch) step!
+{% /callout %}
+
+### GitLab
+
+{% callout type="note" %}
+Using GitHub? Go to the [GitHub](#github) section!
+{% /callout %}
+
+#### Update GitLab CI configuration file
+
+#### Push the changes to GitLab
+
+#### Open an issue on GitLab
+
+#### Create a merge request on GitLab
+
+#### Checkout the new GitLab branch
+
+#### Commit and push the experiment changes to GitLab
+
+Remember
+
+#### Create a Pull Request on GitLab
+
+#### Visualize the execution of the CI/CD pipeline on GitLab
+
+#### Visualize the CML report on GitLab
+
+#### Merging the Merge Request on GitLab
+
+{% callout type="note" %}
+Finished? Go to the [Switch back to the main branch](#switch-back-to-the-main-branch) step!
+{% /callout %}
+
+### Switch back to the main branch
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##### Create an issue and a pull request.
+ 
 
 // TODO ici ça fonctionne bien sur Gitlab mais pas top sur Github
 
 Go to the **Code** section from the top header of your GitHub repository. Select **_N_ branches** (where _N_ is the current number of branches your repository has). Next to the newly created branch, select **New pull request**. Name the pull request and select **Create pull request** to create the pull request.
 
 {% callout type="note" %}
-Finished? Go to the [Make changes to the model](#make-changes-to-the-model) section!
+Finished? Go to the [Make changes to the model](#make-changes-to-the-model) step!
 {% /callout %}
 
 ### Update GitLab CI and create a merge request
 
 {% callout type="note" %}
-Using GitHub? Go to the [Update GitHub Actions and create a pull request](#update-github-actions-and-create-a-pull-request) section!
-{% /callout %}
-
-{% callout type="note" %}
-Highly inspired by the [_Using CML on GitLab_ - cml.dev](https://cml.dev/doc/start/gitlab) and [_Personal access tokens_ - docs.gitlab.com](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html) guides and the [`example_cml` - gitlab.com](https://gitlab.com/iterative.ai/example_cml) and the [`cml-dvc-case` - gitlab.com](https://gitlab.com/iterative.ai/cml-dvc-case) GitLab repositories.
+Using GitHub? Go to the [Update GitHub Actions and create a pull request](#update-github-actions-and-create-a-pull-request) step!
 {% /callout %}
 
 In order to allow CML to generate reports, a Personal Access Token (PAT) must be created. A Project or a Group Access Token are not sufficient for the usage of CML's runners that will be used in the next steps.
@@ -379,22 +454,12 @@ The issue opens.
 Select **Create merge request** and change the merge request configuration if needed. Create the merge request by selecting **Create merge request**.
 
 {% callout type="note" %}
-Finished? Go to the [Make changes to the model](#make-changes-to-the-model) section!
+Finished? Go to the [Make changes to the model](#make-changes-to-the-model) step!
 {% /callout %}
 
 ### Make changes to the model
 
 The goal of this section is to make changes to the model and to compare the results with the previous version.
-
-#### Checkout the branch locally.
-
-```sh
-# Get the latest updates from the remote origin
-git fetch origin
-
-# Check to the new branch
-git checkout <the name of the new branch>
-```
 
 #### Update the parameters to run the experiment.
 
@@ -443,7 +508,7 @@ Congrats! You now have a report that will be generated on each PR/MR that can be
 ### GitHub: Merge the changes
 
 {% callout type="note" %}
-Using GitLab? Go to the [GitLab: Merge the changes](#gitlab-merge-the-changes) section!
+Using GitLab? Go to the [GitLab: Merge the changes](#gitlab-merge-the-changes) step!
 {% /callout %}
 
 Go back to the pull request. At the end of the page, select **Merge pull request**. Confirm the merge by selecting **Confirm merge**.
@@ -453,37 +518,69 @@ The associated issue will be automatically closed as well.
 Congrats! You can now iterate on your model while keeping a trace of the improvements made to it.
 
 {% callout type="note" %}
-Finished? Go to the [Check the results](#check-the-results) section!
+Finished? Go to the [Check the results](#check-the-results) step!
 {% /callout %}
 
 ### GitLab: Merge the changes
 
 {% callout type="note" %}
-Using GitHub? Go to the [GitHub: Merge the changes](#github-merge-the-changes) section!
+Using GitHub? Go to the [GitHub: Merge the changes](#github-merge-the-changes) step!
 {% /callout %}
 
 Go back to the merge request. Select **Mark as ready**. This will allow to merge the changes. Confirm the merge by selecting **Merge** (you might need to refresh the page to see this button).
 
 The associated issue will be automatically closed as well.
 
-Congrats! You can now iterate on your model while keeping a trace of the improvements made to it.
+
 
 {% callout type="note" %}
-Finished? Go to the [Check the results](#check-the-results) section!
+Finished? Go to the [Check the results](#check-the-results) step!
 {% /callout %}
 
-## Check the results
+### Check the results
 
-Want to see what the result at the end of this chapter should look like? Have a look at the Git repository directory here: [chapter-7-track-model-evolutions-in-the-cicd-pipeline-with-cml](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-7-track-model-evolutions-in-the-cicd-pipeline-with-cml).
+Congrats! You can now iterate on your model while keeping a trace of the improvements made to it. You can visualize and discuss the changes made to a model before adding the changes to the codebase.
+
+This chapter is done, you can check the summary.
+
+## Summary
+
+In this chapter, you have successfully:
+
+- Updated the CI/CD configuration file to generate a CML report
+- Pushed the updated CI/CD configuration file to Git
+- Opened an issue in your issue tracker
+- Created a new branch to add your changes
+- Swithed to the new branch
+- Commit and pushed the changes that were not commited in [Chapter 5: Track model evolutions with DVC](/the-guide/chapter-5-track-model-evolutions-with-dvc)
+- Created a Pull Request/Merge Request
+- Visualized the execution of the CI/CD pipeline
+- Visualized the CML report that is added to your Pull Request/Merge Request
+- Merged the Pull Request/Merge Request to the main branch
+- Switched back to the main branch and pull latest changes
+
+However, you might have identified the following areas for improvement:
+
+- ❌ How can I serve my model to the rest of the world?
+
+In the next chapters, you will enhance the workflow to fix those issues.
+
+You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
-- ✅ The codebase can be shared among the developers. The codebase can be improved collaboratively;
+- ✅ The codebase can be shared and improved by multiple developers;
 - ✅ The dataset can be shared among the developers and is placed in the right directory in order to run the experiment;
 - ✅ The steps used to create the model are documented and can be re-executed;
-- ✅ The experiment can be executed on a clean machine with the help of the CI/CD pipeline;
-- ✅ The changes done to a model can be visualized with parameters, metrics and plots to identify differences between iterations with the help of the CI/CD pipeline;
-- ❌ The model might have required artifacts that can be forgotten or omitted when saving/loading the model for future usage. There is no easy way to use the model outside of the experiment context.
+- ✅ The changes done to a model can be visualized with parameters, metrics and plots to identify differences between iterations;
+- ✅ The experiment can be executed on a clean machine with the help of a CI/CD pipeline and CML;
+- ❌ Model may have required artifacts that are forgotten or omitted in saved/loaded state. There is no easy way to use the model outside of the experiment context.
+
+## Sources
+
+Highly inspired by the [_Get Started with CML on GitHub_ - cml.dev](https://cml.dev/doc/start/github), [_Creating an issue_ - docs.github.com](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue), [_Creating a branch to work on an issue_ - docs.github.com](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-a-branch-for-an-issue), [_Get Started with CML on GitLab_ - cml.dev](https://cml.dev/doc/start/gitlab), [_Personal access tokens_ - docs.gitlab.com](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html) guides and the [`example_cml` - github.com](https://github.com/iterative/example_cml), [`cml_dvc_case` - github.com](https://github.com/iterative/cml_dvc_case), [`example_cml` - gitlab.com](https://gitlab.com/iterative.ai/example_cml), [`cml-dvc-case` - gitlab.com](https://gitlab.com/iterative.ai/cml-dvc-case) Git repositories.
+
+Want to see what the result at the end of this chapter should look like? Have a look at the Git repository directory here: [chapter-7-track-model-evolutions-in-the-cicd-pipeline-with-cml](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-7-track-model-evolutions-in-the-cicd-pipeline-with-cml).
 
 ## Next & Previous chapters
 

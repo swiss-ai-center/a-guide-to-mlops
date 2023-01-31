@@ -59,7 +59,7 @@ Please refer to the correct instructions based on your Git repository provider. 
 #### GitHub Actions
 
 {% callout type="note" %}
-Using GitLab? Go to the [GitLab CI](#gitlab-ci) section!
+Using GitLab? Go to the [GitLab CI](#gitlab-ci) step!
 {% /callout %}
 
 **Display the Google Service Account key**
@@ -142,13 +142,13 @@ git push
 ```
 
 {% callout type="note" %}
-Finished? Go to the [Check the results](#check-the-results) section!
+Finished? Go to the [Check the results](#check-the-results) step!
 {% /callout %}
 
 #### GitLab CI
 
 {% callout type="note" %}
-Using GitHub? Go to the [GitHub Actions](#github-actions) section!
+Using GitHub? Go to the [GitHub Actions](#github-actions) step!
 {% /callout %}
 
 Store the Google Service Account made earlier in GitLab CI variables.
@@ -206,7 +206,7 @@ run-ml-experiment:
 Explore this file to understand the stages and the steps.
 
 {% callout type="note" %}
-Finished? Go to the [Check the results](#check-the-results) section!
+Finished? Go to the [Check the results](#check-the-results) step!
 {% /callout %}
 
 ### Check the results
@@ -236,6 +236,8 @@ You did fix some of the previous issues:
 - ✅ The experiment can be executed on a clean machine with the help of a CI/CD pipeline;
 
 You have a CI/CD pipeline to ensure the whole experiment can still be reproduced using the data and the commmands to run using DVC over time.
+
+You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 

@@ -8,7 +8,7 @@ title: "Chapter 1: Run a simple ML experiment"
 
 You've just joined a new ML team with a promising ML experiment in hand. 
 
-The experiment is training a binary text classification model to classify text into two categories: "related to R programming language" and "not related to R programming language. 
+The experiment is training a binary text classification model to classify text into two categories: "related to R programming language" and "not related to R programming language". 
 
 The dataset consists of 10,000 posts from StackOverflow.
 
@@ -240,7 +240,7 @@ However, you have identified the following areas for improvement:
 - ❌ Dataset still needs manual download and placement
 - ❌ Steps to run the experiment were not documented
 
-In the next chapters, you will enhance the workflow for better efficiency and teamwork.
+In the next chapters, you will enhance the workflow to fix those issues.
 
 You can now safely continue to the next chapter.
 

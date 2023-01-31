@@ -361,7 +361,7 @@ However, you might have identified the following areas for improvement:
 - ❌ How can I ensure my changes helps to improve the model?
 - ❌ How can I ensure my model still can be run on someone's computer?
 
-In the next chapters, you will enhance the workflow for better efficiency and teamwork.
+In the next chapters, you will enhance the workflow to fix those issues.
 
 You can now safely continue to the next chapter.
 
