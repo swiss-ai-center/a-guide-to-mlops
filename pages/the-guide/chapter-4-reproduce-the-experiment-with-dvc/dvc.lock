@@ -61,16 +61,12 @@ stages:
   evaluate:
     cmd: python src/evaluate.py model.pkl data/features
     deps:
-    - path: data/features
-      md5: f8f5cbc3188008a7542d02d63054d9d2.dir
-      size: 1556290
-      nfiles: 2
     - path: model.pkl
-      md5: 3cb45102ef80332ffb3ff8854efdef38
-      size: 7185202
+      md5: d4ef28f873e02fd7d075f9ceec0f17b2
+      size: 7185236
     - path: src/evaluate.py
-      md5: c6465474d4db4e0434ab59e477e6c465
-      size: 2658
+      md5: ea10aff124db8d892b973dde58e04c11
+      size: 2669
     outs:
     - path: evaluation/metrics.json
       md5: dc6adff11320058285d42c18a790f35c

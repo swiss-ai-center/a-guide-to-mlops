@@ -60,7 +60,6 @@ git status
 The output of this command should look similar to this.
 
 ```
-> git status
 On branch main
 
 Untracked files:
@@ -105,7 +104,6 @@ git status
 The output of this command should now look similar to this.
 
 ```
-> git status
 On branch main
 
 Untracked files:

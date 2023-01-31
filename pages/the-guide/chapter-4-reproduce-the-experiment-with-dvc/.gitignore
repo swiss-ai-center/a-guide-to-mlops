@@ -8,8 +8,5 @@ __pycache__/
 
 ## DVC
 
-# The plots created by DVC
-dvc_plots
-
-# Files added by DVC
+# DVC will add new files after this line
 /model.pkl

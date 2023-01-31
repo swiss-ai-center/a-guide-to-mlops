@@ -3,10 +3,13 @@ import Head from "next/head";
 import "prismjs";
 // Import other Prism themes here
 import "prismjs/components/prism-bash.min";
+import "prismjs/components/prism-diff.min";
 import "prismjs/components/prism-json.min";
 import "prismjs/components/prism-python.min";
 import "prismjs/components/prism-yaml.min";
-import "prismjs/themes/prism.css";
+import "prismjs/plugins/diff-highlight/prism-diff-highlight.min";
+import "prismjs/plugins/diff-highlight/prism-diff-highlight.min.css";
+import "prismjs/themes/prism.min.css";
 import "../public/globals.css";
 import {
   AppLink as Link,
