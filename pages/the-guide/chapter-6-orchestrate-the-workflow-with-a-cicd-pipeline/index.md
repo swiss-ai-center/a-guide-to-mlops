@@ -40,13 +40,17 @@ Create a Google Service Account by going to **IAM & Admin > Service Accounts**  
 
 Select **Create Service Account**.
 
-- **Service Account Key name**: _mlopsdemo-service-account-key_)
+- **Service Account Key name**: _mlopsdemo-service-account-key_
 - Select **Create and continue**
-- Select the **Basic > Viewer Role** role
+- Select **Select a role > Basic > Viewer Role**
 - Select **Continue**
 - Select **Done**
 
-Select the newly created service account, select **Keys** and add a new key (JSON format). Save the key in your **Downloads** directory. Remember the name of the file as it will be used later. For the rest of this guide, this service key account file will be referenced as `google-service-account-key.json`.
+Select the newly created service account.
+
+Select **Keys** and **Add new key > Create new key**. Select **(JSON format)** and then **Create**.
+
+The key will be dowloaded in your **Downloads** directory. Remember the name of the file as it will be used later. For the rest of this guide, this service key account file will be referenced as `google-service-account-key.json`.
 
 **Note**: You must **not** add and commit this file to your working directory. It is a sensitive data that you must keep safe.
 
@@ -151,12 +155,16 @@ Finished? Go to the [Check the results](#check-the-results) step!
 Using GitHub? Go to the [GitHub Actions](#github-actions) step!
 {% /callout %}
 
-Store the Google Service Account made earlier in GitLab CI variables.
+**Encode and display the Google Service Account key**
+
+Encode and display the Google Service Account key that you have downloaded from Google Cloud as `base64`. It allows to hide the secret in GitLab CI logs as a security measure.
 
 ```sh
-# Transform the Google Service Account key to base64
-base64 -i google-service-account-key.json
+# Encode the Google Service Account key to base64
+base64 -i ~/Downloads/google-service-account-key.json
 ```
+
+**Store the Google Service Account key as a CI/CD variable**
 
 Store the output as a CI/CD Variable by going to **Settings > CI/CD** from the left sidebar of your GitLab project.
 
@@ -164,9 +172,13 @@ Select **Variables** and select **Add variable**.
 
 Create a new variable named `GCP_SERVICE_ACCOUNT_KEY` with the `base64` value of the Google Service Account key file as its value.
 
-Check the _"Mask variable"_ box, uncheck _"Protect variable"_.
+- **Protect variable**: _Unchecked_
+- **Mask variable**: _Checked_
+- **Expand variable reference**: _Unchecked_
 
-Save the variable by selecting **Add variable**.
+Save the variable by clicking **Add variable**.
+
+**Create the CI/CD pipeline configuration file**
 
 At the root level of your Git repository, create a GitLab CI configuration file `.gitlab-ci.yml`.
 
@@ -174,9 +186,9 @@ At the root level of your Git repository, create a GitLab CI configuration file 
 stages:
   - train
 
-# Change pip's cache directory to be inside the project directory since we can
-# only cache local items.
 variables:
+  # Change pip's cache directory to be inside the project directory since we can
+  # only cache local items.
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
   # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
   GIT_DEPTH: '0'
@@ -210,13 +222,26 @@ train:
 
 Explore this file to understand the stages and the steps.
 
+**Push the CI/CD pipeline configuration file to Git**
+
+Push the CI/CD pipeline configuration file to Git.
+
+```sh
+# Add the configuration file
+git add .gitlab-ci.yml
+
+# Commit the changes
+git commit -m "A pipeline will run my experiment on each push"
+
+# Push the changes
+git push
+```
+
 {% callout type="note" %}
 Finished? Go to the [Check the results](#check-the-results) step!
 {% /callout %}
 
 ### Check the results
-
-Congrats! You now have a CI/CD pipeline that will run the experiment on each commit.
 
 For GitLab, you can see the pipeline running on the **CI/CD > Pipelines** page.
 
@@ -224,9 +249,13 @@ For GitHub, you can see the pipeline running on the **Actions** page.
 
 You should see a newly created pipeline. The pipeline should log into Google Cloud, pull the data from DVC and reproduce the experiment. Ensure you have pushed all data to DVC (`dvc push`) if you have cache errors.
 
+You notice that DVC was able to skip all stages as its cache it up to date. It helps you to be sure the experiment can be run (all data and metadata are up to date) without the pipeline execution time.
+
 This chapter is done, you can check the summary.
 
 ## Summary
+
+Congrats! You now have a CI/CD pipeline that will run the experiment on each commit.
 
 In this chapter, you have successfully:
 

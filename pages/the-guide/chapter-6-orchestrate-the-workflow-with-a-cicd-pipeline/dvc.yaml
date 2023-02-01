@@ -43,7 +43,8 @@ stages:
     - evaluation/metrics.json:
         cache: false
     plots:
-    - evaluation/plots/importance.png
+    - evaluation/plots/importance.png:
+        cache: false
     - evaluation/plots/prc.json:
         cache: false
         x: recall

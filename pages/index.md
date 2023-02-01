@@ -4,7 +4,7 @@ title: "A guide to MLOps"
 
 # {% $markdoc.frontmatter.title %}
 
-## Introduction & Problematic
+## Introduction
 
 This guide will help you through incremental steps from a traditional approach of managing ML projects to a modern ML Ops approach designed to improve team collaboration and reproducibility.
 

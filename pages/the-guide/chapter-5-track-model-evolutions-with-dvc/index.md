@@ -128,9 +128,11 @@ DVC shows you the differences so you can easily compare the two iterations.
 #### Compare the plots difference
 
 ```sh
-# Display the plots for the `precision_recall_curve` and the `roc_curve` - the output file can be visualized in a browser
+# Create the report to display the plots
 dvc plots diff
 ```
+
+The effect of the `dvc plots diff` command is to create a `dvc_plots` directory in the working directory. This directory contains a report to visualize the plots in a browser.
 
 DVC shows you the differences so you can easily compare the two iterations.
 
@@ -138,15 +140,95 @@ DVC shows you the differences so you can easily compare the two iterations.
 
 You should notice the improvements made to the model thanks to the DVC reports. These improvements are very small but illustrate the workflow. Try to tweak the parameters to improve the model and play with the reports to see how your model's performance changes.
 
-Do not push the improved version of your model yet, it will be done in a future chapter.
+#### Update the gitignore file
+
+The `dvc plots diff` creates a `dvc_plots` directory in the working directory. This directory should be ignored by Git.
+
+
+Update the `.gitignore` file to add the `dvc_plots` directory.
+
+```sh
+## Python
+
+# Environments
+.venv
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+## DVC
+
+# DVC plots
+dvc_plots
+
+# DVC will add new files after this line
+/model.pkl
+```
+
+Check the differences with Git to validate the changes.
+
+```sh
+# Show the differences with Git
+git diff .gitignore
+```
+
+The output should be similar to this.
+
+```diff
+diff --git a/.gitignore b/.gitignore
+index c467670..a8a3e41 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -8,5 +8,8 @@ __pycache__/
+ 
+ ## DVC
+ 
++# DVC plots
++dvc_plots
++
+ # DVC will add new files after this line
+ /model.pkl
+```
 
 ### Check the results
 
-Congrats! You now have a simple way to compare the models with the used parameters and metrics.
+Check the changes with Git to ensure all wanted files are here.
+
+```sh
+# Check the changes
+git status
+```
+
+The output should be similar to this.
+
+```
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   .dvc/config
+        modified:   .gitignore
+        modified:   dvc.lock
+        modified:   evaluation/metrics.json
+        modified:   evaluation/plots/importance.png
+        modified:   evaluation/plots/metrics/avg_prec.tsv
+        modified:   evaluation/plots/metrics/roc_auc.tsv
+        modified:   evaluation/plots/prc.json
+        modified:   evaluation/plots/sklearn/confusion_matrix.json
+        modified:   evaluation/plots/sklearn/roc.json
+        modified:   evaluation/report.html
+        modified:   params.yaml
+```
+
+**Do not push the improved version of your model yet**, it will be done in a future chapter.
 
 This chapter is done, you can check the summary.
 
 ## Summary
+
+Congrats! You now have a simple way to compare the models with the used parameters and metrics.
 
 In this chapter, you have successfully:
 

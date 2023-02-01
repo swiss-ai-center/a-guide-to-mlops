@@ -26,11 +26,13 @@ This guide has been written with macOS and Linux operating systems in mind. If y
 
 ### Create a new Git repository
 
-Create a Git repository to collaborate with peers on your preferred Git service.
+Create an Git repository to collaborate with peers on your preferred Git service.
+
+**Note**: Do **not** initialize the Git repository online. You will manually initialize the repository later.
 
 #### GitHub
 
-Using GitHub? Follow the related documentation [_Creating a new repository_ - docs.github.com](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository) to create a new GitHub repository for this chapter.
+Using GitHub? Follow the related documentation [_Creating a new repository_ - docs.github.com](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository) to create a new GitHub repository for this chapter. 
 
 #### GitLab
 
@@ -38,7 +40,7 @@ Using GitLab? Follow the related documentation [_Create a project_ - docs.gitlab
 
 ### Initialize Git in your working directory
 
-Use the following commands to set up a local Git repository in your working directory. Your Git service should provide instructions for initializing the repository.
+Use the following commands to set up a local Git repository in your working directory. Your Git service should provide these instructions as well.
 
 ```sh
 # Initialize Git in your working directory with `main` as the initial branch
@@ -53,7 +55,7 @@ git remote add origin <your git repository url>
 Initialize Git in your working directory. Verify available files for committing with these commands.
 
 ```sh
-# Check Git status
+# Check the changes
 git status
 ```
 
@@ -62,17 +64,19 @@ The output should be similar to this.
 ```
 On branch main
 
+No commits yet
+
 Untracked files:
   (use "git add <file>..." to include in what will be committed)
         .venv/
         data/
         evaluation/
-        src/
         model.pkl
         params.yaml
+        src/
 ```
 
-As you can see, no files have been added to Git yet but all available files are shown here to add them.
+As you can see, no files have been added to Git yet.
 
 #### Create a `.gitignore` file
 
@@ -94,30 +98,49 @@ data
 __pycache__/
 ```
 
-Verify available files for committing with these commands.
+### Check the changes
 
-```sh
-# Check Git status
-git status
-```
-
-The output should now be similar to this.
-
-```
-On branch main
-
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-        src/
-        params.yaml
-```
-
-### Push the metadata to Git
+Check the changes with Git to ensure all wanted files are here.
 
 ```sh
 # Add all the available files
 git add .
 
+# Check the changes
+git status
+```
+
+The output of the `git status` command should be similar to this.
+
+```
+On branch main
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+        new file:   .gitignore
+        new file:   evaluation/metrics.json
+        new file:   evaluation/plots/importance.png
+        new file:   evaluation/plots/metrics/avg_prec.tsv
+        new file:   evaluation/plots/metrics/roc_auc.tsv
+        new file:   evaluation/plots/prc.json
+        new file:   evaluation/plots/sklearn/confusion_matrix.json
+        new file:   evaluation/plots/sklearn/roc.json
+        new file:   evaluation/report.html
+        new file:   params.yaml
+        new file:   src/evaluate.py
+        new file:   src/featurization.py
+        new file:   src/prepare.py
+        new file:   src/requirements.txt
+        new file:   src/train.py
+```
+
+### Push the metadata to Git
+
+Commit and push the changes to Git.
+
+```sh
 # Commit the changes
 git commit -m "My first ML experiment shared on Git"
 
@@ -125,15 +148,15 @@ git commit -m "My first ML experiment shared on Git"
 git push --set-upstream origin main
 ```
 
-If you go on your online Git repository, you should see the files.
-
 ### Check the results
 
-Congrats! You now have a codebase that can be used and shared among the team.
+Go on your online Git repository. You should see the files.
 
 This chapter is done, you can check the summary.
 
 ## Summary
+
+Congrats! You now have a codebase that can be used and shared among the team.
 
 In this chapter, you have successfully:
 

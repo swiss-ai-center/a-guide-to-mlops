@@ -27,7 +27,6 @@ This guide has been written with macOS and Linux operating systems in mind. If y
 Update the `src/requirements.txt` file to include mlem and its dependencies.
 
 ```
-dvc==2.37.0
 dvc[gs]==2.37.0
 dvclive==1.0.0
 pandas==1.5.1
@@ -464,7 +463,7 @@ dvc stage add --force \
   --plots-no-cache evaluation/plots/prc.json \
   --plots-no-cache evaluation/plots/sklearn/roc.json \
   --plots-no-cache evaluation/plots/sklearn/confusion_matrix.json \
-  --plots evaluation/plots/importance.png \
+  --plots-no-cache evaluation/plots/importance.png \
   python src/evaluate.py models/rf data/features
 
 # Set the axes for the `precision_recall_curve`
@@ -665,6 +664,41 @@ This output means a 33% probability that the input is related to the R programmi
 ]
 ```
 
+### Check the changes
+
+Check the changes with Git to ensure all wanted files are here.
+
+```sh
+# Add all the files
+git add .
+
+# Check the changes
+git status
+```
+
+The output of the `git status` command should be similar to this.
+
+```
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   .dvcignore
+        new file:   .mlem.yaml
+        modified:   data/features/.gitignore
+        new file:   data/features/tfidf.mlem
+        new file:   data/features/vectorizer.mlem
+        modified:   dvc.lock
+        modified:   dvc.yaml
+        new file:   models/.gitignore
+        new file:   models/rf.mlem
+        modified:   src/evaluate.py
+        modified:   src/featurization.py
+        modified:   src/requirements.txt
+        modified:   src/train.py
+```
+
 ### Push the changes to DVC and Git
 
 Push the changes to DVC and Git.
@@ -672,9 +706,6 @@ Push the changes to DVC and Git.
 ```sh
 # Upload the experiment data and cache to the remote bucket
 dvc push
-
-# Add all the files
-git add .
 
 # Commit the changes
 git commit -m "MLEM can save, load and serve the model"

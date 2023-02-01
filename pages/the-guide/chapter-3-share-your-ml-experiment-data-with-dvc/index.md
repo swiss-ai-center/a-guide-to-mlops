@@ -10,7 +10,7 @@ At this point, the codebase is distributed to team members using Git.
 
 The objective of this chapter is to distribute the experiment data with the team using [DVC](/get-started/the-tools-used-in-this-guide#dvc). DVC is a version control system for your data. Dataset files are generally too large to be stored in Git. DVC allows you to store the dataset in a remote storage and version it.
 
-For this guide, a Google Storage Bucket will be used to store the dataset. Although, DVC is compatible with many other cloud storage providers as well
+For this guide, a Google Storage Bucket will be used to store the dataset. Although, DVC is compatible with many other cloud storage providers as well.
 
 In this chapter, you'll cover:
 
@@ -39,7 +39,11 @@ This guide has been written with macOS and Linux operating systems in mind. If y
 
 Create a Google Cloud Project by going to the [Google Cloud console](https://console.cloud.google.com/), select **Select a project** in the upper right corner of the screen and select **New project**.
 
-Name your project. The name is unique for all projects on Google Cloud. For the following steps, the project will be named _mlopsdemo-project_. Select **Create** to create the project.
+Name your project. For the following steps, the project will be named _MLOps demo project_.
+
+Edit the project ID. The ID is unique for all projects on Google Cloud. For the following steps, the project ID will be named _mlops-demo-id_.
+
+Select **Create** to create the project.
 
 ### Install Google Cloud CLI
 
@@ -60,7 +64,7 @@ gcloud init
 # List all available projects
 gcloud projects list
 
-# Select your Google Cloud project (`mlopsdemo-project`)
+# Select your Google Cloud project (`mlops-demo-id`)
 gcloud config set project <id of the gcp project>
 
 # Set authentication for our ML experiment
@@ -71,16 +75,16 @@ gcloud auth application-default login
 
 ### Create the Google Storage Bucket
 
-Create the Google Storage Bucket by going to **Cloud Storage** on the left sidebar. Select **Create a Bucket**.
+Create the Google Storage Bucket by going to **Cloud Storage** on the left sidebar. Click on the **Create** button to create a new bucket.
 
-- **Bucket Name** : The name must be unique. For the following steps, the bucket will be named _mlopsdemo-bucket_
-- **Location type** : _europe-west6 (Zurich)_
+- **Bucket Name** : The name must be unique. For the following steps, the bucket will be named _mlops-demo-bucket_
+- **Location type** : _Region -> europe-west6 (Zurich)_
 - **Default storage class** : _Standard_
 - **Enforce public access prevention on this bucket** : _Checked_
 - **Access control** : _Uniform_
 - **Projection tools** : _None_
 
-Select **Create** to create the bucket.
+Select **Create** and **Confirm** to create the bucket.
 
 You now have everything needed for DVC.
 
@@ -134,11 +138,8 @@ pip install --requirement src/requirements.txt
 # Initialize DVC in the working directory
 dvc init
 
-# Add the Google remote storage bucket (`mlopsdemo-bucket`)
+# Add the Google remote storage bucket (`mlops-demo-bucket` and `dvcstore`)
 dvc remote add -d data gs://<your bucket>/<your path>
-
-# Enable auto stage DVC files to Git
-dvc config core.autostage true
 ```
 
 The effect of the `dvc init` command is to create a `.dvc` directory in the working directory. This directory contains the configuration of DVC.
@@ -157,7 +158,7 @@ dvc add data/data.xml
 When executing this command, the following output occurs.
 
 ```sh
-ERROR: bad DVC file name 'data/data.xml' is git-ignored.
+ERROR: bad DVC file name 'data/data.xml.dvc' is git-ignored.
 ```
 
 You will have to update the `.gitignore` file so that DVC can create files in the `data` directory. However, you still don't want the directories `data/features` and `data/prepared` to be added to Git.
@@ -225,14 +226,40 @@ DVC works as Git. Once you want to share the data, you can use `dvc push` to upl
 dvc push
 ```
 
-### Push the changes to Git
+### Check the changes
 
-You can now push the changes to Git so all team members can get the data from DVC as well.
+Check the changes with Git to ensure all wanted files are here.
 
 ```sh
 # Add all the files
 git add .
 
+# Check the changes
+git status
+```
+
+The output of the `git status` command should be similar to this.
+
+```
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   .dvc/.gitignore
+        new file:   .dvc/config
+        new file:   .dvcignore
+        modified:   .gitignore
+        new file:   data/.gitignore
+        new file:   data/data.xml.dvc
+        modified:   src/requirements.txt
+```
+
+### Push the changes to Git
+
+You can now push the changes to Git so all team members can get the data from DVC as well.
+
+```sh
 # Commit the changes
 git commit -m "My ML experiment data is saved with DVC"
 
@@ -240,13 +267,11 @@ git commit -m "My ML experiment data is saved with DVC"
 git push
 ```
 
-### Check the results
-
-Congrats! You now have a dataset that can be used and shared among the team.
-
 This chapter is done, you can check the summary.
 
 ## Summary
+
+Congrats! You now have a dataset that can be used and shared among the team.
 
 In this chapter, you have successfully:
 

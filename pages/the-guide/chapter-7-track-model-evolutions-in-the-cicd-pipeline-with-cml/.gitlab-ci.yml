@@ -46,7 +46,6 @@ report:
     - job: train
       artifacts: true
   rules:
-    - if: $CI_COMMIT_BRANCH == "main"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   variables:
     REPO_TOKEN: $CML_PAT_TOKEN

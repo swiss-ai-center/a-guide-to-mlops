@@ -91,12 +91,12 @@ This is what your working directory should look like.
 
 | **File**              | **Description**                                   | **Input**                             | **Output**                                                        |
 |-----------------------|---------------------------------------------------|---------------------------------------|-------------------------------------------------------------------|
-| `requirements.txt`    | The Python dependencies to run the ML experiment  | -                                     | -                                                                 |
+| `src/requirements.txt`    | The Python dependencies to run the ML experiment  | -                                     | -                                                                 |
+| `src/prepare.py`          | Prepare the dataset to run the ML experiment      | The dataset to prepare as an XML file | The prepared data in `data/prepared` directory                    |
+| `src/featurization.py`    | Extract the features from the dataset             | The prepared dataset                  | The extracted features in `data/features` directory               |
+| `src/train.py`            | Train the ML model                                | The extracted features                | The model trained with the dataset                                |
+| `src/evaluate.py`         | Evaluate the ML model using DVC                   | The model to evaluate                 | The results of the model evaluation in `evaluation` directory     |
 | `params.yaml`         | The parameters to run the ML experiment           | -                                     | -                                                                 |
-| `prepare.py`          | Prepare the dataset to run the ML experiment      | The dataset to prepare as an XML file | The prepared data in `data/prepared` directory                    |
-| `featurization.py`    | Extract the features from the dataset             | The prepared dataset                  | The extracted features in `data/features` directory               |
-| `train.py`            | Train the ML model                                | The extracted features                | The model trained with the dataset                                |
-| `evaluate.py`         | Evaluate the ML model using DVC                   | The model to evaluate                 | The results of the model evaluation in `evaluation` directory     |
 
 ### Download and set up the dataset
 
@@ -186,7 +186,7 @@ Examine the experiment results to gain insights into the output files.
 
 ### Check the results
 
-Congratulations! You've successfully run the experiment on your machine, with guidance from your colleague. Your working directory should now appear as follows.
+Your working directory should now appear as follows.
 
 ```
 .
@@ -225,6 +225,8 @@ Congratulations! You've successfully run the experiment on your machine, with gu
 This chapter is done, you can check the summary.
 
 ## Summary
+
+Congratulations! You've successfully run the experiment on your machine, with guidance from your colleague. 
 
 In this chapter, you have successfully:
 

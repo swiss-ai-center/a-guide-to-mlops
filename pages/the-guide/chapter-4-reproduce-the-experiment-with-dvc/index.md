@@ -52,7 +52,7 @@ As seen in the previous chapter, DVC can update gitignore files.
 
 As you will define the entire experiment pipeline with DVC, you can safely remove all the custom rules from the main `.gitignore` file so DVC can manage them for you. At the end of this chapter, DVC should have updated all the gitignore files if necessary.
 
-Update the `.gitignore` file to keep Python elements with the following content. The rest will be added by DVC.
+Update the `.gitignore` file to remove your experiment data. The required files to be ignored will then be added by DVC.
 
 ```sh
 ## Python
@@ -201,7 +201,7 @@ dvc stage add -n evaluate \
   --plots-no-cache evaluation/plots/prc.json \
   --plots-no-cache evaluation/plots/sklearn/roc.json \
   --plots-no-cache evaluation/plots/sklearn/confusion_matrix.json \
-  --plots evaluation/plots/importance.png \
+  --plots-no-cache evaluation/plots/importance.png \
   python src/evaluate.py model.pkl data/features
 ```
 
@@ -305,6 +305,34 @@ You can force the execution of the entire pipeline with the command `dvc repro -
 
 The parameters discussed before - defined in the `params.yaml` file - can be edited to re-run the experiment. DVC will track all these parameters and store the outputs' results in its cache so it will not re-run the experiment if not needed.
 
+### Check the changes
+
+Check the changes with Git to ensure all wanted files are here.
+
+```sh
+# Add all the files
+git add .
+
+# Check the changes
+git status
+```
+
+The output of the `git status` command should be similar to this.
+
+```
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   .gitignore
+        modified:   data/.gitignore
+        new file:   data/features/.gitignore
+        new file:   dvc.lock
+        new file:   dvc.yaml
+        modified:   evaluation/report.html
+```
+
 ### Push the changes to DVC and Git
 
 Push all DVC and Git files to the remote.
@@ -313,9 +341,6 @@ Push all DVC and Git files to the remote.
 # Upload the experiment data and cache to the remote bucket
 dvc push
 
-# Add all the files
-git add .
-
 # Commit the changes
 git commit -m "My ML experiment commands are saved with DVC"
 
@@ -323,13 +348,11 @@ git commit -m "My ML experiment commands are saved with DVC"
 git push
 ```
 
-### Check the results
-
-Congrats! You now have a defined and common way to reproduce the pipeline to create a model. The stages will be ran only if files or parameters change.
-
 This chapter is done, you can check the summary.
 
 ## Summary
+
+Congrats! You now have a defined and common way to reproduce the pipeline to create a model. The stages will be ran only if files or parameters change.
 
 In this chapter, you have successfully:
 

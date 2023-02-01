@@ -351,6 +351,39 @@ git fetch origin
 git checkout <the name of the new branch>
 ```
 
+#### Check the changes
+
+Check the changes with Git to ensure all wanted files are here.
+
+```sh
+# Add all the files
+git add .
+
+# Check the status
+git status
+```
+
+The output of the `git status` command should be similar to this.
+
+```
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   .gitignore
+        modified:   dvc.lock
+        modified:   evaluation/metrics.json
+        modified:   evaluation/plots/importance.png
+        modified:   evaluation/plots/metrics/avg_prec.tsv
+        modified:   evaluation/plots/metrics/roc_auc.tsv
+        modified:   evaluation/plots/prc.json
+        modified:   evaluation/plots/sklearn/confusion_matrix.json
+        modified:   evaluation/plots/sklearn/roc.json
+        modified:   evaluation/report.html
+        modified:   params.yaml
+```
+
 #### Commit and push the experiment changes to GitHub
 
 Remember the changes done in [Chapter 5: Track model evolutions with DVC](/the-guide/chapter-5-track-model-evolutions-with-dvc)?
@@ -362,9 +395,6 @@ If you don't have changes in your working directory, just update the paramerters
 ```sh
 # Upload the experiment data and cache to the remote bucket
 dvc push
-
-# Add all the files
-git add .
 
 # Commit the changes
 git commit -m "I made some changes to the model"
@@ -421,7 +451,13 @@ Using GitHub? Go to the [GitHub](#github) section!
 
 In order to allow CML to generate reports, a Personal Access Token (PAT) must be created. A Project or a Group Access Token are not sufficient for the usage of CML's runners that will be used in the next steps.
 
-In your profile preferences, create a PAT with `api`, `read_repository` and `write_repository` scopes and name it _"CML"_.
+To create a Personal Access Token, go in your **Profile preferences > Access Tokens**.
+
+**Token name**: _CML_
+**Expiration date**: _None_
+**Select scopes**: `api`, `read_repository` and `write_repository`
+
+Select **Create personal access token** to create the token. Copy it. It will be displayed only once.
 
 Store the PAT as a CI/CD Variable by going to **Settings > CI/CD** from the left sidebar of your GitLab project.
 
@@ -429,7 +465,11 @@ Select **Variables** and select **Add variable**.
 
 Create a new variable named `CML_PAT_TOKEN` with the PAT value as its value.
 
-Check the _"Mask variable"_ box, uncheck _"Protect variable"_ and save the variable by selecting "Add variable".
+- **Protect variable**: _Unchecked_
+- **Mask variable**: _Checked_
+- **Expand variable reference**: _Unchecked_
+
+Save the variable by clicking **Add variable**.
 
 #### Update GitLab CI configuration file
 
@@ -490,7 +530,6 @@ report:
     - job: train
       artifacts: true
   rules:
-    - if: $CI_COMMIT_BRANCH == "main"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   variables:
     REPO_TOKEN: $CML_PAT_TOKEN
@@ -591,7 +630,6 @@ index 561d04f..61dea20 100644
 +    - job: train
 +      artifacts: true
 +  rules:
-+    - if: $CI_COMMIT_BRANCH == "main"
 +    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 +  variables:
 +    REPO_TOKEN: $CML_PAT_TOKEN
@@ -686,6 +724,39 @@ git fetch origin
 git checkout <the name of the new branch>
 ```
 
+#### Check the changes
+
+Check the changes with Git to ensure all wanted files are here.
+
+```sh
+# Add all the files
+git add .
+
+# Check the status
+git status
+```
+
+The output of the `git status` command should be similar to this.
+
+```
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   .gitignore
+        modified:   dvc.lock
+        modified:   evaluation/metrics.json
+        modified:   evaluation/plots/importance.png
+        modified:   evaluation/plots/metrics/avg_prec.tsv
+        modified:   evaluation/plots/metrics/roc_auc.tsv
+        modified:   evaluation/plots/prc.json
+        modified:   evaluation/plots/sklearn/confusion_matrix.json
+        modified:   evaluation/plots/sklearn/roc.json
+        modified:   evaluation/report.html
+        modified:   params.yaml
+```
+
 #### Commit and push the experiment changes to GitLab
 
 Remember the changes done in [Chapter 5: Track model evolutions with DVC](/the-guide/chapter-5-track-model-evolutions-with-dvc)?
@@ -697,9 +768,6 @@ If you don't have changes in your working directory, just update the paramerters
 ```sh
 # Upload the experiment data and cache to the remote bucket
 dvc push
-
-# Add all the files
-git add .
 
 # Commit the changes
 git commit -m "I made some changes to the model"

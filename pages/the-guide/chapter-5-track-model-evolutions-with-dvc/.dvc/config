@@ -1,5 +1,4 @@
 [core]
     remote = data
-    autostage = true
 ['remote "data"']
     url = gs://mlopsdemo/dvcstore
