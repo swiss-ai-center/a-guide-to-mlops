@@ -48,9 +48,9 @@ Using GitLab? Go to the [GitLab](#gitlab) section!
 
 The new "report" job is responsible for reporting the results of the model evaluation and comparing it with the main branch.
 
-This job is triggered only when a pull request is opened.
+This job is triggered only when a pull request is opened and all future commits made to it.
 
-The job checks out the repository, downloads the evaluation results, sets up DVC and CML in the container, creates a report using the data obtained from the training job, and finally publishes the report as a pull request comment.
+The job checks out the repository, downloads the evaluation results, sets up DVC and CML, creates a report using the data obtained from the training job, and finally publishes the report as a pull request comment.
 
 Update the `.github/workflows/mlops.yml` file.
 
@@ -128,7 +128,7 @@ jobs:
       - name: Setup CML
         uses: iterative/setup-cml@v1
         with:
-          version: '0.18.1'
+          version: '0.18.17'
       - name: Create CML report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -254,7 +254,7 @@ index 0ca4d29..9275231 100644
 +      - name: Setup CML
 +        uses: iterative/setup-cml@v1
 +        with:
-+          version: '0.18.1'
++          version: '0.18.17'
 +      - name: Create CML report
 +        env:
 +          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -331,7 +331,7 @@ git push
 
 #### Open an issue on GitHub
 
-Create a new issue by going to the **Issues** section from the top header of your GitHub repository. Select **New issue** and describe the work/improvements/ideas that you want to integrate to the codebase. In this guide, we will name the issue _Demonstrate step 7_. Create the issue by selecting **Submit new issue**.
+Create a new issue by going to the **Issues** section from the top header of your GitHub repository. Select **New issue** and describe the work/improvements/ideas that you want to integrate to the codebase. In this guide, we will name the issue _Demonstrate chapter 7_. Create the issue by selecting **Submit new issue**.
 
 #### Create a branch on GitHub
 
@@ -377,22 +377,33 @@ Go back to your GitHub repository. A new **Compare & pull request** button shoul
 
 Click on it. Name the pull request and select **Create pull request** to create the pull request.
 
-#### Visualize the execution of the CI/CD workflow on GitHub
+#### Visualize the execution of the CI/CD pipeline on GitHub
 
-The pull request opens and automatically starts the workflow `MLOps / train (pull_request)` under the section **Some checks haven’t completed yet**. You can click on **Details** to see the details.
+The pull request opens and automatically starts the workflow `MLOps / train (pull_request)` under the **Some checks haven’t completed yet** section. You can click on **Details** to see the details.
+
+Explore the output and try to see how the configuration file shows up in GitHub.
+
+Once the workflow is done, a new workflow `MLOps / report (pull_request)` is started under the **Some checks haven’t completed yet** section. You can click on **Details** to see the details.
 
 Explore the output and try to see how the configuration file shows up in GitHub.
 
-Once the workflow is done, a new workflow `MLOps / report (pull_request)` is started under the section **Some checks haven’t completed yet**. You can click on **Details** to see the details.
-
-Explore the output and try to see how the configuration file shows up in GitHub.
+Once all workflows are successfully executed, the **Some checks haven't completed yet** section should become **All checks have passed**.
 
 #### Visualize the CML report on GitHub
 
-When the CI/CD completes, a new comment is added to your pull request. 
-
+When the CI/CD pipeline completes, a new comment is added to your pull request. Check the pull request and examine the report made by CML. As it uses the evaluation data that was generated with DVC, it can uses it to display all the plots.
 
 #### Merging the pull request on GitHub
+
+Once you are satisfied with the model's performance, you can merge the changes. 
+
+Go back to the pull request. At the end of the page, select **Merge pull request**. Confirm the merge by selecting **Confirm merge**.
+
+The associated issue will be automatically closed as well.
+
+You can delete the branch by clicking **Delete branch** to clean up your repository. If you ever need to go back to this branch, you can always restore the branch from this menu.
+
+Congrats! You can now iterate on your model while keeping a trace of the improvements made to it.
 
 {% callout type="note" %}
 Finished? Go to the [Switch back to the main branch](#switch-back-to-the-main-branch) step!
@@ -404,64 +415,8 @@ Finished? Go to the [Switch back to the main branch](#switch-back-to-the-main-br
 Using GitHub? Go to the [GitHub](#github) section!
 {% /callout %}
 
-#### Update GitLab CI configuration file
 
-#### Push the changes to GitLab
-
-#### Open an issue on GitLab
-
-#### Create a merge request on GitLab
-
-#### Checkout the new GitLab branch
-
-#### Commit and push the experiment changes to GitLab
-
-Remember
-
-#### Create a pull request on GitLab
-
-#### Visualize the execution of the CI/CD pipeline on GitLab
-
-#### Visualize the CML report on GitLab
-
-#### Merging the merge request on GitLab
-
-{% callout type="note" %}
-Finished? Go to the [Switch back to the main branch](#switch-back-to-the-main-branch) step!
-{% /callout %}
-
-### Switch back to the main branch
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-##### Create an issue and a pull request.
- 
-
-// TODO ici ça fonctionne bien sur Gitlab mais pas top sur Github
-
-Go to the **Code** section from the top header of your GitHub repository. Select **_N_ branches** (where _N_ is the current number of branches your repository has). Next to the newly created branch, select **New pull request**. 
-
-{% callout type="note" %}
-Finished? Go to the [Make changes to the model](#make-changes-to-the-model) step!
-{% /callout %}
-
-### Update GitLab CI and create a merge request
-
-{% callout type="note" %}
-Using GitHub? Go to the [Update GitHub Actions and create a pull request](#update-github-actions-and-create-a-pull-request) step!
-{% /callout %}
+#### Create a Personal Access Token
 
 In order to allow CML to generate reports, a Personal Access Token (PAT) must be created. A Project or a Group Access Token are not sufficient for the usage of CML's runners that will be used in the next steps.
 
@@ -469,15 +424,15 @@ In your profile preferences, create a PAT with `api`, `read_repository` and `wri
 
 Store the PAT as a CI/CD Variable by going to **Settings > CI/CD** from the left sidebar of your GitLab project. Select **Variables** and select **Add variable**. Create a new variable named `CML_PAT_TOKEN` with the PAT value as its value. Check the _"Mask variable"_ box, uncheck _"Protect variable"_ and save the variable by selecting "Add variable".
 
-#### Update the workflow 
+#### Update GitLab CI configuration file
 
-The new "report" job is responsible for reporting the results of the model evaluation and comparing it with the main branch. 
-This job is triggered only when a pull request is opened. 
+The new "report" job is responsible for reporting the results of the model evaluation and comparing it with the main branch.
 
-The job checks out the repository, downloads the evaluation results, sets up DVC and CML in the container, creates a report using the data obtained from the training job, and finally publishes the report as a pull request comment.
+This job is triggered only when a merge request is opened and all future commits made to it.
+
+The job checks out the repository, downloads the evaluation results, sets up DVC and CML, creates a report using the data obtained from the training job, and finally publishes the report as a merge request comment.
 
 Update the `.gitlab-ci.yml` file.
-
 
 ```yaml
 stages:
@@ -588,7 +543,78 @@ report:
       cml comment create --target=pr --publish report.md
 ```
 
+Explore this file to understand the updated jobs and the steps.
+
 This GitLab CI will create CML reports on each pushes that are related to a merge request.
+
+Check the differences with Git to validate the changes.
+
+```sh
+# Show the differences with Git
+git diff .github/workflows/mlops.yml
+```
+
+The output should be similar to this.
+
+```diff
+
+```
+
+#### Push the changes to GitLab
+
+#### Open an issue on GitLab
+
+#### Create a merge request on GitLab
+
+#### Checkout the new GitLab branch
+
+#### Commit and push the experiment changes to GitLab
+
+Remember
+
+#### Create a pull request on GitLab
+
+#### Visualize the execution of the CI/CD pipeline on GitLab
+
+#### Visualize the CML report on GitLab
+
+#### Merging the merge request on GitLab
+
+{% callout type="note" %}
+Finished? Go to the [Switch back to the main branch](#switch-back-to-the-main-branch) step!
+{% /callout %}
+
+### Switch back to the main branch
+
+```sh
+# Get the latest updates from the remote origin
+git fetch origin
+
+# Check to the main branch
+git checkout main
+
+# Pull the changes made by the pull request/merge request
+git pull
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+#### Update the workflow 
+
+The new "report" job is responsible for reporting the results of the model evaluation and comparing it with the main branch. 
+This job is triggered only when a pull request is opened. 
+
+The job checks out the repository, downloads the evaluation results, sets up DVC and CML in the container, creates a report using the data obtained from the training job, and finally publishes the report as a pull request comment.
 
 #### Push the changes to Git.
 
@@ -605,7 +631,7 @@ git push
 
 #### Create a merge request
 
-Create a new issue by going to the **Issues** section from the left sidebar of your GitLab project. Select **New issue** and describe the work/improvements/ideas that you want to integrate to the codebase. In this guide, we will name the issue _Demonstrate step 7_. Create the issue by selecting **Submit new issue**.
+Create a new issue by going to the **Issues** section from the left sidebar of your GitLab project. Select **New issue** and describe the work/improvements/ideas that you want to integrate to the codebase. In this guide, we will name the issue _Demonstrate chapter 7_. Create the issue by selecting **Submit new issue**.
 
 The issue opens.
 
@@ -672,6 +698,8 @@ Using GitLab? Go to the [GitLab: Merge the changes](#gitlab-merge-the-changes) s
 Go back to the pull request. At the end of the page, select **Merge pull request**. Confirm the merge by selecting **Confirm merge**.
 
 The associated issue will be automatically closed as well.
+
+You can delete the branch by clicking **Delete branch** to clean up your repository. If you ever need to go back to this branch, you can always restore the branch from this menu.
 
 Congrats! You can now iterate on your model while keeping a trace of the improvements made to it.
 
