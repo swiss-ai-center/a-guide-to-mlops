@@ -14,7 +14,7 @@ In this chapter, you'll cover:
 - Pushing the updated CI/CD configuration file to Git
 - Opening an issue in your issue tracker
 - Creating a new branch to add your changes
-- Swithing to the new branch
+- Checking out to the new branch
 - Commiting and pushing the changes that were not commited in [Chapter 5: Track model evolutions with DVC](/the-guide/chapter-5-track-model-evolutions-with-dvc)
 - Creating a pull request/merge request
 - Visualizing the execution of the CI/CD pipeline
@@ -333,6 +333,8 @@ git push
 
 Create a new issue by going to the **Issues** section from the top header of your GitHub repository. Select **New issue** and describe the work/improvements/ideas that you want to integrate to the codebase. In this guide, we will name the issue _Demonstrate chapter 7_. Create the issue by selecting **Submit new issue**.
 
+The issue opens.
+
 #### Create a branch on GitHub
 
 On the newly created issue, select **Create a branch for this issue or link a pull request** from the right sidebar. Create the branch by selecting **Create branch**. A new pop-up opens with the name of the branch you want to checkout to.
@@ -403,7 +405,7 @@ The associated issue will be automatically closed as well.
 
 You can delete the branch by clicking **Delete branch** to clean up your repository. If you ever need to go back to this branch, you can always restore the branch from this menu.
 
-Congrats! You can now iterate on your model while keeping a trace of the improvements made to it.
+Congrats! You can now iterate on your model while keeping a trace of the improvements made to it. You can visualize and discuss the changes made to a model before adding the changes to the codebase.
 
 {% callout type="note" %}
 Finished? Go to the [Switch back to the main branch](#switch-back-to-the-main-branch) step!
@@ -415,14 +417,19 @@ Finished? Go to the [Switch back to the main branch](#switch-back-to-the-main-br
 Using GitHub? Go to the [GitHub](#github) section!
 {% /callout %}
 
-
 #### Create a Personal Access Token
 
 In order to allow CML to generate reports, a Personal Access Token (PAT) must be created. A Project or a Group Access Token are not sufficient for the usage of CML's runners that will be used in the next steps.
 
 In your profile preferences, create a PAT with `api`, `read_repository` and `write_repository` scopes and name it _"CML"_.
 
-Store the PAT as a CI/CD Variable by going to **Settings > CI/CD** from the left sidebar of your GitLab project. Select **Variables** and select **Add variable**. Create a new variable named `CML_PAT_TOKEN` with the PAT value as its value. Check the _"Mask variable"_ box, uncheck _"Protect variable"_ and save the variable by selecting "Add variable".
+Store the PAT as a CI/CD Variable by going to **Settings > CI/CD** from the left sidebar of your GitLab project.
+
+Select **Variables** and select **Add variable**.
+
+Create a new variable named `CML_PAT_TOKEN` with the PAT value as its value.
+
+Check the _"Mask variable"_ box, uncheck _"Protect variable"_ and save the variable by selecting "Add variable".
 
 #### Update GitLab CI configuration file
 
@@ -543,7 +550,7 @@ report:
       cml comment create --target=pr --publish report.md
 ```
 
-Explore this file to understand the updated jobs and the steps.
+Explore this file to understand the updated stages and the steps.
 
 This GitLab CI will create CML reports on each pushes that are related to a merge request.
 
@@ -551,75 +558,103 @@ Check the differences with Git to validate the changes.
 
 ```sh
 # Show the differences with Git
-git diff .github/workflows/mlops.yml
+git diff .gitlab-ci.yml
 ```
 
 The output should be similar to this.
 
 ```diff
-
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 561d04f..61dea20 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -1,5 +1,6 @@
+ stages:
+   - train
++  - report
+ 
+ variables:
+   # Change pip's cache directory to be inside the project directory since we can
+@@ -33,3 +34,73 @@ train:
+     - dvc pull
+     # Run the experiment
+     - dvc repro
++  artifacts:
++    expire_in: 1 week
++    paths:
++      - "evaluation"
++
++report:
++  stage: report
++  image: iterativeai/cml:0-dvc2-base1
++  needs:
++    - job: train
++      artifacts: true
++  rules:
++    - if: $CI_COMMIT_BRANCH == "main"
++    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
++  variables:
++    REPO_TOKEN: $CML_PAT_TOKEN
++  script:
++    - |
++      # Compare parameters to main branch
++      echo "# Params workflow vs. main" >> report.md
++      echo >> report.md
++      dvc params diff main --show-md >> report.md
++      echo >> report.md
++
++      # Compare metrics to main branch
++      echo "# Metrics workflow vs. main" >> report.md
++      echo >> report.md
++      dvc metrics diff main --show-md >> report.md
++      echo >> report.md
++
++      # Create plots
++      echo "# Plots" >> report.md
++      echo >> report.md
++
++      echo "## Precision recall curve" >> report.md
++      echo >> report.md
++      dvc plots diff \
++        --target evaluation/plots/prc.json \
++        -x recall \
++        -y precision \
++        --show-vega main > vega.json
++      vl2png vega.json > prc.png
++      echo '![](./prc.png "Precision recall curve")' >> report.md
++      echo >> report.md
++
++      echo "## Roc curve" >> report.md
++      echo >> report.md
++      dvc plots diff \
++        --target evaluation/plots/sklearn/roc.json \
++        -x fpr \
++        -y tpr \
++        --show-vega main > vega.json
++      vl2png vega.json > roc.png
++      echo '![](./roc.png "Roc curve")' >> report.md
++      echo >> report.md
++
++      echo "## Confusion matrix" >> report.md
++      echo >> report.md
++      dvc plots diff \
++        --target evaluation/plots/sklearn/confusion_matrix.json \
++        --template confusion \
++        -x actual \
++        -y predicted \
++        --show-vega main > vega.json
++      vl2png vega.json > confusion_matrix.png
++      echo '![](./confusion_matrix.png "Confusion Matrix")' >> report.md
++      echo >> report.md
++
++      # Publish the CML report
++      cml comment create --target=pr --publish report.md
 ```
 
 #### Push the changes to GitLab
 
-#### Open an issue on GitLab
-
-#### Create a merge request on GitLab
-
-#### Checkout the new GitLab branch
-
-#### Commit and push the experiment changes to GitLab
-
-Remember
-
-#### Create a pull request on GitLab
-
-#### Visualize the execution of the CI/CD pipeline on GitLab
-
-#### Visualize the CML report on GitLab
-
-#### Merging the merge request on GitLab
-
-{% callout type="note" %}
-Finished? Go to the [Switch back to the main branch](#switch-back-to-the-main-branch) step!
-{% /callout %}
-
-### Switch back to the main branch
-
 ```sh
-# Get the latest updates from the remote origin
-git fetch origin
-
-# Check to the main branch
-git checkout main
-
-# Pull the changes made by the pull request/merge request
-git pull
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
-#### Update the workflow 
-
-The new "report" job is responsible for reporting the results of the model evaluation and comparing it with the main branch. 
-This job is triggered only when a pull request is opened. 
-
-The job checks out the repository, downloads the evaluation results, sets up DVC and CML in the container, creates a report using the data obtained from the training job, and finally publishes the report as a pull request comment.
-
-#### Push the changes to Git.
-
-```sh
-# Add the updated workflow
+# Add the updated GitLab CI
 git add .gitlab-ci.yml
 
 # Commit the changes
@@ -629,49 +664,35 @@ git commit -m "Enable CML reports on merge requests"
 git push
 ```
 
-#### Create a merge request
+#### Open an issue on GitLab
 
 Create a new issue by going to the **Issues** section from the left sidebar of your GitLab project. Select **New issue** and describe the work/improvements/ideas that you want to integrate to the codebase. In this guide, we will name the issue _Demonstrate chapter 7_. Create the issue by selecting **Submit new issue**.
 
 The issue opens.
 
+#### Create a merge request on GitLab
+
 Select **Create merge request** and change the merge request configuration if needed. Create the merge request by selecting **Create merge request**.
 
-{% callout type="note" %}
-Finished? Go to the [Make changes to the model](#make-changes-to-the-model) step!
-{% /callout %}
+#### Checkout the new GitLab branch
 
-### Make changes to the model
-
-The goal of this section is to make changes to the model and to compare the results with the previous version.
-
-#### Update the parameters to run the experiment.
-
-In the `params.yaml` file.
-
-```yaml
-prepare:
-  split: 0.25
-  seed: 20170428
-
-featurize:
-  max_features: 500
-  ngrams: 3
-
-train:
-  seed: 20170428
-  n_est: 50
-  min_split: 3
-```
-
-#### Run the experiment.
+On your machine, check out the new branch.
 
 ```sh
-# Run the experiment. DVC will automatically run all required stages
-dvc repro
+# Get the latest updates from the remote origin
+git fetch origin
+
+# Check to the new branch
+git checkout <the name of the new branch>
 ```
 
-#### Push the changes to DVC and Git.
+#### Commit and push the experiment changes to GitLab
+
+Remember the changes done in [Chapter 5: Track model evolutions with DVC](/the-guide/chapter-5-track-model-evolutions-with-dvc)?
+
+You can now commit them to trigger a change on the remote repository.
+
+If you don't have changes in your working directory, just update the paramerters of the experiment in `params.yaml` and reproduce the experiment with `dvc repro`. You can then commit the changes.
 
 ```sh
 # Upload the experiment data and cache to the remote bucket
@@ -687,45 +708,44 @@ git commit -m "I made some changes to the model"
 git push
 ```
 
-Congrats! You now have a report that will be generated on each PR/MR that can be visualized and discussed with the rest of the team before integrating the changes to the common codebase. When you are happy, you can merge the PR/MR on the target branch.
+#### Visualize the execution of the CI/CD pipeline on GitLab
 
-### GitHub: Merge the changes
+Open the merge request. The pipeline should start. Click on the pipeline number to see the details of the pipeline.
 
-{% callout type="note" %}
-Using GitLab? Go to the [GitLab: Merge the changes](#gitlab-merge-the-changes) step!
-{% /callout %}
+Explore the stages and jobs and try to see how the configuration file shows up in GitLab.
 
-Go back to the pull request. At the end of the page, select **Merge pull request**. Confirm the merge by selecting **Confirm merge**.
+#### Visualize the CML report on GitLab
 
-The associated issue will be automatically closed as well.
+When the CI/CD pipeline completes, a new comment is added to your merge request. Check the merge request and examine the report made by CML. As it uses the evaluation data that was generated with DVC, it can uses it to display all the plots.
 
-You can delete the branch by clicking **Delete branch** to clean up your repository. If you ever need to go back to this branch, you can always restore the branch from this menu.
+#### Merging the merge request on GitLab
 
-Congrats! You can now iterate on your model while keeping a trace of the improvements made to it.
-
-{% callout type="note" %}
-Finished? Go to the [Check the results](#check-the-results) step!
-{% /callout %}
-
-### GitLab: Merge the changes
-
-{% callout type="note" %}
-Using GitHub? Go to the [GitHub: Merge the changes](#github-merge-the-changes) step!
-{% /callout %}
+Once you are satisfied with the model's performance, you can merge the changes. 
 
 Go back to the merge request. Select **Mark as ready**. This will allow to merge the changes. Confirm the merge by selecting **Merge** (you might need to refresh the page to see this button).
 
 The associated issue will be automatically closed as well.
 
-
+Congrats! You can now iterate on your model while keeping a trace of the improvements made to it. You can visualize and discuss the changes made to a model before adding the changes to the codebase.
 
 {% callout type="note" %}
-Finished? Go to the [Check the results](#check-the-results) step!
+Finished? Go to the [Switch back to the main branch](#switch-back-to-the-main-branch) step!
 {% /callout %}
 
-### Check the results
+### Switch back to the main branch and pull latest changes
 
-Congrats! You can now iterate on your model while keeping a trace of the improvements made to it. You can visualize and discuss the changes made to a model before adding the changes to the codebase.
+Now that the merge is done, you can get the changes on the main branch.
+
+```sh
+# Get the latest updates from the remote origin
+git fetch origin
+
+# Check to the main branch
+git checkout main
+
+# Pull the changes made by the pull request/merge request
+git pull
+```
 
 This chapter is done, you can check the summary.
 
@@ -737,13 +757,13 @@ In this chapter, you have successfully:
 - Pushed the updated CI/CD configuration file to Git
 - Opened an issue in your issue tracker
 - Created a new branch to add your changes
-- Swithed to the new branch
+- Checked out to the new branch
 - Commit and pushed the changes that were not commited in [Chapter 5: Track model evolutions with DVC](/the-guide/chapter-5-track-model-evolutions-with-dvc)
 - Created a pull request/merge request
 - Visualized the execution of the CI/CD pipeline
 - Visualized the CML report that is added to your pull request/merge request
 - Merged the pull request/merge request to the main branch
-- Switched back to the main branch and pull latest changes
+- Switched back to the main branch and pulled latest changes
 
 However, you might have identified the following areas for improvement:
 

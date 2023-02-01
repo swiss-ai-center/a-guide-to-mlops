@@ -1,5 +1,6 @@
 stages:
   - train
+  - report
 
 variables:
   # Change pip's cache directory to be inside the project directory since we can
@@ -33,3 +34,73 @@ train:
     - dvc pull
     # Run the experiment
     - dvc repro
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - "evaluation"
+
+report:
+  stage: report
+  image: iterativeai/cml:0-dvc2-base1
+  needs:
+    - job: train
+      artifacts: true
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  variables:
+    REPO_TOKEN: $CML_PAT_TOKEN
+  script:
+    - |
+      # Compare parameters to main branch
+      echo "# Params workflow vs. main" >> report.md
+      echo >> report.md
+      dvc params diff main --show-md >> report.md
+      echo >> report.md
+
+      # Compare metrics to main branch
+      echo "# Metrics workflow vs. main" >> report.md
+      echo >> report.md
+      dvc metrics diff main --show-md >> report.md
+      echo >> report.md
+
+      # Create plots
+      echo "# Plots" >> report.md
+      echo >> report.md
+
+      echo "## Precision recall curve" >> report.md
+      echo >> report.md
+      dvc plots diff \
+        --target evaluation/plots/prc.json \
+        -x recall \
+        -y precision \
+        --show-vega main > vega.json
+      vl2png vega.json > prc.png
+      echo '![](./prc.png "Precision recall curve")' >> report.md
+      echo >> report.md
+
+      echo "## Roc curve" >> report.md
+      echo >> report.md
+      dvc plots diff \
+        --target evaluation/plots/sklearn/roc.json \
+        -x fpr \
+        -y tpr \
+        --show-vega main > vega.json
+      vl2png vega.json > roc.png
+      echo '![](./roc.png "Roc curve")' >> report.md
+      echo >> report.md
+
+      echo "## Confusion matrix" >> report.md
+      echo >> report.md
+      dvc plots diff \
+        --target evaluation/plots/sklearn/confusion_matrix.json \
+        --template confusion \
+        -x actual \
+        -y predicted \
+        --show-vega main > vega.json
+      vl2png vega.json > confusion_matrix.png
+      echo '![](./confusion_matrix.png "Confusion Matrix")' >> report.md
+      echo >> report.md
+
+      # Publish the CML report
+      cml comment create --target=pr --publish report.md
