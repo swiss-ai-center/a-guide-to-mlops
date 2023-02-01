@@ -46,8 +46,9 @@ Using GitLab? Go to the [GitLab](#gitlab) section!
 
 #### Update GitHub Actions configuration file
 
-The new "report" job is responsible for reporting the results of the model evaluation and comparing it with the main branch. 
-This job is triggered only when a pull request is opened. 
+The new "report" job is responsible for reporting the results of the model evaluation and comparing it with the main branch.
+
+This job is triggered only when a pull request is opened.
 
 The job checks out the repository, downloads the evaluation results, sets up DVC and CML in the container, creates a report using the data obtained from the training job, and finally publishes the report as a pull request comment.
 
@@ -186,10 +187,134 @@ jobs:
           echo >> report.md
 
           # Publish the CML report
-          cml comment create --pr --publish report.md
+          cml comment create --target=pr --publish report.md
 ```
 
+Explore this file to understand the updated jobs and the steps.
+
 This GitHub Workflow will create CML reports on each pushes that are related to a pull request.
+
+Check the differences with Git to validate the changes.
+
+```sh
+# Show the differences with Git
+git diff .github/workflows/mlops.yml
+```
+
+The output should be similar to this.
+
+```diff
+diff --git a/.github/workflows/mlops.yml b/.github/workflows/mlops.yml
+index 0ca4d29..9275231 100644
+--- a/.github/workflows/mlops.yml
++++ b/.github/workflows/mlops.yml
+@@ -6,6 +6,9 @@ on:
+     branches:
+       - main
+ 
++  # Runs on pull requests
++  pull_request:
++
+   # Allows you to run this workflow manually from the Actions tab
+   workflow_dispatch:
+ 
+@@ -36,3 +39,95 @@ jobs:
+           dvc pull
+           # Run the experiment
+           dvc repro
++      - name: Upload evaluation results
++        uses: actions/upload-artifact@v3
++        with:
++          path: evaluation
++          retention-days: 5
++
++  report:
++    permissions: write-all
++    needs: train
++    if: github.event_name == 'pull_request'
++    runs-on: ubuntu-latest
++    steps:
++      - name: Checkout repository
++        uses: actions/checkout@v3
++        with:
++          ref: ${{ github.event.pull_request.head.sha }}
++      - name: Download evaluation results
++        uses: actions/download-artifact@v3
++      - name: Copy evaluation results
++        shell: bash
++        run: |
++          # Delete current evaluation results
++          rm -rf evaluation
++          # Replace with the new evaluation results
++          mv artifact evaluation
++      - name: Setup DVC
++        uses: iterative/setup-dvc@v1
++        with:
++          version: '2.37.0'
++      - name: Setup CML
++        uses: iterative/setup-cml@v1
++        with:
++          version: '0.18.1'
++      - name: Create CML report
++        env:
++          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
++        run: |
++          # Fetch all other Git branches
++          git fetch --depth=1 origin main:main
++
++          # Compare parameters to main branch
++          echo "# Params workflow vs. main" >> report.md
++          echo >> report.md
++          dvc params diff main --show-md >> report.md
++          echo >> report.md
++
++          # Compare metrics to main branch
++          echo "# Metrics workflow vs. main" >> report.md
++          echo >> report.md
++          dvc metrics diff main --show-md >> report.md
++          echo >> report.md
++
++          # Create plots
++          echo "# Plots" >> report.md
++          echo >> report.md
++
++          echo "## Precision recall curve" >> report.md
++          echo >> report.md
++          dvc plots diff \
++            --target evaluation/plots/prc.json \
++            -x recall \
++            -y precision \
++            --show-vega main > vega.json
++          vl2png vega.json > prc.png
++          echo '![](./prc.png "Precision recall curve")' >> report.md
++          echo >> report.md
++
++          echo "## Roc curve" >> report.md
++          echo >> report.md
++          dvc plots diff \
++            --target evaluation/plots/sklearn/roc.json \
++            -x fpr \
++            -y tpr \
++            --show-vega main > vega.json
++          vl2png vega.json > roc.png
++          echo '![](./roc.png "Roc curve")' >> report.md
++          echo >> report.md
++
++          echo "## Confusion matrix" >> report.md
++          echo >> report.md
++          dvc plots diff \
++            --target evaluation/plots/sklearn/confusion_matrix.json \
++            --template confusion \
++            -x actual \
++            -y predicted \
++            --show-vega main > vega.json
++          vl2png vega.json > confusion_matrix.png
++          echo '![](./confusion_matrix.png "Confusion Matrix")' >> report.md
++          echo >> report.md
++
++          # Publish the CML report
++          cml comment create --target=pr --publish report.md
+```
 
 #### Push the changes to GitHub
 
@@ -226,9 +351,30 @@ git checkout <the name of the new branch>
 
 #### Commit and push the experiment changes to GitHub
 
-Remember
+Remember the changes done in [Chapter 5: Track model evolutions with DVC](/the-guide/chapter-5-track-model-evolutions-with-dvc)?
+
+You can now commit them to trigger a change on the remote repository.
+
+If you don't have changes in your working directory, just update the paramerters of the experiment in `params.yaml` and reproduce the experiment with `dvc repro`. You can then commit the changes.
+
+```sh
+# Upload the experiment data and cache to the remote bucket
+dvc push
+
+# Add all the files
+git add .
+
+# Commit the changes
+git commit -m "I made some changes to the model"
+
+# Push the changes
+git push
+```
 
 #### Create a Pull Request on GitHub
+
+Go back to your GitHub repository. A new button
+
 
 #### Visualize the execution of the CI/CD pipeline on GitHub
 
