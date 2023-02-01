@@ -383,9 +383,13 @@ Click on it. Name the pull request and select **Create pull request** to create 
 
 The pull request opens and automatically starts the workflow `MLOps / train (pull_request)` under the section **Some checks haven’t completed yet**. You can click on **Details** to see the details.
 
-Once the workflow is done, a new workflow `MLOps / report (pull_request)` is started under the section **Some checks haven’t completed yet**.
+Explore the output and try to see how the configuration files shows up in GitHub.
 
-You can click on **Details** to see the details.
+Once the workflow is done, a new workflow `MLOps / report (pull_request)` is started under the section **Some checks haven’t completed yet**. You can click on **Details** to see the details.
+
+Explore the output and try to see how the configuration files shows up in GitHub.
+
+
 
 #### Visualize the CML report on GitHub
 
