@@ -69,7 +69,7 @@ jobs:
           # Delete current evaluation results
           rm -rf pages/the-guide/chapter-8-serve-the-model-with-mlem/evaluation
           # Replace with the new evaluation results
-          mv artifact pages/the-guide/chapter-7-track-model-evolutions-the-in-the-cicd-pipeline-with-cml/evaluation
+          mv artifact pages/the-guide/chapter-8-serve-the-model-with-mlem/evaluation
       - name: Setup DVC
         uses: iterative/setup-dvc@v1
         with:
