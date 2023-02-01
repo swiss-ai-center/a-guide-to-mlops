@@ -46,6 +46,7 @@ jobs:
           retention-days: 5
 
   report:
+    permissions: write-all
     needs: train
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
@@ -70,7 +71,7 @@ jobs:
       - name: Setup CML
         uses: iterative/setup-cml@v1
         with:
-          version: '0.18.1'
+          version: '0.18.17'
       - name: Create CML report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
