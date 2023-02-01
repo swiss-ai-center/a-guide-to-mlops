@@ -43,6 +43,33 @@ train:
   min_split: 2
 ```
 
+Check the differences with Git to validate the changes.
+
+```sh
+# Show the differences with Git
+git diff params.yaml
+```
+
+The output should be similar to this.
+
+```diff
+diff --git a/params.yaml b/params.yaml
+index a2a290e..8046f85 100644
+--- a/params.yaml
++++ b/params.yaml
+@@ -3,8 +3,8 @@ prepare:
+   seed: 20170428
+ 
+ featurize:
+-  max_features: 100
+-  ngrams: 1
++  max_features: 200
++  ngrams: 2
+ 
+ train:
+   seed: 20170428
+```
+
 ### Reproduce the experiment
 
 Run the experiment.
