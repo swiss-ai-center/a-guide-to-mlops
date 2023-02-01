@@ -345,7 +345,7 @@ In this chapter, you have successfully:
 
 You did fix some of the previous issues:
 
-- ✅ The steps used to create the model are documented and can be re-executed
+- ✅ The steps used to create the model are documented and can be re-executed.
 
 When used by another member of the team, they can easily reproduce your experiment with the help of DVC with the following commands.
 

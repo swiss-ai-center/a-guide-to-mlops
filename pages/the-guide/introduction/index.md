@@ -62,6 +62,6 @@ Google Cloud SDK 412.0.0
 x64
 ```
 
-## Next step
+## Next chapter
 
 - **Next**: [Chapter 1: Run a simple ML experiment](/the-guide/chapter-1-run-a-simple-ml-experiment)

@@ -8,11 +8,13 @@ title: "Chapter 8: Serve the model with MLEM"
 
 The purpose of this chapter is to serve and use the model for usage outside of the experiment context with the help of MLEM. MLEM allows to do this by saving the model with metadata information that can be used to load the model for future usage.
 
-In this chapter, we will install MLEM and update our experiment's to save and load the model with MLEM instead of using the `pickle` module to save and load it from the file system.
+In this chapter, you'll cover:
 
-Finally we will run a fastapi server to test the model in action.
-
-A the end of this chapter you will have a working model that can be used outside of the experiment context.
+1. Installing MLEM
+2. Initializig and configuring MLEM
+3. Updating and running the experiment to use MLEM to save and load the model
+4. Serving the model with FastAPI
+5. Pushing the changes to DVC and Git
 
 ## Steps
 
@@ -683,15 +685,27 @@ git push
 
 ### Check the results
 
-Congrats! You now have a model served over a REST API! You could serve this model from anywhere. Additional services could submit predictions to your model. The usage of FastAPI creates endpoints that are automatically documented to interact with the model. Check the next chapter of this guide concluding your journey for the next things you could do with your model.
+Congrats! You now have a model served over a REST API!
+
+This chapter is done, you can check the summary.
 
 ## Summary
 
 In this chapter, you have successfully:
 
+1. Installed MLEM
+2. Initialized and configuring MLEM
+3. Updated and ran the experiment to use MLEM to save and load the model
+4. Served the model with FastAPI
+5. Pushed the changes to DVC and Git
 
+You did fix some of the previous issues:
 
-You can now safely continue to the conclusion.
+- ✅ The model can be saved and loaded with all have required artifacts for future usage. The model can be served outside of the experiment context.
+
+You could serve this model from anywhere. Additional services could submit predictions to your model. The usage of FastAPI creates endpoints that are automatically documented to interact with the model.
+
+You can now safely continue to the next chapter of this guide concluding your journey and the next things you could do with your model.
 
 ## State of the MLOps process
 

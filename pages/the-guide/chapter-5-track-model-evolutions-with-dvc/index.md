@@ -156,7 +156,7 @@ In this chapter, you have successfully:
 
 You did fix some of the previous issues:
 
-- ✅ The changes done to a model can be visualized with parameters, metrics and plots to identify differences between iterations
+- ✅ The changes done to a model can be visualized with parameters, metrics and plots to identify differences between iterations.
 
 You have solid metrics to evaluate the changes before intergrating your work in the code codebase.
 

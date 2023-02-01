@@ -40,6 +40,6 @@ Distribution and deployment of the model is out of scope for this guide. However
 
 Thank you for staying with us! We hope you had a great time following this guide. We have advanced concepts and labelization topics that might interest you. Check out the left sidebar for more content regarding MLOps! Please contact us on [GitHub](https://github.com/csia-pme/a-guide-to-mlops) if you have any issues. :)
 
-## Previous step
+## Previous chapter
 
 - **Previous**: [Step 8: Serve the model with MLEM](/the-guide/step-8-serve-the-model-with-mlem)

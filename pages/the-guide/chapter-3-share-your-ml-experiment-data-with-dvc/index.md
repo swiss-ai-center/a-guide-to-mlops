@@ -261,7 +261,7 @@ In this chapter, you have successfully:
 
 You did fix some of the previous issues:
 
-- ✅ Data no longer needs manual download and is placed in the right directory
+- ✅ Data no longer needs manual download and is placed in the right directory.
 
 When used by another member of the team, they can easily get a copy of the experiment data from DVC with the following commands.
 

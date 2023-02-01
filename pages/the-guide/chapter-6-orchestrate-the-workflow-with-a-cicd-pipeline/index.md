@@ -238,7 +238,7 @@ In this chapter, you have successfully:
 
 You did fix some of the previous issues:
 
-- ✅ The experiment can be executed on a clean machine with the help of a CI/CD pipeline;
+- ✅ The experiment can be executed on a clean machine with the help of a CI/CD pipeline.
 
 You have a CI/CD pipeline to ensure the whole experiment can still be reproduced using the data and the commmands to run using DVC over time.
 

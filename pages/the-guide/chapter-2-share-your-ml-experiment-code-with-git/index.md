@@ -145,7 +145,7 @@ In this chapter, you have successfully:
 
 You did fix some of the previous issues:
 
-- ✅ Codebase no longer needs manual download and is versioned
+- ✅ Codebase no longer needs manual download and is versioned.
 
 When used by another member of the team, they can easily clone the experiment from Git with the following commands.
 
