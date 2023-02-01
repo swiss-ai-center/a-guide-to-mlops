@@ -10,17 +10,17 @@ The purpose of this chapter is to track the model evolutions and generate report
 
 In this chapter, you'll cover:
 
-- Updating the CI/CD configuration file to generate a CML report
-- Pushing the updated CI/CD configuration file to Git
-- Opening an issue in your issue tracker
-- Creating a new branch to add your changes
-- Checking out to the new branch
-- Commiting and pushing the changes that were not commited in [Chapter 5: Track model evolutions with DVC](/the-guide/chapter-5-track-model-evolutions-with-dvc)
-- Creating a pull request/merge request
-- Visualizing the execution of the CI/CD pipeline
-- Visualizing the CML report that is added to your pull request/merge request
-- Merging the pull request/merge request to the main branch
-- Switching back to the main branch and pulling latest changes
+1. Updating the CI/CD configuration file to generate a CML report
+2. Pushing the updated CI/CD configuration file to Git
+3. Opening an issue in your issue tracker
+4. Creating a new branch to add your changes
+5. Checking out to the new branch
+6. Commiting and pushing the changes that were not commited in [Chapter 5: Track model evolutions with DVC](/the-guide/chapter-5-track-model-evolutions-with-dvc)
+7. Creating a pull request/merge request
+8. Visualizing the execution of the CI/CD pipeline
+9. Visualizing the CML report that is added to your pull request/merge request
+10. Merging the pull request/merge request to the main branch
+11. Switching back to the main branch and pulling latest changes
 
 {% callout type="note" %}
 CML can do much more than just generating reports. Have a look to the [Train the model on a Kubernetes cluster with CML](/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml) guide.
@@ -753,17 +753,17 @@ This chapter is done, you can check the summary.
 
 In this chapter, you have successfully:
 
-- Updated the CI/CD configuration file to generate a CML report
-- Pushed the updated CI/CD configuration file to Git
-- Opened an issue in your issue tracker
-- Created a new branch to add your changes
-- Checked out to the new branch
-- Commit and pushed the changes that were not commited in [Chapter 5: Track model evolutions with DVC](/the-guide/chapter-5-track-model-evolutions-with-dvc)
-- Created a pull request/merge request
-- Visualized the execution of the CI/CD pipeline
-- Visualized the CML report that is added to your pull request/merge request
-- Merged the pull request/merge request to the main branch
-- Switched back to the main branch and pulled latest changes
+1. Updated the CI/CD configuration file to generate a CML report
+2. Pushed the updated CI/CD configuration file to Git
+3. Opened an issue in your issue tracker
+4. Created a new branch to add your changes
+5. Checked out to the new branch
+6. Commit and pushed the changes that were not commited in [Chapter 5: Track model evolutions with DVC](/the-guide/chapter-5-track-model-evolutions-with-dvc)
+7. Created a pull request/merge request
+8. Visualized the execution of the CI/CD pipeline
+9. Visualized the CML report that is added to your pull request/merge request
+10. Merged the pull request/merge request to the main branch
+11. Switched back to the main branch and pulled latest changes
 
 However, you might have identified the following areas for improvement:
 

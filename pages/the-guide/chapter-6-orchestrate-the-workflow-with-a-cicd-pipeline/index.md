@@ -12,11 +12,11 @@ One of great advantages of using a DVC pipeline is the facility to reproduce the
 
 In this chapter, you'll cover:
 
-- Creating a Google Service Account to grant access to the Google Cloud project from the CI/CD pipeline
-- Storing the Google Service Account key in GitHub/GitLab CI/CD configuration
-- Creating the CI/CD pipeline configuration file
-- Pushing the CI/CD pipeline configuration file to Git
-- Visualizing the execution of the CI/CD pipeline
+1. Creating a Google Service Account to grant access to the Google Cloud project from the CI/CD pipeline
+2. Storing the Google Service Account key in GitHub/GitLab CI/CD configuration
+3. Creating the CI/CD pipeline configuration file
+4. Pushing the CI/CD pipeline configuration file to Git
+5. Visualizing the execution of the CI/CD pipeline
 
 ## Steps
 
@@ -230,11 +230,11 @@ This chapter is done, you can check the summary.
 
 In this chapter, you have successfully:
 
-- Created a Google Service Account to grant access to the Google Cloud project from the CI/CD pipeline
-- Stored the Google Service Account key in GitHub/GitLab CI/CD configuration
-- Created the CI/CD pipeline configuration file
-- Pushed the CI/CD pipeline configuration file to Git
-- Visualized the execution of the CI/CD pipeline
+1. Created a Google Service Account to grant access to the Google Cloud project from the CI/CD pipeline
+2. Stored the Google Service Account key in GitHub/GitLab CI/CD configuration
+3. Created the CI/CD pipeline configuration file
+4. Pushed the CI/CD pipeline configuration file to Git
+5. Visualized the execution of the CI/CD pipeline
 
 You did fix some of the previous issues:
 

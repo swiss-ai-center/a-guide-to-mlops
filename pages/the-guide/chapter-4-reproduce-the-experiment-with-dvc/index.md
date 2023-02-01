@@ -12,15 +12,15 @@ By using DVC stages to create a pipeline, we can execute all of our experiment's
 
 In this chapter, you'll cover:
 
-- Removing custom rules from the gitignore file
-- Setting up four DVC pipeline stages
+1. Removing custom rules from the gitignore file
+2. Setting up four DVC pipeline stages
   - `prepare`
   - `featurize`
   - `train`
   - `evaluate`
-- Visualizing the pipeline
-- Executing the pipeline
-- Pushing the changes to DVC and Git
+3. Visualizing the pipeline
+4. Executing the pipeline
+5. Pushing the changes to DVC and Git
 
 As a reminder, the current steps to run the experiment are as follow:
 
@@ -226,7 +226,7 @@ dvc plots modify evaluation/plots/sklearn/roc.json -x fpr -y tpr
 dvc plots modify evaluation/plots/sklearn/confusion_matrix.json -x actual -y predicted -t confusion
 ```
 
-You will go deeper about the evaluation in the next chapter.
+Explore the `dvc.yaml` file to understand how the pipeline is updated.
 
 #### Summary of the DVC pipeline
 
@@ -333,15 +333,15 @@ This chapter is done, you can check the summary.
 
 In this chapter, you have successfully:
 
-- Removed custom rules from the gitignore file
-- Set up four DVC pipeline stages
+1. Removed custom rules from the gitignore file
+2. Set up four DVC pipeline stages
   - `prepare`
   - `featurize`
   - `train`
   - `evaluate`
-- Visualized the pipeline
-- Executed the pipeline
-- Pushed the changes to DVC and Git
+3. Visualized the pipeline
+4. Executed the pipeline
+5. Pushed the changes to DVC and Git
 
 You did fix some of the previous issues:
 

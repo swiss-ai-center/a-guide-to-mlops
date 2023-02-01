@@ -124,8 +124,8 @@ index c8fa80f..ff173a7 100644
 You can now install the required packages from the `src/requirements.txt` file.
 
 ```sh
-# Install the required packages
-pip install -r src/requirements.txt
+# Install the requirements
+pip install --requirement src/requirements.txt
 ```
 
 ### Initialize and configure DVC

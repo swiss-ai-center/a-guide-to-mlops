@@ -12,9 +12,9 @@ Once this stage is created, you'll be able to change our model's configruation, 
 
 In this chapter, you'll cover:
 
-- Updating the experiment parameters
-- Reproducing the experiment
-- Visualizing the changes made to the model
+1. Updating the experiment parameters
+2. Reproducing the experiment
+3. Visualizing the changes made to the model
 
 Let's get started!
 
@@ -150,9 +150,9 @@ This chapter is done, you can check the summary.
 
 In this chapter, you have successfully:
 
-- Updated the experiment parameters
-- Reproducing the experiment
-- Visualizing the changes made to the model
+1. Updated the experiment parameters
+2. Reproducing the experiment
+3. Visualizing the changes made to the model
 
 You did fix some of the previous issues:
 

@@ -14,7 +14,7 @@ Finally we will run a fastapi server to test the model in action.
 
 A the end of this chapter you will have a working model that can be used outside of the experiment context.
 
-## Instructions
+## Steps
 
 {% callout type="warning" %}
 This guide has been written with macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use [GitBash](https://gitforwindows.org/) or a Windows Subsystem for Linux (WSL) for optimal results.
@@ -33,13 +33,35 @@ pyaml==21.10.1
 scikit-learn==1.1.3
 scipy==1.9.3
 matplotlib==3.6.2
-mlem[fastapi]==0.4.1
+mlem[fastapi]==0.4.3
 ```
 
-```sh
-# Install all the requirements
-pip install -r src/requirements.txt
+Check the differences with Git to validate the changes.
 
+```sh
+# Show the differences with Git
+git diff src/requirements.txt
+```
+
+The output should be similar to this.
+
+```diff
+diff --git a/src/requirements.txt b/src/requirements.txt
+index 351dc82..6fc53a9 100644
+--- a/src/requirements.txt
++++ b/src/requirements.txt
+@@ -6,3 +6,4 @@ pyaml==21.10.1
+ scikit-learn==1.1.3
+ scipy==1.9.3
+ matplotlib==3.6.2
++mlem[fastapi]==0.4.3
+```
+
+You can now install the required packages from the `src/requirements.txt` file.
+
+```sh
+# Install the requirements
+pip install --requirement src/requirements.txt
 ```
 
 ### Initialize and configure MLEM.
@@ -55,7 +77,11 @@ mlem config set core.storage.type dvc
 echo "/**/?*.mlem" >> .dvcignore
 ```
 
+The effect of the `mlem init` command is to create a `.mlem.yaml` file in the working directory. This file contains the configuration of MLEM.
+
 ### Update the experiment
+
+#### Update `src/featurization.py`
 
 Update the `src/featurization.py` file to save the `CountVectorizer` and the `TfidfTransformer` with MLEM.
 
@@ -147,6 +173,44 @@ test_words_tfidf_matrix = tfidf.transform(test_words_binary_matrix)
 save_matrix(df_test, test_words_tfidf_matrix, feature_names, test_output)
 ```
 
+Check the differences with Git to validate the changes.
+
+```sh
+# Show the differences with Git
+git diff src/featurization.py
+```
+
+The output should be similar to this.
+
+```diff
+diff --git a/src/featurization.py b/src/featurization.py
+index 4afb10e..a61d371 100644
+--- a/src/featurization.py
++++ b/src/featurization.py
+@@ -8,6 +8,8 @@ import scipy.sparse as sparse
+ import yaml
+ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+ 
++from mlem.api import save
++
+ params = yaml.safe_load(open("params.yaml"))["featurize"]
+ 
+ np.set_printoptions(suppress=True)
+@@ -69,6 +71,9 @@ tfidf = TfidfTransformer(smooth_idf=False)
+ tfidf.fit(train_words_binary_matrix)
+ train_words_tfidf_matrix = tfidf.transform(train_words_binary_matrix)
+ 
++save(bag_of_words.transform, "data/features/vectorizer")
++save(tfidf.transform, "data/features/tfidf")
++
+ save_matrix(df_train, train_words_tfidf_matrix, feature_n
+ames, train_output)
+ 
+ # Generate test feature matrix
+```
+
+#### Update `src/train.py`
+
 Update the `src/train.py` file to save the model with its artifacts with MLEM.
 
 ```py
@@ -195,15 +259,56 @@ vectorizer = load("data/features/vectorizer")
 save(
     clf,
     output,
-    # Remove the `.toarray()` when the following PR is merged: https://github.com/iterative/mlem/pull/538
-    preprocess=lambda x: tfidf(vectorizer(x)).toarray(),
+    preprocess=lambda x: tfidf(vectorizer(x)),
     sample_data=["This is a sample text."]
 )
+```
+
+Check the differences with Git to validate the changes.
+
+```sh
+# Show the differences with Git
+git diff src/train.py
+```
+
+The output should be similar to this.
+
+```diff
+diff --git a/src/train.py b/src/train.py
+index 97bb9d0..87e4756 100644
+--- a/src/train.py
++++ b/src/train.py
+@@ -6,6 +6,8 @@ import numpy as np
+ import yaml
+ from sklearn.ensemble import RandomForestClassifier
+ 
++from mlem.api import load, save
++
+ params = yaml.safe_load(open("params.yaml"))["train"]
+ 
+ if len(sys.argv) != 3:
+@@ -35,5 +37,12 @@ clf = RandomForestClassifier(
+ 
+ clf.fit(x, labels)
+ 
+-with open(output, "wb") as fd:
+-    pickle.dump(clf, fd)
++tfidf = load("data/features/tfidf")
++vectorizer = load("data/features/vectorizer")
++
++save(
++    clf,
++    output,
++    preprocess=lambda x: tfidf(vectorizer(x)),
++    sample_data=["This is a sample text."]
++)
 ```
 
 {% callout type="note" %}
 Did you pay attention to the last lines? The `preprocess` lambda loads the `TfidfTransformer` with the `CountVectorizer`. These will be saved along the model for future predictions. The `sample_data` will be used to generate the right input for when the model is deployed (seen later on). MLEM will store the model's metadata in the `models/rf.mlem` file.
 {% /callout %}
+
+#### Update `src/evaluate.py`
 
 Update the `src/evaluate.py` file to load the model from MLEM.
 
@@ -289,6 +394,40 @@ with Live("evaluation") as live:
     fig.savefig(os.path.join("evaluation", "plots", "importance.png"))
 ```
 
+Check the differences with Git to validate the changes.
+
+```sh
+# Show the differences with Git
+git diff src/evaluate.py 
+```
+
+The output should be similar to this.
+
+```diff
+diff --git a/src/evaluate.py b/src/evaluate.py
+index e18629a..53a17a7 100644
+--- a/src/evaluate.py
++++ b/src/evaluate.py
+@@ -10,6 +10,7 @@ from sklearn import tree
+ from dvclive import Live
+ from matplotlib import pyplot as plt
+ 
++from mlem.api import load
+ 
+ if len(sys.argv) != 3:
+     sys.stderr.write("Arguments error. Usage:\n")
+@@ -19,8 +20,7 @@ if len(sys.argv) != 3:
+ model_file = sys.argv[1]
+ matrix_file = os.path.join(sys.argv[2], "test.pkl")
+ 
+-with open(model_file, "rb") as fd:
+-    model = pickle.load(fd)
++model = load(model_file)
+ 
+ with open(matrix_file, "rb") as fd:
+     matrix, feature_names = pickle.load(fd)
+```
+
 {% callout type="note" %}
 When a MLEM model is loaded with `mlem.api.load`, it will automatically load the artifacts as well. In this case, `mlem.api.load("models/rf")` will automatically load the `preprocess` lambda described earlier.
 {% /callout %}
@@ -317,7 +456,7 @@ dvc stage add --force \
 # Update the evaluate stage
 dvc stage add --force \
   -n evaluate \
-  -d src/evaluate.py -d models/rf -d data/features \
+  -d src/evaluate.py -d models/rf \
   -O evaluation/plots/metrics \
   --metrics-no-cache evaluation/metrics.json \
   --plots-no-cache evaluation/plots/prc.json \
@@ -325,9 +464,62 @@ dvc stage add --force \
   --plots-no-cache evaluation/plots/sklearn/confusion_matrix.json \
   --plots evaluation/plots/importance.png \
   python src/evaluate.py models/rf data/features
+
+# Set the axes for the `precision_recall_curve`
+dvc plots modify evaluation/plots/prc.json -x recall -y precision
+
+# Set the axes for the `roc_curve`
+dvc plots modify evaluation/plots/sklearn/roc.json -x fpr -y tpr
+
+# Set the axes for the `confusion_matrix`
+dvc plots modify evaluation/plots/sklearn/confusion_matrix.json -x actual -y predicted -t confusion
 ```
 
-### Run the experiment.
+Check the differences with Git to validate the changes.
+
+```sh
+# Show the differences with Git
+git diff dvc.yaml
+```
+
+The output should be similar to this.
+
+```diff
+diff --git a/dvc.yaml b/dvc.yaml
+index 0e00f1b..2539fe4 100644
+--- a/dvc.yaml
++++ b/dvc.yaml
+@@ -19,9 +19,11 @@ stages:
+     - featurize.ngrams
+     outs:
+     - data/features/test.pkl
++    - data/features/tfidf
+     - data/features/train.pkl
++    - data/features/vectorizer
+   train:
+-    cmd: python src/train.py data/features model.pkl
++    cmd: python src/train.py data/features models/rf
+     deps:
+     - data/features
+     - src/train.py
+@@ -30,11 +32,11 @@ stages:
+     - train.n_est
+     - train.seed
+     outs:
+-    - model.pkl
++    - models/rf
+   evaluate:
+-    cmd: python src/evaluate.py model.pkl data/features
++    cmd: python src/evaluate.py models/rf data/features
+     deps:
+-    - model.pkl
++    - models/rf
+     - src/evaluate.py
+     outs:
+     - evaluation/plots/metrics:
+```
+
+### Run the experiment
 
 ```sh
 # Run the experiment. DVC will automatically run all required stages
@@ -335,30 +527,6 @@ dvc repro
 ```
 
 The experiment now uses MLEM to save and load the model. DVC stores the model and its metadata.
-
-### Install additional dependencies
-
-Install the additional MLEM dependencies to serve.
-
-Update the `src/requirements.txt` file to include the added packages.
-
-```
-dvc==2.37.0
-dvc[gs]==2.37.0
-dvclive==1.0.0
-pandas==1.5.1
-pyaml==21.10.1
-scikit-learn==1.1.3
-scipy==1.9.3
-matplotlib==3.6.2
-mlem==0.4.1
-mlem[fastapi]==0.4.1
-```
-
-```sh
-# Install the additional dependencies
-pip install -r src/requirements.txt
-```
 
 ### Serve the model with FastAPI
 
@@ -513,9 +681,9 @@ git commit -m "MLEM can save, load and serve the model"
 git push
 ```
 
-Congrats! You now have a model served over a REST API! You could serve this model from anywhere. Additional services could submit predictions to your model. The usage of FastAPI creates endpoints that are automatically documented to interact with the model. Check the next chapter of this guide concluding your journey for the next things you could do with your model.
+### Check the results
 
-## Check the results
+Congrats! You now have a model served over a REST API! You could serve this model from anywhere. Additional services could submit predictions to your model. The usage of FastAPI creates endpoints that are automatically documented to interact with the model. Check the next chapter of this guide concluding your journey for the next things you could do with your model.
 
 ## Summary
 
@@ -523,7 +691,7 @@ In this chapter, you have successfully:
 
 
 
-You can now safely continue to the next chapter.
+You can now safely continue to the conclusion.
 
 ## State of the MLOps process
 

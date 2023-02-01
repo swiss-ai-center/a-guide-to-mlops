@@ -8,6 +8,8 @@ import scipy.sparse as sparse
 import yaml
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
+from mlem.api import save
+
 params = yaml.safe_load(open("params.yaml"))["featurize"]
 
 np.set_printoptions(suppress=True)
@@ -68,6 +70,9 @@ feature_names = bag_of_words.get_feature_names_out()
 tfidf = TfidfTransformer(smooth_idf=False)
 tfidf.fit(train_words_binary_matrix)
 train_words_tfidf_matrix = tfidf.transform(train_words_binary_matrix)
+
+save(bag_of_words.transform, "data/features/vectorizer")
+save(tfidf.transform, "data/features/tfidf")
 
 save_matrix(df_train, train_words_tfidf_matrix, feature_names, train_output)
 
