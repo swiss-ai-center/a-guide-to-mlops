@@ -1,7 +1,7 @@
 name: MLOps
 
 on:
-  # Runs on pushes targeting all branches
+  # Runs on pushes targeting main branch
   push:
     branches:
       - main
