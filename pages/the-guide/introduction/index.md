@@ -22,15 +22,18 @@ The tools and approach must be adapted to your specific use-case and experiments
 
 ## Requirements
 
-The following tools must be installed to follow this guide.
+The following requirement are necessary to follow this guide.
 
+- A [GitHub](https://github.com/) or a [GitLab](https://gitlab.com/) account
+- A [Google Cloud](https://console.cloud.google.com/) account
+    - Google Cloud might need a credit card
+- An IDE
+    - We recommend to use [Visual Studio Code](https://code.visualstudio.com/) to follow this guide.
 - [Python 3](https://www.python.org/downloads/)
 - [Git](https://git-scm.com/)
 - [wget](https://linux.die.net/man/1/wget)
 - [unzip](https://linux.die.net/man/1/unzip)
 - [Google Cloud CLI (`gcloud`)](https://cloud.google.com/sdk/docs/install-sdk)
-
-We recommend to use [Visual Studio Code](https://code.visualstudio.com/) to follow this guide.
 
 At the time of writing this guide, the following versions of the requirements are as follow (on macOS).
 
