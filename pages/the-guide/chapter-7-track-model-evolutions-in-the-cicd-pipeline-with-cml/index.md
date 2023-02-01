@@ -373,10 +373,19 @@ git push
 
 #### Create a Pull Request on GitHub
 
-Go back to your GitHub repository. A new button
+Go back to your GitHub repository. A new **Compare & pull request** button should automatically display.
 
+![](/pull-request.png)
 
-#### Visualize the execution of the CI/CD pipeline on GitHub
+Click on it. Name the pull request and select **Create pull request** to create the pull request.
+
+#### Visualize the execution of the CI/CD workflow on GitHub
+
+The pull request opens and automatically starts the workflow `MLOps / train (pull_request)` under the section **Some checks haven’t completed yet**. You can click on **Details** to see the details.
+
+Once the workflow is done, a new workflow `MLOps / report (pull_request)` is started under the section **Some checks haven’t completed yet**.
+
+You can click on **Details** to see the details.
 
 #### Visualize the CML report on GitHub
 
@@ -439,7 +448,7 @@ Finished? Go to the [Switch back to the main branch](#switch-back-to-the-main-br
 
 // TODO ici ça fonctionne bien sur Gitlab mais pas top sur Github
 
-Go to the **Code** section from the top header of your GitHub repository. Select **_N_ branches** (where _N_ is the current number of branches your repository has). Next to the newly created branch, select **New pull request**. Name the pull request and select **Create pull request** to create the pull request.
+Go to the **Code** section from the top header of your GitHub repository. Select **_N_ branches** (where _N_ is the current number of branches your repository has). Next to the newly created branch, select **New pull request**. 
 
 {% callout type="note" %}
 Finished? Go to the [Make changes to the model](#make-changes-to-the-model) step!
