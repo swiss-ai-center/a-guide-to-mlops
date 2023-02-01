@@ -4,11 +4,7 @@ title: "Chapter 8: Serve the model with MLEM"
 
 # {% $markdoc.frontmatter.title %}
 
-## Summary
-
-{% callout type="note" %}
-Highly inspired by the [_Get Started_ - mlem.ai](https://mlem.ai/doc/get-started), [_Saving models_ - mlem.ai](https://mlem.ai/doc/get-started/saving), [_Working with Data_ - mlem.ai](https://mlem.ai/doc/user-guide/data), [_Serving models_ - mlem.ai](https://mlem.ai/doc/user-guide/serving), [_Versioning MLEM objects with DVC_ - mlem.ai](https://mlem.ai/doc/use-cases/dvc), [_`mlem.api.save()`_ - mlem.ai](https://mlem.ai/doc/api-reference/save) and [_`mlem.api.load()`_ - mlem.ai](https://mlem.ai/doc/api-reference/load) guides.
-{% /callout %}
+## Introduction
 
 The purpose of this chapter is to serve and use the model for usage outside of the experiment context with the help of MLEM. MLEM allows to do this by saving the model with metadata information that can be used to load the model for future usage.
 
@@ -521,16 +517,28 @@ Congrats! You now have a model served over a REST API! You could serve this mode
 
 ## Check the results
 
-Want to see what the result at the end of this chapter should look like? Have a look at the Git repository directory here: [chapter-8-serve-the-model-with-mlem](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-8-serve-the-model-with-mlem).
+## Summary
+
+In this chapter, you have successfully:
+
+
+
+You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
-- ✅ The codebase can be shared among the developers. The codebase can be improved collaboratively;
+- ✅ The codebase can be shared and improved by multiple developers;
 - ✅ The dataset can be shared among the developers and is placed in the right directory in order to run the experiment;
 - ✅ The steps used to create the model are documented and can be re-executed;
-- ✅ The experiment can be executed on a clean machine with the help of the CI/CD pipeline;
-- ✅ The changes done to a model can be visualized with parameters, metrics and plots to identify differences between iterations with the help of the CI/CD pipeline;
+- ✅ The changes done to a model can be visualized with parameters, metrics and plots to identify differences between iterations;
+- ✅ The experiment can be executed on a clean machine with the help of a CI/CD pipeline and CML;
 - ✅ The model can be saved and loaded with all have required artifacts for future usage. The model can be served outside of the experiment context.
+
+## Sources
+
+Highly inspired by the [_Get Started_ - mlem.ai](https://mlem.ai/doc/get-started), [_Saving models_ - mlem.ai](https://mlem.ai/doc/get-started/saving), [_Working with Data_ - mlem.ai](https://mlem.ai/doc/user-guide/data), [_Serving models_ - mlem.ai](https://mlem.ai/doc/user-guide/serving), [_Versioning MLEM objects with DVC_ - mlem.ai](https://mlem.ai/doc/use-cases/dvc), [_`mlem.api.save()`_ - mlem.ai](https://mlem.ai/doc/api-reference/save) and [_`mlem.api.load()`_ - mlem.ai](https://mlem.ai/doc/api-reference/load) guides.
+
+Want to see what the result at the end of this chapter should look like? Have a look at the Git repository directory here: [chapter-8-serve-the-model-with-mlem](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-8-serve-the-model-with-mlem).
 
 ## Next & Previous chapters
 

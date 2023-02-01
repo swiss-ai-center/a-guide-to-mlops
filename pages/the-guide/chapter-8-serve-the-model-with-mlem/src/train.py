@@ -6,8 +6,6 @@ import numpy as np
 import yaml
 from sklearn.ensemble import RandomForestClassifier
 
-from mlem.api import load, save
-
 params = yaml.safe_load(open("params.yaml"))["train"]
 
 if len(sys.argv) != 3:
@@ -37,13 +35,5 @@ clf = RandomForestClassifier(
 
 clf.fit(x, labels)
 
-tfidf = load("data/features/tfidf")
-vectorizer = load("data/features/vectorizer")
-
-save(
-    clf,
-    output,
-    # Remove the `.toarray()` when the following PR is merged: https://github.com/iterative/mlem/pull/538
-    preprocess=lambda x: tfidf(vectorizer(x)).toarray(),
-    sample_data=["This is a sample text."]
-)
+with open(output, "wb") as fd:
+    pickle.dump(clf, fd)

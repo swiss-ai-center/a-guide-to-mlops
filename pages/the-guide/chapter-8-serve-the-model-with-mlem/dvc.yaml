@@ -19,11 +19,9 @@ stages:
     - featurize.ngrams
     outs:
     - data/features/test.pkl
-    - data/features/tfidf
     - data/features/train.pkl
-    - data/features/vectorizer
   train:
-    cmd: python src/train.py data/features models/rf
+    cmd: python src/train.py data/features model.pkl
     deps:
     - data/features
     - src/train.py
@@ -32,13 +30,15 @@ stages:
     - train.n_est
     - train.seed
     outs:
-    - models/rf
+    - model.pkl
   evaluate:
-    cmd: python src/evaluate.py models/rf data/features
+    cmd: python src/evaluate.py model.pkl data/features
     deps:
-    - data/features
-    - models/rf
+    - model.pkl
     - src/evaluate.py
+    outs:
+    - evaluation/plots/metrics:
+        cache: false
     metrics:
     - evaluation/metrics.json:
         cache: false
@@ -46,10 +46,14 @@ stages:
     - evaluation/plots/importance.png
     - evaluation/plots/prc.json:
         cache: false
+        x: recall
+        y: precision
     - evaluation/plots/sklearn/confusion_matrix.json:
         cache: false
+        template: confusion
+        x: actual
+        y: predicted
     - evaluation/plots/sklearn/roc.json:
         cache: false
-    outs:
-    - evaluation/plots/metrics:
-        cache: false
+        x: fpr
+        y: tpr

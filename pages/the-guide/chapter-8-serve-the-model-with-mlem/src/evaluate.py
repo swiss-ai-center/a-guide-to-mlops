@@ -10,7 +10,6 @@ from sklearn import tree
 from dvclive import Live
 from matplotlib import pyplot as plt
 
-from mlem.api import load
 
 if len(sys.argv) != 3:
     sys.stderr.write("Arguments error. Usage:\n")
@@ -20,7 +19,8 @@ if len(sys.argv) != 3:
 model_file = sys.argv[1]
 matrix_file = os.path.join(sys.argv[2], "test.pkl")
 
-model = load(model_file)
+with open(model_file, "rb") as fd:
+    model = pickle.load(fd)
 
 with open(matrix_file, "rb") as fd:
     matrix, feature_names = pickle.load(fd)
