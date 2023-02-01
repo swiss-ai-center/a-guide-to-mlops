@@ -19,9 +19,11 @@ stages:
     - featurize.ngrams
     outs:
     - data/features/test.pkl
+    - data/features/tfidf
     - data/features/train.pkl
+    - data/features/vectorizer
   train:
-    cmd: python src/train.py data/features model.pkl
+    cmd: python src/train.py data/features models/rf
     deps:
     - data/features
     - src/train.py
@@ -30,11 +32,11 @@ stages:
     - train.n_est
     - train.seed
     outs:
-    - model.pkl
+    - models/rf
   evaluate:
-    cmd: python src/evaluate.py model.pkl data/features
+    cmd: python src/evaluate.py models/rf data/features
     deps:
-    - model.pkl
+    - models/rf
     - src/evaluate.py
     outs:
     - evaluation/plots/metrics:
