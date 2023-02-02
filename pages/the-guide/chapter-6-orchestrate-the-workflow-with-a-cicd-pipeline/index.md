@@ -20,10 +20,6 @@ In this chapter, you'll cover:
 
 ## Steps
 
-{% callout type="warning" %}
-This guide has been written with macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use [GitBash](https://gitforwindows.org/) or a Windows Subsystem for Linux (WSL) for optimal results.
-{% /callout %}
-
 ### Create a Google Service Account to be used by the CI/CD pipeline
 
 DVC will need to log in to Google Cloud in order to download the data inside the CI/CD pipeline.

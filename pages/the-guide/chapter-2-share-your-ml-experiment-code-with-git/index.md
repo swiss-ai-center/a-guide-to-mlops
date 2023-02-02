@@ -20,10 +20,6 @@ Let's get started!
 
 ## Steps
 
-{% callout type="warning" %}
-This guide has been written with macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use [GitBash](https://gitforwindows.org/) or a Windows Subsystem for Linux (WSL) for optimal results.
-{% /callout %}
-
 ### Create a new Git repository
 
 Create an Git repository to collaborate with peers on your preferred Git service.

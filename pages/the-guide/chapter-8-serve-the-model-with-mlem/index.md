@@ -18,10 +18,6 @@ In this chapter, you'll cover:
 
 ## Steps
 
-{% callout type="warning" %}
-This guide has been written with macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use [GitBash](https://gitforwindows.org/) or a Windows Subsystem for Linux (WSL) for optimal results.
-{% /callout %}
-
 ### Install MLEM
 
 Update the `src/requirements.txt` file to include mlem and its dependencies.

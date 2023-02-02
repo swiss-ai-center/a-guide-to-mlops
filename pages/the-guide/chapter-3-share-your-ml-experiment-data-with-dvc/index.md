@@ -31,10 +31,6 @@ Let's get started!
 
 ## Steps
 
-{% callout type="warning" %}
-This guide has been written with macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use [GitBash](https://gitforwindows.org/) or a Windows Subsystem for Linux (WSL) for optimal results.
-{% /callout %}
-
 ### Create a Google Cloud Project
 
 Create a Google Cloud Project by going to the [Google Cloud console](https://console.cloud.google.com/), select **Select a project** in the upper right corner of the screen and select **New project**.

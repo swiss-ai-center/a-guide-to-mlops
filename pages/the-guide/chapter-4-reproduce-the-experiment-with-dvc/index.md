@@ -42,10 +42,6 @@ Let's get started!
 
 ## Steps
 
-{% callout type="warning" %}
-This guide has been written with macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use [GitBash](https://gitforwindows.org/) or a Windows Subsystem for Linux (WSL) for optimal results.
-{% /callout %}
-
 ### Remove custom rules from the gitignore file
 
 As seen in the previous chapter, DVC can update gitignore files.
