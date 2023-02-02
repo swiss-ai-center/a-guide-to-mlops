@@ -25,7 +25,7 @@ Your goal is to streamline the team's workflow by setting up MLOps tools,
 documenting the process, tracking changes, and making the model accessible to
 others. 
 
-In this chapter, you will:
+In this chapter, you will learn how to:
 
 1. Set up the project directory;
 2. Acquire the codebase;

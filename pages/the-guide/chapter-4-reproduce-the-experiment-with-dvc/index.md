@@ -6,21 +6,27 @@ title: "Chapter 4: Reproduce the experiment with DVC"
 
 ## Introduction
 
-A key component of DVC is the concept of "stages". Stages are essentially commands that produce a result, whether that be a file or directory. The beauty of DVC is that these stages are executed only when the dependencies they rely on have changed. This way, we don't have to waste time re-running unnecessary steps.
+A key component of DVC is the concept of "stages". Stages are essentially
+commands that produce a result, whether that be a file or directory. The beauty
+of DVC is that these stages are executed only when the dependencies they rely on
+have changed. This way, we don't have to waste time re-running unnecessary
+steps.
 
-By using DVC stages to create a pipeline, we can execute all of our experiment's steps in a streamlined manner by simply running dvc repro. In this way, DVC helps us improve our team's efficiency and makes it easier for us to keep track of our experiment's progress.
+By using DVC stages to create a pipeline, we can execute all of our experiment's
+steps in a streamlined manner by simply running the `dvc repro` command. As a result, DVC
+makes it easy to reproduce the experiment and track the effects of changes.
 
-In this chapter, you'll cover:
+In this chapter, you will learn how to:
 
-1. Removing custom rules from the gitignore file
-2. Setting up four DVC pipeline stages
-  - `prepare`
-  - `featurize`
-  - `train`
-  - `evaluate`
-3. Visualizing the pipeline
-4. Executing the pipeline
-5. Pushing the changes to DVC and Git
+1. Remove custom rules from the gitignore file;
+2. Set up four DVC pipeline stages:
+  - `prepare`,
+  - `featurize`,
+  - `train`,
+  - `evaluate`;
+1. Visualize the pipeline;
+2. Execute the pipeline;
+3. Push the changes to DVC and Git.
 
 As a reminder, the current steps to run the experiment are as follow:
 
@@ -44,11 +50,15 @@ Let's get started!
 
 ### Remove custom rules from the gitignore file
 
-As seen in the previous chapter, DVC can update gitignore files.
+As seen in the previous chapter, DVC can update `.gitignore` files.
 
-As you will define the entire experiment pipeline with DVC, you can safely remove all the custom rules from the main `.gitignore` file so DVC can manage them for you. At the end of this chapter, DVC should have updated all the gitignore files if necessary.
+As you will define the entire experiment pipeline with DVC, you can safely
+remove all the custom rules from the main `.gitignore` file so DVC can manage
+them for you. At the end of this chapter, DVC should have updated all the
+`.gitignore` files.
 
-Update the `.gitignore` file to remove your experiment data. The required files to be ignored will then be added by DVC.
+Update the `.gitignore` file to remove your experiment data. The required files
+to be ignored will then be added by DVC.
 
 ```sh
 ## Python
@@ -71,7 +81,7 @@ Check the differences with Git to validate the changes.
 git diff .gitignore
 ```
 
-The output should be similar to this.
+The output should be similar to this:
 
 ```diff
 diff --git a/.gitignore b/.gitignore
@@ -101,21 +111,32 @@ index 6755ab0..be446de 100644
 
 ### Setup the DVC pipeline stages
 
-Each step of the experiment will be stored as a DVC stage.  
+A DVC pipeline is a set of stages that are executed in a specific order based on the
+dependencies between the stages (deps and outs). The `dvc repro` command
+executes the pipeline to reproduce the experiment.
 
-A pipeline is a set of stages that are executed in a specific order based on the dependencies between the stages (deps and outs).
+In the following sections, each step of the experiment will be converted into a stage of a DVC pipeline.
+The `dvc stage add` command creates a new stage in the pipeline. 
+This stage will be added to the `dvc.yaml` file that describes the pipeline.
+This file can also be edited manually.
 
-The pipeline will be executed by `dvc repro` to reproduce the experiment. 
+The `dvc stage add` accepts some options:
+- `-n` specifies the name of the stage;
+- `-p` specifies the parameters of the stage (referenced in the `params.yaml` file);
+- `-d` specifies the dependencies of the stage;
+- `-o` specifies the outputs of the stage;
+- `--metrics-no-cache` specifies the metrics of the stage (not cached by DVC);
+- `--plots-no-cache` specifies the plots of the stage (not cached by DVC).
 
-Each `dvc stage add` command will create a new stage in the `dvc.yaml` file. 
+As parameters are an important part of the experiment, they are versioned in a `params.yaml` file.
+DVC keeps track of these parameters and of the corresponding results.
 
-The `dvc.yaml` file can also be edited manually.
-
-Store the command to prepare the dataset in DVC.
+Dependencies and outputs are files or directories that are used or produced by the stage.
+If any of these files change, DVC will re-run the command of the stage when using `dvc repro`.
 
 #### `prepare` stage
 
-Store the command to prepare the experiment data in DVC.
+Run the following command to add a new stage called _prepare_ that prepares the dataset.
 
 ```sh
 dvc stage add -n prepare \
@@ -125,21 +146,19 @@ dvc stage add -n prepare \
   python src/prepare.py data/data.xml
 ```
 
-Explore the `dvc.yaml` file to understand how the pipeline is updated.
+The values of the parameters `prepare.seed` and `prepare.split` are referenced in the `params.yaml` file.
 
-This command adds a new stage called _prepare_ that has the `src/prepare.py` and `data/data.xml` files as a dependency.
+This stage has the `src/prepare.py` and `data/data.xml` files as dependencies.
+If any of these files change, DVC will run the command 
+`python src/prepare.py data/data.xml` when using `dvc repro`.
 
-If any of these files change, DVC will run the command `python src/prepare.py data/data.xml` when using `dvc repro`.
+The output of this command is stored in the `data/prepared` directory.
 
-The output of this command is `data/prepared`.
-
-{% callout type="note" %}
-The parameters `prepare.seed` and `prepare.split` will be discussed later.
-{% /callout %}
+Take some time to explore the `dvc.yaml` file and to understand how the pipeline is updated.
 
 #### `featurize` stage
 
-Store the command to perform the features extraction in DVC.
+Run the following command to create a new stage called _featurize_ that performs the features extraction.
 
 ```sh
 dvc stage add -n featurize \
@@ -149,21 +168,21 @@ dvc stage add -n featurize \
   python src/featurization.py data/prepared data/features
 ```
 
+The values of the parameters `featurize.max_features` and `featurize.ngrams` are referenced in the `params.yaml` file.
+
+This stage has the `src/featurization.py` file and `data/prepared` directory as dependencies.
+If any of these files change, DVC will run the command 
+`python src/featurization.py data/prepared data/features` 
+when using `dvc repro`.
+
+The outputs of this command are stored in the `data/features/test.pkl` and
+`data/features/train.pkl` files.
+
 Explore the `dvc.yaml` file to understand how the pipeline is updated.
-
-This command adds a new stage called _featurize_ that has the `src/featurization.py` and `data/prepared` files as a dependency.
-
-If any of these files change, DVC will run the command `python src/featurization.py data/prepared data/features` when using `dvc repro`.
-
-The outputs of this command are `data/features/test.pkl` and `data/features/train.pkl` files.
-
-{% callout type="note" %}
-The parameters `featurize.max_features` and `featurize.ngrams` will be discussed later.
-{% /callout %}
 
 #### `train` stage
 
-Store the command to train the model in DVC.
+Run the following command to create a new stage called _train_ that trains the model.
 
 ```sh
 dvc stage add -n train \
@@ -173,21 +192,20 @@ dvc stage add -n train \
   python src/train.py data/features model.pkl
 ```
 
+The values of the parameters `train.seed`, `train.n_est` and `train.min_split` are referenced in the `params.yaml` file.
+
+This stage has the `src/train.py` and `data/features` files as dependencies.
+If any of these files change, DVC will run the command 
+`python src/train.py data/features model.pkl` when using `dvc repro`.
+
+The output of this command is stored in the `model.pkl` file.
+
 Explore the `dvc.yaml` file to understand how the pipeline is updated.
-
-This command adds a new stage called _train_ that has the `src/train.py` and `data/features` files as a dependency of the DVC pipeline.
-
-If any of these files change, DVC will run the command `python src/train.py data/features model.pkl` when using `dvc repro`.
-
-The output of this command is `model.pkl`.
-
-{% callout type="note" %}
-The parameters `train.seed`, `train.n_est` and `train.min_split` will be discussed later.
-{% /callout %}
 
 #### `evaluate` stage
 
-Store the command to evaluate the model in DVC.
+
+Run the following command to create a new stage called _evaluate_ that evaluates the model.
 
 ```sh
 dvc stage add -n evaluate \
@@ -201,15 +219,19 @@ dvc stage add -n evaluate \
   python src/evaluate.py model.pkl data/features
 ```
 
-Explore the `dvc.yaml` file to understand how the pipeline is updated.
+This stage has the `src/evaluate.py` file and `model.pkl` file, and the `data/features` directory as dependencies.
+If any of these files change, DVC will run the command 
+`python src/evaluate.py model.pkl data/features` when using `dvc repro`.
 
-This command adds a new stage called _evaluate_ that has the `src/evaluate.py`, `model.pkl` and `data/features` files as a dependency.
+This command writes the model's metrics to `evaluation/metrics.json`. It writes
+the `confusion_matrix` to `evaluation/plots/sklearn/confusion_matrix.json`, the
+`precision_recall_curve` to `evaluation/plots/prc.json ` and the `roc_curve` to
+`evaluation/plots/sklearn/roc.json` that will be used to create plots.
+Here, `no-cache` prevents DVC from caching the metrics and plots.
 
-If any of these files change, DVC will run the command `python src/evaluate.py model.pkl data/features` when using `dvc repro`.
 
-This command writes the model's metrics to `evaluation/metrics.json`. It writes the `confusion_matrix` to `evaluation/plots/sklearn/confusion_matrix.json`, the `precision_recall_curve` to `evaluation/plots/prc.json ` and the `roc_curve` to `evaluation/plots/sklearn/roc.json` that will be used to create plots.
-
-Update the plots to set the axes with the following commands.
+DVC has the ability to generate images for the plots.
+The following command are used to tune the axes of the plots.
 
 ```sh
 # Set the axes for the `precision_recall_curve`
@@ -226,9 +248,11 @@ Explore the `dvc.yaml` file to understand how the pipeline is updated.
 
 #### Summary of the DVC pipeline
 
-The pipeline is now entirely defined. You can explore the `dvc.yaml` file to understand how the pipeline is defined.
+The pipeline is now entirely defined. You can explore the `dvc.yaml` file to
+see all the stages and their dependencies.
 
-DVC updated the main `.gitignore` file with the model, as it is an output of the  `train` stage.
+Notice that DVC also updated the main `.gitignore` file with the model, as it is an output of the
+`train` stage.
 
 ```sh
 ## Python
@@ -288,18 +312,15 @@ If any dependencies/outputs change, the affected stages will be reexecuted.
 
 ### Execute the pipeline
 
-Now that the pipeline has been defined, you can reproduce it.
+Now that the pipeline has been defined, you can execute it and reproduce the experiment.
 
 ```sh
 # Execute only the required pipeline stages
 dvc repro
 ```
 
-{% callout type="note" %}
-You can force the execution of the entire pipeline with the command `dvc repro --force`.
-{% /callout %}
-
-The parameters discussed before - defined in the `params.yaml` file - can be edited to re-run the experiment. DVC will track all these parameters and store the outputs' results in its cache so it will not re-run the experiment if not needed.
+{% callout type="note" %} You can force the execution of the entire pipeline
+with the command `dvc repro --force`. {% /callout %}
 
 ### Check the changes
 
@@ -331,7 +352,7 @@ Changes to be committed:
 
 ### Push the changes to DVC and Git
 
-Push all DVC and Git files to the remote.
+Push all the DVC changes to the remote storage and all the Git changes to the remote repository.
 
 ```sh
 # Upload the experiment data and cache to the remote bucket
@@ -348,60 +369,68 @@ This chapter is done, you can check the summary.
 
 ## Summary
 
-Congrats! You now have a defined and common way to reproduce the pipeline to create a model. The stages will be ran only if files or parameters change.
+Congrats! You have defined a pipeline and know how to reproduce your experiment. 
 
 In this chapter, you have successfully:
 
-1. Removed custom rules from the gitignore file
-2. Set up four DVC pipeline stages
-  - `prepare`
-  - `featurize`
-  - `train`
-  - `evaluate`
-3. Visualized the pipeline
-4. Executed the pipeline
-5. Pushed the changes to DVC and Git
+1. Removed custom rules from the gitignore file;
+2. Set up four DVC pipeline stages;
+  - `prepare`,
+  - `featurize`,
+  - `train`,
+  - `evaluate`;
+1. Visualized the pipeline;
+2. Executed the pipeline;
+3. Pushed the changes to DVC and Git.
 
 You did fix some of the previous issues:
 
-- ✅ The steps used to create the model are documented and can be re-executed.
+- ✅ The steps used to create the model are documented and can be reproduced.
 
-When used by another member of the team, they can easily reproduce your experiment with the help of DVC with the following commands.
+With the help of DVC, another member of your team can now easily reproduce your
+experiment and, thanks to caching, only the required steps will be executed.
 
 ```sh
 # Execute the pipeline
 dvc repro
 ```
 
-It will only run the required stages thanks to DVC cache.
-
 However, you might have identified the following areas for improvement:
 
 - ❌ How can I ensure my changes helps to improve the model?
 - ❌ How can I ensure my model still can be run on someone's computer?
 
-In the next chapters, you will enhance the workflow to fix those issues.
+In the next chapters, you will enhance the workflow to fix these issues.
 
 You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
 - ✅ The codebase can be shared and improved by multiple developers;
-- ✅ The dataset can be shared among the developers and is placed in the right directory in order to run the experiment;
+- ✅ The dataset can be shared among the developers and is placed in the right
+  directory in order to run the experiment;
 - ✅ The steps used to create the model are documented and can be re-executed;
 - ❌ Changes to model are not easily visualized;
 - ❌ Experiment may not be reproducible on other machines;
-- ❌ Model may have required artifacts that are forgotten or omitted in saved/loaded state. There is no easy way to use the model outside of the experiment context.
+- ❌ Model may have required artifacts that are forgotten or omitted in
+  saved/loaded state. There is no easy way to use the model outside of the
+  experiment context.
 
-You will address these issues in the next chapters for improved efficiency and collaboration. Continue the guide to learn how.
+You will address these issues in the next chapters for improved efficiency and
+collaboration. Continue the guide to learn how.
 
 ## Sources
 
-Highly inspired by the [_Get Started: Data Pipelines_ - dvc.org](https://dvc.org/doc/start/data-management/pipelines) guide.
+Highly inspired by the [_Get Started: Data Pipelines_ -
+dvc.org](https://dvc.org/doc/start/data-management/pipelines) guide.
 
-Want to see what the result at the end of this chapter should look like? Have a look at the Git repository directory here: [chapter-4-reproduce-the-experiment-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-4-reproduce-the-experiment-with-dvc).
+Want to see what the result at the end of this chapter should look like? Have a
+look at the Git repository directory here:
+[chapter-4-reproduce-the-experiment-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-4-reproduce-the-experiment-with-dvc).
 
 ## Next & Previous chapters
 
-- **Previous**: [Chapter 3: Share your ML experiment data with DVC](/the-guide/chapter-3-share-your-ml-experiment-data-with-dvc)
-- **Next**: [Chapter 5: Track model evolutions with DVC](/the-guide/chapter-5-track-model-evolutions-with-dvc)
+- **Previous**: [Chapter 3: Share your ML experiment data with
+  DVC](/the-guide/chapter-3-share-your-ml-experiment-data-with-dvc)
+- **Next**: [Chapter 5: Track model evolutions with
+  DVC](/the-guide/chapter-5-track-model-evolutions-with-dvc)

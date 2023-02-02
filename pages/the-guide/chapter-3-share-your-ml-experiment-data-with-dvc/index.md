@@ -6,26 +6,33 @@ title: "Chapter 3: Share your ML experiment data with DVC"
 
 ## Introduction
 
-At this point, the codebase is distributed to team members using Git. 
+At this point, the codebase is made available to team members using Git, but the
+experiment data is not.
 
-The objective of this chapter is to distribute the experiment data with the team using [DVC](/get-started/the-tools-used-in-this-guide#dvc). DVC is a version control system for your data. Dataset files are generally too large to be stored in Git. DVC allows you to store the dataset in a remote storage and version it.
+The goal of this chapter is to store the data of the experiment in a version control system.
+Git is not suitable for this purpose because of its size limitations.
+Git lfs is a solution to this problem, but it is not as efficient as other version control systems.
 
-For this guide, a Google Storage Bucket will be used to store the dataset. Although, DVC is compatible with many other cloud storage providers as well.
+[DVC](/get-started/the-tools-used-in-this-guide#dvc) is a version control system for data.
+It uses chunking to store large files efficiently and track their changes.
+Similar to Git, DVC allows you to store the dataset in a remote storage, typically a cloud storage provider, and track its changes.
 
-In this chapter, you'll cover:
+In this guide, a Google Storage Bucket will be used to store the dataset.
+Although, DVC is compatible with many other cloud storage providers as well.
 
-1. Creating a new project on Google Cloud
-2. Installing Google Cloud CLI
-3. Creating the Google Storage Bucket
-4. Installing DVC
-5. Initializing and configuring DVC
-6. Updating the gitignore file and adding the experiment data to DVC
-7. Pushing the data files to DVC
-8. Pushing the metadata files to Git
+{% callout type="note" %} Want to self-host your storage? Check out the [Deploy
+MinIO](/advanced-concepts/deploy-minio) guide! {% /callout %}
 
-{% callout type="note" %}
-Want to self-host your storage? Check out the [Deploy MinIO](/advanced-concepts/deploy-minio) guide!
-{% /callout %}
+In this chapter, you will learn how to:
+
+1. Create a new project on Google Cloud;
+2. Install Google Cloud CLI;
+3. Create the Google Storage Bucket;
+4. Install DVC;
+5. Initialize and configuring DVC;
+6. Update the gitignore file and adding the experiment data to DVC;
+7. Push the data files to DVC;
+8. Push the metadata files to Git;
 
 Let's get started!
 
@@ -33,25 +40,35 @@ Let's get started!
 
 ### Create a Google Cloud Project
 
-Create a Google Cloud Project by going to the [Google Cloud console](https://console.cloud.google.com/), select **Select a project** in the upper right corner of the screen and select **New project**.
+Create a Google Cloud Project by going to the [Google Cloud
+console](https://console.cloud.google.com/), select **Select a project** in the
+upper right corner of the screen and select **New project**.
 
-Name your project. For the following steps, the project will be named _MLOps demo project_.
+Name your project. For the following steps, the project will be named _MLOps
+demo project_.
 
-Edit the project ID. The ID is unique for all projects on Google Cloud. For the following steps, the project ID will be named _mlops-demo-id_.
+Edit the project ID. The ID is unique for all projects on Google Cloud. For the
+following steps, the project ID will be named _mlops-demo-id_.
 
 Select **Create** to create the project.
 
 ### Install Google Cloud CLI
 
-To install `gcloud`, follow the official documentation: [_Install the Google Cloud CLI_ - cloud.google.com](https://cloud.google.com/sdk/docs/install-sdk)
+To install `gcloud`, follow the official documentation: [_Install the Google
+Cloud CLI_ - cloud.google.com](https://cloud.google.com/sdk/docs/install-sdk)
 
 ### Initialize and configure Google Cloud CLI 
 
-The following process will authenticate to Google Cloud using the Google Cloud CLI. It will open a browser window to log you in and create a credentials file in `~/.config/gcloud/application_default_credentials.json`. This file must not be shared.
+The following process will authenticate to Google Cloud using the Google Cloud
+CLI. It will open a browser window to log you in and create a credentials file
+in `~/.config/gcloud/application_default_credentials.json`. This file must not
+be shared.
 
-DVC will then automatically use these credentials to authenticate to the cloud storage provider.
+DVC will then automatically use these credentials to authenticate to the cloud
+storage provider.
 
-Alternatively, you can set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable to the path of the credentials file.
+Alternatively, you can set the `GOOGLE_APPLICATION_CREDENTIALS` environment
+variable to the path of the credentials file.
 
 ```sh
 # Initialize and login to Google Cloud
@@ -71,9 +88,11 @@ gcloud auth application-default login
 
 ### Create the Google Storage Bucket
 
-Create the Google Storage Bucket by going to **Cloud Storage** on the left sidebar. Click on the **Create** button to create a new bucket.
+Create the Google Storage Bucket by going to **Cloud Storage** on the left
+sidebar. Click on the **Create** button to create a new bucket.
 
-- **Bucket Name** : The name must be unique. For the following steps, the bucket will be named _mlops-demo-bucket_
+- **Bucket Name** : The name must be unique. For the following steps, the bucket
+  will be named _mlops-demo-bucket_
 - **Location type** : _Region -> europe-west6 (Zurich)_
 - **Default storage class** : _Standard_
 - **Enforce public access prevention on this bucket** : _Checked_
@@ -138,7 +157,8 @@ dvc init
 dvc remote add -d data gs://<your bucket>/<your path>
 ```
 
-The effect of the `dvc init` command is to create a `.dvc` directory in the working directory. This directory contains the configuration of DVC.
+The effect of the `dvc init` command is to create a `.dvc` directory in the
+working directory. This directory contains the configuration of DVC.
 
 ### Update the gitignore file and add the experiment data to DVC
 
@@ -157,9 +177,12 @@ When executing this command, the following output occurs.
 ERROR: bad DVC file name 'data/data.xml.dvc' is git-ignored.
 ```
 
-You will have to update the `.gitignore` file so that DVC can create files in the `data` directory. However, you still don't want the directories `data/features` and `data/prepared` to be added to Git.
+You will have to update the `.gitignore` file so that DVC can create files in
+the `data` directory. However, you still don't want the directories
+`data/features` and `data/prepared` to be added to Git.
 
-Update the `.gitignore` file by changing `data` to `data/features` and `data/prepared`.
+Update the `.gitignore` file by changing `data` to `data/features` and
+`data/prepared`.
 
 ```sh
 # Data used to train the models
@@ -209,13 +232,20 @@ You can now add the experiment data to DVC without complain!
 dvc add data/data.xml
 ```
 
-The effect of the `dvc add` command is to create a `data/data.xml.dvc` file and a `data/.gitignore`. The `.dvc` file contains the metadata of the file that is used by DVC to download and check the integrity of the files. The `.gitignore` file is created to add the `data.xml` file to be ignored by Git. The `.dvc` files must be added to Git.
+The effect of the `dvc add` command is to create a `data/data.xml.dvc` file and
+a `data/.gitignore`. The `.dvc` file contains the metadata of the file that is
+used by DVC to download and check the integrity of the files. The `.gitignore`
+file is created to add the `data.xml` file to be ignored by Git. The `.dvc`
+files must be added to Git.
 
-Various DVC commands will automatically try to update the gitignore files. If a `.gitignore` file is already present, it will be updated to include the newly ignored files. You might need to update existing gitignore files accordingly. 
+Various DVC commands will automatically try to update the gitignore files. If a
+`.gitignore` file is already present, it will be updated to include the newly
+ignored files. You might need to update existing gitignore files accordingly. 
 
 ### Push the data files to DVC
 
-DVC works as Git. Once you want to share the data, you can use `dvc push` to upload the data and its cache to the storage provider.
+DVC works as Git. Once you want to share the data, you can use `dvc push` to
+upload the data and its cache to the storage provider.
 
 ```sh
 # Upload the experiment data and cache to the remote bucket
@@ -253,7 +283,8 @@ Changes to be committed:
 
 ### Push the changes to Git
 
-You can now push the changes to Git so all team members can get the data from DVC as well.
+You can now push the changes to Git so all team members can get the data from
+DVC as well.
 
 ```sh
 # Commit the changes
@@ -284,7 +315,8 @@ You did fix some of the previous issues:
 
 - ✅ Data no longer needs manual download and is placed in the right directory.
 
-When used by another member of the team, they can easily get a copy of the experiment data from DVC with the following commands.
+When used by another member of the team, they can easily get a copy of the
+experiment data from DVC with the following commands.
 
 ```sh
 # Download experiment data from DVC
@@ -296,22 +328,37 @@ You can now safely continue to the next chapter.
 ## State of the MLOps process
 
 - ✅ The codebase can be shared and improved by multiple developers;
-- ✅ The dataset can be shared among the developers and is placed in the right directory in order to run the experiment;
+- ✅ The dataset can be shared among the developers and is placed in the right
+  directory in order to run the experiment;
 - ❌ Model steps rely on verbal communication and may be undocumented;
 - ❌ Changes to model are not easily visualized;
 - ❌ Experiment may not be reproducible on other machines;
-- ❌ Model may have required artifacts that are forgotten or omitted in saved/loaded state. There is no easy way to use the model outside of the experiment context.
+- ❌ Model may have required artifacts that are forgotten or omitted in
+  saved/loaded state. There is no easy way to use the model outside of the
+  experiment context.
 
-You will address these issues in the next chapters for improved efficiency and collaboration. Continue the guide to learn how.
+You will address these issues in the next chapters for improved efficiency and
+collaboration. Continue the guide to learn how.
 
 ## Sources
 
-Highly inspired by the [_Get Started_ - dvc.org](https://dvc.org/doc/start), [_Supported storage types_ - dvc.org
-](https://dvc.org/doc/command-reference/remote/add#supported-storage-types) [_Get Started: Data Versioning_ - dvc.org](https://dvc.org/doc/start/data-management), [_Install the Google Cloud CLI_ - cloud.google.com](https://cloud.google.com/sdk/docs/install-sdk) and [_Create storage buckets_ - cloud.google.com](https://cloud.google.com/storage/docs/creating-buckets) guides.
+Highly inspired by the [_Get Started_ - dvc.org](https://dvc.org/doc/start),
+[_Supported storage types_ - dvc.org
+](https://dvc.org/doc/command-reference/remote/add#supported-storage-types)
+[_Get Started: Data Versioning_ -
+dvc.org](https://dvc.org/doc/start/data-management), [_Install the Google Cloud
+CLI_ - cloud.google.com](https://cloud.google.com/sdk/docs/install-sdk) and
+[_Create storage buckets_ -
+cloud.google.com](https://cloud.google.com/storage/docs/creating-buckets)
+guides.
 
-Want to see what the result at the end of this chapter should look like? Have a look at the Git repository directory here: [chapter-3-share-your-ml-experiment-data-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-3-share-your-ml-experiment-data-with-dvc).
+Want to see what the result at the end of this chapter should look like? Have a
+look at the Git repository directory here:
+[chapter-3-share-your-ml-experiment-data-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-3-share-your-ml-experiment-data-with-dvc).
 
 ## Next & Previous chapters
 
-- **Previous**: [Chapter 2: Share your ML experiment code with Git](/the-guide/chapter-2-share-your-ml-experiment-code-with-git)
-- **Next**: [Chapter 4: Reproduce the experiment with DVC](/the-guide/chapter-4-reproduce-the-experiment-with-dvc)
+- **Previous**: [Chapter 2: Share your ML experiment code with
+  Git](/the-guide/chapter-2-share-your-ml-experiment-code-with-git)
+- **Next**: [Chapter 4: Reproduce the experiment with
+  DVC](/the-guide/chapter-4-reproduce-the-experiment-with-dvc)
