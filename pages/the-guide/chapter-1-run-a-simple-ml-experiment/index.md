@@ -246,7 +246,7 @@ In this chapter, you have:
 4. Set up a Python environment to run the experiment;
 5. Executed the experiment locally for the first time.
 
-However, you have identified the following areas for improvement:
+However, you may have identified the following areas for improvement:
 
 - ❌ Codebase still needs manual download
 - ❌ Dataset still needs manual download and placement

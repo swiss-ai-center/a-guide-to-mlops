@@ -311,7 +311,7 @@ In this chapter, you have successfully:
 7. Pushed the data files to DVC
 8. Pushed the metadata files to Git
 
-You did fix some of the previous issues:
+You fixed some of the previous issues:
 
 - ✅ Data no longer needs manual download and is placed in the right directory.
 

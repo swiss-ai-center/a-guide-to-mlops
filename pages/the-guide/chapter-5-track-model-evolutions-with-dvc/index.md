@@ -247,7 +247,7 @@ Changes not staged for commit:
 **Do not push the improved version of your model yet**, it will be done in a
 future chapter.
 
-This chapter is complete, you can check the summary.
+This chapter is done, you can check the summary.
 
 ## Summary
 
@@ -259,7 +259,7 @@ In this chapter, you have successfully:
 2. Reproduced the experiment;
 3. Visualized the changes made to the experiment.
 
-You did fix some of the previous issues:
+You fixed some of the previous issues:
 
 - ✅ The changes done to a model can be visualized with parameters, metrics and
   plots to identify differences between iterations.

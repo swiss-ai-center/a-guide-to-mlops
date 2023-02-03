@@ -6,15 +6,18 @@ title: "Chapter 8: Serve the model with MLEM"
 
 ## Introduction
 
-The purpose of this chapter is to serve and use the model for usage outside of the experiment context with the help of MLEM. MLEM allows to do this by saving the model with metadata information that can be used to load the model for future usage.
+The purpose of this chapter is to serve and use the model for usage outside of
+the experiment context with the help of MLEM. MLEM allows to do this by saving
+the model with metadata information that can be used to load the model for
+future usage.
 
-In this chapter, you'll cover:
+In this chapter, you will learn how to:
 
-1. Installing MLEM
-2. Initializig and configuring MLEM
-3. Updating and running the experiment to use MLEM to save and load the model
-4. Serving the model with FastAPI
-5. Pushing the changes to DVC and Git
+1. Install MLEM
+2. Initialize and configure MLEM
+3. Update and run the experiment to use MLEM to save and load the model
+4. Serve the model with FastAPI
+5. Push the changes to DVC and Git
 
 ## Steps
 
@@ -74,13 +77,15 @@ mlem config set core.storage.type dvc
 echo "/**/?*.mlem" >> .dvcignore
 ```
 
-The effect of the `mlem init` command is to create a `.mlem.yaml` file in the working directory. This file contains the configuration of MLEM.
+The effect of the `mlem init` command is to create a `.mlem.yaml` file in the
+working directory. This file contains the configuration of MLEM.
 
 ### Update the experiment
 
 #### Update `src/featurization.py`
 
-Update the `src/featurization.py` file to save the `CountVectorizer` and the `TfidfTransformer` with MLEM.
+Update the `src/featurization.py` file to save the `CountVectorizer` and the
+`TfidfTransformer` with MLEM.
 
 ```py
 import os
@@ -170,7 +175,7 @@ test_words_tfidf_matrix = tfidf.transform(test_words_binary_matrix)
 save_matrix(df_test, test_words_tfidf_matrix, feature_names, test_output)
 ```
 
-Check the differences with Git to validate the changes.
+Check the differences with Git to better understand the changes.
 
 ```sh
 # Show the differences with Git
@@ -261,7 +266,7 @@ save(
 )
 ```
 
-Check the differences with Git to validate the changes.
+Check the differences with Git to better understand the changes.
 
 ```sh
 # Show the differences with Git
@@ -301,9 +306,12 @@ index 97bb9d0..87e4756 100644
 +)
 ```
 
-{% callout type="note" %}
-Did you pay attention to the last lines? The `preprocess` lambda loads the `TfidfTransformer` with the `CountVectorizer`. These will be saved along the model for future predictions. The `sample_data` will be used to generate the right input for when the model is deployed (seen later on). MLEM will store the model's metadata in the `models/rf.mlem` file.
-{% /callout %}
+{% callout type="note" %} Did you pay attention to the last lines? The
+`preprocess` lambda loads the `TfidfTransformer` with the `CountVectorizer`.
+These will be saved along the model for future predictions. The `sample_data`
+will be used to generate the right input for when the model is deployed (seen
+later on). MLEM will store the model's metadata in the `models/rf.mlem` file. {%
+/callout %}
 
 #### Update `src/evaluate.py`
 
@@ -391,7 +399,7 @@ with Live("evaluation") as live:
     fig.savefig(os.path.join("evaluation", "plots", "importance.png"))
 ```
 
-Check the differences with Git to validate the changes.
+Check the differences with Git to better understand the changes.
 
 ```sh
 # Show the differences with Git
@@ -425,9 +433,10 @@ index e18629a..53a17a7 100644
      matrix, feature_names = pickle.load(fd)
 ```
 
-{% callout type="note" %}
-When a MLEM model is loaded with `mlem.api.load`, it will automatically load the artifacts as well. In this case, `mlem.api.load("models/rf")` will automatically load the `preprocess` lambda described earlier.
-{% /callout %}
+{% callout type="note" %} When a MLEM model is loaded with `mlem.api.load`, it
+will automatically load the artifacts as well. In this case,
+`mlem.api.load("models/rf")` will automatically load the `preprocess` lambda
+described earlier. {% /callout %}
 
 ### Update the DVC pipeline
 
@@ -472,7 +481,7 @@ dvc plots modify evaluation/plots/sklearn/roc.json -x fpr -y tpr
 dvc plots modify evaluation/plots/sklearn/confusion_matrix.json -x actual -y predicted -t confusion
 ```
 
-Check the differences with Git to validate the changes.
+Check the differences with Git to better understand the changes.
 
 ```sh
 # Show the differences with Git
@@ -523,17 +532,20 @@ index 0e00f1b..2539fe4 100644
 dvc repro
 ```
 
-The experiment now uses MLEM to save and load the model. DVC stores the model and its metadata.
+The experiment now uses MLEM to save and load the model. DVC stores the model
+and its metadata.
 
 ### Serve the model with FastAPI
 
-Now that the model has been saved with MLEM, we will serve it with [FastAPI](https://fastapi.tiangolo.com/).
+Now that the model has been saved with MLEM, we will serve it with
+[FastAPI](https://fastapi.tiangolo.com/).
 
-FastAPI will generate a REST API with [FastAPI](https://fastapi.tiangolo.com/) that we can use to get predictions from our model.
+FastAPI will generate a REST API that we can use to get predictions from our
+model.
 
-{% callout type="note" %}
-FastAPI is only one of the available backends that MLEM can use to serve the model. Check out their official documentation for more options. 
-{% /callout %}
+{% callout type="note" %} FastAPI is only one of the available backends that
+MLEM can use to serve the model. Check out their official documentation for more
+options. {% /callout %}
 
 Serve the model with FastAPI.
 
@@ -542,24 +554,31 @@ Serve the model with FastAPI.
 mlem serve fastapi --model models/rf
 ```
 
-MLEM will load the model, create the FastAPI app and start it. You can then access the auto-generated model documentation on <http://0.0.0.0:8080/docs>.
+MLEM will load the model, create the FastAPI app and start it. You can then
+access the auto-generated model documentation on <http://0.0.0.0:8080/docs>.
 
-{% callout type="note" %}
-Remember the `sample_data` variable discussed above? This will be used by MLEM to generate the FastAPI endpoints with the right OpenAPI/Swagger specifications.
-{% /callout %}
+{% callout type="note" %} Remember the `sample_data` variable discussed above?
+This will be used by MLEM to generate the FastAPI endpoints with the right
+OpenAPI/Swagger specifications. {% /callout %}
 
 The following endpoints have been created:
 
-- `predict`: Get a string as the input and display the prediction of the input as true (1) if it is related to the R programming language or as false (0) if it is is not related to the R programming language.
-- `predict_proba`: Get a string as the input and display the probability of the input as a array of two numbers. The first number is the probability from 0 to 1 of the input as not related to the R programming language. The second number is the probability from 0 to 1 of the input as related to the R programming language.
+- `predict`: Get a string as the input and display the prediction of the input
+  as true (1) if it is related to the R programming language or as false (0) if
+  it is is not related to the R programming language.
+- `predict_proba`: Get a string as the input and display the probability of the
+  input as a array of two numbers. The first number is the probability from 0 to
+  1 of the input as not related to the R programming language. The second number
+  is the probability from 0 to 1 of the input as related to the R programming
+  language.
 
-You can try out predictions by inputing some sentences to the model through the REST API!
+You can try out predictions by inputing some sentences to the model through the
+REST API!
 
 Here are some request bodies you can use as examples.
 
-{% callout type="warning" %}
-Please be aware the model is a very simple model. Some inputs may be incorrectly predicted.
-{% /callout %}
+{% callout type="warning" %} Please be aware that this model is a toy. Some
+inputs may be incorrectly predicted. {% /callout %}
 
 **Request body**
 
@@ -583,7 +602,8 @@ This output means that the input is related to the R programming language.
 
 **Probablities output**
 
-This output means a 55% probability that the input is related to the R programming language.
+This output means a 55% probability that the input is related to the R
+programming language.
 
 ```json
 [
@@ -616,7 +636,8 @@ This output means that the input is not related to the R programming language.
 
 **Probablities output**
 
-This output means a 0% probability that the input is related to the R programming language.
+This output means a 0% probability that the input is related to the R
+programming language.
 
 ```json
 [
@@ -649,7 +670,8 @@ This output means that the input is not related to the R programming language.
 
 **Probablities output**
 
-This output means a 33% probability that the input is related to the R programming language.
+This output means a 33% probability that the input is related to the R
+programming language.
 
 ```json
 [
@@ -728,28 +750,46 @@ In this chapter, you have successfully:
 
 You did fix some of the previous issues:
 
-- ✅ The model can be saved and loaded with all have required artifacts for future usage. The model can be served outside of the experiment context.
+- ✅ The model can be saved and loaded with all have required artifacts for
+  future usage. The model can be served outside of the experiment context.
 
-You could serve this model from anywhere. Additional services could submit predictions to your model. The usage of FastAPI creates endpoints that are automatically documented to interact with the model.
+You could serve this model from anywhere. Additional services could submit
+predictions to your model. The usage of FastAPI creates endpoints that are
+automatically documented to interact with the model.
 
-You can now safely continue to the next chapter of this guide concluding your journey and the next things you could do with your model.
+You can now safely continue to the next chapter of this guide concluding your
+journey and the next things you could do with your model.
 
 ## State of the MLOps process
 
 - ✅ The codebase can be shared and improved by multiple developers;
-- ✅ The dataset can be shared among the developers and is placed in the right directory in order to run the experiment;
+- ✅ The dataset can be shared among the developers and is placed in the right
+  directory in order to run the experiment;
 - ✅ The steps used to create the model are documented and can be re-executed;
-- ✅ The changes done to a model can be visualized with parameters, metrics and plots to identify differences between iterations;
-- ✅ The experiment can be executed on a clean machine with the help of a CI/CD pipeline and CML;
-- ✅ The model can be saved and loaded with all have required artifacts for future usage. The model can be served outside of the experiment context.
+- ✅ The changes done to a model can be visualized with parameters, metrics and
+  plots to identify differences between iterations;
+- ✅ The experiment can be executed on a clean machine with the help of a CI/CD
+  pipeline and CML;
+- ✅ The model can be saved and loaded with all have required artifacts for
+  future usage. The model can be served outside of the experiment context.
 
 ## Sources
 
-Highly inspired by the [_Get Started_ - mlem.ai](https://mlem.ai/doc/get-started), [_Saving models_ - mlem.ai](https://mlem.ai/doc/get-started/saving), [_Working with Data_ - mlem.ai](https://mlem.ai/doc/user-guide/data), [_Serving models_ - mlem.ai](https://mlem.ai/doc/user-guide/serving), [_Versioning MLEM objects with DVC_ - mlem.ai](https://mlem.ai/doc/use-cases/dvc), [_`mlem.api.save()`_ - mlem.ai](https://mlem.ai/doc/api-reference/save) and [_`mlem.api.load()`_ - mlem.ai](https://mlem.ai/doc/api-reference/load) guides.
+Highly inspired by the [_Get Started_ -
+mlem.ai](https://mlem.ai/doc/get-started), [_Saving models_ -
+mlem.ai](https://mlem.ai/doc/get-started/saving), [_Working with Data_ -
+mlem.ai](https://mlem.ai/doc/user-guide/data), [_Serving models_ -
+mlem.ai](https://mlem.ai/doc/user-guide/serving), [_Versioning MLEM objects with
+DVC_ - mlem.ai](https://mlem.ai/doc/use-cases/dvc), [_`mlem.api.save()`_ -
+mlem.ai](https://mlem.ai/doc/api-reference/save) and [_`mlem.api.load()`_ -
+mlem.ai](https://mlem.ai/doc/api-reference/load) guides.
 
-Want to see what the result at the end of this chapter should look like? Have a look at the Git repository directory here: [chapter-8-serve-the-model-with-mlem](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-8-serve-the-model-with-mlem).
+Want to see what the result at the end of this chapter should look like? Have a
+look at the Git repository directory here:
+[chapter-8-serve-the-model-with-mlem](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-8-serve-the-model-with-mlem).
 
 ## Next & Previous chapters
 
-- **Previous**: [Chapter 7: Track model evolutions in the CI/CD pipeline with CML](/the-guide/chapter-7-track-model-evolutions-in-the-cicd-pipeline-with-cml)
+- **Previous**: [Chapter 7: Track model evolutions in the CI/CD pipeline with
+  CML](/the-guide/chapter-7-track-model-evolutions-in-the-cicd-pipeline-with-cml)
 - **Next**: [Conclusion](/the-guide/conclusion)

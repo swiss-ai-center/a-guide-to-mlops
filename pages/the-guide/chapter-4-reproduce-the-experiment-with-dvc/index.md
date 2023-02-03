@@ -383,7 +383,7 @@ In this chapter, you have successfully:
 2. Executed the pipeline;
 3. Pushed the changes to DVC and Git.
 
-You did fix some of the previous issues:
+You fixed some of the previous issues:
 
 - ✅ The steps used to create the model are documented and can be reproduced.
 
