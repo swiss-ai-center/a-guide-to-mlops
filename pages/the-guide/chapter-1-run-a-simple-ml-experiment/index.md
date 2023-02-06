@@ -14,12 +14,12 @@ Their dataset consists of 10,000 posts from StackOverflow.
 
 The training process is as follows: 
 
-- Mark the R-related posts posts as `1` and the others as `0`;
-- Split the posts into training/testing datasets;
-- Create bag-of-words matrices from the post titles and descriptions;
-- Train a model to classify R vs. non-R posts using the training dataset;
+- Mark the R-related posts posts as `1` and the others as `0`
+- Split the posts into training/testing datasets
+- Create bag-of-words matrices from the post titles and descriptions
+- Train a model to classify R vs. non-R posts using the training dataset
 - Evaluate the model's performance using a precision-recall (PR) curve and a
-  receiver operating characteristic (ROC) curve.
+  receiver operating characteristic (ROC) curve
 
 Your goal is to streamline the team's workflow by setting up MLOps tools,
 documenting the process, tracking changes, and making the model accessible to
@@ -27,11 +27,11 @@ others.
 
 In this chapter, you will learn how to:
 
-1. Set up the project directory;
-2. Acquire the codebase;
-3. Obtain the dataset;
-4. Create a Python environment to run the experiment;
-5. Launch the experiment locally for the first time.
+1. Set up the project directory
+2. Acquire the codebase
+3. Obtain the dataset
+4. Create a Python environment to run the experiment
+5. Launch the experiment locally for the first time
 
 Let's get started!
 
@@ -223,13 +223,13 @@ Your working directory should now be similar to this:
 
 Here, the following should be noted:
 - the `prepare.py` script created the `data/prepared` directory and splitted the
-  dataset into a training set and a test set;
+  dataset into a training set and a test set
 - the `featurization.py` script created the `data/features` directory and
-  extracted the features from the training and test sets;
+  extracted the features from the training and test sets
 - the `train.py` script created the `model.pkl` file and trained the model with
-  the extracted features;
+  the extracted features
 - the `evaluate.py` script created the `evaluation` directory and generated some
-  plots and metrics to evaluate the model.
+  plots and metrics to evaluate the model
 
 Take some time to get familiar with the scripts and the results.
 
@@ -240,11 +240,11 @@ Congratulations! You've successfully reproduced the experiment on your machine.
 
 In this chapter, you have:
 
-1. Created the working directory;
-2. Acquired the codebase;
-3. Obtained the dataset;
-4. Set up a Python environment to run the experiment;
-5. Executed the experiment locally for the first time.
+1. Created the working directory
+2. Acquired the codebase
+3. Obtained the dataset
+4. Set up a Python environment to run the experiment
+5. Executed the experiment locally for the first time
 
 However, you may have identified the following areas for improvement:
 
@@ -258,14 +258,14 @@ You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
-- ❌ Codebase requires manual download and setup;
-- ❌ Dataset requires manual download and placement;
-- ❌ Model steps rely on verbal communication and may be undocumented;
-- ❌ Changes to model are not easily visualized;
-- ❌ Experiment may not be reproducible on other machines;
+- ❌ Codebase requires manual download and setup
+- ❌ Dataset requires manual download and placement
+- ❌ Model steps rely on verbal communication and may be undocumented
+- ❌ Changes to model are not easily visualized
+- ❌ Experiment may not be reproducible on other machines
 - ❌ Model may have required artifacts that are forgotten or omitted in
-  saved/loaded state. There is no easy way to use the model outside of the
-  experiment context.
+  saved/loadedstate and there is no easy way to use the model outside of the
+  experiment context
 
 You will address these issues in the next chapters for improved efficiency and
 collaboration. Continue the guide to learn how.

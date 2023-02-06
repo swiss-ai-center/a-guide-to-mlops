@@ -762,14 +762,14 @@ journey and the next things you could do with your model.
 
 ## State of the MLOps process
 
-- ✅ The codebase can be shared and improved by multiple developers;
+- ✅ The codebase can be shared and improved by multiple developers
 - ✅ The dataset can be shared among the developers and is placed in the right
-  directory in order to run the experiment;
-- ✅ The steps used to create the model are documented and can be re-executed;
+  directory in order to run the experiment
+- ✅ The steps used to create the model are documented and can be re-executed
 - ✅ The changes done to a model can be visualized with parameters, metrics and
-  plots to identify differences between iterations;
+  plots to identify differences between iterations
 - ✅ The experiment can be executed on a clean machine with the help of a CI/CD
-  pipeline and CML;
+  pipeline and CML
 - ✅ The model can be saved and loaded with all have required artifacts for
   future usage. The model can be served outside of the experiment context.
 

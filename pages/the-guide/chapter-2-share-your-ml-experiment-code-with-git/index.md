@@ -183,7 +183,7 @@ In this chapter, you have successfully:
 
 You fixed some of the previous issues:
 
-- ✅ Codebase no longer needs manual download and is versioned.
+- ✅ Codebase no longer needs manual download and is versioned
 
 Another member of your team can easily clone the experiment
 with the following commands.
@@ -197,14 +197,14 @@ You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
-- ✅ The codebase can be shared and improved by multiple developers;
-- ❌ Dataset requires manual download and placement;
-- ❌ Model steps rely on verbal communication and may be undocumented;
-- ❌ Changes to model are not easily visualized;
-- ❌ Experiment may not be reproducible on other machines;
+- ✅ The codebase can be shared and improved by multiple developers
+- ❌ Dataset requires manual download and placement
+- ❌ Model steps rely on verbal communication and may be undocumented
+- ❌ Changes to model are not easily visualized
+- ❌ Experiment may not be reproducible on other machines
 - ❌ Model may have required artifacts that are forgotten or omitted in
-  saved/loaded state. There is no easy way to use the model outside of the
-  experiment context.
+  saved/loadedstate and there is no easy way to use the model outside of the
+  experiment context
 
 You will address these issues in the next chapters for improved efficiency and
 collaboration. Continue the guide to learn how.

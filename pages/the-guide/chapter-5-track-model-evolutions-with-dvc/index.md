@@ -15,9 +15,9 @@ commited ones.
 
 In this chapter, you will learn how to:
 
-1. Update the parameters of the experiment;
-2. Reproduce the experiment;
-3. Visualize the changes made to the model;
+1. Update the parameters of the experiment
+2. Reproduce the experiment
+3. Visualize the changes made to the model
 
 
 Let's get started!
@@ -255,14 +255,14 @@ Congrats! You now have a simple way to compare the two iterations of your experi
 
 In this chapter, you have successfully:
 
-1. Updated the experiment parameters;
-2. Reproduced the experiment;
-3. Visualized the changes made to the experiment.
+1. Updated the experiment parameters
+2. Reproduced the experiment
+3. Visualized the changes made to the experiment
 
 You fixed some of the previous issues:
 
 - ✅ The changes done to a model can be visualized with parameters, metrics and
-  plots to identify differences between iterations.
+  plots to identify differences between iterations
 
 You have solid metrics to evaluate the changes before intergrating your work in
 the code codebase.
@@ -271,16 +271,16 @@ You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
-- ✅ The codebase can be shared and improved by multiple developers;
+- ✅ The codebase can be shared and improved by multiple developers
 - ✅ The dataset can be shared among the developers and is placed in the right
-  directory in order to run the experiment;
-- ✅ The steps used to create the model are documented and can be re-executed;
+  directory in order to run the experiment
+- ✅ The steps used to create the model are documented and can be re-executed
 - ✅ The changes done to a model can be visualized with parameters, metrics and
-  plots to identify differences between iterations;
-- ❌ Experiment may not be reproducible on other machines;
+  plots to identify differences between iterations
+- ❌ Experiment may not be reproducible on other machines
 - ❌ Model may have required artifacts that are forgotten or omitted in
-  saved/loaded state. There is no easy way to use the model outside of the
-  experiment context.
+  saved/loadedstate and there is no easy way to use the model outside of the
+  experiment context
 
 You will address these issues in the next chapters for improved efficiency and
 collaboration. Continue the guide to learn how.

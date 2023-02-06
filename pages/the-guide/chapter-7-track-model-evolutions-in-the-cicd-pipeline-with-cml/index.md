@@ -12,19 +12,19 @@ collaborators to discuss changes online before merging changes in the codebase.
 
 In this chapter, you will learn how to:
 
-1. Update the CI/CD configuration file to generate a CML report;
-2. Push the updated CI/CD configuration file to Git;
-3. Open an issue in your issue tracker;
-4. Create a new branch to add your changes;
-5. Check out to the new branch;
+1. Update the CI/CD configuration file to generate a CML report
+2. Push the updated CI/CD configuration file to Git
+3. Open an issue in your issue tracker
+4. Create a new branch to add your changes
+5. Check out to the new branch
 6. Commit and pushing the changes that were not commited in [Chapter 5: Track
    model evolutions with
-   DVC](/the-guide/chapter-5-track-model-evolutions-with-dvc);
-7. Create a pull request/merge request;
-8. Visualize the execution of the CI/CD pipeline;
-9. Visualizie the CML report that is added to your pull request/merge request;
-10. Merge the pull request/merge request to the main branch;
-11. Switch back to the main branch and pulling latest changes.
+   DVC](/the-guide/chapter-5-track-model-evolutions-with-dvc)
+7. Create a pull request/merge request
+8. Visualize the execution of the CI/CD pipeline
+9. Visualizie the CML report that is added to your pull request/merge request
+10. Merge the pull request/merge request to the main branch
+11. Switch back to the main branch and pulling latest changes
 
 {% callout type="note" %} CML can do much more than just generating reports.
 Have a look to the [Train the model on a Kubernetes cluster with
@@ -674,17 +674,17 @@ You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
-- ✅ The codebase can be shared and improved by multiple developers;
+- ✅ The codebase can be shared and improved by multiple developers
 - ✅ The dataset can be shared among the developers and is placed in the right
-  directory in order to run the experiment;
-- ✅ The steps used to create the model are documented and can be re-executed;
+  directory in order to run the experiment
+- ✅ The steps used to create the model are documented and can be re-executed
 - ✅ The changes done to a model can be visualized with parameters, metrics and
-  plots to identify differences between iterations;
+  plots to identify differences between iterations
 - ✅ The experiment can be executed on a clean machine with the help of a CI/CD
-  pipeline and CML;
+  pipeline and CML
 - ❌ Model may have required artifacts that are forgotten or omitted in
-  saved/loaded state. There is no easy way to use the model outside of the
-  experiment context.
+  saved/loadedstate and there is no easy way to use the model outside of the
+  experiment context
 
 ## Sources
 

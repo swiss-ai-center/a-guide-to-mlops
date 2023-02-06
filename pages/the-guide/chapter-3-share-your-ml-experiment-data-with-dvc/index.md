@@ -25,14 +25,14 @@ MinIO](/advanced-concepts/deploy-minio) guide! {% /callout %}
 
 In this chapter, you will learn how to:
 
-1. Create a new project on Google Cloud;
-2. Install Google Cloud CLI;
-3. Create the Google Storage Bucket;
-4. Install DVC;
-5. Initialize and configuring DVC;
-6. Update the gitignore file and adding the experiment data to DVC;
-7. Push the data files to DVC;
-8. Push the metadata files to Git;
+1. Create a new project on Google Cloud
+2. Install Google Cloud CLI
+3. Create the Google Storage Bucket
+4. Install DVC
+5. Initialize and configuring DVC
+6. Update the gitignore file and adding the experiment data to DVC
+7. Push the data files to DVC
+8. Push the metadata files to Git
 
 Let's get started!
 
@@ -327,15 +327,15 @@ You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
-- ✅ The codebase can be shared and improved by multiple developers;
+- ✅ The codebase can be shared and improved by multiple developers
 - ✅ The dataset can be shared among the developers and is placed in the right
-  directory in order to run the experiment;
-- ❌ Model steps rely on verbal communication and may be undocumented;
-- ❌ Changes to model are not easily visualized;
-- ❌ Experiment may not be reproducible on other machines;
+  directory in order to run the experiment
+- ❌ Model steps rely on verbal communication and may be undocumented
+- ❌ Changes to model are not easily visualized
+- ❌ Experiment may not be reproducible on other machines
 - ❌ Model may have required artifacts that are forgotten or omitted in
-  saved/loaded state. There is no easy way to use the model outside of the
-  experiment context.
+  saved/loadedstate and there is no easy way to use the model outside of the
+  experiment context
 
 You will address these issues in the next chapters for improved efficiency and
 collaboration. Continue the guide to learn how.

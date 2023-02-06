@@ -18,15 +18,15 @@ makes it easy to reproduce the experiment and track the effects of changes.
 
 In this chapter, you will learn how to:
 
-1. Remove custom rules from the gitignore file;
+1. Remove custom rules from the gitignore file
 2. Set up four DVC pipeline stages:
-  - `prepare`,
-  - `featurize`,
-  - `train`,
-  - `evaluate`;
-1. Visualize the pipeline;
-2. Execute the pipeline;
-3. Push the changes to DVC and Git.
+  - `prepare`
+  - `featurize`
+  - `train`
+  - `evaluate`
+1. Visualize the pipeline
+2. Execute the pipeline
+3. Push the changes to DVC and Git
 
 As a reminder, the current steps to run the experiment are as follow:
 
@@ -121,12 +121,12 @@ This stage will be added to the `dvc.yaml` file that describes the pipeline.
 This file can also be edited manually.
 
 The `dvc stage add` accepts some options:
-- `-n` specifies the name of the stage;
-- `-p` specifies the parameters of the stage (referenced in the `params.yaml` file);
-- `-d` specifies the dependencies of the stage;
-- `-o` specifies the outputs of the stage;
-- `--metrics-no-cache` specifies the metrics of the stage (not cached by DVC);
-- `--plots-no-cache` specifies the plots of the stage (not cached by DVC).
+- `-n` specifies the name of the stage
+- `-p` specifies the parameters of the stage (referenced in the `params.yaml` file)
+- `-d` specifies the dependencies of the stage
+- `-o` specifies the outputs of the stage
+- `--metrics-no-cache` specifies the metrics of the stage (not cached by DVC)
+- `--plots-no-cache` specifies the plots of the stage (not cached by DVC)
 
 As parameters are an important part of the experiment, they are versioned in a `params.yaml` file.
 DVC keeps track of these parameters and of the corresponding results.
@@ -373,15 +373,15 @@ Congrats! You have defined a pipeline and know how to reproduce your experiment.
 
 In this chapter, you have successfully:
 
-1. Removed custom rules from the gitignore file;
-2. Set up four DVC pipeline stages;
-  - `prepare`,
-  - `featurize`,
-  - `train`,
-  - `evaluate`;
-1. Visualized the pipeline;
-2. Executed the pipeline;
-3. Pushed the changes to DVC and Git.
+1. Removed custom rules from the gitignore file
+2. Set up four DVC pipeline stages
+  - `prepare`
+  - `featurize`
+  - `train`
+  - `evaluate`
+1. Visualized the pipeline
+2. Executed the pipeline
+3. Pushed the changes to DVC and Git
 
 You fixed some of the previous issues:
 
@@ -406,15 +406,15 @@ You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
-- ✅ The codebase can be shared and improved by multiple developers;
+- ✅ The codebase can be shared and improved by multiple developers
 - ✅ The dataset can be shared among the developers and is placed in the right
-  directory in order to run the experiment;
-- ✅ The steps used to create the model are documented and can be re-executed;
-- ❌ Changes to model are not easily visualized;
-- ❌ Experiment may not be reproducible on other machines;
+  directory in order to run the experiment
+- ✅ The steps used to create the model are documented and can be re-executed
+- ❌ Changes to model are not easily visualized
+- ❌ Experiment may not be reproducible on other machines
 - ❌ Model may have required artifacts that are forgotten or omitted in
-  saved/loaded state. There is no easy way to use the model outside of the
-  experiment context.
+  saved/loadedstate and there is no easy way to use the model outside of the
+  experiment context
 
 You will address these issues in the next chapters for improved efficiency and
 collaboration. Continue the guide to learn how.

@@ -17,11 +17,11 @@ my machine" effect.
 In this chapter, you will learn how to:
 
 1. Create a Google Service Account to grant access to the Google Cloud project
-   from the CI/CD pipeline;
-2. Store the Google Service Account key in GitHub/GitLab CI/CD configuration;
-3. Create the CI/CD pipeline configuration file;
-4. Push the CI/CD pipeline configuration file to Git;
-5. Visualize the execution of the CI/CD pipeline.
+   from the CI/CD pipeline
+2. Store the Google Service Account key in GitHub/GitLab CI/CD configuration
+3. Create the CI/CD pipeline configuration file
+4. Push the CI/CD pipeline configuration file to Git
+5. Visualize the execution of the CI/CD pipeline
 
 ## Steps
 
@@ -277,16 +277,16 @@ commit.
 In this chapter, you have successfully:
 
 1. Created a Google Service Account to grant access to the Google Cloud project
-   from the CI/CD pipeline;
-2. Stored the Google Service Account key in GitHub/GitLab CI/CD configuration;
-3. Created the CI/CD pipeline configuration file;
-4. Pushed the CI/CD pipeline configuration file to Git;
-5. Visualized the execution of the CI/CD pipeline.
+   from the CI/CD pipeline
+2. Stored the Google Service Account key in GitHub/GitLab CI/CD configuration
+3. Created the CI/CD pipeline configuration file
+4. Pushed the CI/CD pipeline configuration file to Git
+5. Visualized the execution of the CI/CD pipeline
 
 You fixed some of the previous issues:
 
 - ✅ The experiment can be executed on a clean machine with the help of a CI/CD
-  pipeline.
+  pipeline
 
 You have a CI/CD pipeline to ensure the whole experiment can still be reproduced
 using the data and the commmands to run using DVC over time.
@@ -295,17 +295,17 @@ You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
-- ✅ The codebase can be shared and improved by multiple developers;
+- ✅ The codebase can be shared and improved by multiple developers
 - ✅ The dataset can be shared among the developers and is placed in the right
-  directory in order to run the experiment;
-- ✅ The steps used to create the model are documented and can be re-executed;
+  directory in order to run the experiment
+- ✅ The steps used to create the model are documented and can be re-executed
 - ✅ The changes done to a model can be visualized with parameters, metrics and
-  plots to identify differences between iterations;
+  plots to identify differences between iterations
 - ✅ The experiment can be executed on a clean machine with the help of a CI/CD
-  pipeline;
+  pipeline
 - ❌ Model may have required artifacts that are forgotten or omitted in
-  saved/loaded state. There is no easy way to use the model outside of the
-  experiment context.
+  saved/loadedstate and there is no easy way to use the model outside of the
+  experiment context
 
 You will address these issues in the next chapters for improved efficiency and
 collaboration. Continue the guide to learn how.
