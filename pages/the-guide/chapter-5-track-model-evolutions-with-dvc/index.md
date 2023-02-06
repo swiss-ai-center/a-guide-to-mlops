@@ -6,27 +6,28 @@ title: "Chapter 5: Track model evolutions with DVC"
 
 ## Introduction
 
-In the previous chapter, you did set up a DVC pipeline to reproduce your experiment.
+In the previous chapter, you did set up a DVC pipeline to reproduce your
+experiment.
 
-Once this stage is created, you'll be able to change our model's configruation, evaluate the new configuration and compare it's performance with the last commited ones. 
+Once this stage is created, you'll be able to change our model's configruation,
+evaluate the new configuration and compare it's performance with the last
+commited ones. 
 
-In this chapter, you'll cover:
+In this chapter, you will learn how to:
 
-1. Updating the experiment parameters
-2. Reproducing the experiment
-3. Visualizing the changes made to the model
+1. Update the parameters of the experiment;
+2. Reproduce the experiment;
+3. Visualize the changes made to the model;
+
 
 Let's get started!
 
 ## Steps
 
-{% callout type="warning" %}
-This guide has been written with macOS and Linux operating systems in mind. If you use Windows, you might encounter issues. Please use [GitBash](https://gitforwindows.org/) or a Windows Subsystem for Linux (WSL) for optimal results.
-{% /callout %}
+### Update the parameters of the experiment 
 
-### Update the experiment parameters
-
-Update your experiment with the following parameters in the `params.yaml` file.
+Update your experiment with the following parameters by editing the
+`params.yaml` file.
 
 ```yaml
 prepare:
@@ -70,9 +71,14 @@ index a2a290e..8046f85 100644
    seed: 20170428
 ```
 
+Here, we simply changed the `max_features` and `ngrams` parameters of the
+`featurize` stage, which should slightly affect the model's performance. 
+
 ### Reproduce the experiment
 
-Run the experiment.
+Let's discover if these changes are positive or not! To do so, you'll need to
+reproduce the experiment.
+
 
 ```sh
 # Run the experiment. DVC will automatically run all required stages
@@ -81,15 +87,20 @@ dvc repro
 
 ### Compare the two iterations
 
-In the next steps, the `HEAD` is always the last commit on the branch you are working on (at this moment, the branch `main`). The `workspace` is the current state of your working directory.
+We'll now use DVC to compare your changes with the last commited ones. For DVC,
+`HEAD` refers to the last commit on the branch you are working on (at this
+moment, the branch `main`), and `workspace` refers to the current state of your
+working directory.
 
-{% callout type="note" %}
-Remember? We did set the parameters, metrics and plots in the previous chapter: [Chapter 4: Reproduce the experiment with DVC](/the-guide/chapter-4-reproduce-the-experiment-with-dvc).
-{% /callout %}
+{% callout type="note" %} Remember? We did set the parameters, metrics and plots
+in the previous chapter: [Chapter 4: Reproduce the experiment with
+DVC](/the-guide/chapter-4-reproduce-the-experiment-with-dvc). {% /callout %}
 
 #### Compare the parameters difference
 
-Compare the the difference between the parameters that were set on `HEAD` and the ones in your current `workspace` with the following command.
+In order to compare the parameters, you'll need to use the `dvc params diff`.
+This command will compare the parameters that were set on `HEAD` and the ones in
+your current `workspace`.
 
 ```sh
 # Compare the parameters' difference
@@ -104,11 +115,14 @@ params.yaml  featurize.max_features  100     200
 params.yaml  featurize.ngrams        1       2
 ```
 
-DVC shows you the differences so you can easily compare the two iterations.
+DVC displays the differences between `HEAD` and `workspace`, so you can easily
+compare the two iterations.
 
 #### Compare the metrics difference
 
-Compare the the difference between the metrics that were set on `HEAD` and the ones in your current `workspace` with the following command.
+Similarly, you can use the `dvc metrics diff` command to compare the metrics
+that were computed on `HEAD` and the ones that were computed in your current
+`workspace`.
 
 ```sh
 # Compare the metrics' difference
@@ -123,7 +137,8 @@ evaluation/metrics.json  avg_prec  0.89668  0.9202       0.02353
 evaluation/metrics.json  roc_auc   0.92729  0.94096      0.01368
 ```
 
-DVC shows you the differences so you can easily compare the two iterations.
+Again, DVC shows you the differences, so you can easily compare the two
+iterations. Here, you can see that the metrics have slightly improved.
 
 #### Compare the plots difference
 
@@ -132,20 +147,27 @@ DVC shows you the differences so you can easily compare the two iterations.
 dvc plots diff
 ```
 
-The effect of the `dvc plots diff` command is to create a `dvc_plots` directory in the working directory. This directory contains a report to visualize the plots in a browser.
+The effect of the `dvc plots diff` command is to create a `dvc_plots` directory
+in the working directory. This directory contains a report to visualize the
+plots in a browser.
 
-DVC shows you the differences so you can easily compare the two iterations.
+As for the other commands, DVC shows you the differences so you can easily
+compare the two iterations.
 
 #### Summary of the model evolutions
 
-You should notice the improvements made to the model thanks to the DVC reports. These improvements are very small but illustrate the workflow. Try to tweak the parameters to improve the model and play with the reports to see how your model's performance changes.
+You should notice the improvements made to the model thanks to the DVC reports.
+These improvements are small but illustrate the workflow. Try to tweak the
+parameters to improve the model and play with the reports to see how your
+model's performance changes.
 
-#### Update the gitignore file
+#### Update the .gitignore file
 
-The `dvc plots diff` creates a `dvc_plots` directory in the working directory. This directory should be ignored by Git.
+The `dvc plots diff` creates a `dvc_plots` directory in the working directory.
+This directory should be ignored by Git.
 
 
-Update the `.gitignore` file to add the `dvc_plots` directory.
+Add the `dvc_plots` directory to the `.gitignore` file.
 
 ```sh
 ## Python
@@ -192,14 +214,14 @@ index c467670..a8a3e41 100644
 
 ### Check the results
 
-Check the changes with Git to ensure all wanted files are here.
+Check the changes with Git to ensure that all the necessary files are tracked.
 
 ```sh
 # Check the changes
 git status
 ```
 
-The output should be similar to this.
+The output should look like this.
 
 ```
 On branch main
@@ -222,46 +244,60 @@ Changes not staged for commit:
         modified:   params.yaml
 ```
 
-**Do not push the improved version of your model yet**, it will be done in a future chapter.
+**Do not push the improved version of your model yet**, it will be done in a
+future chapter.
 
 This chapter is done, you can check the summary.
 
 ## Summary
 
-Congrats! You now have a simple way to compare the models with the used parameters and metrics.
+Congrats! You now have a simple way to compare the two iterations of your experiment.
 
 In this chapter, you have successfully:
 
-1. Updated the experiment parameters
-2. Reproducing the experiment
-3. Visualizing the changes made to the model
+1. Updated the experiment parameters;
+2. Reproduced the experiment;
+3. Visualized the changes made to the experiment.
 
-You did fix some of the previous issues:
+You fixed some of the previous issues:
 
-- ✅ The changes done to a model can be visualized with parameters, metrics and plots to identify differences between iterations.
+- ✅ The changes done to a model can be visualized with parameters, metrics and
+  plots to identify differences between iterations.
 
-You have solid metrics to evaluate the changes before intergrating your work in the code codebase.
+You have solid metrics to evaluate the changes before intergrating your work in
+the code codebase.
 
 You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
 - ✅ The codebase can be shared and improved by multiple developers;
-- ✅ The dataset can be shared among the developers and is placed in the right directory in order to run the experiment;
+- ✅ The dataset can be shared among the developers and is placed in the right
+  directory in order to run the experiment;
 - ✅ The steps used to create the model are documented and can be re-executed;
-- ✅ The changes done to a model can be visualized with parameters, metrics and plots to identify differences between iterations;
+- ✅ The changes done to a model can be visualized with parameters, metrics and
+  plots to identify differences between iterations;
 - ❌ Experiment may not be reproducible on other machines;
-- ❌ Model may have required artifacts that are forgotten or omitted in saved/loaded state. There is no easy way to use the model outside of the experiment context.
+- ❌ Model may have required artifacts that are forgotten or omitted in
+  saved/loaded state. There is no easy way to use the model outside of the
+  experiment context.
 
-You will address these issues in the next chapters for improved efficiency and collaboration. Continue the guide to learn how.
+You will address these issues in the next chapters for improved efficiency and
+collaboration. Continue the guide to learn how.
 
 ## Sources
 
-Highly inspired by the [_Get Started: Metrics, Parameters, and Plots_ - dvc.org](https://dvc.org/doc/start/data-management/metrics-parameters-plots) guide.
+Highly inspired by the [_Get Started: Metrics, Parameters, and Plots_ -
+dvc.org](https://dvc.org/doc/start/data-management/metrics-parameters-plots)
+guide.
 
-Want to see what the result at the end of this chapter should look like? Have a look at the Git repository directory here: [step-5-track-model-evolutions-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-5-track-model-evolutions-with-dvc).
+Want to see what the result at the end of this chapter should look like? Have a
+look at the Git repository directory here:
+[step-5-track-model-evolutions-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-5-track-model-evolutions-with-dvc).
 
 ## Next & Previous chapters
 
-- **Previous**: [Chapter 4: Reproduce the experiment with DVC](/the-guide/chapter-4-reproduce-the-experiment-with-dvc)
-- **Next**: [Chapter 6: Orchestrate the workflow with a CI/CD pipeline](/the-guide/chapter-6-orchestrate-the-workflow-with-a-cicd-pipeline)
+- **Previous**: [Chapter 4: Reproduce the experiment with
+  DVC](/the-guide/chapter-4-reproduce-the-experiment-with-dvc)
+- **Next**: [Chapter 6: Orchestrate the workflow with a CI/CD
+  pipeline](/the-guide/chapter-6-orchestrate-the-workflow-with-a-cicd-pipeline)
