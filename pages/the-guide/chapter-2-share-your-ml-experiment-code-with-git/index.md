@@ -81,6 +81,7 @@ Untracked files:
         evaluation/
         model.pkl
         params.yaml
+        README.md
         src/
 ```
 
@@ -143,6 +144,7 @@ Changes to be committed:
         new file:   evaluation/plots/sklearn/roc.json
         new file:   evaluation/report.html
         new file:   params.yaml
+        new file:   README.md
         new file:   src/evaluate.py
         new file:   src/featurization.py
         new file:   src/prepare.py

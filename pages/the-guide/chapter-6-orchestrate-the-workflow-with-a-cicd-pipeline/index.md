@@ -46,6 +46,7 @@ Create a Google Service Account by going to **IAM & Admin > Service Accounts**
 on the left sidebar.
 
 Select **Create Service Account** and perform the following steps:
+
 - Choose a **Service Account Key name** (e.g., _mlopsdemo-service-account-key_).
 - Select **Create and continue**
 - Select **Select a role > Basic > Viewer Role**
@@ -173,6 +174,8 @@ security measure.
 # Encode the Google Service Account key to base64
 base64 -i ~/Downloads/google-service-account-key.json
 ```
+
+If on Linux, you can use the command `base64 -w 0 -i ~/Downloads/google-service-account-key.json`.
 
 **Store the Google Service Account key as a CI/CD variable**
 

@@ -189,6 +189,128 @@ jobs:
           cml comment create --target=pr --publish report.md
 ```
 
+Check the differences with Git to validate the changes.
+
+```sh
+# Show the differences with Git
+git diff .github/workflows/mlops.yml
+```
+
+The output should be similar to this:
+
+```diff
+diff --git a/.github/workflows/mlops.yml b/.github/workflows/mlops.yml
+index 0ca4d29..10afa49 100644
+--- a/.github/workflows/mlops.yml
++++ b/.github/workflows/mlops.yml
+@@ -6,6 +6,9 @@ on:
+     branches:
+       - main
+ 
++  # Runs on pull requests
++  pull_request:
++
+   # Allows you to run this workflow manually from the Actions tab
+   workflow_dispatch:
+ 
+@@ -36,3 +39,95 @@ jobs:
+           dvc pull
+           # Run the experiment
+           dvc repro
++      - name: Upload evaluation results
++        uses: actions/upload-artifact@v3
++        with:
++          path: evaluation
++          retention-days: 5
++
++  report:
++    permissions: write-all
++    needs: train
++    if: github.event_name == 'pull_request'
++    runs-on: ubuntu-latest
++    steps:
++      - name: Checkout repository
++        uses: actions/checkout@v3
++        with:
++          ref: ${{ github.event.pull_request.head.sha }}
++      - name: Download evaluation results
++        uses: actions/download-artifact@v3
++      - name: Copy evaluation results
++        shell: bash
++        run: |
++          # Delete current evaluation results
++          rm -rf evaluation
++          # Replace with the new evaluation results
++          mv artifact evaluation
++      - name: Setup DVC
++        uses: iterative/setup-dvc@v1
++        with:
++          version: '2.37.0'
++      - name: Setup CML
++        uses: iterative/setup-cml@v1
++        with:
++          version: '0.18.17'
++      - name: Create CML report
++        env:
++          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
++        run: |
++          # Fetch all other Git branches
++          git fetch --depth=1 origin main:main
++
++          # Compare parameters to main branch
++          echo "# Params workflow vs. main" >> report.md
++          echo >> report.md
++          dvc params diff main --show-md >> report.md
++          echo >> report.md
++
++          # Compare metrics to main branch
++          echo "# Metrics workflow vs. main" >> report.md
++          echo >> report.md
++          dvc metrics diff main --show-md >> report.md
++          echo >> report.md
++
++          # Create plots
++          echo "# Plots" >> report.md
++          echo >> report.md
++
++          echo "## Precision recall curve" >> report.md
++          echo >> report.md
++          dvc plots diff \
++            --target evaluation/plots/prc.json \
++            -x recall \
++            -y precision \
++            --show-vega main > vega.json
++          vl2png vega.json > prc.png
++          echo '![](./prc.png "Precision recall curve")' >> report.md
++          echo >> report.md
++
++          echo "## Roc curve" >> report.md
++          echo >> report.md
++          dvc plots diff \
++            --target evaluation/plots/sklearn/roc.json \
++            -x fpr \
++            -y tpr \
++            --show-vega main > vega.json
++          vl2png vega.json > roc.png
++          echo '![](./roc.png "Roc curve")' >> report.md
++          echo >> report.md
++
++          echo "## Confusion matrix" >> report.md
++          echo >> report.md
++          dvc plots diff \
++            --target evaluation/plots/sklearn/confusion_matrix.json \
++            --template confusion \
++            -x actual \
++            -y predicted \
++            --show-vega main > vega.json
++          vl2png vega.json > confusion_matrix.png
++          echo '![](./confusion_matrix.png "Confusion Matrix")' >> report.md
++          echo >> report.md
++
++          # Publish the CML report
++          cml comment create --target=pr --publish report.md
+```
+
 Here, we have added a new step called `Upload evaluation results` to the `train`
 job. This step is responsible for uploading the evaluation results to the
 artifact storage.
@@ -490,6 +612,103 @@ report:
 
       # Publish the CML report
       cml comment create --target=pr --publish report.md
+```
+
+Check the differences with Git to validate the changes.
+
+```sh
+# Show the differences with Git
+git diff .gitlab-ci.yml
+```
+
+The output should be similar to this:
+
+```diff
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 561d04f..fad1002 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -1,5 +1,6 @@
+ stages:
+   - train
++  - report
+ 
+ variables:
+   # Change pip's cache directory to be inside the project directory since we can
+@@ -33,3 +34,72 @@ train:
+     - dvc pull
+     # Run the experiment
+     - dvc repro
++  artifacts:
++    expire_in: 1 week
++    paths:
++      - "evaluation"
++
++report:
++  stage: report
++  image: iterativeai/cml:0-dvc2-base1
++  needs:
++    - job: train
++      artifacts: true
++  rules:
++    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
++  variables:
++    REPO_TOKEN: $CML_PAT_TOKEN
++  script:
++    - |
++      # Compare parameters to main branch
++      echo "# Params workflow vs. main" >> report.md
++      echo >> report.md
++      dvc params diff main --show-md >> report.md
++      echo >> report.md
++
++      # Compare metrics to main branch
++      echo "# Metrics workflow vs. main" >> report.md
++      echo >> report.md
++      dvc metrics diff main --show-md >> report.md
++      echo >> report.md
++
++      # Create plots
++      echo "# Plots" >> report.md
++      echo >> report.md
++
++      echo "## Precision recall curve" >> report.md
++      echo >> report.md
++      dvc plots diff \
++        --target evaluation/plots/prc.json \
++        -x recall \
++        -y precision \
++        --show-vega main > vega.json
++      vl2png vega.json > prc.png
++      echo '![](./prc.png "Precision recall curve")' >> report.md
++      echo >> report.md
++
++      echo "## Roc curve" >> report.md
++      echo >> report.md
++      dvc plots diff \
++        --target evaluation/plots/sklearn/roc.json \
++        -x fpr \
++        -y tpr \
++        --show-vega main > vega.json
++      vl2png vega.json > roc.png
++      echo '![](./roc.png "Roc curve")' >> report.md
++      echo >> report.md
++
++      echo "## Confusion matrix" >> report.md
++      echo >> report.md
++      dvc plots diff \
++        --target evaluation/plots/sklearn/confusion_matrix.json \
++        --template confusion \
++        -x actual \
++        -y predicted \
++        --show-vega main > vega.json
++      vl2png vega.json > confusion_matrix.png
++      echo '![](./confusion_matrix.png "Confusion Matrix")' >
+> report.md
++      echo >> report.md
++
++      # Publish the CML report
++      cml comment create --target=pr --publish report.md
 ```
 
 Here, we have added an `artifacts` section to the `train` job. This section is

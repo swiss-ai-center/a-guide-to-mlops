@@ -20,10 +20,10 @@ In this chapter, you will learn how to:
 
 1. Remove custom rules from the gitignore file
 2. Set up four DVC pipeline stages:
-  - `prepare`
-  - `featurize`
-  - `train`
-  - `evaluate`
+    - `prepare`
+    - `featurize`
+    - `train`
+    - `evaluate`
 1. Visualize the pipeline
 2. Execute the pipeline
 3. Push the changes to DVC and Git
@@ -375,10 +375,10 @@ In this chapter, you have successfully:
 
 1. Removed custom rules from the gitignore file
 2. Set up four DVC pipeline stages
-  - `prepare`
-  - `featurize`
-  - `train`
-  - `evaluate`
+    - `prepare`
+    - `featurize`
+    - `train`
+    - `evaluate`
 1. Visualized the pipeline
 2. Executed the pipeline
 3. Pushed the changes to DVC and Git

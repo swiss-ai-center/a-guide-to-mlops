@@ -19,7 +19,6 @@ In this chapter, you will learn how to:
 2. Reproduce the experiment
 3. Visualize the changes made to the model
 
-
 Let's get started!
 
 ## Steps
@@ -78,7 +77,6 @@ Here, we simply changed the `max_features` and `ngrams` parameters of the
 
 Let's discover if these changes are positive or not! To do so, you'll need to
 reproduce the experiment.
-
 
 ```sh
 # Run the experiment. DVC will automatically run all required stages
@@ -166,7 +164,6 @@ model's performance changes.
 The `dvc plots diff` creates a `dvc_plots` directory in the working directory.
 This directory should be ignored by Git.
 
-
 Add the `dvc_plots` directory to the `.gitignore` file.
 
 ```sh
@@ -230,7 +227,6 @@ Your branch is up to date with 'origin/main'.
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
   (use "git restore <file>..." to discard changes in working directory)
-        modified:   .dvc/config
         modified:   .gitignore
         modified:   dvc.lock
         modified:   evaluation/metrics.json

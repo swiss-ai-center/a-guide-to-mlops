@@ -23,7 +23,7 @@ The training process is as follows:
 
 Your goal is to streamline the team's workflow by setting up MLOps tools,
 documenting the process, tracking changes, and making the model accessible to
-others. 
+others.
 
 In this chapter, you will learn how to:
 
@@ -82,8 +82,8 @@ This is what your working directory should look like.
 │   ├── prepare.py
 │   ├── requirements.txt
 │   └── train.py
-├── params.yaml
-└── README.md
+├── params.yaml <- this is new
+└── README.md <- this is new
 ```
 
 The following table describes the files present in the codebase.
@@ -232,7 +232,6 @@ Here, the following should be noted:
   plots and metrics to evaluate the model
 
 Take some time to get familiar with the scripts and the results.
-
 
 ## Summary
 
