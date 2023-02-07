@@ -149,12 +149,14 @@ pip install --requirement src/requirements.txt
 
 ### Initialize and configure DVC
 
+Initialize DVC with a Google Storage remote bucket. Replace the `<your bucket>` with your own bucket. The `dvcstore` is a user-defined path on the bucket. You can change it if needed.
+
 ```sh
 # Initialize DVC in the working directory
 dvc init
 
-# Add the Google remote storage bucket (`mlops-demo-bucket` and `dvcstore`)
-dvc remote add -d data gs://<your bucket>/<your path>
+# Add the Google Storage remote bucket (`mlops-demo-bucket`)
+dvc remote add -d data gs://<your bucket>/dvcstore
 ```
 
 The effect of the `dvc init` command is to create a `.dvc` directory in the
