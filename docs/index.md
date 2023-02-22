@@ -1,6 +1,6 @@
 # A guide to MLOps
 
-This guide will help you through incremental steps from a traditional approach of managing ML projects to a modern ML Ops approach designed to improve team collaboration and reproducibility.
+This guide will help you through incremental steps from a traditional approach of managing ML projects to a modern MLOps approach designed to improve team collaboration and reproducibility.
 
 It has been written using many different sources that will be mentioned in each step of the process.
 
