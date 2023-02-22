@@ -72,15 +72,19 @@ This is what your working directory should look like.
 
 ```yaml hl_lines="2-9"
 .
-├── src # this is new
+├── src # (1)!
 │   ├── evaluate.py
 │   ├── featurization.py
 │   ├── prepare.py
 │   ├── requirements.txt
 │   └── train.py
-├── params.yaml # this is new
-└── README.md # this is new
+├── params.yaml # (2)!
+└── README.md # (3)!
 ```
+
+1. This, and all its sub-directory, is new.
+2. This is new.
+3. This is new.
 
 The following table describes the files present in the codebase.
 
@@ -125,7 +129,7 @@ Your working directory should now look like this:
 
 ```yaml hl_lines="2-4"
 .
-├── data # this is new
+├── data # (1)!
 │   ├── data.xml
 │   └── README.md
 ├── src
@@ -137,6 +141,8 @@ Your working directory should now look like this:
 ├── params.yaml
 └── README.md
 ```
+
+1. This, and all its sub-directory, is new.
 
 ### Run the experiment
 
@@ -185,18 +191,18 @@ Your working directory should now be similar to this:
 
 ```yaml hl_lines="2-3 5-10 13-24 31"
 .
-├── .venv # this is new
+├── .venv # (1)!
 │   └── ...
 ├── data
-│   ├── features # this is new
+│   ├── features # (2)!
 │   │   ├── test.pkl
 │   │   └── train.pkl
-│   ├── prepared # this is new
+│   ├── prepared # (3)!
 │   │   ├── test.tsv
 │   │   └── train.tsv
 │   ├── data.xml
 │   └── README.md
-├── evaluation # this is new
+├── evaluation # (4)!
 │   ├── plots
 │   │   ├── metrics
 │   │   │   ├── avg_prec.tsv
@@ -214,10 +220,16 @@ Your working directory should now be similar to this:
 │   ├── prepare.py
 │   ├── requirements.txt
 │   └── train.py
-├── model.pkl # this is new
+├── model.pkl # (5)!
 └── params.yaml
 └── README.md
 ```
+
+1. This, and all its sub-directory, is new.
+2. This, and all its sub-directory, is new.
+3. This, and all its sub-directory, is new.
+4. This, and all its sub-directory, is new.
+5. This is new.
 
 Here, the following should be noted:
 - the `prepare.py` script created the `data/prepared` directory and splitted the

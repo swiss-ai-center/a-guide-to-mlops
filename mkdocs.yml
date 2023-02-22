@@ -11,6 +11,7 @@ nav:
       - index.md
       - Get started: get-started/what-is-mlops/index.md
       - The guide: the-guide/introduction/index.md
+      - Labelization: label-studio/introduction/index.md
   - Get started:
       - What is MLOps?: get-started/what-is-mlops/index.md
       - What problems is MLOps trying to solve?: get-started/what-problems-is-mlops-trying-to-solve/index.md
