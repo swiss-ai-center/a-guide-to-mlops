@@ -8,7 +8,7 @@ create a Git repository to enable easy collaboration with the rest of the team.
 
 In this chapter, you will learn how to:
 
-1. Set up a new [Git](/get-started/the-tools-used-in-this-guide#git)
+1. Set up a new [Git](../../get-started/the-tools-used-in-this-guide#git)
    repository
 2. Initialize Git in your project directory
 3. Verify Git tracking for your files
@@ -219,4 +219,4 @@ guides.
 
 Want to see what the result at the end of this chapter should look like? Have a
 look at the Git repository directory here:
-[chapter-2-share-your-ml-experiment-code-with-git](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-2-share-your-ml-experiment-code-with-git).
+[chapter-2-share-your-ml-experiment-code-with-git](https://github.com/csia-pme/a-guide-to-mlops/tree/main/docs/the-guide/chapter-2-share-your-ml-experiment-code-with-git).

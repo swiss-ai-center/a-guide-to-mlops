@@ -424,4 +424,4 @@ dvc.org](https://dvc.org/doc/start/data-management/pipelines) guide.
 
 Want to see what the result at the end of this chapter should look like? Have a
 look at the Git repository directory here:
-[chapter-4-reproduce-the-experiment-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-4-reproduce-the-experiment-with-dvc).
+[chapter-4-reproduce-the-experiment-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/docs/the-guide/chapter-4-reproduce-the-experiment-with-dvc).

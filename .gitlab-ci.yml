@@ -22,7 +22,7 @@ MLOps Step 6:
     - if: $CI_COMMIT_BRANCH == "main"
       changes:
         - ".gitlab-ci.yml"
-        - "pages/the-guide/step-6-orchestrate-the-workflow-with-a-cicd-pipeline"
+        - "docs/the-guide/step-6-orchestrate-the-workflow-with-a-cicd-pipeline"
   variables:
     # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
     GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
@@ -30,7 +30,7 @@ MLOps Step 6:
     # Set the Google Service Account key
     - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
     # Switch to step path
-    - cd pages/the-guide/step-6-orchestrate-the-workflow-with-a-cicd-pipeline
+    - cd docs/the-guide/step-6-orchestrate-the-workflow-with-a-cicd-pipeline
     # Install dependencies
     - pip install --requirement src/requirements.txt
   script:
@@ -46,11 +46,11 @@ MLOps Step 7 - train:
     - if: $CI_COMMIT_BRANCH == "main"
       changes:
         - ".gitlab-ci.yml"
-        - "pages/the-guide/step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml"
+        - "docs/the-guide/step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - ".gitlab-ci.yml"
-        - "pages/the-guide/step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml"
+        - "docs/the-guide/step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml"
   variables:
     # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
     GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
@@ -58,7 +58,7 @@ MLOps Step 7 - train:
     # Set the Google Service Account key
     - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
     # Switch to step path
-    - cd pages/the-guide/step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml
+    - cd docs/the-guide/step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml
     # Install dependencies
     - pip install --requirement src/requirements.txt
   script:
@@ -69,7 +69,7 @@ MLOps Step 7 - train:
   artifacts:
     expire_in: 1 week
     paths:
-      - "pages/the-guide/step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml/evaluation"
+      - "docs/the-guide/step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml/evaluation"
 
 MLOps Step 7 - report:
   stage: report
@@ -81,12 +81,12 @@ MLOps Step 7 - report:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - ".gitlab-ci.yml"
-        - "pages/the-guide/step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml"
+        - "docs/the-guide/step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml"
   variables:
     REPO_TOKEN: $CML_PAT_TOKEN
   before_script:
     # Switch to step path
-    - cd pages/the-guide/step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml
+    - cd docs/the-guide/step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml
   script:
     - |
       # Compare parameters to main branch

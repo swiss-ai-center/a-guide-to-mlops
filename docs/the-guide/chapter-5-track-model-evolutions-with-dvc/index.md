@@ -90,7 +90,7 @@ working directory.
 
 	Remember? We did set the parameters, metrics and plots
 	in the previous chapter: [Chapter 4: Reproduce the experiment with
-	DVC](/the-guide/chapter-4-reproduce-the-experiment-with-dvc).
+	DVC](../chapter-4-reproduce-the-experiment-with-dvc).
 
 #### Compare the parameters difference
 
@@ -288,4 +288,4 @@ guide.
 
 Want to see what the result at the end of this chapter should look like? Have a
 look at the Git repository directory here:
-[step-5-track-model-evolutions-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/step-5-track-model-evolutions-with-dvc).
+[step-5-track-model-evolutions-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/docs/the-guide/step-5-track-model-evolutions-with-dvc).

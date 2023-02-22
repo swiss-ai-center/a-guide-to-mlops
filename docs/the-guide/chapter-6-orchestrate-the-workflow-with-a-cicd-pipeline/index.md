@@ -32,11 +32,11 @@ store/share your own credentials. A Service Account can be deleted, hence revoki
 In order to create a Google Service Account, connect to to the [Google Cloud console](https://console.cloud.google.com/).
 There, select **Select a project** in the upper right corner of the screen and select the
 project that was created in [Chapter 3: Share your ML experiment data with
-DVC](/the-guide/chapter-3-share-your-ml-experiment-data-with-dvc).
+DVC](../chapter-3-share-your-ml-experiment-data-with-dvc).
 
 On the frontpage, note the project ID, it will be used later
 (`mlopsdemo-project` from [Chapter 3: Share your ML experiment data with
-DVC](/the-guide/chapter-3-share-your-ml-experiment-data-with-dvc)).
+DVC](../chapter-3-share-your-ml-experiment-data-with-dvc)).
 
 Create a Google Service Account by going to **IAM & Admin > Service Accounts**
 on the left sidebar.
@@ -321,4 +321,4 @@ guides.
 
 Want to see what the result at the end of this chapter should look like? Have a
 look at the Git repository directory here:
-[chapter-6-orchestrate-the-workflow-with-a-cicd-pipeline](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-6-orchestrate-the-workflow-with-a-cicd-pipeline).
+[chapter-6-orchestrate-the-workflow-with-a-cicd-pipeline](https://github.com/csia-pme/a-guide-to-mlops/tree/main/docs/the-guide/chapter-6-orchestrate-the-workflow-with-a-cicd-pipeline).

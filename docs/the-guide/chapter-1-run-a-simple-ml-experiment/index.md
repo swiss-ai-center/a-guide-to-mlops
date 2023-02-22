@@ -274,4 +274,4 @@ dvc.org](https://dvc.org/doc/start/data-management/pipelines) guide.
 
 Want to see what the result at the end of this chapter should look like? Have a
 look at the Git repository directory here:
-[chapter-1-run-a-simple-ml-experiment](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-1-run-a-simple-ml-experiment).
+[chapter-1-run-a-simple-ml-experiment](https://github.com/csia-pme/a-guide-to-mlops/tree/main/docs/the-guide/chapter-1-run-a-simple-ml-experiment).

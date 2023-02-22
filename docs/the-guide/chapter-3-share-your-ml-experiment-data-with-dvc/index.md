@@ -9,7 +9,7 @@ The goal of this chapter is to store the data of the experiment in a version con
 Git is not suitable for this purpose because of its size limitations.
 Git lfs is a solution to this problem, but it is not as efficient as other version control systems.
 
-[DVC](/get-started/the-tools-used-in-this-guide#dvc) is a version control system for data.
+[DVC](../../get-started/the-tools-used-in-this-guide#dvc) is a version control system for data.
 It uses chunking to store large files efficiently and track their changes.
 Similar to Git, DVC allows you to store the dataset in a remote storage, typically a cloud storage provider, and track its changes.
 
@@ -19,7 +19,7 @@ Although, DVC is compatible with many other cloud storage providers as well.
 !!! info
 
 	Want to self-host your storage? Check out the [Deploy
-	MinIO](/advanced-concepts/deploy-minio) guide!
+	MinIO](../../advanced-concepts/deploy-minio) guide!
 
 In this chapter, you will learn how to:
 
@@ -354,4 +354,4 @@ guides.
 
 Want to see what the result at the end of this chapter should look like? Have a
 look at the Git repository directory here:
-[chapter-3-share-your-ml-experiment-data-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-3-share-your-ml-experiment-data-with-dvc).
+[chapter-3-share-your-ml-experiment-data-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/docs/the-guide/chapter-3-share-your-ml-experiment-data-with-dvc).

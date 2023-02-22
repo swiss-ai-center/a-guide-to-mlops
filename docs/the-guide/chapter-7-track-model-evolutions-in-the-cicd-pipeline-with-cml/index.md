@@ -15,7 +15,7 @@ In this chapter, you will learn how to:
 5. Check out to the new branch
 6. Commit and pushing the changes that were not commited in [Chapter 5: Track
    model evolutions with
-   DVC](/the-guide/chapter-5-track-model-evolutions-with-dvc)
+   DVC](../chapter-5-track-model-evolutions-with-dvc)
 7. Create a pull request/merge request
 8. Visualize the execution of the CI/CD pipeline
 9. Visualizie the CML report that is added to your pull request/merge request
@@ -26,7 +26,7 @@ In this chapter, you will learn how to:
 
 	CML can do much more than just generating reports.
 	Have a look to the [Train the model on a Kubernetes cluster with
-	CML](/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml) guide.
+	CML](../../advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml) guide.
 
 ## Steps
 
@@ -643,7 +643,7 @@ git checkout <the name of the new branch>
 ### Commit and push the experiment changes
 
 Remember the changes done in [Chapter 5: Track model evolutions with
-DVC](/the-guide/chapter-5-track-model-evolutions-with-dvc)?
+DVC](../chapter-5-track-model-evolutions-with-dvc)?
 
 You can now commit them to trigger a change on the remote repository.
 
@@ -810,7 +810,7 @@ In this chapter, you have successfully:
 5. Checked out to the new branch
 6. Commit and pushed the changes that were not commited in [Chapter 5: Track
    model evolutions with
-   DVC](/the-guide/chapter-5-track-model-evolutions-with-dvc)
+   DVC](../chapter-5-track-model-evolutions-with-dvc)
 7. Created a pull request/merge request
 8. Visualized the execution of the CI/CD pipeline
 9. Visualized the CML report that is added to your pull request/merge request
@@ -857,4 +857,4 @@ gitlab.com](https://gitlab.com/iterative.ai/cml-dvc-case) Git repositories.
 
 Want to see what the result at the end of this chapter should look like? Have a
 look at the Git repository directory here:
-[chapter-7-track-model-evolutions-in-the-cicd-pipeline-with-cml](https://github.com/csia-pme/a-guide-to-mlops/tree/main/pages/the-guide/chapter-7-track-model-evolutions-in-the-cicd-pipeline-with-cml).
+[chapter-7-track-model-evolutions-in-the-cicd-pipeline-with-cml](https://github.com/csia-pme/a-guide-to-mlops/tree/main/docs/the-guide/chapter-7-track-model-evolutions-in-the-cicd-pipeline-with-cml).
