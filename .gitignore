@@ -1,18 +1,10 @@
-## Node
+## Material for MkDocs
 
-# Logs
-logs
-*.log
+# Cache
+.cache
 
-# Coverage directory
-coverage
-
-# Dependency directories
-node_modules/
-
-# Next.js builds / generated outputs
-.next
-out
+# Output directory
+public
 
 ## Python
 

@@ -1,0 +1,11 @@
+code {
+	tab-size: 2
+}
+
+[data-md-color-scheme="default"] {
+	--md-code-hl-color: var(--md-accent-fg-color--transparent);
+}
+
+[data-md-color-scheme="slate"] {
+	--md-code-hl-color: var(--md-accent-fg-color--transparent);
+}
