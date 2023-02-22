@@ -7,13 +7,13 @@ on:
       - main
     paths:
       - .github/workflows/mlops-chapter-8.yml
-      - pages/the-guide/chapter-8-serve-the-model-with-mlem/**/*
+      - docs/the-guide/chapter-8-serve-the-model-with-mlem/**/*
 
   # Runs on pull requests
   pull_request:
     paths:
       - .github/workflows/mlops-chapter-8.yml
-      - pages/the-guide/chapter-8-serve-the-model-with-mlem/**/*
+      - docs/the-guide/chapter-8-serve-the-model-with-mlem/**/*
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -38,7 +38,7 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
       - name: Train model
-        working-directory: pages/the-guide/chapter-8-serve-the-model-with-mlem
+        working-directory: docs/the-guide/chapter-8-serve-the-model-with-mlem
         run: |
           # Install dependencies
           pip install --requirement src/requirements.txt
@@ -49,7 +49,7 @@ jobs:
       - name: Upload evaluation results
         uses: actions/upload-artifact@v3
         with:
-          path: pages/the-guide/chapter-8-serve-the-model-with-mlem/evaluation
+          path: docs/the-guide/chapter-8-serve-the-model-with-mlem/evaluation
           retention-days: 5
 
   report:
@@ -67,9 +67,9 @@ jobs:
         shell: bash
         run: |
           # Delete current evaluation results
-          rm -rf pages/the-guide/chapter-8-serve-the-model-with-mlem/evaluation
+          rm -rf docs/the-guide/chapter-8-serve-the-model-with-mlem/evaluation
           # Replace with the new evaluation results
-          mv artifact pages/the-guide/chapter-8-serve-the-model-with-mlem/evaluation
+          mv artifact docs/the-guide/chapter-8-serve-the-model-with-mlem/evaluation
       - name: Setup DVC
         uses: iterative/setup-dvc@v1
         with:
@@ -81,7 +81,7 @@ jobs:
       - name: Create CML report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        working-directory: pages/the-guide/chapter-8-serve-the-model-with-mlem
+        working-directory: docs/the-guide/chapter-8-serve-the-model-with-mlem
         run: |
           # Fetch all other Git branches
           git fetch --depth=1 origin main:main

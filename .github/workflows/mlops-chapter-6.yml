@@ -7,7 +7,7 @@ on:
       - main
     paths:
       - .github/workflows/mlops-chapter-6.yml
-      - pages/the-guide/chapter-6-orchestrate-the-workflow-with-a-cicd-pipeline/**/*
+      - docs/the-guide/chapter-6-orchestrate-the-workflow-with-a-cicd-pipeline/**/*
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -32,7 +32,7 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
       - name: Train model
-        working-directory: pages/the-guide/chapter-6-orchestrate-the-workflow-with-a-cicd-pipeline
+        working-directory: docs/the-guide/chapter-6-orchestrate-the-workflow-with-a-cicd-pipeline
         run: |
           # Install dependencies
           pip install --requirement src/requirements.txt
