@@ -47,7 +47,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	Update the `.github/workflows/mlops.yml` file.
 
-	```yaml hl_lines="9-10 42-133"
+	```yaml  title=".github/workflows/mlops.yml" hl_lines="9-10 42-133"
 	name: MLOps
 
 	on:
@@ -185,7 +185,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	Check the differences with Git to validate the changes.
 
-	```sh title="In a terminal, execute the following command(s)"
+	```sh title="Execute the following command(s) in a terminal"
 	# Show the differences with Git
 	git diff .github/workflows/mlops.yml
 	```
@@ -350,7 +350,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	Update the `.gitlab-ci.yml` file.
 
-	```yaml hl_lines="3 37-105"
+	```yaml title=".gitlab-ci.yml" hl_lines="3 37-105"
 	stages:
 	  - train
 	  - report
@@ -460,7 +460,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	Check the differences with Git to validate the changes.
 
-	```sh title="In a terminal, execute the following command(s)"
+	```sh title="Execute the following command(s) in a terminal"
 	# Show the differences with Git
 	git diff .gitlab-ci.yml
 	```
@@ -571,7 +571,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 === ":simple-github: GitHub"
 
-	```sh title="In a terminal, execute the following command(s)"
+	```sh title="Execute the following command(s) in a terminal"
 	# Add the updated workflow
 	git add .github/workflows/mlops.yml
 
@@ -584,7 +584,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 === ":simple-gitlab: GitLab"
 
-	```sh title="In a terminal, execute the following command(s)"
+	```sh title="Execute the following command(s) in a terminal"
 	# Add the updated GitLab CI
 	git add .gitlab-ci.yml
 	
@@ -632,7 +632,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 On your machine, check out the new branch.
 
-```sh title="In a terminal, execute the following command(s)"
+```sh title="Execute the following command(s) in a terminal"
 # Get the latest updates from the remote origin
 git fetch origin
 
@@ -653,7 +653,7 @@ repro`. You can then commit the changes.
 
 Check the changes with Git to ensure all wanted files are here.
 
-```sh title="In a terminal, execute the following command(s)"
+```sh title="Execute the following command(s) in a terminal"
 # Add all the files
 git add .
 
@@ -682,7 +682,7 @@ Changes to be committed:
         modified:   params.yaml
 ```
 
-```sh title="In a terminal, execute the following command(s)"
+```sh title="Execute the following command(s) in a terminal"
 # Upload the experiment data and cache to the remote bucket
 dvc push
 
@@ -786,7 +786,7 @@ git push
 
 Now that the merge is done, you can get the changes on the main branch.
 
-```sh title="In a terminal, execute the following command(s)"
+```sh title="Execute the following command(s) in a terminal"
 # Get the latest updates from the remote origin
 git fetch origin
 

@@ -42,13 +42,13 @@ Create a Google Cloud Project by going to the [Google Cloud
 console](https://console.cloud.google.com/), select **Select a project** in the
 upper right corner of the screen and select **New project**.
 
-Name your project. For the following steps, the project will be named _MLOps
-demo project_.
+Name your project and select **Create** to create the project.
 
-Edit the project ID. The ID is unique for all projects on Google Cloud. For the
-following steps, the project ID will be named _mlops-demo-id_.
+A new page opens. Note the ID of your project, it will be used later.
 
-Select **Create** to create the project.
+!!! warning
+
+	Always make sure you're in the right project by selecting your project with **Select a project** in the upper right corner of the screen.
 
 ### Install Google Cloud CLI
 
@@ -68,15 +68,17 @@ storage provider.
 Alternatively, you can set the `GOOGLE_APPLICATION_CREDENTIALS` environment
 variable to the path of the credentials file.
 
-```sh title="In a terminal, execute the following command(s)"
+Replace `<id of your gcp project>` with your own project ID.
+
+```sh title="Execute the following command(s) in a terminal"
 # Initialize and login to Google Cloud
 gcloud init
 
 # List all available projects
 gcloud projects list
 
-# Select your Google Cloud project (`mlops-demo-id`)
-gcloud config set project <id of the gcp project>
+# Select your Google Cloud project
+gcloud config set project <id of your gcp project>
 
 # Set authentication for our ML experiment
 # https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
@@ -86,18 +88,18 @@ gcloud auth application-default login
 
 ### Create the Google Storage Bucket
 
-Create the Google Storage Bucket by going to **Cloud Storage** on the left
-sidebar. Click on the **Create** button to create a new bucket.
+Create the Google Storage Bucket to store the data with the Google Cloud CLI.
 
-- **Bucket Name** : The name must be unique. For the following steps, the bucket
-  will be named _mlops-demo-bucket_
-- **Location type** : _Region -> europe-west6 (Zurich)_
-- **Default storage class** : _Standard_
-- **Enforce public access prevention on this bucket** : _Checked_
-- **Access control** : _Uniform_
-- **Projection tools** : _None_
+!!! warning
 
-Select **Create** and **Confirm** to create the bucket.
+	The bucket name must be unique accross all Google Cloud projects and users. Change the `<my bucket name>` to your own bucket name.
+
+```sh title="Execute the following command(s) in a terminal"
+gcloud storage buckets create gs://<my bucket name> \
+	--location=EUROPE-WEST6 \
+	--uniform-bucket-level-access \
+	--public-access-prevention
+```
 
 You now have everything needed for DVC.
 
@@ -119,7 +121,7 @@ matplotlib==3.6.2
 
 Check the differences with Git to validate the changes.
 
-```sh title="In a terminal, execute the following command(s)"
+```sh title="Execute the following command(s) in a terminal"
 # Show the differences with Git
 git diff src/requirements.txt
 ```
@@ -140,21 +142,21 @@ index c8fa80f..ff173a7 100644
 
 You can now install the required packages from the `src/requirements.txt` file.
 
-```sh title="In a terminal, execute the following command(s)"
+```sh title="Execute the following command(s) in a terminal"
 # Install the requirements
 pip install --requirement src/requirements.txt
 ```
 
 ### Initialize and configure DVC
 
-Initialize DVC with a Google Storage remote bucket. Replace the `<your bucket>` with your own bucket. The `dvcstore` is a user-defined path on the bucket. You can change it if needed.
+Initialize DVC with a Google Storage remote bucket. Replace `<my bucket name>` with your own bucket name. The `dvcstore` is a user-defined path on the bucket. You can change it if needed.
 
-```sh title="In a terminal, execute the following command(s)"
+```sh title="Execute the following command(s) in a terminal"
 # Initialize DVC in the working directory
 dvc init
 
-# Add the Google Storage remote bucket (`mlops-demo-bucket`)
-dvc remote add -d data gs://<your bucket>/dvcstore
+# Add the Google Storage remote bucket
+dvc remote add -d data gs://<my bucket name>/dvcstore
 ```
 
 The effect of the `dvc init` command is to create a `.dvc` directory in the
@@ -166,14 +168,14 @@ Now that DVC has been setup, you can add files to DVC.
 
 Try to add the experiment data. Warning, it will fail.
 
-```sh title="In a terminal, execute the following command(s)"
+```sh title="Execute the following command(s) in a terminal"
 # Try to add the experiment data to DVC
 dvc add data/data.xml
 ```
 
 When executing this command, the following output occurs.
 
-```sh title="In a terminal, execute the following command(s)"
+```sh title="Execute the following command(s) in a terminal"
 ERROR: bad DVC file name 'data/data.xml.dvc' is git-ignored.
 ```
 
@@ -184,7 +186,7 @@ the `data` directory. However, you still don't want the directories
 Update the `.gitignore` file by changing `data` to `data/features` and
 `data/prepared`.
 
-```sh title="In a terminal, execute the following command(s)" hl_lines="2-3"
+```sh title="Execute the following command(s) in a terminal" hl_lines="2-3"
 # Data used to train the models
 data/features
 data/prepared
@@ -203,7 +205,7 @@ __pycache__/
 
 Check the differences with Git to validate the changes.
 
-```sh title="In a terminal, execute the following command(s)"
+```sh title="Execute the following command(s) in a terminal"
 # Show the differences with Git
 git diff .gitignore
 ```
@@ -227,7 +229,7 @@ index f1cbfa9..2b092ce 100644
 
 You can now add the experiment data to DVC without complain!
 
-```sh title="In a terminal, execute the following command(s)"
+```sh title="Execute the following command(s) in a terminal"
 # Add the experiment data to DVC
 dvc add data/data.xml
 ```
@@ -247,7 +249,7 @@ ignored files. You might need to update existing gitignore files accordingly.
 DVC works as Git. Once you want to share the data, you can use `dvc push` to
 upload the data and its cache to the storage provider.
 
-```sh title="In a terminal, execute the following command(s)"
+```sh title="Execute the following command(s) in a terminal"
 # Upload the experiment data and cache to the remote bucket
 dvc push
 ```
@@ -256,7 +258,7 @@ dvc push
 
 Check the changes with Git to ensure all wanted files are here.
 
-```sh title="In a terminal, execute the following command(s)"
+```sh title="Execute the following command(s) in a terminal"
 # Add all the files
 git add .
 
@@ -286,7 +288,7 @@ Changes to be committed:
 You can now push the changes to Git so all team members can get the data from
 DVC as well.
 
-```sh title="In a terminal, execute the following command(s)"
+```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
 git commit -m "My ML experiment data is saved with DVC"
 
@@ -318,7 +320,7 @@ You fixed some of the previous issues:
 When used by another member of the team, they can easily get a copy of the
 experiment data from DVC with the following commands.
 
-```sh title="In a terminal, execute the following command(s)"
+```sh title="Execute the following command(s) in a terminal"
 # Download experiment data from DVC
 dvc pull
 ```
@@ -347,9 +349,9 @@ Highly inspired by the [_Get Started_ - dvc.org](https://dvc.org/doc/start),
 ](https://dvc.org/doc/command-reference/remote/add#supported-storage-types)
 [_Get Started: Data Versioning_ -
 dvc.org](https://dvc.org/doc/start/data-management), [_Install the Google Cloud
-CLI_ - cloud.google.com](https://cloud.google.com/sdk/docs/install-sdk) and
+CLI_ - cloud.google.com](https://cloud.google.com/sdk/docs/install-sdk),
 [_Create storage buckets_ -
-cloud.google.com](https://cloud.google.com/storage/docs/creating-buckets)
+cloud.google.com](https://cloud.google.com/storage/docs/creating-buckets) and [_gcloud storage buckets create_ - cloud.google.com](https://cloud.google.com/sdk/gcloud/reference/storage/buckets/create)
 guides.
 
 Want to see what the result at the end of this chapter should look like? Have a

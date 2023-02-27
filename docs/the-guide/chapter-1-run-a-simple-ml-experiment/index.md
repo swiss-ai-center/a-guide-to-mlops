@@ -45,14 +45,14 @@ Your colleague has generously provided you a ZIP file containing the source
 code. Although this may be an outdated method for sharing files, you're ready to
 tackle the task.
 
-```sh title="In a terminal, execute the following command(s)"
+```sh title="Execute the following command(s) in a terminal"
 # Download the archive containing the code
 wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/code.zip -O code.zip
 ```
 
 Unzip the codebase into your working directory.
 
-```sh title="In a terminal, execute the following command(s)"
+```sh title="Execute the following command(s) in a terminal"
 # Extract the code
 unzip code.zip
 
@@ -102,7 +102,7 @@ The following table describes the files present in the codebase.
 Your colleague provide you the following URL to download an archive containing
 the dataset for this machine learning experiment.
 
-```sh title="In a terminal, execute the following command(s)"
+```sh title="Execute the following command(s) in a terminal"
 # Download the archive containing the dataset
 wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/data.zip -O data.zip
 ```
@@ -110,7 +110,7 @@ wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/data.zip -O
 This archive must decompresed and its contents must be moved in the
  `data` directory in the working directory of the experiment.
 
-```sh title="In a terminal, execute the following command(s)"
+```sh title="Execute the following command(s) in a terminal"
 # Extract the dataset
 unzip data.zip
 
@@ -153,7 +153,7 @@ time.
 Create the virtual environment and install necessary dependencies in your
 working directory using these commands.
 
-```sh title="In a terminal, execute the following command(s)"
+```sh title="Execute the following command(s) in a terminal"
 # Create the virtual environment
 python3 -m venv .venv
 
@@ -166,7 +166,7 @@ pip install --requirement src/requirements.txt
 
 Your helpful colleague provided you some steps to reproduce the experiment.
 
-```sh title="In a terminal, execute the following command(s)"
+```sh title="Execute the following command(s) in a terminal"
 # Prepare the dataset
 python src/prepare.py data/data.xml
 

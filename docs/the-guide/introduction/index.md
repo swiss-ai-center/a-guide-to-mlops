@@ -37,7 +37,7 @@ The following requirements are necessary to follow this guide.
 At the time of writing, the following versions of the requirements were used (on
 macOS).
 
-```sh title="In a terminal, execute the following command(s)"
+```sh title="Execute the following command(s) in a terminal"
 # Python 3
 > python3 --version
 Python 3.10.9

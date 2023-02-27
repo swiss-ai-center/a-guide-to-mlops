@@ -24,7 +24,7 @@ Let's get started!
 Update your experiment with the following parameters by editing the
 `params.yaml` file.
 
-```yaml hl_lines="6-7"
+```yaml title="params.yaml" hl_lines="6-7"
 prepare:
   split: 0.20
   seed: 20170428
@@ -41,7 +41,7 @@ train:
 
 Check the differences with Git to validate the changes.
 
-```sh title="In a terminal, execute the following command(s)"
+```sh title="Execute the following command(s) in a terminal"
 # Show the differences with Git
 git diff params.yaml
 ```
@@ -74,7 +74,7 @@ Here, we simply changed the `max_features` and `ngrams` parameters of the
 Let's discover if these changes are positive or not! To do so, you'll need to
 reproduce the experiment.
 
-```sh title="In a terminal, execute the following command(s)"
+```sh title="Execute the following command(s) in a terminal"
 # Run the experiment. DVC will automatically run all required stages
 dvc repro
 ```
@@ -98,7 +98,7 @@ In order to compare the parameters, you'll need to use the `dvc params diff`.
 This command will compare the parameters that were set on `HEAD` and the ones in
 your current `workspace`.
 
-```sh title="In a terminal, execute the following command(s)"
+```sh title="Execute the following command(s) in a terminal"
 # Compare the parameters' difference
 dvc params diff
 ```
@@ -120,7 +120,7 @@ Similarly, you can use the `dvc metrics diff` command to compare the metrics
 that were computed on `HEAD` and the ones that were computed in your current
 `workspace`.
 
-```sh title="In a terminal, execute the following command(s)"
+```sh title="Execute the following command(s) in a terminal"
 # Compare the metrics' difference
 dvc metrics diff
 ```
@@ -138,7 +138,7 @@ iterations. Here, you can see that the metrics have slightly improved.
 
 #### Compare the plots difference
 
-```sh title="In a terminal, execute the following command(s)"
+```sh title="Execute the following command(s) in a terminal"
 # Create the report to display the plots
 dvc plots diff
 ```
@@ -164,7 +164,7 @@ This directory should be ignored by Git.
 
 Add the `dvc_plots` directory to the `.gitignore` file.
 
-```sh title="In a terminal, execute the following command(s)" hl_lines="11-12"
+```sh title="Execute the following command(s) in a terminal" hl_lines="11-12"
 ## Python
 
 # Environments
@@ -184,7 +184,7 @@ dvc_plots
 
 Check the differences with Git to validate the changes.
 
-```sh title="In a terminal, execute the following command(s)"
+```sh title="Execute the following command(s) in a terminal"
 # Show the differences with Git
 git diff .gitignore
 ```
@@ -211,7 +211,7 @@ index c467670..a8a3e41 100644
 
 Check the changes with Git to ensure that all the necessary files are tracked.
 
-```sh title="In a terminal, execute the following command(s)"
+```sh title="Execute the following command(s) in a terminal"
 # Check the changes
 git status
 ```

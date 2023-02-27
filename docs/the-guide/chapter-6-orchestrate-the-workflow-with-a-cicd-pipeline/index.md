@@ -21,7 +21,7 @@ In this chapter, you will learn how to:
 
 ## Steps
 
-### Create a Google Service Account to be used by the CI/CD pipeline
+### Create a Google Service Account key to be used by the CI/CD pipeline
 
 DVC will need to log in to Google Cloud to download the data inside the
 CI/CD pipeline.
@@ -29,37 +29,31 @@ CI/CD pipeline.
 Google Cloud allows the creation of a "Service Account", so you don't have to
 store/share your own credentials. A Service Account can be deleted, hence revoking all the access it had.
 
-In order to create a Google Service Account, connect to to the [Google Cloud console](https://console.cloud.google.com/).
-There, select **Select a project** in the upper right corner of the screen and select the
-project that was created in [Chapter 3: Share your ML experiment data with
-DVC](../chapter-3-share-your-ml-experiment-data-with-dvc).
+Create the Google Service Account and its associated Google Service Account Key to access Google Cloud without your own credentials.
 
-On the frontpage, note the project ID, it will be used later
-(`mlopsdemo-project` from [Chapter 3: Share your ML experiment data with
-DVC](../chapter-3-share-your-ml-experiment-data-with-dvc)).
+Replace  `<id of your gcp project>` with your own project ID.
 
-Create a Google Service Account by going to **IAM & Admin > Service Accounts**
-on the left sidebar.
+The key will be stored in your **Downloads** directory under the name `google-service-account-key.json`.
 
-Select **Create Service Account** and perform the following steps:
+!!! danger
 
-- Choose a **Service Account Key name** (e.g., _mlopsdemo-service-account-key_).
-- Select **Create and continue**
-- Select **Select a role > Basic > Viewer Role**
-- Select **Continue**
-- Select **Done**
+	You must **never** add and commit this file to your working directory.
+	It is a sensitive data that you must keep safe.
 
-Select the newly created service account.
+```sh title="Execute the following command(s) in a terminal"
+# Create the Google Service Account
+gcloud iam service-accounts create dvc-service-account \
+	--display-name="DVC Service Account"
 
-Select **Keys** and **Add new key > Create new key**. Select **(JSON format)**
-and then **Create**.
+# Set the permissions for the Google Service Account
+gcloud projects add-iam-policy-binding <id of your gcp project> \
+	--member="serviceAccount:dvc-service-account@<id of your gcp project>.iam.gserviceaccount.com" \
+	--role="roles/viewer"
 
-The key will be dowloaded in your **Downloads** directory. Remember the name of
-the file as it will be used later. For the rest of this guide, this service key
-account file will be referenced as `google-service-account-key.json`.
-
-**Note**: You must **never** add and commit this file to your working directory.
-It is a sensitive data that you must keep safe.
+# Create the Google Service Account Key
+gcloud iam service-accounts keys create ~/Downloads/google-service-account-key.json \
+	--iam-account=dvc-service-account@<id of your gcp project>.iam.gserviceaccount.com
+```
 
 ### Store the Google Service Account key and setup the CI/CD pipeline
 
@@ -75,7 +69,7 @@ Please refer to the correct instructions based on your Git repository provider.
 	Display the Google Service Account key that you have downloaded from Google
 	Cloud.
 
-	```sh title="In a terminal, execute the following command(s)"
+	```sh title="Execute the following command(s) in a terminal"
 	# Display the Google Service Account key
 	cat ~/Downloads/google-service-account-key.json
 	```
@@ -86,14 +80,14 @@ Please refer to the correct instructions based on your Git repository provider.
 	Google Cloud as `base64`. It allows to hide the secret in GitLab CI logs as a
 	security measure.
 
-	```sh title="In a terminal, execute the following command(s)"
-	# Encode the Google Service Account key to base64
-	base64 -i ~/Downloads/google-service-account-key.json
-	```
-
 	!!! tip
 
 		If on Linux, you can use the command `base64 -w 0 -i ~/Downloads/google-service-account-key.json`.
+
+	```sh title="Execute the following command(s) in a terminal"
+	# Encode the Google Service Account key to base64
+	base64 -i ~/Downloads/google-service-account-key.json
+	```
 
 ### Store the Google Service Account key as a secret CI/CD variable
 
@@ -133,7 +127,7 @@ Please refer to the correct instructions based on your Git repository provider.
 
 	Take some time to understand the train job and its steps.
 
-	```yaml
+	```yaml title=".github/workflows/mlops.yml"
 	name: MLOps
 
 	on:
@@ -181,7 +175,7 @@ Please refer to the correct instructions based on your Git repository provider.
 
 	Explore this file to understand the stages and the steps.
 
-	```yaml
+	```yaml title=".gitlab-ci.yml"
 	stages:
 	  - train
 
@@ -226,7 +220,7 @@ Please refer to the correct instructions based on your Git repository provider.
 
 	Push the CI/CD pipeline configuration file to Git.
 
-	```sh title="In a terminal, execute the following command(s)"
+	```sh title="Execute the following command(s) in a terminal"
 	# Add the configuration file
 	git add .github/workflows/mlops.yml
 
@@ -241,7 +235,7 @@ Please refer to the correct instructions based on your Git repository provider.
 
 	Push the CI/CD pipeline configuration file to Git.
 
-	```sh title="In a terminal, execute the following command(s)"
+	```sh title="Execute the following command(s) in a terminal"
 	# Add the configuration file
 	git add .gitlab-ci.yml
 
@@ -311,7 +305,7 @@ collaboration. Continue the guide to learn how.
 
 ## Sources
 
-Highly inspired by the [_Using service accounts_ -
+Highly inspired by the [_Creating and managing service accounts_ - cloud.google.com](https://cloud.google.com/iam/docs/creating-managing-service-accounts), [_Create and manage service account keys_ - cloud.google.com](https://cloud.google.com/iam/docs/creating-managing-service-account-keys), [_IAM basic and predefined roles reference_ - cloud.google.com](https://cloud.google.com/iam/docs/understanding-roles), [_Using service accounts_ -
 dvc.org](https://dvc.org/doc/user-guide/setup-google-drive-remote#using-service-accounts),
 [_Creating encrypted secrets for a repository_ -
 docs.github.com](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
