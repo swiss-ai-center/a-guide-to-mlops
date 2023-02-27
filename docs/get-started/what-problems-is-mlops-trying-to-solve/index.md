@@ -1,23 +1,11 @@
 # What problems is MLOps trying to solve?
 
-_This is a work in progress. Please come back later for more :)_
+MLOps is trying to solve several challenges that arise when deploying machine learning models in production environments. Some of these challenges include:
 
-The problems described in this document are based of our own expericences with ML projects/experiments. They might not reflect all projects and/or teams but we tried to regroup the identified issues in major categories.
+- Scalability: Machine learning models can be resource-intensive, making it difficult to scale them up to handle large amounts of data or to meet increasing demand. MLOps helps to manage resources effectively and optimize the performance of models in production.
+- Reproducibility: In machine learning, it's important to be able to reproduce the results of a model. MLOps helps to ensure that models can be replicated in production and that the data used to train them is reproducible.
+- Data management: Machine learning models depend heavily on data, and managing data can be challenging. MLOps helps to manage data more effectively and to ensure that it's clean, labeled, and of high quality.
+- Model drift: Machine learning models can experience drift over time as data changes or as models are updated. MLOps helps to detect and manage model drift, ensuring that models remain accurate and effective.
+- Security: Machine learning models can be vulnerable to attacks, and MLOps helps to ensure that models are secure and protected from malicious actors.
 
-It will try to address the following issues that are common to most ML projects.
-
-## The problems
-
-### The codebase still needs to be downloaded and set up locally in order to run the experiment
-
-When a new member of a ML teams
-
-### The dataset still needs to be downloaded and placed in the right directory in order to run the experiment
-
-### The steps used to create the model can be forgotten
-
-### The changes done to a model cannot be visualized and improvements and/or deteriorations are hard to identify
-
-### There is no guarantee that the experiment can be executed on another machine
-
-### The model might have required artifacts that can be forgotten or omitted when saving/loading the model for future usage. There is no easy way to use the model outside of the experiment context
+By addressing these challenges, MLOps helps to accelerate the development and deployment of machine learning models and to improve their overall quality and performance in production environments.

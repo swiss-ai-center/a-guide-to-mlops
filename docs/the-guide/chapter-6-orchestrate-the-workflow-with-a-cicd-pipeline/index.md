@@ -75,7 +75,7 @@ Please refer to the correct instructions based on your Git repository provider.
 	Display the Google Service Account key that you have downloaded from Google
 	Cloud.
 
-	```sh
+	```sh title="In a terminal, execute the following command(s)"
 	# Display the Google Service Account key
 	cat ~/Downloads/google-service-account-key.json
 	```
@@ -86,7 +86,7 @@ Please refer to the correct instructions based on your Git repository provider.
 	Google Cloud as `base64`. It allows to hide the secret in GitLab CI logs as a
 	security measure.
 
-	```sh
+	```sh title="In a terminal, execute the following command(s)"
 	# Encode the Google Service Account key to base64
 	base64 -i ~/Downloads/google-service-account-key.json
 	```
@@ -226,7 +226,7 @@ Please refer to the correct instructions based on your Git repository provider.
 
 	Push the CI/CD pipeline configuration file to Git.
 
-	```sh
+	```sh title="In a terminal, execute the following command(s)"
 	# Add the configuration file
 	git add .github/workflows/mlops.yml
 
@@ -241,7 +241,7 @@ Please refer to the correct instructions based on your Git repository provider.
 
 	Push the CI/CD pipeline configuration file to Git.
 
-	```sh
+	```sh title="In a terminal, execute the following command(s)"
 	# Add the configuration file
 	git add .gitlab-ci.yml
 

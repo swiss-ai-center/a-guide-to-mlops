@@ -47,7 +47,7 @@ service.
 Use the following commands to set up a local Git repository in your working
 directory. Your Git service should provide these instructions as well.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Initialize Git in your working directory with `main` as the initial branch
 git init --initial-branch=main
 
@@ -60,7 +60,7 @@ git remote add origin <your git repository url>
 Initialize Git in your working directory. Verify available files for committing
 with these commands.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Check the changes
 git status
 ```
@@ -95,7 +95,7 @@ Additionally, this will help to ensure that the repository size and clone time
 remain optimized.
 
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Data used to train the models
 data
 
@@ -115,7 +115,7 @@ __pycache__/
 
 Check the changes with Git to ensure all wanted files are here.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Add all the available files
 git add .
 
@@ -154,7 +154,7 @@ Changes to be committed:
 
 Commit and push the changes to Git.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Commit the changes
 git commit -m "My first ML experiment shared on Git"
 
@@ -188,7 +188,7 @@ You fixed some of the previous issues:
 Another member of your team can easily clone the experiment
 with the following commands.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Clone the Git repository
 git clone <your git repository url>
 ```

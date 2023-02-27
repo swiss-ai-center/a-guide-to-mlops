@@ -26,7 +26,7 @@ In this chapter, you will learn how to:
 
 As a reminder, the current steps to run the experiment are as follow:
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Prepare the dataset
 python src/prepare.py data/data.xml
 
@@ -56,7 +56,7 @@ them for you. At the end of this chapter, DVC should have updated all the
 Update the `.gitignore` file to remove your experiment data. The required files
 to be ignored will then be added by DVC.
 
-```sh hl_lines="9-11"
+```sh title="In a terminal, execute the following command(s)" hl_lines="9-11"
 ## Python
 
 # Environments
@@ -72,7 +72,7 @@ __pycache__/
 
 Check the differences with Git to validate the changes.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Show the differences with Git
 git diff .gitignore
 ```
@@ -134,7 +134,7 @@ If any of these files change, DVC will re-run the command of the stage when usin
 
 Run the following command to add a new stage called _prepare_ that prepares the dataset.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 dvc stage add -n prepare \
   -p prepare.seed,prepare.split \
   -d src/prepare.py -d data/data.xml \
@@ -156,7 +156,7 @@ Take some time to explore the `dvc.yaml` file and to understand how the pipeline
 
 Run the following command to create a new stage called _featurize_ that performs the features extraction.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 dvc stage add -n featurize \
   -p featurize.max_features,featurize.ngrams \
   -d src/featurization.py -d data/prepared \
@@ -180,7 +180,7 @@ Explore the `dvc.yaml` file to understand how the pipeline is updated.
 
 Run the following command to create a new stage called _train_ that trains the model.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 dvc stage add -n train \
   -p train.seed,train.n_est,train.min_split \
   -d src/train.py -d data/features \
@@ -203,7 +203,7 @@ Explore the `dvc.yaml` file to understand how the pipeline is updated.
 
 Run the following command to create a new stage called _evaluate_ that evaluates the model.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 dvc stage add -n evaluate \
   -d src/evaluate.py -d model.pkl \
   -O evaluation/plots/metrics \
@@ -229,7 +229,7 @@ Here, `no-cache` prevents DVC from caching the metrics and plots.
 DVC has the ability to generate images for the plots.
 The following command are used to tune the axes of the plots.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Set the axes for the `precision_recall_curve`
 dvc plots modify evaluation/plots/prc.json -x recall -y precision
 
@@ -250,7 +250,7 @@ see all the stages and their dependencies.
 Notice that DVC also updated the main `.gitignore` file with the model, as it is an output of the
 `train` stage.
 
-```sh hl_lines="12"
+```sh title="In a terminal, execute the following command(s)" hl_lines="12"
 ## Python
 
 # Environments
@@ -269,7 +269,7 @@ __pycache__/
 
 You can visualize the pipeline to check the stages that will be performed.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Display the Directed Acyclic Graph of the pipeline
 dvc dag
 ```
@@ -310,7 +310,7 @@ If any dependencies/outputs change, the affected stages will be reexecuted.
 
 Now that the pipeline has been defined, you can execute it and reproduce the experiment.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Execute only the required pipeline stages
 dvc repro
 ```
@@ -324,7 +324,7 @@ dvc repro
 
 Check the changes with Git to ensure all wanted files are here.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Add all the files
 git add .
 
@@ -352,7 +352,7 @@ Changes to be committed:
 
 Push all the DVC changes to the remote storage and all the Git changes to the remote repository.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Upload the experiment data and cache to the remote bucket
 dvc push
 
@@ -388,7 +388,7 @@ You fixed some of the previous issues:
 With the help of DVC, another member of your team can now easily reproduce your
 experiment and, thanks to caching, only the required steps will be executed.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Execute the pipeline
 dvc repro
 ```

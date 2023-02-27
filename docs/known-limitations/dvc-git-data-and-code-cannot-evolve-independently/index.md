@@ -1,7 +1,5 @@
 # DVC & Git: Data and code cannot evolve independently
 
-This section covers the reflexions to improve the current workflow.
-
 ## Observations
 
 As DVC is used on top of Git, when the data is updated, the metadata files linked with Git must be updated as well.

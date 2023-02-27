@@ -68,7 +68,7 @@ storage provider.
 Alternatively, you can set the `GOOGLE_APPLICATION_CREDENTIALS` environment
 variable to the path of the credentials file.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Initialize and login to Google Cloud
 gcloud init
 
@@ -119,7 +119,7 @@ matplotlib==3.6.2
 
 Check the differences with Git to validate the changes.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Show the differences with Git
 git diff src/requirements.txt
 ```
@@ -140,7 +140,7 @@ index c8fa80f..ff173a7 100644
 
 You can now install the required packages from the `src/requirements.txt` file.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Install the requirements
 pip install --requirement src/requirements.txt
 ```
@@ -149,7 +149,7 @@ pip install --requirement src/requirements.txt
 
 Initialize DVC with a Google Storage remote bucket. Replace the `<your bucket>` with your own bucket. The `dvcstore` is a user-defined path on the bucket. You can change it if needed.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Initialize DVC in the working directory
 dvc init
 
@@ -166,14 +166,14 @@ Now that DVC has been setup, you can add files to DVC.
 
 Try to add the experiment data. Warning, it will fail.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Try to add the experiment data to DVC
 dvc add data/data.xml
 ```
 
 When executing this command, the following output occurs.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 ERROR: bad DVC file name 'data/data.xml.dvc' is git-ignored.
 ```
 
@@ -184,7 +184,7 @@ the `data` directory. However, you still don't want the directories
 Update the `.gitignore` file by changing `data` to `data/features` and
 `data/prepared`.
 
-```sh hl_lines="2-3"
+```sh title="In a terminal, execute the following command(s)" hl_lines="2-3"
 # Data used to train the models
 data/features
 data/prepared
@@ -203,7 +203,7 @@ __pycache__/
 
 Check the differences with Git to validate the changes.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Show the differences with Git
 git diff .gitignore
 ```
@@ -227,7 +227,7 @@ index f1cbfa9..2b092ce 100644
 
 You can now add the experiment data to DVC without complain!
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Add the experiment data to DVC
 dvc add data/data.xml
 ```
@@ -247,7 +247,7 @@ ignored files. You might need to update existing gitignore files accordingly.
 DVC works as Git. Once you want to share the data, you can use `dvc push` to
 upload the data and its cache to the storage provider.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Upload the experiment data and cache to the remote bucket
 dvc push
 ```
@@ -256,7 +256,7 @@ dvc push
 
 Check the changes with Git to ensure all wanted files are here.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Add all the files
 git add .
 
@@ -286,7 +286,7 @@ Changes to be committed:
 You can now push the changes to Git so all team members can get the data from
 DVC as well.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Commit the changes
 git commit -m "My ML experiment data is saved with DVC"
 
@@ -318,7 +318,7 @@ You fixed some of the previous issues:
 When used by another member of the team, they can easily get a copy of the
 experiment data from DVC with the following commands.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Download experiment data from DVC
 dvc pull
 ```

@@ -34,7 +34,7 @@ mlem[fastapi]==0.4.3
 
 Check the differences with Git to validate the changes.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Show the differences with Git
 git diff src/requirements.txt
 ```
@@ -55,14 +55,14 @@ index 351dc82..6fc53a9 100644
 
 You can now install the required packages from the `src/requirements.txt` file.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Install the requirements
 pip install --requirement src/requirements.txt
 ```
 
 ### Initialize and configure MLEM.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Initialize MLEM
 mlem init
 
@@ -173,7 +173,7 @@ save_matrix(df_test, test_words_tfidf_matrix, feature_names, test_output)
 
 Check the differences with Git to better understand the changes.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Show the differences with Git
 git diff src/featurization.py
 ```
@@ -264,7 +264,7 @@ save(
 
 Check the differences with Git to better understand the changes.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Show the differences with Git
 git diff src/train.py
 ```
@@ -398,7 +398,7 @@ with Live("evaluation") as live:
 
 Check the differences with Git to better understand the changes.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Show the differences with Git
 git diff src/evaluate.py 
 ```
@@ -441,7 +441,7 @@ index e18629a..53a17a7 100644
 
 Update the DVC pipeline to reflect the changes in the stages. 
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Update the featurization stage
 dvc stage add --force \
   -n featurize \
@@ -482,7 +482,7 @@ dvc plots modify evaluation/plots/sklearn/confusion_matrix.json -x actual -y pre
 
 Check the differences with Git to better understand the changes.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Show the differences with Git
 git diff dvc.yaml
 ```
@@ -526,7 +526,7 @@ index 0e00f1b..2539fe4 100644
 
 ### Run the experiment
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Run the experiment. DVC will automatically run all required stages
 dvc repro
 ```
@@ -550,7 +550,7 @@ model.
 
 Serve the model with FastAPI.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Serve the model with FastAPI
 mlem serve fastapi --model models/rf
 ```
@@ -691,7 +691,7 @@ programming language.
 
 Check the changes with Git to ensure all wanted files are here.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Add all the files
 git add .
 
@@ -726,7 +726,7 @@ Changes to be committed:
 
 Push the changes to DVC and Git.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Upload the experiment data and cache to the remote bucket
 dvc push
 

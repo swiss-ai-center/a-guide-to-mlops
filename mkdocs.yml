@@ -35,7 +35,6 @@ nav:
       - Annotate new data with Label Studio: label-studio/annotate-new-data-with-label-studio/index.md
       - Export data from Label Studio: label-studio/export-data-from-label-studio/index.md
   - Advanced concepts:
-      - Convert the experiment data from the guide for Label Studio: advanced-concepts/convert-the-experiment-data-from-the-guide-for-label-studio/index.md
       - Deploy MinIO: advanced-concepts/deploy-minio/index.md
       - Deploy Label Studio: advanced-concepts/deploy-label-studio/index.md
       - Link your ML model with Label Studio: advanced-concepts/link-your-ml-model-with-label-studio/index.md

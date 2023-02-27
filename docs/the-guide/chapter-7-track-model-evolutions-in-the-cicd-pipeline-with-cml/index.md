@@ -185,7 +185,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	Check the differences with Git to validate the changes.
 
-	```sh
+	```sh title="In a terminal, execute the following command(s)"
 	# Show the differences with Git
 	git diff .github/workflows/mlops.yml
 	```
@@ -460,7 +460,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	Check the differences with Git to validate the changes.
 
-	```sh
+	```sh title="In a terminal, execute the following command(s)"
 	# Show the differences with Git
 	git diff .gitlab-ci.yml
 	```
@@ -571,7 +571,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 === ":simple-github: GitHub"
 
-	```sh
+	```sh title="In a terminal, execute the following command(s)"
 	# Add the updated workflow
 	git add .github/workflows/mlops.yml
 
@@ -584,7 +584,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 === ":simple-gitlab: GitLab"
 
-	```sh
+	```sh title="In a terminal, execute the following command(s)"
 	# Add the updated GitLab CI
 	git add .gitlab-ci.yml
 	
@@ -632,7 +632,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 On your machine, check out the new branch.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Get the latest updates from the remote origin
 git fetch origin
 
@@ -653,7 +653,7 @@ repro`. You can then commit the changes.
 
 Check the changes with Git to ensure all wanted files are here.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Add all the files
 git add .
 
@@ -682,7 +682,7 @@ Changes to be committed:
         modified:   params.yaml
 ```
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Upload the experiment data and cache to the remote bucket
 dvc push
 
@@ -786,7 +786,7 @@ git push
 
 Now that the merge is done, you can get the changes on the main branch.
 
-```sh
+```sh title="In a terminal, execute the following command(s)"
 # Get the latest updates from the remote origin
 git fetch origin
 

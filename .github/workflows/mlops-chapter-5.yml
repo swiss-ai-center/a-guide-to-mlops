@@ -1,0 +1,42 @@
+name: MLOps Chapter 5
+
+on:
+  # Runs on pushes targeting main branch
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/mlops-chapter-5.yml
+      - docs/the-guide/chapter-5-track-model-evolutions-with-dvc/**/*
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+      - name: Setup DVC
+        uses: iterative/setup-dvc@v1
+        with:
+          version: '2.37.0'
+      - name: Login to Google Cloud
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
+      - name: Train model
+        working-directory: docs/the-guide/chapter-5-track-model-evolutions-with-dvc
+        run: |
+          # Install dependencies
+          pip install --requirement src/requirements.txt
+          # Pull data from DVC
+          dvc pull
+          # Run the experiment
+          dvc repro

@@ -1,7 +1,5 @@
 # Label Studio: Does the predictions made by our ML model really help the person annotating the dataset
 
-## Does the predictions made by our ML model really help the person annotating the dataset
-
 ## Observations
 
 Label Studio can be configured to get predictions from a ML backend. These predictions can help the person annotating the dataset.
