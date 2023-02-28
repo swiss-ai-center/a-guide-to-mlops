@@ -1,4 +1,14 @@
-# Deploy Label Studio
+# Label Studio
+
+As the website of [Label Studio](https://labelstud.io/) mentions:
+
+!!! quote
+
+	A flexible data labeling tool for all data types. Prepare training data for computer vision, natural language processing, speech, voice, and video models.
+
+Label Studio allows to easily annotate datasets.
+
+## Deploy Label Studio
 
 Deploying Label Studio with Docker Compose is a convenient way to quickly set up and manage the application in a containerized environment. Here are the general steps you can follow:
 

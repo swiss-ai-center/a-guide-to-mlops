@@ -318,7 +318,6 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	Take some time to understand the changes made to the file.
 
-
 === ":simple-gitlab: GitLab"
 
 	In order to allow CML to generate reports, a Personal Access Token (PAT) must be

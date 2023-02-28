@@ -776,7 +776,7 @@ journey and the next things you could do with your model.
 - ✅ The experiment can be executed on a clean machine with the help of a CI/CD
   pipeline and CML
 - ✅ The model can be saved and loaded with all have required artifacts for
-  future usage. The model can be served outside of the experiment context.
+  future usage and the model can be served outside of the experiment context.
 
 ## Sources
 

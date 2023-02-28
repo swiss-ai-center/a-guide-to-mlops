@@ -89,7 +89,7 @@ Please refer to the correct instructions based on your Git repository provider.
 	base64 -i ~/Downloads/google-service-account-key.json
 	```
 
-### Store the Google Service Account key as a secret CI/CD variable
+### Store the Google Service Account key as a CI/CD variable
 
 === ":simple-github: GitHub"
 
@@ -212,7 +212,6 @@ Please refer to the correct instructions based on your Git repository provider.
 	    # Run the experiment
 	    - dvc repro
 	```
-
 
 ### Push the CI/CD pipeline configuration file to Git
 

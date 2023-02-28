@@ -1,4 +1,14 @@
-# Deploy MinIO
+# MinIO
+
+As the website of [MinIO](https://min.io/) mentions:
+
+!!! quote
+
+	MinIO offers high-performance, S3 compatible object storage.
+
+MinIO allows to host your data on your own infrastructure.
+
+## Deploy MinIO
 
 Deploying MinIO with Docker Compose is a convenient way to quickly set up and manage the application in a containerized environment. Here are the general steps you can follow:
 
