@@ -27,7 +27,7 @@ dvclive==1.0.0
 pandas==1.5.1
 pyaml==21.10.1
 scikit-learn==1.1.3
-scipy==1.9.3
+scipy==1.10.1
 matplotlib==3.6.2
 mlem[fastapi]==0.4.3
 ```
@@ -48,7 +48,7 @@ index 351dc82..6fc53a9 100644
 +++ b/src/requirements.txt
 @@ -6,3 +6,4 @@ pyaml==21.10.1
  scikit-learn==1.1.3
- scipy==1.9.3
+ scipy==1.10.1
  matplotlib==3.6.2
 +mlem[fastapi]==0.4.3
 ```
