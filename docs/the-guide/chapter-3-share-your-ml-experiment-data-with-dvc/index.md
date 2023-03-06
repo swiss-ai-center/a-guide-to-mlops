@@ -101,6 +101,11 @@ gcloud storage buckets create gs://<my bucket name> \
 	--public-access-prevention
 ```
 
+!!! info
+
+    To be able to create the bucket, the project must be linked to an active billing account. You can set up the billing account from the main GCloud menu on the top left.
+    You will need a credit card. Note that GCloud offers a free trial of $300 credits valid for 90 days.
+
 You now have everything needed for DVC.
 
 ### Install DVC
