@@ -7,7 +7,7 @@ experiment data is not.
 
 The goal of this chapter is to store the data of the experiment in a version control system.
 Git is not suitable for this purpose because of its size limitations.
-Git lfs is a solution to this problem, but it is not as efficient as other version control systems.
+Git LFS is a solution to this problem, but it is not as efficient as other version control systems.
 
 [DVC](../../get-started/the-tools-used-in-this-guide#dvc) is a version control system for data.
 It uses chunking to store large files efficiently and track their changes.
@@ -27,8 +27,8 @@ In this chapter, you will learn how to:
 2. Install Google Cloud CLI
 3. Create the Google Storage Bucket
 4. Install DVC
-5. Initialize and configuring DVC
-6. Update the gitignore file and adding the experiment data to DVC
+5. Initialize and configure DVC
+6. Update the `.gitignore` file and add the experiment data to DVC
 7. Push the data files to DVC
 8. Push the metadata files to Git
 
@@ -40,7 +40,7 @@ Let's get started!
 
 Create a Google Cloud Project by going to the [Google Cloud
 console](https://console.cloud.google.com/), select **Select a project** in the
-upper right corner of the screen and select **New project**.
+upper left corner of the screen and select **New project**.
 
 Name your project and select **Create** to create the project.
 
@@ -48,7 +48,7 @@ A new page opens. Note the ID of your project, it will be used later.
 
 !!! warning
 
-	Always make sure you're in the right project by selecting your project with **Select a project** in the upper right corner of the screen.
+	Always make sure you're in the right project by selecting your project with **Select a project** in the upper left corner of the screen.
 
 ### Install Google Cloud CLI
 
@@ -162,7 +162,7 @@ dvc remote add -d data gs://<my bucket name>/dvcstore
 The effect of the `dvc init` command is to create a `.dvc` directory in the
 working directory. This directory contains the configuration of DVC.
 
-### Update the gitignore file and add the experiment data to DVC
+### Update the .gitignore file and add the experiment data to DVC
 
 Now that DVC has been setup, you can add files to DVC.
 
@@ -240,9 +240,9 @@ used by DVC to download and check the integrity of the files. The `.gitignore`
 file is created to add the `data.xml` file to be ignored by Git. The `.dvc`
 files must be added to Git.
 
-Various DVC commands will automatically try to update the gitignore files. If a
+Various DVC commands will automatically try to update the `.gitignore` files. If a
 `.gitignore` file is already present, it will be updated to include the newly
-ignored files. You might need to update existing gitignore files accordingly. 
+ignored files. You might need to update existing `.gitignore` files accordingly.
 
 ### Push the data files to DVC
 
@@ -309,7 +309,7 @@ In this chapter, you have successfully:
 3. Created the Google Storage Bucket
 4. Installed DVC
 5. Initialized and configuring DVC
-6. Updated the gitignore file and adding the experiment data to DVC
+6. Updated the `.gitignore` file and adding the experiment data to DVC
 7. Pushed the data files to DVC
 8. Pushed the metadata files to Git
 
@@ -318,7 +318,7 @@ You fixed some of the previous issues:
 - ✅ Data no longer needs manual download and is placed in the right directory.
 
 When used by another member of the team, they can easily get a copy of the
-experiment data from DVC with the following commands.
+experiment data from DVC with the following command.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Download experiment data from DVC
@@ -336,7 +336,7 @@ You can now safely continue to the next chapter.
 - ❌ Changes to model are not easily visualized
 - ❌ Experiment may not be reproducible on other machines
 - ❌ Model may have required artifacts that are forgotten or omitted in
-  saved/loadedstate and there is no easy way to use the model outside of the
+  saved/loaded state and there is no easy way to use the model outside of the
   experiment context
 
 You will address these issues in the next chapters for improved efficiency and

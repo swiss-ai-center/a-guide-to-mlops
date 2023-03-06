@@ -5,7 +5,7 @@
 At this point, your code, your data and your execution process should be
 shared with Git and DVC.
 
-One of great advantages of using a DVC pipeline is the ability to reproduce the
+One of the great advantages of using a DVC pipeline is the ability to reproduce the
 experiment. You will now add a CI/CD pipeline to execute the ML experiment
 remotely. This will prevent changes to break the pipeline and to avoid the "but it works on
 my machine" effect.
@@ -96,7 +96,7 @@ Please refer to the correct instructions based on your Git repository provider.
 	Store the output as a CI/CD variable by going to the **Settings** section from
 	the top header of your GitHub repository.
 
-	Select **Secrets > Actions** and select **New repository secret**.
+	Select **Secrets and variables > Actions** and select **New repository secret**.
 
 	Create a new variable named `GCP_SERVICE_ACCOUNT_KEY` with the output value of
 	the Google Service Account key file as its value. Save the variable by selecting
@@ -296,7 +296,7 @@ You can now safely continue to the next chapter.
 - ✅ The experiment can be executed on a clean machine with the help of a CI/CD
   pipeline
 - ❌ Model may have required artifacts that are forgotten or omitted in
-  saved/loadedstate and there is no easy way to use the model outside of the
+  saved/loaded state and there is no easy way to use the model outside of the
   experiment context
 
 You will address these issues in the next chapters for improved efficiency and
