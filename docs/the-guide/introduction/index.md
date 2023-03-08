@@ -24,7 +24,7 @@ The following requirements are necessary to follow this guide.
 
 - A [GitHub](https://github.com/) or a [GitLab](https://gitlab.com/) account
 - A [Google Cloud](https://console.cloud.google.com/) account
-    - Google Cloud might need a credit card
+    - You will need a credit card. Note that Google Cloud offers a free trial of $300 credits valid for 90 days for new accounts.
 - An IDE
     - We recommend to use [Visual Studio Code](https://code.visualstudio.com/)
       to follow this guide.

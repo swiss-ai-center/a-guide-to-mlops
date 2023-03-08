@@ -57,7 +57,7 @@ jobs:
             --labels="cml-runner" \
             --cloud="kubernetes" \
             --cloud-metadata="gpu=true" \
-            --cloud-metadata="spec={nodeName=1}" \
+            --cloud-gpu="k80" \
             --reuse-idle
             # --cloud-type="1-1" \
             # --reuse-idle
