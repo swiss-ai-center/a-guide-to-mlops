@@ -54,7 +54,11 @@ jobs:
           # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#{cpu}-{memory}+{accelerator}*{count}
           cml runner \
             --labels="cml-runner" \
-            --cloud="kubernetes"
+            --cloud="kubernetes" \
+            --cloud-metadata="{nodeSelector={ gpu: 'true' }}" \
+            # --cloud-type="1-1" \
+            --single
+            # --reuse-idle
 
   train:
     needs: setup-runner
