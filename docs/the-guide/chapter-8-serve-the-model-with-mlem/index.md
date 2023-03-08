@@ -775,8 +775,8 @@ journey and the next things you could do with your model.
   plots to identify differences between iterations
 - ✅ The experiment can be executed on a clean machine with the help of a CI/CD
   pipeline and CML
-- ✅ The model can be saved and loaded with all have required artifacts for
-  future usage and the model can be served outside of the experiment context.
+- ✅ The model can be saved and loaded with all required artifacts for future
+  usage and the model can be served outside of the experiment context.
 
 ## Sources
 

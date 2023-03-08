@@ -12,15 +12,15 @@ In this chapter, you will learn how to:
 2. Push the updated CI/CD configuration file to Git
 3. Open an issue in your issue tracker
 4. Create a new branch to add your changes
-5. Check out to the new branch
-6. Commit and pushing the changes that were not commited in [Chapter 5: Track
+5. Check out the new branch
+6. Commit and push the changes that were not commited in [Chapter 5: Track
    model evolutions with
    DVC](../chapter-5-track-model-evolutions-with-dvc)
 7. Create a pull request/merge request
 8. Visualize the execution of the CI/CD pipeline
-9. Visualizie the CML report that is added to your pull request/merge request
+9. Visualize the CML report that is added to your pull request/merge request
 10. Merge the pull request/merge request to the main branch
-11. Switch back to the main branch and pulling latest changes
+11. Switch back to the main branch and pull latest changes
 
 !!! info
 
@@ -646,7 +646,7 @@ DVC](../chapter-5-track-model-evolutions-with-dvc)?
 
 You can now commit them to trigger a change on the remote repository.
 
-If you don't have changes in your working directory, just update the paramerters
+If you don't have changes in your working directory, just update the parameters
 of the experiment in `params.yaml` and reproduce the experiment with `dvc
 repro`. You can then commit the changes.
 
@@ -806,7 +806,7 @@ In this chapter, you have successfully:
 2. Pushed the updated CI/CD configuration file to Git
 3. Opened an issue in your issue tracker
 4. Created a new branch to add your changes
-5. Checked out to the new branch
+5. Checked out the new branch
 6. Commit and pushed the changes that were not commited in [Chapter 5: Track
    model evolutions with
    DVC](../chapter-5-track-model-evolutions-with-dvc)
@@ -835,7 +835,7 @@ You can now safely continue to the next chapter.
 - ✅ The experiment can be executed on a clean machine with the help of a CI/CD
   pipeline and CML
 - ❌ Model may have required artifacts that are forgotten or omitted in
-  saved/loadedstate and there is no easy way to use the model outside of the
+  saved/loaded state and there is no easy way to use the model outside of the
   experiment context
 
 ## Sources

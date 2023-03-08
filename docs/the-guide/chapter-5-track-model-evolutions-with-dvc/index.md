@@ -5,9 +5,9 @@
 In the previous chapter, you did set up a DVC pipeline to reproduce your
 experiment.
 
-Once this stage is created, you'll be able to change our model's configruation,
-evaluate the new configuration and compare it's performance with the last
-commited ones. 
+Once this stage is created, you'll be able to change our model's configuration,
+evaluate the new configuration and compare its performance with the last
+commited ones.
 
 In this chapter, you will learn how to:
 
@@ -274,7 +274,7 @@ You can now safely continue to the next chapter.
   plots to identify differences between iterations
 - ❌ Experiment may not be reproducible on other machines
 - ❌ Model may have required artifacts that are forgotten or omitted in
-  saved/loadedstate and there is no easy way to use the model outside of the
+  saved/loaded state and there is no easy way to use the model outside of the
   experiment context
 
 You will address these issues in the next chapters for improved efficiency and
