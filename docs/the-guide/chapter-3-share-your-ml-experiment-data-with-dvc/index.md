@@ -88,7 +88,7 @@ gcloud auth application-default login
 
 ### Create the Google Storage Bucket
 
-Create the Google Storage Bucket to store the data with the Google Cloud CLI.
+Create the Google Storage Bucket to store the data with the Google Cloud CLI. You should ideally select a location close to where most of the expected traffic will come from. You can view the available regions at [Cloud locations](https://cloud.google.com/about/locations).
 
 !!! warning
 
@@ -103,7 +103,8 @@ gcloud storage buckets create gs://<my bucket name> \
 
 !!! info
 
-You should ideally select a location close to where most of the expected traffic will come from. You can view the available regions at [Cloud locations](https://cloud.google.com/about/locations).
+    To be able to create the bucket, the project must be linked to an active billing account. You can set up the billing account from the main Google Cloud console menu on the top left.
+    You will need a credit card. Note that Google Cloud offers a free trial of $300 credits valid for 90 days.
 
 You now have everything needed for DVC.
 
