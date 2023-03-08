@@ -339,7 +339,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	Select **Variables** and select **Add variable**.
 
-	Create a new variable named `CML_PAT_TOKEN` with the PAT value as its value.
+	Create a new variable named `CML_PAT` with the PAT value as its value.
 
 	- **Protect variable**: _Unchecked_
 	- **Mask variable**: _Checked_
@@ -400,7 +400,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	  rules:
 	    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 	  variables:
-	    REPO_TOKEN: $CML_PAT_TOKEN
+	    REPO_TOKEN: $CML_PAT
 	  script:
 	    - |
 	      # Compare parameters to main branch
@@ -496,7 +496,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	+  rules:
 	+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 	+  variables:
-	+    REPO_TOKEN: $CML_PAT_TOKEN
+	+    REPO_TOKEN: $CML_PAT
 	+  script:
 	+    - |
 	+      # Compare parameters to main branch

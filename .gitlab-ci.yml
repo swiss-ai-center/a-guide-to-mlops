@@ -83,7 +83,7 @@ MLOps Step 7 - report:
         - ".gitlab-ci.yml"
         - "docs/the-guide/step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml"
   variables:
-    REPO_TOKEN: $CML_PAT_TOKEN
+    REPO_TOKEN: $CML_PAT
   before_script:
     # Switch to step path
     - cd docs/the-guide/step-7-track-model-evolutions-in-the-cicd-pipeline-with-cml
