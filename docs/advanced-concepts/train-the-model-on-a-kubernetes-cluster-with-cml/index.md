@@ -36,44 +36,18 @@ gcloud container clusters create \
 	mlops-kubernetes
 ```
 
-### Save the kubeconfig file
-
-The kubeconfig file allows to authenticate to a Kubernetes cluster. This file will be used in the CI/CD pipeline to create runners.
-
-```sh title="Execute the following command(s) in a terminal"
-gcloud container clusters get-credentials mlops-kubernetes \
-	--zone=europe-west6-a
-```
-
 ### Install kubectl
 
-Install the Kubernetes CLI to interact with Kubernetes clusters.
+Install the Kubernetes CLI using the Google Cloud CLI to interact with Kubernetes clusters.
 
-=== ":simple-linux: Linux"
+```sh title="Execute the following command(s) in a terminal"
+# Install kubectl with gcloud
+gcloud components install kubectl
+```
 
-	```sh title="Execute the following command(s) in a terminal"
-	curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-	```
+### Validate kubectl can access the cluster
 
-=== ":simple-apple: macOS (Intel)"
-
-	```sh title="Execute the following command(s) in a terminal"
-	curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/darwin/amd64/kubectl"
-	```
-
-=== ":simple-apple: macOS (Apple Silicon)"
-
-	```sh title="Execute the following command(s) in a terminal"
-	curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/darwin/arm64/kubectl"
-	```
-
-=== ":simple-windows: Windows"
-
-	```sh title="Execute the following command(s) in a terminal"
-	curl.exe -LO "https://dl.k8s.io/release/v1.26.0/bin/windows/amd64/kubectl.exe"
-	```
-
-### Check the Kubernetes access with kubectl
+Validate kubectl can access the cluster using Google Cloud credentials.
 
 ```sh title="Execute the following command(s) in a terminal"
 kubectl get namespaces
@@ -89,67 +63,59 @@ kube-public       Active   25m
 kube-system       Active   25m
 ```
 
-### Display the kubectl config
+### Display the nodes labels
 
-=== ":simple-github: GitHub"
+Display the nodes labels with the following command.
 
-	Display the configuration of kubectl.
+```sh title="Execute the following command(s) in a terminal"
+kubectl get nodes --show-labels
+```
 
-	```sh title="Execute the following command(s) in a terminal"
-	# Display the kubectl configuration
-	kubectl config view
-	```
+The output should be similar to this. As noticed, you have two nodes in your cluster.
 
-=== ":simple-gitlab: GitLab"
+```
+NAME                                              STATUS   ROLES    AGE   VERSION            LABELS
+gke-mlops-kubernetes-default-pool-d4f966ea-8rbn   Ready    <none>   49s   v1.24.9-gke.3200   beta.kubernetes.io/arch=amd64,[...]
+gke-mlops-kubernetes-default-pool-d4f966ea-p7qm   Ready    <none>   50s   v1.24.9-gke.3200   beta.kubernetes.io/arch=amd64,[...]
+```
 
-	Encode and display the configuration of kubectl as `base64`. It allows to hide the secret in GitLab CI logs as a
-	security measure.
+### Labelize the nodes
 
-	!!! tip
+Let's imagine one node has a GPU and the other one doesn't. You can labelize the nodes to be able to use the GPU node for the training of the model. For our expiriment, there is no need to have a GPU to train the model but it's for demonstration purposes.
 
-		If on Linux, you can use the command `kubectl config view | base64 -w 0 -i -`.
+```sh title="Execute the following command(s) in a terminal"
+kubectl label nodes <your-node-1-name> gpu=true
+kubectl label nodes <your-node-2-name> gpu=false
+```
 
-	```sh title="Execute the following command(s) in a terminal"
-	# Encode the kubectl configuration to base64
-	kubectl config view | base64 -i -
-	```
+In the previous example, the nodes are named `gke-mlops-kubernetes-default-pool-d4f966ea-8rbn` and `gke-mlops-kubernetes-default-pool-d4f966ea-p7qm`. The command will be the following.
 
-### Store the content of the kubeconfig file as a CI/CD variable 
+```sh title="Labelization example"
+kubectl label nodes gke-mlops-kubernetes-default-pool-d4f966ea-8rbn gpu=true
+kubectl label nodes gke-mlops-kubernetes-default-pool-d4f966ea-p7qm gpu=false
+```
 
-=== ":simple-github: GitHub"
-
-	Store the output as a CI/CD variable by going to the **Settings** section from
-	the top header of your GitHub repository.
-
-	Select **Secrets > Actions** and select **New repository secret**.
-
-	Create a new variable named `GCP_KUBECONFIG` with the output value of
-	the Google Service Account key file as its value. Save the variable by selecting
-	**Add secret**.
-
-=== ":simple-gitlab: GitLab"
-
-	Store the output as a CI/CD Variable by going to **Settings > CI/CD** from the
-	left sidebar of your GitLab project.
-
-	Select **Variables** and select **Add variable**.
-
-	Create a new variable named `GCP_KUBECONFIG` with
-	the Google Service Account key file encoded in `base64` as its value.
-
-	- **Protect variable**: _Unchecked_
-	- **Mask variable**: _Checked_
-	- **Expand variable reference**: _Unchecked_
-
-	Save the variable by clicking **Add variable**.
+You can check the labels with the `kubectl get nodes --show-labels` command. You should see for both nodes the `gpu` label with the value `true` or `false`.
 
 ### Update the CI/CD configuration file
 
+You'll now update the CI/CD configuration file to start a runner on the Kubernetes cluster with the help of CML. Using the labels defined previously, you'll be able to start the training of the model on the node with the GPU.
+
 === ":simple-github: GitHub"
 
-	In order to allow CML to , a Personal Access Token (PAT) must be
-	created. A Project or a Group Access Token are not sufficient for the usage of
-	CML's runners that will be used in the next steps.
+	In order to allow CML to create a self-hosted runner, a Personal Access Token (PAT) must be
+	created.
+
+	Follow the [_Personal Access Token_ - cml.dev](https://cml.dev/doc/self-hosted-runners?tab=GitHub#personal-access-token) guide to create a personal access token named `CML_PAT` with the `repo` scope.
+
+	Store the Personal Access Token as a CI/CD variable by going to the **Settings** section from
+	the top header of your GitHub repository.
+
+	Select **Secrets and variables > Actions** and select **New repository secret**.
+
+	Create a new variable named `CML_PAT` with the value of
+	the Personal Access Token as its value. Save the variable by selecting
+	**Add secret**.
 
 	Update the `.github/workflows/mlops.yml` file.
 
@@ -180,139 +146,8 @@ kube-system       Active   25m
 
 	Update the `.gitlab-ci.yml` file.
 
-	```yaml title=".gitlab-ci.yml" hl_lines="18-37 42-46"
-	stages:
-	  - train
-	  - report
-	
-	variables:
-	  # Change pip's cache directory to be inside the project directory since we can
-	  # only cache local items.
-	  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
-	  # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
-	  GIT_DEPTH: '0'
-	
-	# Pip's cache doesn't store the python packages
-	# https://pip.pypa.io/en/stable/reference/pip_install/#caching
-	cache:
-	  paths:
-	    - .cache/pip
-	
-	setup-runner:
-	  stage: setup runner
-	  image: iterativeai/cml:0-dvc2-base1
-	  before_script:
-	    # Install Kubernetes
-	    - export KUBERNETES_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt)
-	    - curl -LO -s "https://dl.k8s.io/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl"
-	    - curl -LO -s "https://dl.k8s.io/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl.sha256"
-	    - echo "$(cat kubectl.sha256) kubectl" | sha256sum --check
-	    - sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-	    # https://cml.dev/doc/self-hosted-runners?tab=Kubernetes#cloud-compute-resource-credentials
-	    - export KUBERNETES_CONFIGURATION=$(cat $GCP_KUBECONFIG)
-	  script:
-	    # https://cml.dev/doc/ref/runner#--cloud-type
-	    # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#machine-type
-	    # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#{cpu}-{memory}+{accelerator}*{count}
-	    - cml runner
-	        --labels="cml-runner"
-	        --cloud="kubernetes"
-	        --cloud-type="64-256000+nvidia-tesla-k80*1"
-	
-	train:
-	  stage: train
-	  image: iterativeai/cml:0-dvc2-base1
-	  needs:
-	    - setup-runner
-	  tags:
-	    # Uses the runner set up by CML
-	    - cml-runner
-	  rules:
-	    - if: $CI_COMMIT_BRANCH == "main"
-	    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-	  variables:
-	    # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
-	    GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
-	  before_script:
-	    # Set the Google Service Account key
-	    - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
-	    # Install dependencies
-	    - pip install --requirement src/requirements.txt
-	  script:
-	    # Pull data from DVC
-	    - dvc pull
-	    # Run the experiment
-	    - dvc repro
-	  artifacts:
-	    expire_in: 1 week
-	    paths:
-	      - "evaluation"
-	
-	report:
-	  stage: report
-	  image: iterativeai/cml:0-dvc2-base1
-	  needs:
-	    - job: train
-	      artifacts: true
-	  rules:
-	    - if: $CI_COMMIT_BRANCH == "main"
-	    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-	  variables:
-	    REPO_TOKEN: $CML_PAT_TOKEN
-	  script:
-	    - |
-	      # Compare parameters to main branch
-	      echo "# Params workflow vs. main" >> report.md
-	      echo >> report.md
-	      dvc params diff main --show-md >> report.md
-	      echo >> report.md
-	
-	      # Compare metrics to main branch
-	      echo "# Metrics workflow vs. main" >> report.md
-	      echo >> report.md
-	      dvc metrics diff main --show-md >> report.md
-	      echo >> report.md
-	
-	      # Create plots
-	      echo "# Plots" >> report.md
-	      echo >> report.md
-	
-	      echo "## Precision recall curve" >> report.md
-	      echo >> report.md
-	      dvc plots diff \
-	        --target evaluation/plots/prc.json \
-	        -x recall \
-	        -y precision \
-	        --show-vega main > vega.json
-	      vl2png vega.json > prc.png
-	      echo '![](./prc.png "Precision recall curve")' >> report.md
-	      echo >> report.md
-	
-	      echo "## Roc curve" >> report.md
-	      echo >> report.md
-	      dvc plots diff \
-	        --target evaluation/plots/sklearn/roc.json \
-	        -x fpr \
-	        -y tpr \
-	        --show-vega main > vega.json
-	      vl2png vega.json > roc.png
-	      echo '![](./roc.png "Roc curve")' >> report.md
-	      echo >> report.md
-	
-	      echo "## Confusion matrix" >> report.md
-	      echo >> report.md
-	      dvc plots diff \
-	        --target evaluation/plots/sklearn/confusion_matrix.json \
-	        --template confusion \
-	        -x actual \
-	        -y predicted \
-	        --show-vega main > vega.json
-	      vl2png vega.json > confusion_matrix.png
-	      echo '![](./confusion_matrix.png "Confusion Matrix")' >> report.md
-	      echo >> report.md
-	
-	      # Publish the CML report
-	      cml comment create --target=pr --publish report.md
+	```yaml title=".gitlab-ci.yml" hl_lines="2 19-38 43-47"
+	TODO
 	```
 
 	Check the differences with Git to validate the changes.
@@ -329,42 +164,7 @@ kube-system       Active   25m
 	index 561d04f..fad1002 100644
 	--- a/.gitlab-ci.yml
 	+++ b/.gitlab-ci.yml
-	@@ -15,9 +15,35 @@ cache:
-	   paths:
-	     - .cache/pip
-
-	+setup-runner:
-	+  stage: setup runner
-	+  image: iterativeai/cml:0-dvc2-base1
-	+  before_script:
-	+    # Install Kubernetes
-	+    - export KUBERNETES_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt)
-	+    - curl -LO -s "https://dl.k8s.io/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl"
-	+    - curl -LO -s "https://dl.k8s.io/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl.sha256"
-	+    - echo "$(cat kubectl.sha256) kubectl" | sha256sum --check
-	+    - sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-	+    # https://cml.dev/doc/self-hosted-runners?tab=Kubernetes#cloud-compute-resource-credentials
-	+    - export KUBERNETES_CONFIGURATION=$(cat $GCP_KUBECONFIG)
-	+  script:
-	+    # https://cml.dev/doc/ref/runner#--cloud-type
-	+    # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#machine-type
-	+    # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#{cpu}-{memory}+{accelerator}*{count}
-	+    - cml runner
-	+        --labels="cml-runner"
-	+        --cloud="kubernetes"
-	+        --cloud-type="64-256000+nvidia-tesla-k80*1"
-	+
-	 train:
-	   stage: train
-	   image: iterativeai/cml:0-dvc2-base1
-	+  needs:
-	+    - setup-runner
-	+  tags:
-	+    # Uses the runner set up by CML
-	+    - cml-runner
-	   rules:
-	     - if: $CI_COMMIT_BRANCH == "main"
-	     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+	TODO
 	```
 
 	Take some time to understand the changes made to the file.
@@ -427,7 +227,7 @@ In this chapter, you have successfully:
 
 ## Sources
 
-Highly inspired by the [_Self-hosted (On-premise or Cloud) Runners_ - cml.dev](https://cml.dev/doc/self-hosted-runners), [_Install Tools_ - kubernetes.io](https://kubernetes.io/docs/tasks/tools/) and the [_gcloud container clusters create_ - cloud.google.com](https://cloud.google.com/sdk/gcloud/reference/container/clusters/create) guides.
+Highly inspired by the [_Self-hosted (On-premise or Cloud) Runners_ - cml.dev](https://cml.dev/doc/self-hosted-runners), [_Install kubectl and configure cluster access_ - cloud.google.com](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl), [_gcloud container clusters create_ - cloud.google.com](https://cloud.google.com/sdk/gcloud/reference/container/clusters/create), the [_Install Tools_ - kubernetes.io](https://kubernetes.io/docs/tasks/tools/), [_Assigning Pods to Nodes_ - kubernetes.io](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector) and [_Assign Pods to Nodes_ - kubernetes.io](https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/) guides.
 
 Want to see what the result at the end of this chapter should look like? Have a
 look at the Git repository directory here:

@@ -203,7 +203,7 @@ You can now safely continue to the next chapter.
 - ❌ Changes to model are not easily visualized
 - ❌ Experiment may not be reproducible on other machines
 - ❌ Model may have required artifacts that are forgotten or omitted in
-  saved/loadedstate and there is no easy way to use the model outside of the
+  saved/loaded state and there is no easy way to use the model outside of the
   experiment context
 
 You will address these issues in the next chapters for improved efficiency and

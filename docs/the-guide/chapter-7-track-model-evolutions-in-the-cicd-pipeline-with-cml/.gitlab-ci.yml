@@ -48,7 +48,7 @@ report:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   variables:
-    REPO_TOKEN: $CML_PAT_TOKEN
+    REPO_TOKEN: $CML_PAT
   script:
     - |
       # Compare parameters to main branch

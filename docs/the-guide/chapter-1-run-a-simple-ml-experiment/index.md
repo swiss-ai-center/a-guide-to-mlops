@@ -99,7 +99,7 @@ The following table describes the files present in the codebase.
 
 ### Download and set up the dataset
 
-Your colleague provide you the following URL to download an archive containing
+Your colleague provided you the following URL to download an archive containing
 the dataset for this machine learning experiment.
 
 ```sh title="Execute the following command(s) in a terminal"
@@ -107,7 +107,7 @@ the dataset for this machine learning experiment.
 wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/data.zip -O data.zip
 ```
 
-This archive must decompresed and its contents must be moved in the
+This archive must be decompressed and its contents be moved in the
  `data` directory in the working directory of the experiment.
 
 ```sh title="Execute the following command(s) in a terminal"
@@ -232,6 +232,7 @@ Your working directory should now be similar to this:
 5. This is new.
 
 Here, the following should be noted:
+
 - the `prepare.py` script created the `data/prepared` directory and splitted the
   dataset into a training set and a test set
 - the `featurization.py` script created the `data/features` directory and
@@ -273,7 +274,7 @@ You can now safely continue to the next chapter.
 - ❌ Changes to model are not easily visualized
 - ❌ Experiment may not be reproducible on other machines
 - ❌ Model may have required artifacts that are forgotten or omitted in
-  saved/loadedstate and there is no easy way to use the model outside of the
+  saved/loaded state and there is no easy way to use the model outside of the
   experiment context
 
 You will address these issues in the next chapters for improved efficiency and
@@ -282,7 +283,7 @@ collaboration. Continue the guide to learn how.
 ## Sources
 
 Highly inspired by the [_Get Started: Data Pipelines_ -
-dvc.org](https://dvc.org/doc/start/data-management/pipelines) guide.
+dvc.org](https://dvc.org/doc/start/data-management/data-pipelines) guide.
 
 Want to see what the result at the end of this chapter should look like? Have a
 look at the Git repository directory here:

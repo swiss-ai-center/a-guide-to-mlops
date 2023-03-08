@@ -14,7 +14,7 @@ makes it easy to reproduce the experiment and track the effects of changes.
 
 In this chapter, you will learn how to:
 
-1. Remove custom rules from the gitignore file
+1. Remove custom rules from the `.gitignore` file
 2. Set up four DVC pipeline stages:
     - `prepare`
     - `featurize`
@@ -44,7 +44,7 @@ Let's get started!
 
 ## Steps
 
-### Remove custom rules from the gitignore file
+### Remove custom rules from the .gitignore file
 
 As seen in the previous chapter, DVC can update `.gitignore` files.
 
@@ -117,6 +117,7 @@ This stage will be added to the `dvc.yaml` file that describes the pipeline.
 This file can also be edited manually.
 
 The `dvc stage add` accepts some options:
+
 - `-n` specifies the name of the stage
 - `-p` specifies the parameters of the stage (referenced in the `params.yaml` file)
 - `-d` specifies the dependencies of the stage
@@ -371,7 +372,7 @@ Congrats! You have defined a pipeline and know how to reproduce your experiment.
 
 In this chapter, you have successfully:
 
-1. Removed custom rules from the gitignore file
+1. Removed custom rules from the `.gitignore` file
 2. Set up four DVC pipeline stages
     - `prepare`
     - `featurize`
@@ -411,7 +412,7 @@ You can now safely continue to the next chapter.
 - ❌ Changes to model are not easily visualized
 - ❌ Experiment may not be reproducible on other machines
 - ❌ Model may have required artifacts that are forgotten or omitted in
-  saved/loadedstate and there is no easy way to use the model outside of the
+  saved/loaded state and there is no easy way to use the model outside of the
   experiment context
 
 You will address these issues in the next chapters for improved efficiency and
@@ -420,7 +421,7 @@ collaboration. Continue the guide to learn how.
 ## Sources
 
 Highly inspired by the [_Get Started: Data Pipelines_ -
-dvc.org](https://dvc.org/doc/start/data-management/pipelines) guide.
+dvc.org](https://dvc.org/doc/start/data-management/data-pipelines) guide.
 
 Want to see what the result at the end of this chapter should look like? Have a
 look at the Git repository directory here:

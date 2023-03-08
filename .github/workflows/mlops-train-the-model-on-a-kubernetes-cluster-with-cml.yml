@@ -44,7 +44,7 @@ jobs:
         uses: iterative/setup-cml@v1
         with:
           version: '0.18.17'
-      - name: Deploy runner on Kubernetes
+      - name: Initialize runner on Kubernetes
         env:
           REPO_TOKEN: ${{ secrets.CML_PAT }}
         run: |
@@ -53,8 +53,14 @@ jobs:
           # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#machine-type
           # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#{cpu}-{memory}+{accelerator}*{count}
           cml runner \
+            --name="CML Runner" \
             --labels="cml-runner" \
-            --cloud="kubernetes"
+            --cloud="kubernetes" \
+            --cloud-metadata="gpu=true" \
+            --cloud-metadata="spec={nodeName=1}" \
+            --reuse-idle
+            # --cloud-type="1-1" \
+            # --reuse-idle
 
   train:
     needs: setup-runner
