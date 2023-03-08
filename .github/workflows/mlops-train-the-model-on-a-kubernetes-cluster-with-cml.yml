@@ -18,29 +18,43 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   setup-runner:
     runs-on: ubuntu-latest
+    env:
+      KUBECTL_BINARY_URL: https://dl.k8s.io/release/v1.25.3/bin/linux/amd64/kubectl
+      KUBECTL_BINARY_SHA_URL: https://dl.k8s.io/v1.25.3/bin/linux/amd64/kubectl.sha256
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - uses: actions/checkout@v3
+      - name: Login to Google Cloud
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
+      - name: Get Google Cloud's Kubernetes credentials
+        uses: 'google-github-actions/get-gke-credentials@v1'
+        with:
+          cluster_name: 'mlops-kubernetes'
+          location: 'europe-west6-a'
       - name: Setup CML
         uses: iterative/setup-cml@v1
         with:
           version: '0.18.17'
       - name: Deploy runner on Kubernetes
         env:
-          REPO_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          KUBERNETES_CONFIGURATION: ${{ secrets.GCP_KUBECONFIG }}
+          REPO_TOKEN: ${{ secrets.CML_PAT }}
         run: |
+          export KUBERNETES_CONFIGURATION=$(cat $KUBECONFIG)
           # https://cml.dev/doc/ref/runner#--cloud-type
           # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#machine-type
           # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#{cpu}-{memory}+{accelerator}*{count}
           cml runner \
             --labels="cml-runner" \
-            --cloud="kubernetes" \
-            --cloud-type="64-256000"
+            --cloud="kubernetes"
 
   train:
     needs: setup-runner

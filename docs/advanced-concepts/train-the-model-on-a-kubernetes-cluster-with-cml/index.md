@@ -36,44 +36,18 @@ gcloud container clusters create \
 	mlops-kubernetes
 ```
 
-### Save the kubeconfig file
-
-The kubeconfig file allows to authenticate to a Kubernetes cluster. This file will be used in the CI/CD pipeline to create runners.
-
-```sh title="Execute the following command(s) in a terminal"
-gcloud container clusters get-credentials mlops-kubernetes \
-	--zone=europe-west6-a
-```
-
 ### Install kubectl
 
-Install the Kubernetes CLI to interact with Kubernetes clusters.
+Install the Kubernetes CLI using the Google Cloud CLI to interact with Kubernetes clusters.
 
-=== ":simple-linux: Linux"
+```sh title="Execute the following command(s) in a terminal"
+# Install kubectl with gcloud
+gcloud components install kubectl
+```
 
-	```sh title="Execute the following command(s) in a terminal"
-	curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-	```
+### Validate kubectl can access the cluster
 
-=== ":simple-apple: macOS (Intel)"
-
-	```sh title="Execute the following command(s) in a terminal"
-	curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/darwin/amd64/kubectl"
-	```
-
-=== ":simple-apple: macOS (Apple Silicon)"
-
-	```sh title="Execute the following command(s) in a terminal"
-	curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/darwin/arm64/kubectl"
-	```
-
-=== ":simple-windows: Windows"
-
-	```sh title="Execute the following command(s) in a terminal"
-	curl.exe -LO "https://dl.k8s.io/release/v1.26.0/bin/windows/amd64/kubectl.exe"
-	```
-
-### Check the Kubernetes access with kubectl
+Validate kubectl can access the cluster using Google Cloud credentials.
 
 ```sh title="Execute the following command(s) in a terminal"
 kubectl get namespaces
@@ -89,6 +63,63 @@ kube-public       Active   25m
 kube-system       Active   25m
 ```
 
+### Generate a universal kubeconfig file
+
+The kubeconfig file allows to authenticate to a Kubernetes cluster. This file will be used in the CI/CD pipeline to create runners.
+
+In order to obtain a kubeconfig file that can be used without the need of the Google Cloud CLI (gcloud), a number of steps are required. This is done to demonstrate the usage of Kubernetes and CML without being coupled to a specific authentication provider such as gcloud.
+
+Create a file `my-service-account.yml`. It will allow to create a user on the Google Kubernetes Cluster we'll use later to authenticate to the cluster.
+
+```yaml title="my-service-account.yaml"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: my-user
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: my-user-role
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "watch", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: my-user-role-binding
+subjects:
+  - kind: ServiceAccount
+    name: my-user
+roleRef:
+  kind: Role
+  name: my-user-role
+  apiGroup: rbac.authorization.k8s.io
+```
+
+Create the resources on the Google Kubernetes cluster.
+
+```sh title="Execute the following command(s) in a terminal"
+kubectl apply -f my-service-account.yml
+```
+
+
+```sh title="Execute the following command(s) in a terminal"
+export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+
+gcloud container clusters get-credentials mlops-kubernetes \
+	--zone=europe-west6-a
+```
+
+### Check the Kubernetes access with kubectl
+
+```sh title="Execute the following command(s) in a terminal"
+./kubectl get namespaces
+```
+
 ### Display the kubectl config
 
 === ":simple-github: GitHub"
@@ -97,7 +128,7 @@ kube-system       Active   25m
 
 	```sh title="Execute the following command(s) in a terminal"
 	# Display the kubectl configuration
-	kubectl config view
+	./kubectl config view
 	```
 
 === ":simple-gitlab: GitLab"
@@ -111,7 +142,7 @@ kube-system       Active   25m
 
 	```sh title="Execute the following command(s) in a terminal"
 	# Encode the kubectl configuration to base64
-	kubectl config view | base64 -i -
+	./kubectl config view | base64 -i -
 	```
 
 ### Store the content of the kubeconfig file as a CI/CD variable 
@@ -147,9 +178,19 @@ kube-system       Active   25m
 
 === ":simple-github: GitHub"
 
-	In order to allow CML to , a Personal Access Token (PAT) must be
-	created. A Project or a Group Access Token are not sufficient for the usage of
-	CML's runners that will be used in the next steps.
+	In order to allow CML to create a self-hosted runner, a Personal Access Token (PAT) must be
+	created.
+
+	Follow the [_Personal Access Token_ - cml.dev](https://cml.dev/doc/self-hosted-runners?tab=GitHub#personal-access-token) guide to create a personal access token named `CML_PAT` with the `repo` scope.
+
+	Store the Personal Access Token as a CI/CD variable by going to the **Settings** section from
+	the top header of your GitHub repository.
+
+	Select **Secrets > Actions** and select **New repository secret**.
+
+	Create a new variable named `CML_PAT` with the value of
+	the Personal Access Token as its value. Save the variable by selecting
+	**Add secret**.
 
 	Update the `.github/workflows/mlops.yml` file.
 
@@ -180,8 +221,9 @@ kube-system       Active   25m
 
 	Update the `.gitlab-ci.yml` file.
 
-	```yaml title=".gitlab-ci.yml" hl_lines="18-37 42-46"
+	```yaml title=".gitlab-ci.yml" hl_lines="2 19-38 43-47"
 	stages:
+	  - setup runner
 	  - train
 	  - report
 	
@@ -258,7 +300,7 @@ kube-system       Active   25m
 	    - if: $CI_COMMIT_BRANCH == "main"
 	    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 	  variables:
-	    REPO_TOKEN: $CML_PAT_TOKEN
+	    REPO_TOKEN: $CML_PAT
 	  script:
 	    - |
 	      # Compare parameters to main branch
@@ -427,7 +469,7 @@ In this chapter, you have successfully:
 
 ## Sources
 
-Highly inspired by the [_Self-hosted (On-premise or Cloud) Runners_ - cml.dev](https://cml.dev/doc/self-hosted-runners), [_Install Tools_ - kubernetes.io](https://kubernetes.io/docs/tasks/tools/) and the [_gcloud container clusters create_ - cloud.google.com](https://cloud.google.com/sdk/gcloud/reference/container/clusters/create) guides.
+Highly inspired by the [_Self-hosted (On-premise or Cloud) Runners_ - cml.dev](https://cml.dev/doc/self-hosted-runners), [_Install kubectl and configure cluster access_ - cloud.google.com](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl), [_gcloud container clusters create_ - cloud.google.com](https://cloud.google.com/sdk/gcloud/reference/container/clusters/create) and the [_Install Tools_ - kubernetes.io](https://kubernetes.io/docs/tasks/tools/) guides.
 
 Want to see what the result at the end of this chapter should look like? Have a
 look at the Git repository directory here:
