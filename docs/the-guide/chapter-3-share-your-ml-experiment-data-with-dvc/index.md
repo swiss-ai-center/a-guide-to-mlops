@@ -101,6 +101,10 @@ gcloud storage buckets create gs://<my bucket name> \
 	--public-access-prevention
 ```
 
+!!! info
+
+You should ideally select a location close to where most of the expected traffic will come from. You can view the available regions at [Cloud locations](https://cloud.google.com/about/locations).
+
 You now have everything needed for DVC.
 
 ### Install DVC
