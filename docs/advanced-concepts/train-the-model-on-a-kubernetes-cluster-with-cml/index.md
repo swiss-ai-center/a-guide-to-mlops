@@ -2,7 +2,7 @@
 
 !!! warning
 
-	This is a work in progress.
+	This is a work in progress. CML does not support the Kubernetes arbitrary node selector at the moment. Check this issue for more information: <https://github.com/iterative/cml/issues/1365>.
 
 ## Introduction
 
@@ -119,8 +119,179 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 
 	Update the `.github/workflows/mlops.yml` file.
 
-	```yaml  title=".github/workflows/mlops.yml" hl_lines="9-10 42-133"
-	TODO
+	```yaml  title=".github/workflows/mlops.yml" hl_lines="15-17 20-50 53-55"
+	name: MLOps
+	
+	on:
+	  # Runs on pushes targeting main branch
+	  push:
+	    branches:
+	      - main
+	
+	  # Runs on pull requests
+	  pull_request:
+	
+	  # Allows you to run this workflow manually from the Actions tab
+	  workflow_dispatch:
+	
+	permissions:
+	  contents: read
+	  id-token: write
+	
+	jobs:
+	  setup-runner:
+	    runs-on: ubuntu-latest
+	    steps:
+	      - name: Checkout repository
+	        uses: actions/checkout@v3
+	      - name: Login to Google Cloud
+	        uses: 'google-github-actions/auth@v1'
+	        with:
+	          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
+	      - name: Get Google Cloud's Kubernetes credentials
+	        uses: 'google-github-actions/get-gke-credentials@v1'
+	        with:
+	          cluster_name: 'mlops-kubernetes'
+	          location: 'europe-west6-a'
+	      - name: Setup CML
+	        uses: iterative/setup-cml@v1
+	        with:
+	          version: '0.18.17'
+	      - name: Initialize runner on Kubernetes
+	        env:
+	          REPO_TOKEN: ${{ secrets.CML_PAT }}
+	        run: |
+	          export KUBERNETES_CONFIGURATION=$(cat $KUBECONFIG)
+	          # https://cml.dev/doc/ref/runner#--cloud-type
+	          # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#machine-type
+	          # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#{cpu}-{memory}	+{accelerator}*{count}
+	          cml runner \
+	            --name="CML" \
+	            --labels="cml-runner" \
+	            --cloud="kubernetes" \
+	            --reuse-idle
+	
+	  train:
+	    needs: setup-runner
+	    runs-on: [self-hosted, cml-runner]
+	    timeout-minutes: 50400 # 35 days
+	    steps:
+	      - name: Checkout repository
+	        uses: actions/checkout@v3
+	      - name: Setup Python
+	        uses: actions/setup-python@v4
+	        with:
+	          python-version: '3.10'
+	          cache: 'pip'
+	      - name: Setup DVC
+	        uses: iterative/setup-dvc@v1
+	        with:
+	          version: '2.37.0'
+	      - name: Login to Google Cloud
+	        uses: 'google-github-actions/auth@v1'
+	        with:
+	          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
+	      - name: Train model
+	        working-directory: docs/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml
+	        run: |
+	          # Install dependencies
+	          pip install --requirement src/requirements.txt
+	          # Pull data from DVC
+	          dvc pull
+	          # Run the experiment
+	          dvc repro
+	      - name: Upload evaluation results
+	        uses: actions/upload-artifact@v3
+	        with:
+	          path: docs/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml/evaluation
+	          retention-days: 5
+	
+	  report:
+	    needs: train
+	    if: github.event_name == 'pull_request'
+	    runs-on: ubuntu-latest
+	    steps:
+	      - name: Checkout repository
+	        uses: actions/checkout@v3
+	        with:
+	          ref: ${{ github.event.pull_request.head.sha }}
+	      - name: Download evaluation results
+	        uses: actions/download-artifact@v3
+	      - name: Copy evaluation results
+	        shell: bash
+	        run: |
+	          # Delete current evaluation results
+	          rm -rf docs/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml/evaluation
+	          # Replace with the new evaluation results
+	          mv artifact docs/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml/evaluation
+	      - name: Setup DVC
+	        uses: iterative/setup-dvc@v1
+	        with:
+	          version: '2.37.0'
+	      - name: Setup CML
+	        uses: iterative/setup-cml@v1
+	        with:
+	          version: '0.18.17'
+	      - name: Create CML report
+	        env:
+	          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+	        working-directory: docs/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml
+	        run: |
+	          # Fetch all other Git branches
+	          git fetch --depth=1 origin main:main
+	
+	          # Compare parameters to main branch
+	          echo "# Params workflow vs. main" >> report.md
+	          echo >> report.md
+	          dvc params diff main --show-md >> report.md
+	          echo >> report.md
+	
+	          # Compare metrics to main branch
+	          echo "# Metrics workflow vs. main" >> report.md
+	          echo >> report.md
+	          dvc metrics diff main --show-md >> report.md
+	          echo >> report.md
+	
+	          # Create plots
+	          echo "# Plots" >> report.md
+	          echo >> report.md
+	
+	          echo "## Precision recall curve" >> report.md
+	          echo >> report.md
+	          dvc plots diff \
+	            --target evaluation/plots/prc.json \
+	            -x recall \
+	            -y precision \
+	            --show-vega main > vega.json
+	          vl2png vega.json > prc.png
+	          echo '![](./prc.png "Precision recall curve")' >> report.md
+	          echo >> report.md
+	
+	          echo "## Roc curve" >> report.md
+	          echo >> report.md
+	          dvc plots diff \
+	            --target evaluation/plots/sklearn/roc.json \
+	            -x fpr \
+	            -y tpr \
+	            --show-vega main > vega.json
+	          vl2png vega.json > roc.png
+	          echo '![](./roc.png "Roc curve")' >> report.md
+	          echo >> report.md
+	
+	          echo "## Confusion matrix" >> report.md
+	          echo >> report.md
+	          dvc plots diff \
+	            --target evaluation/plots/sklearn/confusion_matrix.json \
+	            --template confusion \
+	            -x actual \
+	            -y predicted \
+	            --show-vega main > vega.json
+	          vl2png vega.json > confusion_matrix.png
+	          echo '![](./confusion_matrix.png "Confusion Matrix")' >> report.md
+	          echo >> report.md
+	
+	          # Publish the CML report
+	          cml comment create --target=pr --publish report.md
 	```
 
 	Check the differences with Git to validate the changes.
@@ -137,7 +308,55 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 	index 0ca4d29..10afa49 100644
 	--- a/.github/workflows/mlops.yml
 	+++ b/.github/workflows/mlops.yml
-	TODO
+	@@ -12,9 +12,47 @@ on:
+	   # Allows you to run this workflow manually from the Actions tab
+	   workflow_dispatch:
+	 
+	+permissions:
+	+  contents: read
+	+  id-token: write
+	+
+	 jobs:
+	-  train:
+	+  setup-runner:
+	     runs-on: ubuntu-latest
+	+    steps:
+	+      - name: Checkout repository
+	+        uses: actions/checkout@v3
+	+      - name: Login to Google Cloud
+	+        uses: 'google-github-actions/auth@v1'
+	+        with:
+	+          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
+	+      - name: Get Google Cloud's Kubernetes credentials
+	+        uses: 'google-github-actions/get-gke-credentials@v1'
+	+        with:
+	+          cluster_name: 'mlops-kubernetes'
+	+          location: 'europe-west6-a'
+	+      - name: Setup CML
+	+        uses: iterative/setup-cml@v1
+	+        with:
+	+          version: '0.18.17'
+	+      - name: Initialize runner on Kubernetes
+	+        env:
+	+          REPO_TOKEN: ${{ secrets.CML_PAT }}
+	+        run: |
+	+          export KUBERNETES_CONFIGURATION=$(cat $KUBECONFIG)
+	+          # https://cml.dev/doc/ref/runner#--cloud-type
+	+          # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#machine-type
+	+          # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#{cpu}-{memory}   	+{accelerator}*{count}
+	+          cml runner \
+	+            --name="CML" \
+	+            --labels="cml-runner" \
+	+            --cloud="kubernetes" \
+	+            --reuse-idle
+	+
+	+  train:
+	+    needs: setup-runner
+	+    runs-on: [self-hosted, cml-runner]
+	+    timeout-minutes: 50400 # 35 days
+	     steps:
+	       - name: Checkout repository
+	         uses: actions/checkout@v3
 	```
 
 	Take some time to understand the changes made to the file.
@@ -146,8 +365,144 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 
 	Update the `.gitlab-ci.yml` file.
 
-	```yaml title=".gitlab-ci.yml" hl_lines="2 19-38 43-47"
-	TODO
+	```yaml title=".gitlab-ci.yml" hl_lines="2 19-43 48-51"
+	stages:
+	  - setup runner
+	  - train
+	  - report
+	
+	variables:
+	  # Change pip's cache directory to be inside the project directory since we can
+	  # only cache local items.
+	  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+	  # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
+	  GIT_DEPTH: '0'
+	
+	# Pip's cache doesn't store the python packages
+	# https://pip.pypa.io/en/stable/reference/pip_install/#caching
+	cache:
+	  paths:
+	    - .cache/pip
+	
+	setup-runner:
+	  stage: setup runner
+	  image: iterativeai/cml:0-dvc2-base1
+	  rules:
+	    - if: $CI_COMMIT_BRANCH == "main"
+	    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+	  variables:
+	    # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/	add#google-cloud-storage
+	    GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
+	  before_script:
+	    # Install Google Cloud CLI (gcloud)
+	    - sudo apt-get install apt-transport-https ca-certificates gnupg
+	    - curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo tee /usr/share/keyrings/cloud.google.gpg
+	    - sudo apt-get update && sudo apt-get install google-cloud-cli
+	    # Set the Google Service Account key
+	    - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+	    # Authenticate to Google Cloud with the service key
+	    - gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
+	  script:
+	    # https://cml.dev/doc/ref/runner
+	    - cml runner
+	        --name="CML"
+	        --labels="cml-runner"
+	        --cloud="kubernetes"
+	        --reuse-idle
+	
+	train:
+	  stage: train
+	  image: iterativeai/cml:0-dvc2-base1
+	  tags:
+	    - cml-runner
+	  needs:
+	    - setup-runner
+	  rules:
+	    - if: $CI_COMMIT_BRANCH == "main"
+	    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+	  variables:
+	    # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/	add#google-cloud-storage
+	    GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
+	  before_script:
+	    # Set the Google Service Account key
+	    - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+	    # Install dependencies
+	    - pip install --requirement src/requirements.txt
+	  script:
+	    # Pull data from DVC
+	    - dvc pull
+	    # Run the experiment
+	    - dvc repro
+	  artifacts:
+	    expire_in: 1 week
+	    paths:
+	      - "evaluation"
+	
+	report:
+	  stage: report
+	  image: iterativeai/cml:0-dvc2-base1
+	  needs:
+	    - job: train
+	      artifacts: true
+	  rules:
+	    - if: $CI_COMMIT_BRANCH == "main"
+	    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+	  variables:
+	    REPO_TOKEN: $CML_PAT
+	  script:
+	    - |
+	      # Compare parameters to main branch
+	      echo "# Params workflow vs. main" >> report.md
+	      echo >> report.md
+	      dvc params diff main --show-md >> report.md
+	      echo >> report.md
+	
+	      # Compare metrics to main branch
+	      echo "# Metrics workflow vs. main" >> report.md
+	      echo >> report.md
+	      dvc metrics diff main --show-md >> report.md
+	      echo >> report.md
+	
+	      # Create plots
+	      echo "# Plots" >> report.md
+	      echo >> report.md
+	
+	      echo "## Precision recall curve" >> report.md
+	      echo >> report.md
+	      dvc plots diff \
+	        --target evaluation/plots/prc.json \
+	        -x recall \
+	        -y precision \
+	        --show-vega main > vega.json
+	      vl2png vega.json > prc.png
+	      echo '![](./prc.png "Precision recall curve")' >> report.md
+	      echo >> report.md
+	
+	      echo "## Roc curve" >> report.md
+	      echo >> report.md
+	      dvc plots diff \
+	        --target evaluation/plots/sklearn/roc.json \
+	        -x fpr \
+	        -y tpr \
+	        --show-vega main > vega.json
+	      vl2png vega.json > roc.png
+	      echo '![](./roc.png "Roc curve")' >> report.md
+	      echo >> report.md
+	
+	      echo "## Confusion matrix" >> report.md
+	      echo >> report.md
+	      dvc plots diff \
+	        --target evaluation/plots/sklearn/confusion_matrix.json \
+	        --template confusion \
+	        -x actual \
+	        -y predicted \
+	        --show-vega main > vega.json
+	      vl2png vega.json > confusion_matrix.png
+	      echo '![](./confusion_matrix.png "Confusion Matrix")' >> report.md
+	      echo >> report.md
+	
+	      # Publish the CML report
+	      cml comment create --target=pr --publish report.md
 	```
 
 	Check the differences with Git to validate the changes.
@@ -164,7 +519,52 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 	index 561d04f..fad1002 100644
 	--- a/.gitlab-ci.yml
 	+++ b/.gitlab-ci.yml
-	TODO
+	@@ -1,4 +1,5 @@
+	 stages:
+	+  - setup runner
+	   - train
+	   - report
+	 
+	@@ -15,9 +16,39 @@ cache:
+	   paths:
+	     - .cache/pip
+	 
+	+setup-runner:
+	+  stage: setup runner
+	+  image: iterativeai/cml:0-dvc2-base1
+	+  rules:
+	+    - if: $CI_COMMIT_BRANCH == "main"
+	+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+	+  variables:
+	+    # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
+	+    GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
+	+  before_script:
+	+    # Install Google Cloud CLI (gcloud)
+	+    - sudo apt-get install apt-transport-https ca-certificates gnupg
+	+    - curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo tee /usr/share/keyrings/cloud.google.gpg
+	+    - sudo apt-get update && sudo apt-get install google-cloud-cli
+	+    # Set the Google Service Account key
+	+    - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+	+    # Authenticate to Google Cloud with the service key
+	+    - gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
+	+  script:
+	+    # https://cml.dev/doc/ref/runner
+	+    - cml runner
+	+        --name="CML"
+	+        --labels="cml-runner"
+	+        --cloud="kubernetes"
+	+        --reuse-idle
+	+
+	 train:
+	   stage: train
+	   image: iterativeai/cml:0-dvc2-base1
+	+  tags:
+	+    - cml-runner
+	+  needs:
+	+    - setup-runner
+	   rules:
+	     - if: $CI_COMMIT_BRANCH == "main"
+	     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 	```
 
 	Take some time to understand the changes made to the file.
@@ -207,7 +607,7 @@ On GitLab, you can see the pipeline running on the **CI/CD > Pipelines** page.
 
 On GitHub, you can see the pipeline running on the **Actions** page.
 
-TODO
+On Google Cloud Console, you can see the pod that has been created on the **Kubernetes Engine > Workloads** page.
 
 This chapter is done, you can check the summary.
 

@@ -25,9 +25,6 @@ permissions:
 jobs:
   setup-runner:
     runs-on: ubuntu-latest
-    env:
-      KUBECTL_BINARY_URL: https://dl.k8s.io/release/v1.25.3/bin/linux/amd64/kubectl
-      KUBECTL_BINARY_SHA_URL: https://dl.k8s.io/v1.25.3/bin/linux/amd64/kubectl.sha256
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -56,11 +53,7 @@ jobs:
             --name="CML" \
             --labels="cml-runner" \
             --cloud="kubernetes" \
-            --cloud-type="s" \
             --reuse-idle
-            # --cloud-gpu="k80" \
-            # --cloud-type="1-1" \
-            # --reuse-idle
 
   train:
     needs: setup-runner
