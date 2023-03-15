@@ -25,6 +25,7 @@ permissions:
 jobs:
   setup-runner:
     runs-on: ubuntu-latest
+    container: iterativeai/cml:0-dvc2-base1
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -37,10 +38,6 @@ jobs:
         with:
           cluster_name: 'mlops-kubernetes'
           location: 'europe-west6-a'
-      - name: Setup CML
-        uses: iterative/setup-cml@v1
-        with:
-          version: '0.18.21'
       - name: Initialize runner on Kubernetes
         env:
           REPO_TOKEN: ${{ secrets.CML_PAT }}
