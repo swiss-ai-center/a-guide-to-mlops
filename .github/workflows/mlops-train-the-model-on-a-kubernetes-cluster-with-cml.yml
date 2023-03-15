@@ -40,7 +40,7 @@ jobs:
       - name: Setup CML
         uses: iterative/setup-cml@v1
         with:
-          version: '0.18.17'
+          version: '0.18.21'
       - name: Initialize runner on Kubernetes
         env:
           REPO_TOKEN: ${{ secrets.CML_PAT }}
@@ -53,6 +53,7 @@ jobs:
             --name="CML" \
             --labels="cml-runner" \
             --cloud="kubernetes" \
+            --cloud-type="1-2000+nvidia-tesla-k80*1" \
             --reuse-idle
 
   train:
