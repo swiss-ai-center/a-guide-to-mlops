@@ -563,7 +563,7 @@ mlem serve fastapi --model models/rf
 ```
 
 MLEM will load the model, create the FastAPI app and start it. You can then
-access the auto-generated model documentation on <http://0.0.0.0:8080/docs>.
+access the auto-generated model documentation on <http://localhost:8080/docs>.
 
 !!! info
 
