@@ -43,4 +43,5 @@ Here is a summary of the resources you created during the guide.
 - A GitHub/GitLab repository/project
 - A Google Cloud project
 - A Google Storage bucket
+- A Google service account
 - A GitLab Personal Access Token if you used GitLab
