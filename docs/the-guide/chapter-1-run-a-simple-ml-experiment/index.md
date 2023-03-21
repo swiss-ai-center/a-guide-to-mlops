@@ -97,6 +97,10 @@ The following table describes the files present in the codebase.
 | `src/evaluate.py`      | Evaluate the ML model using DVC                  | The model to evaluate                 | The results of the model evaluation in `evaluation` directory |
 | `params.yaml`          | The parameters to run the ML experiment          | -                                     | -                                                             |
 
+!!! info
+    The `params.yaml` is the default file used by DVC. You can find the reference here: <https://dvc.org/doc/command-reference/params>.
+
+
 ### Download and set up the dataset
 
 Your colleague provided you the following URL to download an archive containing
