@@ -244,6 +244,13 @@ Here, the following should be noted:
 
 Take some time to get familiar with the scripts and the results.
 
+Running the `evaluate.py` also generates a report at `evaluation/report.html` with the metrics and plots.
+
+Here is a preview of the report:
+
+![Evaluation Report](../media/evaluation_report.png)
+
+
 ## Summary
 
 Congratulations! You've successfully reproduced the experiment on your machine. 
