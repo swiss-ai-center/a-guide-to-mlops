@@ -79,7 +79,11 @@ gcloud projects list
 
 # Select your Google Cloud project
 gcloud config set project <id of your gcp project>
+```
 
+Then run the following command to authenticate to Google Cloud with the Application Default.
+
+```sh title="Execute the following command(s) in a terminal"
 # Set authentication for our ML experiment
 # https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
 # https://cloud.google.com/sdk/gcloud/reference/auth/application-default/login
