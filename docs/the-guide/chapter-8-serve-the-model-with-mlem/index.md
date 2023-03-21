@@ -21,7 +21,7 @@ In this chapter, you will learn how to:
 
 Update the `src/requirements.txt` file to include mlem and its dependencies.
 
-``` hl_lines="8"
+``` title="src/requirements.txt" hl_lines="8"
 dvc[gs]==2.37.0
 dvclive==1.0.0
 pandas==1.5.1
@@ -83,7 +83,7 @@ working directory. This file contains the configuration of MLEM.
 Update the `src/featurization.py` file to save the `CountVectorizer` and the
 `TfidfTransformer` with MLEM.
 
-```py hl_lines="11 74-75"
+```py title="src/featurization.py" hl_lines="11 74-75"
 import os
 import pickle
 import sys
@@ -211,7 +211,7 @@ ames, train_output)
 
 Update the `src/train.py` file to save the model with its artifacts with MLEM.
 
-```py hl_lines="9 40-48"
+```py title="src/train.py" hl_lines="9 40-48"
 import os
 import pickle
 import sys
@@ -314,7 +314,7 @@ index 97bb9d0..87e4756 100644
 
 Update the `src/evaluate.py` file to load the model from MLEM.
 
-```py hl_lines="13 23"
+```py title="src/evaluate.py" hl_lines="13 23"
 import json
 import math
 import os

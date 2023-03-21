@@ -115,7 +115,7 @@ Update the `src/requirements.txt` file to include some additional packages.
 
 Here, the `dvc[gs]` package enables support for Google Cloud Storage.
 
-``` hl_lines="1"
+``` title="src/requirements.txt" hl_lines="1"
 dvc[gs]==2.37.0
 dvclive==1.0.0
 pandas==1.5.1
@@ -181,7 +181,7 @@ dvc add data/data.xml
 
 When executing this command, the following output occurs.
 
-```sh title="Execute the following command(s) in a terminal"
+```sh
 ERROR: bad DVC file name 'data/data.xml.dvc' is git-ignored.
 ```
 
