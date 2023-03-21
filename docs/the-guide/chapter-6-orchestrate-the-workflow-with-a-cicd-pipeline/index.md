@@ -33,7 +33,7 @@ Create the Google Service Account and its associated Google Service Account Key 
 
 Replace  `<id of your gcp project>` with your own project ID.
 
-The key will be stored in your **Downloads** directory under the name `google-service-account-key.json`.
+The key will be stored in your **~/.config/gcloud** directory under the name `dvc-google-service-account-key.json`.
 
 !!! danger
 
@@ -51,7 +51,7 @@ gcloud projects add-iam-policy-binding <id of your gcp project> \
 	--role="roles/viewer"
 
 # Create the Google Service Account Key
-gcloud iam service-accounts keys create ~/Downloads/google-service-account-key.json \
+gcloud iam service-accounts keys create ~/.config/gcloud/dvc-google-service-account-key.json \
 	--iam-account=dvc-service-account@<id of your gcp project>.iam.gserviceaccount.com
 ```
 
@@ -71,7 +71,7 @@ Please refer to the correct instructions based on your Git repository provider.
 
 	```sh title="Execute the following command(s) in a terminal"
 	# Display the Google Service Account key
-	cat ~/Downloads/google-service-account-key.json
+	cat ~/.config/gcloud/dvc-google-service-account-key.json
 	```
 
 === ":simple-gitlab: GitLab"
@@ -82,11 +82,11 @@ Please refer to the correct instructions based on your Git repository provider.
 
 	!!! tip
 
-		If on Linux, you can use the command `base64 -w 0 -i ~/Downloads/google-service-account-key.json`.
+		If on Linux, you can use the command `base64 -w 0 -i ~/.config/gcloud/dvc-google-service-account-key.json`.
 
 	```sh title="Execute the following command(s) in a terminal"
 	# Encode the Google Service Account key to base64
-	base64 -i ~/Downloads/google-service-account-key.json
+	base64 -i ~/.config/gcloud/dvc-google-service-account-key.json
 	```
 
 ### Store the Google Service Account key as a CI/CD variable
