@@ -700,6 +700,10 @@ git push
 	should automatically appear. Click on it. Name the pull request and select
 	**Create pull request**.
 
+	!!! info
+
+		You might need to wait for the pipeline to finish before the button appears.
+
 === ":simple-gitlab: GitLab"
 
 	The merge request has already been created from the issue earlier, you can
