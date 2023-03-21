@@ -288,6 +288,7 @@ Changes to be committed:
         new file:   .dvcignore
         modified:   .gitignore
         new file:   data/.gitignore
+        new file:   data/README.md
         new file:   data/data.xml.dvc
         modified:   src/requirements.txt
 ```

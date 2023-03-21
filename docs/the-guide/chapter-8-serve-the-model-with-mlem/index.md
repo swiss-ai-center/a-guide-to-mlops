@@ -413,21 +413,28 @@ index e18629a..53a17a7 100644
 @@ -10,6 +10,7 @@ from sklearn import tree
  from dvclive import Live
  from matplotlib import pyplot as plt
- 
+
 +from mlem.api import load
- 
+
  if len(sys.argv) != 3:
      sys.stderr.write("Arguments error. Usage:\n")
-@@ -19,8 +20,7 @@ if len(sys.argv) != 3:
+@@ -19,14 +20,13 @@ if len(sys.argv) != 3:
  model_file = sys.argv[1]
  matrix_file = os.path.join(sys.argv[2], "test.pkl")
- 
+
 -with open(model_file, "rb") as fd:
 -    model = pickle.load(fd)
 +model = load(model_file)
- 
+
  with open(matrix_file, "rb") as fd:
      matrix, feature_names = pickle.load(fd)
+
+ labels = matrix[:, 1].toarray().astype(int)
+-x = matrix[:, 2:]
++x = matrix[:, 2:].toarray()
+
+ predictions_by_class = model.predict_proba(x)
+ predictions = predictions_by_class[:, 1]
 ```
 
 !!! info
