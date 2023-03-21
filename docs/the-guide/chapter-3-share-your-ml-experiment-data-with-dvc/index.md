@@ -96,9 +96,11 @@ To be able to create the bucket, the project must be linked to an active billing
 
 Create the Google Storage Bucket to store the data with the Google Cloud CLI. You should ideally select a location close to where most of the expected traffic will come from. You can view the available regions at [Cloud locations](https://cloud.google.com/about/locations).
 
+Change the `<my bucket name>` to your own bucket name (ex: `mlopsdemo`).
+
 !!! warning
 
-	The bucket name must be unique accross all Google Cloud projects and users. Change the `<my bucket name>` to your own bucket name.
+	The bucket name must be unique accross all Google Cloud projects and users.
 
 ```sh title="Execute the following command(s) in a terminal"
 gcloud storage buckets create gs://<my bucket name> \
