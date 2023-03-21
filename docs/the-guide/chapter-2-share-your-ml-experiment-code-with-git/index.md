@@ -95,7 +95,10 @@ Additionally, this will help to ensure that the repository size and clone time
 remain optimized.
 
 
-```sh title="Execute the following command(s) in a terminal"
+```sh title=".gitignore"
+## Macos Specific
+.DS_Store
+
 # Data used to train the models
 data
 

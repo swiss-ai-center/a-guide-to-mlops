@@ -56,7 +56,10 @@ them for you. At the end of this chapter, DVC should have updated all the
 Update the `.gitignore` file to remove your experiment data. The required files
 to be ignored will then be added by DVC.
 
-```sh title="Execute the following command(s) in a terminal" hl_lines="9-11"
+```sh title=".gitignore" hl_lines="12-14"
+## Macos Specific
+.DS_Store
+
 ## Python
 
 # Environments
@@ -251,7 +254,10 @@ see all the stages and their dependencies.
 Notice that DVC also updated the main `.gitignore` file with the model, as it is an output of the
 `train` stage.
 
-```sh title="Execute the following command(s) in a terminal" hl_lines="12"
+```sh title=".gitignore" hl_lines="15"
+## Macos Specific
+.DS_Store
+
 ## Python
 
 # Environments
