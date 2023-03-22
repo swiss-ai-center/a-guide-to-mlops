@@ -10,6 +10,6 @@ code {
 	--md-code-hl-color: var(--md-accent-fg-color--transparent);
 }
 
-img {
+article img {
 	border-radius: .2rem;
 }
