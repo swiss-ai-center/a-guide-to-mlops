@@ -250,7 +250,6 @@ Here is a preview of the report:
 
 ![Evaluation Report](../media/evaluation_report.png){ loading=lazy }
 
-
 ## Summary
 
 Congratulations! You've successfully reproduced the experiment on your machine. 

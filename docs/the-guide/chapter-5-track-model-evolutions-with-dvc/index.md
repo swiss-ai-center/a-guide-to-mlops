@@ -154,7 +154,6 @@ Here is a preview of the report:
 
 ![Plots Diff](../media/plots_diff.png){ loading=lazy }
 
-
 #### Summary of the model evolutions
 
 You should notice the improvements made to the model thanks to the DVC reports.
