@@ -55,6 +55,10 @@ gcloud iam service-accounts keys create ~/.config/gcloud/dvc-google-service-acco
 	--iam-account=dvc-service-account@<id of your gcp project>.iam.gserviceaccount.com
 ```
 
+!!! info
+	The path `~/.config/gcloud` should be created when installing `gcloud`. If does
+	not exist, you can create it by running `mkdir -p ~/.config/gcloud`
+
 ### Store the Google Service Account key and setup the CI/CD pipeline
 
 You are about the setup the CI/CD pipeline to run the experiment each time there
