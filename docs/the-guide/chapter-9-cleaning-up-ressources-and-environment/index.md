@@ -1,6 +1,6 @@
 # Cleaning up resources and environments
 
-Now that you have completed the guide, it's important to clean up the resources and environments you created to avoid incurring unnecessary costs. Here's a step-by-step guide to help you do that.
+Now that you have completed the guide, it's important to clean up the resources and environments you created to avoid incurring unnecessary costs and security related issues. Here's a step-by-step guide to help you do that.
 
 !!! warning
 
