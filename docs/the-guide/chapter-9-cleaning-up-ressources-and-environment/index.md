@@ -4,7 +4,7 @@ Now that you have completed the guide, it's important to clean up the resources 
 
 !!! warning
 
-    If you are using a new google cloud account, make sure to delete the resources you created before the credits are consumed. Otherwise, **you will be charged for the resources you created.**
+    If you are using a new Google Cloud account, make sure to delete the resources you created before the credits are consumed. Otherwise, **you will be charged for the resources you created.**
 
 ## Steps
 
@@ -14,7 +14,7 @@ Now that you have completed the guide, it's important to clean up the resources 
 
 !!! warning
 
-    Ignore this if you plan deleting the git repository. When deleting the Google Storage bucket, **it will break the DVC remote**. You will need to reconfigure it to a new remote if you want to keep the git repository to use DVC.
+    Ignore this if you plan deleting the git repository. When deleting the Google Storage bucket, **it will break the DVC remote**. You will need to reconfigure it to a new remote if you want to keep the Git repository to use DVC.
 
 To delete the Google Storage bucket you created:
 
