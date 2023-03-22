@@ -152,7 +152,7 @@ compare the two iterations.
 
 Here is a preview of the report:
 
-![Plots Diff](../media/plots_diff.png){ loading=lazy }
+![Plots Diff](../../assets/images/plots_diff.png){ loading=lazy }
 
 #### Summary of the model evolutions
 

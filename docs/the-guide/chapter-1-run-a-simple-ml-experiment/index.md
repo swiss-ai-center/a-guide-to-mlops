@@ -248,7 +248,7 @@ Running the `evaluate.py` also generates a report at `evaluation/report.html` wi
 
 Here is a preview of the report:
 
-![Evaluation Report](../media/evaluation_report.png){ loading=lazy }
+![Evaluation Report](../../assets/images/evaluation_report.png){ loading=lazy }
 
 ## Summary
 
