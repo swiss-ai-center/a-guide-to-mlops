@@ -3,17 +3,17 @@
 Now that you have completed the guide, it's important to clean up the resources and environments you created to avoid incurring unnecessary costs. Here's a step-by-step guide to help you do that.
 
 !!! warning
+
     If you are using a new google cloud account, make sure to delete the resources you created before the credits are consumed. Otherwise, **you will be charged for the resources you created.**
 
-
 ## Steps
-
 
 ### Google Cloud
 
 #### Delete the Google Storage bucket
 
 !!! warning
+
     Ignore this if you plan deleting the git repository. When deleting the Google Storage bucket, **it will break the DVC remote**. You will need to reconfigure it to a new remote if you want to keep the git repository to use DVC.
 
 To delete the Google Storage bucket you created:
@@ -51,11 +51,11 @@ To delete the Google Cloud project you created:
 3. Click on **Delete** at the top of the page.
 4. Follow the instructions to shut down the project.
 
-
 ### Repository
+
 === ":simple-github: GitHub"
 
-	To delete the GitHub repository you created:
+    To delete the GitHub repository you created:
 
     1. Go to the repository page in GitHub.
     2. Click on **Settings** above the repository.
@@ -74,7 +74,7 @@ To delete the Google Cloud project you created:
     5. Click on the **Delete project** button.
     6. Follow the instructions to delete the repository.
 
-	To delete the GitLab Personal Access Token you created:
+    To delete the GitLab Personal Access Token you created:
 
     1. Go to your GitLab **Profile preferences** at the top right of the page.
     2. Click on **Access Tokens** in the left sidebar.
@@ -82,11 +82,9 @@ To delete the Google Cloud project you created:
     4. Click on the **Revoke** button next to it.
     5. Follow the instructions to revoke the token.
 
-
 ### Clean up your local environment
 
 To clean up your local environment, you can simply delete the project directory you created for this guide.
-
 
 ### Double-check everything
 
@@ -101,7 +99,6 @@ Here is a checklist of all the resources and environments you created:
 - GitHub/GitLab repository
 - If you used GitLab, you also created a Personal Access Token
 - Project directory on your local machine
-
 
 ## Summary
 
