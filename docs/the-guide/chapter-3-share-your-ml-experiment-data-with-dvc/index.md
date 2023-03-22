@@ -194,10 +194,7 @@ the `data` directory. However, you still don't want the directories
 Update the `.gitignore` file by changing `data` to `data/features` and
 `data/prepared`.
 
-```sh title=".gitignore" hl_lines="5-6"
-## Macos Specific
-.DS_Store
-
+```sh title="Execute the following command(s) in a terminal" hl_lines="2-3"
 # Data used to train the models
 data/features
 data/prepared

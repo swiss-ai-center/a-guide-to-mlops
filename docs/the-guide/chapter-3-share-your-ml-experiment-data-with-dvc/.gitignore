@@ -1,6 +1,3 @@
-## Macos Specific
-.DS_Store
-
 # Data used to train the models
 data/features
 data/prepared
