@@ -111,6 +111,9 @@ data
 __pycache__/
 ```
 
+!!! info
+    If using macOS, you might want to ignore `.DS_Store` files as well to avoid pushing Apple's metadata files to your repository.
+
 ### Check the changes
 
 Check the changes with Git to ensure all wanted files are here.
