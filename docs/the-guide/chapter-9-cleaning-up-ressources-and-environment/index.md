@@ -16,7 +16,13 @@ Now that you have completed the guide, it's important to clean up the resources 
 
     Ignore this if you plan deleting the git repository. When deleting the Google Storage bucket, **it will break the DVC remote**. You will need to reconfigure it to a new remote if you want to keep the Git repository to use DVC.
 
-To delete the Google Storage bucket you created:
+To delete the Google Storage bucket you created you can excute the following command:
+
+```sh title="Execute the following command(s) in a terminal"
+gcloud storage rm --recursive gs://<your bucket name>
+```
+
+Alternatively, you can delete the bucket from the Google Cloud Console:
 
 1. Go to the [Google Cloud Storage Console](https://console.cloud.google.com/storage){:target="_blank"}.
 2. Make sure you selected the correct project.
@@ -26,7 +32,13 @@ To delete the Google Storage bucket you created:
 
 #### Delete the Service Account
 
-To delete the service account you created:
+To delete the service account you created you can excute the following command:
+
+```sh title="Execute the following command(s) in a terminal"
+gcloud iam service-accounts delete dvc-service-account@<id of your gcp project>.iam.gserviceaccount.com
+```
+
+Alternatively, you can delete the service account from the Google Cloud Console:
 
 1. Go to the [Google Cloud IAM Console](https://console.cloud.google.com/iam-admin/serviceaccounts){:target="_blank"}.
 2. Make sure you selected the correct project.
