@@ -27,7 +27,7 @@ nav:
       - "Chapter 6: Orchestrate the workflow with a CI/CD pipeline": the-guide/chapter-6-orchestrate-the-workflow-with-a-cicd-pipeline/index.md
       - "Chapter 7: Track model evolutions in the CI/CD pipeline with CML": the-guide/chapter-7-track-model-evolutions-in-the-cicd-pipeline-with-cml/index.md
       - "Chapter 8: Serve the model with MLEM": the-guide/chapter-8-serve-the-model-with-mlem/index.md
-      - Conclusion: the-guide/conclusion/index.md
+      - "Clean up and Conclusion": the-guide/clean-up-and-conclusion/index.md
   - Labelization:
       - Introduction: label-studio/introduction/index.md
       - Create a Label Studio project: label-studio/create-a-label-studio-project/index.md
