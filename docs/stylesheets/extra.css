@@ -9,3 +9,7 @@ code {
 [data-md-color-scheme="slate"] {
 	--md-code-hl-color: var(--md-accent-fg-color--transparent);
 }
+
+article img {
+	border-radius: .2rem;
+}

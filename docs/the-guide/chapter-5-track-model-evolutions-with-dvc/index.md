@@ -150,6 +150,10 @@ plots in a browser.
 As for the other commands, DVC shows you the differences so you can easily
 compare the two iterations.
 
+Here is a preview of the report:
+
+![Plots Diff](../../assets/images/plots_diff.png){ loading=lazy }
+
 #### Summary of the model evolutions
 
 You should notice the improvements made to the model thanks to the DVC reports.
