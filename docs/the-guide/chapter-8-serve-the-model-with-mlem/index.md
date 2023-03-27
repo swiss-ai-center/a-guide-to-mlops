@@ -19,7 +19,7 @@ In this chapter, you will learn how to:
 
 ### Install MLEM
 
-Update the `src/requirements.txt` file to include mlem and its dependencies.
+Update the `src/requirements.txt` file to include MLEM and its dependencies.
 
 ``` hl_lines="8"
 dvc[gs]==2.37.0
@@ -400,7 +400,7 @@ Check the differences with Git to better understand the changes.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Show the differences with Git
-git diff src/evaluate.py 
+git diff src/evaluate.py
 ```
 
 The output should be similar to this.
@@ -439,7 +439,7 @@ index e18629a..53a17a7 100644
 
 ### Update the DVC pipeline
 
-Update the DVC pipeline to reflect the changes in the stages. 
+Update the DVC pipeline to reflect the changes in the stages.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Update the featurization stage
@@ -605,7 +605,7 @@ This output means that the input is related to the R programming language.
 ]
 ```
 
-**Probablities output**
+**Probabilities output**
 
 This output means a 55% probability that the input is related to the R
 programming language.
@@ -639,7 +639,7 @@ This output means that the input is not related to the R programming language.
 ]
 ```
 
-**Probablities output**
+**Probabilities output**
 
 This output means a 0% probability that the input is related to the R
 programming language.
@@ -673,7 +673,7 @@ This output means that the input is not related to the R programming language.
 ]
 ```
 
-**Probablities output**
+**Probabilities output**
 
 This output means a 33% probability that the input is related to the R
 programming language.

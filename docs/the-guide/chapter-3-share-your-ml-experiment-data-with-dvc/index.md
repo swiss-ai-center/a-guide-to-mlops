@@ -55,7 +55,7 @@ A new page opens. Note the ID of your project, it will be used later.
 To install `gcloud`, follow the official documentation: [_Install the Google
 Cloud CLI_ - cloud.google.com](https://cloud.google.com/sdk/docs/install-sdk)
 
-### Initialize and configure Google Cloud CLI 
+### Initialize and configure Google Cloud CLI
 
 The following process will authenticate to Google Cloud using the Google Cloud
 CLI. It will open a browser window to log you in and create a credentials file
@@ -94,7 +94,7 @@ Create the Google Storage Bucket to store the data with the Google Cloud CLI. Yo
 
 !!! warning
 
-	The bucket name must be unique accross all Google Cloud projects and users. Change the `<my bucket name>` to your own bucket name.
+	The bucket name must be unique across all Google Cloud projects and users. Change the `<my bucket name>` to your own bucket name.
 
 ```sh title="Execute the following command(s) in a terminal"
 gcloud storage buckets create gs://<my bucket name> \

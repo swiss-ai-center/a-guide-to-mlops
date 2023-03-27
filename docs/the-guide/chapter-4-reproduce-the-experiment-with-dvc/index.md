@@ -112,7 +112,7 @@ dependencies between the stages (deps and outs). The `dvc repro` command
 executes the pipeline to reproduce the experiment.
 
 In the following sections, each step of the experiment will be converted into a stage of a DVC pipeline.
-The `dvc stage add` command creates a new stage in the pipeline. 
+The `dvc stage add` command creates a new stage in the pipeline.
 This stage will be added to the `dvc.yaml` file that describes the pipeline.
 This file can also be edited manually.
 
@@ -201,7 +201,6 @@ Explore the `dvc.yaml` file to understand how the pipeline is updated.
 
 #### `evaluate` stage
 
-
 Run the following command to create a new stage called _evaluate_ that evaluates the model.
 
 ```sh title="Execute the following command(s) in a terminal"
@@ -225,7 +224,6 @@ the `confusion_matrix` to `evaluation/plots/sklearn/confusion_matrix.json`, the
 `precision_recall_curve` to `evaluation/plots/prc.json ` and the `roc_curve` to
 `evaluation/plots/sklearn/roc.json` that will be used to create plots.
 Here, `no-cache` prevents DVC from caching the metrics and plots.
-
 
 DVC has the ability to generate images for the plots.
 The following command are used to tune the axes of the plots.
@@ -305,7 +303,7 @@ dvc dag
     +----------+
 ```
 
-If any dependencies/outputs change, the affected stages will be reexecuted.
+If any dependencies/outputs change, the affected stages will be re-executed.
 
 ### Execute the pipeline
 
@@ -368,7 +366,7 @@ This chapter is done, you can check the summary.
 
 ## Summary
 
-Congrats! You have defined a pipeline and know how to reproduce your experiment. 
+Congrats! You have defined a pipeline and know how to reproduce your experiment.
 
 In this chapter, you have successfully:
 
@@ -378,9 +376,9 @@ In this chapter, you have successfully:
     - `featurize`
     - `train`
     - `evaluate`
-1. Visualized the pipeline
-2. Executed the pipeline
-3. Pushed the changes to DVC and Git
+3. Visualized the pipeline
+4. Executed the pipeline
+5. Pushed the changes to DVC and Git
 
 You fixed some of the previous issues:
 
