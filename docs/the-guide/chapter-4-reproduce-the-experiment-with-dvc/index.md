@@ -85,9 +85,6 @@ index 6755ab0..be446de 100644
 --- a/.gitignore
 +++ b/.gitignore
 @@ -1,13 +1,6 @@
- ## Macos Specific
- .DS_Store
-
 -# Data used to train the models
 -data/features
 -data/prepared
