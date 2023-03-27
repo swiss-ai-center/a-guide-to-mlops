@@ -79,7 +79,11 @@ gcloud projects list
 
 # Select your Google Cloud project
 gcloud config set project <id of your gcp project>
+```
 
+Then run the following command to authenticate to Google Cloud with the Application Default.
+
+```sh title="Execute the following command(s) in a terminal"
 # Set authentication for our ML experiment
 # https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
 # https://cloud.google.com/sdk/gcloud/reference/auth/application-default/login
@@ -92,9 +96,11 @@ To be able to create the bucket, the project must be linked to an active billing
 
 Create the Google Storage Bucket to store the data with the Google Cloud CLI. You should ideally select a location close to where most of the expected traffic will come from. You can view the available regions at [Cloud locations](https://cloud.google.com/about/locations).
 
+Change the `<my bucket name>` to your own bucket name (ex: `mlopsdemo`).
+
 !!! warning
 
-	The bucket name must be unique accross all Google Cloud projects and users. Change the `<my bucket name>` to your own bucket name.
+	The bucket name must be unique accross all Google Cloud projects and users.
 
 ```sh title="Execute the following command(s) in a terminal"
 gcloud storage buckets create gs://<my bucket name> \
@@ -111,7 +117,7 @@ Update the `src/requirements.txt` file to include some additional packages.
 
 Here, the `dvc[gs]` package enables support for Google Cloud Storage.
 
-``` hl_lines="1"
+``` title="src/requirements.txt" hl_lines="1"
 dvc[gs]==2.37.0
 dvclive==1.0.0
 pandas==1.5.1
@@ -177,7 +183,7 @@ dvc add data/data.xml
 
 When executing this command, the following output occurs.
 
-```sh title="Execute the following command(s) in a terminal"
+```sh
 ERROR: bad DVC file name 'data/data.xml.dvc' is git-ignored.
 ```
 
@@ -281,6 +287,7 @@ Changes to be committed:
         new file:   .dvcignore
         modified:   .gitignore
         new file:   data/.gitignore
+        new file:   data/README.md
         new file:   data/data.xml.dvc
         modified:   src/requirements.txt
 ```

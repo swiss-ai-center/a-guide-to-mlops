@@ -84,7 +84,7 @@ diff --git a/.gitignore b/.gitignore
 index 6755ab0..be446de 100644
 --- a/.gitignore
 +++ b/.gitignore
-@@ -1,10 +1,3 @@
+@@ -1,13 +1,6 @@
 -# Data used to train the models
 -data/features
 -data/prepared
@@ -93,10 +93,10 @@ index 6755ab0..be446de 100644
 -*.pkl
 -
  ## Python
- 
+
  # Environments
-@@ -12,3 +5,7 @@ data/prepared
- 
+@@ -15,3 +8,8 @@ data/prepared
+
  # Byte-compiled / optimized / DLL files
  __pycache__/
 +

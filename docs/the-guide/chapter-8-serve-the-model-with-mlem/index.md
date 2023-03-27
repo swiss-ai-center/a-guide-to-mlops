@@ -21,7 +21,7 @@ In this chapter, you will learn how to:
 
 Update the `src/requirements.txt` file to include mlem and its dependencies.
 
-``` hl_lines="8"
+``` title="src/requirements.txt" hl_lines="8"
 dvc[gs]==2.37.0
 dvclive==1.0.0
 pandas==1.5.1
@@ -83,7 +83,7 @@ working directory. This file contains the configuration of MLEM.
 Update the `src/featurization.py` file to save the `CountVectorizer` and the
 `TfidfTransformer` with MLEM.
 
-```py hl_lines="11 74-75"
+```py title="src/featurization.py" hl_lines="11 74-75"
 import os
 import pickle
 import sys
@@ -211,7 +211,7 @@ ames, train_output)
 
 Update the `src/train.py` file to save the model with its artifacts with MLEM.
 
-```py hl_lines="9 40-48"
+```py title="src/train.py" hl_lines="9 40-48"
 import os
 import pickle
 import sys
@@ -314,7 +314,7 @@ index 97bb9d0..87e4756 100644
 
 Update the `src/evaluate.py` file to load the model from MLEM.
 
-```py hl_lines="13 23"
+```py title="src/evaluate.py" hl_lines="13 23"
 import json
 import math
 import os
@@ -413,21 +413,28 @@ index e18629a..53a17a7 100644
 @@ -10,6 +10,7 @@ from sklearn import tree
  from dvclive import Live
  from matplotlib import pyplot as plt
- 
+
 +from mlem.api import load
- 
+
  if len(sys.argv) != 3:
      sys.stderr.write("Arguments error. Usage:\n")
-@@ -19,8 +20,7 @@ if len(sys.argv) != 3:
+@@ -19,14 +20,13 @@ if len(sys.argv) != 3:
  model_file = sys.argv[1]
  matrix_file = os.path.join(sys.argv[2], "test.pkl")
- 
+
 -with open(model_file, "rb") as fd:
 -    model = pickle.load(fd)
 +model = load(model_file)
- 
+
  with open(matrix_file, "rb") as fd:
      matrix, feature_names = pickle.load(fd)
+
+ labels = matrix[:, 1].toarray().astype(int)
+-x = matrix[:, 2:]
++x = matrix[:, 2:].toarray()
+
+ predictions_by_class = model.predict_proba(x)
+ predictions = predictions_by_class[:, 1]
 ```
 
 !!! info
@@ -556,7 +563,7 @@ mlem serve fastapi --model models/rf
 ```
 
 MLEM will load the model, create the FastAPI app and start it. You can then
-access the auto-generated model documentation on <http://0.0.0.0:8080/docs>.
+access the auto-generated model documentation on <http://localhost:8080/docs>.
 
 !!! info
 
