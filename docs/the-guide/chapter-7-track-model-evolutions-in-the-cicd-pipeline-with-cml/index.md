@@ -13,7 +13,7 @@ In this chapter, you will learn how to:
 3. Open an issue in your issue tracker
 4. Create a new branch to add your changes
 5. Check out the new branch
-6. Commit and push the changes that were not commited in [Chapter 5: Track
+6. Commit and push the changes that were not committed in [Chapter 5: Track
    model evolutions with
    DVC](../chapter-5-track-model-evolutions-with-dvc)
 7. Create a pull request/merge request
@@ -811,7 +811,7 @@ In this chapter, you have successfully:
 3. Opened an issue in your issue tracker
 4. Created a new branch to add your changes
 5. Checked out the new branch
-6. Commit and pushed the changes that were not commited in [Chapter 5: Track
+6. Commit and pushed the changes that were not committed in [Chapter 5: Track
    model evolutions with
    DVC](../chapter-5-track-model-evolutions-with-dvc)
 7. Created a pull request/merge request

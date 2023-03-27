@@ -2,13 +2,13 @@
 
 ## Introduction
 
-You've just joined a new ML team whose goal is to build a model that can
+You have just joined a new ML team whose goal is to build a model that can
 classify text into two categories: "related to R programming language" and "not
 related to R programming language".
 
 Their dataset consists of 10,000 posts from StackOverflow.
 
-The training process is as follows: 
+The training process is as follows:
 
 - Mark the R-related posts posts as `1` and the others as `0`
 - Split the posts into training/testing datasets
@@ -42,7 +42,7 @@ directory for the duration of the guide.
 ### Download and set up the codebase
 
 Your colleague has generously provided you a ZIP file containing the source
-code. Although this may be an outdated method for sharing files, you're ready to
+code. Although this may be an outdated method for sharing files, you are ready to
 tackle the task.
 
 ```sh title="Execute the following command(s) in a terminal"
@@ -60,7 +60,7 @@ unzip code.zip
 mv a-guide-to-mlops-code/* .
 
 # Remove the archive and the directory
-rm -r code.zip a-guide-to-mlops-code 
+rm -r code.zip a-guide-to-mlops-code
 ```
 
 ### Explore the codebase
@@ -112,7 +112,7 @@ wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/data.zip -O
 ```
 
 This archive must be decompressed and its contents be moved in the
- `data` directory in the working directory of the experiment.
+`data` directory in the working directory of the experiment.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Extract the dataset
@@ -151,7 +151,7 @@ Your working directory should now look like this:
 ### Run the experiment
 
 Awesome! You now have everything you need to run the experiment: the codebase and
-the dataset are in place; and you're ready to run the experiment for the first
+the dataset are in place; and you are ready to run the experiment for the first
 time.
 
 Create the virtual environment and install necessary dependencies in your
@@ -237,7 +237,7 @@ Your working directory should now be similar to this:
 
 Here, the following should be noted:
 
-- the `prepare.py` script created the `data/prepared` directory and splitted the
+- the `prepare.py` script created the `data/prepared` directory and divided the
   dataset into a training set and a test set
 - the `featurization.py` script created the `data/features` directory and
   extracted the features from the training and test sets
@@ -256,7 +256,7 @@ Here is a preview of the report:
 
 ## Summary
 
-Congratulations! You've successfully reproduced the experiment on your machine. 
+Congratulations! You have successfully reproduced the experiment on your machine.
 
 In this chapter, you have:
 

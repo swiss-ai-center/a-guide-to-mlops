@@ -3,7 +3,7 @@
 ## Introduction
 
 Now that you have a good understanding of the experiment, it's time to
-streamline the code sharing process. Instead of relying on ZIP archives, we'll
+streamline the code sharing process. Instead of relying on ZIP archives, we will
 create a Git repository to enable easy collaboration with the rest of the team.
 
 In this chapter, you will learn how to:
@@ -93,7 +93,6 @@ DVC in the next chapters. Keep the model's evaluation as it doesn't take much
 space and you can have a history of the improvements made to your model.
 Additionally, this will help to ensure that the repository size and clone time
 remain optimized.
-
 
 ```sh title="Execute the following command(s) in a terminal"
 # Data used to train the models

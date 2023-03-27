@@ -5,7 +5,7 @@
 In the previous chapter, you did set up a DVC pipeline to reproduce your
 experiment.
 
-Once this stage is created, you'll be able to change our model's configuration,
+Once this stage is created, you will be able to change our model's configuration,
 evaluate the new configuration and compare its performance with the last
 commited ones.
 
@@ -19,7 +19,7 @@ Let's get started!
 
 ## Steps
 
-### Update the parameters of the experiment 
+### Update the parameters of the experiment
 
 Update your experiment with the following parameters by editing the
 `params.yaml` file.
@@ -67,11 +67,11 @@ index a2a290e..8046f85 100644
 ```
 
 Here, we simply changed the `max_features` and `ngrams` parameters of the
-`featurize` stage, which should slightly affect the model's performance. 
+`featurize` stage, which should slightly affect the model's performance.
 
 ### Reproduce the experiment
 
-Let's discover if these changes are positive or not! To do so, you'll need to
+Let's discover if these changes are positive or not! To do so, you will need to
 reproduce the experiment.
 
 ```sh title="Execute the following command(s) in a terminal"
@@ -81,7 +81,7 @@ dvc repro
 
 ### Compare the two iterations
 
-We'll now use DVC to compare your changes with the last commited ones. For DVC,
+We will now use DVC to compare your changes with the last commited ones. For DVC,
 `HEAD` refers to the last commit on the branch you are working on (at this
 moment, the branch `main`), and `workspace` refers to the current state of your
 working directory.
@@ -94,7 +94,7 @@ working directory.
 
 #### Compare the parameters difference
 
-In order to compare the parameters, you'll need to use the `dvc params diff`.
+In order to compare the parameters, you will need to use the `dvc params diff`.
 This command will compare the parameters that were set on `HEAD` and the ones in
 your current `workspace`.
 
@@ -263,7 +263,7 @@ You fixed some of the previous issues:
 - ✅ The changes done to a model can be visualized with parameters, metrics and
   plots to identify differences between iterations
 
-You have solid metrics to evaluate the changes before intergrating your work in
+You have solid metrics to evaluate the changes before integrating your work in
 the code codebase.
 
 You can now safely continue to the next chapter.

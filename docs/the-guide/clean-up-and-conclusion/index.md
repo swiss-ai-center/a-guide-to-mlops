@@ -1,6 +1,6 @@
 # Clean up and Conclusion
 
-## Cleaning up ressources and environments
+## Cleaning up resources and environments
 
 Now that you have completed the guide, it's important to clean up the resources and environments you created to avoid incurring unnecessary costs and security related issues. Here's a step-by-step guide to help you do that.
 
@@ -16,7 +16,7 @@ Now that you have completed the guide, it's important to clean up the resources 
 
     Ignore this if you plan deleting the git repository. When deleting the Google Storage bucket, **it will break the DVC remote**. You will need to reconfigure it to a new remote if you want to keep the Git repository to use DVC.
 
-To delete the Google Storage bucket you created you can excute the following command:
+To delete the Google Storage bucket you created you can execute the following command :
 
 ```sh title="Execute the following command(s) in a terminal"
 gcloud storage rm --recursive gs://<your bucket name>
@@ -32,7 +32,7 @@ Alternatively, you can delete the bucket from the Google Cloud Console:
 
 #### Delete the Service Account
 
-To delete the service account you created you can excute the following command:
+To delete the service account you created you can execute the following command :
 
 ```sh title="Execute the following command(s) in a terminal"
 gcloud iam service-accounts delete dvc-service-account@<id of your gcp project>.iam.gserviceaccount.com
@@ -58,7 +58,7 @@ rm "~/.config/gcloud/dvc-google-account-key.json"
 
 To delete the Google Cloud project you created:
 
-1. Go to the [Google Cloud Ressource Manager Console](https://console.cloud.google.com/cloud-resource-manager){:target="_blank"}.
+1. Go to the [Google Cloud Resource Manager Console](https://console.cloud.google.com/cloud-resource-manager){:target="_blank"}.
 2. Select the project you created.
 3. Click on **Delete** at the top of the page.
 4. Follow the instructions to shut down the project.

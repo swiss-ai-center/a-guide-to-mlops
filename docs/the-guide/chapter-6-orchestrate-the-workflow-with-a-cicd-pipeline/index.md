@@ -31,7 +31,7 @@ store/share your own credentials. A Service Account can be deleted, hence revoki
 
 Create the Google Service Account and its associated Google Service Account Key to access Google Cloud without your own credentials.
 
-Replace  `<id of your gcp project>` with your own project ID.
+Replace `<id of your gcp project>` with your own project ID.
 
 The key will be stored in your **~/.config/gcloud** directory under the name `dvc-google-service-account-key.json`.
 
@@ -286,7 +286,7 @@ You fixed some of the previous issues:
   pipeline
 
 You have a CI/CD pipeline to ensure the whole experiment can still be reproduced
-using the data and the commmands to run using DVC over time.
+using the data and the commands to run using DVC over time.
 
 You can now safely continue to the next chapter.
 
