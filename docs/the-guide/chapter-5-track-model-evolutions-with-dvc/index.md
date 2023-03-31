@@ -168,7 +168,7 @@ This directory should be ignored by Git.
 
 Add the `dvc_plots` directory to the `.gitignore` file.
 
-```sh title="Execute the following command(s) in a terminal" hl_lines="8-9"
+```sh title=".gitignore" hl_lines="8-9"
 ## Python
 
 # Byte-compiled / optimized / DLL files
