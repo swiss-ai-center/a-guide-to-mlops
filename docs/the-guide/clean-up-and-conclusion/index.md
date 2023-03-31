@@ -51,7 +51,7 @@ Alternatively, you can delete the service account from the Google Cloud Console:
 You can run the following command to delete the service account key you created locally:
 
 ```sh title="Execute the following command(s) in a terminal"
-rm "~/.config/gcloud/dvc-google-account-key.json"
+rm ~/.config/gcloud/dvc-google-service-account-key.json
 ```
 
 #### Delete the Google Cloud project
