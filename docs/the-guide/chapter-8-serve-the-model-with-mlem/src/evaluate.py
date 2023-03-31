@@ -46,7 +46,9 @@ with Live("evaluation") as live:
     # ROC has a drop_intermediate arg that reduces the number of points.
     # https://scikit-learn.org/stable/modules/generated/sklearn.metrics.roc_curve.html#sklearn.metrics.roc_curve.
     # PRC lacks this arg, so we manually reduce to 1000 points as a rough estimate.
-    precision, recall, prc_thresholds = metrics.precision_recall_curve(labels,predictions)
+    precision, recall, prc_thresholds = metrics.precision_recall_curve(
+        labels, predictions
+    )
     nth_point = math.ceil(len(prc_thresholds) / 1000)
     prc_points = list(zip(precision, recall, prc_thresholds))[::nth_point]
     prc_file = os.path.join("evaluation", "plots", "prc.json")
@@ -62,12 +64,10 @@ with Live("evaluation") as live:
             indent=4,
         )
 
-
     # ... confusion matrix plot
-    live.log_sklearn_plot("confusion_matrix",
-                          labels.squeeze(),
-                          predictions_by_class.argmax(-1)
-                         )
+    live.log_sklearn_plot(
+        "confusion_matrix", labels.squeeze(), predictions_by_class.argmax(-1)
+    )
 
     # ... and finally, we can dump an image, it's also supported:
     fig, axes = plt.subplots(dpi=100)

@@ -7,7 +7,7 @@ variables:
   # only cache local items.
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
   # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
-  GIT_DEPTH: '0'
+  GIT_DEPTH: "0"
 
 # Pip's cache doesn't store the python packages
 # https://pip.pypa.io/en/stable/reference/pip_install/#caching
@@ -27,17 +27,20 @@ train:
   before_script:
     # Set the Google Service Account key
     - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+    # Install Poetry
+    - pip install poetry==1.4.0
     # Install dependencies
-    - pip install --requirement src/requirements.txt
+    - poetry install
+    - source `poetry env info --path`/bin/activate
   script:
     # Pull data from DVC
     - dvc pull
     # Run the experiment
     - dvc repro
   artifacts:
-    expire_in: 1 week
-    paths:
-      - "evaluation"
+      expire_in: 1 week
+      paths:
+        - "evaluation"
 
 report:
   stage: report
@@ -46,7 +49,6 @@ report:
     - job: train
       artifacts: true
   rules:
-    - if: $CI_COMMIT_BRANCH == "main"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   variables:
     REPO_TOKEN: $CML_PAT
