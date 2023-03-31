@@ -47,21 +47,21 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	Update the `.github/workflows/mlops.yml` file.
 
-	```yaml  title=".github/workflows/mlops.yml" hl_lines="9-10 42-133"
+	```yaml  title=".github/workflows/mlops.yml" hl_lines="9-10 55-149"
 	name: MLOps
-
+	
 	on:
 	  # Runs on pushes targeting main branch
 	  push:
 	    branches:
 	      - main
-
+	
 	  # Runs on pull requests
 	  pull_request:
-
+	
 	  # Allows you to run this workflow manually from the Actions tab
 	  workflow_dispatch:
-
+	
 	jobs:
 	  train:
 	    runs-on: ubuntu-latest
@@ -73,6 +73,15 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	        with:
 	          python-version: '3.10'
 	          cache: 'pip'
+	      - name: Install Poetry
+	        run: |
+	          export POETRY_HOME=/opt/poetry
+	          python3 -m venv $POETRY_HOME
+	          $POETRY_HOME/bin/pip install poetry==1.4.0
+	          export PATH="/opt/poetry/bin:$PATH"
+	      - name: Install dependencies
+	        run: |
+	          poetry install
 	      - name: Setup DVC
 	        uses: iterative/setup-dvc@v1
 	        with:
@@ -83,18 +92,16 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
 	      - name: Train model
 	        run: |
-	          # Install dependencies
-	          pip install --requirement src/requirements.txt
 	          # Pull data from DVC
-	          dvc pull
+	          poetry run dvc pull
 	          # Run the experiment
-	          dvc repro
+	          poetry run dvc repro
 	      - name: Upload evaluation results
 	        uses: actions/upload-artifact@v3
 	        with:
 	          path: evaluation
 	          retention-days: 5
-
+	
 	  report:
 	    permissions: write-all
 	    needs: train
@@ -114,6 +121,15 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	          rm -rf evaluation
 	          # Replace with the new evaluation results
 	          mv artifact evaluation
+	      - name: Install Poetry
+	        run: |
+	          export POETRY_HOME=/opt/poetry
+	          python3 -m venv $POETRY_HOME
+	          $POETRY_HOME/bin/pip install poetry==1.4.0
+	          export PATH="/opt/poetry/bin:$PATH"
+	      - name: Install dependencies
+	        run: |
+	          poetry install
 	      - name: Setup DVC
 	        uses: iterative/setup-dvc@v1
 	        with:
@@ -128,26 +144,26 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	        run: |
 	          # Fetch all other Git branches
 	          git fetch --depth=1 origin main:main
-
+	
 	          # Compare parameters to main branch
 	          echo "# Params workflow vs. main" >> report.md
 	          echo >> report.md
-	          dvc params diff main --show-md >> report.md
+	          poetry run dvc params diff main --show-md >> report.md
 	          echo >> report.md
-
+	
 	          # Compare metrics to main branch
 	          echo "# Metrics workflow vs. main" >> report.md
 	          echo >> report.md
-	          dvc metrics diff main --show-md >> report.md
+	          poetry run dvc metrics diff main --show-md >> report.md
 	          echo >> report.md
-
+	
 	          # Create plots
 	          echo "# Plots" >> report.md
 	          echo >> report.md
-
+	
 	          echo "## Precision recall curve" >> report.md
 	          echo >> report.md
-	          dvc plots diff \
+	          poetry run dvc plots diff \
 	            --target evaluation/plots/prc.json \
 	            -x recall \
 	            -y precision \
@@ -155,10 +171,10 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	          vl2png vega.json > prc.png
 	          echo '![](./prc.png "Precision recall curve")' >> report.md
 	          echo >> report.md
-
+	
 	          echo "## Roc curve" >> report.md
 	          echo >> report.md
-	          dvc plots diff \
+	          poetry run dvc plots diff \
 	            --target evaluation/plots/sklearn/roc.json \
 	            -x fpr \
 	            -y tpr \
@@ -166,10 +182,10 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	          vl2png vega.json > roc.png
 	          echo '![](./roc.png "Roc curve")' >> report.md
 	          echo >> report.md
-
+	
 	          echo "## Confusion matrix" >> report.md
 	          echo >> report.md
-	          dvc plots diff \
+	          poetry run dvc plots diff \
 	            --target evaluation/plots/sklearn/confusion_matrix.json \
 	            --template confusion \
 	            -x actual \
@@ -178,9 +194,9 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	          vl2png vega.json > confusion_matrix.png
 	          echo '![](./confusion_matrix.png "Confusion Matrix")' >> report.md
 	          echo >> report.md
-
+	
 	          # Publish the CML report
-	          cml comment create --target=pr --publish report.md
+	          poetry run cml comment create --target=pr --publish report.md
 	```
 
 	Check the differences with Git to validate the changes.
@@ -194,7 +210,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	```diff
 	diff --git a/.github/workflows/mlops.yml b/.github/workflows/mlops.yml
-	index 0ca4d29..10afa49 100644
+	index 67b7fe5..590f892 100644
 	--- a/.github/workflows/mlops.yml
 	+++ b/.github/workflows/mlops.yml
 	@@ -6,6 +6,9 @@ on:
@@ -207,10 +223,11 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	   # Allows you to run this workflow manually from the Actions tab
 	   workflow_dispatch:
 
-	@@ -36,3 +39,95 @@ jobs:
-	           dvc pull
+	@@ -42,4 +45,105 @@ jobs:
+	           # Pull data from DVC
+	           poetry run dvc pull
 	           # Run the experiment
-	           dvc repro
+	           poetry run dvc repro
 	+      - name: Upload evaluation results
 	+        uses: actions/upload-artifact@v3
 	+        with:
@@ -236,6 +253,15 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	+          rm -rf evaluation
 	+          # Replace with the new evaluation results
 	+          mv artifact evaluation
+	+      - name: Install Poetry
+	+        run: |
+	+          export POETRY_HOME=/opt/poetry
+	+          python3 -m venv $POETRY_HOME
+	+          $POETRY_HOME/bin/pip install poetry==1.4.0
+	+          export PATH="/opt/poetry/bin:$PATH"
+	+      - name: Install dependencies
+	+        run: |
+	+          poetry install
 	+      - name: Setup DVC
 	+        uses: iterative/setup-dvc@v1
 	+        with:
@@ -254,13 +280,13 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	+          # Compare parameters to main branch
 	+          echo "# Params workflow vs. main" >> report.md
 	+          echo >> report.md
-	+          dvc params diff main --show-md >> report.md
+	+          poetry run dvc params diff main --show-md >> report.md
 	+          echo >> report.md
 	+
 	+          # Compare metrics to main branch
 	+          echo "# Metrics workflow vs. main" >> report.md
 	+          echo >> report.md
-	+          dvc metrics diff main --show-md >> report.md
+	+          poetry run dvc metrics diff main --show-md >> report.md
 	+          echo >> report.md
 	+
 	+          # Create plots
@@ -269,7 +295,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	+
 	+          echo "## Precision recall curve" >> report.md
 	+          echo >> report.md
-	+          dvc plots diff \
+	+          poetry run dvc plots diff \
 	+            --target evaluation/plots/prc.json \
 	+            -x recall \
 	+            -y precision \
@@ -280,7 +306,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	+
 	+          echo "## Roc curve" >> report.md
 	+          echo >> report.md
-	+          dvc plots diff \
+	+          poetry run dvc plots diff \
 	+            --target evaluation/plots/sklearn/roc.json \
 	+            -x fpr \
 	+            -y tpr \
@@ -291,7 +317,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	+
 	+          echo "## Confusion matrix" >> report.md
 	+          echo >> report.md
-	+          dvc plots diff \
+	+          poetry run dvc plots diff \
 	+            --target evaluation/plots/sklearn/confusion_matrix.json \
 	+            --template confusion \
 	+            -x actual \
@@ -302,7 +328,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	+          echo >> report.md
 	+
 	+          # Publish the CML report
-	+          cml comment create --target=pr --publish report.md
+	+          poetry run cml comment create --target=pr --publish report.md
 	```
 
 	Here, we have added a new step called `Upload evaluation results` to the `train`
@@ -360,12 +386,15 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 	  # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
 	  GIT_DEPTH: '0'
+	  # https://python-poetry.org/docs/#ci-recommendations
+	  POETRY_HOME: "$CI_PROJECT_DIR/.cache/poetry"
 
 	# Pip's cache doesn't store the python packages
 	# https://pip.pypa.io/en/stable/reference/pip_install/#caching
 	cache:
 	  paths:
 	    - .cache/pip
+	    - .cache/poetry
 
 	train:
 	  stage: train
@@ -379,13 +408,17 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	  before_script:
 	    # Set the Google Service Account key
 	    - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+	    # Install Poetry
+	    - python3 -m venv $POETRY_HOME
+	    - $POETRY_HOME/bin/pip install poetry==1.4.0
+	    - export PATH="$POETRY_HOME/bin:$PATH"
 	    # Install dependencies
-	    - pip install --requirement src/requirements.txt
+	    - poetry install
 	  script:
 	    # Pull data from DVC
-	    - dvc pull
+	    - poetry run dvc pull
 	    # Run the experiment
-	    - dvc repro
+	    - poetry run dvc repro
 	  artifacts:
 	    expire_in: 1 week
 	    paths:
@@ -406,13 +439,13 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	      # Compare parameters to main branch
 	      echo "# Params workflow vs. main" >> report.md
 	      echo >> report.md
-	      dvc params diff main --show-md >> report.md
+	      poetry run dvc params diff main --show-md >> report.md
 	      echo >> report.md
 
 	      # Compare metrics to main branch
 	      echo "# Metrics workflow vs. main" >> report.md
 	      echo >> report.md
-	      dvc metrics diff main --show-md >> report.md
+	      poetry run dvc metrics diff main --show-md >> report.md
 	      echo >> report.md
 
 	      # Create plots
@@ -421,7 +454,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	      echo "## Precision recall curve" >> report.md
 	      echo >> report.md
-	      dvc plots diff \
+	      poetry run dvc plots diff \
 	        --target evaluation/plots/prc.json \
 	        -x recall \
 	        -y precision \
@@ -432,7 +465,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	      echo "## Roc curve" >> report.md
 	      echo >> report.md
-	      dvc plots diff \
+	      poetry run dvc plots diff \
 	        --target evaluation/plots/sklearn/roc.json \
 	        -x fpr \
 	        -y tpr \
@@ -443,7 +476,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	      echo "## Confusion matrix" >> report.md
 	      echo >> report.md
-	      dvc plots diff \
+	      poetry run dvc plots diff \
 	        --target evaluation/plots/sklearn/confusion_matrix.json \
 	        --template confusion \
 	        -x actual \
@@ -454,7 +487,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	      echo >> report.md
 
 	      # Publish the CML report
-	      cml comment create --target=pr --publish report.md
+	      poetry run cml comment create --target=pr --publish report.md
 	```
 
 	Check the differences with Git to validate the changes.
@@ -468,7 +501,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	```diff
 	diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-	index 561d04f..fad1002 100644
+	index 5c9661b..d38e3e9 100644
 	--- a/.gitlab-ci.yml
 	+++ b/.gitlab-ci.yml
 	@@ -1,5 +1,6 @@
@@ -478,10 +511,11 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	 variables:
 	   # Change pip's cache directory to be inside the project directory since we can
-	@@ -33,3 +34,72 @@ train:
-	     - dvc pull
+	@@ -39,4 +40,73 @@ train:
+	     # Pull data from DVC
+	     - poetry run dvc pull
 	     # Run the experiment
-	     - dvc repro
+	     - poetry run dvc repro
 	+  artifacts:
 	+    expire_in: 1 week
 	+    paths:
@@ -502,13 +536,39 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	+      # Compare parameters to main branch
 	+      echo "# Params workflow vs. main" >> report.md
 	+      echo >> report.md
-	+      dvc params diff main --show-md >> report.md
+	+      poetry run dvc params diff main --show-md >> report.md
 	+      echo >> report.md
 	+
 	+      # Compare metrics to main branch
 	+      echo "# Metrics workflow vs. main" >> report.md
 	+      echo >> report.md
-	+      dvc metrics diff main --show-md >> report.md
+	+      poetry run dvc metrics diff main --show-md >> report.md
+	+      echo >> report.md
+	+
+	+      - "evaluation"
+	+
+	+report:
+	+  stage: report
+	+  image: iterativeai/cml:0-dvc2-base1
+	+  needs:
+	+    - job: train
+	+      artifacts: true
+	+  rules:
+	+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+	+  variables:
+	+    REPO_TOKEN: $CML_PAT
+	+  script:
+	+    - |
+	+      # Compare parameters to main branch
+	+      echo "# Params workflow vs. main" >> report.md
+	+      echo >> report.md
+	+      poetry run dvc params diff main --show-md >> report.md
+	+      echo >> report.md
+	+
+	+      # Compare metrics to main branch
+	+      echo "# Metrics workflow vs. main" >> report.md
+	+      echo >> report.md
+	+      poetry run dvc metrics diff main --show-md >> report.md
 	+      echo >> report.md
 	+
 	+      # Create plots
@@ -517,7 +577,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	+
 	+      echo "## Precision recall curve" >> report.md
 	+      echo >> report.md
-	+      dvc plots diff \
+	+      poetry run dvc plots diff \
 	+        --target evaluation/plots/prc.json \
 	+        -x recall \
 	+        -y precision \
@@ -528,7 +588,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	+
 	+      echo "## Roc curve" >> report.md
 	+      echo >> report.md
-	+      dvc plots diff \
+	+      poetry run dvc plots diff \
 	+        --target evaluation/plots/sklearn/roc.json \
 	+        -x fpr \
 	+        -y tpr \
@@ -539,19 +599,18 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	+
 	+      echo "## Confusion matrix" >> report.md
 	+      echo >> report.md
-	+      dvc plots diff \
+	+      poetry run dvc plots diff \
 	+        --target evaluation/plots/sklearn/confusion_matrix.json \
 	+        --template confusion \
 	+        -x actual \
 	+        -y predicted \
 	+        --show-vega main > vega.json
 	+      vl2png vega.json > confusion_matrix.png
-	+      echo '![](./confusion_matrix.png "Confusion Matrix")' >
-	> report.md
+	+      echo '![](./confusion_matrix.png "Confusion Matrix")' >> report.md
 	+      echo >> report.md
 	+
 	+      # Publish the CML report
-	+      cml comment create --target=pr --publish report.md
+	+      poetry run cml comment create --target=pr --publish report.md
 	```
 
 	Here, we have added an `artifacts` section to the `train` job. This section is

@@ -113,46 +113,34 @@ You now have everything needed for DVC.
 
 ### Install DVC
 
-Update the `src/requirements.txt` file to include some additional packages.
-
 Here, the `dvc[gs]` package enables support for Google Cloud Storage.
 
-``` title="src/requirements.txt" hl_lines="1"
-dvc[gs]==2.37.0
-dvclive==1.0.0
-pandas==1.5.1
-pyaml==21.10.1
-scikit-learn==1.1.3
-scipy==1.10.1
-matplotlib==3.6.2
+```sh title="Execute the following command(s) in a terminal"
+poetry add "dvc[gs]==2.37.0"
 ```
 
 Check the differences with Git to validate the changes.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Show the differences with Git
-git diff src/requirements.txt
+git diff pyproject.toml
 ```
 
 The output should be similar to this.
 
 ```diff
-diff --git a/src/requirements.txt b/src/requirements.txt
-index c8fa80f..ff173a7 100644
---- a/src/requirements.txt
-+++ b/src/requirements.txt
-@@ -1,3 +1,4 @@
-+dvc[gs]==2.37.0
- dvclive==1.0.0
- pandas==1.5.1
- pyaml==21.10.1
-```
+diff --git a/pyproject.toml b/pyproject.toml
+index 8a57399..ff11768 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -13,6 +13,7 @@ pyaml = "21.10.1"
+ scikit-learn = "1.1.3"
+ scipy = "1.10.1"
+ matplotlib = "3.6.2"
++dvc = {version = "2.37.0", extras = ["gs"]}
 
-You can now install the required packages from the `src/requirements.txt` file.
-
-```sh title="Execute the following command(s) in a terminal"
-# Install the requirements
-pip install --requirement src/requirements.txt
+ [build-system]
+ requires = ["poetry-core"]
 ```
 
 ### Initialize and configure DVC
@@ -289,7 +277,8 @@ Changes to be committed:
         new file:   data/.gitignore
         new file:   data/README.md
         new file:   data/data.xml.dvc
-        modified:   src/requirements.txt
+        modified:   pyproject.toml
+        modified:   poetry.lock
 ```
 
 ### Push the changes to Git

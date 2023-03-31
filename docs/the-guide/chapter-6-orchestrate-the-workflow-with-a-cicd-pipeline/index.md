@@ -155,6 +155,15 @@ Please refer to the correct instructions based on your Git repository provider.
 	        with:
 	          python-version: '3.10'
 	          cache: 'pip'
+	      - name: Install Poetry
+	        run: |
+	          export POETRY_HOME=/opt/poetry
+	          python3 -m venv $POETRY_HOME
+	          $POETRY_HOME/bin/pip install poetry==1.4.0
+	          export PATH="/opt/poetry/bin:$PATH"
+	      - name: Install dependencies
+	        run: |
+	          poetry install
 	      - name: Setup DVC
 	        uses: iterative/setup-dvc@v1
 	        with:
@@ -165,12 +174,10 @@ Please refer to the correct instructions based on your Git repository provider.
 	          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
 	      - name: Train model
 	        run: |
-	          # Install dependencies
-	          pip install --requirement src/requirements.txt
 	          # Pull data from DVC
-	          dvc pull
+	          poetry run dvc pull
 	          # Run the experiment
-	          dvc repro
+	          poetry run dvc repro
 	```
 
 === ":simple-gitlab: GitLab"
@@ -181,41 +188,48 @@ Please refer to the correct instructions based on your Git repository provider.
 	Explore this file to understand the stages and the steps.
 
 	```yaml title=".gitlab-ci.yml"
-	stages:
-	  - train
+stages:
+  - train
 
-	variables:
-	  # Change pip's cache directory to be inside the project directory since we can
-	  # only cache local items.
-	  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
-	  # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
-	  GIT_DEPTH: '0'
+variables:
+  # Change pip's cache directory to be inside the project directory since we can
+  # only cache local items.
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
+  GIT_DEPTH: '0'
+  # https://python-poetry.org/docs/#ci-recommendations
+  POETRY_HOME: "$CI_PROJECT_DIR/.cache/poetry"
 
-	# Pip's cache doesn't store the python packages
-	# https://pip.pypa.io/en/stable/reference/pip_install/#caching
-	cache:
-	  paths:
-	    - .cache/pip
+# Pip's cache doesn't store the python packages
+# https://pip.pypa.io/en/stable/reference/pip_install/#caching
+cache:
+  paths:
+    - .cache/pip
+    - .cache/poetry
 
-	train:
-	  stage: train
-	  image: iterativeai/cml:0-dvc2-base1
-	  rules:
-	    - if: $CI_COMMIT_BRANCH == "main"
-	    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-	  variables:
-	    # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
-	    GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
-	  before_script:
-	    # Set the Google Service Account key
-	    - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
-	    # Install dependencies
-	    - pip install --requirement src/requirements.txt
-	  script:
-	    # Pull data from DVC
-	    - dvc pull
-	    # Run the experiment
-	    - dvc repro
+train:
+  stage: train
+  image: iterativeai/cml:0-dvc2-base1
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  variables:
+    # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
+    GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
+  before_script:
+    # Set the Google Service Account key
+    - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+    # Install Poetry
+    - python3 -m venv $POETRY_HOME
+    - $POETRY_HOME/bin/pip install poetry==1.4.0
+    - export PATH="$POETRY_HOME/bin:$PATH"
+    # Install dependencies
+    - poetry install
+  script:
+    # Pull data from DVC
+    - poetry run dvc pull
+    # Run the experiment
+    - poetry run dvc repro
 	```
 
 ### Push the CI/CD pipeline configuration file to Git

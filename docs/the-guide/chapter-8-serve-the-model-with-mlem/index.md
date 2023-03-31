@@ -19,45 +19,35 @@ In this chapter, you will learn how to:
 
 ### Install MLEM
 
-Update the `src/requirements.txt` file to include MLEM and its dependencies.
+Add the `mlem[fastapi]` package to install MLEM with FastAPI support.
 
-``` title="src/requirements.txt" hl_lines="8"
-dvc[gs]==2.37.0
-dvclive==1.0.0
-pandas==1.5.1
-pyaml==21.10.1
-scikit-learn==1.1.3
-scipy==1.10.1
-matplotlib==3.6.2
-mlem[fastapi]==0.4.3
+```sh title="Execute the following command(s) in a terminal"
+poetry add "mlem[fastapi]==0.4.3"
 ```
 
 Check the differences with Git to validate the changes.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Show the differences with Git
-git diff src/requirements.txt
+git diff pyproject.toml
 ```
 
 The output should be similar to this.
 
 ```diff
-diff --git a/src/requirements.txt b/src/requirements.txt
-index 351dc82..6fc53a9 100644
---- a/src/requirements.txt
-+++ b/src/requirements.txt
-@@ -6,3 +6,4 @@ pyaml==21.10.1
- scikit-learn==1.1.3
- scipy==1.10.1
- matplotlib==3.6.2
-+mlem[fastapi]==0.4.3
-```
+diff --git a/pyproject.toml b/pyproject.toml
+index 8a57399..f28f832 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -13,6 +13,8 @@ pyaml = "21.10.1"
+ scikit-learn = "1.1.3"
+ scipy = "1.10.1"
+ matplotlib = "3.6.2"
+ dvc = {version = "2.37.0", extras = ["gs"]}
++mlem = {version = "0.4.3", extras = ["fastapi"]}
 
-You can now install the required packages from the `src/requirements.txt` file.
-
-```sh title="Execute the following command(s) in a terminal"
-# Install the requirements
-pip install --requirement src/requirements.txt
+ [build-system]
+ requires = ["poetry-core"]
 ```
 
 ### Initialize and configure MLEM.
@@ -723,9 +713,10 @@ Changes to be committed:
         modified:   dvc.yaml
         new file:   models/.gitignore
         new file:   models/rf.mlem
+        modified:   pyproject.toml
+        modified:   poetry.lock
         modified:   src/evaluate.py
         modified:   src/featurization.py
-        modified:   src/requirements.txt
         modified:   src/train.py
 ```
 

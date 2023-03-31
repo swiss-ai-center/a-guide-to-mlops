@@ -76,26 +76,29 @@ This is what your working directory should look like.
 │   ├── evaluate.py
 │   ├── featurization.py
 │   ├── prepare.py
-│   ├── requirements.txt
 │   └── train.py
 ├── params.yaml # (2)!
-└── README.md # (3)!
+├── pyproject.toml # (3)!
+├── poetry.lock # (4)!
+└── README.md # (5)!
 ```
 
 1. This, and all its sub-directory, is new.
 2. This is new.
 3. This is new.
+4. This is new.
+5. This is new.
 
 The following table describes the files present in the codebase.
 
 | **File**               | **Description**                                  | **Input**                             | **Output**                                                    |
 | ---------------------- | ------------------------------------------------ | ------------------------------------- | ------------------------------------------------------------- |
-| `src/requirements.txt` | The Python dependencies to run the ML experiment | -                                     | -                                                             |
 | `src/prepare.py`       | Prepare the dataset to run the ML experiment     | The dataset to prepare as an XML file | The prepared data in `data/prepared` directory                |
 | `src/featurization.py` | Extract the features from the dataset            | The prepared dataset                  | The extracted features in `data/features` directory           |
 | `src/train.py`         | Train the ML model                               | The extracted features                | The model trained with the dataset                            |
 | `src/evaluate.py`      | Evaluate the ML model using DVC                  | The model to evaluate                 | The results of the model evaluation in `evaluation` directory |
 | `params.yaml`          | The parameters to run the ML experiment          | -                                     | -                                                             |
+| `pyproject.toml`       | The Poetry dependencies to run the ML experiment | -                                     | -                                                             |
 
 !!! info
 
@@ -140,9 +143,10 @@ Your working directory should now look like this:
 │   ├── evaluate.py
 │   ├── featurization.py
 │   ├── prepare.py
-│   ├── requirements.txt
 │   └── train.py
 ├── params.yaml
+├── pyproject.toml
+├── poetry.lock
 └── README.md
 ```
 
@@ -158,14 +162,11 @@ Create the virtual environment and install necessary dependencies in your
 working directory using these commands.
 
 ```sh title="Execute the following command(s) in a terminal"
-# Create the virtual environment
-python3 -m venv .venv
+# Install the dependencies in a virtual environment
+poetry install
 
 # Activate the virtual environment
-source .venv/bin/activate
-
-# Install the requirements
-pip install --requirement src/requirements.txt
+poetry shell
 ```
 
 Your helpful colleague provided you some steps to reproduce the experiment.
@@ -222,10 +223,11 @@ Your working directory should now be similar to this:
 │   ├── evaluate.py
 │   ├── featurization.py
 │   ├── prepare.py
-│   ├── requirements.txt
 │   └── train.py
 ├── model.pkl # (5)!
-└── params.yaml
+├── params.yaml
+├── pyproject.toml
+├── poetry.lock
 └── README.md
 ```
 
