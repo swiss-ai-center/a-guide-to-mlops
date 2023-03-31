@@ -171,9 +171,6 @@ Add the `dvc_plots` directory to the `.gitignore` file.
 ```sh title="Execute the following command(s) in a terminal" hl_lines="11-12"
 ## Python
 
-# Environments
-.venv
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 
@@ -197,7 +194,7 @@ The output should be similar to this.
 
 ```diff
 diff --git a/.gitignore b/.gitignore
-index c467670..a8a3e41 100644
+index 165e2c9..a2e21d2 100644
 --- a/.gitignore
 +++ b/.gitignore
 @@ -8,5 +8,8 @@ __pycache__/

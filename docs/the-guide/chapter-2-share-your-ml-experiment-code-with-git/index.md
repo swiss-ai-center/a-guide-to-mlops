@@ -74,13 +74,12 @@ No commits yet
 
 Untracked files:
   (use "git add <file>..." to include in what will be committed)
-        .venv/
         data/
         evaluation/
         model.pkl
         params.yaml
-        pyproject.toml
         poetry.lock
+        pyproject.toml
         README.md
         src/
 ```
@@ -104,9 +103,6 @@ data
 *.pkl
 
 ## Python
-
-# Environments
-.venv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -138,6 +134,7 @@ No commits yet
 Changes to be committed:
   (use "git rm --cached <file>..." to unstage)
         new file:   .gitignore
+        new file:   README.md
         new file:   evaluation/metrics.json
         new file:   evaluation/plots/importance.png
         new file:   evaluation/plots/metrics/avg_prec.tsv
@@ -147,9 +144,8 @@ Changes to be committed:
         new file:   evaluation/plots/sklearn/roc.json
         new file:   evaluation/report.html
         new file:   params.yaml
-        new file:   pyproject.toml
         new file:   poetry.lock
-        new file:   README.md
+        new file:   pyproject.toml
         new file:   src/evaluate.py
         new file:   src/featurization.py
         new file:   src/prepare.py

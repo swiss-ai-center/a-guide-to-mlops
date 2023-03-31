@@ -192,9 +192,6 @@ data/prepared
 
 ## Python
 
-# Environments
-.venv
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 ```
@@ -210,7 +207,7 @@ The output should be similar to this.
 
 ```diff
 diff --git a/.gitignore b/.gitignore
-index f1cbfa9..2b092ce 100644
+index f911df2..69b142f 100644
 --- a/.gitignore
 +++ b/.gitignore
 @@ -1,5 +1,6 @@
@@ -218,7 +215,7 @@ index f1cbfa9..2b092ce 100644
 -data
 +data/features
 +data/prepared
- 
+
  # The models
  *.pkl
 ```
@@ -277,8 +274,8 @@ Changes to be committed:
         new file:   data/.gitignore
         new file:   data/README.md
         new file:   data/data.xml.dvc
-        modified:   pyproject.toml
         modified:   poetry.lock
+        modified:   pyproject.toml
 ```
 
 ### Push the changes to Git

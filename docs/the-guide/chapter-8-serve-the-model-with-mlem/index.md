@@ -36,11 +36,10 @@ The output should be similar to this.
 
 ```diff
 diff --git a/pyproject.toml b/pyproject.toml
-index 8a57399..f28f832 100644
+index ff11768..f28f832 100644
 --- a/pyproject.toml
 +++ b/pyproject.toml
-@@ -13,6 +13,8 @@ pyaml = "21.10.1"
- scikit-learn = "1.1.3"
+@@ -14,6 +14,7 @@ scikit-learn = "1.1.3"
  scipy = "1.10.1"
  matplotlib = "3.6.2"
  dvc = {version = "2.37.0", extras = ["gs"]}
@@ -713,8 +712,8 @@ Changes to be committed:
         modified:   dvc.yaml
         new file:   models/.gitignore
         new file:   models/rf.mlem
-        modified:   pyproject.toml
         modified:   poetry.lock
+        modified:   pyproject.toml
         modified:   src/evaluate.py
         modified:   src/featurization.py
         modified:   src/train.py

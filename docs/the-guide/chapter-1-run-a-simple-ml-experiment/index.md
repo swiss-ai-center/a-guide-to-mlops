@@ -70,7 +70,7 @@ contents. The following is a summary of each file.
 
 This is what your working directory should look like.
 
-```yaml hl_lines="2-9"
+```yaml hl_lines="2-10"
 .
 ├── src # (1)!
 │   ├── evaluate.py
@@ -78,8 +78,8 @@ This is what your working directory should look like.
 │   ├── prepare.py
 │   └── train.py
 ├── params.yaml # (2)!
-├── pyproject.toml # (3)!
-├── poetry.lock # (4)!
+├── poetry.lock # (3)!
+├── pyproject.toml # (4)!
 └── README.md # (5)!
 ```
 
@@ -194,41 +194,39 @@ python src/evaluate.py model.pkl data/features
 
 Your working directory should now be similar to this:
 
-```yaml hl_lines="2-3 5-10 13-24 31"
+```yaml hl_lines="6-11 12-23 24"
 .
-├── .venv # (1)!
-│   └── ...
+├── README.md
 ├── data
-│   ├── features # (2)!
-│   │   ├── test.pkl
-│   │   └── train.pkl
-│   ├── prepared # (3)!
-│   │   ├── test.tsv
-│   │   └── train.tsv
-│   ├── data.xml
-│   └── README.md
+│   ├── README.md
+│   ├── data.xml
+│   ├── features # (1)!
+│   │   ├── test.pkl
+│   │   └── train.pkl
+│   └── prepared # (2)!
+│       ├── test.tsv
+│       └── train.tsv
 ├── evaluation # (4)!
-│   ├── plots
-│   │   ├── metrics
-│   │   │   ├── avg_prec.tsv
-│   │   │   └── roc_auc.tsv
-│   │   ├── sklearn
-│   │   │   ├── confusion_matrix.json
-│   │   │   └── roc.json
-│   │   ├── importance.png
-│   │   └── prc.json
-│   ├── metrics.json
-│   └── report.html
-├── src
-│   ├── evaluate.py
-│   ├── featurization.py
-│   ├── prepare.py
-│   └── train.py
+│   ├── metrics.json
+│   ├── plots
+│   │   ├── importance.png
+│   │   ├── metrics
+│   │   │   ├── avg_prec.tsv
+│   │   │   └── roc_auc.tsv
+│   │   ├── prc.json
+│   │   └── sklearn
+│   │       ├── confusion_matrix.json
+│   │       └── roc.json
+│   └── report.html
 ├── model.pkl # (5)!
 ├── params.yaml
-├── pyproject.toml
 ├── poetry.lock
-└── README.md
+├── pyproject.toml
+└── src
+    ├── evaluate.py
+    ├── featurization.py
+    ├── prepare.py
+    └── train.py
 ```
 
 1. This, and all its sub-directory, is new.

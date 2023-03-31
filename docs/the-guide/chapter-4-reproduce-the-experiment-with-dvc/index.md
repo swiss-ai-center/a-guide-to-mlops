@@ -56,11 +56,8 @@ them for you. At the end of this chapter, DVC should have updated all the
 Update the `.gitignore` file to remove your experiment data. The required files
 to be ignored will then be added by DVC.
 
-```sh title="Execute the following command(s) in a terminal" hl_lines="9-11"
+```sh title="Execute the following command(s) in a terminal" hl_lines="6-8"
 ## Python
-
-# Environments
-.venv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -81,10 +78,10 @@ The output should be similar to this:
 
 ```diff
 diff --git a/.gitignore b/.gitignore
-index 6755ab0..be446de 100644
+index 69b142f..554f913 100644
 --- a/.gitignore
 +++ b/.gitignore
-@@ -1,13 +1,6 @@
+@@ -1,11 +1,8 @@
 -# Data used to train the models
 -data/features
 -data/prepared
@@ -93,9 +90,6 @@ index 6755ab0..be446de 100644
 -*.pkl
 -
  ## Python
-
- # Environments
-@@ -15,3 +8,8 @@ data/prepared
 
  # Byte-compiled / optimized / DLL files
  __pycache__/
@@ -249,11 +243,8 @@ see all the stages and their dependencies.
 Notice that DVC also updated the main `.gitignore` file with the model, as it is an output of the
 `train` stage.
 
-```sh title="Execute the following command(s) in a terminal" hl_lines="12"
+```sh title="Execute the following command(s) in a terminal" hl_lines="9"
 ## Python
-
-# Environments
-.venv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
