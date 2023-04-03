@@ -81,25 +81,23 @@ gke-mlops-kubernetes-default-pool-d4f966ea-p7qm   Ready    <none>   50s   v1.24.
 
 ### Labelize the nodes
 
-Let's imagine one node has a GPU and the other one doesn't. You can labelize the nodes to be able to use the GPU node for the training of the model. For our experiment, there is no need to have a GPU to train the model but it's for demonstration purposes.
+Let's imagine one node has a GPU and the other one doesn't. You can labelize the nodes to be able to use the GPU node for the training of the model. For our expiriment, there is no need to have a GPU to train the model but it's for demonstration purposes.
 
 ```sh title="Execute the following command(s) in a terminal"
-kubectl label nodes <your-node-1-name> gpu=true
-kubectl label nodes <your-node-2-name> gpu=false
+kubectl label nodes <your-node-1-name> accelerator=nvidia-tesla-k80
 ```
 
 In the previous example, the nodes are named `gke-mlops-kubernetes-default-pool-d4f966ea-8rbn` and `gke-mlops-kubernetes-default-pool-d4f966ea-p7qm`. The command will be the following.
 
 ```sh title="Labelization example"
-kubectl label nodes gke-mlops-kubernetes-default-pool-d4f966ea-8rbn gpu=true
-kubectl label nodes gke-mlops-kubernetes-default-pool-d4f966ea-p7qm gpu=false
+kubectl label nodes gke-mlops-kubernetes-default-pool-d4f966ea-8rbn accelerator=nvidia-tesla-k80
 ```
 
-You can check the labels with the `kubectl get nodes --show-labels` command. You should see for both nodes the `gpu` label with the value `true` or `false`.
+You can check the labels with the `kubectl get nodes --show-labels` command. You should see the node with the `accelerator=nvidia-tesla-k80` label.
 
 ### Update the CI/CD configuration file
 
-You will now update the CI/CD configuration file to start a runner on the Kubernetes cluster with the help of CML. Using the labels defined previously, you will be able to start the training of the model on the node with the GPU.
+You'll now update the CI/CD configuration file to start a runner on the Kubernetes cluster with the help of CML. Using the labels defined previously, you'll be able to start the training of the model on the node with the GPU.
 
 === ":simple-github: GitHub"
 
@@ -166,9 +164,9 @@ You will now update the CI/CD configuration file to start a runner on the Kubern
 	          # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#machine-type
 	          # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#{cpu}-{memory}	+{accelerator}*{count}
 	          cml runner \
-	            --name="CML" \
 	            --labels="cml-runner" \
 	            --cloud="kubernetes" \
+	            --cloud-type="1-1024+nvidia-tesla-k80*1"
 	            --reuse-idle
 	
 	  train:
@@ -308,55 +306,7 @@ You will now update the CI/CD configuration file to start a runner on the Kubern
 	index 0ca4d29..10afa49 100644
 	--- a/.github/workflows/mlops.yml
 	+++ b/.github/workflows/mlops.yml
-	@@ -12,9 +12,47 @@ on:
-	   # Allows you to run this workflow manually from the Actions tab
-	   workflow_dispatch:
-	 
-	+permissions:
-	+  contents: read
-	+  id-token: write
-	+
-	 jobs:
-	-  train:
-	+  setup-runner:
-	     runs-on: ubuntu-latest
-	+    steps:
-	+      - name: Checkout repository
-	+        uses: actions/checkout@v3
-	+      - name: Login to Google Cloud
-	+        uses: 'google-github-actions/auth@v1'
-	+        with:
-	+          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
-	+      - name: Get Google Cloud's Kubernetes credentials
-	+        uses: 'google-github-actions/get-gke-credentials@v1'
-	+        with:
-	+          cluster_name: 'mlops-kubernetes'
-	+          location: 'europe-west6-a'
-	+      - name: Setup CML
-	+        uses: iterative/setup-cml@v1
-	+        with:
-	+          version: '0.18.17'
-	+      - name: Initialize runner on Kubernetes
-	+        env:
-	+          REPO_TOKEN: ${{ secrets.CML_PAT }}
-	+        run: |
-	+          export KUBERNETES_CONFIGURATION=$(cat $KUBECONFIG)
-	+          # https://cml.dev/doc/ref/runner#--cloud-type
-	+          # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#machine-type
-	+          # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#{cpu}-{memory}   	+{accelerator}*{count}
-	+          cml runner \
-	+            --name="CML" \
-	+            --labels="cml-runner" \
-	+            --cloud="kubernetes" \
-	+            --reuse-idle
-	+
-	+  train:
-	+    needs: setup-runner
-	+    runs-on: [self-hosted, cml-runner]
-	+    timeout-minutes: 50400 # 35 days
-	     steps:
-	       - name: Checkout repository
-	         uses: actions/checkout@v3
+	TODO
 	```
 
 	Take some time to understand the changes made to the file.
@@ -365,7 +315,7 @@ You will now update the CI/CD configuration file to start a runner on the Kubern
 
 	Update the `.gitlab-ci.yml` file.
 
-	```yaml title=".gitlab-ci.yml" hl_lines="2 19-43 48-51"
+	```yaml title=".gitlab-ci.yml" hl_lines="2 19-39 44-48"
 	stages:
 	  - setup runner
 	  - train
@@ -387,36 +337,33 @@ You will now update the CI/CD configuration file to start a runner on the Kubern
 	setup-runner:
 	  stage: setup runner
 	  image: iterativeai/cml:0-dvc2-base1
-	  rules:
-	    - if: $CI_COMMIT_BRANCH == "main"
-	    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-	  variables:
-	    # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/	add#google-cloud-storage
-	    GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
 	  before_script:
-	    # Install Google Cloud CLI (gcloud)
-	    - sudo apt-get install apt-transport-https ca-certificates gnupg
-	    - curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo tee /usr/share/keyrings/cloud.google.gpg
-	    - sudo apt-get update && sudo apt-get install google-cloud-cli
-	    # Set the Google Service Account key
-	    - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
-	    # Authenticate to Google Cloud with the service key
-	    - gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
+	    # Install Kubernetes
+	    - export KUBERNETES_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt)
+	    - curl -LO -s "https://dl.k8s.io/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl"
+	    - curl -LO -s "https://dl.k8s.io/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl.sha256"
+	    - echo "$(cat kubectl.sha256) kubectl" | sha256sum --check
+	    - sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+	    # https://cml.dev/doc/self-hosted-runners?tab=Kubernetes#cloud-compute-resource-credentials
+	    - export KUBERNETES_CONFIGURATION=$(cat $GCP_KUBECONFIG)
 	  script:
-	    # https://cml.dev/doc/ref/runner
+	    # https://cml.dev/doc/ref/runner#--cloud-type
+	    # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#machine-type
+	    # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#{cpu}-{memory}+{accelerator}*	{count}
 	    - cml runner
-	        --name="CML"
 	        --labels="cml-runner"
 	        --cloud="kubernetes"
+	        --cloud-type="1-1024+nvidia-tesla-k80*1"
 	        --reuse-idle
 	
 	train:
 	  stage: train
 	  image: iterativeai/cml:0-dvc2-base1
-	  tags:
-	    - cml-runner
 	  needs:
 	    - setup-runner
+	  tags:
+	    # Uses the runner set up by CML
+	    - cml-runner
 	  rules:
 	    - if: $CI_COMMIT_BRANCH == "main"
 	    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -519,52 +466,7 @@ You will now update the CI/CD configuration file to start a runner on the Kubern
 	index 561d04f..fad1002 100644
 	--- a/.gitlab-ci.yml
 	+++ b/.gitlab-ci.yml
-	@@ -1,4 +1,5 @@
-	 stages:
-	+  - setup runner
-	   - train
-	   - report
-	 
-	@@ -15,9 +16,39 @@ cache:
-	   paths:
-	     - .cache/pip
-	 
-	+setup-runner:
-	+  stage: setup runner
-	+  image: iterativeai/cml:0-dvc2-base1
-	+  rules:
-	+    - if: $CI_COMMIT_BRANCH == "main"
-	+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-	+  variables:
-	+    # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
-	+    GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
-	+  before_script:
-	+    # Install Google Cloud CLI (gcloud)
-	+    - sudo apt-get install apt-transport-https ca-certificates gnupg
-	+    - curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo tee /usr/share/keyrings/cloud.google.gpg
-	+    - sudo apt-get update && sudo apt-get install google-cloud-cli
-	+    # Set the Google Service Account key
-	+    - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
-	+    # Authenticate to Google Cloud with the service key
-	+    - gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
-	+  script:
-	+    # https://cml.dev/doc/ref/runner
-	+    - cml runner
-	+        --name="CML"
-	+        --labels="cml-runner"
-	+        --cloud="kubernetes"
-	+        --reuse-idle
-	+
-	 train:
-	   stage: train
-	   image: iterativeai/cml:0-dvc2-base1
-	+  tags:
-	+    - cml-runner
-	+  needs:
-	+    - setup-runner
-	   rules:
-	     - if: $CI_COMMIT_BRANCH == "main"
-	     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+	TODO
 	```
 
 	Take some time to understand the changes made to the file.

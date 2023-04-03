@@ -44,9 +44,9 @@ jobs:
           # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#machine-type
           # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#{cpu}-{memory}+{accelerator}*{count}
           cml runner \
-            --name="CML" \
             --labels="cml-runner" \
             --cloud="kubernetes" \
+            --cloud-type="1-1024+nvidia-tesla-k80*1"
             --reuse-idle
 
   train:

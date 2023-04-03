@@ -35,7 +35,8 @@ setup-runner:
     - cml runner
         --labels="cml-runner"
         --cloud="kubernetes"
-        --cloud-type="64-256000+nvidia-tesla-k80*1"
+        --cloud-type="1-1024+nvidia-tesla-k80*1"
+        --reuse-idle
 
 train:
   stage: train
