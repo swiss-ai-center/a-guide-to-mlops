@@ -194,46 +194,45 @@ python src/evaluate.py model.pkl data/features
 
 Your working directory should now be similar to this:
 
-```yaml hl_lines="6-11 12-23 24"
+```yaml hl_lines="3-8 11-22 29"
 .
-├── README.md
 ├── data
-│   ├── README.md
-│   ├── data.xml
 │   ├── features # (1)!
 │   │   ├── test.pkl
 │   │   └── train.pkl
-│   └── prepared # (2)!
-│       ├── test.tsv
-│       └── train.tsv
-├── evaluation # (4)!
-│   ├── metrics.json
+│   ├── prepared # (2)!
+│   │   ├── test.tsv
+│   │   └── train.tsv
+│   ├── README.md
+│   └── data.xml
+├── evaluation # (3)!
 │   ├── plots
-│   │   ├── importance.png
 │   │   ├── metrics
 │   │   │   ├── avg_prec.tsv
 │   │   │   └── roc_auc.tsv
-│   │   ├── prc.json
-│   │   └── sklearn
-│   │       ├── confusion_matrix.json
-│   │       └── roc.json
+│   │   ├── sklearn
+│   │   │   ├── confusion_matrix.json
+│   │   │   └── roc.json
+│   │   ├── importance.png
+│   │   └── prc.json
+│   ├── metrics.json
 │   └── report.html
-├── model.pkl # (5)!
+├── src
+│   ├── evaluate.py
+│   ├── featurization.py
+│   ├── prepare.py
+│   └── train.py
+├── README.md
+├── model.pkl # (4)!
 ├── params.yaml
 ├── poetry.lock
-├── pyproject.toml
-└── src
-    ├── evaluate.py
-    ├── featurization.py
-    ├── prepare.py
-    └── train.py
+└── pyproject.toml
 ```
 
 1. This, and all its sub-directory, is new.
 2. This, and all its sub-directory, is new.
 3. This, and all its sub-directory, is new.
-4. This, and all its sub-directory, is new.
-5. This is new.
+4. This is new.
 
 Here, the following should be noted:
 

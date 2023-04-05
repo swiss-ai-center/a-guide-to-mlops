@@ -228,14 +228,6 @@ Changes not staged for commit:
   (use "git restore <file>..." to discard changes in working directory)
         modified:   .gitignore
         modified:   dvc.lock
-        modified:   evaluation/metrics.json
-        modified:   evaluation/plots/importance.png
-        modified:   evaluation/plots/metrics/avg_prec.tsv
-        modified:   evaluation/plots/metrics/roc_auc.tsv
-        modified:   evaluation/plots/prc.json
-        modified:   evaluation/plots/sklearn/confusion_matrix.json
-        modified:   evaluation/plots/sklearn/roc.json
-        modified:   evaluation/report.html
         modified:   params.yaml
 ```
 

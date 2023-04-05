@@ -74,13 +74,13 @@ No commits yet
 
 Untracked files:
   (use "git add <file>..." to include in what will be committed)
+        README.md
         data/
         evaluation/
         model.pkl
         params.yaml
         poetry.lock
         pyproject.toml
-        README.md
         src/
 ```
 
@@ -99,6 +99,9 @@ remain optimized.
 # Data used to train the models
 data
 
+# Artifacts
+evaluation
+
 # The models
 *.pkl
 
@@ -116,7 +119,7 @@ __pycache__/
 
 Check the changes with Git to ensure all wanted files are here.
 
-```sh title="Execute the following command(s) in a terminal"
+```sh title=".gitingore"
 # Add all the available files
 git add .
 
@@ -135,14 +138,6 @@ Changes to be committed:
   (use "git rm --cached <file>..." to unstage)
         new file:   .gitignore
         new file:   README.md
-        new file:   evaluation/metrics.json
-        new file:   evaluation/plots/importance.png
-        new file:   evaluation/plots/metrics/avg_prec.tsv
-        new file:   evaluation/plots/metrics/roc_auc.tsv
-        new file:   evaluation/plots/prc.json
-        new file:   evaluation/plots/sklearn/confusion_matrix.json
-        new file:   evaluation/plots/sklearn/roc.json
-        new file:   evaluation/report.html
         new file:   params.yaml
         new file:   poetry.lock
         new file:   pyproject.toml

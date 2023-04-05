@@ -47,7 +47,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	Update the `.github/workflows/mlops.yml` file.
 
-	```yaml  title=".github/workflows/mlops.yml" hl_lines="9-10 55-149"
+	```yaml  title=".github/workflows/mlops.yml" hl_lines="9-10 44-149"
 	name: MLOps
 
 	on:
@@ -58,7 +58,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	  # Runs on pull requests
 	  pull_request:
-	
+
 	  # Allows you to run this workflow manually from the Actions tab
 	  workflow_dispatch:
 
@@ -202,13 +202,13 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	@@ -6,6 +6,9 @@ on:
 	     branches:
 	       - main
-	
+
 	+  # Runs on pull requests
 	+  pull_request:
 	+
 	   # Allows you to run this workflow manually from the Actions tab
 	   workflow_dispatch:
-	
+
 	@@ -38,3 +41,95 @@ jobs:
 	           dvc pull
 	           # Run the experiment
@@ -351,7 +351,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	Update the `.gitlab-ci.yml` file.
 
-	```yaml title=".gitlab-ci.yml" hl_lines="3 37-105"
+	```yaml title=".gitlab-ci.yml" hl_lines="3 43-111"
 	stages:
 	  - train
 	  - report
@@ -361,7 +361,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	  # only cache local items.
 	  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 	  # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
-	  GIT_DEPTH: '0'
+	  GIT_DEPTH: "0"
 	  # https://python-poetry.org/docs/#ci-recommendations
 	  POETRY_HOME: "$CI_PROJECT_DIR/.cache/poetry"
 
@@ -385,16 +385,15 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	    # Set the Google Service Account key
 	    - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
 	    # Install Poetry
-	    - python3 -m venv $POETRY_HOME
-	    - $POETRY_HOME/bin/pip install poetry==1.4.0
-	    - export PATH="$POETRY_HOME/bin:$PATH"
+	    - pip install poetry==1.4.0
 	    # Install dependencies
 	    - poetry install
+	    - source `poetry env info --path`/bin/activate
 	  script:
 	    # Pull data from DVC
-	    - poetry run dvc pull
+	    - dvc pull
 	    # Run the experiment
-	    - poetry run dvc repro
+	    - dvc repro
 	  artifacts:
 	    expire_in: 1 week
 	    paths:
@@ -415,13 +414,13 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	      # Compare parameters to main branch
 	      echo "# Params workflow vs. main" >> report.md
 	      echo >> report.md
-	      poetry run dvc params diff main --show-md >> report.md
+	      dvc params diff main --show-md >> report.md
 	      echo >> report.md
 
 	      # Compare metrics to main branch
 	      echo "# Metrics workflow vs. main" >> report.md
 	      echo >> report.md
-	      poetry run dvc metrics diff main --show-md >> report.md
+	      dvc metrics diff main --show-md >> report.md
 	      echo >> report.md
 
 	      # Create plots
@@ -430,7 +429,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	      echo "## Precision recall curve" >> report.md
 	      echo >> report.md
-	      poetry run dvc plots diff \
+	      dvc plots diff \
 	        --target evaluation/plots/prc.json \
 	        -x recall \
 	        -y precision \
@@ -441,7 +440,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	      echo "## Roc curve" >> report.md
 	      echo >> report.md
-	      poetry run dvc plots diff \
+	      dvc plots diff \
 	        --target evaluation/plots/sklearn/roc.json \
 	        -x fpr \
 	        -y tpr \
@@ -452,7 +451,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	      echo "## Confusion matrix" >> report.md
 	      echo >> report.md
-	      poetry run dvc plots diff \
+	      dvc plots diff \
 	        --target evaluation/plots/sklearn/confusion_matrix.json \
 	        --template confusion \
 	        -x actual \
@@ -463,7 +462,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	      echo >> report.md
 
 	      # Publish the CML report
-	      poetry run cml comment create --target=pr --publish report.md
+	      cml comment create --target=pr --publish report.md
 	```
 
 	Check the differences with Git to validate the changes.
@@ -477,7 +476,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	```diff
 	diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-	index cd6dfc2..89df8f5 100644
+	index 06355c9..345f6d3 100644
 	--- a/.gitlab-ci.yml
 	+++ b/.gitlab-ci.yml
 	@@ -1,5 +1,6 @@
@@ -487,14 +486,17 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	 variables:
 	   # Change pip's cache directory to be inside the project directory since we can
-	@@ -36,3 +37,72 @@ train:
+	@@ -38,4 +39,73 @@ train:
+	     # Pull data from DVC
 	     - dvc pull
 	     # Run the experiment
-	     - dvc repro
+	-    - dvc repro
+	\ No newline at end of file
+	+    - dvc repro
 	+  artifacts:
-	+      expire_in: 1 week
-	+      paths:
-	+        - "evaluation"
+	+    expire_in: 1 week
+	+    paths:
+	+      - "evaluation"
 	+
 	+report:
 	+  stage: report
@@ -678,14 +680,6 @@ Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
         modified:   .gitignore
         modified:   dvc.lock
-        modified:   evaluation/metrics.json
-        modified:   evaluation/plots/importance.png
-        modified:   evaluation/plots/metrics/avg_prec.tsv
-        modified:   evaluation/plots/metrics/roc_auc.tsv
-        modified:   evaluation/plots/prc.json
-        modified:   evaluation/plots/sklearn/confusion_matrix.json
-        modified:   evaluation/plots/sklearn/roc.json
-        modified:   evaluation/report.html
         modified:   params.yaml
 ```
 

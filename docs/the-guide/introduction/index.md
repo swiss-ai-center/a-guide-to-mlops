@@ -29,7 +29,7 @@ The following requirements are necessary to follow this guide.
     - We recommend to use [Visual Studio Code](https://code.visualstudio.com/)
       to follow this guide.
 - [Python 3](https://www.python.org/downloads/) >=3.8,<3.12
-- [Poetry](https://python-poetry.org/docs) 1.4 or higher
+- [Poetry](https://python-poetry.org/docs) >=1.4
 - [Git](https://git-scm.com/)
 - [wget](https://linux.die.net/man/1/wget)
 - [unzip](https://linux.die.net/man/1/unzip)

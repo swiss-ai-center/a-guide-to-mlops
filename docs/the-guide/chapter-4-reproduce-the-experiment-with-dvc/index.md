@@ -56,7 +56,7 @@ them for you. At the end of this chapter, DVC should have updated all the
 Update the `.gitignore` file to remove your experiment data. The required files
 to be ignored will then be added by DVC.
 
-```sh title="Execute the following command(s) in a terminal" hl_lines="6-8"
+```sh title=".gitignore" hl_lines="6-8"
 ## Python
 
 # Byte-compiled / optimized / DLL files
@@ -78,13 +78,16 @@ The output should be similar to this:
 
 ```diff
 diff --git a/.gitignore b/.gitignore
-index 69b142f..554f913 100644
+index d65f97a..554f913 100644
 --- a/.gitignore
 +++ b/.gitignore
-@@ -1,11 +1,8 @@
+@@ -1,14 +1,8 @@
 -# Data used to train the models
 -data/features
 -data/prepared
+-
+-# Artifacts
+-evaluation
 -
 -# The models
 -*.pkl
@@ -115,9 +118,9 @@ The `dvc stage add` accepts some options:
 - `-n` specifies the name of the stage
 - `-p` specifies the parameters of the stage (referenced in the `params.yaml` file)
 - `-d` specifies the dependencies of the stage
-- `-o` specifies the outputs of the stage
-- `--metrics-no-cache` specifies the metrics of the stage (not cached by DVC)
-- `--plots-no-cache` specifies the plots of the stage (not cached by DVC)
+- `-o` specifies the outputs of the stage (cached by DVC)
+- `--metrics` specifies the metrics of the stage (cached by DVC)
+- `--plots` specifies the plots of the stage (cached by DVC)
 
 As parameters are an important part of the experiment, they are versioned in a `params.yaml` file.
 DVC keeps track of these parameters and of the corresponding results.
@@ -200,12 +203,13 @@ Run the following command to create a new stage called _evaluate_ that evaluates
 ```sh title="Execute the following command(s) in a terminal"
 dvc stage add -n evaluate \
   -d src/evaluate.py -d model.pkl \
-  -O evaluation/plots/metrics \
-  --metrics-no-cache evaluation/metrics.json \
-  --plots-no-cache evaluation/plots/prc.json \
-  --plots-no-cache evaluation/plots/sklearn/roc.json \
-  --plots-no-cache evaluation/plots/sklearn/confusion_matrix.json \
-  --plots-no-cache evaluation/plots/importance.png \
+  -o evaluation/plots/metrics \
+  -o evaluation/report.html \
+  --metrics evaluation/metrics.json \
+  --plots evaluation/plots/prc.json \
+  --plots evaluation/plots/sklearn/roc.json \
+  --plots evaluation/plots/sklearn/confusion_matrix.json \
+  --plots evaluation/plots/importance.png \
   python src/evaluate.py model.pkl data/features
 ```
 
@@ -243,7 +247,7 @@ see all the stages and their dependencies.
 Notice that DVC also updated the main `.gitignore` file with the model, as it is an output of the
 `train` stage.
 
-```sh title="Execute the following command(s) in a terminal" hl_lines="9"
+```sh title=".gitignore" hl_lines="9"
 ## Python
 
 # Byte-compiled / optimized / DLL files
@@ -335,7 +339,9 @@ Changes to be committed:
         new file:   data/features/.gitignore
         new file:   dvc.lock
         new file:   dvc.yaml
-        modified:   evaluation/report.html
+        new file:   evaluation/.gitignore
+        new file:   evaluation/plots/.gitignore
+        new file:   evaluation/plots/sklearn/.gitignore
 ```
 
 ### Push the changes to DVC and Git

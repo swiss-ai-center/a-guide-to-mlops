@@ -187,6 +187,9 @@ Update the `.gitignore` file by changing `data` to `data/features` and
 data/features
 data/prepared
 
+# Artifacts
+evaluation
+
 # The models
 *.pkl
 
@@ -207,7 +210,7 @@ The output should be similar to this.
 
 ```diff
 diff --git a/.gitignore b/.gitignore
-index f911df2..69b142f 100644
+index be315d6..d65f97a 100644
 --- a/.gitignore
 +++ b/.gitignore
 @@ -1,5 +1,6 @@
@@ -216,8 +219,8 @@ index f911df2..69b142f 100644
 +data/features
 +data/prepared
 
- # The models
- *.pkl
+ # Artifacts
+ evaluation
 ```
 
 You can now add the experiment data to DVC without complain!
