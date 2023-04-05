@@ -99,11 +99,7 @@ To delete the Google Cloud project you created:
 In order to remove the packages installed with Poetry, you can run the following command:
 
 ```sh title="Execute the following command(s) in a terminal"
-# List the environments created by Poetry
-poetry env list
-
-# Delete the environment you created for this guide
-poetry env remove <name of the environment you created>
+poetry env remove --all
 ```
 
 To clean up your local environment, you can simply delete the project directory you created for this guide.
