@@ -15,15 +15,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Install poetry
-        run: pipx install poetry
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-          cache: 'poetry'
-      - name: Install dependencies
-        run: poetry install
+          cache: 'pip'
       - name: Setup DVC
         uses: iterative/setup-dvc@v1
         with:
@@ -34,6 +30,8 @@ jobs:
           credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
       - name: Train model
         run: |
+          # Install dependencies
+          pip install --requirement src/requirements.txt
           # Pull data from DVC
           dvc pull
           # Run the experiment

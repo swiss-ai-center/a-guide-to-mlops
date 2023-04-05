@@ -1,14 +1,14 @@
-## Python
+# Data used to train the models
 data/features
 data/prepared
 
 # The models
 *.pkl
 
+## Python
+
+# Environments
+.venv
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
-
-## DVC
-
-# DVC will add new files after this line
-/model.pkl
