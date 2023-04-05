@@ -95,7 +95,7 @@ space and you can have a history of the improvements made to your model.
 Additionally, this will help to ensure that the repository size and clone time
 remain optimized.
 
-```sh title="Execute the following command(s) in a terminal"
+```sh title=".gitingore"
 # Data used to train the models
 data
 
@@ -119,7 +119,7 @@ __pycache__/
 
 Check the changes with Git to ensure all wanted files are here.
 
-```sh title=".gitingore"
+```sh title="Execute the following command(s) in a terminal"
 # Add all the available files
 git add .
 
