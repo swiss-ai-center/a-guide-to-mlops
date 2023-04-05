@@ -2,13 +2,13 @@
 data/features
 data/prepared
 
+# Artifacts
+evaluation
+
 # The models
 *.pkl
 
 ## Python
-
-# Environments
-.venv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -25,7 +25,7 @@ with open(os.path.join(input, "train.pkl"), "rb") as fd:
     matrix, _ = pickle.load(fd)
 
 labels = np.squeeze(matrix[:, 1].toarray())
-x = matrix[:, 2:].toarray()
+x = matrix[:, 2:]
 
 sys.stderr.write("Input matrix size {}\n".format(matrix.shape))
 sys.stderr.write("X matrix size {}\n".format(x.shape))
@@ -44,5 +44,5 @@ save(
     clf,
     output,
     preprocess=lambda x: tfidf(vectorizer(x)),
-    sample_data=["This is a sample text."]
+    sample_data=["This is a sample text."],
 )

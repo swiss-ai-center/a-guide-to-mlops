@@ -37,24 +37,19 @@ stages:
     - model.pkl
     - src/evaluate.py
     outs:
-    - evaluation/plots/metrics:
-        cache: false
+    - evaluation/plots/metrics
+    - evaluation/report.html
     metrics:
-    - evaluation/metrics.json:
-        cache: false
+    - evaluation/metrics.json
     plots:
-    - evaluation/plots/importance.png:
-        cache: false
+    - evaluation/plots/importance.png
     - evaluation/plots/prc.json:
-        cache: false
         x: recall
         y: precision
     - evaluation/plots/sklearn/confusion_matrix.json:
-        cache: false
         template: confusion
         x: actual
         y: predicted
     - evaluation/plots/sklearn/roc.json:
-        cache: false
         x: fpr
         y: tpr
