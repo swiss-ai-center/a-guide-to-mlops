@@ -486,13 +486,10 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	 variables:
 	   # Change pip's cache directory to be inside the project directory since we can
-	@@ -38,4 +39,73 @@ train:
-	     # Pull data from DVC
+	@@ -39,3 +40,72 @@ train:
 	     - dvc pull
 	     # Run the experiment
-	-    - dvc repro
-	\ No newline at end of file
-	+    - dvc repro
+	     - dvc repro
 	+  artifacts:
 	+    expire_in: 1 week
 	+    paths:
