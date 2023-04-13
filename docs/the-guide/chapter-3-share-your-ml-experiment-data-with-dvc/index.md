@@ -363,6 +363,6 @@ CLI_ - cloud.google.com](https://cloud.google.com/sdk/docs/install-sdk),
 cloud.google.com](https://cloud.google.com/storage/docs/creating-buckets) and [_gcloud storage buckets create_ - cloud.google.com](https://cloud.google.com/sdk/gcloud/reference/storage/buckets/create)
 guides.
 
-Want to see what the result at the end of this chapter should look like? Have a
+Want to see what the result at the end of this chapter should look like on your GitHub/GitLab? Have a
 look at the Git repository directory here:
 [chapter-3-share-your-ml-experiment-data-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/docs/the-guide/chapter-3-share-your-ml-experiment-data-with-dvc).

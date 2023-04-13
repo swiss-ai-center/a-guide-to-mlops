@@ -220,6 +220,6 @@ and [_Create a project_ -
 docs.gitlab.com](https://docs.gitlab.com/ee/user/project/working_with_projects.html#create-a-project)
 guides.
 
-Want to see what the result at the end of this chapter should look like? Have a
+Want to see what the result at the end of this chapter should look like on your GitHub/GitLab? Have a
 look at the Git repository directory here:
 [chapter-2-share-your-ml-experiment-code-with-git](https://github.com/csia-pme/a-guide-to-mlops/tree/main/docs/the-guide/chapter-2-share-your-ml-experiment-code-with-git).

@@ -858,6 +858,6 @@ github.com](https://github.com/iterative/cml_dvc_case), [`example_cml` -
 gitlab.com](https://gitlab.com/iterative.ai/example_cml), [`cml-dvc-case` -
 gitlab.com](https://gitlab.com/iterative.ai/cml-dvc-case) Git repositories.
 
-Want to see what the result at the end of this chapter should look like? Have a
+Want to see what the result at the end of this chapter should look like on your GitHub/GitLab? Have a
 look at the Git repository directory here:
 [chapter-7-track-model-evolutions-in-the-cicd-pipeline-with-cml](https://github.com/csia-pme/a-guide-to-mlops/tree/main/docs/the-guide/chapter-7-track-model-evolutions-in-the-cicd-pipeline-with-cml).

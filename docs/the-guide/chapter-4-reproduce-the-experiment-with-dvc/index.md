@@ -421,6 +421,6 @@ collaboration. Continue the guide to learn how.
 Highly inspired by the [_Get Started: Data Pipelines_ -
 dvc.org](https://dvc.org/doc/start/data-management/data-pipelines) guide.
 
-Want to see what the result at the end of this chapter should look like? Have a
+Want to see what the result at the end of this chapter should look like on your GitHub/GitLab? Have a
 look at the Git repository directory here:
 [chapter-4-reproduce-the-experiment-with-dvc](https://github.com/csia-pme/a-guide-to-mlops/tree/main/docs/the-guide/chapter-4-reproduce-the-experiment-with-dvc).

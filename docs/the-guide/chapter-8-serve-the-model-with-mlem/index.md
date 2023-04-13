@@ -796,6 +796,6 @@ DVC_ - mlem.ai](https://mlem.ai/doc/use-cases/dvc), [_`mlem.api.save()`_ -
 mlem.ai](https://mlem.ai/doc/api-reference/save) and [_`mlem.api.load()`_ -
 mlem.ai](https://mlem.ai/doc/api-reference/load) guides.
 
-Want to see what the result at the end of this chapter should look like? Have a
+Want to see what the result at the end of this chapter should look like on your GitHub/GitLab? Have a
 look at the Git repository directory here:
 [chapter-8-serve-the-model-with-mlem](https://github.com/csia-pme/a-guide-to-mlops/tree/main/docs/the-guide/chapter-8-serve-the-model-with-mlem).
