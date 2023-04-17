@@ -2,7 +2,7 @@
 
 !!! warning
 
-	This is a work in progress. CML does not support the Kubernetes arbitrary node selector at the moment. Check this issue for more information: <https://github.com/iterative/cml/issues/1365>.
+	The feature presented in this guide is still a work in progress. The PRs are opened on GitHub and are soon to be closed. Check this issue for more information: <https://github.com/iterative/cml/issues/1365>.
 
 ## Introduction
 
@@ -26,7 +26,7 @@ You must enable the Google Kubernetes Engine API to create Kubernetes clusters o
 
 ### Create the Kubernetes cluster
 
-Create the Google Kubernetes cluster with the Google Cloud CLI.
+Create the Google Kubernetes cluster with the Google Cloud CLI. You might need to change the name `mlops-kubernetes` and the zone `europe-west6-a` to match your needs.
 
 ```sh title="Execute the following command(s) in a terminal"
 gcloud container clusters create \
@@ -84,16 +84,17 @@ gke-mlops-kubernetes-default-pool-d4f966ea-p7qm   Ready    <none>   50s   v1.24.
 Let's imagine one node has a GPU and the other one doesn't. You can labelize the nodes to be able to use the GPU node for the training of the model. For our expiriment, there is no need to have a GPU to train the model but it's for demonstration purposes.
 
 ```sh title="Execute the following command(s) in a terminal"
-kubectl label nodes <your-node-1-name> accelerator=nvidia-tesla-k80
+kubectl label nodes <your-node-1-name> gpu=true
 ```
 
 In the previous example, the nodes are named `gke-mlops-kubernetes-default-pool-d4f966ea-8rbn` and `gke-mlops-kubernetes-default-pool-d4f966ea-p7qm`. The command will be the following.
 
 ```sh title="Labelization example"
-kubectl label nodes gke-mlops-kubernetes-default-pool-d4f966ea-8rbn accelerator=nvidia-tesla-k80
+kubectl label nodes gke-mlops-kubernetes-default-pool-d4f966ea-8rbn gpu=true
+kubectl label nodes gke-mlops-kubernetes-default-pool-d4f966ea-p7qm gpu=false
 ```
 
-You can check the labels with the `kubectl get nodes --show-labels` command. You should see the node with the `accelerator=nvidia-tesla-k80` label.
+You can check the labels with the `kubectl get nodes --show-labels` command. You should see the node with the `gpu=true`/`gpu=false` labels.
 
 ### Update the CI/CD configuration file
 
@@ -117,28 +118,30 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 
 	Update the `.github/workflows/mlops.yml` file.
 
-	```yaml  title=".github/workflows/mlops.yml" hl_lines="15-17 20-50 53-55"
+	```yaml  title=".github/workflows/mlops.yml" hl_lines="15-18 21-49 52-54"
 	name: MLOps
-	
+
 	on:
 	  # Runs on pushes targeting main branch
 	  push:
 	    branches:
 	      - main
-	
+
 	  # Runs on pull requests
 	  pull_request:
-	
+
 	  # Allows you to run this workflow manually from the Actions tab
 	  workflow_dispatch:
-	
+
+	# Allow the creation and usage of self-hosted runners
 	permissions:
 	  contents: read
 	  id-token: write
-	
+
 	jobs:
 	  setup-runner:
 	    runs-on: ubuntu-latest
+	    container: iterativeai/cml:0-dvc2-base1
 	    steps:
 	      - name: Checkout repository
 	        uses: actions/checkout@v3
@@ -151,23 +154,20 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 	        with:
 	          cluster_name: 'mlops-kubernetes'
 	          location: 'europe-west6-a'
-	      - name: Setup CML
-	        uses: iterative/setup-cml@v1
-	        with:
-	          version: '0.18.17'
 	      - name: Initialize runner on Kubernetes
 	        env:
 	          REPO_TOKEN: ${{ secrets.CML_PAT }}
 	        run: |
 	          export KUBERNETES_CONFIGURATION=$(cat $KUBECONFIG)
-	          # https://cml.dev/doc/ref/runner#--cloud-type
+	          # https://cml.dev/doc/ref/runner
 	          # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#machine-type
-	          # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#{cpu}-{memory}	+{accelerator}*{count}
+	          # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#{cpu}-{memory}
 	          cml runner \
 	            --labels="cml-runner" \
 	            --cloud="kubernetes" \
-	            --cloud-type="1-1024+nvidia-tesla-k80*1"
-	            --reuse-idle
+	            --cloud-type="1-2000" \
+	            --cloud-kubernetes-node-selector="gpu=true" \
+	            --single
 	
 	  train:
 	    needs: setup-runner
@@ -176,11 +176,15 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 	    steps:
 	      - name: Checkout repository
 	        uses: actions/checkout@v3
+	      - name: Install poetry
+	        run: pipx install poetry==1.4.0
 	      - name: Setup Python
 	        uses: actions/setup-python@v4
 	        with:
 	          python-version: '3.10'
-	          cache: 'pip'
+	          cache: 'poetry'
+	      - name: Install dependencies
+	        run: poetry install
 	      - name: Setup DVC
 	        uses: iterative/setup-dvc@v1
 	        with:
@@ -190,10 +194,7 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 	        with:
 	          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
 	      - name: Train model
-	        working-directory: docs/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml
 	        run: |
-	          # Install dependencies
-	          pip install --requirement src/requirements.txt
 	          # Pull data from DVC
 	          dvc pull
 	          # Run the experiment
@@ -201,10 +202,11 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 	      - name: Upload evaluation results
 	        uses: actions/upload-artifact@v3
 	        with:
-	          path: docs/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml/evaluation
+	          path: evaluation
 	          retention-days: 5
-	
+
 	  report:
+	    permissions: write-all
 	    needs: train
 	    if: github.event_name == 'pull_request'
 	    runs-on: ubuntu-latest
@@ -219,9 +221,9 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 	        shell: bash
 	        run: |
 	          # Delete current evaluation results
-	          rm -rf docs/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml/evaluation
+	          rm -rf evaluation
 	          # Replace with the new evaluation results
-	          mv artifact docs/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml/evaluation
+	          mv artifact evaluation
 	      - name: Setup DVC
 	        uses: iterative/setup-dvc@v1
 	        with:
@@ -233,27 +235,26 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 	      - name: Create CML report
 	        env:
 	          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-	        working-directory: docs/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml
 	        run: |
 	          # Fetch all other Git branches
 	          git fetch --depth=1 origin main:main
-	
+
 	          # Compare parameters to main branch
 	          echo "# Params workflow vs. main" >> report.md
 	          echo >> report.md
 	          dvc params diff main --show-md >> report.md
 	          echo >> report.md
-	
+
 	          # Compare metrics to main branch
 	          echo "# Metrics workflow vs. main" >> report.md
 	          echo >> report.md
 	          dvc metrics diff main --show-md >> report.md
 	          echo >> report.md
-	
+
 	          # Create plots
 	          echo "# Plots" >> report.md
 	          echo >> report.md
-	
+
 	          echo "## Precision recall curve" >> report.md
 	          echo >> report.md
 	          dvc plots diff \
@@ -264,7 +265,7 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 	          vl2png vega.json > prc.png
 	          echo '![](./prc.png "Precision recall curve")' >> report.md
 	          echo >> report.md
-	
+
 	          echo "## Roc curve" >> report.md
 	          echo >> report.md
 	          dvc plots diff \
@@ -275,7 +276,7 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 	          vl2png vega.json > roc.png
 	          echo '![](./roc.png "Roc curve")' >> report.md
 	          echo >> report.md
-	
+
 	          echo "## Confusion matrix" >> report.md
 	          echo >> report.md
 	          dvc plots diff \
@@ -287,7 +288,7 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 	          vl2png vega.json > confusion_matrix.png
 	          echo '![](./confusion_matrix.png "Confusion Matrix")' >> report.md
 	          echo >> report.md
-	
+
 	          # Publish the CML report
 	          cml comment create --target=pr --publish report.md
 	```
@@ -303,10 +304,59 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 
 	```diff
 	diff --git a/.github/workflows/mlops.yml b/.github/workflows/mlops.yml
-	index 0ca4d29..10afa49 100644
+	index f79856a..ce556c7 100644
 	--- a/.github/workflows/mlops.yml
 	+++ b/.github/workflows/mlops.yml
-	TODO
+	@@ -12,9 +12,46 @@ on:
+	   # Allows you to run this workflow manually from the Actions tab
+	   workflow_dispatch:
+	
+	+# Allow the creation and usage of self-hosted runners
+	+permissions:
+	+  contents: read
+	+  id-token: write
+	+
+	 jobs:
+	-  train:
+	+  setup-runner:
+	     runs-on: ubuntu-latest
+	+    container: iterativeai/cml:0-dvc2-base1
+	+    steps:
+	+      - name: Checkout repository
+	+        uses: actions/checkout@v3
+	+      - name: Login to Google Cloud
+	+        uses: 'google-github-actions/auth@v1'
+	+        with:
+	+          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
+	+      - name: Get Google Cloud's Kubernetes credentials
+	+        uses: 'google-github-actions/get-gke-credentials@v1'
+	+        with:
+	+          cluster_name: 'mlops-kubernetes'
+	+          location: 'europe-west6-a'
+	+      - name: Initialize runner on Kubernetes
+	+        env:
+	+          REPO_TOKEN: ${{ secrets.CML_PAT }}
+	+        run: |
+	+          export KUBERNETES_CONFIGURATION=$(cat $KUBECONFIG)
+	+          # https://cml.dev/doc/ref/runner
+	+          # https://registry.terraform.io/providers/iterative/iterative/latest/docs/r
+	esources/task#machine-type
+	+          # https://registry.terraform.io/providers/iterative/iterative/latest/docs/r
+	esources/task#{cpu}-{memory}
+	+          cml runner \
+	+            --labels="cml-runner" \
+	+            --cloud="kubernetes" \
+	+            --cloud-type="1-2000" \
+	+            --cloud-kubernetes-node-selector="gpu=true" \
+	+            --single
+	+
+	+  train:
+	+    needs: setup-runner
+	+    runs-on: [self-hosted, cml-runner]
+	+    timeout-minutes: 50400 # 35 days
+	     steps:
+	       - name: Checkout repository
+	         uses: actions/checkout@v3
 	```
 
 	Take some time to understand the changes made to the file.
@@ -315,25 +365,28 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 
 	Update the `.gitlab-ci.yml` file.
 
-	```yaml title=".gitlab-ci.yml" hl_lines="2 19-39 44-48"
+	```yaml title=".gitlab-ci.yml" hl_lines="2 22-43 48-52"
 	stages:
 	  - setup runner
 	  - train
 	  - report
-	
+
 	variables:
 	  # Change pip's cache directory to be inside the project directory since we can
 	  # only cache local items.
 	  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 	  # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
 	  GIT_DEPTH: "0"
-	
+	  # https://python-poetry.org/docs/#ci-recommendations
+	  POETRY_HOME: "$CI_PROJECT_DIR/.cache/poetry"
+
 	# Pip's cache doesn't store the python packages
 	# https://pip.pypa.io/en/stable/reference/pip_install/#caching
 	cache:
 	  paths:
 	    - .cache/pip
-	
+	    - .cache/poetry
+
 	setup-runner:
 	  stage: setup runner
 	  image: iterativeai/cml:0-dvc2-base1
@@ -347,15 +400,16 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 	    # https://cml.dev/doc/self-hosted-runners?tab=Kubernetes#cloud-compute-resource-credentials
 	    - export KUBERNETES_CONFIGURATION=$(cat $GCP_KUBECONFIG)
 	  script:
-	    # https://cml.dev/doc/ref/runner#--cloud-type
+	    # https://cml.dev/doc/ref/runner
 	    # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#machine-type
-	    # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#{cpu}-{memory}+{accelerator}*	{count}
+	    # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#{cpu}-{memory}
 	    - cml runner
 	        --labels="cml-runner"
 	        --cloud="kubernetes"
-	        --cloud-type="1-1024+nvidia-tesla-k80*1"
-	        --reuse-idle
-	
+	        --cloud-type="1-2000"
+	        --cloud-kubernetes-node-selector="gpu=true"
+	        --single
+
 	train:
 	  stage: train
 	  image: iterativeai/cml:0-dvc2-base1
@@ -373,8 +427,11 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 	  before_script:
 	    # Set the Google Service Account key
 	    - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+	    # Install Poetry
+	    - pip install poetry==1.4.0
 	    # Install dependencies
-	    - pip install --requirement src/requirements.txt
+	    - poetry install
+	    - source `poetry env info --path`/bin/activate
 	  script:
 	    # Pull data from DVC
 	    - dvc pull
@@ -384,7 +441,7 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 	    expire_in: 1 week
 	    paths:
 	      - "evaluation"
-	
+
 	report:
 	  stage: report
 	  image: iterativeai/cml:0-dvc2-base1
@@ -392,7 +449,6 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 	    - job: train
 	      artifacts: true
 	  rules:
-	    - if: $CI_COMMIT_BRANCH == "main"
 	    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 	  variables:
 	    REPO_TOKEN: $CML_PAT
@@ -403,17 +459,17 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 	      echo >> report.md
 	      dvc params diff main --show-md >> report.md
 	      echo >> report.md
-	
+
 	      # Compare metrics to main branch
 	      echo "# Metrics workflow vs. main" >> report.md
 	      echo >> report.md
 	      dvc metrics diff main --show-md >> report.md
 	      echo >> report.md
-	
+
 	      # Create plots
 	      echo "# Plots" >> report.md
 	      echo >> report.md
-	
+
 	      echo "## Precision recall curve" >> report.md
 	      echo >> report.md
 	      dvc plots diff \
@@ -424,7 +480,7 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 	      vl2png vega.json > prc.png
 	      echo '![](./prc.png "Precision recall curve")' >> report.md
 	      echo >> report.md
-	
+
 	      echo "## Roc curve" >> report.md
 	      echo >> report.md
 	      dvc plots diff \
@@ -435,7 +491,7 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 	      vl2png vega.json > roc.png
 	      echo '![](./roc.png "Roc curve")' >> report.md
 	      echo >> report.md
-	
+
 	      echo "## Confusion matrix" >> report.md
 	      echo >> report.md
 	      dvc plots diff \
@@ -447,7 +503,7 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 	      vl2png vega.json > confusion_matrix.png
 	      echo '![](./confusion_matrix.png "Confusion Matrix")' >> report.md
 	      echo >> report.md
-	
+
 	      # Publish the CML report
 	      cml comment create --target=pr --publish report.md
 	```
@@ -466,7 +522,53 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 	index 561d04f..fad1002 100644
 	--- a/.gitlab-ci.yml
 	+++ b/.gitlab-ci.yml
-	TODO
+	@@ -1,4 +1,5 @@
+	 stages:
+	+  - setup runner
+	   - train
+	   - report
+	
+	@@ -18,9 +19,37 @@ cache:
+	     - .cache/pip
+	     - .cache/poetry
+	
+	+setup-runner:
+	+  stage: setup runner
+	+  image: iterativeai/cml:0-dvc2-base1
+	+  before_script:
+	+    # Install Kubernetes
+	+    - export KUBERNETES_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt)
+	+    - curl -LO -s "https://dl.k8s.io/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl"
+	+    - curl -LO -s "https://dl.k8s.io/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl.sha256"
+	+    - echo "$(cat kubectl.sha256) kubectl" | sha256sum --check
+	+    - sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+	+    # https://cml.dev/doc/self-hosted-runners?tab=Kubernetes#cloud-compute-resource-c
+	redentials
+	+    - export KUBERNETES_CONFIGURATION=$(cat $GCP_KUBECONFIG)
+	+  script:
+	+    # https://cml.dev/doc/ref/runner#--cloud-type
+	+    # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resourc
+	es/task#machine-type
+	+    # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resourc
+	es/task#{cpu}-{memory}
+	+    - cml runner
+	+        --labels="cml-runner"
+	+        --cloud="kubernetes"
+	+        --cloud-type="1-2000"
+	+        --cloud-kubernetes-node-selector="gpu=true"
+	+        --single
+	+
+	 train:
+	   stage: train
+	   image: iterativeai/cml:0-dvc2-base1
+	+  needs:
+	+    - setup-runner
+	+  tags:
+	+    # Uses the runner set up by CML
+	+    - cml-runner
+	   rules:
+	     - if: $CI_COMMIT_BRANCH == "main"
+	     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 	```
 
 	Take some time to understand the changes made to the file.
@@ -509,7 +611,7 @@ On GitLab, you can see the pipeline running on the **CI/CD > Pipelines** page.
 
 On GitHub, you can see the pipeline running on the **Actions** page.
 
-On Google Cloud Console, you can see the pod that has been created on the **Kubernetes Engine > Workloads** page.
+On Google Cloud Console, you can see the pod that has been created on the **Kubernetes Engine > Workloads** page. Open the pod and go to the **YAML** tab to see the configuration of the pod. You should notice that the pod has been created with the node selector `gpu=true` and that it has been created on the right node.
 
 This chapter is done, you can check the summary.
 
@@ -522,6 +624,16 @@ In this chapter, you have successfully:
 1. Created a Kubernetes cluster on Google Cloud
 2. Configured CML to start a runner on Kubernetes
 3. Trained the model on the Kubernetes cluster
+
+For more information, you can check the following resources: [CML Command Reference: `runner` #Using `--cloud-kubernetes-node-selector`](https://cml.dev/doc/ref/runner#using---cloud-kubernetes-node-selector).
+
+### Destroy the Kubernetes cluster
+
+When you are done with the chapter, you can destroy the Kubernetes cluster.
+
+```sh title="Execute the following command(s) in a terminal"
+gcloud container clusters delete --zone europe-west6-a mlops-kubernetes
+```
 
 ## State of the MLOps process
 

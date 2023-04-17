@@ -12,6 +12,7 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+# Allow the creation and usage of self-hosted runners
 permissions:
   contents: read
   id-token: write
@@ -19,6 +20,7 @@ permissions:
 jobs:
   setup-runner:
     runs-on: ubuntu-latest
+    container: iterativeai/cml:0-dvc2-base1
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -31,24 +33,21 @@ jobs:
         with:
           cluster_name: 'mlops-kubernetes'
           location: 'europe-west6-a'
-      - name: Setup CML
-        uses: iterative/setup-cml@v1
-        with:
-          version: '0.18.17'
       - name: Initialize runner on Kubernetes
         env:
           REPO_TOKEN: ${{ secrets.CML_PAT }}
         run: |
           export KUBERNETES_CONFIGURATION=$(cat $KUBECONFIG)
-          # https://cml.dev/doc/ref/runner#--cloud-type
+          # https://cml.dev/doc/ref/runner
           # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#machine-type
-          # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#{cpu}-{memory}+{accelerator}*{count}
+          # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#{cpu}-{memory}
           cml runner \
             --labels="cml-runner" \
             --cloud="kubernetes" \
-            --cloud-type="1-1024+nvidia-tesla-k80*1"
-            --reuse-idle
-
+            --cloud-type="1-2000" \
+            --cloud-kubernetes-node-selector="gpu=true" \
+            --single
+  
   train:
     needs: setup-runner
     runs-on: [self-hosted, cml-runner]
@@ -56,11 +55,15 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+      - name: Install poetry
+        run: pipx install poetry==1.4.0
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-          cache: 'pip'
+          cache: 'poetry'
+      - name: Install dependencies
+        run: poetry install
       - name: Setup DVC
         uses: iterative/setup-dvc@v1
         with:
@@ -70,10 +73,7 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
       - name: Train model
-        working-directory: docs/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml
         run: |
-          # Install dependencies
-          pip install --requirement src/requirements.txt
           # Pull data from DVC
           dvc pull
           # Run the experiment
@@ -81,10 +81,11 @@ jobs:
       - name: Upload evaluation results
         uses: actions/upload-artifact@v3
         with:
-          path: docs/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml/evaluation
+          path: evaluation
           retention-days: 5
 
   report:
+    permissions: write-all
     needs: train
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
@@ -99,9 +100,9 @@ jobs:
         shell: bash
         run: |
           # Delete current evaluation results
-          rm -rf docs/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml/evaluation
+          rm -rf evaluation
           # Replace with the new evaluation results
-          mv artifact docs/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml/evaluation
+          mv artifact evaluation
       - name: Setup DVC
         uses: iterative/setup-dvc@v1
         with:
@@ -113,7 +114,6 @@ jobs:
       - name: Create CML report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        working-directory: docs/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml
         run: |
           # Fetch all other Git branches
           git fetch --depth=1 origin main:main

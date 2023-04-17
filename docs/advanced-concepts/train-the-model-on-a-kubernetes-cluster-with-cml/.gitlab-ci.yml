@@ -8,13 +8,16 @@ variables:
   # only cache local items.
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
   # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
-  GIT_DEPTH: '0'
+  GIT_DEPTH: "0"
+  # https://python-poetry.org/docs/#ci-recommendations
+  POETRY_HOME: "$CI_PROJECT_DIR/.cache/poetry"
 
 # Pip's cache doesn't store the python packages
 # https://pip.pypa.io/en/stable/reference/pip_install/#caching
 cache:
   paths:
     - .cache/pip
+    - .cache/poetry
 
 setup-runner:
   stage: setup runner
@@ -29,14 +32,15 @@ setup-runner:
     # https://cml.dev/doc/self-hosted-runners?tab=Kubernetes#cloud-compute-resource-credentials
     - export KUBERNETES_CONFIGURATION=$(cat $GCP_KUBECONFIG)
   script:
-    # https://cml.dev/doc/ref/runner#--cloud-type
+    # https://cml.dev/doc/ref/runner
     # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#machine-type
-    # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#{cpu}-{memory}+{accelerator}*{count}
+    # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#{cpu}-{memory}
     - cml runner
         --labels="cml-runner"
         --cloud="kubernetes"
-        --cloud-type="1-1024+nvidia-tesla-k80*1"
-        --reuse-idle
+        --cloud-type="1-2000"
+        --cloud-kubernetes-node-selector="gpu=true"
+        --single
 
 train:
   stage: train
@@ -55,8 +59,11 @@ train:
   before_script:
     # Set the Google Service Account key
     - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+    # Install Poetry
+    - pip install poetry==1.4.0
     # Install dependencies
-    - pip install --requirement src/requirements.txt
+    - poetry install
+    - source `poetry env info --path`/bin/activate
   script:
     # Pull data from DVC
     - dvc pull
@@ -74,7 +81,6 @@ report:
     - job: train
       artifacts: true
   rules:
-    - if: $CI_COMMIT_BRANCH == "main"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   variables:
     REPO_TOKEN: $CML_PAT
