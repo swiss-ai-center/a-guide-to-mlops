@@ -325,6 +325,6 @@ and [_Add a CI/CD variable to a project_ -
 docs.gitlab.com](https://docs.gitlab.com/ee/ci/variables/#add-a-cicd-variable-to-a-project)
 guides.
 
-Want to see what the result at the end of this chapter should look like? Have a
+Want to see what the result at the end of this chapter should look like on your GitHub/GitLab Git repository? Have a
 look at the Git repository directory here:
 [chapter-6-orchestrate-the-workflow-with-a-cicd-pipeline](https://github.com/csia-pme/a-guide-to-mlops/tree/main/docs/the-guide/chapter-6-orchestrate-the-workflow-with-a-cicd-pipeline).
