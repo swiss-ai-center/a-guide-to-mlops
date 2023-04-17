@@ -326,7 +326,7 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 	  # only cache local items.
 	  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 	  # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
-	  GIT_DEPTH: '0'
+	  GIT_DEPTH: "0"
 	
 	# Pip's cache doesn't store the python packages
 	# https://pip.pypa.io/en/stable/reference/pip_install/#caching

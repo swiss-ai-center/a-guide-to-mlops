@@ -19,45 +19,34 @@ In this chapter, you will learn how to:
 
 ### Install MLEM
 
-Update the `src/requirements.txt` file to include MLEM and its dependencies.
+Add the `mlem[fastapi]` package to install MLEM with FastAPI support.
 
-``` title="src/requirements.txt" hl_lines="8"
-dvc[gs]==2.37.0
-dvclive==1.0.0
-pandas==1.5.1
-pyaml==21.10.1
-scikit-learn==1.1.3
-scipy==1.10.1
-matplotlib==3.6.2
-mlem[fastapi]==0.4.3
+```sh title="Execute the following command(s) in a terminal"
+poetry add "mlem[fastapi]==0.4.3"
 ```
 
 Check the differences with Git to validate the changes.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Show the differences with Git
-git diff src/requirements.txt
+git diff pyproject.toml
 ```
 
 The output should be similar to this.
 
 ```diff
-diff --git a/src/requirements.txt b/src/requirements.txt
-index 351dc82..6fc53a9 100644
---- a/src/requirements.txt
-+++ b/src/requirements.txt
-@@ -6,3 +6,4 @@ pyaml==21.10.1
- scikit-learn==1.1.3
- scipy==1.10.1
- matplotlib==3.6.2
-+mlem[fastapi]==0.4.3
-```
+diff --git a/pyproject.toml b/pyproject.toml
+index ff11768..f28f832 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -14,6 +14,7 @@ scikit-learn = "1.1.3"
+ scipy = "1.10.1"
+ matplotlib = "3.6.2"
+ dvc = {version = "2.37.0", extras = ["gs"]}
++mlem = {version = "0.4.3", extras = ["fastapi"]}
 
-You can now install the required packages from the `src/requirements.txt` file.
-
-```sh title="Execute the following command(s) in a terminal"
-# Install the requirements
-pip install --requirement src/requirements.txt
+ [build-system]
+ requires = ["poetry-core"]
 ```
 
 ### Initialize and configure MLEM.
@@ -239,7 +228,7 @@ with open(os.path.join(input, "train.pkl"), "rb") as fd:
     matrix, _ = pickle.load(fd)
 
 labels = np.squeeze(matrix[:, 1].toarray())
-x = matrix[:, 2:].toarray()
+x = matrix[:, 2:]
 
 sys.stderr.write("Input matrix size {}\n".format(matrix.shape))
 sys.stderr.write("X matrix size {}\n".format(x.shape))
@@ -343,7 +332,7 @@ with open(matrix_file, "rb") as fd:
     matrix, feature_names = pickle.load(fd)
 
 labels = matrix[:, 1].toarray().astype(int)
-x = matrix[:, 2:].toarray()
+x = matrix[:, 2:]
 
 predictions_by_class = model.predict_proba(x)
 predictions = predictions_by_class[:, 1]
@@ -407,7 +396,7 @@ The output should be similar to this.
 
 ```diff
 diff --git a/src/evaluate.py b/src/evaluate.py
-index e18629a..53a17a7 100644
+index d1668c3..ce4c4c5 100644
 --- a/src/evaluate.py
 +++ b/src/evaluate.py
 @@ -10,6 +10,7 @@ from sklearn import tree
@@ -418,7 +407,7 @@ index e18629a..53a17a7 100644
 
  if len(sys.argv) != 3:
      sys.stderr.write("Arguments error. Usage:\n")
-@@ -19,14 +20,13 @@ if len(sys.argv) != 3:
+@@ -19,8 +20,7 @@ if len(sys.argv) != 3:
  model_file = sys.argv[1]
  matrix_file = os.path.join(sys.argv[2], "test.pkl")
 
@@ -428,13 +417,6 @@ index e18629a..53a17a7 100644
 
  with open(matrix_file, "rb") as fd:
      matrix, feature_names = pickle.load(fd)
-
- labels = matrix[:, 1].toarray().astype(int)
--x = matrix[:, 2:]
-+x = matrix[:, 2:].toarray()
-
- predictions_by_class = model.predict_proba(x)
- predictions = predictions_by_class[:, 1]
 ```
 
 !!! info
@@ -469,12 +451,13 @@ dvc stage add --force \
 dvc stage add --force \
   -n evaluate \
   -d src/evaluate.py -d models/rf \
-  -O evaluation/plots/metrics \
-  --metrics-no-cache evaluation/metrics.json \
-  --plots-no-cache evaluation/plots/prc.json \
-  --plots-no-cache evaluation/plots/sklearn/roc.json \
-  --plots-no-cache evaluation/plots/sklearn/confusion_matrix.json \
-  --plots-no-cache evaluation/plots/importance.png \
+  -o evaluation/plots/metrics \
+  -o evaluation/report.html \
+  --metrics evaluation/metrics.json \
+  --plots evaluation/plots/prc.json \
+  --plots evaluation/plots/sklearn/roc.json \
+  --plots evaluation/plots/sklearn/confusion_matrix.json \
+  --plots evaluation/plots/importance.png \
   python src/evaluate.py models/rf data/features
 
 # Set the axes for the `precision_recall_curve`
@@ -498,7 +481,7 @@ The output should be similar to this.
 
 ```diff
 diff --git a/dvc.yaml b/dvc.yaml
-index 0e00f1b..2539fe4 100644
+index fdb2bc3..3f2eaeb 100644
 --- a/dvc.yaml
 +++ b/dvc.yaml
 @@ -19,9 +19,11 @@ stages:
@@ -528,7 +511,7 @@ index 0e00f1b..2539fe4 100644
 +    - models/rf
      - src/evaluate.py
      outs:
-     - evaluation/plots/metrics:
+     - evaluation/plots/metrics
 ```
 
 ### Run the experiment
@@ -723,9 +706,10 @@ Changes to be committed:
         modified:   dvc.yaml
         new file:   models/.gitignore
         new file:   models/rf.mlem
+        modified:   poetry.lock
+        modified:   pyproject.toml
         modified:   src/evaluate.py
         modified:   src/featurization.py
-        modified:   src/requirements.txt
         modified:   src/train.py
 ```
 

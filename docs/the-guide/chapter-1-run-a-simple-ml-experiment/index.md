@@ -70,32 +70,35 @@ contents. The following is a summary of each file.
 
 This is what your working directory should look like.
 
-```yaml hl_lines="2-9"
+```yaml hl_lines="2-10"
 .
 ├── src # (1)!
 │   ├── evaluate.py
 │   ├── featurization.py
 │   ├── prepare.py
-│   ├── requirements.txt
 │   └── train.py
 ├── params.yaml # (2)!
-└── README.md # (3)!
+├── poetry.lock # (3)!
+├── pyproject.toml # (4)!
+└── README.md # (5)!
 ```
 
 1. This, and all its sub-directory, is new.
 2. This is new.
 3. This is new.
+4. This is new.
+5. This is new.
 
 The following table describes the files present in the codebase.
 
 | **File**               | **Description**                                  | **Input**                             | **Output**                                                    |
 | ---------------------- | ------------------------------------------------ | ------------------------------------- | ------------------------------------------------------------- |
-| `src/requirements.txt` | The Python dependencies to run the ML experiment | -                                     | -                                                             |
 | `src/prepare.py`       | Prepare the dataset to run the ML experiment     | The dataset to prepare as an XML file | The prepared data in `data/prepared` directory                |
 | `src/featurization.py` | Extract the features from the dataset            | The prepared dataset                  | The extracted features in `data/features` directory           |
 | `src/train.py`         | Train the ML model                               | The extracted features                | The model trained with the dataset                            |
 | `src/evaluate.py`      | Evaluate the ML model using DVC                  | The model to evaluate                 | The results of the model evaluation in `evaluation` directory |
 | `params.yaml`          | The parameters to run the ML experiment          | -                                     | -                                                             |
+| `pyproject.toml`       | The Poetry dependencies to run the ML experiment | -                                     | -                                                             |
 
 !!! info
 
@@ -140,9 +143,10 @@ Your working directory should now look like this:
 │   ├── evaluate.py
 │   ├── featurization.py
 │   ├── prepare.py
-│   ├── requirements.txt
 │   └── train.py
 ├── params.yaml
+├── pyproject.toml
+├── poetry.lock
 └── README.md
 ```
 
@@ -158,14 +162,11 @@ Create the virtual environment and install necessary dependencies in your
 working directory using these commands.
 
 ```sh title="Execute the following command(s) in a terminal"
-# Create the virtual environment
-python3 -m venv .venv
+# Install the dependencies in a virtual environment
+poetry install
 
 # Activate the virtual environment
-source .venv/bin/activate
-
-# Install the requirements
-pip install --requirement src/requirements.txt
+poetry shell
 ```
 
 Your helpful colleague provided you some steps to reproduce the experiment.
@@ -193,47 +194,45 @@ python src/evaluate.py model.pkl data/features
 
 Your working directory should now be similar to this:
 
-```yaml hl_lines="2-3 5-10 13-24 31"
+```yaml hl_lines="3-8 11-22 29"
 .
-├── .venv # (1)!
-│   └── ...
 ├── data
-│   ├── features # (2)!
-│   │   ├── test.pkl
-│   │   └── train.pkl
-│   ├── prepared # (3)!
-│   │   ├── test.tsv
-│   │   └── train.tsv
-│   ├── data.xml
-│   └── README.md
-├── evaluation # (4)!
-│   ├── plots
-│   │   ├── metrics
-│   │   │   ├── avg_prec.tsv
-│   │   │   └── roc_auc.tsv
-│   │   ├── sklearn
-│   │   │   ├── confusion_matrix.json
-│   │   │   └── roc.json
-│   │   ├── importance.png
-│   │   └── prc.json
-│   ├── metrics.json
-│   └── report.html
+│   ├── features # (1)!
+│   │   ├── test.pkl
+│   │   └── train.pkl
+│   ├── prepared # (2)!
+│   │   ├── test.tsv
+│   │   └── train.tsv
+│   ├── README.md
+│   └── data.xml
+├── evaluation # (3)!
+│   ├── plots
+│   │   ├── metrics
+│   │   │   ├── avg_prec.tsv
+│   │   │   └── roc_auc.tsv
+│   │   ├── sklearn
+│   │   │   ├── confusion_matrix.json
+│   │   │   └── roc.json
+│   │   ├── importance.png
+│   │   └── prc.json
+│   ├── metrics.json
+│   └── report.html
 ├── src
-│   ├── evaluate.py
-│   ├── featurization.py
-│   ├── prepare.py
-│   ├── requirements.txt
-│   └── train.py
-├── model.pkl # (5)!
-└── params.yaml
-└── README.md
+│   ├── evaluate.py
+│   ├── featurization.py
+│   ├── prepare.py
+│   └── train.py
+├── README.md
+├── model.pkl # (4)!
+├── params.yaml
+├── poetry.lock
+└── pyproject.toml
 ```
 
 1. This, and all its sub-directory, is new.
 2. This, and all its sub-directory, is new.
 3. This, and all its sub-directory, is new.
-4. This, and all its sub-directory, is new.
-5. This is new.
+4. This is new.
 
 Here, the following should be noted:
 

@@ -51,7 +51,7 @@ Alternatively, you can delete the service account from the Google Cloud Console:
 You can run the following command to delete the service account key you created locally:
 
 ```sh title="Execute the following command(s) in a terminal"
-rm "~/.config/gcloud/dvc-google-account-key.json"
+rm ~/.config/gcloud/dvc-google-service-account-key.json
 ```
 
 #### Delete the Google Cloud project
@@ -95,6 +95,12 @@ To delete the Google Cloud project you created:
     5. Follow the instructions to revoke the token.
 
 ### Clean up your local environment
+
+In order to remove the packages installed with Poetry, you can run the following command:
+
+```sh title="Execute the following command(s) in a terminal"
+poetry env remove --all
+```
 
 To clean up your local environment, you can simply delete the project directory you created for this guide.
 

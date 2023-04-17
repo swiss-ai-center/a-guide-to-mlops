@@ -168,11 +168,8 @@ This directory should be ignored by Git.
 
 Add the `dvc_plots` directory to the `.gitignore` file.
 
-```sh title="Execute the following command(s) in a terminal" hl_lines="11-12"
+```sh title=".gitignore" hl_lines="8-9"
 ## Python
-
-# Environments
-.venv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -197,7 +194,7 @@ The output should be similar to this.
 
 ```diff
 diff --git a/.gitignore b/.gitignore
-index c467670..a8a3e41 100644
+index 165e2c9..a2e21d2 100644
 --- a/.gitignore
 +++ b/.gitignore
 @@ -8,5 +8,8 @@ __pycache__/
@@ -231,14 +228,6 @@ Changes not staged for commit:
   (use "git restore <file>..." to discard changes in working directory)
         modified:   .gitignore
         modified:   dvc.lock
-        modified:   evaluation/metrics.json
-        modified:   evaluation/plots/importance.png
-        modified:   evaluation/plots/metrics/avg_prec.tsv
-        modified:   evaluation/plots/metrics/roc_auc.tsv
-        modified:   evaluation/plots/prc.json
-        modified:   evaluation/plots/sklearn/confusion_matrix.json
-        modified:   evaluation/plots/sklearn/roc.json
-        modified:   evaluation/report.html
         modified:   params.yaml
 ```
 

@@ -74,12 +74,13 @@ No commits yet
 
 Untracked files:
   (use "git add <file>..." to include in what will be committed)
-        .venv/
+        README.md
         data/
         evaluation/
         model.pkl
         params.yaml
-        README.md
+        poetry.lock
+        pyproject.toml
         src/
 ```
 
@@ -94,17 +95,17 @@ space and you can have a history of the improvements made to your model.
 Additionally, this will help to ensure that the repository size and clone time
 remain optimized.
 
-```sh title="Execute the following command(s) in a terminal"
+```sh title=".gitingore"
 # Data used to train the models
 data
+
+# Artifacts
+evaluation
 
 # The models
 *.pkl
 
 ## Python
-
-# Environments
-.venv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -136,20 +137,13 @@ No commits yet
 Changes to be committed:
   (use "git rm --cached <file>..." to unstage)
         new file:   .gitignore
-        new file:   evaluation/metrics.json
-        new file:   evaluation/plots/importance.png
-        new file:   evaluation/plots/metrics/avg_prec.tsv
-        new file:   evaluation/plots/metrics/roc_auc.tsv
-        new file:   evaluation/plots/prc.json
-        new file:   evaluation/plots/sklearn/confusion_matrix.json
-        new file:   evaluation/plots/sklearn/roc.json
-        new file:   evaluation/report.html
-        new file:   params.yaml
         new file:   README.md
+        new file:   params.yaml
+        new file:   poetry.lock
+        new file:   pyproject.toml
         new file:   src/evaluate.py
         new file:   src/featurization.py
         new file:   src/prepare.py
-        new file:   src/requirements.txt
         new file:   src/train.py
 ```
 

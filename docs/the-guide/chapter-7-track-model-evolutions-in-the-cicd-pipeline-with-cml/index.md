@@ -47,7 +47,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	Update the `.github/workflows/mlops.yml` file.
 
-	```yaml  title=".github/workflows/mlops.yml" hl_lines="9-10 42-133"
+	```yaml  title=".github/workflows/mlops.yml" hl_lines="9-10 44-149"
 	name: MLOps
 
 	on:
@@ -68,11 +68,15 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	    steps:
 	      - name: Checkout repository
 	        uses: actions/checkout@v3
+	      - name: Install poetry
+	        run: pipx install poetry==1.4.0
 	      - name: Setup Python
 	        uses: actions/setup-python@v4
 	        with:
 	          python-version: '3.10'
-	          cache: 'pip'
+	          cache: 'poetry'
+	      - name: Install dependencies
+	        run: poetry install
 	      - name: Setup DVC
 	        uses: iterative/setup-dvc@v1
 	        with:
@@ -83,8 +87,6 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
 	      - name: Train model
 	        run: |
-	          # Install dependencies
-	          pip install --requirement src/requirements.txt
 	          # Pull data from DVC
 	          dvc pull
 	          # Run the experiment
@@ -194,7 +196,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	```diff
 	diff --git a/.github/workflows/mlops.yml b/.github/workflows/mlops.yml
-	index 0ca4d29..10afa49 100644
+	index 4612023..f79856a 100644
 	--- a/.github/workflows/mlops.yml
 	+++ b/.github/workflows/mlops.yml
 	@@ -6,6 +6,9 @@ on:
@@ -207,7 +209,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	   # Allows you to run this workflow manually from the Actions tab
 	   workflow_dispatch:
 
-	@@ -36,3 +39,95 @@ jobs:
+	@@ -38,3 +41,95 @@ jobs:
 	           dvc pull
 	           # Run the experiment
 	           dvc repro
@@ -349,7 +351,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	Update the `.gitlab-ci.yml` file.
 
-	```yaml title=".gitlab-ci.yml" hl_lines="3 37-105"
+	```yaml title=".gitlab-ci.yml" hl_lines="3 43-111"
 	stages:
 	  - train
 	  - report
@@ -359,13 +361,16 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	  # only cache local items.
 	  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 	  # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
-	  GIT_DEPTH: '0'
+	  GIT_DEPTH: "0"
+	  # https://python-poetry.org/docs/#ci-recommendations
+	  POETRY_HOME: "$CI_PROJECT_DIR/.cache/poetry"
 
 	# Pip's cache doesn't store the python packages
 	# https://pip.pypa.io/en/stable/reference/pip_install/#caching
 	cache:
 	  paths:
 	    - .cache/pip
+	    - .cache/poetry
 
 	train:
 	  stage: train
@@ -379,8 +384,11 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	  before_script:
 	    # Set the Google Service Account key
 	    - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+	    # Install Poetry
+	    - pip install poetry==1.4.0
 	    # Install dependencies
-	    - pip install --requirement src/requirements.txt
+	    - poetry install
+	    - source `poetry env info --path`/bin/activate
 	  script:
 	    # Pull data from DVC
 	    - dvc pull
@@ -468,7 +476,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	```diff
 	diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-	index 561d04f..fad1002 100644
+	index 06355c9..345f6d3 100644
 	--- a/.gitlab-ci.yml
 	+++ b/.gitlab-ci.yml
 	@@ -1,5 +1,6 @@
@@ -478,7 +486,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	 variables:
 	   # Change pip's cache directory to be inside the project directory since we can
-	@@ -33,3 +34,72 @@ train:
+	@@ -39,3 +40,72 @@ train:
 	     - dvc pull
 	     # Run the experiment
 	     - dvc repro
@@ -546,8 +554,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	+        -y predicted \
 	+        --show-vega main > vega.json
 	+      vl2png vega.json > confusion_matrix.png
-	+      echo '![](./confusion_matrix.png "Confusion Matrix")' >
-	> report.md
+	+      echo '![](./confusion_matrix.png "Confusion Matrix")' >> report.md
 	+      echo >> report.md
 	+
 	+      # Publish the CML report
@@ -670,14 +677,6 @@ Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
         modified:   .gitignore
         modified:   dvc.lock
-        modified:   evaluation/metrics.json
-        modified:   evaluation/plots/importance.png
-        modified:   evaluation/plots/metrics/avg_prec.tsv
-        modified:   evaluation/plots/metrics/roc_auc.tsv
-        modified:   evaluation/plots/prc.json
-        modified:   evaluation/plots/sklearn/confusion_matrix.json
-        modified:   evaluation/plots/sklearn/roc.json
-        modified:   evaluation/report.html
         modified:   params.yaml
 ```
 
