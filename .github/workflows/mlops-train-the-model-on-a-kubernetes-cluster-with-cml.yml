@@ -30,49 +30,48 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
       ### begin custom CML
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
       - name: Clone CML
         uses: actions/checkout@v3
         with:
           repository: ludelafo/cml
           ref: add-support-for-kubernetes-arbitrary-node-selector
           path: cml
-      - name: CML deps
-        run: |
-          pushd cml
-          npm ci
-          popd
-      - name: Hack cml for local tpi
-        run: |
-          pushd cml
-          sed -i "s/source: 'iterative\/iterative',/source: 'github.com\/iterative\/iterative'/g" src/terraform.js
-          sed -i "/...(tpiVersion && { version: tpiVersion })/d" src/terraform.js
-          popd
-      - name: Install CML
-        run: |
-          pushd cml
-          npm install -g .
-          popd
-      - name: Install misc CML tooling
-        run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5
       - name: Clone TPI
         uses: actions/checkout@v3
         with:
           repository: ludelafo/terraform-provider-iterative
           ref: add-support-for-kubernetes-arbitrary-node-selector
           path: tpi
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
+          cache-dependency-path: 'cml/package-lock.json'
       - name: Setup Go
         uses: actions/setup-go@v3
         with:
           go-version: ^1.18.0
-          cache-dependency-path: tpi/go.sum
-      - name: Build/Install TPI
+          cache-dependency-path: 'tpi/go.sum'
+      - name: CML deps
+        working-directory: cml
         run: |
-          pushd tpi
+          npm ci
+      - name: Hack cml for local tpi
+        working-directory: cml
+        run: |
+          sed -i "s/source: 'iterative\/iterative',/source: 'github.com\/iterative\/iterative'/g" src/terraform.js
+          sed -i "/...(tpiVersion && { version: tpiVersion })/d" src/terraform.js
+      - name: Install CML
+        working-directory: cml
+        run: |
+          npm install -g .
+      - name: Install misc CML tooling
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5
+      - name: Build/Install TPI
+        working-directory: tpi
+        run: |
           make build
           make install-tpi
       ### end custom CML
@@ -96,7 +95,8 @@ jobs:
           cml runner \
             --labels="cml-runner" \
             --cloud="kubernetes" \
-            --cloud-type="1-2000+nvidia-tesla-k80*1" \
+            --cloud-type="1-1234" \
+            --cloud-kubernetes-node-selector="gpu=true" \
             --single
 
   train:
