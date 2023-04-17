@@ -1,7 +1,7 @@
 version: '3.7'
 
 services:
-  app:
+  docs:
     build:
       context: .
       dockerfile: Dockerfile
