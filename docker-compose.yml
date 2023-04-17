@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/workspaces/a-guide-to-mlops
+    command: poetry run mkdocs serve --dev-addr 0.0.0.0:8000
