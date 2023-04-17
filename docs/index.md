@@ -40,7 +40,7 @@ Not sure where to start? Check the following links to get started!
 - [Deploy MinIO](./advanced-concepts/deploy-minio)
 - [Deploy Label Studio](./advanced-concepts/deploy-label-studio)
 - [Link your ML model with Label Studio](./advanced-concepts/link-your-ml-model-with-label-studio)
-- [Train the model on a Kubernetes cluster with CML](./advanced-concept)
+- [Train the model on a Kubernetes cluster with CML](./advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml)
 
 ## Known limitations
 
