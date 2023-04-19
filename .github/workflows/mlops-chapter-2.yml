@@ -1,0 +1,35 @@
+name: MLOps Chapter 2
+
+on:
+  # Runs on pushes targeting main branch
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/mlops-chapter-2.yml
+      - docs/the-guide/chapter-2-share-your-ml-experiment-code-with-git/**/*
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  CWD: docs/the-guide/chapter-2-share-your-ml-experiment-code-with-git
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Check .gitignore
+        working-directory: ${{ env.CWD }}
+        run: '[ ! -e ".gitignore" ] && exit 1'
+      - name: Check no data directory
+        working-directory:  ${{ env.CWD }}
+        run: '[ -d "data" ] && exit 1'
+      - name: Check no evaluation directory
+        working-directory:  ${{ env.CWD }}
+        run: '[ -d "evaluation" ] && exit 1'
+      - name: Check no model.plk
+        working-directory:  ${{ env.CWD }}
+        run: '[ -e "model.plk" ] && exit 1'
