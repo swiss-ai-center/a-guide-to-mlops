@@ -3,6 +3,7 @@
 In this guide, the following tools are selected to demonstrate the MLOps process:
 
 - Code management: [Git](#git)
+- Package management: [Poetry](#poetry)
 - Data management: [DVC](#dvc)
 - Model reproducibility: [DVC](#dvc)
 - Model tracking: [DVC](#dvc) & [CML](#cml)
@@ -19,6 +20,14 @@ We did try to find and use the tools that cause the less friction in established
 [Git](https://git-scm.com/) 
 
 For more, check out their documentation: [_Documentation_ - git-scm.com](https://git-scm.com/doc).
+
+### Poetry
+
+[Poetry](https://python-poetry.org/)
+
+We decided to use Poetry instead of Python pip because it is more convenient to manage dependencies and to create virtual environments. It also allows to create a lock file that can be used to reproduce the exact same environment.
+
+For more, check out their documentation: [_Documentation_ - python-poetry.org](https://python-poetry.org/docs/).
 
 ### DVC
 
