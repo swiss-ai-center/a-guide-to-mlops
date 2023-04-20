@@ -169,6 +169,16 @@ poetry install
 poetry shell
 ```
 
+!!! question
+
+	**Why Poetry?**
+
+	Poetry is a tool to manage Python dependencies. It is a more robust and
+	user-friendly alternative to `pip`. It is also more suitable for
+	reproducibility and collaboration by creating a lock file that can be used
+	to recreate the exact same environment.
+
+
 Your helpful colleague provided you some steps to reproduce the experiment.
 
 ```sh title="Execute the following command(s) in a terminal"
