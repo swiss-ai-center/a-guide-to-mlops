@@ -11,13 +11,13 @@ repos:
     hooks:
       - id: yamlfix
         # Exclude the-guide chapter checkpoints
-        exclude: '^docs\/the-guide\/.*\/.*$'
+        exclude: ^docs\/the-guide\/.*\/.*$
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.16
     hooks:
       - id: mdformat
         # Exclude the-guide chapter checkpoints except for index.md
-        exclude: '^docs\/the-guide\/.*\/(?!index\.md).+$'
+        exclude: ^docs\/the-guide\/.*\/(?!index\.md).+$
         additional_dependencies:
           - mdformat-config
           - mdformat-tables

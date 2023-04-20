@@ -44,3 +44,4 @@ line_length = 88
 none_representation = ""
 section_whitelines = 1
 explicit_start = false
+sequence_style = "keep_style"
