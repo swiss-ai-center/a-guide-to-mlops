@@ -25,8 +25,6 @@ For more, check out their documentation: [_Documentation_ - git-scm.com](https:/
 
 [Poetry](https://python-poetry.org/)
 
-We decided to use Poetry instead of Python pip because it is more convenient to manage dependencies and to create virtual environments. It also allows to create a lock file that can be used to reproduce the exact same environment.
-
 For more, check out their documentation: [_Documentation_ - python-poetry.org](https://python-poetry.org/docs/).
 
 ### DVC
