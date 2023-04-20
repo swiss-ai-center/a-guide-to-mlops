@@ -1,0 +1,25 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-merge-conflict
+  - repo: https://github.com/lyz-code/yamlfix/
+    rev: 1.9.0
+    hooks:
+      - id: yamlfix
+        # Exclude the-guide chapter checkpoints
+        exclude: '^docs\/the-guide\/.*\/.*$'
+  - repo: https://github.com/executablebooks/mdformat
+    rev: 0.7.16
+    hooks:
+      - id: mdformat
+        # Exclude the-guide chapter checkpoints except for index.md
+        exclude: '^docs\/the-guide\/.*\/(?!index\.md).+$'
+        additional_dependencies:
+          - mdformat-config
+          - mdformat-tables
+          - mdformat-admon
+          - mdformat-simple-breaks
