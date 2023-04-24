@@ -95,7 +95,7 @@ space and you can have a history of the improvements made to your model.
 Additionally, this will help to ensure that the repository size and clone time
 remain optimized.
 
-```sh title=".gitingore"
+```sh title=".gitignore"
 # Data used to train the models
 data
 
