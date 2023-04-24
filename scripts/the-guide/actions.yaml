@@ -1,4 +1,4 @@
-base_tmp_path: tmp/generated_checkpoints/the-guide
+base_tmp_path: tmp/the-guide/generated_checkpoints
 base_save_path: docs/the-guide
 
 saves:
