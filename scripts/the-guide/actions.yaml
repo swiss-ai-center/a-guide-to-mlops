@@ -10,7 +10,6 @@ saves:
       - run: unzip -o code.zip
       - run: mv a-guide-to-mlops-code/* .
       - run: rm -r code.zip a-guide-to-mlops-code
-      - run: rm code.zip
       # Download and set up the dataset
       - run: wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/data.zip -O data.zip
       - run: unzip -o data.zip
