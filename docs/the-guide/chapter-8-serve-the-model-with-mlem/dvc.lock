@@ -43,13 +43,13 @@ stages:
       md5: 6ea11cbbd66ef6fb06a2850134902ac9
       size: 1788826
     - path: data/features/vectorizer
-      md5: c8b9239b78bbf15f0ece7f29adcb8841
+      md5: ef9eac6fd4ef4d800030820444fcfe2c
       size: 6273374
   train:
     cmd: python src/train.py data/features models/rf
     deps:
     - path: data/features
-      md5: aca72da6b08ededd2d90c7abe46205fd.dir
+      md5: 8afd8ba64b38563dc67bc55894eb634f.dir
       size: 8509842
       nfiles: 5
     - path: src/train.py
@@ -62,15 +62,15 @@ stages:
         train.seed: 20170428
     outs:
     - path: models/rf
-      md5: a5726ec18764227c0e120b533b039167.dir
-      size: 12856085
+      md5: fc8a0c21669cc0a80960c04876536938.dir
+      size: 12856133
       nfiles: 2
   evaluate:
     cmd: python src/evaluate.py models/rf data/features
     deps:
     - path: models/rf
-      md5: a5726ec18764227c0e120b533b039167.dir
-      size: 12856085
+      md5: fc8a0c21669cc0a80960c04876536938.dir
+      size: 12856133
       nfiles: 2
     - path: src/evaluate.py
       md5: ef83b50e9755f54797aaeb7e4814c4f5
