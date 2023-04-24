@@ -79,7 +79,7 @@ jobs:
           version: '0.18.17'
       - name: Create CML report
         env:
-          REPO_TOKEN: ${{ secrets.CML_PAT }}
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         working-directory: ${{ env.CWD }}
         run: |
           # Fetch all other Git branches
