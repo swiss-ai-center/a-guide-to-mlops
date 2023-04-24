@@ -9,6 +9,12 @@ on:
       - .github/workflows/mlops-chapter-4.yml
       - docs/the-guide/chapter-4-reproduce-the-experiment-with-dvc/**/*
 
+  # Runs on pull requests
+  pull_request:
+    paths:
+      - .github/workflows/mlops-chapter-4.yml
+      - docs/the-guide/chapter-4-reproduce-the-experiment-with-dvc/**/*
+
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
