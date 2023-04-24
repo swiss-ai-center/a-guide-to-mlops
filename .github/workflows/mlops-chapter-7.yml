@@ -52,7 +52,7 @@ jobs:
         working-directory: ${{ env.CWD }}
         run: |
           # Pull data from DVC
-          dvc pull
+          poetry run dvc pull
           # Run the experiment
           dvc repro
 
@@ -91,13 +91,13 @@ jobs:
           # Compare parameters to main branch
           echo "# Params workflow vs. main" >> report.md
           echo >> report.md
-          dvc params diff main --show-md >> report.md
+          poetry run dvc params diff main --show-md >> report.md
           echo >> report.md
 
           # Compare metrics to main branch
           echo "# Metrics workflow vs. main" >> report.md
           echo >> report.md
-          dvc metrics diff main --show-md >> report.md
+          poetry run dvc metrics diff main --show-md >> report.md
           echo >> report.md
 
           # Create plots
@@ -106,7 +106,7 @@ jobs:
 
           echo "## Precision recall curve" >> report.md
           echo >> report.md
-          dvc plots diff \
+          poetry run dvc plots diff \
             --target evaluation/plots/prc.json \
             -x recall \
             -y precision \
@@ -117,7 +117,7 @@ jobs:
 
           echo "## Roc curve" >> report.md
           echo >> report.md
-          dvc plots diff \
+          poetry run dvc plots diff \
             --target evaluation/plots/sklearn/roc.json \
             -x fpr \
             -y tpr \
@@ -128,7 +128,7 @@ jobs:
 
           echo "## Confusion matrix" >> report.md
           echo >> report.md
-          dvc plots diff \
+          poetry run dvc plots diff \
             --target evaluation/plots/sklearn/confusion_matrix.json \
             --template confusion \
             -x actual \

@@ -52,6 +52,6 @@ jobs:
         working-directory: ${{ env.CWD }}
         run: |
           # Pull data from DVC
-          dvc pull
+          poetry run dvc pull
           # Run the experiment
-          dvc repro
+          poetry run dvc repro
