@@ -18,6 +18,9 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+env:
+  CWD: docs/the-guide/chapter-7-track-model-evolutions-in-the-cicd-pipeline-with-cml
+
 jobs:
   train:
     runs-on: ubuntu-latest
@@ -32,7 +35,7 @@ jobs:
           python-version: '3.10'
           cache: 'poetry'
       - name: Install dependencies
-        working-directory: docs/the-guide/chapter-7-track-model-evolutions-in-the-cicd-pipeline-with-cml
+        working-directory: ${{ env.CWD }}
         run: poetry install
       - name: Setup DVC
         uses: iterative/setup-dvc@v1
@@ -43,7 +46,7 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
       - name: Train model
-        working-directory: docs/the-guide/chapter-7-track-model-evolutions-in-the-cicd-pipeline-with-cml
+        working-directory: ${{ env.CWD }}
         run: |
           # Pull data from DVC
           dvc pull
@@ -52,7 +55,7 @@ jobs:
       - name: Upload evaluation results
         uses: actions/upload-artifact@v3
         with:
-          path: docs/the-guide/chapter-7-track-model-evolutions-in-the-cicd-pipeline-with-cml/evaluation
+          path: ${{ env.CWD }}/evaluation
           retention-days: 5
 
   report:
@@ -70,9 +73,9 @@ jobs:
         shell: bash
         run: |
           # Delete current evaluation results
-          rm -rf docs/the-guide/chapter-7-track-model-evolutions-in-the-cicd-pipeline-with-cml/evaluation
+          rm -rf ${CWD}/evaluation
           # Replace with the new evaluation results
-          mv artifact docs/the-guide/chapter-7-track-model-evolutions-in-the-cicd-pipeline-with-cml/evaluation
+          mv artifact ${CWD}/evaluation
       - name: Setup DVC
         uses: iterative/setup-dvc@v1
         with:
@@ -84,7 +87,7 @@ jobs:
       - name: Create CML report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        working-directory: docs/the-guide/chapter-7-track-model-evolutions-in-the-cicd-pipeline-with-cml
+        working-directory: ${{ env.CWD }}
         run: |
           # Fetch all other Git branches
           git fetch --depth=1 origin main:main

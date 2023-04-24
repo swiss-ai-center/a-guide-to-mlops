@@ -18,6 +18,9 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+env:
+  CWD: docs/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml
+
 # Allow the creation and usage of self-hosted runners
 permissions:
   contents: read
@@ -121,7 +124,7 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
       - name: Train model
-        working-directory: docs/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml
+        working-directory: ${{ env.CWD }}
         run: |
           # Install dependencies
           pip install --requirement src/requirements.txt
@@ -132,7 +135,7 @@ jobs:
       - name: Upload evaluation results
         uses: actions/upload-artifact@v3
         with:
-          path: docs/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml/evaluation
+          path: ${{ env.CWD }}/evaluation
           retention-days: 5
 
   report:
@@ -150,9 +153,9 @@ jobs:
         shell: bash
         run: |
           # Delete current evaluation results
-          rm -rf docs/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml/evaluation
+          rm -rf ${CWD}/evaluation
           # Replace with the new evaluation results
-          mv artifact docs/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml/evaluation
+          mv artifact ${CWD}/evaluation
       - name: Setup DVC
         uses: iterative/setup-dvc@v1
         with:
@@ -164,7 +167,7 @@ jobs:
       - name: Create CML report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        working-directory: docs/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml
+        working-directory: ${{ env.CWD }}
         run: |
           # Fetch all other Git branches
           git fetch --depth=1 origin main:main

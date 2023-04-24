@@ -12,6 +12,9 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+env:
+  CWD: docs/the-guide/chapter-4-reproduce-the-experiment-with-dvc
+
 jobs:
   train:
     runs-on: ubuntu-latest
@@ -26,7 +29,7 @@ jobs:
           python-version: '3.10'
           cache: 'poetry'
       - name: Install dependencies
-        working-directory: docs/the-guide/chapter-4-reproduce-the-experiment-with-dvc
+        working-directory: ${{ env.CWD }}
         run: poetry install
       - name: Setup DVC
         uses: iterative/setup-dvc@v1
@@ -37,7 +40,7 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
       - name: Train model
-        working-directory: docs/the-guide/chapter-4-reproduce-the-experiment-with-dvc
+        working-directory: ${{ env.CWD }}
         run: |
           # Pull data from DVC
           dvc pull
