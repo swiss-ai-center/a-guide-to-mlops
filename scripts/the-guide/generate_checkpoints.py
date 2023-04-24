@@ -1,3 +1,4 @@
+import argparse
 import os
 import re
 import shutil
@@ -6,7 +7,7 @@ import textwrap
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Union
+from typing import List, Optional, Union
 
 import yaml
 
@@ -47,7 +48,7 @@ class CommandAction(AbstractAction):
         task = subprocess.Popen(self.command, shell=True, stdout=subprocess.PIPE)
         data = task.stdout.read().decode("utf-8")
         if data:
-            print(esc(90), data, esc(0))
+            print(esc(90), data, esc(0), end="")
         if self.log_output:
             print(esc(94), f"  Log output: {self.log_output}", esc(0), sep="")
             write_output(f"> {self.command}\n")
@@ -103,11 +104,12 @@ class Save:
         self.tmp_path = self.tmp_path.resolve()
         self.save_path = self.save_path.resolve()
 
-    def run_and_save(self) -> None:
+    def run(self) -> None:
         print(esc("92;1"), f"\nRunning save: {self.name}", esc(0), sep="")
         for action in self.actions:
             action.run()
 
+    def save(self) -> None:
         if self.save_git:
             # Copy all files, ignore by gitignore and unstaged files
             shutil.copytree(
@@ -164,8 +166,12 @@ class SavesManager:
 
     base_tmp_path: Path
     saves: List[Save]
+    clean_tmp: bool = False
+    run_until: Optional[int] = None
+    should_save: bool = True
 
     def run(self) -> None:
+        cwd = Path.cwd()
         if self.base_tmp_path.exists():
             shutil.rmtree(self.base_tmp_path)
 
@@ -173,9 +179,17 @@ class SavesManager:
         os.chdir(self.base_tmp_path)
 
         write_output(f"# Generation Output\n")
-        for save in self.saves:
+        for i, save in enumerate(self.saves):
+            if self.run_until is not None and i >= self.run_until:
+                break
             write_output(f"## {save.name}\n")
-            save.run_and_save()
+            save.run()
+            if self.should_save:
+                save.save()
+
+        os.chdir(cwd)
+        if self.clean_tmp:
+            shutil.rmtree(self.base_tmp_path)
 
 
 @dataclass
@@ -243,6 +257,30 @@ def main() -> None:
 
     The output of the actions is saved in the GENERATED_OUTPUT_PATH file (see top of file).
     """
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "-c",
+        "--clean",
+        help="Delete the tmp working directory after running the actions.",
+        action="store_true",
+        default=False,
+    )
+    parser.add_argument(
+        "-u",
+        "--until",
+        help="Run the actions until the given save index. If not given, run all actions.",
+        type=int,
+        default=None,
+    )
+    parser.add_argument(
+        "--no-save",
+        help="Do not save the result of the actions.",
+        action="store_true",
+        default=False,
+    )
+    args = parser.parse_args()
+
     actions = yaml.safe_load(Path("scripts/the-guide/actions.yaml").read_text())
 
     base_tmp_path = Path(actions["base_tmp_path"])
@@ -250,7 +288,13 @@ def main() -> None:
     saves_factory = SavesFactory(base_tmp_path, base_save_path)
 
     saves = saves_factory.create(saves=actions["saves"])
-    saves_manager = SavesManager(base_tmp_path=base_tmp_path, saves=saves)
+    saves_manager = SavesManager(
+        base_tmp_path=base_tmp_path,
+        saves=saves,
+        clean_tmp=args.clean,
+        run_until=args.until,
+        should_save=not args.no_save,
+    )
 
     saves_manager.run()
 
