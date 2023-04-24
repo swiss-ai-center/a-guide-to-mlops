@@ -51,7 +51,7 @@ class CommandAction(AbstractAction):
     log_output: bool = False
 
     def run(self) -> None:
-        print(esc(94), f"Running command: {self.command}", esc(0), sep="")
+        print(esc(94), f"[RUN] {self.command}", esc(0), sep="")
         task = subprocess.Popen(self.command, shell=True, stdout=subprocess.PIPE)
         # Get exit code
         task.wait()
@@ -59,9 +59,8 @@ class CommandAction(AbstractAction):
         if task.returncode != 0:
             error(f"Command failed: {self.command}")
         if data:
-            print(esc(90), data, esc(0), end="")
+            print(esc(90), data, esc(0), sep="")
         if self.log_output:
-            print(esc(94), f"  Log output: {self.log_output}", esc(0), sep="")
             write_output(f"> {self.command}\n")
             write_output(f"```\n{data}```\n")
             write_output(f"----\n")
@@ -83,9 +82,12 @@ class ReplaceFileFromMdAction(AbstractAction):
             raise ValueError(f"Md file does not exist: {self.md_path}")
 
     def run(self) -> None:
-        print(esc(94), f"Replacing file: {self.file_path}", esc(0), sep="")
-        print(esc(94), f"  From md: {self.md_path}", esc(0), sep="")
-        print(esc(94), f"  Occurance index: {self.occurance_index}", esc(0), sep="")
+        print(
+            esc(94),
+            f"[REPLACE FROM MD] {self.file_path} <- {self.md_path}",
+            esc(0),
+            sep="",
+        )
 
         regex = rf'```.* title="{re.escape(str(self.file_path))}".*\n([\s\S]*?)```$'
         content = self.abs_md_path.read_text()
@@ -115,7 +117,7 @@ class Save:
         self.save_path = self.save_path.resolve()
 
     def run(self) -> None:
-        print(esc("92;1"), f"\nRunning save: {self.name}", esc(0), sep="")
+        print(esc("92;1"), f"\nRunning action for save: {self.name}", esc(0), sep="")
         for action in self.actions:
             action.run()
 
