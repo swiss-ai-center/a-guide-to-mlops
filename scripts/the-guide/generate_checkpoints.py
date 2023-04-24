@@ -25,6 +25,12 @@ def write_output(output: str) -> None:
         f.write(output + "\n")
 
 
+def error(msg: str) -> None:
+    """Print error and exit."""
+    print("\n", esc(31), msg, esc(0), sep="")
+    exit(1)
+
+
 @dataclass
 class AbstractAction(ABC):
     def __post_init__(self) -> None:
@@ -46,7 +52,11 @@ class CommandAction(AbstractAction):
     def run(self) -> None:
         print(esc(94), f"Running command: {self.command}", esc(0), sep="")
         task = subprocess.Popen(self.command, shell=True, stdout=subprocess.PIPE)
+        # Get exit code
+        task.wait()
         data = task.stdout.read().decode("utf-8")
+        if task.returncode != 0:
+            error(f"Command failed: {self.command}")
         if data:
             print(esc(90), data, esc(0), end="")
         if self.log_output:
@@ -80,9 +90,8 @@ class ReplaceFileFromMdAction(AbstractAction):
         content = self.abs_md_path.read_text()
         matches = re.findall(regex, content, re.MULTILINE)
         if not matches:
-            raise ValueError(
-                f"Could not find code block file in md: {str(self.file_path)}"
-            )
+            error(f"Could not find code block file in md: {str(self.file_path)}")
+
         to_replace = textwrap.dedent(matches[self.occurance_index])
 
         if not self.file_path.exists():
@@ -225,7 +234,10 @@ class SavesFactory:
                     )
                 )
             else:
-                raise ValueError(f"Unknown action type in: {action.keys()}")
+                error(
+                    f"Unknown action type in .yaml file: '{list(action.keys())[0]}'. "
+                    "Available action types are 'run' and 'replace_from_md'."
+                )
 
         return Save(self.base_tmp_path, save_path, save["save_git"], actions)
 
