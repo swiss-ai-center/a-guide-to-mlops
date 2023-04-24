@@ -80,6 +80,10 @@ jobs:
         uses: iterative/setup-dvc@v1
         with:
           version: '2.37.0'
+      - name: Login to Google Cloud
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
       - name: Setup CML
         uses: iterative/setup-cml@v1
         with:
