@@ -1,6 +1,6 @@
 artifacts:
   data.pkl:
-    hash: 74a373f1e37e8476b1bea343b7f39575
+    hash: c8b9239b78bbf15f0ece7f29adcb8841
     size: 6273374
     type: dvc
     uri: vectorizer
