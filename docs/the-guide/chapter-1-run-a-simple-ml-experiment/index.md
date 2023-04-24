@@ -171,13 +171,19 @@ poetry shell
 
 !!! question
 
-	**Why Poetry?**
+    **Why Poetry?**
 
-	Poetry is a tool to manage Python dependencies. It is a more robust and
-	user-friendly alternative to `pip`. It is also more suitable for
-	reproducibility and collaboration by creating a lock file that can be used
-	to recreate the exact same environment.
+    Poetry is a tool to manage Python dependencies. It is a more robust and
+    user-friendly alternative to `pip`. It is also more suitable for
+    reproducibility and collaboration by creating a lock file that can be used
+    to recreate the exact same environment.
 
+    For example, freezing the version of a dependency in a `requirements.txt` file
+    is not enough to ensure reproducibility. The `requirements.txt` file only
+    specifies the version of the dependency at the time of installation. If dependencies
+    of the dependency are updated, the version of the dependency might change
+    without you knowing it. This is why Poetry creates a lock file that contains
+    the exact version of all the dependencies and their dependencies.
 
 Your helpful colleague provided you some steps to reproduce the experiment.
 
