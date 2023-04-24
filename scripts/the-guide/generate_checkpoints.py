@@ -3,6 +3,7 @@ import os
 import re
 import shutil
 import subprocess
+import sys
 import textwrap
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
@@ -27,7 +28,7 @@ def write_output(output: str) -> None:
 
 def error(msg: str) -> None:
     """Print error and exit."""
-    print("\n", esc(31), msg, esc(0), sep="")
+    print("\n", esc(31), msg, esc(0), sep="", file=sys.stderr)
     exit(1)
 
 
@@ -90,7 +91,7 @@ class ReplaceFileFromMdAction(AbstractAction):
         content = self.abs_md_path.read_text()
         matches = re.findall(regex, content, re.MULTILINE)
         if not matches:
-            error(f"Could not find code block file in md: {str(self.file_path)}")
+            raise ValueError(f"Could not find code block in md: {str(self.md_path)}")
 
         to_replace = textwrap.dedent(matches[self.occurance_index])
 
@@ -234,7 +235,7 @@ class SavesFactory:
                     )
                 )
             else:
-                error(
+                raise ValueError(
                     f"Unknown action type in .yaml file: '{list(action.keys())[0]}'. "
                     "Available action types are 'run' and 'replace_from_md'."
                 )
