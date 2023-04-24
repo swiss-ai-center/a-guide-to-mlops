@@ -4,17 +4,27 @@
 
 This script generates the checkpoints for the guide.
 
+## Pre-requisites
+
+If the `GOOGLE_APPLICATION_CREDENTIALS` environment variable is not set, you need to set it to the path of the service account key file.
+
+```bash
+export GOOGLE_APPLICATION_CREDENTIALS=<path_to_service_account_key_file>
+```
+
 ## Usage
 
 To run the script, you need to be in the root directory of the repository.
 
-```
+
+
+```bash
 python3 scripts/the-guide/generate_checkpoints.py
 ```
 
 You can see a list of all the available options by running:
 
-```
+```bash
 python3 scripts/the-guide/generate_checkpoints.py --help
 ```
 
