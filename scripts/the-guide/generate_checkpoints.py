@@ -10,7 +10,7 @@ from typing import List, Union
 
 import yaml
 
-GENERAION_OUTPUT_FILENAME = "generation_output.md"
+GENERATED_OUTPUT_PATH = "../generated_output.md"
 
 
 def esc(code: Union[str, int]) -> str:
@@ -20,7 +20,7 @@ def esc(code: Union[str, int]) -> str:
 
 def write_output(output: str) -> None:
     """Write output to file."""
-    with open(GENERAION_OUTPUT_FILENAME, "+a") as f:
+    with open(GENERATED_OUTPUT_PATH, "+a") as f:
         f.write(output + "\n")
 
 
@@ -121,7 +121,7 @@ class Save:
             shutil.copytree(
                 self.tmp_path,
                 self.save_path,
-                ignore=shutil.ignore_patterns(".git", GENERAION_OUTPUT_FILENAME),
+                ignore=shutil.ignore_patterns(".git"),
                 dirs_exist_ok=True,
             )
 
@@ -132,12 +132,7 @@ class Save:
         """
 
         to_exclude = set(
-            [
-                ".git",
-                GENERAION_OUTPUT_FILENAME,
-            ]
-            + self._get_gitignored_patterns()
-            + self._get_unstaged_patterns()
+            [".git"] + self._get_gitignored_patterns() + self._get_unstaged_patterns()
         )
         ret = []
         for filename in filenames:
@@ -246,7 +241,7 @@ def main() -> None:
                     occurance_index: <occurance_index> # The index of the code block to use
     ```
 
-    The output of the actions is saved in the GENERAION_OUTPUT_FILENAME file (see top of file).
+    The output of the actions is saved in the GENERATED_OUTPUT_PATH file (see top of file).
     """
     actions = yaml.safe_load(Path("scripts/the-guide/actions.yaml").read_text())
 
