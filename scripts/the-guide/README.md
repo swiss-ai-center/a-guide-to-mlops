@@ -16,8 +16,6 @@ export GOOGLE_APPLICATION_CREDENTIALS=<path_to_service_account_key_file>
 
 To run the script, you need to be in the root directory of the repository.
 
-
-
 ```bash
 python3 scripts/the-guide/generate_checkpoints.py
 ```
