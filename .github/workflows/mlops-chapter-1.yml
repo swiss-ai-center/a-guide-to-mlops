@@ -37,18 +37,15 @@ jobs:
       - name: Install dependencies
         working-directory: ${{ env.CWD }}
         run: poetry install
-      - name: Enable Poetry virtual environment
-        working-directory: ${{ env.CWD }}
-        run: source `poetry env info --path`/bin/activate
       - name: Prepare the dataset
         working-directory: ${{ env.CWD }}
-        run: python src/prepare.py data/data.xml
+        run: poetry run python src/prepare.py data/data.xml
       - name: Perform feature extraction
         working-directory: ${{ env.CWD }}
-        run: python src/featurization.py data/prepared data/features
+        run: poetry run python src/featurization.py data/prepared data/features
       - name: Train the model
         working-directory: ${{ env.CWD }}
-        run: python src/train.py data/features model.pkl
+        run: poetry run python src/train.py data/features model.pkl
       - name: Evaluate the model
         working-directory: ${{ env.CWD }}
-        run: python src/evaluate.py model.pkl data/features
+        run: poetry run python src/evaluate.py model.pkl data/features
