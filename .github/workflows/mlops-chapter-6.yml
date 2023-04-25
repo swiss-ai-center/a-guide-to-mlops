@@ -1,4 +1,4 @@
-poetry run name: MLOps Chapter 6
+name: MLOps Chapter 6
 
 on:
   # Runs on pushes targeting main branch
@@ -52,6 +52,6 @@ jobs:
         working-directory: ${{ env.CWD }}
         run: |
           # Pull data from DVC
-          poetry run dvc pull
+          dvc pull
           # Run the experiment
-          poetry run dvc repro
+          dvc repro

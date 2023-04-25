@@ -37,6 +37,9 @@ jobs:
       - name: Install dependencies
         working-directory: ${{ env.CWD }}
         run: poetry install
+      - name: Enable Poetry virtual environment
+        working-directory: ${{ env.CWD }}
+        run: source `poetry env info --path`/bin/activate
       - name: Setup DVC
         uses: iterative/setup-dvc@v1
         with:
@@ -49,7 +52,7 @@ jobs:
         working-directory: ${{ env.CWD }}
         run: |
           # Pull data from DVC
-          poetry run dvc pull
+          dvc pull
           # Run the experiment
           dvc repro
 
@@ -62,16 +65,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-      - name: Install poetry
-        run: pipx install poetry==1.4.0
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-          cache: 'poetry'
-      - name: Install dependencies
-        working-directory: ${{ env.CWD }}
-        run: poetry install
       - name: Setup DVC
         uses: iterative/setup-dvc@v1
         with:
@@ -95,13 +88,13 @@ jobs:
           # Compare parameters to main branch
           echo "# Params workflow vs. main" >> report.md
           echo >> report.md
-          poetry run dvc params diff main --show-md >> report.md
+          dvc params diff main --show-md >> report.md
           echo >> report.md
 
           # Compare metrics to main branch
           echo "# Metrics workflow vs. main" >> report.md
           echo >> report.md
-          poetry run dvc metrics diff main --show-md >> report.md
+          dvc metrics diff main --show-md >> report.md
           echo >> report.md
 
           # Create plots
@@ -110,7 +103,7 @@ jobs:
 
           echo "## Precision recall curve" >> report.md
           echo >> report.md
-          poetry run dvc plots diff \
+          dvc plots diff \
             --target evaluation/plots/prc.json \
             -x recall \
             -y precision \
@@ -121,7 +114,7 @@ jobs:
 
           echo "## Roc curve" >> report.md
           echo >> report.md
-          poetry run dvc plots diff \
+          dvc plots diff \
             --target evaluation/plots/sklearn/roc.json \
             -x fpr \
             -y tpr \
@@ -132,7 +125,7 @@ jobs:
 
           echo "## Confusion matrix" >> report.md
           echo >> report.md
-          poetry run dvc plots diff \
+          dvc plots diff \
             --target evaluation/plots/sklearn/confusion_matrix.json \
             --template confusion \
             -x actual \

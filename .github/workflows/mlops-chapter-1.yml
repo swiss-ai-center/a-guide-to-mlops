@@ -42,13 +42,13 @@ jobs:
         run: source `poetry env info --path`/bin/activate
       - name: Prepare the dataset
         working-directory: ${{ env.CWD }}
-        run: poetry run python src/prepare.py data/data.xml
+        run: python src/prepare.py data/data.xml
       - name: Perform feature extraction
         working-directory: ${{ env.CWD }}
-        run: poetry run python src/featurization.py data/prepared data/features
+        run: python src/featurization.py data/prepared data/features
       - name: Train the model
         working-directory: ${{ env.CWD }}
-        run: poetry run python src/train.py data/features model.pkl
+        run: python src/train.py data/features model.pkl
       - name: Evaluate the model
         working-directory: ${{ env.CWD }}
-        run: poetry run python src/evaluate.py model.pkl data/features
+        run: python src/evaluate.py model.pkl data/features
