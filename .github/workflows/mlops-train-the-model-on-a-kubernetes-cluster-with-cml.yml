@@ -223,4 +223,4 @@ jobs:
           echo >> report.md
 
           # Publish the CML report
-          cml comment create --target=pr --publish report.md
+          cml comment update --target=pr --publish report.md

@@ -9,15 +9,12 @@ variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
   # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
   GIT_DEPTH: "0"
-  # https://python-poetry.org/docs/#ci-recommendations
-  POETRY_HOME: "$CI_PROJECT_DIR/.cache/poetry"
 
 # Pip's cache doesn't store the python packages
 # https://pip.pypa.io/en/stable/reference/pip_install/#caching
 cache:
   paths:
     - .cache/pip
-    - .cache/poetry
 
 setup-runner:
   stage: setup runner
@@ -63,27 +60,28 @@ train:
     - pip install poetry==1.4.0
     # Install dependencies
     - poetry install
+    # Enable Poetry virtual environment
     - source `poetry env info --path`/bin/activate
   script:
     # Pull data from DVC
     - dvc pull
     # Run the experiment
     - dvc repro
-  artifacts:
-    expire_in: 1 week
-    paths:
-      - "evaluation"
 
 report:
   stage: report
   image: iterativeai/cml:0-dvc2-base1
   needs:
-    - job: train
-      artifacts: true
+    - train
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   variables:
+    # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
+    GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
     REPO_TOKEN: $CML_PAT
+  before_script:
+    # Set the Google Service Account key
+    - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
   script:
     - |
       # Compare parameters to main branch
@@ -136,5 +134,13 @@ report:
       echo '![](./confusion_matrix.png "Confusion Matrix")' >> report.md
       echo >> report.md
 
+      echo "## Importance" >> report.md
+      echo >> report.md
+      dvc plots diff --target evaluation/plots/importance.png -- main
+      echo '![](./dvc_plots/static/main_evaluation_plots_importance.png "Importance (main)")' >> report.md
+      echo >> report.md
+      echo '![](./dvc_plots/static/workspace_evaluation_plots_importance.png "Importance (workspace)")' >> report.md
+      echo >> report.md
+
       # Publish the CML report
-      cml comment create --target=pr --publish report.md
+      cml comment update --target=pr --publish report.md

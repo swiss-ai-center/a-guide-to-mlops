@@ -147,7 +147,7 @@ Changes to be committed:
         new file:   src/train.py
 ```
 
-### Push the metadata to Git
+### Push the changes to Git
 
 Commit and push the changes to Git.
 

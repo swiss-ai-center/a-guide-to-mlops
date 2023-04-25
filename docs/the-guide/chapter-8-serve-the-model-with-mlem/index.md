@@ -546,7 +546,7 @@ mlem serve fastapi --model models/rf
 ```
 
 MLEM will load the model, create the FastAPI app and start it. You can then
-access the auto-generated model documentation on <http://localhost:8080/docs>.
+access the auto-generated model documentation on <http://localhost:8080/docs>{:target="\_blank"}.
 
 !!! info
 
@@ -575,12 +575,14 @@ Here are some request bodies you can use as examples.
 	Please be aware that this model is a toy. Some
 	inputs may be incorrectly predicted.
 
+#### Input example 1
+
 **Request body**
 
 ```json
 {
   "data": [
-    "Is this related to the R programming language?"
+    "How to create a plot in R?"
   ]
 }
 ```
@@ -597,17 +599,19 @@ This output means that the input is related to the R programming language.
 
 **Probabilities output**
 
-This output means a 55% probability that the input is related to the R
+This output means a 94% probability that the input is related to the R
 programming language.
 
 ```json
 [
   [
-    0.45,
-    0.55
+    0.06,
+    0.94
   ]
 ]
 ```
+
+#### Input example 2
 
 **Request body**
 
@@ -631,17 +635,19 @@ This output means that the input is not related to the R programming language.
 
 **Probabilities output**
 
-This output means a 0% probability that the input is related to the R
+This output means a 22% probability that the input is related to the R
 programming language.
 
 ```json
 [
   [
-    1,
-    0
+    0.77650959300044,
+    0.22349040699956035
   ]
 ]
 ```
+
+#### Input example 3
 
 **Request body**
 
@@ -665,14 +671,14 @@ This output means that the input is not related to the R programming language.
 
 **Probabilities output**
 
-This output means a 33% probability that the input is related to the R
+This output means a 10% probability that the input is related to the R
 programming language.
 
 ```json
 [
   [
-    0.6616666666666666,
-    0.33833333333333326
+    0.8910538088128949,
+    0.10894619118710518
   ]
 ]
 ```

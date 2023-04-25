@@ -16,7 +16,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
       - name: Install poetry
-        run: pipx install poetry==1.4.0
+        run: pip install poetry==1.4.0
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
@@ -24,6 +24,8 @@ jobs:
           cache: 'poetry'
       - name: Install dependencies
         run: poetry install
+      - name: Enable Poetry virtual environment
+        run: source `poetry env info --path`/bin/activate
       - name: Setup DVC
         uses: iterative/setup-dvc@v1
         with:

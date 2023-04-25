@@ -24,7 +24,7 @@ gcloud storage rm --recursive gs://<your bucket name>
 
 Alternatively, you can delete the bucket from the Google Cloud Console:
 
-1. Go to the [Google Cloud Storage Console](https://console.cloud.google.com/storage){:target="_blank"}.
+1. Go to the [Google Cloud Storage Console](https://console.cloud.google.com/storage){:target="\_blank"}.
 2. Make sure you selected the correct project.
 3. Select the bucket you want to delete from the bucket list.
 4. Click on **Delete** at the top of the page.
@@ -40,7 +40,7 @@ gcloud iam service-accounts delete dvc-service-account@<id of your gcp project>.
 
 Alternatively, you can delete the service account from the Google Cloud Console:
 
-1. Go to the [Google Cloud IAM Console](https://console.cloud.google.com/iam-admin/serviceaccounts){:target="_blank"}.
+1. Go to the [Google Cloud IAM Console](https://console.cloud.google.com/iam-admin/serviceaccounts){:target="\_blank"}.
 2. Make sure you selected the correct project.
 3. Select the service account you want to delete from the service account list.
 4. Click on **Delete** at the top of the page.
@@ -58,7 +58,7 @@ rm ~/.config/gcloud/dvc-google-service-account-key.json
 
 To delete the Google Cloud project you created:
 
-1. Go to the [Google Cloud Resource Manager Console](https://console.cloud.google.com/cloud-resource-manager){:target="_blank"}.
+1. Go to the [Google Cloud Resource Manager Console](https://console.cloud.google.com/cloud-resource-manager){:target="\_blank"}.
 2. Select the project you created.
 3. Click on **Delete** at the top of the page.
 4. Follow the instructions to shut down the project.
@@ -122,7 +122,7 @@ Here is a checklist of all the resources and environments you created:
 
 By following these steps, you have successfully cleaned up the resources and environments you created during the guide. We hope you found this guide helpful and that it has given you a good understanding of the importance of cleaning up after yourself in cloud computing environments.
 
-If you have any questions or concerns, please do not hesitate to contact us on [GitHub](https://github.com/csia-pme/a-guide-to-mlops){:target="_blank"}.
+If you have any questions or concerns, please do not hesitate to contact us on [GitHub](https://github.com/csia-pme/a-guide-to-mlops){:target="\_blank"}.
 
 ## Conclusion
 

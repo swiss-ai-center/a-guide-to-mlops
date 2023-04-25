@@ -151,7 +151,7 @@ Please refer to the correct instructions based on your Git repository provider.
 	      - name: Checkout repository
 	        uses: actions/checkout@v3
 	      - name: Install poetry
-	        run: pipx install poetry==1.4.0
+	        run: pip install poetry==1.4.0
 	      - name: Setup Python
 	        uses: actions/setup-python@v4
 	        with:
@@ -159,6 +159,8 @@ Please refer to the correct instructions based on your Git repository provider.
 	          cache: 'poetry'
 	      - name: Install dependencies
 	        run: poetry install
+	      - name: Enable Poetry virtual environment
+	        run: source `poetry env info --path`/bin/activate
 	      - name: Setup DVC
 	        uses: iterative/setup-dvc@v1
 	        with:
@@ -192,15 +194,12 @@ Please refer to the correct instructions based on your Git repository provider.
 	  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 	  # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
 	  GIT_DEPTH: "0"
-	  # https://python-poetry.org/docs/#ci-recommendations
-	  POETRY_HOME: "$CI_PROJECT_DIR/.cache/poetry"
 	
 	# Pip's cache doesn't store the python packages
 	# https://pip.pypa.io/en/stable/reference/pip_install/#caching
 	cache:
 	  paths:
 	    - .cache/pip
-	    - .cache/poetry
 
 	train:
 	  stage: train
@@ -218,6 +217,7 @@ Please refer to the correct instructions based on your Git repository provider.
 	    - pip install poetry==1.4.0
 	    # Install dependencies
 	    - poetry install
+	    # Enable Poetry virtual environment
 	    - source `poetry env info --path`/bin/activate
 	  script:
 	    # Pull data from DVC
