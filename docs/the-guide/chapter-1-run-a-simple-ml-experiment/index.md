@@ -91,14 +91,15 @@ This is what your working directory should look like.
 
 The following table describes the files present in the codebase.
 
-| **File**               | **Description**                                  | **Input**                             | **Output**                                                    |
-| ---------------------- | ------------------------------------------------ | ------------------------------------- | ------------------------------------------------------------- |
-| `src/prepare.py`       | Prepare the dataset to run the ML experiment     | The dataset to prepare as an XML file | The prepared data in `data/prepared` directory                |
-| `src/featurization.py` | Extract the features from the dataset            | The prepared dataset                  | The extracted features in `data/features` directory           |
-| `src/train.py`         | Train the ML model                               | The extracted features                | The model trained with the dataset                            |
-| `src/evaluate.py`      | Evaluate the ML model using DVC                  | The model to evaluate                 | The results of the model evaluation in `evaluation` directory |
-| `params.yaml`          | The parameters to run the ML experiment          | -                                     | -                                                             |
-| `pyproject.toml`       | The Poetry dependencies to run the ML experiment | -                                     | -                                                             |
+| **File**                | **Description**                                   | **Input**                             | **Output**                                                    |
+| ----------------------- | ------------------------------------------------- | ------------------------------------- | ------------------------------------------------------------- |
+| `src/prepare.py`        | Prepare the dataset to run the ML experiment      | The dataset to prepare as an XML file | The prepared data in `data/prepared` directory                |
+| `src/featurization.py`  | Extract the features from the dataset             | The prepared dataset                  | The extracted features in `data/features` directory           |
+| `src/train.py`          | Train the ML model                                | The extracted features                | The model trained with the dataset                            |
+| `src/evaluate.py`       | Evaluate the ML model using DVC                   | The model to evaluate                 | The results of the model evaluation in `evaluation` directory |
+| `params.yaml`           | The parameters to run the ML experiment           | -                                     | -                                                             |
+| `poetry.lock`           | The Poetry lockfile of all dependencies           | -                                     | -                                                             |
+| `pyproject.toml`        | The Poetry dependencies to run the ML experiment  | -                                     | -                                                             |
 
 !!! info
 

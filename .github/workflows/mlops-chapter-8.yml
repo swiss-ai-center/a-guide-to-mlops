@@ -28,7 +28,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
       - name: Install poetry
-        run: pipx install poetry==1.4.0
+        run: pip install poetry==1.4.0
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
@@ -52,11 +52,6 @@ jobs:
           dvc pull
           # Run the experiment
           dvc repro
-      - name: Upload evaluation results
-        uses: actions/upload-artifact@v3
-        with:
-          path: ${{ env.CWD }}/evaluation
-          retention-days: 5
 
   report:
     needs: train
@@ -67,15 +62,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-      - name: Download evaluation results
-        uses: actions/download-artifact@v3
-      - name: Copy evaluation results
-        shell: bash
-        run: |
-          # Delete current evaluation results
-          rm -rf ${CWD}/evaluation
-          # Replace with the new evaluation results
-          mv artifact ${CWD}/evaluation
       - name: Setup DVC
         uses: iterative/setup-dvc@v1
         with:
@@ -146,5 +132,13 @@ jobs:
           echo '![](./confusion_matrix.png "Confusion Matrix")' >> report.md
           echo >> report.md
 
+          echo "## Importance" >> report.md
+          echo >> report.md
+          dvc plots diff --target evaluation/plots/importance.png -- main
+          echo '![](./dvc_plots/static/main_evaluation_plots_importance.png "Importance (main)")' >> report.md
+          echo >> report.md
+          echo '![](./dvc_plots/static/workspace_evaluation_plots_importance.png "Importance (workspace)")' >> report.md
+          echo >> report.md
+
           # Publish the CML report
-          cml comment create --target=pr --publish report.md
+          cml comment update --target=pr --publish report.md

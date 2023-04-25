@@ -47,7 +47,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	Update the `.github/workflows/mlops.yml` file.
 
-	```yaml  title=".github/workflows/mlops.yml" hl_lines="9-10 44-149"
+	```yaml  title=".github/workflows/mlops.yml" hl_lines="9-10 47-135"
 	name: MLOps
 
 	on:
@@ -69,7 +69,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	      - name: Checkout repository
 	        uses: actions/checkout@v3
 	      - name: Install poetry
-	        run: pipx install poetry==1.4.0
+	        run: pip install poetry==1.4.0
 	      - name: Setup Python
 	        uses: actions/setup-python@v4
 	        with:
@@ -77,6 +77,8 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	          cache: 'poetry'
 	      - name: Install dependencies
 	        run: poetry install
+	      - name: Enable Poetry virtual environment
+	        run: source `poetry env info --path`/bin/activate
 	      - name: Setup DVC
 	        uses: iterative/setup-dvc@v1
 	        with:
@@ -91,11 +93,6 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	          dvc pull
 	          # Run the experiment
 	          dvc repro
-	      - name: Upload evaluation results
-	        uses: actions/upload-artifact@v3
-	        with:
-	          path: evaluation
-	          retention-days: 5
 
 	  report:
 	    permissions: write-all
@@ -107,19 +104,14 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	        uses: actions/checkout@v3
 	        with:
 	          ref: ${{ github.event.pull_request.head.sha }}
-	      - name: Download evaluation results
-	        uses: actions/download-artifact@v3
-	      - name: Copy evaluation results
-	        shell: bash
-	        run: |
-	          # Delete current evaluation results
-	          rm -rf evaluation
-	          # Replace with the new evaluation results
-	          mv artifact evaluation
 	      - name: Setup DVC
 	        uses: iterative/setup-dvc@v1
 	        with:
 	          version: '2.37.0'
+	      - name: Login to Google Cloud
+	        uses: 'google-github-actions/auth@v1'
+	        with:
+	          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
 	      - name: Setup CML
 	        uses: iterative/setup-cml@v1
 	        with:
@@ -181,8 +173,16 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	          echo '![](./confusion_matrix.png "Confusion Matrix")' >> report.md
 	          echo >> report.md
 
+	          echo "## Importance" >> report.md
+	          echo >> report.md
+	          dvc plots diff --target evaluation/plots/importance.png -- main
+	          echo '![](./dvc_plots/static/main_evaluation_plots_importance.png "Importance (main)")' >> report.md
+	          echo >> report.md
+	          echo '![](./dvc_plots/static/workspace_evaluation_plots_importance.png "Importance (workspace)")' >> report.md
+	          echo >> report.md
+
 	          # Publish the CML report
-	          cml comment create --target=pr --publish report.md
+	          cml comment update --target=pr --publish report.md
 	```
 
 	Check the differences with Git to validate the changes.
@@ -209,15 +209,10 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	   # Allows you to run this workflow manually from the Actions tab
 	   workflow_dispatch:
 
-	@@ -38,3 +41,95 @@ jobs:
+	@@ -40,3 +43,93 @@ jobs:
 	           dvc pull
 	           # Run the experiment
 	           dvc repro
-	+      - name: Upload evaluation results
-	+        uses: actions/upload-artifact@v3
-	+        with:
-	+          path: evaluation
-	+          retention-days: 5
 	+
 	+  report:
 	+    permissions: write-all
@@ -229,19 +224,14 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	+        uses: actions/checkout@v3
 	+        with:
 	+          ref: ${{ github.event.pull_request.head.sha }}
-	+      - name: Download evaluation results
-	+        uses: actions/download-artifact@v3
-	+      - name: Copy evaluation results
-	+        shell: bash
-	+        run: |
-	+          # Delete current evaluation results
-	+          rm -rf evaluation
-	+          # Replace with the new evaluation results
-	+          mv artifact evaluation
 	+      - name: Setup DVC
 	+        uses: iterative/setup-dvc@v1
 	+        with:
 	+          version: '2.37.0'
+	+      - name: Login to Google Cloud
+	+        uses: 'google-github-actions/auth@v1'
+	+        with:
+	+          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
 	+      - name: Setup CML
 	+        uses: iterative/setup-cml@v1
 	+        with:
@@ -303,20 +293,22 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	+          echo '![](./confusion_matrix.png "Confusion Matrix")' >> report.md
 	+          echo >> report.md
 	+
+	+          echo "## Importance" >> report.md
+	+          echo >> report.md
+	+          dvc plots diff --target evaluation/plots/importance.png -- main
+	+          echo '![](./dvc_plots/static/main_evaluation_plots_importance.png "Importance (main)")' >> report.md
+	+          echo >> report.md
+	+          echo '![](./dvc_plots/static/workspace_evaluation_plots_importance.png "Importance (workspace)")' >> report.md
+	+          echo >> report.md
+	+
 	+          # Publish the CML report
-	+          cml comment create --target=pr --publish report.md
+	+          cml comment update --target=pr --publish report.md
 	```
-
-	Here, we have added a new step called `Upload evaluation results` to the `train`
-	job. This step is responsible for uploading the evaluation results to the
-	artifact storage.
 
 	The new `report` job is responsible for reporting the results of the model
 	evaluation and comparing it with the main branch. This job is triggered only
 	when a pull request is opened and commits are made to it. The job checks out the
-	repository, downloads the evaluation results, sets up DVC and CML, creates a
-	report using the data obtained from the training job, and publishes the report
-	as a pull request comment.
+	repository, sets up DVC and CML, creates and publishes the report as a pull request comment.
 
 	Take some time to understand the changes made to the file.
 
@@ -351,7 +343,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	Update the `.gitlab-ci.yml` file.
 
-	```yaml title=".gitlab-ci.yml" hl_lines="3 43-111"
+	```yaml title=".gitlab-ci.yml" hl_lines="3 42-117"
 	stages:
 	  - train
 	  - report
@@ -362,15 +354,12 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 	  # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
 	  GIT_DEPTH: "0"
-	  # https://python-poetry.org/docs/#ci-recommendations
-	  POETRY_HOME: "$CI_PROJECT_DIR/.cache/poetry"
 
 	# Pip's cache doesn't store the python packages
 	# https://pip.pypa.io/en/stable/reference/pip_install/#caching
 	cache:
 	  paths:
 	    - .cache/pip
-	    - .cache/poetry
 
 	train:
 	  stage: train
@@ -388,27 +377,28 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	    - pip install poetry==1.4.0
 	    # Install dependencies
 	    - poetry install
+	    # Enable Poetry virtual environment
 	    - source `poetry env info --path`/bin/activate
 	  script:
 	    # Pull data from DVC
 	    - dvc pull
 	    # Run the experiment
 	    - dvc repro
-	  artifacts:
-	    expire_in: 1 week
-	    paths:
-	      - "evaluation"
 
 	report:
 	  stage: report
 	  image: iterativeai/cml:0-dvc2-base1
 	  needs:
-	    - job: train
-	      artifacts: true
+	    - train
 	  rules:
 	    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 	  variables:
+	    # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
+	    GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
 	    REPO_TOKEN: $CML_PAT
+	  before_script:
+	    # Set the Google Service Account key
+	    - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
 	  script:
 	    - |
 	      # Compare parameters to main branch
@@ -461,8 +451,16 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	      echo '![](./confusion_matrix.png "Confusion Matrix")' >> report.md
 	      echo >> report.md
 
+	      echo "## Importance" >> report.md
+	      echo >> report.md
+	      dvc plots diff --target evaluation/plots/importance.png -- main
+	      echo '![](./dvc_plots/static/main_evaluation_plots_importance.png "Importance (main)")' >> report.md
+	      echo >> report.md
+	      echo '![](./dvc_plots/static/workspace_evaluation_plots_importance.png "Importance (workspace)")' >> report.md
+	      echo >> report.md
+
 	      # Publish the CML report
-	      cml comment create --target=pr --publish report.md
+	      cml comment update --target=pr --publish report.md
 	```
 
 	Check the differences with Git to validate the changes.
@@ -486,25 +484,25 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	 variables:
 	   # Change pip's cache directory to be inside the project directory since we can
-	@@ -39,3 +40,72 @@ train:
+	@@ -37,3 +38,80 @@ train:
 	     - dvc pull
 	     # Run the experiment
 	     - dvc repro
-	+  artifacts:
-	+    expire_in: 1 week
-	+    paths:
-	+      - "evaluation"
 	+
 	+report:
 	+  stage: report
 	+  image: iterativeai/cml:0-dvc2-base1
 	+  needs:
-	+    - job: train
-	+      artifacts: true
+	+    - train
 	+  rules:
 	+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 	+  variables:
+	+    # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
+	+    GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
 	+    REPO_TOKEN: $CML_PAT
+	+  before_script:
+	+    # Set the Google Service Account key
+	+    - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
 	+  script:
 	+    - |
 	+      # Compare parameters to main branch
@@ -557,18 +555,22 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	+      echo '![](./confusion_matrix.png "Confusion Matrix")' >> report.md
 	+      echo >> report.md
 	+
+	+      echo "## Importance" >> report.md
+	+      echo >> report.md
+	+      dvc plots diff --target evaluation/plots/importance.png -- main
+	+      echo '![](./dvc_plots/static/main_evaluation_plots_importance.png "Importance (main)")' >> report.md
+	+      echo >> report.md
+	+      echo '![](./dvc_plots/static/workspace_evaluation_plots_importance.png "Importance (workspace)")' >> report.md
+	+      echo >> report.md
+	+
 	+      # Publish the CML report
-	+      cml comment create --target=pr --publish report.md
+	+      cml comment update --target=pr --publish report.md
 	```
-
-	Here, we have added an `artifacts` section to the `train` job. This section is
-	responsible for uploading the evaluation results to the artifact storage.
 
 	The new `report` job is responsible for reporting the results of the model
 	evaluation and comparing it with the main branch. This job is triggered only
 	when a merge request is opened and commits are made to it. The job checks out
-	the repository, downloads the evaluation results, sets up DVC and CML, creates a
-	report using the data obtained from the training job, and publishes the report
+	the repository, sets up DVC and CML, creates and publishes the report
 	as a merge request comment.
 
 	Take some time to understand the changes made to the file.
@@ -741,14 +743,14 @@ git push
 
 	When the CI/CD pipeline completes, a new comment is added to your pull request.
 	Check the pull request and examine the report published by CML. As it uses the
-	evaluation data that was generated with DVC, it can uses it to display all the
+	evaluation data that was pulled from DVC, it can uses it to display all the
 	plots.
 
 === ":simple-gitlab: GitLab"
 
 	When the CI/CD pipeline completes, a new comment is added to your merge request.
 	Check the merge request and examine the report made by CML. As it uses the
-	evaluation data that was generated with DVC, it can uses it to display all the
+	evaluation data that was pulled DVC, it can uses it to display all the
 	plots.
 
 ### Merge the pull request/merge request
