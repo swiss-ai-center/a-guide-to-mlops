@@ -6,6 +6,9 @@ variables:
   # Change pip's cache directory to be inside the project directory since we can
   # only cache local items.
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  # Change poetry's cache directory to be inside the project directory since we can
+  # only cache local items.
+  POETRY_CACHE_DIR: "$CI_PROJECT_DIR/.cache/poetry"
   # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
   GIT_DEPTH: "0"
 
@@ -14,6 +17,7 @@ variables:
 cache:
   paths:
     - .cache/pip
+    - .cache/poetry
 
 train:
   stage: train
@@ -31,13 +35,11 @@ train:
     - pip install poetry==1.4.0
     # Install dependencies
     - poetry install
-    # Enable Poetry virtual environment
-    - source `poetry env info --path`/bin/activate
   script:
     # Pull data from DVC
-    - dvc pull
+    - poetry run dvc pull
     # Run the experiment
-    - dvc repro
+    - poetry run dvc repro
 
 report:
   stage: report

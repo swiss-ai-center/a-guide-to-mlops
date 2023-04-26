@@ -159,12 +159,6 @@ Please refer to the correct instructions based on your Git repository provider.
 	          cache: 'poetry'
 	      - name: Install dependencies
 	        run: poetry install
-	      - name: Enable Poetry virtual environment
-	        run: source `poetry env info --path`/bin/activate
-	      - name: Setup DVC
-	        uses: iterative/setup-dvc@v1
-	        with:
-	          version: '2.37.0'
 	      - name: Login to Google Cloud
 	        uses: 'google-github-actions/auth@v1'
 	        with:
@@ -172,17 +166,19 @@ Please refer to the correct instructions based on your Git repository provider.
 	      - name: Train model
 	        run: |
 	          # Pull data from DVC
-	          dvc pull
+	          poetry run dvc pull
 	          # Run the experiment
-	          dvc repro
+	          poetry run dvc repro
 	```
+
+	You may notice the usage of the `poetry run` prefix before each command. As we are in the context of a GitHub Workflow, we need to prefix each command with `poetry run` to ensure that the command is executed in the virtual environment created by Poetry. Locally, you enabled the Poetry virtual environment with `poetry shell` that is not needed in the context of a GitHub Workflow.
 
 === ":simple-gitlab: GitLab"
 
 	At the root level of your Git repository, create a GitLab CI configuration file
 	`.gitlab-ci.yml`.
 
-	Explore this file to understand the stages and the steps.
+	Explore this file to understand the train stage and its steps.
 
 	```yaml title=".gitlab-ci.yml"
 	stages:
@@ -192,14 +188,18 @@ Please refer to the correct instructions based on your Git repository provider.
 	  # Change pip's cache directory to be inside the project directory since we can
 	  # only cache local items.
 	  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+	  # Change poetry's cache directory to be inside the project directory since we can
+	  # only cache local items.
+	  POETRY_CACHE_DIR: "$CI_PROJECT_DIR/.cache/poetry"
 	  # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
 	  GIT_DEPTH: "0"
-	
+
 	# Pip's cache doesn't store the python packages
 	# https://pip.pypa.io/en/stable/reference/pip_install/#caching
 	cache:
 	  paths:
 	    - .cache/pip
+	    - .cache/poetry
 
 	train:
 	  stage: train
@@ -217,14 +217,14 @@ Please refer to the correct instructions based on your Git repository provider.
 	    - pip install poetry==1.4.0
 	    # Install dependencies
 	    - poetry install
-	    # Enable Poetry virtual environment
-	    - source `poetry env info --path`/bin/activate
 	  script:
 	    # Pull data from DVC
-	    - dvc pull
+	    - poetry run dvc pull
 	    # Run the experiment
-	    - dvc repro
+	    - poetry run dvc repro
 	```
+
+	You may notice the usage of the `poetry run` prefix before each command. As we are in the context of a GitLab CI pipeline, we need to prefix each command with `poetry run` to ensure that the command is executed in the virtual environment created by Poetry. Locally, you enabled the Poetry virtual environment with `poetry shell` that is not needed in the context of a GitLab CI pipeline.
 
 ### Push the CI/CD pipeline configuration file to Git
 

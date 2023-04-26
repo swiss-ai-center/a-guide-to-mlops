@@ -200,7 +200,7 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 	          # Pull data from DVC
 	          dvc pull
 	          # Run the experiment
-	          dvc repro
+	          dvc repro --force
 
 	  report:
 	    permissions: write-all
@@ -434,7 +434,7 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 	    # Pull data from DVC
 	    - dvc pull
 	    # Run the experiment
-	    - dvc repro
+	    - dvc repro --force
 	  artifacts:
 	    expire_in: 1 week
 	    paths:

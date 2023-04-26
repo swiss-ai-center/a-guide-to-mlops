@@ -47,7 +47,9 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	Update the `.github/workflows/mlops.yml` file.
 
-	```yaml  title=".github/workflows/mlops.yml" hl_lines="9-10 47-135"
+	Take some time to understand the report job and its steps.
+
+	```yaml  title=".github/workflows/mlops.yml" hl_lines="9-10 41-129"
 	name: MLOps
 
 	on:
@@ -77,12 +79,6 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	          cache: 'poetry'
 	      - name: Install dependencies
 	        run: poetry install
-	      - name: Enable Poetry virtual environment
-	        run: source `poetry env info --path`/bin/activate
-	      - name: Setup DVC
-	        uses: iterative/setup-dvc@v1
-	        with:
-	          version: '2.37.0'
 	      - name: Login to Google Cloud
 	        uses: 'google-github-actions/auth@v1'
 	        with:
@@ -90,9 +86,9 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	      - name: Train model
 	        run: |
 	          # Pull data from DVC
-	          dvc pull
+	          poetry run dvc pull
 	          # Run the experiment
-	          dvc repro
+	          poetry run dvc repro
 
 	  report:
 	    permissions: write-all
@@ -184,6 +180,8 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	          # Publish the CML report
 	          cml comment update --target=pr --publish report.md
 	```
+
+	You may notice that the `report` job doesn't use Poetry. As we do not need to reproduce the experiment, we can install DVC using the `iterative/setup-dvc@v1` GitHub action without Poetry. DVC will then retrieve the data stored on the bucket on its own.
 
 	Check the differences with Git to validate the changes.
 
@@ -343,7 +341,9 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	Update the `.gitlab-ci.yml` file.
 
-	```yaml title=".gitlab-ci.yml" hl_lines="3 42-117"
+	Explore this file to understand the report stage and its steps.
+
+	```yaml title=".gitlab-ci.yml" hl_lines="3 46-121"
 	stages:
 	  - train
 	  - report
@@ -352,6 +352,9 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	  # Change pip's cache directory to be inside the project directory since we can
 	  # only cache local items.
 	  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+	  # Change poetry's cache directory to be inside the project directory since we can
+	  # only cache local items.
+	  POETRY_CACHE_DIR: "$CI_PROJECT_DIR/.cache/poetry"
 	  # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
 	  GIT_DEPTH: "0"
 
@@ -360,6 +363,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	cache:
 	  paths:
 	    - .cache/pip
+		- .cache/poetry
 
 	train:
 	  stage: train
@@ -381,9 +385,9 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	    - source `poetry env info --path`/bin/activate
 	  script:
 	    # Pull data from DVC
-	    - dvc pull
+	    - poetry run dvc pull
 	    # Run the experiment
-	    - dvc repro
+	    - poetry run dvc repro
 
 	report:
 	  stage: report
@@ -462,6 +466,8 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	      # Publish the CML report
 	      cml comment update --target=pr --publish report.md
 	```
+
+	You may notice that the `report` stage doesn't use Poetry. As we do not need to reproduce the experiment, we can use DVC from the `iterativeai/cml:0-dvc2-base1` Docker image without Poetry. DVC will then retrieve the data stored on the bucket on its own.
 
 	Check the differences with Git to validate the changes.
 

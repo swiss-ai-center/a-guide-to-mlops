@@ -24,12 +24,6 @@ jobs:
           cache: 'poetry'
       - name: Install dependencies
         run: poetry install
-      - name: Enable Poetry virtual environment
-        run: source `poetry env info --path`/bin/activate
-      - name: Setup DVC
-        uses: iterative/setup-dvc@v1
-        with:
-          version: '2.37.0'
       - name: Login to Google Cloud
         uses: 'google-github-actions/auth@v1'
         with:
@@ -37,6 +31,6 @@ jobs:
       - name: Train model
         run: |
           # Pull data from DVC
-          dvc pull
+          poetry run dvc pull
           # Run the experiment
-          dvc repro
+          poetry run dvc repro

@@ -337,7 +337,7 @@ x = matrix[:, 2:]
 predictions_by_class = model.predict_proba(x)
 predictions = predictions_by_class[:, 1]
 
-with Live("evaluation") as live:
+with Live("evaluation", report="html") as live:
 
     # Use dvclive to log a few simple metrics...
     avg_prec = metrics.average_precision_score(labels, predictions)
