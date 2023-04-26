@@ -183,7 +183,7 @@ Please refer to the correct instructions based on your Git repository provider.
 	```yaml title=".gitlab-ci.yml"
 	stages:
 	  - train
-	
+
 	variables:
 	  # Change pip's cache directory to be inside the project directory since we can
 	  # only cache local items.
@@ -193,14 +193,14 @@ Please refer to the correct instructions based on your Git repository provider.
 	  POETRY_CACHE_DIR: "$CI_PROJECT_DIR/.cache/poetry"
 	  # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
 	  GIT_DEPTH: "0"
-	
+
 	# Pip's cache doesn't store the python packages
 	# https://pip.pypa.io/en/stable/reference/pip_install/#caching
 	cache:
 	  paths:
 	    - .cache/pip
 	    - .cache/poetry
-	
+
 	train:
 	  stage: train
 	  image: iterativeai/cml:0-dvc2-base1
