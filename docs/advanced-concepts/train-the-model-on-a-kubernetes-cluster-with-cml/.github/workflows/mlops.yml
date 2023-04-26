@@ -79,7 +79,7 @@ jobs:
           # Pull data from DVC
           dvc pull
           # Run the experiment
-          dvc repro
+          dvc repro --force
 
   report:
     permissions: write-all

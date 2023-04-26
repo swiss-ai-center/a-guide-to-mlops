@@ -130,7 +130,7 @@ jobs:
           # Pull data from DVC
           poetry run dvc pull
           # Run the experiment
-          poetry run dvc repro
+          poetry run dvc repro --force
 
   report:
     needs: train
@@ -216,4 +216,4 @@ jobs:
           echo >> report.md
 
           # Publish the CML report
-          cml comment update --target=pr --publish report.md
+          cml comment update --target=pr --publish report.md/

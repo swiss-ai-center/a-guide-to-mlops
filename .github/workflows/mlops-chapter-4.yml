@@ -47,4 +47,4 @@ jobs:
           # Pull data from DVC
           poetry run dvc pull
           # Run the experiment
-          poetry run dvc repro
+          poetry run dvc repro --force
