@@ -23,3 +23,5 @@ repos:
           - mdformat-tables
           - mdformat-admon
           - mdformat-simple-breaks
+          - mdformat-footnote
+          - mdformat-toc
