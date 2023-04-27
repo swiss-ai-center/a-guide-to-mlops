@@ -177,22 +177,21 @@ index 4afb10e..a61d371 100644
 @@ -8,6 +8,8 @@ import scipy.sparse as sparse
  import yaml
  from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
- 
+
 +from mlem.api import save
 +
  params = yaml.safe_load(open("params.yaml"))["featurize"]
- 
+
  np.set_printoptions(suppress=True)
 @@ -69,6 +71,9 @@ tfidf = TfidfTransformer(smooth_idf=False)
  tfidf.fit(train_words_binary_matrix)
  train_words_tfidf_matrix = tfidf.transform(train_words_binary_matrix)
- 
+
 +save(bag_of_words.transform, "data/features/vectorizer")
 +save(tfidf.transform, "data/features/tfidf")
 +
- save_matrix(df_train, train_words_tfidf_matrix, feature_n
-ames, train_output)
- 
+ save_matrix(df_train, train_words_tfidf_matrix, feature_names, train_output)
+
  # Generate test feature matrix
 ```
 
@@ -262,7 +261,7 @@ The output should be similar to this.
 
 ```diff
 diff --git a/src/train.py b/src/train.py
-index 97bb9d0..87e4756 100644
+index 483fb50..fd1b6d9 100644
 --- a/src/train.py
 +++ b/src/train.py
 @@ -6,6 +6,8 @@ import numpy as np
@@ -396,7 +395,7 @@ The output should be similar to this.
 
 ```diff
 diff --git a/src/evaluate.py b/src/evaluate.py
-index d1668c3..ce4c4c5 100644
+index 89d616f..ba21f0e 100644
 --- a/src/evaluate.py
 +++ b/src/evaluate.py
 @@ -10,6 +10,7 @@ from sklearn import tree
@@ -703,20 +702,20 @@ Your branch is up to date with 'origin/main'.
 
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
-        modified:   .dvcignore
-        new file:   .mlem.yaml
-        modified:   data/features/.gitignore
-        new file:   data/features/tfidf.mlem
-        new file:   data/features/vectorizer.mlem
-        modified:   dvc.lock
-        modified:   dvc.yaml
-        new file:   models/.gitignore
-        new file:   models/rf.mlem
-        modified:   poetry.lock
-        modified:   pyproject.toml
-        modified:   src/evaluate.py
-        modified:   src/featurization.py
-        modified:   src/train.py
+	modified:   .dvcignore
+	new file:   .mlem.yaml
+	modified:   data/features/.gitignore
+	new file:   data/features/tfidf.mlem
+	new file:   data/features/vectorizer.mlem
+	modified:   dvc.lock
+	modified:   dvc.yaml
+	new file:   models/.gitignore
+	new file:   models/rf.mlem
+	modified:   poetry.lock
+	modified:   pyproject.toml
+	modified:   src/evaluate.py
+	modified:   src/featurization.py
+	modified:   src/train.py
 ```
 
 ### Push the changes to DVC and Git
