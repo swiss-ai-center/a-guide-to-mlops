@@ -363,7 +363,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	cache:
 	  paths:
 	    - .cache/pip
-		- .cache/poetry
+	    - .cache/poetry
 
 	train:
 	  stage: train
