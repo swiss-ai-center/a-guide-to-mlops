@@ -44,5 +44,5 @@ save(
     clf,
     output,
     preprocess=lambda x: tfidf(vectorizer(x)),
-    sample_data=["This is a sample text."],
+    sample_data=["This is a sample text."]
 )
