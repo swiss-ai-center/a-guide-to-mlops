@@ -74,14 +74,14 @@ No commits yet
 
 Untracked files:
   (use "git add <file>..." to include in what will be committed)
-        README.md
-        data/
-        evaluation/
-        model.pkl
-        params.yaml
-        poetry.lock
-        pyproject.toml
-        src/
+	README.md
+	data/
+	evaluation/
+	model.pkl
+	params.yaml
+	poetry.lock
+	pyproject.toml
+	src/
 ```
 
 As you can see, no files have been added to Git yet.
@@ -136,15 +136,15 @@ No commits yet
 
 Changes to be committed:
   (use "git rm --cached <file>..." to unstage)
-        new file:   .gitignore
-        new file:   README.md
-        new file:   params.yaml
-        new file:   poetry.lock
-        new file:   pyproject.toml
-        new file:   src/evaluate.py
-        new file:   src/featurization.py
-        new file:   src/prepare.py
-        new file:   src/train.py
+	new file:   .gitignore
+	new file:   README.md
+	new file:   params.yaml
+	new file:   poetry.lock
+	new file:   pyproject.toml
+	new file:   src/evaluate.py
+	new file:   src/featurization.py
+	new file:   src/prepare.py
+	new file:   src/train.py
 ```
 
 ### Push the changes to Git

@@ -270,15 +270,15 @@ Your branch is up to date with 'origin/main'.
 
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
-        new file:   .dvc/.gitignore
-        new file:   .dvc/config
-        new file:   .dvcignore
-        modified:   .gitignore
-        new file:   data/.gitignore
-        new file:   data/README.md
-        new file:   data/data.xml.dvc
-        modified:   poetry.lock
-        modified:   pyproject.toml
+	new file:   .dvc/.gitignore
+	new file:   .dvc/config
+	new file:   .dvcignore
+	modified:   .gitignore
+	new file:   data/.gitignore
+	new file:   data/README.md
+	new file:   data/data.xml.dvc
+	modified:   poetry.lock
+	modified:   pyproject.toml
 ```
 
 ### Push the changes to Git

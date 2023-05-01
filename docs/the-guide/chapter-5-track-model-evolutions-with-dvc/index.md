@@ -50,18 +50,18 @@ The output should be similar to this.
 
 ```diff
 diff --git a/params.yaml b/params.yaml
-index a2a290e..8046f85 100644
+index 83e7649..586d3e2 100644
 --- a/params.yaml
 +++ b/params.yaml
 @@ -3,8 +3,8 @@ prepare:
    seed: 20170428
- 
+
  featurize:
 -  max_features: 100
 -  ngrams: 1
 +  max_features: 200
 +  ngrams: 2
- 
+
  train:
    seed: 20170428
 ```
@@ -197,7 +197,7 @@ diff --git a/.gitignore b/.gitignore
 index 165e2c9..a2e21d2 100644
 --- a/.gitignore
 +++ b/.gitignore
-@@ -8,5 +8,8 @@ __pycache__/
+@@ -5,5 +5,8 @@ __pycache__/
  
  ## DVC
  
@@ -226,9 +226,11 @@ Your branch is up to date with 'origin/main'.
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
   (use "git restore <file>..." to discard changes in working directory)
-        modified:   .gitignore
-        modified:   dvc.lock
-        modified:   params.yaml
+	modified:   .gitignore
+	modified:   dvc.lock
+	modified:   params.yaml
+
+no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
 !!! warning

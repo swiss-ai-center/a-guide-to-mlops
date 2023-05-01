@@ -198,23 +198,23 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	```diff
 	diff --git a/.github/workflows/mlops.yml b/.github/workflows/mlops.yml
-	index 4612023..f79856a 100644
+	index f4232c9..9041212 100644
 	--- a/.github/workflows/mlops.yml
 	+++ b/.github/workflows/mlops.yml
 	@@ -6,6 +6,9 @@ on:
-	     branches:
-	       - main
-	
+		branches:
+		- main
+
 	+  # Runs on pull requests
 	+  pull_request:
 	+
-	   # Allows you to run this workflow manually from the Actions tab
-	   workflow_dispatch:
-	
-	@@ -34,3 +37,97 @@ jobs:
-	           poetry run dvc pull
-	           # Run the experiment
-	           poetry run dvc repro
+	# Allows you to run this workflow manually from the Actions tab
+	workflow_dispatch:
+
+	@@ -34,3 +37,93 @@ jobs:
+			poetry run dvc pull
+			# Run the experiment
+			poetry run dvc repro
 	+
 	+  report:
 	+    permissions: write-all
@@ -389,8 +389,6 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	    - pip install poetry==1.4.0
 	    # Install dependencies
 	    - poetry install
-	    # Enable Poetry virtual environment
-	    - source `poetry env info --path`/bin/activate
 	  script:
 	    # Pull data from DVC
 	    - poetry run dvc pull
@@ -488,20 +486,25 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	```diff
 	diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-	index 06355c9..345f6d3 100644
+	index aa15df3..0587f9b 100644
 	--- a/.gitlab-ci.yml
 	+++ b/.gitlab-ci.yml
 	@@ -1,5 +1,6 @@
-	 stages:
-	   - train
+	stages:
+	- train
 	+  - report
 
-	 variables:
-	   # Change pip's cache directory to be inside the project directory since we can
-	@@ -37,3 +38,80 @@ train:
-	     - dvc pull
-	     # Run the experiment
-	     - dvc repro
+	variables:
+	# Change pip's cache directory to be inside the project directory since we can
+	@@ -34,8 +35,87 @@ train:
+		- pip install poetry==1.4.0
+		# Install dependencies
+		- poetry install
+	script:
+		# Pull data from DVC
+		- poetry run dvc pull
+		# Run the experiment
+		- poetry run dvc repro
 	+
 	+report:
 	+  stage: report
@@ -691,9 +694,9 @@ Your branch is up to date with 'origin/main'.
 
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
-        modified:   .gitignore
-        modified:   dvc.lock
-        modified:   params.yaml
+	modified:   .gitignore
+	modified:   dvc.lock
+	modified:   params.yaml
 ```
 
 ```sh title="Execute the following command(s) in a terminal"

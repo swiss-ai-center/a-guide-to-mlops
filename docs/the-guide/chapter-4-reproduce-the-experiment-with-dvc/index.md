@@ -334,14 +334,14 @@ Your branch is up to date with 'origin/main'.
 
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
-        modified:   .gitignore
-        modified:   data/.gitignore
-        new file:   data/features/.gitignore
-        new file:   dvc.lock
-        new file:   dvc.yaml
-        new file:   evaluation/.gitignore
-        new file:   evaluation/plots/.gitignore
-        new file:   evaluation/plots/sklearn/.gitignore
+	modified:   .gitignore
+	modified:   data/.gitignore
+	new file:   data/features/.gitignore
+	new file:   dvc.lock
+	new file:   dvc.yaml
+	new file:   evaluation/.gitignore
+	new file:   evaluation/plots/.gitignore
+	new file:   evaluation/plots/sklearn/.gitignore
 ```
 
 ### Push the changes to DVC and Git

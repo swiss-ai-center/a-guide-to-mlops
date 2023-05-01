@@ -5,7 +5,7 @@ artifacts:
     type: dvc
     uri: rf/model
   preprocess/data.pkl:
-    hash: d58672493aa76fc8dbf15b3b5bd56cfd
+    hash: 986446851b1f7a7baad84e7329bc9ab1
     size: 6278001
     type: dvc
     uri: rf/preprocess
@@ -79,11 +79,6 @@ processors:
 requirements:
 - module: scipy
   version: 1.10.1
-- module: numpy
-  version: 1.24.2
-- module: sklearn
-  package_name: scikit-learn
-  version: 1.1.3
 - module: yaml
   package_name: PyYAML
   version: '6.0'
@@ -92,3 +87,8 @@ requirements:
   name: __main__
   source64zip: eJx9U01vE0EMvc+vMHvalVZTtdwi7QEhIXFFIIHSKHK63mba+WI8aRMQ/x3vTNIWSohyGD/72X6217gYUobAytRXNDf3lk4WH1id3n7n4gGQwccTdEBn1ZSCAxYSJq/JM7mNJThGfEI/BvchJOL83iKzmQwlVUnOktMYzSnYBhx7YHwgpSImdAxDqaEZJ1rP7jZE8m1TvXr2NV23bHJC45uV9DqBlQDpW2O6fejgzQBvFwrkN2OcR0pJPyaTqW3epdudI58ZBAxJwxfGW1pc+6Y7w7jO8ZC3wUMpqGUeE2HeiTpwYST7B5X2JreXnTTl4y6LlFNXy8uVCrv8F3i1Ukw0ClTVLZvZFFF+LcN7ARdbcGf8mqM1L31P2DyMR5O3UAYWWEfMW30XjG9LOz00Rw33MkKx0qbp5u1OYx2Xw5zMvof1nL0chS4LmEZRZHFDdt6Oj5q/74h+UFsJy0UPlyudA6aEh7br1F7Cnn1XC2ns9WA/lhHVMGDzg+DnLxmmnkIS8Jhb8xYjScrX/K/nuf+jfTtPqxKfuOrGTiLk3/fclomVvRjhhsRDMXoo+0AXLXHdy/C0oV4Id2HDw1UPqaRdc8ZMw7x2VSvqSU5IllCbESxPZpz7KKtoRsx4cbrAi+KT+3ugG2lBBKUzgc8BEq3m760KkIJ9edTjrO+YKKZwQ8yDRbcZEfYLKKXa5zztvutqeBW7ngsOy+bz1jDIH484ZNpnLbfZqd/ht4ef
   type: custom
+- module: numpy
+  version: 1.24.2
+- module: sklearn
+  package_name: scikit-learn
+  version: 1.1.3
