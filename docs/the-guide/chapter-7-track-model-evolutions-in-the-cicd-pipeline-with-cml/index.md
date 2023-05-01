@@ -381,8 +381,6 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	    - pip install poetry==1.4.0
 	    # Install dependencies
 	    - poetry install
-	    # Enable Poetry virtual environment
-	    - source `poetry env info --path`/bin/activate
 	  script:
 	    # Pull data from DVC
 	    - poetry run dvc pull
@@ -494,8 +492,6 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 		- pip install poetry==1.4.0
 		# Install dependencies
 		- poetry install
-	+    # Enable Poetry virtual environment
-	+    - source `poetry env info --path`/bin/activate
 	script:
 		# Pull data from DVC
 		- poetry run dvc pull
