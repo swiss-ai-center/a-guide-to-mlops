@@ -67,6 +67,10 @@ __pycache__/
 # DVC will add new files after this line
 ```
 
+!!! info
+
+    If using macOS, you might want to ignore `.DS_Store` files as well to avoid pushing Apple's metadata files to your repository.
+
 Check the differences with Git to validate the changes.
 
 ```sh title="Execute the following command(s) in a terminal"
@@ -258,6 +262,10 @@ __pycache__/
 # DVC will add new files after this line
 /model.pkl
 ```
+
+!!! info
+
+    If using macOS, you might want to ignore `.DS_Store` files as well to avoid pushing Apple's metadata files to your repository.
 
 ### Visualize the pipeline
 

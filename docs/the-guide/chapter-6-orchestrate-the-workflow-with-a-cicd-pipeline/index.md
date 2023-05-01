@@ -260,9 +260,9 @@ Please refer to the correct instructions based on your Git repository provider.
 
 ### Check the results
 
-On GitLab, you can see the pipeline running on the **CI/CD > Pipelines** page.
-
 On GitHub, you can see the pipeline running on the **Actions** page.
+
+On GitLab, you can see the pipeline running on the **CI/CD > Pipelines** page.
 
 You should see a newly created pipeline. The pipeline should log into Google
 Cloud, pull the data from DVC and reproduce the experiment. If you encounter cache errors, verify that you have

@@ -351,7 +351,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	Explore this file to understand the report stage and its steps.
 
-	```yaml title=".gitlab-ci.yml" hl_lines="3 46-121"
+	```yaml title=".gitlab-ci.yml" hl_lines="3 44-119"
 	stages:
 	  - train
 	  - report
