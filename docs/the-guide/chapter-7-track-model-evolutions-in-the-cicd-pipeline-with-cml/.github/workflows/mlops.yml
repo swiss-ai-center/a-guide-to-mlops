@@ -60,6 +60,10 @@ jobs:
         uses: iterative/setup-cml@v1
         with:
           version: '0.18.17'
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
       - name: Create CML report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}

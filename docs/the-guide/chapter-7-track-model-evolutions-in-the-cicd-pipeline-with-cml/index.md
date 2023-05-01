@@ -49,7 +49,7 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 
 	Take some time to understand the report job and its steps.
 
-	```yaml  title=".github/workflows/mlops.yml" hl_lines="9-10 41-129"
+	```yaml  title=".github/workflows/mlops.yml" hl_lines="9-10 41-133"
 	name: MLOps
 
 	on:
@@ -108,6 +108,10 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	        uses: 'google-github-actions/auth@v1'
 	        with:
 	          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
+	      - name: Setup Node
+	        uses: actions/setup-node@v3
+	        with:
+	          node-version: '16'
 	      - name: Setup CML
 	        uses: iterative/setup-cml@v1
 	        with:
@@ -200,17 +204,17 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	@@ -6,6 +6,9 @@ on:
 	     branches:
 	       - main
-
+	
 	+  # Runs on pull requests
 	+  pull_request:
 	+
 	   # Allows you to run this workflow manually from the Actions tab
 	   workflow_dispatch:
-
-	@@ -40,3 +43,93 @@ jobs:
-	           dvc pull
+	
+	@@ -34,3 +37,97 @@ jobs:
+	           poetry run dvc pull
 	           # Run the experiment
-	           dvc repro
+	           poetry run dvc repro
 	+
 	+  report:
 	+    permissions: write-all
@@ -234,6 +238,10 @@ merge requests (MRs) - to integrate the work done into the `main` branch.
 	+        uses: iterative/setup-cml@v1
 	+        with:
 	+          version: '0.18.17'
+	+      - name: Setup Node
+	+        uses: actions/setup-node@v3
+	+        with:
+	+          node-version: '16'
 	+      - name: Create CML report
 	+        env:
 	+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
