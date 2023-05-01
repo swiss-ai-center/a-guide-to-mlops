@@ -140,7 +140,7 @@ iterations. Here, you can see that the metrics have slightly improved.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Create the report to display the plots
-dvc plots diff
+dvc plots diff --open
 ```
 
 The effect of the `dvc plots diff` command is to create a `dvc_plots` directory
@@ -182,6 +182,10 @@ dvc_plots
 # DVC will add new files after this line
 /model.pkl
 ```
+
+!!! info
+
+    If using macOS, you might want to ignore `.DS_Store` files as well to avoid pushing Apple's metadata files to your repository.
 
 Check the differences with Git to validate the changes.
 
@@ -234,8 +238,7 @@ no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
 !!! warning
-	**Do not push the improved version of your model yet**; it will be done in a
-	future chapter.
+	**Do not commit and push the improved version of your model yet**; it will be done in a future chapter.
 
 This chapter is done, you can check the summary.
 

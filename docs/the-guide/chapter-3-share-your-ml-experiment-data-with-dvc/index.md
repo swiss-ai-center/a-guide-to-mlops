@@ -162,7 +162,7 @@ working directory. This directory contains the configuration of DVC.
 
 Now that DVC has been setup, you can add files to DVC.
 
-Try to add the experiment data. Warning, it will fail.
+Try to add the experiment data. Spoiler: it will fail.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Try to add the experiment data to DVC
@@ -199,6 +199,10 @@ evaluation
 __pycache__/
 ```
 
+!!! info
+
+    If using macOS, you might want to ignore `.DS_Store` files as well to avoid pushing Apple's metadata files to your repository.
+
 Check the differences with Git to validate the changes.
 
 ```sh title="Execute the following command(s) in a terminal"
@@ -228,6 +232,18 @@ You can now add the experiment data to DVC without complain!
 ```sh title="Execute the following command(s) in a terminal"
 # Add the experiment data to DVC
 dvc add data/data.xml
+```
+
+The output should be similar to this. You can safely ignore the warning.
+
+```
+To track the changes with git, run:
+
+        git add data/data.xml.dvc data/.gitignore
+
+To enable auto staging, run:
+
+        dvc config core.autostage true
 ```
 
 The effect of the `dvc add` command is to create a `data/data.xml.dvc` file and

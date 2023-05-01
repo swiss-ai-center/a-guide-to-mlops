@@ -86,7 +86,7 @@ Untracked files:
 
 As you can see, no files have been added to Git yet.
 
-#### Create a `.gitignore` file
+### Create a `.gitignore` file
 
 Create a `.gitignore` file to exclude data, models, and Python environment to
 improve repository size and clone time. The data and models will be managed by

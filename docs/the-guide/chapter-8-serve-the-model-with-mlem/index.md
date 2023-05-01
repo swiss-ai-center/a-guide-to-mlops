@@ -250,6 +250,14 @@ save(
 )
 ```
 
+!!! note
+
+	Did you pay attention to the last lines? The
+	`preprocess` lambda loads the `TfidfTransformer` with the `CountVectorizer`.
+	These will be saved along the model for future predictions. The `sample_data`
+	will be used to generate the right input for when the model is deployed (seen
+	later on). MLEM will store the model's metadata in the `models/rf.mlem` file.
+
 Check the differences with Git to better understand the changes.
 
 ```sh title="Execute the following command(s) in a terminal"
@@ -289,14 +297,6 @@ index 483fb50..fd1b6d9 100644
 +    sample_data=["This is a sample text."]
 +)
 ```
-
-!!! note
-
-	Did you pay attention to the last lines? The
-	`preprocess` lambda loads the `TfidfTransformer` with the `CountVectorizer`.
-	These will be saved along the model for future predictions. The `sample_data`
-	will be used to generate the right input for when the model is deployed (seen
-	later on). MLEM will store the model's metadata in the `models/rf.mlem` file.
 
 #### Update `src/evaluate.py`
 
@@ -555,10 +555,10 @@ access the auto-generated model documentation on <http://localhost:8080/docs>{:t
 
 The following endpoints have been created:
 
-- `predict`: Get a string as the input and display the prediction of the input
+- `/predict`: Get a string as the input and display the prediction of the input
   as true (1) if it is related to the R programming language or as false (0) if
   it is is not related to the R programming language.
-- `predict_proba`: Get a string as the input and display the probability of the
+- `/predict_proba`: Get a string as the input and display the probability of the
   input as a array of two numbers. The first number is the probability from 0 to
   1 of the input as not related to the R programming language. The second number
   is the probability from 0 to 1 of the input as related to the R programming
