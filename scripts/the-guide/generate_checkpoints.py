@@ -190,6 +190,9 @@ class SavesManager:
         self.base_tmp_path.mkdir(parents=True, exist_ok=True)
         os.chdir(self.base_tmp_path)
 
+        if Path(GENERATED_OUTPUT_PATH).exists():
+            os.remove(GENERATED_OUTPUT_PATH)
+
         write_output(f"# Generation Output\n")
         for i, save in enumerate(self.saves):
             if self.run_until is not None and i >= self.run_until:

@@ -66,6 +66,10 @@ jobs:
         uses: 'google-github-actions/auth@v1'
         with:
           credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
       - name: Setup CML
         uses: iterative/setup-cml@v1
         with:

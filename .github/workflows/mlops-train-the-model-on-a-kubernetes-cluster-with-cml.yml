@@ -145,6 +145,10 @@ jobs:
         uses: iterative/setup-dvc@v1
         with:
           version: '2.37.0'
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
       - name: Setup CML
         uses: iterative/setup-cml@v1
         with:
