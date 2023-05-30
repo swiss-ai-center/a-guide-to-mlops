@@ -7,46 +7,38 @@ site_description: >-
   A simple yet complete guide to MLOps tools and practices - from a conventional way to a modern approach of working with ML projects.
 copyright: Copyright &copy; 2022 - 2023 CSIA-PME
 nav:
-  - Home:
-      - index.md
-      - Get started: get-started/what-is-mlops/index.md
-      - The guide: the-guide/introduction/index.md
-      - Labelization: label-studio/introduction/index.md
-  - Get started:
-      - What is MLOps?: get-started/what-is-mlops/index.md
-      - What problems is MLOps trying to solve?: get-started/what-problems-is-mlops-trying-to-solve/index.md
-      - Why would MLOps be useful for me?: get-started/why-would-mlops-be-useful-for-me/index.md
-      - The tools used in this guide: get-started/the-tools-used-in-this-guide/index.md
-  - The guide:
-      - Introduction: the-guide/introduction/index.md
-      - "Chapter 1: Run a simple ML experiment": the-guide/chapter-1-run-a-simple-ml-experiment/index.md
-      - "Chapter 2: Share your ML experiment code with Git": the-guide/chapter-2-share-your-ml-experiment-code-with-git/index.md
-      - "Chapter 3: Share your ML experiment data with DVC": the-guide/chapter-3-share-your-ml-experiment-data-with-dvc/index.md
-      - "Chapter 4: Reproduce the experiment with DVC": the-guide/chapter-4-reproduce-the-experiment-with-dvc/index.md
-      - "Chapter 5: Track model evolutions with DVC": the-guide/chapter-5-track-model-evolutions-with-dvc/index.md
-      - "Chapter 6: Orchestrate the workflow with a CI/CD pipeline": the-guide/chapter-6-orchestrate-the-workflow-with-a-cicd-pipeline/index.md
-      - "Chapter 7: Track model evolutions in the CI/CD pipeline with CML": the-guide/chapter-7-track-model-evolutions-in-the-cicd-pipeline-with-cml/index.md
-      - "Chapter 8: Serve the model with MLEM": the-guide/chapter-8-serve-the-model-with-mlem/index.md
-      - "Clean up and Conclusion": the-guide/clean-up-and-conclusion/index.md
-  - Labelization:
-      - Introduction: label-studio/introduction/index.md
-      - Create a Label Studio project: label-studio/create-a-label-studio-project/index.md
-      - Import existing data to Label Studio: label-studio/import-existing-data-to-label-studio/index.md
-      - Annotate new data with Label Studio: label-studio/annotate-new-data-with-label-studio/index.md
-      - Export data from Label Studio: label-studio/export-data-from-label-studio/index.md
-  - Advanced concepts:
-      - Deploy MinIO: advanced-concepts/deploy-minio/index.md
-      - Deploy Label Studio: advanced-concepts/deploy-label-studio/index.md
-      - Link your ML model with Label Studio: advanced-concepts/link-your-ml-model-with-label-studio/index.md
-      - Train the model on a Kubernetes cluster with CML: advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml/index.md
-  - Known limitations:
-      - "CML: Cannot create a runner every time": known-limitations/cml-cannot-create-a-runner-every-time/index.md
-      - "CML: Cannot specify an affinity to run the pod on Kubernetes": known-limitations/cml-cannot-specify-an-affinity-to-run-the-pod-on-kubernetes/index.md
-      - "DVC & Git: Data and code cannot evolve independently": known-limitations/dvc-git-data-and-code-cannot-evolve-independently/index.md
-      - "Global: Missing elements in comparison to other user-friendly solutions": known-limitations/global-missing-elements-in-comparison-to-other-user-friendly-solutions/index.md
-      - "Label Studio: Does the predictions made by our ML model really help the person annotating the dataset": known-limitations/label-studio-does-the-predictions-made-by-our-ml-model-really-help-the-person-annotating-the-dataset/index.md
-      - "Label Studio: The export of the dataset is manual": known-limitations/label-studio-the-export-of-the-dataset-is-manual/index.md
-      - "Label Studio: The retraining of the ML model is difficult": known-limitations/label-studio-the-retraining-of-the-ml-model-is-difficult/index.md
+  - Introduction: introduction.md
+  - Part 1 - Local training and model evaluation:
+      - "Part 1 - Local training and model evaluation": part-1-local-training-and-model-evaluation/introduction.md
+      - "Chapter 1 - Run a simple ML experiment with Jupyter Notebook": part-1-local-training-and-model-evaluation/chapter-1-run-a-simple-ml-experiment-with-jupyter-notebook/index.md
+      - "Chapter 2 - Adapt and move the Jupyter Notebook to Python scripts": part-1-local-training-and-model-evaluation/chapter-2-adapt-and-move-the-jupyter-notebook-to-python-scripts/index.md
+      - "Chapter 3 - Initialize Git and DVC for local training": part-1-local-training-and-model-evaluation/chapter-3-initialize-git-and-dvc-for-local-training/index.md
+      - "Chapter 4 - Reproduce the ML experiment with DVC": part-1-local-training-and-model-evaluation/chapter-4-reproduce-the-ml-experiment-with-dvc/index.md
+      - "Chapter 5 - Track model evolution with DVC": part-1-local-training-and-model-evaluation/chapter-5-track-model-evolution-with-dvc/index.md
+      - "Part 1 - Conclusion": part-1-local-training-and-model-evaluation/conclusion.md
+  - Part 2 - Move to the cloud:
+      - "Part 2 - Move to the cloud": part-2-move-to-the-cloud/introduction.md
+      - "Chapter 6 - Move the ML experiment data to the cloud": part-2-move-to-the-cloud/chapter-6-move-the-ml-experiment-data-to-the-cloud/index.md
+      - "Chapter 7 - Move the ML experiment code to the cloud": part-2-move-to-the-cloud/chapter-7-move-the-ml-experiment-code-to-the-cloud/index.md
+      - "Chapter 8 - Reproduce the ML experiment in a CI/CD pipeline": part-2-move-to-the-cloud/chapter-8-reproduce-the-ml-experiment-in-a-cicd-pipeline/index.md
+      - "Chapter 9 - Track model evolution in the CI/CD pipeline with CML": part-2-move-to-the-cloud/chapter-9-track-model-evolution-in-the-cicd-pipeline-with-cml/index.md
+      - "Part 2 - Conclusion": part-2-move-to-the-cloud/conclusion.md
+  - Part 3 - Serve and deploy the model online:
+      - "Part 3 - Serve and deploy the model online": part-3-serve-and-deploy-the-model-online/introduction.md
+      - "Chapter 10 - Save and load the model with MLEM": part-3-serve-and-deploy-the-model-online/chapter-10-save-and-load-the-model-with-mlem/index.md
+      - "Chapter 11 - Serve the model locally with MLEM": part-3-serve-and-deploy-the-model-online/chapter-11-serve-the-model-locally-with-mlem/index.md
+      - "Chapter 12 - Deploy and access the model on Kubernetes with MLEM": part-3-serve-and-deploy-the-model-online/chapter-12-deploy-and-access-the-model-on-kubernetes-with-mlem/index.md
+      - "Chapter 13 - Train the model on a Kubernetes pod with CML": part-3-serve-and-deploy-the-model-online/chapter-13-train-the-model-on-a-kubernetes-pod-with-cml/index.md
+      - "Part 3 - Conclusion": part-3-serve-and-deploy-the-model-online/conclusion.md
+  - Part 4 - Labeling the data and retrain:
+      - "Part 4 - Labeling the data and retrain": part-4-labeling-the-data-and-retrain/introduction.md
+      - "Chapter 14 - Setup Label Studio": part-4-labeling-the-data-and-retrain/chapter-14-setup-label-studio/index.md
+      - "Chapter 15 - Import existing data to Label Studio": part-4-labeling-the-data-and-retrain/chapter-15-import-existing-data-to-label-studio/index.md
+      - "Chapter 16 - Label new data with Label Studio": part-4-labeling-the-data-and-retrain/chapter-16-label-new-data-with-label-studio/index.md
+      - "Chapter 17 - Retrain the model from new data with DVC Sync": part-4-labeling-the-data-and-retrain/chapter-17-retrain-the-model-from-new-data-with-dvc-sync/index.md
+      - "Chapter 18 - Link the model to Label Studio and get predictions": part-4-labeling-the-data-and-retrain/chapter-18-link-the-model-to-label-studio-and-get-predictions/index.md
+      - "Part 4 - Conclusion": part-4-labeling-the-data-and-retrain/conclusion.md
+  - Conclusion: conclusion.md
 edit_uri: blob/main/docs/
 theme:
   language: en
@@ -81,7 +73,6 @@ theme:
     - navigation.tabs
     - navigation.tabs.sticky
     - navigation.top
-    - navigation.tracking
     - navigation.footer
     - search.suggest
     - search.highlight

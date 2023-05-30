@@ -1,0 +1,1 @@
+# Chapter 18: Link the model to Label Studio and get predictions
