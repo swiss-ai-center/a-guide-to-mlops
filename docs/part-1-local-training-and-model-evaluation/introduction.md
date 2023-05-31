@@ -1,1 +1,3 @@
-# Part 1 - Local training and model evaluation
+# Introduction
+
+Learn how to train a model locally and evaluate it using DVC.

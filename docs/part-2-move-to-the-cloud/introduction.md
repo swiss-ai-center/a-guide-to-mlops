@@ -1,1 +1,3 @@
-# Part 2 - Move to the cloud
+# Introduction
+
+Learn how to collaborate online using Git, a CI/CD pipeline and CML.
