@@ -1,3 +1,9 @@
+---
+hide:
+- navigation
+- toc
+---
+
 # A guide to MLOps
 
 Welcome to our comprehensive guide to MLOps!
