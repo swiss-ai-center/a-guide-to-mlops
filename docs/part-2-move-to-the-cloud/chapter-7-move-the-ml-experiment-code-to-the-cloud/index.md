@@ -127,6 +127,38 @@ git commit -m "My ML experiment data is saved with DVC"
 git push
 ```
 
+### Configure DVC
+
+Here, the `dvc[gs]` package enables support for Google Cloud Storage.
+
+```sh title="Execute the following command(s) in a terminal"
+poetry add "dvc[gs]==2.37.0"
+```
+
+Check the differences with Git to validate the changes.
+
+```sh title="Execute the following command(s) in a terminal"
+# Show the differences with Git
+git diff pyproject.toml
+```
+
+The output should be similar to this.
+
+```diff
+diff --git a/pyproject.toml b/pyproject.toml
+index 8a57399..ff11768 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -13,6 +13,7 @@ pyaml = "21.10.1"
+scikit-learn = "1.1.3"
+scipy = "1.10.1"
+matplotlib = "3.6.2"
++dvc = {version = "2.37.0", extras = ["gs"]}
+
+[build-system]
+requires = ["poetry-core"]
+```
+
 ## Summary
 
 ## State of the MLOps process

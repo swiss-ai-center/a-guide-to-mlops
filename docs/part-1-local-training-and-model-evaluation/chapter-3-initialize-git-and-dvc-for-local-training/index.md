@@ -18,7 +18,6 @@ Git commits
 
 Let's get started!
 
-
 At this point, the codebase is made available to team members using Git, but the
 experiment data is not.
 
@@ -30,19 +29,8 @@ Git LFS is a solution to this problem, but it is not as efficient as other versi
 It uses chunking to store large files efficiently and track their changes.
 Similar to Git, DVC allows you to store the dataset in a remote storage, typically a cloud storage provider, and track its changes.
 
-In this guide, a Google Storage Bucket will be used to store the dataset.
-Although, DVC is compatible with many other cloud storage providers as well.
-
-!!! info
-
-Want to self-host your storage? Check out the [Deploy
-MinIO](../../advanced-concepts/deploy-minio) guide!
-
 In this chapter, you will learn how to:
 
-1. Create a new project on Google Cloud
-2. Install Google Cloud CLI
-3. Create the Google Storage Bucket
 4. Install DVC
 5. Initialize and configure DVC
 6. Update the `.gitignore` file and add the experiment data to DVC
@@ -176,7 +164,6 @@ git push --set-upstream origin main
 ```
 
 ### Install DVC
-
 
 Here, the `dvc[gs]` package enables support for Google Cloud Storage.
 
