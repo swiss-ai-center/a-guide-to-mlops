@@ -1,1 +1,252 @@
 # Chapter 2: Adapt and move the Jupyter Notebook to Python scripts
+
+## Introduction
+
+## Steps
+
+### Set up the project directory
+
+As a new team member, set up a project directory on your computer for this
+ground breaking ML experiment. This directory will serve as your working
+directory for the duration of the guide.
+
+### Download and set up the codebase
+
+Your colleague has generously provided you a ZIP file containing the source
+code. Although this may be an outdated method for sharing files, you are ready to
+tackle the task.
+
+```sh title="Execute the following command(s) in a terminal"
+# Download the archive containing the code
+wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/code.zip -O code.zip
+```
+
+Unzip the codebase into your working directory.
+
+```sh title="Execute the following command(s) in a terminal"
+# Extract the code
+unzip code.zip
+
+# Move the subdirectory files to the working directory
+mv a-guide-to-mlops-code/* .
+
+# Remove the archive and the directory
+rm -r code.zip a-guide-to-mlops-code
+```
+
+
+### Explore the codebase
+
+Take some time to get familiar with the codebase and examine its
+contents. The following is a summary of each file.
+
+This is what your working directory should look like.
+
+```yaml hl_lines="2-10"
+.
+├── src # (1)!
+│   ├── evaluate.py
+│   ├── featurization.py
+│   ├── prepare.py
+│   └── train.py
+├── params.yaml # (2)!
+├── poetry.lock # (3)!
+├── pyproject.toml # (4)!
+└── README.md # (5)!
+```
+
+1. This, and all its sub-directory, is new.
+2. This is new.
+3. This is new.
+4. This is new.
+5. This is new.
+
+The following table describes the files present in the codebase.
+
+| **File**                | **Description**                                   | **Input**                             | **Output**                                                    |
+| ----------------------- | ------------------------------------------------- | ------------------------------------- | ------------------------------------------------------------- |
+| `src/prepare.py`        | Prepare the dataset to run the ML experiment      | The dataset to prepare as an XML file | The prepared data in `data/prepared` directory                |
+| `src/featurization.py`  | Extract the features from the dataset             | The prepared dataset                  | The extracted features in `data/features` directory           |
+| `src/train.py`          | Train the ML model                                | The extracted features                | The model trained with the dataset                            |
+| `src/evaluate.py`       | Evaluate the ML model using DVC                   | The model to evaluate                 | The results of the model evaluation in `evaluation` directory |
+| `params.yaml`           | The parameters to run the ML experiment           | -                                     | -                                                             |
+| `poetry.lock`           | The Poetry lockfile of all dependencies           | -                                     | -                                                             |
+| `pyproject.toml`        | The Poetry dependencies to run the ML experiment  | -                                     | -                                                             |
+
+!!! info
+
+    The `params.yaml` is the default file used by DVC. You can find the reference here: <https://dvc.org/doc/command-reference/params>.
+
+### Download and set up the dataset
+
+Your colleague provided you the following URL to download an archive containing
+the dataset for this machine learning experiment.
+
+```sh title="Execute the following command(s) in a terminal"
+# Download the archive containing the dataset
+wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/data.zip -O data.zip
+```
+
+This archive must be decompressed and its contents be moved in the
+`data` directory in the working directory of the experiment.
+
+```sh title="Execute the following command(s) in a terminal"
+# Extract the dataset
+unzip data.zip
+
+# Move the `data.xml` file to the working directory
+mv a-guide-to-mlops-data/ data/
+
+# Remove the archive and the directory
+rm data.zip
+```
+
+### Explore the dataset
+
+Examine the dataset to get a better understanding of its contents.
+
+Your working directory should now look like this:
+
+```yaml hl_lines="2-4"
+.
+├── data # (1)!
+│   ├── data.xml
+│   └── README.md
+├── src
+│   ├── evaluate.py
+│   ├── featurization.py
+│   ├── prepare.py
+│   └── train.py
+├── params.yaml
+├── pyproject.toml
+├── poetry.lock
+└── README.md
+```
+
+1. This, and all its sub-directory, is new.
+
+### Run the experiment
+
+Awesome! You now have everything you need to run the experiment: the codebase and
+the dataset are in place; and you are ready to run the experiment for the first
+time.
+
+Create the virtual environment and install necessary dependencies in your
+working directory using these commands.
+
+```sh title="Execute the following command(s) in a terminal"
+# Install the dependencies in a virtual environment
+poetry install
+
+# Activate the virtual environment
+poetry shell
+```
+
+!!! question
+
+    **Why Poetry?**
+
+    Poetry is a tool to manage Python dependencies. It is a more robust and
+    user-friendly alternative to `pip`. It is also more suitable for
+    reproducibility and collaboration by creating a lock file that can be used
+    to recreate the exact same environment.
+
+    For example, freezing the version of a dependency in a `requirements.txt` file
+    is not enough to ensure reproducibility. The `requirements.txt` file only
+    specifies the version of the dependency at the time of installation. If dependencies
+    of the dependency are updated, the version of the dependency might change
+    without you knowing it. This is why Poetry creates a lock file that contains
+    the exact version of all the dependencies and their dependencies.
+
+Your helpful colleague provided you some steps to reproduce the experiment.
+
+```sh title="Execute the following command(s) in a terminal"
+# Prepare the dataset
+python src/prepare.py data/data.xml
+
+# Perform feature extraction
+python src/featurization.py data/prepared data/features
+
+# Train the model with the extracted features and save it
+python src/train.py data/features model.pkl
+
+# Evaluate the model performances - see below note
+python src/evaluate.py model.pkl data/features
+```
+
+!!! info
+
+    The `evaluate.py` Python script might display a
+    warning regarding DVC. You can safely ignore it for now.
+
+### Check the results
+
+
+Your working directory should now be similar to this:
+
+```yaml hl_lines="3-8 11-22 29"
+.
+├── data
+│   ├── features # (1)!
+│   │   ├── test.pkl
+│   │   └── train.pkl
+│   ├── prepared # (2)!
+│   │   ├── test.tsv
+│   │   └── train.tsv
+│   ├── README.md
+│   └── data.xml
+├── evaluation # (3)!
+│   ├── plots
+│   │   ├── metrics
+│   │   │   ├── avg_prec.tsv
+│   │   │   └── roc_auc.tsv
+│   │   ├── sklearn
+│   │   │   ├── confusion_matrix.json
+│   │   │   └── roc.json
+│   │   ├── importance.png
+│   │   └── prc.json
+│   ├── metrics.json
+│   └── report.html
+├── src
+│   ├── evaluate.py
+│   ├── featurization.py
+│   ├── prepare.py
+│   └── train.py
+├── README.md
+├── model.pkl # (4)!
+├── params.yaml
+├── poetry.lock
+└── pyproject.toml
+```
+
+1. This, and all its sub-directory, is new.
+2. This, and all its sub-directory, is new.
+3. This, and all its sub-directory, is new.
+4. This is new.
+
+Here, the following should be noted:
+
+- the `prepare.py` script created the `data/prepared` directory and divided the
+dataset into a training set and a test set
+- the `featurization.py` script created the `data/features` directory and
+extracted the features from the training and test sets
+- the `train.py` script created the `model.pkl` file and trained the model with
+the extracted features
+- the `evaluate.py` script created the `evaluation` directory and generated some
+plots and metrics to evaluate the model
+
+Take some time to get familiar with the scripts and the results.
+
+Running the `evaluate.py` also generates a report at `evaluation/report.html` with the metrics and plots.
+
+Here is a preview of the report:
+
+![Evaluation Report](../../assets/images/evaluation_report.png){ loading=lazy }
+
+## Summary
+
+[TBD]
+
+## State of the MLOps process
+
+[TBD]
