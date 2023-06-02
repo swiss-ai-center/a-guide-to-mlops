@@ -544,9 +544,11 @@ In this chapter, you have:
 
 However, you may have identified the following areas for improvement:
 
-- ❌ Codebase is not easily sharable
+- ❌ Codebase is not versioned
 - ❌ Dataset still needs manual download and placement
 - ❌ Steps to run the experiment were not documented
+- ❌ Codebase is not easily sharable
+- ❌ Dataset is not easily sharable
 
 In the next chapters, you will enhance the workflow to fix those issues.
 

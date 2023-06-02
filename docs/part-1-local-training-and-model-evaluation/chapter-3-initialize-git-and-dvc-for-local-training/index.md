@@ -3,8 +3,11 @@
 ## Introduction
 
 Now that you have a good understanding of the experiment, it's time to
-streamline the code sharing process. Instead of relying on ZIP archives, we will
-create a Git repository to enable easy collaboration with the rest of the team.
+streamline the code sharing process. We will create a Git repository to enable
+tracking of changes and reproducibility.
+
+Later, we will streamline the code sharing process by sharing a remote a Git
+repository to enable easy collaboration with the rest of the team.
 
 In this chapter, you will learn how to:
 
@@ -44,7 +47,7 @@ Let's get started!
 
 ### Create a new Git repository
 
-### Initialize Git in your working directory
+#### Initialize Git in your working directory
 
 Use the following commands to set up a local Git repository in your working
 directory. Your Git service should provide these instructions as well.
@@ -57,7 +60,7 @@ git init --initial-branch=main
 git remote add origin <your git repository url>
 ```
 
-### Check if Git tracks your files
+#### Check if Git tracks your files
 
 
 Initialize Git in your working directory. Verify available files for committing
@@ -77,7 +80,6 @@ No commits yet
 
 Untracked files:
 (use "git add <file>..." to include in what will be committed)
-    README.md
     data/
     evaluation/
     model.pkl
@@ -89,7 +91,7 @@ Untracked files:
 
 As you can see, no files have been added to Git yet.
 
-### Create a .gitignore file
+#### Create a .gitignore file
 
 Create a `.gitignore` file to exclude data, models, and Python environment to
 improve repository size and clone time. The data and models will be managed by
@@ -118,7 +120,7 @@ __pycache__/
 
     If using macOS, you might want to ignore `.DS_Store` files as well to avoid pushing Apple's metadata files to your repository.
 
-### Check the changes
+#### Check the changes
 
 
 Check the changes with Git to ensure all wanted files are here.
@@ -141,7 +143,6 @@ No commits yet
 Changes to be committed:
 (use "git rm --cached <file>..." to unstage)
     new file:   .gitignore
-    new file:   README.md
     new file:   params.yaml
     new file:   poetry.lock
     new file:   pyproject.toml
@@ -151,7 +152,7 @@ Changes to be committed:
     new file:   src/train.py
 ```
 
-### Commit the changes to Git
+#### Commit the changes to Git
 
 Commit and push the changes to Git.
 
@@ -163,7 +164,9 @@ git commit -m "My first ML experiment shared on Git"
 git push --set-upstream origin main
 ```
 
-### Install DVC
+### Create a DVC repository
+
+#### Install DVC
 
 Here, the `dvc[gs]` package enables support for Google Cloud Storage.
 
@@ -189,29 +192,26 @@ index 8a57399..ff11768 100644
 scikit-learn = "1.1.3"
 scipy = "1.10.1"
 matplotlib = "3.6.2"
-+dvc = {version = "2.37.0", extras = ["gs"]}
++dvc = {version = "2.37.0"}
 
 [build-system]
 requires = ["poetry-core"]
 ```
 
-### Initialize and configure DVC
+#### Initialize and configure DVC
 
 Initialize DVC with a Google Storage remote bucket. Replace `<my bucket name>` with your own bucket name. The `dvcstore` is a user-defined path on the bucket. You can change it if needed.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Initialize DVC in the working directory
 dvc init
-
-# Add the Google Storage remote bucket
-dvc remote add -d data gs://<my bucket name>/dvcstore
 ```
 
 The effect of the `dvc init` command is to create a `.dvc` directory in the
 working directory. This directory contains the configuration of DVC.
 
 
-### Update the .gitignore file and add the experiment data to DVC
+#### Update the .gitignore file and add the experiment data to DVC
 
 Now that DVC has been setup, you can add files to DVC.
 
@@ -309,7 +309,7 @@ Various DVC commands will automatically try to update the `.gitignore` files. If
 `.gitignore` file is already present, it will be updated to include the newly
 ignored files. You might need to update existing `.gitignore` files accordingly.
 
-### Push the data files to DVC
+#### Push the data files to DVC
 
 DVC works as Git. Once you want to share the data, you can use `dvc push` to
 upload the data and its cache to the storage provider.
@@ -319,7 +319,7 @@ upload the data and its cache to the storage provider.
 dvc push
 ```
 
-### Check the changes
+#### Check the changes
 
 Check the changes with Git to ensure all wanted files are here.
 
@@ -350,40 +350,39 @@ Changes to be committed:
     modified:   pyproject.toml
 ```
 
-### Commit the changes to Git
+#### Commit the changes to Git
 
-You can now push the changes to Git so all team members can get the data from
-DVC as well.
+You can now commit the changes to Git so the data from DVC is tracked along code
+changes as well.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
 git commit -m "My ML experiment data is saved with DVC"
-
-# Push the changes
-git push
 ```
 
-    This chapter is done, you can check the summary.
+This chapter is done, you can check the summary.
 
 ## Summary
-
 
 Congrats! You now have a dataset that can be used and shared among the team.
 
 In this chapter, you have successfully:
 
-1. Created a new project on Google Cloud
-2. Installed Google Cloud CLI
-3. Created the Google Storage Bucket
-4. Installed DVC
-5. Initialized and configuring DVC
-6. Updated the `.gitignore` file and adding the experiment data to DVC
-7. Pushed the data files to DVC
-8. Pushed the metadata files to Git
+1. Set up a new Git repository
+2. Initialized Git in your project directory
+3. Verified Git tracking for your files
+4. Excluded experiment results, data, models and Python environment files from Git commits
+4. Commited your changes to the Git repository
+5. Installed DVC
+6. Initialized and configuring DVC
+7. Updated the `.gitignore` file and adding the experiment data to DVC
+8. Commited the data files to DVC
+9. Commited your changes to the Git repository
 
 You fixed some of the previous issues:
 
 - ✅ Data no longer needs manual download and is placed in the right directory.
+- ✅ Codebase is versioned
 
 When used by another member of the team, they can easily get a copy of the
 experiment data from DVC with the following command.
