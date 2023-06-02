@@ -2,66 +2,38 @@
 
 ## Introduction
 
+Jupyter Notebooks provide an interactive environment where code can be executed
+and results can be visualized. They combine code, text explanations,
+visualizations, and media in a single document, making it a flexible tool to
+document a ML experiment.
+
+However, they have severe limitations, such as challenges with reproducibility,
+scalability, experiment tracking, and standardization. Integrating Jupyter
+Notebooks into Python scripts suitable for running ML experiments in a more
+modular and reproducible manner can help address these shortcomings and enhance
+the overall ML development process.
+
+In this chapter, you will learn how to:
+
+1. Adapt the content of the Jupyter notebook into Python scripts
+4. Set up a standardized Python environment using [poetry](https://python-poetry.org/)
+5. Launch the experiment locally
+
+Let's get started!
+
 ## Steps
 
-### Set up the project directory
+### Split the notebook into scripts
 
-As a new team member, set up a project directory on your computer for this
-ground breaking ML experiment. This directory will serve as your working
-directory for the duration of the guide.
+You will split the notebook in a codebase made of separate Python scripts with
+well defined role. These scripts will be able to be called on the command line,
+making it ideal for automation tasks.
 
-### Download and set up the codebase
+In addition, you will use [poetry](https://python-poetry.org/) to provide a
+convenient and efficient approach to setting up Python environments, making the
+process easier, more standardized and reproducible across different machines.
 
-Your colleague has generously provided you a ZIP file containing the source
-code. Although this may be an outdated method for sharing files, you are ready to
-tackle the task.
-
-```sh title="Execute the following command(s) in a terminal"
-# Download the archive containing the code
-wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/code.zip -O code.zip
-```
-
-Unzip the codebase into your working directory.
-
-```sh title="Execute the following command(s) in a terminal"
-# Extract the code
-unzip code.zip
-
-# Move the subdirectory files to the working directory
-mv a-guide-to-mlops-code/* .
-
-# Remove the archive and the directory
-rm -r code.zip a-guide-to-mlops-code
-```
-
-
-### Explore the codebase
-
-Take some time to get familiar with the codebase and examine its
-contents. The following is a summary of each file.
-
-This is what your working directory should look like.
-
-```yaml hl_lines="2-10"
-.
-├── src # (1)!
-│   ├── evaluate.py
-│   ├── featurization.py
-│   ├── prepare.py
-│   └── train.py
-├── params.yaml # (2)!
-├── poetry.lock # (3)!
-├── pyproject.toml # (4)!
-└── README.md # (5)!
-```
-
-1. This, and all its sub-directory, is new.
-2. This is new.
-3. This is new.
-4. This is new.
-5. This is new.
-
-The following table describes the files present in the codebase.
+The following table describes the files that you will create in this codebase.
 
 | **File**                | **Description**                                   | **Input**                             | **Output**                                                    |
 | ----------------------- | ------------------------------------------------- | ------------------------------------- | ------------------------------------------------------------- |
@@ -77,53 +49,385 @@ The following table describes the files present in the codebase.
 
     The `params.yaml` is the default file used by DVC. You can find the reference here: <https://dvc.org/doc/command-reference/params>.
 
-### Download and set up the dataset
 
-Your colleague provided you the following URL to download an archive containing
-the dataset for this machine learning experiment.
+#### Parameters section
 
-```sh title="Execute the following command(s) in a terminal"
-# Download the archive containing the dataset
-wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/data.zip -O data.zip
+Let's split the parameters to run the ML experiment with in a distinct file.
+
+```yaml title="params.yaml"
+prepare:
+    split: 0.20
+    seed: 20170428
+
+featurize:
+    max_features: 100
+    ngrams: 1
+
+train:
+    seed: 20170428
+    n_est: 50
+    min_split: 2
 ```
 
-This archive must be decompressed and its contents be moved in the
-`data` directory in the working directory of the experiment.
+#### Prepare section
 
-```sh title="Execute the following command(s) in a terminal"
-# Extract the dataset
-unzip data.zip
+The `src/prepare.py` script will prepare the dataset.
 
-# Move the `data.xml` file to the working directory
-mv a-guide-to-mlops-data/ data/
+```py title="src/prepare.py"
 
-# Remove the archive and the directory
-rm data.zip
+import io
+import os
+import random
+import re
+import sys
+import xml.etree.ElementTree
+
+import yaml
+
+params = yaml.safe_load(open("params.yaml"))["prepare"]
+
+if len(sys.argv) != 2:
+    sys.stderr.write("Arguments error. Usage:\n")
+    sys.stderr.write("\tpython prepare.py data-file\n")
+    sys.exit(1)
+
+# Test data set split ratio
+split = params["split"]
+random.seed(params["seed"])
+
+input = sys.argv[1]
+output_train = os.path.join("data", "prepared", "train.tsv")
+output_test = os.path.join("data", "prepared", "test.tsv")
+
+
+def process_posts(fd_in, fd_out_train, fd_out_test, target_tag):
+    num = 1
+    for line in fd_in:
+        try:
+            fd_out = fd_out_train if random.random() > split else fd_out_test
+            attr = xml.etree.ElementTree.fromstring(line).attrib
+
+            pid = attr.get("Id", "")
+            label = 1 if target_tag in attr.get("Tags", "") else 0
+            title = re.sub(r"\s+", " ", attr.get("Title", "")).strip()
+            body = re.sub(r"\s+", " ", attr.get("Body", "")).strip()
+            text = title + " " + body
+
+            fd_out.write("{}\t{}\t{}\n".format(pid, label, text))
+
+            num += 1
+        except Exception as ex:
+            sys.stderr.write(f"Skipping the broken line {num}: {ex}\n")
+
+
+os.makedirs(os.path.join("data", "prepared"), exist_ok=True)
+
+with io.open(input, encoding="utf8") as fd_in:
+    with io.open(output_train, "w", encoding="utf8") as fd_out_train:
+        with io.open(output_test, "w", encoding="utf8") as fd_out_test:
+            process_posts(fd_in, fd_out_train, fd_out_test, "<r>")
 ```
 
-### Explore the dataset
+#### Featurize section
 
-Examine the dataset to get a better understanding of its contents.
+The `src/featurization.py` script will extract the features from the dataset.
+
+```py title="src/featurization.py"
+import os
+import pickle
+import sys
+
+import numpy as np
+import pandas as pd
+import scipy.sparse as sparse
+import yaml
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+
+params = yaml.safe_load(open("params.yaml"))["featurize"]
+
+np.set_printoptions(suppress=True)
+
+if len(sys.argv) != 3 and len(sys.argv) != 5:
+    sys.stderr.write("Arguments error. Usage:\n")
+    sys.stderr.write("\tpython featurization.py data-dir-path features-dir-path\n")
+    sys.exit(1)
+
+train_input = os.path.join(sys.argv[1], "train.tsv")
+test_input = os.path.join(sys.argv[1], "test.tsv")
+train_output = os.path.join(sys.argv[2], "train.pkl")
+test_output = os.path.join(sys.argv[2], "test.pkl")
+
+max_features = params["max_features"]
+ngrams = params["ngrams"]
+
+
+def get_df(data):
+    df = pd.read_csv(
+        data,
+        encoding="utf-8",
+        header=None,
+        delimiter="\t",
+        names=["id", "label", "text"],
+    )
+    sys.stderr.write(f"The input data frame {data} size is {df.shape}\n")
+    return df
+
+
+def save_matrix(df, matrix, names, output):
+    id_matrix = sparse.csr_matrix(df.id.astype(np.int64)).T
+    label_matrix = sparse.csr_matrix(df.label.astype(np.int64)).T
+
+    result = sparse.hstack([id_matrix, label_matrix, matrix], format="csr")
+
+    msg = "The output matrix {} size is {} and data type is {}\n"
+    sys.stderr.write(msg.format(output, result.shape, result.dtype))
+
+    with open(output, "wb") as fd:
+        pickle.dump((result, names), fd)
+    pass
+
+
+os.makedirs(sys.argv[2], exist_ok=True)
+
+# Generate train feature matrix
+df_train = get_df(train_input)
+train_words = np.array(df_train.text.str.lower().values.astype("U"))
+
+bag_of_words = CountVectorizer(
+    stop_words="english", max_features=max_features, ngram_range=(1, ngrams)
+)
+
+bag_of_words.fit(train_words)
+train_words_binary_matrix = bag_of_words.transform(train_words)
+feature_names = bag_of_words.get_feature_names_out()
+tfidf = TfidfTransformer(smooth_idf=False)
+tfidf.fit(train_words_binary_matrix)
+train_words_tfidf_matrix = tfidf.transform(train_words_binary_matrix)
+
+save_matrix(df_train, train_words_tfidf_matrix, feature_names, train_output)
+
+# Generate test feature matrix
+df_test = get_df(test_input)
+test_words = np.array(df_test.text.str.lower().values.astype("U"))
+test_words_binary_matrix = bag_of_words.transform(test_words)
+test_words_tfidf_matrix = tfidf.transform(test_words_binary_matrix)
+
+save_matrix(df_test, test_words_tfidf_matrix, feature_names, test_output)
+```
+
+#### Train section
+
+The `src/train.py` script will train the ML model.
+
+```py title="src/train.py"
+import os
+import pickle
+import sys
+
+import numpy as np
+import yaml
+from sklearn.ensemble import RandomForestClassifier
+
+params = yaml.safe_load(open("params.yaml"))["train"]
+
+if len(sys.argv) != 3:
+    sys.stderr.write("Arguments error. Usage:\n")
+    sys.stderr.write("\tpython train.py features model\n")
+    sys.exit(1)
+
+input = sys.argv[1]
+output = sys.argv[2]
+seed = params["seed"]
+n_est = params["n_est"]
+min_split = params["min_split"]
+
+with open(os.path.join(input, "train.pkl"), "rb") as fd:
+    matrix, _ = pickle.load(fd)
+
+labels = np.squeeze(matrix[:, 1].toarray())
+x = matrix[:, 2:]
+
+sys.stderr.write("Input matrix size {}\n".format(matrix.shape))
+sys.stderr.write("X matrix size {}\n".format(x.shape))
+sys.stderr.write("Y matrix size {}\n".format(labels.shape))
+
+clf = RandomForestClassifier(
+    n_estimators=n_est, min_samples_split=min_split, n_jobs=2, random_state=seed
+)
+
+clf.fit(x, labels)
+
+with open(output, "wb") as fd:
+    pickle.dump(clf, fd)
+```
+
+#### Evaluate section
+
+The `src/evaluate.py` script will evaluate the ML model using DVC.
+
+```py title="src/evaluate.py"
+import json
+import math
+import os
+import pickle
+import sys
+
+import pandas as pd
+from sklearn import metrics
+from sklearn import tree
+from dvclive import Live
+from matplotlib import pyplot as plt
+
+
+if len(sys.argv) != 3:
+    sys.stderr.write("Arguments error. Usage:\n")
+    sys.stderr.write("\tpython evaluate.py model features\n")
+    sys.exit(1)
+
+model_file = sys.argv[1]
+matrix_file = os.path.join(sys.argv[2], "test.pkl")
+
+with open(model_file, "rb") as fd:
+    model = pickle.load(fd)
+
+with open(matrix_file, "rb") as fd:
+    matrix, feature_names = pickle.load(fd)
+
+labels = matrix[:, 1].toarray().astype(int)
+x = matrix[:, 2:]
+
+predictions_by_class = model.predict_proba(x)
+predictions = predictions_by_class[:, 1]
+
+with Live("evaluation", report="html") as live:
+
+    # Use dvclive to log a few simple metrics...
+    avg_prec = metrics.average_precision_score(labels, predictions)
+    roc_auc = metrics.roc_auc_score(labels, predictions)
+    live.log_metric("avg_prec", avg_prec)
+    live.log_metric("roc_auc", roc_auc)
+
+    # ... and plots...
+    live.log_sklearn_plot("roc", labels, predictions)
+
+    # ... but actually it can be done with dumping data points into a file:
+    # ROC has a drop_intermediate arg that reduces the number of points.
+    # https://scikit-learn.org/stable/modules/generated/sklearn.metrics.roc_curve.html#sklearn.metrics.roc_curve.
+    # PRC lacks this arg, so we manually reduce to 1000 points as a rough estimate.
+    precision, recall, prc_thresholds = metrics.precision_recall_curve(labels,predictions)
+    nth_point = math.ceil(len(prc_thresholds) / 1000)
+    prc_points = list(zip(precision, recall, prc_thresholds))[::nth_point]
+    prc_file = os.path.join("evaluation", "plots", "prc.json")
+    with open(prc_file, "w") as fd:
+        json.dump(
+        {
+            "prc": [
+            {"precision": p, "recall": r, "threshold": t}
+            for p, r, t in prc_points
+            ]
+        },
+        fd,
+        indent=4,
+        )
+
+
+    # ... confusion matrix plot
+    live.log_sklearn_plot("confusion_matrix",
+        labels.squeeze(),
+        predictions_by_class.argmax(-1)
+    )
+
+    # ... and finally, we can dump an image, it's also supported:
+    fig, axes = plt.subplots(dpi=100)
+    fig.subplots_adjust(bottom=0.2, top=0.95)
+    importances = model.feature_importances_
+    forest_importances = pd.Series(importances, index=feature_names).nlargest(n=30)
+    axes.set_ylabel("Mean decrease in impurity")
+    forest_importances.plot.bar(ax=axes)
+    fig.savefig(os.path.join("evaluation", "plots", "importance.png"))
+```
+
+### Set up standardized environment
+
+You will now establish a convenient and efficient method for setting up Python
+environments with all the required dependencies using [poetry](https://python-poetry.org/).
+This approach aims to simplify the installation process, standardize the
+environment across various machines, and ensure reproducibility within a
+streamlined development workflow.
+
+!!! question
+
+    **Why Poetry?**
+
+    Poetry is a tool to manage Python dependencies. It is a more robust and
+    user-friendly alternative to `pip`. It is also more suitable for
+    reproducibility and collaboration by creating a lock file that can be used
+    to recreate the exact same environment.
+
+    For example, freezing the version of a dependency in a `requirements.txt` file
+    is not enough to ensure reproducibility. The `requirements.txt` file only
+    specifies the version of the dependency at the time of installation. If dependencies
+    of the dependency are updated, the version of the dependency might change
+    without you knowing it. This is why Poetry creates a lock file that contains
+    the exact version of all the dependencies and their dependencies.
+
+Create the `pyproject.toml` file at the root of the directory.
+
+```toml title="pyproject.toml"
+[tool.poetry]
+name = "a-guide-to-mlops"
+version = "0.1.0"
+description = "CSIA-PME - A Guide to MLOps"
+authors = []
+packages = [{include = "src"}]
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.12"
+dvclive = "1.0.0"
+pandas = "1.5.1"
+pyaml = "21.10.1"
+scikit-learn = "1.1.3"
+scipy = "1.10.1"
+matplotlib = "3.6.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+```
+
+Compute necessary dependencies and create the `poetry.lock` file that define the
+dependency requirements.
+
+```sh title="Execute the following command(s) in a terminal"
+# Lock the installation requirements.
+poetry lock
+```
+
+### Check the results
 
 Your working directory should now look like this:
 
-```yaml hl_lines="2-4"
+```yaml hl_lines="2-10"
 .
-├── data # (1)!
+├── data
 │   ├── data.xml
 │   └── README.md
-├── src
+├── notebook.md
+├── src # (1)!
 │   ├── evaluate.py
 │   ├── featurization.py
 │   ├── prepare.py
 │   └── train.py
-├── params.yaml
-├── pyproject.toml
-├── poetry.lock
-└── README.md
+├── params.yaml # (2)!
+├── poetry.lock # (3)!
+└── pyproject.toml # (4)!
 ```
 
 1. This, and all its sub-directory, is new.
+2. This is new.
+3. This is new.
+4. This is new.
+5. This is new.
 
 ### Run the experiment
 
@@ -142,23 +446,7 @@ poetry install
 poetry shell
 ```
 
-!!! question
-
-    **Why Poetry?**
-
-    Poetry is a tool to manage Python dependencies. It is a more robust and
-    user-friendly alternative to `pip`. It is also more suitable for
-    reproducibility and collaboration by creating a lock file that can be used
-    to recreate the exact same environment.
-
-    For example, freezing the version of a dependency in a `requirements.txt` file
-    is not enough to ensure reproducibility. The `requirements.txt` file only
-    specifies the version of the dependency at the time of installation. If dependencies
-    of the dependency are updated, the version of the dependency might change
-    without you knowing it. This is why Poetry creates a lock file that contains
-    the exact version of all the dependencies and their dependencies.
-
-Your helpful colleague provided you some steps to reproduce the experiment.
+You can now follow these steps to reproduce the experiment.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Prepare the dataset
@@ -245,8 +533,27 @@ Here is a preview of the report:
 
 ## Summary
 
-[TBD]
+Congratulations! You have successfully reproduced the experiment on your machine,
+this time using a modular approach that can be put into production.
+
+In this chapter, you have:
+
+1. Adapted the content of the Jupyter notebook into Python scripts
+2. Set up a standardized Python environment using poetry
+3. Launched the experiment locally
+
+However, you may have identified the following areas for improvement:
+
+- ❌ Codebase is not easily sharable
+- ❌ Dataset still needs manual download and placement
+- ❌ Steps to run the experiment were not documented
+
+In the next chapters, you will enhance the workflow to fix those issues.
+
+You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
-[TBD]
+!!! bug
+
+`[TBD]`
