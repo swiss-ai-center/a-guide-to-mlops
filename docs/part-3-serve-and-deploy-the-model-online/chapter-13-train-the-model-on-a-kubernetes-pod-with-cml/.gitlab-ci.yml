@@ -1,5 +1,4 @@
 stages:
-  - setup runner
   - train
   - report
 
@@ -7,6 +6,9 @@ variables:
   # Change pip's cache directory to be inside the project directory since we can
   # only cache local items.
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  # Change poetry's cache directory to be inside the project directory since we can
+  # only cache local items.
+  POETRY_CACHE_DIR: "$CI_PROJECT_DIR/.cache/poetry"
   # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
   GIT_DEPTH: "0"
 
@@ -15,38 +17,11 @@ variables:
 cache:
   paths:
     - .cache/pip
-
-setup-runner:
-  stage: setup runner
-  image: iterativeai/cml:0-dvc2-base1
-  before_script:
-    # Install Kubernetes
-    - export KUBERNETES_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt)
-    - curl -LO -s "https://dl.k8s.io/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl"
-    - curl -LO -s "https://dl.k8s.io/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl.sha256"
-    - echo "$(cat kubectl.sha256) kubectl" | sha256sum --check
-    - sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-    # https://cml.dev/doc/self-hosted-runners?tab=Kubernetes#cloud-compute-resource-credentials
-    - export KUBERNETES_CONFIGURATION=$(cat $GCP_KUBECONFIG)
-  script:
-    # https://cml.dev/doc/ref/runner
-    # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#machine-type
-    # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#{cpu}-{memory}
-    - cml runner
-        --labels="cml-runner"
-        --cloud="kubernetes"
-        --cloud-type="1-2000"
-        --cloud-kubernetes-node-selector="gpu=true"
-        --single
+    - .cache/poetry
 
 train:
   stage: train
   image: iterativeai/cml:0-dvc2-base1
-  needs:
-    - setup-runner
-  tags:
-    # Uses the runner set up by CML
-    - cml-runner
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -60,13 +35,11 @@ train:
     - pip install poetry==1.4.0
     # Install dependencies
     - poetry install
-    # Enable Poetry virtual environment
-    - source `poetry env info --path`/bin/activate
   script:
     # Pull data from DVC
-    - dvc pull
+    - poetry run dvc pull
     # Run the experiment
-    - dvc repro --force
+    - poetry run dvc repro
 
 report:
   stage: report

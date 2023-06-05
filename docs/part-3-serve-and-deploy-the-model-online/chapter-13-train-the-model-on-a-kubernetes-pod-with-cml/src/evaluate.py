@@ -26,7 +26,7 @@ with open(matrix_file, "rb") as fd:
     matrix, feature_names = pickle.load(fd)
 
 labels = matrix[:, 1].toarray().astype(int)
-x = matrix[:, 2:].toarray()
+x = matrix[:, 2:]
 
 predictions_by_class = model.predict_proba(x)
 predictions = predictions_by_class[:, 1]

@@ -1,7 +1,7 @@
 artifacts:
   data.pkl:
-    hash: 8401c95a51ff109e3a723ff8012f8a1b
-    size: 2240
+    hash: c77bc5e88070a33f8c1e5a4434929df7
+    size: 3840
     type: dvc
     uri: tfidf
 call_orders:
@@ -29,10 +29,10 @@ processors:
           type: unspecified
     type: callable
 requirements:
-- module: scipy
-  version: 1.9.3
 - module: numpy
-  version: 1.24.1
+  version: 1.24.2
+- module: scipy
+  version: 1.10.1
 - module: sklearn
   package_name: scikit-learn
   version: 1.1.3

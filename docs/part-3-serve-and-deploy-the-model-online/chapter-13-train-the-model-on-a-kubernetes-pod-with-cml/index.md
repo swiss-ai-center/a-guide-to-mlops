@@ -74,7 +74,7 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 
 	Update the `.github/workflows/mlops.yml` file.
 
-	```yaml  title=".github/workflows/mlops.yml" hl_lines="15-18 21-49 52-54"
+	```yaml  title=".github/workflows/mlops.yml" hl_lines="15-18 21-51 54-56"
 	name: MLOps
 
 	on:
@@ -97,7 +97,6 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 	jobs:
 	  setup-runner:
 	    runs-on: ubuntu-latest
-	    container: iterativeai/cml:0-dvc2-base1
 	    steps:
 	      - name: Checkout repository
 	        uses: actions/checkout@v3
@@ -110,6 +109,9 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 	        with:
 	          cluster_name: 'mlops-kubernetes'
 	          location: 'europe-west6-a'
+	      - uses: iterative/setup-cml@v1
+	        with:
+	          version: '0.19.0'
 	      - name: Initialize runner on Kubernetes
 	        env:
 	          REPO_TOKEN: ${{ secrets.CML_PAT }}
