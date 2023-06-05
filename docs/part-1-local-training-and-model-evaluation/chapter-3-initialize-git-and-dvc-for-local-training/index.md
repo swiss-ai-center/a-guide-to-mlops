@@ -3,11 +3,19 @@
 ## Introduction
 
 Now that you have a good understanding of the experiment, it's time to
-streamline the code sharing process. We will create a Git repository to enable
-tracking of changes and reproducibility.
+streamline the code and data sharing process. To enable efficient tracking of
+code changes and ensure reproducibility, we will create a Git repository.
 
-Later, we will streamline the code sharing process by sharing a remote a Git
-repository to enable easy collaboration with the rest of the team.
+However, when it comes to managing large files, Git has some limitations.
+Although Git LFS is an option for handling large files in Git repositories, it
+may not be the most efficient solution. That's why we will use [DVC](../../get-started/the-tools-used-in-this-guide#dvc),
+a version control system specifically designed for efficient data management
+that seamlessly integrates with Git.
+
+DVC utilizes chunking to efficiently store large files and track their changes.
+Similar to Git, DVC also allows for storing the dataset in a remote storage,
+typically a cloud storage provider, ensuring effective tracking of modifications
+and allow to maintain a smooth workflow alongside our code.
 
 In this chapter, you will learn how to:
 
@@ -17,31 +25,15 @@ repository
 3. Verify Git tracking for your files
 4. Exclude experiment results, data, models and Python environment files from
 Git commits
-5. Push your changes to the Git repository
+5. Commit your changes to the Git repository
+6. Install DVC
+7. Initialize and configure DVC
+8. Update the `.gitignore` file and add the experiment data to DVC
+9. Push the data files to DVC
+10. Commit the metadata files to Git
 
-Let's get started!
-
-At this point, the codebase is made available to team members using Git, but the
-experiment data is not.
-
-The goal of this chapter is to store the data of the experiment in a version control system.
-Git is not suitable for this purpose because of its size limitations.
-Git LFS is a solution to this problem, but it is not as efficient as other version control systems.
-
-[DVC](../../get-started/the-tools-used-in-this-guide#dvc) is a version control system for data.
-It uses chunking to store large files efficiently and track their changes.
-Similar to Git, DVC allows you to store the dataset in a remote storage, typically a cloud storage provider, and track its changes.
-
-In this chapter, you will learn how to:
-
-4. Install DVC
-5. Initialize and configure DVC
-6. Update the `.gitignore` file and add the experiment data to DVC
-7. Push the data files to DVC
-8. Push the metadata files to Git
-
-Let's get started!
-
+Later, we will streamline the code sharing process by setting up remote Git and
+DVC repositories to enable easy collaboration with the rest of the team.
 
 ## Steps
 
@@ -50,14 +42,11 @@ Let's get started!
 #### Initialize Git in your working directory
 
 Use the following commands to set up a local Git repository in your working
-directory. Your Git service should provide these instructions as well.
+directory.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Initialize Git in your working directory with `main` as the initial branch
 git init --initial-branch=main
-
-# Add the remote origin to your newly created repository
-git remote add origin <your git repository url>
 ```
 
 #### Check if Git tracks your files
@@ -152,26 +141,23 @@ Changes to be committed:
     new file:   src/train.py
 ```
 
-#### Commit the changes to Git
+#### Commit the changes
 
-Commit and push the changes to Git.
+Commit the changes to Git.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
 git commit -m "My first ML experiment shared on Git"
-
-# Push the changes
-git push --set-upstream origin main
 ```
 
 ### Create a DVC repository
 
 #### Install DVC
 
-Here, the `dvc[gs]` package enables support for Google Cloud Storage.
+Install the main `dvc` package.
 
 ```sh title="Execute the following command(s) in a terminal"
-poetry add "dvc[gs]==2.37.0"
+poetry add "dvc==2.37.0"
 ```
 
 Check the differences with Git to validate the changes.
@@ -192,28 +178,28 @@ index 8a57399..ff11768 100644
 scikit-learn = "1.1.3"
 scipy = "1.10.1"
 matplotlib = "3.6.2"
-+dvc = {version = "2.37.0"}
++dvc = "2.37.0"
 
 [build-system]
 requires = ["poetry-core"]
 ```
 
-#### Initialize and configure DVC
+#### Initialize DVC
 
-Initialize DVC with a Google Storage remote bucket. Replace `<my bucket name>` with your own bucket name. The `dvcstore` is a user-defined path on the bucket. You can change it if needed.
+Initialize DVC in the current project.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Initialize DVC in the working directory
 dvc init
 ```
 
-The effect of the `dvc init` command is to create a `.dvc` directory in the
-working directory. This directory contains the configuration of DVC.
+The `dvc init` command creates a `.dvc` directory in the working directory,
+which serves as the configuration directory for DVC.
 
 
 #### Update the .gitignore file and add the experiment data to DVC
 
-Now that DVC has been setup, you can add files to DVC.
+With DVC now set up, you can begin adding files to it.
 
 Try to add the experiment data. Spoiler: it will fail.
 
@@ -309,15 +295,6 @@ Various DVC commands will automatically try to update the `.gitignore` files. If
 `.gitignore` file is already present, it will be updated to include the newly
 ignored files. You might need to update existing `.gitignore` files accordingly.
 
-#### Push the data files to DVC
-
-DVC works as Git. Once you want to share the data, you can use `dvc push` to
-upload the data and its cache to the storage provider.
-
-```sh title="Execute the following command(s) in a terminal"
-# Upload the experiment data and cache to the remote bucket
-dvc push
-```
 
 #### Check the changes
 
@@ -335,8 +312,6 @@ The output of the `git status` command should be similar to this.
 
 ```
 On branch main
-Your branch is up to date with 'origin/main'.
-
 Changes to be committed:
 (use "git restore --staged <file>..." to unstage)
     new file:   .dvc/.gitignore
@@ -374,7 +349,7 @@ In this chapter, you have successfully:
 4. Excluded experiment results, data, models and Python environment files from Git commits
 4. Commited your changes to the Git repository
 5. Installed DVC
-6. Initialized and configuring DVC
+6. Initialized DVC
 7. Updated the `.gitignore` file and adding the experiment data to DVC
 8. Commited the data files to DVC
 9. Commited your changes to the Git repository
@@ -383,14 +358,6 @@ You fixed some of the previous issues:
 
 - ✅ Data no longer needs manual download and is placed in the right directory.
 - ✅ Codebase is versioned
-
-When used by another member of the team, they can easily get a copy of the
-experiment data from DVC with the following command.
-
-```sh title="Execute the following command(s) in a terminal"
-# Download experiment data from DVC
-dvc pull
-```
 
 You can now safely continue to the next chapter.
 

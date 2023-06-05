@@ -1,9 +1,17 @@
 # Chapter 6: Move the ML experiment data to the cloud
 
-## Create a new Git repository
+## Introduction
 
-Create an Git repository to collaborate with peers on your preferred Git
-service.
+Now that we have a local Git repository and can reproduce the experiment with
+DVC, let's set up a remote repository for effortless collaboration with the team.
+
+By linking your local project to a remote repository on platforms like GitHub
+or GitLab, you can seamlessly push, pull, and synchronize changes, facilitating
+collaboration and ensuring smooth workflow.
+
+## Create a remote Git repository
+
+Create a Git repository on your preferred service to collaborate with peers.
 
 !!! warning
 
@@ -19,18 +27,31 @@ service.
 === ":simple-gitlab: GitLab"
 
     Follow the related documentation [_Create a project_ -
-    docs.gitlab.com](https://docs.gitlab.com/ee/user/project/working_with_projects.html#create-a-project)
+    docs.gitlab.com](https://docs.gitlab.com/ee/user/project/)
     to create a new GitLab project for this chapter.
+
+## Configure Git for the remote branch
+
+Add the remote origin to your repository. Your Git service should provide these
+instructions as well.
+
+```sh title="Execute the following command(s) in a terminal"
+# Add the remote origin
+git remote add origin <your git repository url>
+```
 
 ## Push the changes to Git
 
-Push the changes to Git.
+Set the remote as the upstream branch and push the changes to Git.
 
 ```sh title="Execute the following command(s) in a terminal"
 
 # Push the changes
 git push --set-upstream origin main
 ```
+
+After setting the upstream branch, you can simply use `git push` and `git pull`
+without additional arguments to interact with the remote branch.
 
 ## Check the results
 
@@ -44,12 +65,9 @@ Congrats! You now have a codebase that can be used and shared among the team.
 
 In this chapter, you have successfully:
 
-1. Set up a new Git repository
-2. Initialized Git in your project directory
-3. Verified Git tracking for your files
-4. Excluded experiment results, data, models and Python environment files from
-Git commits
-5. Pushed your changes to the Git repository
+1. Set up a remote Git repository
+2. Added the remote to your local git repository
+3. Pushed your changes to the remote Git repository
 
 You fixed some of the previous issues:
 
