@@ -1,3 +1,4 @@
 core:
+  no_analytics: 'True'
   storage:
     type: dvc
