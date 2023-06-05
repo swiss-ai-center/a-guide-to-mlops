@@ -1,25 +1,16 @@
-name: MLOps Train the model on a Kubernetes cluster with CML
+name: MLOps
 
 on:
   # Runs on pushes targeting main branch
   push:
     branches:
       - main
-    paths:
-      - .github/workflows/mlops-train-the-model-on-a-kubernetes-cluster-with-cml.yml
-      - docs/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml/**/*
 
   # Runs on pull requests
   pull_request:
-    paths:
-      - .github/workflows/mlops-train-the-model-on-a-kubernetes-cluster-with-cml.yml
-      - docs/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml/**/*
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
-env:
-  CWD: docs/advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml
 
 # Allow the creation and usage of self-hosted runners
 permissions:
@@ -29,56 +20,10 @@ permissions:
 jobs:
   setup-runner:
     runs-on: ubuntu-latest
-    # container: iterativeai/cml:0-dvc2-base1
+    container: iterativeai/cml:0-dvc2-base1
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      ### begin custom CML
-      - name: Clone CML
-        uses: actions/checkout@v3
-        with:
-          repository: ludelafo/cml
-          ref: add-support-for-kubernetes-arbitrary-node-selector
-          path: cml
-      - name: Clone TPI
-        uses: actions/checkout@v3
-        with:
-          repository: ludelafo/terraform-provider-iterative
-          ref: add-support-for-kubernetes-arbitrary-node-selector
-          path: tpi
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-          cache: 'npm'
-          cache-dependency-path: 'cml/package-lock.json'
-      - name: Setup Go
-        uses: actions/setup-go@v3
-        with:
-          go-version: ^1.18.0
-          cache-dependency-path: 'tpi/go.sum'
-      - name: CML deps
-        working-directory: cml
-        run: |
-          npm ci
-      - name: Hack cml for local tpi
-        working-directory: cml
-        run: |
-          sed -i "s/source: 'iterative\/iterative',/source: 'github.com\/iterative\/iterative'/g" src/terraform.js
-          sed -i "/...(tpiVersion && { version: tpiVersion })/d" src/terraform.js
-      - name: Install CML
-        working-directory: cml
-        run: |
-          npm install -g .
-      - name: Install misc CML tooling
-        run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5
-      - name: Build/Install TPI
-        working-directory: tpi
-        run: |
-          make build
-          make install-tpi
-      ### end custom CML
       - name: Login to Google Cloud
         uses: 'google-github-actions/auth@v1'
         with:
@@ -118,21 +63,26 @@ jobs:
           python-version: '3.10'
           cache: 'poetry'
       - name: Install dependencies
-        working-directory: ${{ env.CWD }}
         run: poetry install
+      - name: Enable Poetry virtual environment
+        run: source `poetry env info --path`/bin/activate
+      - name: Setup DVC
+        uses: iterative/setup-dvc@v1
+        with:
+          version: '2.37.0'
       - name: Login to Google Cloud
         uses: 'google-github-actions/auth@v1'
         with:
           credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
       - name: Train model
-        working-directory: ${{ env.CWD }}
         run: |
           # Pull data from DVC
-          poetry run dvc pull
+          dvc pull
           # Run the experiment
-          poetry run dvc repro --force
+          dvc repro --force
 
   report:
+    permissions: write-all
     needs: train
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
@@ -145,10 +95,10 @@ jobs:
         uses: iterative/setup-dvc@v1
         with:
           version: '2.37.0'
-      - name: Setup Node
-        uses: actions/setup-node@v3
+      - name: Login to Google Cloud
+        uses: 'google-github-actions/auth@v1'
         with:
-          node-version: '16'
+          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
       - name: Setup CML
         uses: iterative/setup-cml@v1
         with:
@@ -156,7 +106,6 @@ jobs:
       - name: Create CML report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        working-directory: ${{ env.CWD }}
         run: |
           # Fetch all other Git branches
           git fetch --depth=1 origin main:main
@@ -220,4 +169,4 @@ jobs:
           echo >> report.md
 
           # Publish the CML report
-          cml comment update --target=pr --publish report.md/
+          cml comment update --target=pr --publish report.md

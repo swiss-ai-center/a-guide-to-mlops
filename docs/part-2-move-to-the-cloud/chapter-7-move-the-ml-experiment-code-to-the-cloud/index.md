@@ -52,12 +52,20 @@ A new page opens. Note the ID of your project, it will be used later.
 
     Always make sure you're in the right project by selecting your project with **Select a project** in the upper left corner of the screen.
 
-### Install Google Cloud CLI
+### Export the Google Cloud Project ID
+
+Export the Google Cloud Project ID as an environment variable. Replace `<id of your gcp project>` with your own project ID.
+
+```sh title="Execute the following command(s) in a terminal"
+export GCP_PROJECT_ID=<id of your gcp project>
+```
+
+### Install the Google Cloud CLI
 
 To install `gcloud`, follow the official documentation: [_Install the Google
 Cloud CLI_ - cloud.google.com](https://cloud.google.com/sdk/docs/install-sdk)
 
-### Initialize and configure Google Cloud CLI
+### Initialize and configure the Google Cloud CLI
 
 The following process will authenticate to Google Cloud using the Google Cloud
 CLI. It will open a browser window to log you in and create a credentials file
@@ -70,8 +78,6 @@ storage provider.
 Alternatively, you can set the `GOOGLE_APPLICATION_CREDENTIALS` environment
 variable to the path of the credentials file.
 
-Replace `<id of your gcp project>` with your own project ID.
-
 ```sh title="Execute the following command(s) in a terminal"
 # Initialize and login to Google Cloud
 gcloud init
@@ -80,7 +86,7 @@ gcloud init
 gcloud projects list
 
 # Select your Google Cloud project
-gcloud config set project <id of your gcp project>
+gcloud config set project $GCP_PROJECT_ID
 ```
 
 Then run the following command to authenticate to Google Cloud with the Application Default.
@@ -98,15 +104,27 @@ To be able to create the bucket, the project must be linked to an active billing
 
 Create the Google Storage Bucket to store the data with the Google Cloud CLI. You should ideally select a location close to where most of the expected traffic will come from. You can view the available regions at [Cloud locations](https://cloud.google.com/about/locations).
 
-Change the `<my bucket name>` to your own bucket name (ex: `mlopsdemo`).
+Export the bucket name as an environment variable. Replace `<my bucket name>` with your own bucket name (ex: `mlopsdemo`).
 
 !!! warning
 
     The bucket name must be unique across all Google Cloud projects and users. Change the `<my bucket name>` to your own bucket name.
 
 ```sh title="Execute the following command(s) in a terminal"
-gcloud storage buckets create gs://<my bucket name> \
-    --location=EUROPE-WEST6 \
+export GCP_BUCKET_NAME=<my bucket name>
+```
+
+Export the bucket region as an environment variable. Replace `<my bucket region>` with your own zone (ex: `EUROPE-WEST6` for Switzerland).
+
+```sh title="Execute the following command(s) in a terminal"
+export GCP_BUCKET_REGION=<my bucket region>
+```
+
+Create the bucket.
+
+```sh title="Execute the following command(s) in a terminal"
+gcloud storage buckets create gs://$GCP_BUCKET_NAME \
+    --location=$GCP_BUCKET_REGION \
     --uniform-bucket-level-access \
     --public-access-prevention
 ```
@@ -147,11 +165,11 @@ requires = ["poetry-core"]
 
 ### Configure DVC
 
-Configure DVC to use a Google Storage remote bucket. Replace `<my bucket name>` with your own bucket name. The `dvcstore` is a user-defined path on the bucket. You can change it if needed.
+Configure DVC to use a Google Storage remote bucket. The `dvcstore` is a user-defined path on the bucket. You can change it if needed.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Add the Google Storage remote bucket
-dvc remote add -d data gs://<my bucket name>/dvcstore
+dvc remote add -d data gs://$GCP_BUCKET_NAME/dvcstore
 ```
 
 ### Push the changes to Git
