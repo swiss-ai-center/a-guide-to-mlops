@@ -70,7 +70,7 @@ __pycache__/
 
 !!! info
 
-If using macOS, you might want to ignore `.DS_Store` files as well to avoid pushing Apple's metadata files to your repository.
+    If using macOS, you might want to ignore `.DS_Store` files as well to avoid pushing Apple's metadata files to your repository.
 
 Check the differences with Git to validate the changes.
 
@@ -266,7 +266,7 @@ __pycache__/
 
 !!! info
 
-If using macOS, you might want to ignore `.DS_Store` files as well to avoid pushing Apple's metadata files to your repository.
+    If using macOS, you might want to ignore `.DS_Store` files as well to avoid pushing Apple's metadata files to your repository.
 
 ### Visualize the pipeline
 
@@ -320,8 +320,8 @@ dvc repro
 
 !!! tip
 
-You can force the execution of the entire pipeline
-with the command `dvc repro --force`.
+    You can force the execution of the entire pipeline with the command
+    `dvc repro --force`.
 
 ### Check the changes
 
@@ -409,3 +409,7 @@ In the next chapters, you will enhance the workflow to fix these issues.
 You can now safely continue to the next chapter.
 
 ## State of the MLOps process
+
+!!! bug
+
+    `[TBD]`

@@ -254,7 +254,7 @@ __pycache__/
 
 !!! info
 
-If using macOS, you might want to ignore `.DS_Store` files as well to avoid pushing Apple's metadata files to your repository.
+    If using macOS, you might want to ignore `.DS_Store` files as well to avoid pushing Apple's metadata files to your repository.
 
 Check the differences with Git to validate the changes.
 
@@ -396,4 +396,6 @@ You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
-[TBD]
+!!! bug
+
+    `[TBD]`

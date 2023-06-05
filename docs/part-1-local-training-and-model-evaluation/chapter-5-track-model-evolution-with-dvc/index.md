@@ -238,7 +238,12 @@ Changes not staged for commit:
 ```
 
 !!! warning
-**Do not commit and push the improved version of your model yet**; it will be done in a future chapter.
+
+    **Do not commit and push the improved version of your model yet**; it will be done in a future chapter.
+
+!!! bug
+
+    We need to commit before starting a new chapter.
 
 This chapter is done, you can check the summary.
 
@@ -263,3 +268,7 @@ the code codebase.
 You can now safely continue to the next chapter.
 
 ## State of the MLOps process
+
+!!! bug
+
+    `[TBD]`
