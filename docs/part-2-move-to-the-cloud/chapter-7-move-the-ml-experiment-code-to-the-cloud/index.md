@@ -172,6 +172,16 @@ Configure DVC to use a Google Storage remote bucket. The `dvcstore` is a user-de
 dvc remote add -d data gs://$GCP_BUCKET_NAME/dvcstore
 ```
 
+#### Push the data files to DVC
+
+DVC works as Git. Once you want to share the data, you can use `dvc push` to
+upload the data and its cache to the storage provider.
+
+```sh title="Execute the following command(s) in a terminal"
+# Upload the experiment data and cache to the remote bucket
+dvc push
+```
+
 ### Push the changes to Git
 
 You can now push the changes to Git so all team members can get the data from
@@ -185,38 +195,37 @@ git commit -m "My ML experiment data is saved with DVC"
 git push
 ```
 
-### Configure DVC
-
-Here, the `dvc[gs]` package enables support for Google Cloud Storage.
-
-```sh title="Execute the following command(s) in a terminal"
-poetry add "dvc[gs]==2.37.0"
-```
-
-Check the differences with Git to validate the changes.
-
-```sh title="Execute the following command(s) in a terminal"
-# Show the differences with Git
-git diff pyproject.toml
-```
-
-The output should be similar to this.
-
-```diff
-diff --git a/pyproject.toml b/pyproject.toml
-index 8a57399..ff11768 100644
---- a/pyproject.toml
-+++ b/pyproject.toml
-@@ -13,6 +13,7 @@ pyaml = "21.10.1"
-scikit-learn = "1.1.3"
-scipy = "1.10.1"
-matplotlib = "3.6.2"
-+dvc = {version = "2.37.0", extras = ["gs"]}
-
-[build-system]
-requires = ["poetry-core"]
-```
-
 ## Summary
 
+Congrats! You now have a dataset that can be used and shared among the team.
+
+In this chapter, you have successfully:
+
+1. Created a new project on Google Cloud
+2. Installed Google Cloud CLI
+3. Created the Google Storage Bucket
+4. Installed DVC Google Storage plugin
+5. Configuring DVC for Google Storage
+6. Updated the `.gitignore` file and adding the experiment data to DVC
+7. Pushed the data files to DVC
+8. Pushed the metadata files to Git
+
+You fixed some of the previous issues:
+
+- ✅ Data no longer needs manual download and is placed in the right directory.
+
+When used by another member of the team, they can easily get a copy of the
+experiment data from DVC with the following command.
+
+```sh title="Execute the following command(s) in a terminal"
+# Download experiment data from DVC
+dvc pull
+```
+
+You can now safely continue to the next chapter.
+
 ## State of the MLOps process
+
+!!! bug
+
+    `[TBD]`

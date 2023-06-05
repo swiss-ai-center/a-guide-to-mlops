@@ -12,15 +12,15 @@ service.
 
 === ":simple-github: GitHub"
 
-Follow the related documentation [_Creating a new repository_ -
-docs.github.com](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository)
-to create a new GitHub repository for this chapter.
+    Follow the related documentation [_Creating a new repository_ -
+    docs.github.com](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository)
+    to create a new GitHub repository for this chapter.
 
 === ":simple-gitlab: GitLab"
 
-Follow the related documentation [_Create a project_ -
-docs.gitlab.com](https://docs.gitlab.com/ee/user/project/working_with_projects.html#create-a-project)
-to create a new GitLab project for this chapter.
+    Follow the related documentation [_Create a project_ -
+    docs.gitlab.com](https://docs.gitlab.com/ee/user/project/working_with_projects.html#create-a-project)
+    to create a new GitLab project for this chapter.
 
 ## Push the changes to Git
 
@@ -66,3 +66,7 @@ git clone <your git repository url>
 You can now safely continue to the next chapter.
 
 ## State of the MLOps process
+
+!!! bug
+
+    `[TBD]`
