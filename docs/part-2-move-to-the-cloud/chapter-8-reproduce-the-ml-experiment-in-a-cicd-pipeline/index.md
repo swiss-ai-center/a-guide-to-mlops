@@ -5,10 +5,12 @@
 At this point, your code, your data and your execution process should be
 shared with Git and DVC.
 
-One of the great advantages of using a DVC pipeline is the ability to reproduce the
-experiment. You will now add a CI/CD pipeline to execute the ML experiment
-remotely. This will prevent changes to break the pipeline and to avoid the "but it works on
-my machine" effect.
+Now, it's time to enhance your workflow further by incorporating a CI/CD
+(Continuous Integration/Continuous Deployment) pipeline. This addition will
+enable you to execute your ML experiments remotely and reproduce it, ensuring
+that any changes made to the project won't inadvertently break. This helps
+eliminate the notorious "but it works on my machine" effect, where code behave
+differently across different environments.
 
 In this chapter, you will learn how to:
 
@@ -28,13 +30,16 @@ DVC will need to log in to Google Cloud to download the data inside the
 CI/CD pipeline.
 
 Google Cloud allows the creation of a "Service Account", so you don't have to
-store/share your own credentials. A Service Account can be deleted, hence revoking all the access it had.
+store/share your own credentials. A Service Account can be deleted, hence
+revoking all the access it had.
 
-Create the Google Service Account and its associated Google Service Account Key to access Google Cloud without your own credentials.
+Create the Google Service Account and its associated Google Service Account Key
+to access Google Cloud without your own credentials.
 
 Replace `<id of your gcp project>` with your own project ID.
 
-The key will be stored in your **~/.config/gcloud** directory under the name `dvc-google-service-account-key.json`.
+The key will be stored in your **~/.config/gcloud** directory under the name
+`dvc-google-service-account-key.json`.
 
 !!! danger
 
@@ -58,8 +63,8 @@ gcloud iam service-accounts keys create ~/.config/gcloud/dvc-google-service-acco
 
 !!! info
 
-    The path `~/.config/gcloud` should be created when installing `gcloud`. If does
-    not exist, you can create it by running `mkdir -p ~/.config/gcloud`
+    The path `~/.config/gcloud` should be created when installing `gcloud`. If
+    it does not exist, you can create it by running `mkdir -p ~/.config/gcloud`
 
 ### Store the Google Service Account key and setup the CI/CD pipeline
 
@@ -110,8 +115,8 @@ Please refer to the correct instructions based on your Git repository provider.
 
 === ":simple-gitlab: GitLab"
 
-    Store the output as a CI/CD Variable by going to **Settings > CI/CD** from the
-    left sidebar of your GitLab project.
+    Store the output as a CI/CD Variable by going to **Settings > CI/CD** from
+    the left sidebar of your GitLab project.
 
     Select **Variables** and select **Add variable**.
 
@@ -128,8 +133,8 @@ Please refer to the correct instructions based on your Git repository provider.
 
 === ":simple-github: GitHub"
 
-    At the root level of your Git repository, create a GitHub Workflow configuration
-    file `.github/workflows/mlops.yml`.
+    At the root level of your Git repository, create a GitHub Workflow
+    configuration file `.github/workflows/mlops.yml`.
 
     Take some time to understand the train job and its steps.
 
@@ -176,8 +181,8 @@ Please refer to the correct instructions based on your Git repository provider.
 
 === ":simple-gitlab: GitLab"
 
-    At the root level of your Git repository, create a GitLab CI configuration file
-    `.gitlab-ci.yml`.
+    At the root level of your Git repository, create a GitLab CI configuration
+    file `.gitlab-ci.yml`.
 
     Explore this file to understand the train stage and its steps.
 
@@ -266,12 +271,13 @@ On GitHub, you can see the pipeline running on the **Actions** page.
 On GitLab, you can see the pipeline running on the **CI/CD > Pipelines** page.
 
 You should see a newly created pipeline. The pipeline should log into Google
-Cloud, pull the data from DVC and reproduce the experiment. If you encounter cache errors, verify that you have
-pushed all data to DVC (`dvc push`).
+Cloud, pull the data from DVC and reproduce the experiment. If you encounter
+cache errors, verify that you have pushed all data to DVC with `dvc push`.
 
-You may have noticed that DVC was able to skip all stages as its cache it up to date. It
-helps you to be sure the experiment can be run (all data and metadata are up to
-date) and that the experiment can be reproduced (the results are the same).
+You may have noticed that DVC was able to skip all stages as its cache is up to
+date. It helps you to ensure the experiment can be run (all data and metadata
+are up to date) and that the experiment can be reproduced (the results are the
+same).
 
 This chapter is done, you can check the summary.
 
