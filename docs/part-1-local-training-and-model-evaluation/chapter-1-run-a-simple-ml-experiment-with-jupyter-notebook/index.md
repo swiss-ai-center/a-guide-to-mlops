@@ -23,7 +23,6 @@ Your goal is to streamline the team's workflow by setting up MLOps tools,
 documenting the process, tracking changes, and making the model accessible to
 others.
 
-
 In this chapter, you will learn how to:
 
 1. Set up the project directory
@@ -44,12 +43,24 @@ the duration of the guide.
 
 ### Download the notebook
 
-Your colleague has generously provided you a Jupyter Notebook file containing
-the experiment. You are ready to tackle the task.
+Your colleague provided you the following URL to download an archive containing the Jupyter Notebook for this machine learning experiment.
 
 ```sh title="Execute the following command(s) in a terminal"
-# Download the archive containing the dataset
-wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/notebook.ipynb -O notebook.ipynb
+# Download the archive containing the Jupyter Notebook
+wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/jupyter-notebook.zip -O jupyter-notebook.zip
+```
+
+Unzip the Jupyter Notebook into your working directory.
+
+```sh title="Execute the following command(s) in a terminal"
+# Extract the Jupyter Notebook
+unzip jupyter-notebook.zip
+
+# Move the subdirectory files to the working directory
+mv a-guide-to-mlops-jupyter-notebook/* .
+
+# Remove the archive and the directory
+rm -r jupyter-notebook.zip a-guide-to-mlops-jupyter-notebook
 ```
 
 ### Download and set up the dataset

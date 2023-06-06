@@ -15,11 +15,11 @@ you use Windows, you might encounter issues. Please use
 
 ## Requirements
 
-The following requirements are necessary to follow this chapter.
+The following requirements are necessary to follow this part.
 
-- An IDE. We recommend to use [Visual Studio Code](https://code.visualstudio.com/) to follow this guide.
-- [Python 3](https://www.python.org/downloads/) >=3.8,<3.12
-- [Poetry](https://python-poetry.org/docs) >=1.4
-- [Git](https://git-scm.com/)
+- An IDE. We recommend to use [:simple-visualstudiocode: Visual Studio Code](https://code.visualstudio.com/) to follow this guide.
+- [:simple-python: Python 3](https://www.python.org/downloads/)
+- [:simple-poetry: Poetry](https://python-poetry.org/docs)
+- [:simple-git: Git](https://git-scm.com/)
 - [wget](https://linux.die.net/man/1/wget)
 - [unzip](https://linux.die.net/man/1/unzip)
