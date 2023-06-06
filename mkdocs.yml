@@ -9,8 +9,8 @@ copyright: Copyright &copy; 2022 - 2023 CSIA-PME
 nav:
   # - Home: index.md TODO: Discuss this entry
   - Introduction:
-      - introduction.md
-      - tools.md
+      - introduction/concept.md
+      - introduction/tools.md
   - Part 1 - Local training and model evaluation:
       - "Introduction": part-1-local-training-and-model-evaluation/introduction.md
       - "Chapter 1 - Run a simple ML experiment with Jupyter Notebook": part-1-local-training-and-model-evaluation/chapter-1-run-a-simple-ml-experiment-with-jupyter-notebook/index.md

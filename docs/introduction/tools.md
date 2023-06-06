@@ -18,9 +18,11 @@ In this guide, we will use the following tools to demonstrate the MLOps process:
 
 You will go into details about each tool in the following parts of this guide.
 
+TODO: Add an illustration to display the different tools and their purposes?
+
 ### Git
 
-[Git](https://git-scm.com/) 
+[Git](https://git-scm.com/)
 
 For more, check out their documentation: [_Documentation_ - git-scm.com](https://git-scm.com/doc).
 
@@ -32,7 +34,7 @@ For more, check out their documentation: [_Documentation_ - python-poetry.org](h
 
 ### DVC
 
-[DVC](https://dvc.org/) 
+[DVC](https://dvc.org/)
 
 For more, check out their documentation: [_DVC Documentation_ - dvc.org](https://dvc.org/doc).
 
@@ -44,17 +46,17 @@ For more, check out their documentation: [_Google Cloud Storage Documentation_ -
 
 ### CML
 
-[CML](https://cml.dev/) 
+[CML](https://cml.dev/)
 
 For more, check out their documentation: [_CML Documentation_ - cml.dev](https://cml.dev/doc/).
 
 ### GitHub Actions or GitLab CI
 
-[GitHub Actions](https://github.com/features/actions) or [GitLab CI](https://about.gitlab.com/topics/ci-cd/) 
+[GitHub Actions](https://github.com/features/actions) or [GitLab CI](https://about.gitlab.com/topics/ci-cd/)
 
-For more, check out their documentation: 
+For more, check out their documentation:
 
-For more, check out their documentation: [_GitHub Actions_ - docs.github.com](https://docs.github.com/en/actions) or [_GitLab CI/CD_ - docs.gitlab.com](https://docs.gitlab.com/ee/ci/). 
+For more, check out their documentation: [_GitHub Actions_ - docs.github.com](https://docs.github.com/en/actions) or [_GitLab CI/CD_ - docs.gitlab.com](https://docs.gitlab.com/ee/ci/).
 
 ### MLEM
 
@@ -64,6 +66,6 @@ For more, check out their documentation: [_MLEM Documentation_ - mlem.ai](https:
 
 ### Label Studio
 
-[Label Studio](https://labelstud.io/) 
+[Label Studio](https://labelstud.io/)
 
 For more, check out their documentation: [_Get started with Label Studio_ - labelstud.io](https://labelstud.io/guide/).

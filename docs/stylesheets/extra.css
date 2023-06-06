@@ -13,3 +13,7 @@ code {
 article img {
 	border-radius: .2rem;
 }
+
+p, li {
+	text-align: justify;
+}

@@ -8,7 +8,7 @@ hide:
 
 Welcome to our comprehensive guide to MLOps!
 
-We are a passionate team of software engineers and data scientists from the [Swiss AI Center](https://swiss-ai-center.ch/){:target="\_blank"} (*CSIA-PME - Centre Suisse d'Intelligence Artificiel à destination des PMEs*). With expertise in both Machine Learning (ML) and DevOps, we have embarked on a mission to provide you with a valuable resource for seamlessly transitioning your ML projects from experimentation to production.
+We are a passionate team of software engineers and data scientists from the [Swiss AI Center](https://www.hes-so.ch/swiss-ai-center){:target="\_blank"} (*CSIA-PME - Centre Suisse d'Intelligence Artificiel à destination des PMEs*). With expertise in both Machine Learning (ML) and DevOps, we have embarked on a mission to provide you with a valuable resource for seamlessly transitioning your ML projects from experimentation to production.
 
 Throughout this guide, we have carefully curated a collection of tools and best practices that minimize friction within established workflows and teams. Our aim is to empower you to embrace a modern MLOps approach, fostering improved collaboration and reproducibility among your team members.
 
@@ -20,8 +20,8 @@ Whether you are a seasoned practitioner or new to the world of ML, this guide wi
 
 What you will learn from this guide.
 
-- [Introduction](./introduction.md) - Learn about MLOps and the tools used in this guide.
-- [Part 1 - Local training and model evaluation](./part-1-local-training-and-model-evaluation/introduction/) - Learn how to train a model locally and evaluate it using DVC.
+- [Introduction](./introduction/concept.md) - Learn about MLOps and the tools used in this guide.
+- [Part 1 - Local training and model evaluation](./part-1-local-training-and-model-evaluation/introduction.md) - Learn how to train a model locally and evaluate it using DVC.
     - [Chapter 1 - Run a simple ML experiment with Jupyter Notebook](./part-1-local-training-and-model-evaluation/chapter-1-run-a-simple-ml-experiment-with-jupyter-notebook/index.md)
     - [Chapter 2 - Adapt and move the Jupyter Notebook to Python scripts](./part-1-local-training-and-model-evaluation/chapter-2-adapt-and-move-the-jupyter-notebook-to-python-scripts/index.md)
     - [Chapter 3 - Initialize Git and DVC for local training](./part-1-local-training-and-model-evaluation/chapter-3-initialize-git-and-dvc-for-local-training/index.md)
@@ -43,7 +43,6 @@ What you will learn from this guide.
     - [Chapter 16 - Label new data with Label Studio](./part-4-labeling-the-data-and-retrain/chapter-16-label-new-data-with-label-studio/index.md)
     - [Chapter 17 - Retrain the model from new data with DVC Sync](./part-4-labeling-the-data-and-retrain/chapter-17-retrain-the-model-from-new-data-with-dvc-sync/index.md)
     - [Chapter 18 - Link the model to Label Studio and get predictions](./part-4-labeling-the-data-and-retrain/chapter-18-link-the-model-to-label-studio-and-get-predictions/index.md)
-      
 - [Conclusion](./conclusion.md) - Summary of what you have done and what is left to be done.
 
 You can find this guide on [GitHub](https://github.com/csia-pme/a-guide-to-mlops). Don't hesitate to show your support by giving us a star or opening an issue if you encounter any difficulties. :)
