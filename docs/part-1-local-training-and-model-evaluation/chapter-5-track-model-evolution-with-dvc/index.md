@@ -89,8 +89,8 @@ working directory.
 !!! note
 
     Remember? We did set the parameters, metrics and plots
-    in the previous chapter: [Chapter 4: Reproduce the experiment with
-    DVC](../chapter-4-reproduce-the-experiment-with-dvc).
+    in the previous chapter: [Chapter 4: Reproduce the ML experiment with
+    DVC](../chapter-4-reproduce-the-ml-experiment-with-dvc).
 
 #### Compare the parameters difference
 
@@ -212,11 +212,14 @@ index 165e2c9..a2e21d2 100644
 /model.pkl
 ```
 
-### Check the results
+### Check the changes
 
 Check the changes with Git to ensure that all the necessary files are tracked.
 
 ```sh title="Execute the following command(s) in a terminal"
+# Add all the files
+git add .
+
 # Check the changes
 git status
 ```
@@ -225,25 +228,21 @@ The output should look like this.
 
 ```
 On branch main
-Your branch is up to date with 'origin/main'.
-
-Changes not staged for commit:
-(use "git add <file>..." to update what will be committed)
-(use "git restore <file>..." to discard changes in working directory)
-    modified:   .gitignore
-    modified:   dvc.lock
-    modified:   params.yaml
-
-    no changes added to commit (use "git add" and/or "git commit -a")
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   .gitignore
+        modified:   dvc.lock
+        modified:   params.yaml
 ```
 
-!!! warning
+### Commit the changes
 
-    **Do not commit and push the improved version of your model yet**; it will be done in a future chapter.
+Commit the changes to the local Git repository.
 
-!!! bug
-
-    We need to commit before starting a new chapter.
+```sh title="Execute the following command(s) in a terminal"
+# Commit the changes
+git commit -m "My ML experiment changes are tracked"
+```
 
 This chapter is done, you can check the summary.
 
@@ -256,6 +255,7 @@ In this chapter, you have successfully:
 1. Updated the experiment parameters
 2. Reproduced the experiment
 3. Visualized the changes made to the experiment
+4. Commited the changes
 
 You fixed some of the previous issues:
 

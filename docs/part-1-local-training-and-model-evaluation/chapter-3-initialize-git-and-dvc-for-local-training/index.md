@@ -8,7 +8,7 @@ code changes and ensure reproducibility, we will create a Git repository.
 
 However, when it comes to managing large files, Git has some limitations.
 Although Git LFS is an option for handling large files in Git repositories, it
-may not be the most efficient solution. That's why we will use [DVC](../../get-started/the-tools-used-in-this-guide#dvc),
+may not be the most efficient solution. This is the reason we will use [DVC](../../get-started/the-tools-used-in-this-guide#dvc),
 a version control system specifically designed for efficient data management
 that seamlessly integrates with Git.
 

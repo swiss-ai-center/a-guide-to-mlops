@@ -281,30 +281,30 @@ dvc dag
 +-------------------+
 | data/data.xml.dvc |
 +-------------------+
-*
-*
-*
-+---------+
-| prepare |
-+---------+
-*
-*
-*
-+-----------+
-| featurize |
-+-----------+
-*
-*
-*
-+-------+
-| train |
-+-------+
-*
-*
-*
-+----------+
-| evaluate |
-+----------+
+          *
+          *
+          *
+     +---------+
+     | prepare |
+     +---------+
+          *
+          *
+          *
+    +-----------+
+    | featurize |
+    +-----------+
+          *
+          *
+          *
+      +-------+
+      | train |
+      +-------+
+          *
+          *
+          *
+    +----------+
+    | evaluate |
+    +----------+
 ```
 
 If any dependencies/outputs change, the affected stages will be re-executed.
@@ -353,19 +353,13 @@ Changes to be committed:
     new file:   evaluation/plots/sklearn/.gitignore
 ```
 
-### Push the changes to DVC and Git
+### Commit the changes
 
-Push all the DVC changes to the remote storage and all the Git changes to the remote repository.
+Commit the changes to the local Git repository.
 
 ```sh title="Execute the following command(s) in a terminal"
-# Upload the experiment data and cache to the remote bucket
-dvc push
-
 # Commit the changes
 git commit -m "My ML experiment commands are saved with DVC"
-
-# Push the changes
-git push
 ```
 
 This chapter is done, you can check the summary.
@@ -385,19 +379,11 @@ In this chapter, you have successfully:
 - `evaluate`
 3. Visualized the pipeline
 4. Executed the pipeline
-5. Pushed the changes to DVC and Git
+5. Committed the changes
 
 You fixed some of the previous issues:
 
 - ✅ The steps used to create the model are documented and can be reproduced.
-
-With the help of DVC, another member of your team can now easily reproduce your
-experiment and, thanks to caching, only the required steps will be executed.
-
-```sh title="Execute the following command(s) in a terminal"
-# Execute the pipeline
-dvc repro
-```
 
 However, you might have identified the following areas for improvement:
 

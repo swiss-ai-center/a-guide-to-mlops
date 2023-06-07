@@ -222,6 +222,14 @@ experiment data from DVC with the following command.
 dvc pull
 ```
 
+With the help of DVC, they can also easily reproduce your experiment and,
+thanks to caching, only the required steps will be executed.
+
+```sh title="Execute the following command(s) in a terminal"
+# Execute the pipeline
+dvc repro
+```
+
 You can now safely continue to the next chapter.
 
 ## State of the MLOps process

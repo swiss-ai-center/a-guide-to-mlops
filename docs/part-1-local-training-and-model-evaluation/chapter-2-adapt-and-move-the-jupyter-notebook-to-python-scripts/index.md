@@ -471,7 +471,7 @@ Your working directory should now look like this:
 ### Run the experiment
 
 Awesome! You now have everything you need to run the experiment: the codebase and
-the dataset are in place; and you are ready to run the experiment for the first
+the dataset are in place, and you are ready to run the experiment for the first
 time.
 
 Create the virtual environment and install necessary dependencies in your
@@ -507,7 +507,6 @@ python src/evaluate.py model.pkl data/features
     warning regarding DVC. You can safely ignore it for now.
 
 ### Check the results
-
 
 Your working directory should now be similar to this:
 
