@@ -1,5 +1,44 @@
 # Chapter 2: Adapt and move the Jupyter Notebook to Python scripts
 
+??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
+
+    !!! warning
+
+        It might be easier to start from the previous chapter(s). Only follow this section if you are confortable with the content of the previous chapter(s).
+
+    Get the required files for this chapter.
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Clone the repository
+    git clone \
+        --no-checkout \
+        --depth=1 \
+        --filter=tree:0 \
+        https://github.com/csia-pme/a-guide-to-mlops.git
+
+    # Move to the cloned repository
+    cd a-guide-to-mlops
+
+    # Get the files for this chapter
+    git sparse-checkout set --no-cone docs/the-guide/chapter-1-run-a-simple-ml-experiment
+
+    # Clone the files locally
+    git checkout
+
+    # Move back to the root directory
+    cd ..
+
+    # Copy the chapter files to the working directory
+    cp -r a-guide-to-mlops/docs/the-guide/chapter-1-run-a-simple-ml-experiment/* .
+
+    # Delete the cloned repository
+    rm -r a-guide-to-mlops
+    ```
+
+    Set up the environment.
+
+    TODO FOR EACH CHAPTER
+
 ## Introduction
 
 Jupyter Notebooks provide an interactive environment where code can be executed
