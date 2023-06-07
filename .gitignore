@@ -1,2 +1,5 @@
 # jupyter
 .ipynb_checkpoints/
+
+# Macos
+.DS_Store
