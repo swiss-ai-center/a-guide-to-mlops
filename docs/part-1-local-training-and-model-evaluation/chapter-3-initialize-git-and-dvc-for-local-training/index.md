@@ -8,14 +8,12 @@ code changes and ensure reproducibility, we will create a Git repository.
 
 However, when it comes to managing large files, Git has some limitations.
 Although Git LFS is an option for handling large files in Git repositories, it
-may not be the most efficient solution. This is the reason we will use [DVC](../../get-started/the-tools-used-in-this-guide#dvc),
-a version control system specifically designed for efficient data management
-that seamlessly integrates with Git.
+may not be the most efficient solution.
 
-DVC utilizes chunking to efficiently store large files and track their changes.
-Similar to Git, DVC also allows for storing the dataset in a remote storage,
-typically a cloud storage provider, ensuring effective tracking of modifications
-and allow to maintain a smooth workflow alongside our code.
+This is the reason we will use [DVC](../../get-started/the-tools-used-in-this-guide#dvc),
+a version control system specifically designed for efficient data management
+that seamlessly integrates with Git. DVC utilizes chunking to efficiently store
+large files and track their changes.
 
 In this chapter, you will learn how to:
 
