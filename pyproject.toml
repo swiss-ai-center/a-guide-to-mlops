@@ -11,9 +11,12 @@ packages = [{include = "guide_notebook"}]
 python = "^3.8"
 jupyterlab = "^4.0.1"
 pandas = "^2.0.2"
-dvclive = "^2.11.0"
 matplotlib = "^3.7.1"
 scikit-learn = "^1.2.2"
+seaborn = "^0.12.2"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
 
 [build-system]
 requires = ["poetry-core"]
