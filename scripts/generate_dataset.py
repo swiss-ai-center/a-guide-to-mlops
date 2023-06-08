@@ -1,6 +1,7 @@
-import seaborn as sns
 import random
 import pandas as pd
+
+random.seed(42)
 
 # Define the number of planets in the dataset for each habitability
 num_planets_per_habitability = 10_000
@@ -186,7 +187,7 @@ while (
 df = pd.DataFrame(data)
 
 # Save the dataset to a CSV file
-df.to_csv("data/planet_habitability_dataset.csv", index=False)
+df.to_csv("data/planet_habitability.csv", index=False)
 
 print(df.value_counts("Habitability"))
 print(df.describe(include="all"))
