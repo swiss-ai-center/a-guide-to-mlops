@@ -544,15 +544,9 @@ In this chapter, you have successfully:
 
 You did fix some of the previous issues:
 
-- ✅ The model can be saved and loaded with all have required artifacts for
-future usage. The model can be served outside of the experiment context.
+- ✅ Model can be saved and loaded with all required artifacts for future usage
 
-You could serve this model from anywhere. Additional services could submit
-predictions to your model. The usage of FastAPI creates endpoints that are
-automatically documented to interact with the model.
-
-You can now safely continue to the next chapter of this guide concluding your
-journey and the next things you could do with your model.
+You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 

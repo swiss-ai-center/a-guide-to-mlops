@@ -56,8 +56,173 @@ Here are some request bodies you can use as examples.
 
 !!! warning
 
-Please be aware that this model is a toy. Some
-inputs may be incorrectly predicted.
+    Please be aware that this model is a toy. Some
+    inputs may be incorrectly predicted.
+
+#### Input example 1
+
+**Request body**
+
+```json
+{
+    "data": [
+    "How to create a plot in R?"
+    ]
+}
+```
+
+**Prediction output**
+
+This output means that the input is related to the R programming language.
+
+```json
+[
+    1
+]
+```
+
+**Probabilities output**
+
+This output means a 94% probability that the input is related to the R
+programming language.
+
+```json
+[
+    [
+        0.06,
+        0.94
+    ]
+]
+```
+
+#### Input example 2
+
+**Request body**
+
+```json
+{
+    "data": [
+    "This should not be related as I talk about dogs"
+    ]
+}
+```
+
+**Prediction output**
+
+This output means that the input is not related to the R programming language.
+
+```json
+[
+    0
+]
+```
+
+**Probabilities output**
+
+This output means a 22% probability that the input is related to the R
+programming language.
+
+```json
+[
+    [
+        0.77650959300044,
+        0.22349040699956035
+    ]
+]
+```
+
+#### Input example 3
+
+**Request body**
+
+```json
+{
+    "data": [
+        "My favorite programming language is Python!"
+    ]
+}
+```
+
+**Prediction output**
+
+This output means that the input is not related to the R programming language.
+
+```json
+[
+    0
+]
+```
+
+**Probabilities output**
+
+This output means a 10% probability that the input is related to the R
+programming language.
+
+```json
+[
+    [
+        0.8910538088128949,
+        0.10894619118710518
+    ]
+]
+```
+
+### Check the changes
+
+Check the changes with Git to ensure all wanted files are here.
+
+```sh title="Execute the following command(s) in a terminal"
+# Add all the files
+git add .
+
+# Check the changes
+git status
+```
+
+The output of the `git status` command should be similar to this.
+
+```
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+(use "git restore --staged <file>..." to unstage)
+    modified:   .dvcignore
+    new file:   .mlem.yaml
+    modified:   data/features/.gitignore
+    new file:   data/features/tfidf.mlem
+    new file:   data/features/vectorizer.mlem
+    modified:   dvc.lock
+    modified:   dvc.yaml
+    new file:   models/.gitignore
+    new file:   models/rf.mlem
+    modified:   poetry.lock
+    modified:   pyproject.toml
+    modified:   src/evaluate.py
+    modified:   src/featurization.py
+    modified:   src/train.py
+```
+
+### Push the changes to DVC and Git
+
+Push the changes to DVC and Git.
+
+```sh title="Execute the following command(s) in a terminal"
+# Upload the experiment data and cache to the remote bucket
+dvc push
+
+# Commit the changes
+git commit -m "MLEM can save, load and serve the model"
+
+# Push the changes
+git push
+```
+
+### Check the results
+
+Congrats! You now have a model served over a REST API!
+
+This chapter is done, you can check the summary.
 
 ## Summary
 
@@ -68,8 +233,7 @@ In this chapter, you have successfully:
 
 You did fix some of the previous issues:
 
-- ✅ The model can be saved and loaded with all have required artifacts for
-future usage. The model can be served outside of the experiment context.
+- ✅ Model can be easily used outside of the experiment context.
 
 You could serve this model from anywhere. Additional services could submit
 predictions to your model. The usage of FastAPI creates endpoints that are
