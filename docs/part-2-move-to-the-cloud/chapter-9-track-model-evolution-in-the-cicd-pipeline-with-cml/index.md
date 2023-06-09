@@ -3,7 +3,7 @@
 ## Introduction
 
 The objective of this chapter is to effectively track the evolution of the model
-and generate reports directly from the CI/CD pipeline, using [CML](https://cml.dev/).
+and generate reports directly from the CI/CD pipeline, using [CML](../../tools).
 This capability empowers collaborators to engage in online discussions, enabling
 them to thoroughly review and deliberate on proposed changes before merging them
 into the codebase.
@@ -22,17 +22,11 @@ In this chapter, you will learn how to:
 10. Merge the pull request/merge request to the main branch
 11. Switch back to the main branch and pull latest changes
 
-!!! bug
-    Do we assume all the changes were already commited (in chapter 5)?
-
 !!! info
 
     CML can do much more than just generating reports.
     Have a look to the [Train the model on a Kubernetes cluster with
-    CML](../../advanced-concepts/train-the-model-on-a-kubernetes-cluster-with-cml) guide.
-
-!!! bug
-    Fix the above 'info' link, someday.
+    CML](../../part-3-serve-and-deploy-the-model-online/chapter-13-train-the-model-on-a-kubernetes-pod-with-cml/) guide.
 
 ## Steps
 
@@ -638,16 +632,16 @@ Take some time to understand the changes made to the file.
     Create a new issue by going to the **Issues** section from the top header of
     your GitHub repository. Select **New issue** and describe the
     work/improvements/ideas that you want to integrate to the codebase. In this
-    guide, we will name the issue _Demonstrate chapter 9_. Create the issue by
-    selecting **Submit new issue**.
+    guide, we will name the issue _Demonstrate model evolution tracking_. Create
+    the issue by selecting **Submit new issue**.
 
 === ":simple-gitlab: GitLab"
 
     Create a new issue by going to the **Issues** section from the left sidebar of
     your GitLab project. Select **New issue** and describe the
     work/improvements/ideas that you want to integrate to the codebase. In this
-    guide, we will name the issue _Demonstrate chapter 9_. Create the issue by
-    selecting **Submit new issue**.
+    guide, we will name the issue _Demonstrate model evolution tracking_. Create
+    the issue by selecting **Submit new issue**.
 
 ### Create a branch for the issue
 
@@ -677,22 +671,68 @@ git fetch origin
 git checkout <the name of the new branch>
 ```
 
-### Commit and push the experiment changes
+### Update the parameters of the experiment
 
-Remember the changes done in [Chapter 5: Track model evolutions with
-DVC](../chapter-5-track-model-evolutions-with-dvc)?
-
-!!! bug
-
-    `[TBD]` Replace by dummy changes in the experiment as an example - so we can
-    commit properly at each steps.
-
-
-You can now commit them to trigger a change on the remote repository.
+Similarly to what we have done in [Chapter 5: Track model evolutions with
+DVC](../../part-1-local-training-and-model-evaluation/chapter-5-track-model-evolution-with-dvc),
+we will update the experiment to see the evolution being tracked remotely by CML.
 
 If you don't have changes in your working directory, just update the parameters
 of the experiment in `params.yaml` and reproduce the experiment with `dvc
 repro`. You can then commit the changes.
+
+Update your experiment with the following parameters by editing the
+`params.yaml` file.
+
+```yaml title="params.yaml" hl_lines="6-7"
+prepare:
+split: 0.20
+seed: 20170428
+
+featurize:
+max_features: 400
+ngrams: 4
+
+train:
+seed: 20170428
+n_est: 50
+min_split: 2
+```
+
+Check the differences with Git to validate the changes.
+
+```sh title="Execute the following command(s) in a terminal"
+# Show the differences with Git
+git diff params.yaml
+```
+
+The output should be similar to this.
+
+```diff
+diff --git a/params.yaml b/params.yaml
+index 83e7649..586d3e2 100644
+--- a/params.yaml
++++ b/params.yaml
+@@ -3,8 +3,8 @@ prepare:
+seed: 20170428
+
+featurize:
+-  max_features: 200
+-  ngrams: 2
++  max_features: 400
++  ngrams: 4
+
+train:
+seed: 20170428
+```
+
+Here, we simply changed the `max_features` and `ngrams` parameters of the
+`featurize` stage, which should slightly affect the model's performance.
+
+### Commit and push the experiment changes
+
+You can now commit and push the above changes to trigger a change on the remote
+repository.
 
 Check the changes with Git to ensure all wanted files are here.
 
