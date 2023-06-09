@@ -40,17 +40,7 @@
 
 ## State of the MLOps process
 
-- ✅ The codebase can be shared and improved by multiple developers
-- ❌ Dataset requires manual download and placement
-- ❌ Model steps rely on verbal communication and may be undocumented
-- ❌ Changes to model are not easily visualized
-- ❌ Experiment may not be reproducible on other machines
-- ❌ Model may have required artifacts that are forgotten or omitted in
-  saved/loaded state and there is no easy way to use the model outside of the
-  experiment context
-
-You will address these issues in the next chapters for improved efficiency and
-collaboration. Continue the guide to learn how.
+[moved]
 
 ## Sources
 

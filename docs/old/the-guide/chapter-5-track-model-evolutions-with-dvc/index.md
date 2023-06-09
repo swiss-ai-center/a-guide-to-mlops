@@ -32,19 +32,7 @@
 
 ## State of the MLOps process
 
-- ✅ The codebase can be shared and improved by multiple developers
-- ✅ The dataset can be shared among the developers and is placed in the right
-  directory in order to run the experiment
-- ✅ The steps used to create the model are documented and can be re-executed
-- ✅ The changes done to a model can be visualized with parameters, metrics and
-  plots to identify differences between iterations
-- ❌ Experiment may not be reproducible on other machines
-- ❌ Model may have required artifacts that are forgotten or omitted in
-  saved/loaded state and there is no easy way to use the model outside of the
-  experiment context
-
-You will address these issues in the next chapters for improved efficiency and
-collaboration. Continue the guide to learn how.
+[moved]
 
 ## Sources
 

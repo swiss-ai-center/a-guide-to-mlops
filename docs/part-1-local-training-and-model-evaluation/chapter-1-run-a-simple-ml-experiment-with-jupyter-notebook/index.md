@@ -142,10 +142,17 @@ However, you may have identified the following areas for improvement:
 
 In the next chapters, you will enhance the workflow to fix those issues.
 
-You can now safely continue to the next chapter.
-
 ## State of the MLOps process
 
-!!! bug
+- ❌ Notebook can be run but is not adequate for production
+- ❌ Codebase and dataset are not versioned
+- ❌ Model steps rely on verbal communication and may be undocumented
+- ❌ Changes to model are not easily visualized
+- ❌ Dataset requires manual download and placement
+- ❌ Codebase requires manual download and setup
+- ❌ Experiment may not be reproducible on other machines
+- ❌ Changes to model are not thoroughly reviewed and discussed before integration
+- ❌ Model may have required artifacts that are forgotten or omitted in saved/loaded state
+- ❌ Model cannot be easily used from outside of the experiment context
 
-    `[TBD]`
+## Sources

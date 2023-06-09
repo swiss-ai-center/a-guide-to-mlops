@@ -226,6 +226,20 @@ You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
-!!! bug
+- ✅ Notebook has been transformed into scripts for production
+- ✅ Codebase and dataset are versioned
+- ✅ Steps used to create the model are documented and can be re-executed
+- ✅ Changes done to a model can be visualized with parameters, metrics and plots to identify
+differences between iterations
+- ✅ Dataset can be shared among the developers and is placed in the right
+directory in order to run the experiment
+- ❌ Codebase requires manual download and setup
+- ❌ Experiment may not be reproducible on other machines
+- ❌ Changes to model are not thoroughly reviewed and discussed before integration
+- ❌ Model may have required artifacts that are forgotten or omitted in saved/loaded state
+- ❌ Model cannot be easily used from outside of the experiment context
 
-`[TBD]`
+You will address these issues in the next chapters for improved efficiency and
+collaboration. Continue the guide to learn how.
+
+## Sources
