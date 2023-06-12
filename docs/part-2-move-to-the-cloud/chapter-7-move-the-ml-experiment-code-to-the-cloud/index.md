@@ -13,22 +13,13 @@ collaboration and ensuring smooth workflow.
 
 Create a Git repository on your preferred service to collaborate with peers.
 
-!!! warning
-
-    **Do not initialize the Git repository online**. You will manually
-    initialize the repository later.
-
 === ":simple-github: GitHub"
 
-    Follow the related documentation [_Creating a new repository_ -
-    docs.github.com](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository)
-    to create a new GitHub repository for this chapter.
+    Create a new GitHub repository for this chapter by accessing <https://github.com/new>. Configure the repository as you wish but **do not** check the box _"Add a README file"_.
 
 === ":simple-gitlab: GitLab"
 
-    Follow the related documentation [_Create a project_ -
-    docs.gitlab.com](https://docs.gitlab.com/ee/user/project/)
-    to create a new GitLab project for this chapter.
+    Create a new GitLab blank project for this chapter by accessing <https://gitlab.com/projects/new>. Configure the repository as you wish but **do not** check the box _"Initialize repository with a README"_.
 
 ## Configure Git for the remote branch
 
