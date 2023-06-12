@@ -7,7 +7,7 @@ import pandas as pd
 random.seed(42)
 
 DATA_DIR = "data"
-DATA_FILENAME = "planet_habitability.csv"
+DATA_FILENAME = "data.csv"
 NUM_PLANETS_PER_HABITABILITY = 10_000
 
 FEATURES = {
