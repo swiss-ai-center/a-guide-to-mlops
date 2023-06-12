@@ -122,7 +122,7 @@ python3 -m venv .venv
 source .venv/bin/activate
 
 # Install the requirements
-pip install --requirement src/requirements.txt
+pip install --requirement requirements.txt
 ```
 
 ### Run the experiment

@@ -213,7 +213,7 @@ Once access to the virtual environment is no longer needed, simply type `exit` t
 
 Dependencies are cleary listed in the `pyproject.toml` file and the `poetry.lock` file ensures reproducibility.
 
-### Split the Jupyter Ntebook into scripts
+### Split the Jupyter Notebook into scripts
 
 You will split the Jupyter Notebook in a codebase made of separate Python scripts with
 well defined role. These scripts will be able to be called on the command line,
@@ -275,7 +275,7 @@ The `src/evaluate.py` script will evaluate the ML model using DVC.
 # TODO
 ```
 
-### Make usage of the scripts in the Notebook
+### Make usage of the scripts in the Jupyter Notebook
 
 TODO: Update the notebook to use the scripts and the parameters file as well in a hybrid approach: Notebook to visualize the data and results and scripts to run the experiment.
 
