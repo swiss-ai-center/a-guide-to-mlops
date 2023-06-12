@@ -72,9 +72,9 @@ For example, freezing the version of a dependency in a `requirements.txt` file i
 
 In this chapter, you will learn how to:
 
-1. Adapt the content of the Jupyter Notebook into Python scripts
-4. Set up a standardized Python environment using [Poetry](https://python-poetry.org/)
-5. Launch the experiment locally
+1. Set up a standardized Python environment using [Poetry](https://python-poetry.org/)
+2. Adapt the content of the Jupyter Notebook into Python scripts
+3. Launch the experiment locally
 
 Let's get started!
 
@@ -405,8 +405,8 @@ this time using a modular approach that can be put into production.
 
 In this chapter, you have:
 
-1. Adapted the content of the Jupyter Notebook into Python scripts
-2. Set up a standardized Python environment using Poetry
+1. Set up a standardized Python environment using Poetry
+2. Adapted the content of the Jupyter Notebook into Python scripts
 3. Launched the experiment locally
 
 However, you may have identified the following areas for improvement:

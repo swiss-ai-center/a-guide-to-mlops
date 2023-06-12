@@ -49,7 +49,6 @@ git init --initial-branch=main
 
 #### Check if Git tracks your files
 
-
 Initialize Git in your working directory. Verify available files for committing
 with these commands.
 
