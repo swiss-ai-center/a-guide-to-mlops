@@ -68,9 +68,11 @@ rm -r jupyter-notebook.zip a-guide-to-mlops-jupyter-notebook
 Your colleague provided you the following URL to download an archive containing
 the dataset for this machine learning experiment.
 
+TODO: Update the branch name once the branch is merged
+
 ```sh title="Execute the following command(s) in a terminal"
 # Download the archive containing the dataset
-wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/data.zip -O data.zip
+wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/59-data.zip -O data.zip
 ```
 
 This archive must be decompressed and its contents be moved in the
@@ -81,7 +83,7 @@ This archive must be decompressed and its contents be moved in the
 unzip data.zip
 
 # Move the `data.xml` file to the working directory
-mv a-guide-to-mlops-data/ data/
+mv a-guide-to-mlops-59-data/ data/
 
 # Remove the archive and the directory
 rm data.zip
@@ -98,9 +100,11 @@ TODO: Update the tree
 ```yaml hl_lines="2-4"
 .
 ├── data # (1)!
-│   ├── data.xml
-│   └── README.md
-└── notebook.md
+│   ├── README.md
+│   └── planet_habitability.csv
+├── README.md
+├── notebook.ipynb
+└── requirements.txt
 ```
 
 1. This, and all its sub-directory, is new.
@@ -138,6 +142,8 @@ A browser window should open with the Jupyter Notebook.
 
 Execute each step of the notebook to train the model and evaluate its performance.
 
+TODO: Improve this section
+
 The notebook is useful for the following elements:
 
 - Single file for the entire experiment
@@ -150,7 +156,14 @@ The notebook lacks the following elements:
 - Difficult to reproduce
 - Cluttered with previous outputs
 
-TODO: Improve this section
+Once done, you can close the notebook and shut down the Jupyter server by pressing `++Ctrl+C++` in the terminal.
+
+Exit the virtual environment with the following command.
+
+```sh title="Execute the following command(s) in a terminal"
+# Exit the virtual environment
+deactivate
+```
 
 ## Summary
 

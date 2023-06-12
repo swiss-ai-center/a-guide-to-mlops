@@ -52,83 +52,9 @@ Notebooks into Python scripts suitable for running ML experiments in a more
 modular and reproducible manner can help address these shortcomings and enhance
 the overall ML development process.
 
-In this chapter, you will learn how to:
-
-1. Adapt the content of the Jupyter notebook into Python scripts
-4. Set up a standardized Python environment using [Poetry](https://python-poetry.org/)
-5. Launch the experiment locally
-
-Let's get started!
-
-## Steps
-
-### Split the notebook into scripts
-
-You will split the notebook in a codebase made of separate Python scripts with
-well defined role. These scripts will be able to be called on the command line,
-making it ideal for automation tasks.
-
-In addition, you will use Poetry to provide a
-convenient and efficient approach to setting up Python environments, making the
-process easier, more standardized and reproducible across different machines.
-
-The following table describes the files that you will create in this codebase.
-
-| **File**                | **Description**                                   | **Input**                             | **Output**                                                    |
-| ----------------------- | ------------------------------------------------- | ------------------------------------- | ------------------------------------------------------------- |
-| `src/prepare.py`        | Prepare the dataset to run the ML experiment      | The dataset to prepare as an XML file | The prepared data in `data/prepared` directory                |
-| `src/featurize.py`      | Extract the features from the dataset             | The prepared dataset                  | The extracted features in `data/features` directory           |
-| `src/train.py`          | Train the ML model                                | The extracted features                | The model trained with the dataset                            |
-| `src/evaluate.py`       | Evaluate the ML model using DVC                   | The model to evaluate                 | The results of the model evaluation in `evaluation` directory |
-| `params.yaml`           | The parameters to run the ML experiment           | -                                     | -                                                             |
-
-#### Move the parameters to its own file
-
-Let's split the parameters to run the ML experiment with in a distinct file.
-
-```yaml title="params.yaml"
-# TODO
-```
-
-#### Move the preparation step to its own file
-
-The `src/prepare.py` script will prepare the dataset.
-
-```py title="src/prepare.py"
-# TODO
-```
-
-#### Move the featurize step to its own file
-
-TODO: Do you still need this section in the new version?
-
-The `src/featurize.py` script will extract the features from the dataset.
-
-```py title="src/featurization.py"
-# TODO
-```
-
-#### Move the train step to its own file
-
-The `src/train.py` script will train the ML model.
-
-```py title="src/train.py"
-# TODO
-```
-
-#### Move the evaluate step to its own file
-
-The `src/evaluate.py` script will evaluate the ML model using DVC.
-
-```py title="src/evaluate.py"
-# TODO
-```
-
-### Move from pip to Poetry
-
 pip is the standard package manager for Python. It is used to install and manage dependencies in a Python environment.
 
-However, pip is not the best tool to manage Python dependencies. It is not user-friendly and it is not suitable for reproducibility and collaboration.
+Yet, pip is not the best tool to manage Python dependencies. It is not user-friendly and it is not suitable for reproducibility and collaboration.
 
 If you have a look at the `requirements.txt` file, you might notice the following issues:
 
@@ -144,12 +70,28 @@ Poetry is a tool to manage Python dependencies. It is a more robust and user-fri
 
 For example, freezing the version of a dependency in a `requirements.txt` file is not enough to ensure reproducibility. The `requirements.txt` file only specifies the version of the dependency at the time of installation. If dependencies of the dependency are updated, the version of the dependency might change without you knowing it. This is why Poetry creates a lock file that contains the exact version of all the dependencies and their dependencies.
 
+In this chapter, you will learn how to:
+
+1. Adapt the content of the Jupyter Notebook into Python scripts
+4. Set up a standardized Python environment using [Poetry](https://python-poetry.org/)
+5. Launch the experiment locally
+
+Let's get started!
+
+## Steps
+
+### Move from pip to Poetry
+
 Start by ensuring you have left the virtual environment created in the previous chapter.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Deactivate the virtual environment
 deactivate
+```
 
+Remove the virtual environment and the `requirements.txt` file.
+
+```sh title="Execute the following command(s) in a terminal"
 # Remove the virtual environment
 rm -r .venv
 
@@ -261,15 +203,81 @@ To exit the Poetry shell, simply type `exit`.
 exit
 ```
 
-Now that Poetry is set up, acessing the virtual environment is now easier. Simply type `poetry shell` to open a Poetry shell in the virtual environment.
+Now that Poetry is set up, accessing the virtual environment is now easier. Simply type `poetry shell` to open a Poetry shell in the virtual environment.
 
-Installing dependencies is also easier. Simply type `poetry add <dependency>` to install a dependency in the virtual environment and update the `pyproject.toml` file.
+Installing dependencies is also easier. Simply type `poetry add <dependency>` to install a dependency in the virtual environment and update the `pyproject.toml` and `poetry.lock` files.
 
 When accessing the virtual environment, you can also install all the dependencies listed in the `pyproject.toml` file by typing `poetry install`.
 
 Once access to the virtual environment is no longer needed, simply type `exit` to exit the Poetry shell.
 
 Dependencies are cleary listed in the `pyproject.toml` file and the `poetry.lock` file ensures reproducibility.
+
+### Split the Jupyter Ntebook into scripts
+
+You will split the Jupyter Notebook in a codebase made of separate Python scripts with
+well defined role. These scripts will be able to be called on the command line,
+making it ideal for automation tasks.
+
+In addition, you will use Poetry to provide a
+convenient and efficient approach to setting up Python environments, making the
+process easier, more standardized and reproducible across different machines.
+
+The following table describes the files that you will create in this codebase.
+
+| **File**                | **Description**                                   | **Input**                             | **Output**                                                    |
+| ----------------------- | ------------------------------------------------- | ------------------------------------- | ------------------------------------------------------------- |
+| `src/prepare.py`        | Prepare the dataset to run the ML experiment      | The dataset to prepare as an XML file | The prepared data in `data/prepared` directory                |
+| `src/featurize.py`      | Extract the features from the dataset             | The prepared dataset                  | The extracted features in `data/features` directory           |
+| `src/train.py`          | Train the ML model                                | The extracted features                | The model trained with the dataset                            |
+| `src/evaluate.py`       | Evaluate the ML model using DVC                   | The model to evaluate                 | The results of the model evaluation in `evaluation` directory |
+| `params.yaml`           | The parameters to run the ML experiment           | -                                     | -                                                             |
+
+#### Move the parameters to its own file
+
+Let's split the parameters to run the ML experiment with in a distinct file.
+
+```yaml title="params.yaml"
+# TODO
+```
+
+#### Move the preparation step to its own file
+
+The `src/prepare.py` script will prepare the dataset.
+
+```py title="src/prepare.py"
+# TODO
+```
+
+#### Move the featurize step to its own file
+
+TODO: Do you still need this section in the new version?
+
+The `src/featurize.py` script will extract the features from the dataset.
+
+```py title="src/featurization.py"
+# TODO
+```
+
+#### Move the train step to its own file
+
+The `src/train.py` script will train the ML model.
+
+```py title="src/train.py"
+# TODO
+```
+
+#### Move the evaluate step to its own file
+
+The `src/evaluate.py` script will evaluate the ML model using DVC.
+
+```py title="src/evaluate.py"
+# TODO
+```
+
+### Make usage of the scripts in the Notebook
+
+TODO: Update the notebook to use the scripts and the parameters file as well in a hybrid approach: Notebook to visualize the data and results and scripts to run the experiment.
 
 ### Check the results
 
@@ -282,7 +290,7 @@ TODO: Update the tree
 ├── data
 │   ├── data.xml
 │   └── README.md
-├── notebook.md
+├── notebook.ipynb
 ├── src # (1)!
 │   ├── evaluate.py
 │   ├── featurization.py
@@ -297,7 +305,6 @@ TODO: Update the tree
 2. This is new.
 3. This is new.
 4. This is new.
-5. This is new.
 
 ### Run the experiment
 
@@ -398,7 +405,7 @@ this time using a modular approach that can be put into production.
 
 In this chapter, you have:
 
-1. Adapted the content of the Jupyter notebook into Python scripts
+1. Adapted the content of the Jupyter Notebook into Python scripts
 2. Set up a standardized Python environment using Poetry
 3. Launched the experiment locally
 
