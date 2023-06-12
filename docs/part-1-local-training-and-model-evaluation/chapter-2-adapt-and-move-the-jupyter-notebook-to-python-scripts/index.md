@@ -76,6 +76,19 @@ In this chapter, you will learn how to:
 2. Adapt the content of the Jupyter Notebook into Python scripts
 3. Launch the experiment locally
 
+```mermaid
+flowchart
+	subgraph 356399["LOCAL"]
+		927342["data"] --> 672354
+        672354["prepare.py"] --> 347464
+		347464["train.py"] --> 964259
+		964259["evaluate.py"]
+        238472["params.yaml"] -.- 672354
+        238472 -.- 347464
+	end
+    style 927342 opacity:0.4,color:#7f7f7f80
+```
+
 Let's get started!
 
 ## Steps

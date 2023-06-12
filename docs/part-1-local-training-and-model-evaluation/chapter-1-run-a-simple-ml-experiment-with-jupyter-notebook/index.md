@@ -31,6 +31,13 @@ In this chapter, you will learn how to:
 4. Create a Python environment to run the experiment
 5. Launch the experiment locally for the first time
 
+```mermaid
+flowchart
+	subgraph 356399["LOCAL"]
+		927342["data"] <--> 128749["notebook.ipynb"]
+	end
+```
+
 Let's get started!
 
 ## Steps
