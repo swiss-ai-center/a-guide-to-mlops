@@ -30,6 +30,36 @@ Git commits
 9. Push the data files to DVC
 10. Commit the metadata files to Git
 
+```mermaid
+flowchart LR
+	789994[(".dvc")]
+	429113[(".git")]
+	927342["data"] <-.-> 789994
+    356399 <-....-> 429113
+	subgraph 438901["CACHE"]
+		789994
+		429113
+	end
+	subgraph 356399["LOCAL"]
+        927342 --> 672354
+        672354["prepare.py"] --> 347464
+		347464["train.py"] --> 964259
+		964259["evaluate.py"]
+        238472["params.yaml"] -.- 672354
+        238472 -.- 347464
+	end
+    style 356399 opacity:0.4,color:#7f7f7f80
+    style 672354 opacity:0.4,color:#7f7f7f80
+    style 347464 opacity:0.4,color:#7f7f7f80
+    style 964259 opacity:0.4,color:#7f7f7f80
+    style 238472 opacity:0.4,color:#7f7f7f80
+    linkStyle 2 opacity:0.4,color:#7f7f7f80
+    linkStyle 3 opacity:0.4,color:#7f7f7f80
+    linkStyle 4 opacity:0.4,color:#7f7f7f80
+    linkStyle 5 opacity:0.4,color:#7f7f7f80
+    linkStyle 6 opacity:0.4,color:#7f7f7f80
+```
+
 Later, we will streamline the code sharing process by setting up remote Git and
 DVC repositories to enable easy collaboration with the rest of the team.
 
