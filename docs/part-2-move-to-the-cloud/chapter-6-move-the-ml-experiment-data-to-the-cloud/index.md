@@ -300,6 +300,12 @@ DVC as well.
 git commit -m "My ML experiment data is saved with DVC"
 ```
 
+### Check the results
+
+Open the Bucket Storage on the cloud provider and check that the data files have been uploaded.
+
+TODO: Add explanation on how to check the files on the cloud provider, the difference between the data and the cache, and how to download the data from the cloud provider.
+
 ## Summary
 
 Congrats! You now have a dataset that can be used and shared among the team.
