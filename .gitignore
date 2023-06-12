@@ -1,5 +1,13 @@
-# jupyter
+## Jupyter Notebook
 .ipynb_checkpoints/
 
-# Macos
+## macOS
 .DS_Store
+
+## Python
+
+# Environments
+.venv
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
