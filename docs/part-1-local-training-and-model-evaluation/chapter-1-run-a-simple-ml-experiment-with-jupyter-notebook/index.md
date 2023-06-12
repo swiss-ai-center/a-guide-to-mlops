@@ -93,6 +93,8 @@ Examine the notebook and the dataset to get a better understanding of their cont
 
 Your working directory should now look like this:
 
+TODO: Update the tree
+
 ```yaml hl_lines="2-4"
 .
 ├── data # (1)!
@@ -103,24 +105,52 @@ Your working directory should now look like this:
 
 1. This, and all its sub-directory, is new.
 
+### Create the virtual environment
+
+Create the virtual environment and install necessary dependencies in your
+working directory using these commands.
+
+```sh
+# Create the virtual environment
+python3 -m venv .venv
+
+# Activate the virtual environment
+source .venv/bin/activate
+
+# Install the requirements
+pip install --requirement src/requirements.txt
+```
+
 ### Run the experiment
 
-Launch the notebook with:
+Awesome! You now have everything you need to run the experiment: the notebook and
+the dataset are in place, the virtual environment is ready; and you're ready to run the experiment for the first
+time.
+
+Launch the notebook with the following command.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Launch the experiment
-jupyter-lab notebook
+jupyter-lab notebook.ipynb
 ```
 
-If you wish to modify and run the notebook cells, you will likely need to install
-missing dependencies.
+A browser window should open with the Jupyter Notebook.
 
-!!! bug
+Execute each step of the notebook to train the model and evaluate its performance.
 
-    `[TBD]`
+The notebook is useful for the following elements:
 
-    * do we show how to install jupyter with pip/conda?
-    * or do not tell anything to display the lack of instructions? >:)
+- Single file for the entire experiment
+- Data visualization
+- Presentation of the results
+
+The notebook lacks the following elements:
+
+- Difficult to share with others (no versioning)
+- Difficult to reproduce
+- Cluttered with previous outputs
+
+TODO: Improve this section
 
 ## Summary
 
@@ -131,7 +161,7 @@ In this chapter, you have:
 1. Created the working directory
 2. Acquired the codebase
 3. Obtained the dataset
-4. Set up a Python environment to run the experiment `[TBD]`
+4. Set up a Python environment to run the experiment
 5. Executed the experiment locally for the first time
 
 However, you may have identified the following areas for improvement:
