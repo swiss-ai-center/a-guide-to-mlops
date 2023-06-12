@@ -269,10 +269,6 @@ You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
-- ❌ Dataset requires manual download and placement
-- ❌ Codebase requires manual download and setup
-
-
 - ✅ Notebook has been transformed into scripts for production
 - ✅ Codebase and dataset are versioned
 - ✅ Steps used to create the model are documented and can be re-executed
