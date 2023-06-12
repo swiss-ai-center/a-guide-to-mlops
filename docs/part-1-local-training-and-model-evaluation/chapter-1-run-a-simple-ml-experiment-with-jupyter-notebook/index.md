@@ -33,7 +33,7 @@ In this chapter, you will learn how to:
 
 ```mermaid
 flowchart
-	subgraph graph[LOCAL]
+	subgraph localGraph[LOCAL]
 		data[data.csv] <--> notebook[notebook.ipynb]
 	end
 ```

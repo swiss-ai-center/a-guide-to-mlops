@@ -23,39 +23,39 @@ In this chapter, you will learn how to:
 
 ```mermaid
 flowchart LR
-	789994[(".dvc")] -->|"dvc push"| 574108[("S3 Storage")]
-	574108 -->|"dvc pull"| 789994
-	429113[(".git")]
-    356399 <-....-> 429113
-	980408["data"] <-.-> 789994
-	subgraph 438901["CACHE"]
-		789994
-		429113
+	dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]
+	s3_storage -->|dvc pull| dot_dvc
+	dot_git[(.git)]
+    localGraph <-....-> dot_git
+	data[data.csv] <-.-> dot_dvc
+    subgraph cloudGraph[CLOUD]
+		s3_storage
 	end
-	subgraph 356399["LOCAL"]
-		672354["prepare.py"] <-.-> 789994
-		347464["train.py"] <-.-> 789994
-		964259["evaluate.py"] <-.-> 789994
-		980408 --> 672354
-		subgraph 695374["dvc.yaml"]
-			672354 --> 347464
-			347464 --> 964259
+	subgraph cacheGraph[CACHE]
+		dot_dvc
+		dot_git
+	end
+	subgraph localGraph[LOCAL]
+		prepare[prepare.py] <-.-> dot_dvc
+		train[train.py] <-.-> dot_dvc
+		evaluate[evaluate.py] <-.-> dot_dvc
+		data --> prepare
+		subgraph dvcGraph[dvc.yaml]
+			prepare --> train
+			train --> evaluate
 		end
-        238472["params.yaml"] -.- 672354
-        238472 -.- 347464
-        238472 <-.-> 789994
+        params[params.yaml] -.- prepare
+        params -.- train
+        params <-.-> dot_dvc
 	end
-    subgraph 935111["CLOUD"]
-		574108
-	end
-    style 238472 opacity:0.4,color:#7f7f7f80
-    style 429113 opacity:0.4,color:#7f7f7f80
-    style 438901 opacity:0.4,color:#7f7f7f80
-    style 356399 opacity:0.4,color:#7f7f7f80
-    style 672354 opacity:0.4,color:#7f7f7f80
-    style 347464 opacity:0.4,color:#7f7f7f80
-    style 964259 opacity:0.4,color:#7f7f7f80
-    style 695374 opacity:0.4,color:#7f7f7f80
+    style localGraph opacity:0.4,color:#7f7f7f80
+    style dvcGraph opacity:0.4,color:#7f7f7f80
+    style cacheGraph opacity:0.4,color:#7f7f7f80
+    style dot_git opacity:0.4,color:#7f7f7f80
+    style prepare opacity:0.4,color:#7f7f7f80
+    style train opacity:0.4,color:#7f7f7f80
+    style evaluate opacity:0.4,color:#7f7f7f80
+    style params opacity:0.4,color:#7f7f7f80
     linkStyle 2 opacity:0.4,color:#7f7f7f80
     linkStyle 4 opacity:0.4,color:#7f7f7f80
     linkStyle 5 opacity:0.4,color:#7f7f7f80

@@ -78,7 +78,7 @@ In this chapter, you will learn how to:
 
 ```mermaid
 flowchart
-    subgraph graph[LOCAL]
+    subgraph localGraph[LOCAL]
         data[data.csv] --> prepare
         prepare[prepare.py] --> train
         train[train.py] --> evaluate

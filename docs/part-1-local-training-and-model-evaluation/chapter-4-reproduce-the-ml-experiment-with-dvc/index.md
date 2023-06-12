@@ -26,29 +26,29 @@ In this chapter, you will learn how to:
 
 ```mermaid
 flowchart LR
-	789994[(".dvc")]
-	429113[(".git")]
-	980408["data"] <-.-> 789994
-    356399 <-....-> 429113
-	subgraph 438901["CACHE"]
-		789994
-		429113
+	dot_dvc[(.dvc)]
+	dot_git[(.git)]
+	data[data.csv] <-.-> dot_dvc
+    localGraph <-....-> dot_git
+	subgraph cacheGraph[CACHE]
+		dot_dvc
+		dot_git
 	end
-	subgraph 356399["LOCAL"]
-		672354["prepare.py"] <-.-> 789994
-		347464["train.py"] <-.-> 789994
-		964259["evaluate.py"] <-.-> 789994
-		980408 --> 672354
-		subgraph 695374["dvc.yaml"]
-			672354 --> 347464
-			347464 --> 964259
+	subgraph localGraph[LOCAL]
+		prepare[prepare.py] <-.-> dot_dvc
+		train[train.py] <-.-> dot_dvc
+		evaluate[evaluate.py] <-.-> dot_dvc
+		data --> prepare
+		subgraph dvcGraph[dvc.yaml]
+			prepare --> train
+			train --> evaluate
 		end
-        238472["params.yaml"] -.- 672354
-        238472 -.- 347464
-        238472 <-.-> 789994
+        params[params.yaml] -.- prepare
+        params -.- train
+        params <-.-> dot_dvc
 	end
-    style 980408 opacity:0.4,color:#7f7f7f80
-    style 429113 opacity:0.4,color:#7f7f7f80
+    style dot_git opacity:0.4,color:#7f7f7f80
+    style data opacity:0.4,color:#7f7f7f80
     linkStyle 0 opacity:0.4,color:#7f7f7f80
     linkStyle 1 opacity:0.4,color:#7f7f7f80
     linkStyle 5 opacity:0.4,color:#7f7f7f80

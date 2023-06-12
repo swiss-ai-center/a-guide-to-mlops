@@ -32,27 +32,27 @@ Git commits
 
 ```mermaid
 flowchart LR
-	789994[(".dvc")]
-	429113[(".git")]
-	927342["data"] <-.-> 789994
-    356399 <-....-> 429113
-	subgraph 438901["CACHE"]
-		789994
-		429113
+	dot_dvc[(.dvc)]
+	dot_git[(.git)]
+	data[data.csv] <-.-> dot_dvc
+    localGraph <-....-> dot_git
+	subgraph cacheGraph[CACHE]
+		dot_dvc
+		dot_git
 	end
-	subgraph 356399["LOCAL"]
-        927342 --> 672354
-        672354["prepare.py"] --> 347464
-		347464["train.py"] --> 964259
-		964259["evaluate.py"]
-        238472["params.yaml"] -.- 672354
-        238472 -.- 347464
+	subgraph localGraph[LOCAL]
+        data --> prepare
+        prepare[prepare.py] --> train
+		train[train.py] --> evaluate
+		evaluate[evaluate.py]
+        params[params.yaml] -.- prepare
+        params -.- train
 	end
-    style 356399 opacity:0.4,color:#7f7f7f80
-    style 672354 opacity:0.4,color:#7f7f7f80
-    style 347464 opacity:0.4,color:#7f7f7f80
-    style 964259 opacity:0.4,color:#7f7f7f80
-    style 238472 opacity:0.4,color:#7f7f7f80
+    style localGraph opacity:0.4,color:#7f7f7f80
+    style prepare opacity:0.4,color:#7f7f7f80
+    style train opacity:0.4,color:#7f7f7f80
+    style evaluate opacity:0.4,color:#7f7f7f80
+    style params opacity:0.4,color:#7f7f7f80
     linkStyle 2 opacity:0.4,color:#7f7f7f80
     linkStyle 3 opacity:0.4,color:#7f7f7f80
     linkStyle 4 opacity:0.4,color:#7f7f7f80
