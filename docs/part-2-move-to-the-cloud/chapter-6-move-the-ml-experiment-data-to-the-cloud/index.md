@@ -9,13 +9,8 @@ Similarly to other version control system, DVC allows for storing the dataset in
 a remote storage, typically a cloud storage provider, ensuring effective tracking
 of modifications and smooth maintenance workflow.
 
-This guide will demonstrate the use of a Google Storage Bucket for storing the
-dataset, but it's important to note that DVC is also compatible with various
-other cloud storage providers.
-
-!!! info
-
-    Want to self-host your storage? Check out the [Deploy MinIO](../../advanced-concepts/deploy-minio) guide!
+This guide will demonstrate the use of a remote Storage Bucket for storing the
+dataset.
 
 In this chapter, you will learn how to:
 
@@ -123,7 +118,6 @@ Install and configure the cloud provider CLI tool to manage the cloud resources.
 === ":simple-rancher: Self-hosted Rancher"
 
 	TODO
-
 
 ### Create the Storage Bucket on the cloud provider
 

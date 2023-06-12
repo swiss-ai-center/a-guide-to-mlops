@@ -101,7 +101,7 @@ TODO: Update the tree
 .
 ├── data # (1)!
 │   ├── README.md
-│   └── planet_habitability.csv
+│   └── data.csv
 ├── README.md
 ├── notebook.ipynb
 └── requirements.txt
@@ -156,7 +156,7 @@ The notebook lacks the following elements:
 - Difficult to reproduce
 - Cluttered with previous outputs
 
-Once done, you can close the notebook and shut down the Jupyter server by pressing `++Ctrl+C++` in the terminal.
+Once done, you can close the notebook and shut down the Jupyter server by pressing ++ctrl+c++ in the terminal.
 
 Exit the virtual environment with the following command.
 
