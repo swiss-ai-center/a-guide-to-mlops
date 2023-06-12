@@ -33,8 +33,8 @@ In this chapter, you will learn how to:
 
 ```mermaid
 flowchart
-	subgraph 356399["LOCAL"]
-		927342["data"] <--> 128749["notebook.ipynb"]
+	subgraph graph[LOCAL]
+		data[data.csv] <--> notebook[notebook.ipynb]
 	end
 ```
 
@@ -163,7 +163,7 @@ The notebook lacks the following elements:
 - Difficult to reproduce
 - Cluttered with previous outputs
 
-Once done, you can close the notebook and shut down the Jupyter server by pressing ++ctrl+c++ in the terminal.
+Once done, you can close the notebook and shut down the Jupyter server by pressing ++ctrl+c++ in the terminal and pressing ++y++.
 
 Exit the virtual environment with the following command.
 

@@ -78,15 +78,15 @@ In this chapter, you will learn how to:
 
 ```mermaid
 flowchart
-	subgraph 356399["LOCAL"]
-		927342["data"] --> 672354
-        672354["prepare.py"] --> 347464
-		347464["train.py"] --> 964259
-		964259["evaluate.py"]
-        238472["params.yaml"] -.- 672354
-        238472 -.- 347464
-	end
-    style 927342 opacity:0.4,color:#7f7f7f80
+    subgraph graph[LOCAL]
+        data[data.csv] --> prepare
+        prepare[prepare.py] --> train
+        train[train.py] --> evaluate
+        evaluate[evaluate.py]
+        params[params.yaml] -.- prepare
+        params -.- train
+    end
+    style data opacity:0.4,color:#7f7f7f80
 ```
 
 Let's get started!
