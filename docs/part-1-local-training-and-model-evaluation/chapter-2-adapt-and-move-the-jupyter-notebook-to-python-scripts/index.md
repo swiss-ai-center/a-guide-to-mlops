@@ -232,17 +232,12 @@ You will split the Jupyter Notebook in a codebase made of separate Python script
 well defined role. These scripts will be able to be called on the command line,
 making it ideal for automation tasks.
 
-In addition, you will use Poetry to provide a
-convenient and efficient approach to setting up Python environments, making the
-process easier, more standardized and reproducible across different machines.
-
 The following table describes the files that you will create in this codebase.
 
 | **File**                | **Description**                                   | **Input**                             | **Output**                                                    |
 | ----------------------- | ------------------------------------------------- | ------------------------------------- | ------------------------------------------------------------- |
-| `src/prepare.py`        | Prepare the dataset to run the ML experiment      | The dataset to prepare as an XML file | The prepared data in `data/prepared` directory                |
-| `src/featurize.py`      | Extract the features from the dataset             | The prepared dataset                  | The extracted features in `data/features` directory           |
-| `src/train.py`          | Train the ML model                                | The extracted features                | The model trained with the dataset                            |
+| `src/prepare.py`        | Prepare the dataset to run the ML experiment      | The dataset to prepare as an CSV file | The prepared data in `data/prepared` directory                |
+| `src/train.py`          | Train the ML model                                | The prepared dataset                  | The model trained with the dataset                            |
 | `src/evaluate.py`       | Evaluate the ML model using DVC                   | The model to evaluate                 | The results of the model evaluation in `evaluation` directory |
 | `params.yaml`           | The parameters to run the ML experiment           | -                                     | -                                                             |
 
@@ -301,12 +296,11 @@ TODO: Update the tree
 ```yaml hl_lines="2-10"
 .
 ├── data
-│   ├── data.xml
+│   ├── data.csv
 │   └── README.md
 ├── notebook.ipynb
 ├── src # (1)!
 │   ├── evaluate.py
-│   ├── featurization.py
 │   ├── prepare.py
 │   └── train.py
 ├── params.yaml # (2)!
@@ -341,11 +335,11 @@ You can now follow these steps to reproduce the experiment.
 # Prepare the dataset
 python src/prepare.py data/data.xml
 
-# Train the model with the extracted features and save it
-python src/train.py data/features model.pkl
+# Train the model with the train dataset and save it
+python src/train.py data/train.csv model.pkl
 
 # Evaluate the model performances - see below note
-python src/evaluate.py model.pkl data/features
+python src/evaluate.py model.pkl data/test.csv
 ```
 
 ### Check the results

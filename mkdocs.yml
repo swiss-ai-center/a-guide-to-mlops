@@ -52,6 +52,7 @@ nav:
 edit_uri: blob/main/docs/
 theme:
   language: en
+  favicon: assets/images/favicon.svg
   icon:
     logo: material/all-inclusive
     repo: fontawesome/brands/git-alt
