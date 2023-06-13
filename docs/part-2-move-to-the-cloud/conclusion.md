@@ -17,7 +17,7 @@ flowchart LR
         subgraph gitGraph[Git Remote]
             repository[Repository] --> action[Action]
             action -->|dvc pull| action_data[data.csv]
-            action_data -->|dvc repro| action_out[metrics &amp; plots]
+            action_data -->|dvc repro| action_out[metrics & plots]
             action_out -->|cml publish| pr[Pull Request]
             pr --> repository
         end
