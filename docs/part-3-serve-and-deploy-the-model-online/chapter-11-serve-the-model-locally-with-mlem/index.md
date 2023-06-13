@@ -262,3 +262,7 @@ You will address these issues in the next chapters for improved efficiency and
 collaboration. Continue the guide to learn how.
 
 ## Sources
+
+Highly inspired by:
+
+* [_Serving models_ - mlem.ai](https://mlem.ai/doc/user-guide/serving)

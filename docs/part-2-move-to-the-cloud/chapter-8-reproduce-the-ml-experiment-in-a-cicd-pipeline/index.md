@@ -330,9 +330,13 @@ Please refer to the correct instructions based on your Git repository provider.
 
 ### Check the results
 
-On GitHub, you can see the pipeline running on the **Actions** page.
+=== ":simple-github: GitHub"
 
-On GitLab, you can see the pipeline running on the **CI/CD > Pipelines** page.
+    You can see the pipeline running on the **Actions** page.
+
+=== ":simple-gitlab: GitLab"
+
+    You can see the pipeline running on the **CI/CD > Pipelines** page.
 
 You should see a newly created pipeline. The pipeline should log into Google
 Cloud, pull the data from DVC and reproduce the experiment. If you encounter
@@ -389,3 +393,12 @@ You will address these issues in the next chapters for improved efficiency and
 collaboration. Continue the guide to learn how.
 
 ## Sources
+
+Highly inspired by:
+
+* [_Creating and managing service accounts_ - cloud.google.com](https://cloud.google.com/iam/docs/creating-managing-service-accounts)
+* [_Create and manage service account keys_ - cloud.google.com](https://cloud.google.com/iam/docs/creating-managing-service-account-keys)
+* [_IAM basic and predefined roles reference_ - cloud.google.com](https://cloud.google.com/iam/docs/understanding-roles)
+* [_Using service accounts_ - dvc.org](https://dvc.org/doc/user-guide/setup-google-drive-remote#using-service-accounts)
+* [_Creating encrypted secrets for a repository_ - docs.github.com](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+* [_Add a CI/CD variable to a project_ - docs.gitlab.com](https://docs.gitlab.com/ee/ci/variables/#add-a-cicd-variable-to-a-project)

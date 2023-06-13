@@ -406,3 +406,10 @@ You will address these issues in the next chapters for improved efficiency and
 collaboration. Continue the guide to learn how.
 
 ## Sources
+
+Highly inspired by:
+
+* [_Supported storage types_ - dvc.org](https://dvc.org/doc/command-reference/remote/add#supported-storage-types)
+* [_Install the Google Cloud CLI_ - cloud.google.com](https://cloud.google.com/sdk/docs/install-sdk)
+* [_Create storage buckets_ - cloud.google.com](https://cloud.google.com/storage/docs/creating-buckets)
+* [_gcloud storage buckets create_ - cloud.google.com](https://cloud.google.com/sdk/gcloud/reference/storage/buckets/create)

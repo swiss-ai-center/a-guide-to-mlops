@@ -56,15 +56,7 @@
 
 ## Sources
 
-Highly inspired by the [_Get Started_ - dvc.org](https://dvc.org/doc/start),
-[_Supported storage types_ - dvc.org
-](https://dvc.org/doc/command-reference/remote/add#supported-storage-types)
-[_Get Started: Data Versioning_ -
-dvc.org](https://dvc.org/doc/start/data-management), [_Install the Google Cloud
-CLI_ - cloud.google.com](https://cloud.google.com/sdk/docs/install-sdk),
-[_Create storage buckets_ -
-cloud.google.com](https://cloud.google.com/storage/docs/creating-buckets) and [_gcloud storage buckets create_ - cloud.google.com](https://cloud.google.com/sdk/gcloud/reference/storage/buckets/create)
-guides.
+[moved]
 
 Want to see what the result at the end of this chapter should look like on your GitHub/GitLab Git repository? Have a
 look at the Git repository directory here:

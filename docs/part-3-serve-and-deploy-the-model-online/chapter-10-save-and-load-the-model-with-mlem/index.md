@@ -568,3 +568,11 @@ You will address these issues in the next chapters for improved efficiency and
 collaboration. Continue the guide to learn how.
 
 ## Sources
+
+Highly inspired by:
+
+* [_Get Started_ - mlem.ai](https://mlem.ai/doc/get-started)
+* [_Saving models_ - mlem.ai](https://mlem.ai/doc/get-started/saving)
+* [_Working with Data_ - mlem.ai](https://mlem.ai/doc/user-guide/data)
+* [_`mlem.api.save()`_ - mlem.ai](https://mlem.ai/doc/api-reference/save)
+* [_`mlem.api.load()`_ - mlem.ai](https://mlem.ai/doc/api-reference/load)

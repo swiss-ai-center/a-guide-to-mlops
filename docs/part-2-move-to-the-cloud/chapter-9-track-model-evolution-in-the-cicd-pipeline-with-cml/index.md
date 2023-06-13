@@ -997,3 +997,18 @@ You will address these issues in the next chapters for improved efficiency and
 collaboration. Continue the guide to learn how.
 
 ## Sources
+
+Highly inspired by the following guides:
+
+* [_Get Started with CML on GitHub_ - cml.dev](https://cml.dev/doc/start/github)
+* [_Creating an issue_ - docs.github.com](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue)
+* [_Creating a branch to work on an issue_ - docs.github.com](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-a-branch-for-an-issue)
+* [_Get Started with CML on GitLab_ - cml.dev](https://cml.dev/doc/start/gitlab)
+* [_Personal access tokens_ - docs.gitlab.com](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html)
+
+And the following Git repositories:
+
+* [`example_cml` - github.com](https://github.com/iterative/example_cml)
+* [`cml_dvc_case` - github.com](https://github.com/iterative/cml_dvc_case)
+* [`example_cml` - gitlab.com](https://gitlab.com/iterative.ai/example_cml)
+* [`cml-dvc-case` - gitlab.com](https://gitlab.com/iterative.ai/cml-dvc-case)

@@ -211,3 +211,8 @@ In the next chapters, you will enhance the workflow to fix those issues.
 - ❌ Model cannot be easily used from outside of the experiment context
 
 ## Sources
+
+Highly inspired by:
+
+* the [_CA04 - Habitability of Distant Planets_ -
+kaggle.com](https://www.kaggle.com/competitions/dat200-ca4-2021/) community prediction competition.

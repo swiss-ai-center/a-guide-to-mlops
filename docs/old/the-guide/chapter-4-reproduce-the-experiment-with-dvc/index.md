@@ -40,8 +40,7 @@
 
 ## Sources
 
-Highly inspired by the [_Get Started: Data Pipelines_ -
-dvc.org](https://dvc.org/doc/start/data-management/data-pipelines) guide.
+[moved]
 
 Want to see what the result at the end of this chapter should look like on your GitHub/GitLab Git repository? Have a
 look at the Git repository directory here:

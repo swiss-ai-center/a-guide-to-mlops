@@ -36,9 +36,7 @@
 
 ## Sources
 
-Highly inspired by the [_Get Started: Metrics, Parameters, and Plots_ -
-dvc.org](https://dvc.org/doc/start/data-management/metrics-parameters-plots)
-guide.
+[moved]
 
 Want to see what the result at the end of this chapter should look like on your GitHub/GitLab Git repository? Have a
 look at the Git repository directory here:

@@ -711,3 +711,8 @@ You will address these issues in the next chapters for improved efficiency and
 collaboration. Continue the guide to learn how.
 
 ## Sources
+
+Highly inspired by:
+
+* the [_Get Started: Data Pipelines_ -
+dvc.org](https://dvc.org/doc/start/data-management/data-pipelines) guide.

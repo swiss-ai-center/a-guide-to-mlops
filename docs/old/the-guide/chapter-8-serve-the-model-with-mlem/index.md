@@ -62,14 +62,7 @@
 
 ## Sources
 
-Highly inspired by the [_Get Started_ -
-mlem.ai](https://mlem.ai/doc/get-started), [_Saving models_ -
-mlem.ai](https://mlem.ai/doc/get-started/saving), [_Working with Data_ -
-mlem.ai](https://mlem.ai/doc/user-guide/data), [_Serving models_ -
-mlem.ai](https://mlem.ai/doc/user-guide/serving), [_Versioning MLEM objects with
-DVC_ - mlem.ai](https://mlem.ai/doc/use-cases/dvc), [_`mlem.api.save()`_ -
-mlem.ai](https://mlem.ai/doc/api-reference/save) and [_`mlem.api.load()`_ -
-mlem.ai](https://mlem.ai/doc/api-reference/load) guides.
+[moved]
 
 Want to see what the result at the end of this chapter should look like on your GitHub/GitLab Git repository? Have a
 look at the Git repository directory here:

@@ -155,3 +155,8 @@ You will address these issues in the next chapters for improved efficiency and
 collaboration. Continue the guide to learn how.
 
 ## Sources
+
+Highly inspired by:
+
+* [Managing remote repositories - github.com](https://docs.github.com/en/get-started/getting-started-with-git/managing-remote-repositories)
+* [git-remote - git-scm.com](https://git-scm.com/docs/git-remote)
