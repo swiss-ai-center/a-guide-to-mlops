@@ -1,3 +1,4 @@
+import json
 import pickle
 import sys
 from pathlib import Path
@@ -96,17 +97,20 @@ def main() -> None:
     plots_folder = Path("plots")
 
     # Create folders
-    evaluation_folder.mkdir(parents=True, exist_ok=True)
-    plots_folder.mkdir(parents=True, exist_ok=True)
+    (evaluation_folder / plots_folder).mkdir(parents=True, exist_ok=True)
 
     # Load files
-    df = pd.read_csv(prepared_dataset_folder / "dataset.csv")
-    labels = df.drop(["Habitability"], axis=1).columns
+    labels = None
+    with open(prepared_dataset_folder / "labels.json", "r") as f:
+        labels = json.load(f)
+        # Remove the "Habitability" label as this is what we are trying to predict
+        labels = list(filter(lambda x: x != "Habitability", labels))
 
     X_test = np.load(prepared_dataset_folder / "X_test.npy")
     y_test = np.load(prepared_dataset_folder / "y_test.npy")
 
     # Load model
+    model = None
     with open(model_path, "rb") as f:
         model = pickle.load(f)
 
