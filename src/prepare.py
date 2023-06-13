@@ -1,3 +1,4 @@
+import json
 import random
 import sys
 from pathlib import Path
@@ -25,11 +26,12 @@ def shuffle_data(df: pd.DataFrame, seed: Optional[int] = None) -> pd.DataFrame:
     return df.sample(frac=1, random_state=seed).reset_index(drop=True)
 
 
-def save_dataframe(df: pd.DataFrame, path: Path) -> None:
-    """Save the dataframe to the given path"""
+def save_labels(df: pd.DataFrame, path: Path) -> None:
+    """Save the dataframe columns to the given path"""
 
     path.parent.mkdir(parents=True, exist_ok=True)
-    df.to_csv(path, index=False)
+    with open(path, "w") as f:
+        f.write(json.dumps(df.columns.tolist()))
 
 
 def main() -> None:
@@ -69,7 +71,7 @@ def main() -> None:
     print(f"Test set size: {len(X_test)}")
 
     # Save the prepared dataset
-    save_dataframe(df, prepared_dataset_folder / "dataset.csv")
+    save_labels(df, prepared_dataset_folder / "labels.json")
     np.save(prepared_dataset_folder / "X_train.npy", X_train)
     np.save(prepared_dataset_folder / "X_test.npy", X_test)
     np.save(prepared_dataset_folder / "y_train.npy", y_train)
