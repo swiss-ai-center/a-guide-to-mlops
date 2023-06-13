@@ -1,79 +1,146 @@
 import json
-import math
-import os
 import pickle
 import sys
+from pathlib import Path
+from typing import List
 
+import numpy as np
 import pandas as pd
-from sklearn import metrics
-from sklearn import tree
-from dvclive import Live
+import seaborn as sns
 from matplotlib import pyplot as plt
+from sklearn import metrics
+from sklearn.ensemble import RandomForestClassifier
+
+# Matplotlib config
+sns.set_style("whitegrid")
 
 
-if len(sys.argv) != 3:
-    sys.stderr.write("Arguments error. Usage:\n")
-    sys.stderr.write("\tpython evaluate.py model features\n")
-    sys.exit(1)
+def get_model_metrics(y_test: np.ndarray, predictions: np.ndarray) -> dict[str, float]:
+    """Calculate the model metrics
 
-model_file = sys.argv[1]
-matrix_file = os.path.join(sys.argv[2], "test.pkl")
-
-with open(model_file, "rb") as fd:
-    model = pickle.load(fd)
-
-with open(matrix_file, "rb") as fd:
-    matrix, feature_names = pickle.load(fd)
-
-labels = matrix[:, 1].toarray().astype(int)
-x = matrix[:, 2:]
-
-predictions_by_class = model.predict_proba(x)
-predictions = predictions_by_class[:, 1]
-
-with Live("evaluation", report="html") as live:
-
-    # Use dvclive to log a few simple metrics...
-    avg_prec = metrics.average_precision_score(labels, predictions)
-    roc_auc = metrics.roc_auc_score(labels, predictions)
-    live.log_metric("avg_prec", avg_prec)
-    live.log_metric("roc_auc", roc_auc)
-
-    # ... and plots...
-    live.log_sklearn_plot("roc", labels, predictions)
-
-    # ... but actually it can be done with dumping data points into a file:
-    # ROC has a drop_intermediate arg that reduces the number of points.
-    # https://scikit-learn.org/stable/modules/generated/sklearn.metrics.roc_curve.html#sklearn.metrics.roc_curve.
-    # PRC lacks this arg, so we manually reduce to 1000 points as a rough estimate.
-    precision, recall, prc_thresholds = metrics.precision_recall_curve(labels,predictions)
-    nth_point = math.ceil(len(prc_thresholds) / 1000)
-    prc_points = list(zip(precision, recall, prc_thresholds))[::nth_point]
-    prc_file = os.path.join("evaluation", "plots", "prc.json")
-    with open(prc_file, "w") as fd:
-        json.dump(
-            {
-                "prc": [
-                    {"precision": p, "recall": r, "threshold": t}
-                    for p, r, t in prc_points
-                ]
-            },
-            fd,
-            indent=4,
-        )
+    accuracy: the fraction of predictions our model got right
+    precision: the fraction of true positives out of all positive predictions
+    avg_precision: the average precision across all possible thresholds
+    recall: the fraction of true positives out of all the actual positives
+    f1: the harmonic mean of precision and recall
+    auc: the area under the ROC curve
+    """
+    return {
+        "accuracy": metrics.accuracy_score(y_test, predictions),
+        "precision": metrics.precision_score(y_test, predictions),
+        "avg_precision": metrics.average_precision_score(y_test, predictions),
+        "recall": metrics.recall_score(y_test, predictions),
+        "f1": metrics.f1_score(y_test, predictions),
+        "auc": metrics.roc_auc_score(y_test, predictions),
+    }
 
 
-    # ... confusion matrix plot
-    live.log_sklearn_plot("confusion_matrix",
-                          labels.squeeze(),
-                          predictions_by_class.argmax(-1)
-                         )
-
-    # ... and finally, we can dump an image, it's also supported:
-    fig, axes = plt.subplots(dpi=100)
-    fig.subplots_adjust(bottom=0.2, top=0.95)
+def plot_feature_importances(
+    model: RandomForestClassifier, columns: List[str]
+) -> plt.Figure:
+    """Plot the feature importances of the model"""
+    # Calculate feature importances
     importances = model.feature_importances_
-    forest_importances = pd.Series(importances, index=feature_names).nlargest(n=30)
-    axes.set_ylabel("Mean decrease in impurity")
-    forest_importances.plot.bar(ax=axes)
-    fig.savefig(os.path.join("evaluation", "plots", "importance.png"))
+    indices = np.argsort(importances)[::-1]
+
+    # Rearrange feature names so they match the sorted feature importances
+    names = [columns[i] for i in indices]
+
+    # Plot feature importances
+    fig = plt.figure(tight_layout=True)
+    plt.bar(range(len(columns)), importances[indices])
+    plt.xticks(range(len(columns)), names, rotation=90)
+    plt.ylabel("Importance")
+    plt.title("Feature Importance")
+
+    return fig
+
+
+def plot_roc_curve(y_test: np.ndarray, predictions_proba: np.ndarray) -> plt.Figure:
+    """Plot the ROC curve"""
+    fpr, tpr, _ = metrics.roc_curve(y_test, predictions_proba)
+
+    fig = plt.figure(tight_layout=True)
+    plt.plot(fpr, tpr, color="darkorange", lw=2, label="ROC curve")
+    plt.plot([0, 1], [0, 1], color="navy", lw=2, linestyle="--")
+    plt.xlabel("False Positive Rate")
+    plt.ylabel("True Positive Rate")
+    plt.title("ROC curve")
+    plt.legend(loc="lower right")
+
+    return fig
+
+
+def plot_confusion_matrix(y_test: np.ndarray, predictions: np.ndarray) -> plt.Figure:
+    """Plot the confusion matrix"""
+    matrix = metrics.confusion_matrix(y_test, predictions)
+    matrix = matrix.astype("float") / matrix.sum(axis=1)[:, np.newaxis]
+
+    fig = plt.figure(figsize=(6, 5), tight_layout=True)
+    sns.heatmap(matrix, annot=True, annot_kws={"size": 14}, cmap="coolwarm")
+    plt.xlabel("Predicted label")
+    plt.ylabel("True label")
+    plt.title("Confusion Matrix")
+
+    return fig
+
+
+def main() -> None:
+    if len(sys.argv) != 3:
+        print("Arguments error. Usage:\n")
+        print("\tpython evaluate.py model-path prepared-dataset-folder\n")
+        exit(1)
+
+    model_path = Path(sys.argv[1])
+    prepared_dataset_folder = Path(sys.argv[2])
+    evaluation_folder = Path("evaluation")
+    plots_folder = Path("plots")
+
+    # Create folders
+    evaluation_folder.mkdir(parents=True, exist_ok=True)
+    plots_folder.mkdir(parents=True, exist_ok=True)
+
+    # Load files
+    df = pd.read_csv(prepared_dataset_folder / "dataset.csv")
+    labels = df.drop(["Habitability"], axis=1).columns
+
+    X_test = np.load(prepared_dataset_folder / "X_test.npy")
+    y_test = np.load(prepared_dataset_folder / "y_test.npy")
+
+    # Load model
+    with open(model_path, "rb") as f:
+        model = pickle.load(f)
+
+    # Predict on test set
+    y_pred = model.predict(X_test)
+    preds_by_class = model.predict_proba(X_test)
+    preds = preds_by_class[:, 1]
+
+    # Log metrics
+    model_metrics = get_model_metrics(y_test, y_pred)
+    for metric, value in model_metrics.items():
+        print(f"{metric}: {value}")
+
+    # Plot feature importances
+    fig = plot_feature_importances(model, labels)
+    fig.savefig(evaluation_folder / plots_folder / "feature_importance.png")
+
+    # Plot ROC curve with thresholds
+    fig = plot_roc_curve(y_test, preds)
+    fig.savefig(evaluation_folder / plots_folder / "roc_curve.png")
+
+    # Calculate classification report
+    cr = metrics.classification_report(y_test, y_pred, output_dict=True)
+    print(json.dumps(cr, indent=4) + "\n")
+    cr_df = pd.DataFrame(cr).transpose()
+    cr_df.to_csv(evaluation_folder / "classification_report.csv")
+
+    # Plot confusion matrix
+    fig = plot_confusion_matrix(y_test, y_pred)
+    fig.savefig(evaluation_folder / plots_folder / "confusion_matrix.png")
+
+    print(f"Evaluation metrics and plot files saved at {evaluation_folder.absolute()}")
+
+
+if __name__ == "__main__":
+    main()

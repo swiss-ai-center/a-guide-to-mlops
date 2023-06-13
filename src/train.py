@@ -1,39 +1,54 @@
-import os
 import pickle
+import random
 import sys
+from pathlib import Path
 
 import numpy as np
 import yaml
 from sklearn.ensemble import RandomForestClassifier
 
-params = yaml.safe_load(open("params.yaml"))["train"]
 
-if len(sys.argv) != 3:
-    sys.stderr.write("Arguments error. Usage:\n")
-    sys.stderr.write("\tpython train.py features model\n")
-    sys.exit(1)
+def main() -> None:
+    if len(sys.argv) != 3:
+        print("Arguments error. Usage:\n")
+        print("\tpython train.py prepared-dataset-folder model-path\n")
+        exit(1)
 
-input = sys.argv[1]
-output = sys.argv[2]
-seed = params["seed"]
-n_est = params["n_est"]
-min_split = params["min_split"]
+    # Load parameters
+    params = yaml.safe_load(open("params.yaml"))["train"]
 
-with open(os.path.join(input, "train.pkl"), "rb") as fd:
-    matrix, _ = pickle.load(fd)
+    prepared_dataset_folder = Path(sys.argv[1])
+    model_path = Path(sys.argv[2])
+    seed = params["seed"]
+    n_est = params["n_est"]
+    max_depth = params["max_depth"]
+    min_split = params["min_split"]
 
-labels = np.squeeze(matrix[:, 1].toarray())
-x = matrix[:, 2:]
+    # Set seed for reproducibility
+    random.seed(seed)
+    np.random.seed(seed)
 
-sys.stderr.write("Input matrix size {}\n".format(matrix.shape))
-sys.stderr.write("X matrix size {}\n".format(x.shape))
-sys.stderr.write("Y matrix size {}\n".format(labels.shape))
+    # Load data
+    X_train = np.load(prepared_dataset_folder / "X_train.npy")
+    y_train = np.load(prepared_dataset_folder / "y_train.npy")
 
-clf = RandomForestClassifier(
-    n_estimators=n_est, min_samples_split=min_split, n_jobs=2, random_state=seed
-)
+    # Train the model
+    print("Training model...")
+    clf = RandomForestClassifier(
+        n_estimators=n_est,
+        max_depth=max_depth,
+        min_samples_split=min_split,
+        random_state=seed,
+    )
+    clf.fit(X_train, y_train)
 
-clf.fit(x, labels)
+    # Save the model
+    model_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(model_path, "wb") as f:
+        pickle.dump(clf, f)
 
-with open(output, "wb") as fd:
-    pickle.dump(clf, fd)
+    print(f"Model saved at {model_path.absolute()}")
+
+
+if __name__ == "__main__":
+    main()

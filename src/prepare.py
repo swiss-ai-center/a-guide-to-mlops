@@ -1,51 +1,82 @@
-import io
-import os
 import random
-import re
 import sys
-import xml.etree.ElementTree
+from pathlib import Path
+from typing import Optional, Set
 
+import numpy as np
+import pandas as pd
 import yaml
-
-params = yaml.safe_load(open("params.yaml"))["prepare"]
-
-if len(sys.argv) != 2:
-    sys.stderr.write("Arguments error. Usage:\n")
-    sys.stderr.write("\tpython prepare.py data-file\n")
-    sys.exit(1)
-
-# Test data set split ratio
-split = params["split"]
-random.seed(params["seed"])
-
-input = sys.argv[1]
-output_train = os.path.join("data", "prepared", "train.tsv")
-output_test = os.path.join("data", "prepared", "test.tsv")
+from sklearn.model_selection import train_test_split
 
 
-def process_posts(fd_in, fd_out_train, fd_out_test, target_tag):
-    num = 1
-    for line in fd_in:
-        try:
-            fd_out = fd_out_train if random.random() > split else fd_out_test
-            attr = xml.etree.ElementTree.fromstring(line).attrib
+def normalize_data(df: pd.DataFrame, columns: Set[str]) -> pd.DataFrame:
+    """Normalize the data in the given columns to the range [0, 1]"""
 
-            pid = attr.get("Id", "")
-            label = 1 if target_tag in attr.get("Tags", "") else 0
-            title = re.sub(r"\s+", " ", attr.get("Title", "")).strip()
-            body = re.sub(r"\s+", " ", attr.get("Body", "")).strip()
-            text = title + " " + body
-
-            fd_out.write("{}\t{}\t{}\n".format(pid, label, text))
-
-            num += 1
-        except Exception as ex:
-            sys.stderr.write(f"Skipping the broken line {num}: {ex}\n")
+    normalized_df = df.copy()
+    for feature in columns:
+        normalized_df[feature] = (df[feature] - df[feature].min()) / (
+            df[feature].max() - df[feature].min()
+        )
+    return normalized_df
 
 
-os.makedirs(os.path.join("data", "prepared"), exist_ok=True)
+def shuffle_data(df: pd.DataFrame, seed: Optional[int] = None) -> pd.DataFrame:
+    """Shuffle the data"""
+    return df.sample(frac=1, random_state=seed).reset_index(drop=True)
 
-with io.open(input, encoding="utf8") as fd_in:
-    with io.open(output_train, "w", encoding="utf8") as fd_out_train:
-        with io.open(output_test, "w", encoding="utf8") as fd_out_test:
-            process_posts(fd_in, fd_out_train, fd_out_test, "<r>")
+
+def save_dataframe(df: pd.DataFrame, path: Path) -> None:
+    """Save the dataframe to the given path"""
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(path, index=False)
+
+
+def main() -> None:
+    if len(sys.argv) != 3:
+        print("Arguments error. Usage:\n")
+        print("\tpython prepare.py dataset-path prepared-dataset-folder\n")
+        exit(1)
+
+    # Load parameters
+    params = yaml.safe_load(open("params.yaml"))["prepare"]
+
+    input_dataset_path = Path(sys.argv[1])
+    prepared_dataset_folder = Path(sys.argv[2])
+    seed = params["seed"]
+    split = params["split"]
+
+    # Set seed for reproducibility
+    random.seed(seed)
+    np.random.seed(seed)
+
+    # Read data
+    print("Preparing dataset...")
+    df = pd.read_csv(input_dataset_path)
+    df = normalize_data(df, columns=set(df.columns) - set(["Habitability"]))
+    df = shuffle_data(df, seed=seed)
+
+    # Split the dataset into features and labels
+    X = df.drop(["Habitability"], axis=1).values
+    y = df["Habitability"].values
+
+    # Split the dataset into training and test sets
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=split, random_state=seed
+    )
+
+    print(f"Train set size: {len(X_train)}")
+    print(f"Test set size: {len(X_test)}")
+
+    # Save the prepared dataset
+    save_dataframe(df, prepared_dataset_folder / "dataset.csv")
+    np.save(prepared_dataset_folder / "X_train.npy", X_train)
+    np.save(prepared_dataset_folder / "X_test.npy", X_test)
+    np.save(prepared_dataset_folder / "y_train.npy", y_train)
+    np.save(prepared_dataset_folder / "y_test.npy", y_test)
+
+    print(f"Dataset saved at {prepared_dataset_folder.absolute()}")
+
+
+if __name__ == "__main__":
+    main()
