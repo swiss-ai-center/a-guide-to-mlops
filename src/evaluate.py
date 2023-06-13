@@ -1,4 +1,3 @@
-import json
 import pickle
 import sys
 from pathlib import Path
@@ -131,7 +130,6 @@ def main() -> None:
 
     # Calculate classification report
     cr = metrics.classification_report(y_test, y_pred, output_dict=True)
-    print(json.dumps(cr, indent=4) + "\n")
     cr_df = pd.DataFrame(cr).transpose()
     cr_df.to_csv(evaluation_folder / "classification_report.csv")
 
