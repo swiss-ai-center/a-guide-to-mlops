@@ -88,7 +88,7 @@ def plot_confusion_matrix(y_test: np.ndarray, predictions: np.ndarray) -> plt.Fi
 def main() -> None:
     if len(sys.argv) != 3:
         print("Arguments error. Usage:\n")
-        print("\tpython evaluate.py model-path prepared-dataset-folder\n")
+        print("\tpython3 evaluate.py <model-path> <prepared-dataset-folder>\n")
         exit(1)
 
     model_path = Path(sys.argv[1])

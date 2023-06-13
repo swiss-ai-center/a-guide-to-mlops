@@ -11,7 +11,7 @@ from sklearn.ensemble import RandomForestClassifier
 def main() -> None:
     if len(sys.argv) != 3:
         print("Arguments error. Usage:\n")
-        print("\tpython train.py prepared-dataset-folder model-path\n")
+        print("\tpython3 train.py <prepared-dataset-folder> <model-path>\n")
         exit(1)
 
     # Load parameters

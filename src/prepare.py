@@ -35,7 +35,7 @@ def save_dataframe(df: pd.DataFrame, path: Path) -> None:
 def main() -> None:
     if len(sys.argv) != 3:
         print("Arguments error. Usage:\n")
-        print("\tpython prepare.py dataset-path prepared-dataset-folder\n")
+        print("\tpython3 prepare.py <dataset-path> <prepared-dataset-folder>\n")
         exit(1)
 
     # Load parameters
