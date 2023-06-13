@@ -96,7 +96,9 @@ Let's get started!
 
 ## Steps
 
-### Move from pip to Poetry
+### Set up a new project directory
+
+For the rest of the guide, you will work in a new directory. This will allow you to use the Jupyter Notebook directory as a reference.
 
 Start by ensuring you have left the virtual environment created in the previous chapter.
 
@@ -105,15 +107,22 @@ Start by ensuring you have left the virtual environment created in the previous 
 deactivate
 ```
 
-Remove the virtual environment and the `requirements.txt` file.
+Next, exit from the current directory and create a new one.
 
 ```sh title="Execute the following command(s) in a terminal"
-# Remove the virtual environment
-rm -r .venv
-
-# Remove the requirements.txt file
-rm requirements.txt
+cd .. && mkdir a-guide-to-mlops && cd a-guide-to-mlops
 ```
+
+### Set up the dataset
+
+You will use the same dataset as in the previous chapter. Copy the `data` folder from the previous chapter to your new directory.
+
+```sh title="Execute the following command(s) in a terminal"
+# Copy the data folder from the previous chapter
+cp -r ../a-guide-to-mlops-jupyter-notebook/data .
+```
+
+### Move from pip to Poetry
 
 Initialize Poetry at the root of the directory.
 
@@ -576,7 +585,7 @@ Your working directory should now look like this:
 
 TODO: Decide if we want to keep the notebook or not and the README from the notebook.
 
-```yaml hl_lines="5-8 11-13"
+```yaml hl_lines="5-8 9-11"
 .
 ├── data
 │   ├── data.csv
@@ -585,8 +594,6 @@ TODO: Decide if we want to keep the notebook or not and the README from the note
 │   ├── evaluate.py
 │   ├── prepare.py
 │   └── train.py
-├── README.md
-├── notebook.ipynb
 ├── params.yaml # (2)!
 ├── poetry.lock # (3)!
 └── pyproject.toml # (4)!
@@ -622,7 +629,7 @@ Your working directory should now be similar to this:
 
 TODO: Update the tree
 
-```yaml hl_lines="3-8 11-16 22"
+```yaml hl_lines="3-8 11-16 21"
 .
 ├── data
 │   ├── prepared # (1)!
@@ -643,9 +650,7 @@ TODO: Update the tree
 │   ├── evaluate.py
 │   ├── prepare.py
 │   └── train.py
-├── README.md
 ├── model.pkl # (4)!
-├── notebook.ipynb
 ├── params.yaml
 ├── poetry.lock
 └── pyproject.toml

@@ -25,8 +25,14 @@ saves:
   part-1-local-training-and-model-evaluation/chapter-2-adapt-and-move-the-jupyter-notebook-to-python-scripts:
     save_git: false
     actions:
-      - run: rm -r .venv
-      - run: rm requirements.txt
+      # Clean the directory including hidden files
+      - run: rm -rf .[!.]* *
+      # Download and set up the dataset
+      - run: wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/59-data.zip -O data.zip
+      - run: unzip data.zip
+      - run: mv a-guide-to-mlops-59-data/ data/
+      - run: rm data.zip
+      # Initialize poetry
       - run: poetry init --no-interaction
       - run: poetry add "jupyterlab==^4.0.2" "pandas==^2.0.2" "matplotlib==^3.7.1" "scikit-learn==^1.2.2" "seaborn==^0.12.2"
       # Add new files

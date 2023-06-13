@@ -47,7 +47,11 @@ Let's get started!
 
 As a new team member, set up a project directory on your computer for this ground
 breaking ML experiment. This directory will serve as your working directory for
-the duration of the guide.
+this first chapter.
+
+```sh title="Execute the following command(s) in a terminal"
+mkdir a-guide-to-mlops-jupyter-notebook && cd a-guide-to-mlops-jupyter-notebook
+```
 
 ### Download the notebook
 
