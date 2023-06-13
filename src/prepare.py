@@ -12,7 +12,6 @@ from sklearn.model_selection import train_test_split
 
 def normalize_data(df: pd.DataFrame, columns: Set[str]) -> pd.DataFrame:
     """Normalize the data in the given columns to the range [0, 1]"""
-
     normalized_df = df.copy()
     for feature in columns:
         normalized_df[feature] = (df[feature] - df[feature].min()) / (
@@ -28,7 +27,6 @@ def shuffle_data(df: pd.DataFrame, seed: Optional[int] = None) -> pd.DataFrame:
 
 def save_labels(df: pd.DataFrame, path: Path) -> None:
     """Save the dataframe columns to the given path"""
-
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w") as f:
         f.write(json.dumps(df.columns.tolist()))
@@ -72,6 +70,7 @@ def main() -> None:
 
     # Save the prepared dataset
     save_labels(df, prepared_dataset_folder / "labels.json")
+    # Using np.save to save the numpy arrays as .npy files
     np.save(prepared_dataset_folder / "X_train.npy", X_train)
     np.save(prepared_dataset_folder / "X_test.npy", X_test)
     np.save(prepared_dataset_folder / "y_train.npy", y_train)
