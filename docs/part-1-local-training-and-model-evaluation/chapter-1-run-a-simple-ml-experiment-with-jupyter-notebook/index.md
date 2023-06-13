@@ -31,6 +31,9 @@ In this chapter, you will learn how to:
 4. Create a Python environment to run the experiment
 5. Launch the experiment locally for the first time
 
+The following diagram illustrates control flow of the experiment at the end of
+this chapter:
+
 ```mermaid
 flowchart
 	subgraph localGraph[LOCAL]

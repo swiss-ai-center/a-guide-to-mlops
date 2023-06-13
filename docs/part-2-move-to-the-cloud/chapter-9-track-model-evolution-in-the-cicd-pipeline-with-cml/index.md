@@ -22,6 +22,9 @@ In this chapter, you will learn how to:
 10. Merge the pull request/merge request to the main branch
 11. Switch back to the main branch and pull latest changes
 
+The following diagram illustrates control flow of the experiment at the end of
+this chapter:
+
 ```mermaid
 flowchart LR
 	dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]

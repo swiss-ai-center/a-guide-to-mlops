@@ -9,6 +9,9 @@ By linking your local project to a remote repository on platforms like GitHub
 or GitLab, you can seamlessly push, pull, and synchronize changes, facilitating
 collaboration and ensuring smooth workflow.
 
+The following diagram illustrates control flow of the experiment at the end of
+this chapter:
+
 ```mermaid
 flowchart LR
 	dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]

@@ -21,6 +21,9 @@ from the CI/CD pipeline
 4. Push the CI/CD pipeline configuration file to Git
 5. Visualize the execution of the CI/CD pipeline
 
+The following diagram illustrates control flow of the experiment at the end of
+this chapter:
+
 ```mermaid
 flowchart LR
 	dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]

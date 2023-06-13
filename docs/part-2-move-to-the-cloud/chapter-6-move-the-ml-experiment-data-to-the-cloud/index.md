@@ -21,6 +21,9 @@ In this chapter, you will learn how to:
 5. Push the data files to DVC
 6. Push the metadata files to Git
 
+The following diagram illustrates control flow of the experiment at the end of
+this chapter:
+
 ```mermaid
 flowchart LR
 	dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]

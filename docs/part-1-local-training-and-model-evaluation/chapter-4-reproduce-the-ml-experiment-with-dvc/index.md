@@ -24,6 +24,9 @@ In this chapter, you will learn how to:
 2. Execute the pipeline
 3. Push the changes to DVC and Git
 
+The following diagram illustrates control flow of the experiment at the end of
+this chapter:
+
 ```mermaid
 flowchart LR
 	dot_dvc[(.dvc)]

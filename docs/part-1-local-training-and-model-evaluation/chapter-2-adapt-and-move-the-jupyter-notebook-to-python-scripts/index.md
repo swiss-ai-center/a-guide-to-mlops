@@ -76,6 +76,9 @@ In this chapter, you will learn how to:
 2. Adapt the content of the Jupyter Notebook into Python scripts
 3. Launch the experiment locally
 
+The following diagram illustrates control flow of the experiment at the end of
+this chapter:
+
 ```mermaid
 flowchart
     subgraph localGraph[LOCAL]
