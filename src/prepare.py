@@ -77,7 +77,7 @@ def main() -> None:
     np.save(prepared_dataset_folder / "y_train.npy", y_train)
     np.save(prepared_dataset_folder / "y_test.npy", y_test)
 
-    print(f"Dataset saved at {prepared_dataset_folder.absolute()}")
+    print(f"\nDataset saved at {prepared_dataset_folder.absolute()}")
 
 
 if __name__ == "__main__":

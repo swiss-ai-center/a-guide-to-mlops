@@ -121,8 +121,9 @@ def main() -> None:
 
     # Log metrics
     model_metrics = get_model_metrics(y_test, y_pred)
+    print("Model metrics:")
     for metric, value in model_metrics.items():
-        print(f"{metric}: {value}")
+        print(f"  {metric}: {value}")
 
     # Plot feature importances
     fig = plot_feature_importances(model, labels)
@@ -141,7 +142,9 @@ def main() -> None:
     fig = plot_confusion_matrix(y_test, y_pred)
     fig.savefig(evaluation_folder / plots_folder / "confusion_matrix.png")
 
-    print(f"Evaluation metrics and plot files saved at {evaluation_folder.absolute()}")
+    print(
+        f"\nEvaluation metrics and plot files saved at {evaluation_folder.absolute()}"
+    )
 
 
 if __name__ == "__main__":

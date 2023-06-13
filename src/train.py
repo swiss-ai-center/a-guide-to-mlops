@@ -47,7 +47,7 @@ def main() -> None:
     with open(model_path, "wb") as f:
         pickle.dump(clf, f)
 
-    print(f"Model saved at {model_path.absolute()}")
+    print(f"\nModel saved at {model_path.absolute()}")
 
 
 if __name__ == "__main__":
