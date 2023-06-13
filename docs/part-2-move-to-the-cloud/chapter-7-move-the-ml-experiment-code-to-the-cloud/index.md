@@ -32,7 +32,7 @@ flowchart LR
 		train[train.py] <-.-> dot_dvc
 		evaluate[evaluate.py] <-.-> dot_dvc
 		data --> prepare
-		subgraph dvcGraph[dvc.yaml]
+		subgraph dvcGraph["dvc.yaml (dvc repro)"]
 			prepare --> train
 			train --> evaluate
 		end
