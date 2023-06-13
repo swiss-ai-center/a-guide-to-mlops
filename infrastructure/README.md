@@ -1,8 +1,8 @@
-# AII4.0 infrastructure
+# Infrastructure
 
 ## Introduction
 
-This is the infrastructure used for the AII4.0 project. At the moment, the virtual machine (VM) is hosted by the HEIG-VD.
+This is the infrastructure used for the A guide to MLOps project. The instructions are meant to be used on a publicely available virtual machine. At the moment, the virtual machine (VM) is hosted by the HEIG-VD.
 
 ## Setup
 
@@ -64,14 +64,14 @@ sudo apt install git
 ### Create a new user
 
 ```sh
-# Create a new user `aii`
-sudo useradd -m aii
+# Create a new user `a-guide-to-mlops`
+sudo useradd -m a-guide-to-mlops
 
-# Setup the user's `aii` password
-sudo passwd aii
+# Setup the user's `a-guide-to-mlops` password
+sudo passwd a-guide-to-mlops
 
-# Add the `aii` user to the `docker` and `ssh` groups
-sudo usermod -a -G docker,ssh aii
+# Add the `a-guide-to-mlops` user to the `docker` and `ssh` groups
+sudo usermod -a -G docker,ssh a-guide-to-mlops
 
 # Reboot to apply all updates
 sudo reboot now
@@ -81,24 +81,24 @@ sudo reboot now
 
 ```sh
 # Clone the infrastructure repository
-git clone https://git-ext.iict.ch/aii4.0/infrastructure.git aii-infrastructure
+git clone https://github.com/csia-pme/a-guide-to-mlops.git
 ```
 
 ## Configure and start the applications
 
-Each application has its own directory with its configuration.
+Each application has its own directory with its configuration. A detailed documentation is available in each directory.
 
-You might want to edit the `.env` and `*.env` files to change the FQDNs and the application's configuration based on your need.
+You might want to edit the `.env` and `*.env` files to change the FQDNs and the application's configuration based on your needs.
 
 Each application has its Docker Compose configuration, allowing to manage the application individually.
 
 ```sh
 # Start Traefik
-docker compose --project-directory ./aii-infrastructure/traefik up --detach
+docker compose --project-directory ./a-guide-to-mlops/infrastructure/traefik up --detach
 
 # Start MinIO
-docker compose --project-directory ./aii-infrastructure/minio up --detach
+docker compose --project-directory ./a-guide-to-mlops/infrastructure/minio up --detach
 
 # Start Label Studio
-docker compose --project-directory ./aii-infrastructure/label-studio up --detach
+docker compose --project-directory ./a-guide-to-mlops/infrastructure/label-studio up --detach
 ```
