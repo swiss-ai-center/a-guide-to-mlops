@@ -3,21 +3,19 @@
 ## Introduction
 
 You have just joined a new ML team whose goal is to build a model that can
-classify text into two categories: "related to R programming language" and "not
-related to R programming language".
+classify a planet as **habitable or non-habitable** based on its features.
 
 The data scientists of your team have been working with a Jupyter Notebook that
-they promptly share with you. Their dataset consists of 10,000 posts from
-StackOverflow.
+they promptly share with you. Their dataset consists of 20,000 planets, each
+with 8 features including the habitability label.
 
 The training process is as follows:
 
-- Mark the R-related posts posts as `1` and the others as `0`
+- Preprocess the dataset
 - Split the posts into training/testing datasets
-- Create bag-of-words matrices from the post titles and descriptions
-- Train a model to classify R vs. non-R posts using the training dataset
-- Evaluate the model's performance using a precision-recall (PR) curve and a
-receiver operating characteristic (ROC) curve
+- Train a model to classify the habitability of a given planet using the training dataset
+- Evaluate the model's performance using metrics, a receiver operating characteristic (ROC) curve
+and a confusion matrix.
 
 Your goal is to streamline the team's workflow by setting up MLOps tools,
 documenting the process, tracking changes, and making the model accessible to
