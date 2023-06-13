@@ -187,7 +187,7 @@ git commit -m "My first ML experiment shared on Git"
 Install the main `dvc` package.
 
 ```sh title="Execute the following command(s) in a terminal"
-poetry add "dvc==2.37.0"
+poetry add "dvc==2.58.2"
 ```
 
 Check the differences with Git to validate the changes.
@@ -235,13 +235,13 @@ Try to add the experiment data. Spoiler: it will fail.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Try to add the experiment data to DVC
-dvc add data/data.xml
+dvc add data/data.csv
 ```
 
 When executing this command, the following output occurs.
 
 ```sh
-ERROR: bad DVC file name 'data/data.xml.dvc' is git-ignored.
+ERROR: bad DVC file name 'data/data.csv.dvc' is git-ignored.
 ```
 
 You will have to update the `.gitignore` file so that DVC can create files in
@@ -253,7 +253,6 @@ Update the `.gitignore` file by changing `data` to `data/features` and
 
 ```sh title=".gitignore" hl_lines="2-3"
 # Data used to train the models
-data/features
 data/prepared
 
 # Artifacts
@@ -300,7 +299,7 @@ You can now add the experiment data to DVC without complain!
 
 ```sh title="Execute the following command(s) in a terminal"
 # Add the experiment data to DVC
-dvc add data/data.xml
+dvc add data/data.csv
 ```
 
 The output should be similar to this. You can safely ignore the warning.
@@ -308,17 +307,17 @@ The output should be similar to this. You can safely ignore the warning.
 ```
 To track the changes with git, run:
 
-git add data/data.xml.dvc data/.gitignore
+git add data/data.csv.dvc data/.gitignore
 
 To enable auto staging, run:
 
 dvc config core.autostage true
 ```
 
-The effect of the `dvc add` command is to create a `data/data.xml.dvc` file and
+The effect of the `dvc add` command is to create a `data/data.csv.dvc` file and
 a `data/.gitignore`. The `.dvc` file contains the metadata of the file that is
 used by DVC to download and check the integrity of the files. The `.gitignore`
-file is created to add the `data.xml` file to be ignored by Git. The `.dvc`
+file is created to add the `data.csv` file to be ignored by Git. The `.dvc`
 files must be added to Git.
 
 Various DVC commands will automatically try to update the `.gitignore` files. If a
@@ -350,7 +349,7 @@ Changes to be committed:
     modified:   .gitignore
     new file:   data/.gitignore
     new file:   data/README.md
-    new file:   data/data.xml.dvc
+    new file:   data/data.csv.dvc
     modified:   poetry.lock
     modified:   pyproject.toml
 ```

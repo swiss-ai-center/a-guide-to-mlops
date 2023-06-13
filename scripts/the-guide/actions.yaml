@@ -58,21 +58,38 @@ saves:
       # Log the codebase tree
       - run: tree --dirsfirst
         log: true
-  # chapter-2-share-your-ml-experiment-code-with-git::
-  #   save_git: true
-  #   actions:
-  #     # Create a new Git repository
-  #     - run: git init --initial-branch=main
-  #     - run: git status
-  #       log: true
-  #     - replace_from_md:
-  #       file: .gitignore
-  #       occurance_index: 0
-  #     - run: git add .
-  #     - run: git status
-  #       log: true
-  #     - run: git commit -m "My first ML experiment shared on Git"
-  
+
+  part-1-local-training-and-model-evaluation/chapter-3-initialize-git-and-dvc-for-local-training:
+    save_git: true
+    actions:
+      # Create a new Git repository
+      - run: git init --initial-branch=main
+      - run: git status
+        log: true
+      - replace_from_md:
+        file: .gitignore
+        occurance_index: 0
+      - run: git add .
+      - run: git status
+        log: true
+      - run: git commit -m "My first ML experiment shared on Git"
+      # Create a DVC repository
+      - run: poetry add "dvc==2.58.2"
+      - run: git diff pyproject.toml
+        log: true
+      - run: poetry run dvc init
+      - replace_from_md:
+        file: .gitignore
+        occurance_index: 1
+      - run: git diff .gitignore
+        log: true
+      - run: poetry run dvc add data/data.csv
+        log: true
+      - run: git add .
+      - run: git status
+        log: true
+      - run: git commit -m "My ML experiment data is saved with DVC"
+
   # chapter-3-share-your-ml-experiment-data-with-dvc:
   #   save_git: true
   #   actions:
