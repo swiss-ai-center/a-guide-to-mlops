@@ -5,5 +5,5 @@ prepare:
 train:
   seed: 20170428
   n_est: 100
-  max_depth: 10
+  max_depth: 2
   min_split: 2
