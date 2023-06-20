@@ -1,35 +1,26 @@
 import json
-import random
 import sys
 from pathlib import Path
-from typing import Optional, Set
+from typing import List
 
-import numpy as np
-import pandas as pd
+import matplotlib.pyplot as plt
+import tensorflow as tf
 import yaml
-from sklearn.model_selection import train_test_split
+
+from src.utils.seed import set_seed
 
 
-def normalize_data(df: pd.DataFrame, columns: Set[str]) -> pd.DataFrame:
-    """Normalize the data in the given columns to the range [0, 1]"""
-    normalized_df = df.copy()
-    for feature in columns:
-        normalized_df[feature] = (df[feature] - df[feature].min()) / (
-            df[feature].max() - df[feature].min()
-        )
-    return normalized_df
+def get_preview_plot(ds: tf.data.Dataset, labels: List[str]) -> plt.Figure:
+    """Plot a preview of the prepared dataset"""
+    fig = plt.figure(figsize=(10, 5), tight_layout=True)
+    for images, label_idxs in ds.take(1):
+        for i in range(10):
+            plt.subplot(2, 5, i + 1)
+            plt.imshow(images[i].numpy().astype("uint8"), cmap="gray")
+            plt.title(labels[label_idxs[i].numpy()])
+            plt.axis("off")
 
-
-def shuffle_data(df: pd.DataFrame, seed: Optional[int] = None) -> pd.DataFrame:
-    """Shuffle the data"""
-    return df.sample(frac=1, random_state=seed).reset_index(drop=True)
-
-
-def save_labels(df: pd.DataFrame, path: Path) -> None:
-    """Save the dataframe columns to the given path"""
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with open(path, "w") as f:
-        f.write(json.dumps(df.columns.tolist()))
+    return fig
 
 
 def main() -> None:
@@ -39,42 +30,45 @@ def main() -> None:
         exit(1)
 
     # Load parameters
-    params = yaml.safe_load(open("params.yaml"))["prepare"]
+    prepare_params = yaml.safe_load(open("params.yaml"))["prepare"]
 
     input_dataset_path = Path(sys.argv[1])
     prepared_dataset_folder = Path(sys.argv[2])
-    seed = params["seed"]
-    split = params["split"]
+    seed = prepare_params["seed"]
+    split = prepare_params["split"]
+    image_size = prepare_params["image_size"]
+    grayscale = prepare_params["grayscale"]
 
     # Set seed for reproducibility
-    random.seed(seed)
-    np.random.seed(seed)
+    set_seed(seed)
 
     # Read data
-    print("Preparing dataset...")
-    df = pd.read_csv(input_dataset_path)
-    df = normalize_data(df, columns=set(df.columns) - set(["Habitability"]))
-    df = shuffle_data(df, seed=seed)
-
-    # Split the dataset into features and labels
-    X = df.drop(["Habitability"], axis=1).values
-    y = df["Habitability"].values
-
-    # Split the dataset into training and test sets
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=split, random_state=seed
+    ds_train, ds_test = tf.keras.utils.image_dataset_from_directory(
+        input_dataset_path,
+        labels="inferred",
+        label_mode="int",
+        color_mode="grayscale" if grayscale else "rgb",
+        batch_size=32,
+        image_size=image_size,
+        shuffle=True,
+        seed=seed,
+        validation_split=split,
+        subset="both",
     )
+    labels = ds_train.class_names
 
-    print(f"Train set size: {len(X_train)}")
-    print(f"Test set size: {len(X_test)}")
+    if not prepared_dataset_folder.exists():
+        prepared_dataset_folder.mkdir(parents=True)
+
+    # Save the preview plot
+    preview_plot = get_preview_plot(ds_train, labels)
+    preview_plot.savefig(prepared_dataset_folder / "preview.png")
 
     # Save the prepared dataset
-    save_labels(df, prepared_dataset_folder / "labels.json")
-    # Using np.save to save the numpy arrays as .npy files
-    np.save(prepared_dataset_folder / "X_train.npy", X_train)
-    np.save(prepared_dataset_folder / "X_test.npy", X_test)
-    np.save(prepared_dataset_folder / "y_train.npy", y_train)
-    np.save(prepared_dataset_folder / "y_test.npy", y_test)
+    with open(prepared_dataset_folder / "labels.json", "w") as f:
+        json.dump(labels, f)
+    tf.data.Dataset.save(ds_train, str(prepared_dataset_folder / "train"))
+    tf.data.Dataset.save(ds_test, str(prepared_dataset_folder / "test"))
 
     print(f"\nDataset saved at {prepared_dataset_folder.absolute()}")
 

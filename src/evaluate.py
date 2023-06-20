@@ -1,86 +1,90 @@
 import json
-import pickle
 import sys
 from pathlib import Path
 from typing import List
 
 import numpy as np
-import pandas as pd
-import seaborn as sns
-from matplotlib import pyplot as plt
-from sklearn import metrics
-from sklearn.ensemble import RandomForestClassifier
-
-# Matplotlib config
-sns.set_style("whitegrid")
+import tensorflow as tf
+import matplotlib.pyplot as plt
 
 
-def get_model_metrics(y_test: np.ndarray, predictions: np.ndarray) -> dict[str, float]:
-    """Calculate the model metrics
+def get_training_plot(model_history: dict) -> plt.Figure:
+    """Plot the training and validation loss"""
+    epochs = range(1, len(model_history["loss"]) + 1)
 
-    accuracy: the fraction of predictions our model got right
-    precision: the fraction of true positives out of all positive predictions
-    avg_precision: the average precision across all possible thresholds
-    recall: the fraction of true positives out of all the actual positives
-    f1: the harmonic mean of precision and recall
-    auc: the area under the ROC curve
-    """
-    return {
-        "accuracy": metrics.accuracy_score(y_test, predictions),
-        "precision": metrics.precision_score(y_test, predictions),
-        "avg_precision": metrics.average_precision_score(y_test, predictions),
-        "recall": metrics.recall_score(y_test, predictions),
-        "f1": metrics.f1_score(y_test, predictions),
-        "auc": metrics.roc_auc_score(y_test, predictions),
-    }
+    fig = plt.figure(figsize=(10, 4))
+    plt.plot(epochs, model_history["loss"], label="Training loss")
+    plt.plot(epochs, model_history["val_loss"], label="Validation loss")
+    plt.xticks(epochs)
+    plt.title("Training and validation loss")
+    plt.xlabel("Epochs")
+    plt.ylabel("Loss")
+    plt.legend()
+    plt.grid(True)
+
+    return fig
 
 
-def plot_feature_importances(
-    model: RandomForestClassifier, columns: List[str]
+def get_pred_preview_plot(
+    model: tf.keras.Model, ds_test: tf.data.Dataset, labels: List[str]
 ) -> plt.Figure:
-    """Plot the feature importances of the model"""
-    # Calculate feature importances
-    importances = model.feature_importances_
-    indices = np.argsort(importances)[::-1]
+    """Plot a preview of the predictions"""
+    fig = plt.figure(figsize=(10, 5), tight_layout=True)
+    for images, label_idxs in ds_test.take(1):
+        preds = model.predict(images)
+        for i in range(10):
+            plt.subplot(2, 5, i + 1)
+            img = images[i].numpy().astype("uint8")
+            # Convert image to rgb if grayscale
+            if img.shape[-1] == 1:
+                img = np.squeeze(img, axis=-1)
+                img = np.stack((img,) * 3, axis=-1)
+            true_label = labels[label_idxs[i].numpy()]
+            pred_label = labels[np.argmax(preds[i])]
+            # Add red border if the prediction is wrong else add green border
+            img = np.pad(img, pad_width=((1, 1), (1, 1), (0, 0)))
+            if true_label != pred_label:
+                img[0,:,0] = 255  # Top border
+                img[-1,:,0] = 255  # Bottom border
+                img[:,0,0] = 255  # Left border
+                img[:,-1,0] = 255  # Right border
+            else:
+                img[0,:,1] = 255
+                img[-1,:,1] = 255
+                img[:,0,1] = 255
+                img[:,-1,1] = 255
 
-    # Rearrange feature names so they match the sorted feature importances
-    names = [columns[i] for i in indices]
-
-    # Plot feature importances
-    fig = plt.figure(tight_layout=True)
-    plt.bar(range(len(columns)), importances[indices])
-    plt.xticks(range(len(columns)), names, rotation=90)
-    plt.ylabel("Importance")
-    plt.title("Feature Importance")
+            plt.imshow(img)
+            plt.title(
+                f"True: {true_label}\n"
+                f"Pred: {pred_label}"
+            )
+            plt.axis("off")
 
     return fig
 
 
-def plot_roc_curve(y_test: np.ndarray, predictions_proba: np.ndarray) -> plt.Figure:
-    """Plot the ROC curve"""
-    fpr, tpr, _ = metrics.roc_curve(y_test, predictions_proba)
-
-    fig = plt.figure(tight_layout=True)
-    plt.plot(fpr, tpr, color="darkorange", lw=2, label="ROC curve")
-    plt.plot([0, 1], [0, 1], color="navy", lw=2, linestyle="--")
-    plt.xlabel("False Positive Rate")
-    plt.ylabel("True Positive Rate")
-    plt.title("ROC curve")
-    plt.legend(loc="lower right")
-
-    return fig
-
-
-def plot_confusion_matrix(y_test: np.ndarray, predictions: np.ndarray) -> plt.Figure:
+def get_confusion_matrix_plot(
+    model: tf.keras.Model, ds_test: tf.data.Dataset, labels: List[str]
+) -> plt.Figure:
     """Plot the confusion matrix"""
-    matrix = metrics.confusion_matrix(y_test, predictions)
-    matrix = matrix.astype("float") / matrix.sum(axis=1)[:, np.newaxis]
+    fig = plt.figure(figsize=(6, 6), tight_layout=True)
+    preds = model.predict(ds_test)
 
-    fig = plt.figure(figsize=(6, 5), tight_layout=True)
-    sns.heatmap(matrix, annot=True, annot_kws={"size": 14}, cmap="coolwarm")
+    conf_matrix = tf.math.confusion_matrix(
+        labels=tf.concat([y for _, y in ds_test], axis=0),
+        predictions=tf.argmax(preds, axis=1),
+        num_classes=len(labels),
+    )
+
+    conf_matrix = conf_matrix / tf.reduce_sum(conf_matrix, axis=1)
+    plt.imshow(conf_matrix)
+    plt.colorbar()
+    plt.xticks(range(len(labels)), labels, rotation=90)
+    plt.yticks(range(len(labels)), labels)
     plt.xlabel("Predicted label")
     plt.ylabel("True label")
-    plt.title("Confusion Matrix")
+    plt.title("Confusion matrix")
 
     return fig
 
@@ -88,10 +92,10 @@ def plot_confusion_matrix(y_test: np.ndarray, predictions: np.ndarray) -> plt.Fi
 def main() -> None:
     if len(sys.argv) != 3:
         print("Arguments error. Usage:\n")
-        print("\tpython3 evaluate.py <model-path> <prepared-dataset-folder>\n")
+        print("\tpython3 evaluate.py <model-folder> <prepared-dataset-folder>\n")
         exit(1)
 
-    model_path = Path(sys.argv[1])
+    model_folder = Path(sys.argv[1])
     prepared_dataset_folder = Path(sys.argv[2])
     evaluation_folder = Path("evaluation")
     plots_folder = Path("plots")
@@ -100,46 +104,32 @@ def main() -> None:
     (evaluation_folder / plots_folder).mkdir(parents=True, exist_ok=True)
 
     # Load files
+    ds_test = tf.data.Dataset.load(str(prepared_dataset_folder / "test"))
     labels = None
-    with open(prepared_dataset_folder / "labels.json", "r") as f:
+    with open(prepared_dataset_folder / "labels.json") as f:
         labels = json.load(f)
-        # Remove the "Habitability" label as this is what we are trying to predict
-        labels = list(filter(lambda x: x != "Habitability", labels))
-
-    X_test = np.load(prepared_dataset_folder / "X_test.npy")
-    y_test = np.load(prepared_dataset_folder / "y_test.npy")
 
     # Load model
-    model = None
-    with open(model_path, "rb") as f:
-        model = pickle.load(f)
-
-    # Predict on test set
-    y_pred = model.predict(X_test)
-    preds_by_class = model.predict_proba(X_test)
-    preds = preds_by_class[:, 1]
+    model = tf.keras.models.load_model(model_folder)
+    model_history = np.load(model_folder / "history.npy", allow_pickle=True).item()
 
     # Log metrics
-    model_metrics = get_model_metrics(y_test, y_pred)
-    print("Model metrics:")
-    for metric, value in model_metrics.items():
-        print(f"  {metric}: {value}")
+    val_loss, val_acc = model.evaluate(ds_test)
+    print(f"Validation loss: {val_loss:.2f}")
+    print(f"Validation accuracy: {val_acc * 100:.2f}%")
+    with open(evaluation_folder / "metrics.json", "w") as f:
+        json.dump({"val_loss": val_loss, "val_acc": val_acc}, f)
 
-    # Plot feature importances
-    fig = plot_feature_importances(model, labels)
-    fig.savefig(evaluation_folder / plots_folder / "feature_importance.png")
+    # Save training history plot
+    fig = get_training_plot(model_history)
+    fig.savefig(evaluation_folder / plots_folder / "training_history.png")
 
-    # Plot ROC curve with thresholds
-    fig = plot_roc_curve(y_test, preds)
-    fig.savefig(evaluation_folder / plots_folder / "roc_curve.png")
+    # Save predictions preview plot
+    fig = get_pred_preview_plot(model, ds_test, labels)
+    fig.savefig(evaluation_folder / plots_folder / "pred_preview.png")
 
-    # Calculate classification report
-    cr = metrics.classification_report(y_test, y_pred, output_dict=True)
-    cr_df = pd.DataFrame(cr).transpose()
-    cr_df.to_csv(evaluation_folder / "classification_report.csv")
-
-    # Plot confusion matrix
-    fig = plot_confusion_matrix(y_test, y_pred)
+    # Save confusion matrix plot
+    fig = get_confusion_matrix_plot(model, ds_test, labels)
     fig.savefig(evaluation_folder / plots_folder / "confusion_matrix.png")
 
     print(

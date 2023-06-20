@@ -14,5 +14,5 @@ poetry install
 
 The code is divided in 3 scripts:
 - `python3 prepare.py <dataset-path> <prepared-dataset-folder>`: prepare the dataset for training
-- `python3 train.py <prepared-dataset-folder> <model-path>`: train the model
-- `python3 evaluate.py <model-path> <prepared-dataset-folder>`: evaluate the model
+- `python3 train.py <prepared-dataset-folder> <model-folder>`: train the model
+- `python3 evaluate.py <model-folder> <prepared-dataset-folder>`: evaluate the model

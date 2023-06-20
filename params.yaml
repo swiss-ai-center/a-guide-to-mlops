@@ -1,9 +1,13 @@
 prepare:
-  seed: 20170428
+  seed: 77
   split: 0.2
+  image_size: [32, 32]
+  grayscale: True
 
 train:
-  seed: 20170428
-  n_est: 100
-  max_depth: 3
-  min_split: 2
+  seed: 77
+  lr: 0.0001
+  epochs: 5
+  conv_size: 32
+  dense_size: 64
+  output_classes: 11
