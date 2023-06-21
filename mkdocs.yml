@@ -1,15 +1,15 @@
 repo_url: https://github.com/csia-pme/a-guide-to-mlops
 repo_name: csia-pme/a-guide-to-mlops
-site_name: A guide to MLOps
+site_name: A Guide to MLOps
 site_author: CSIA-PME contributors
 site_url: https://csia-pme.github.io/a-guide-to-mlops/
 site_description: >-
   A simple yet complete guide to MLOps tools and practices - from a conventional way to a modern approach of working with ML projects.
 copyright: Copyright &copy; 2022 - 2023 CSIA-PME
 nav:
-  # - Home: index.md TODO: Discuss this entry
+  - Home: index.md
   - Introduction:
-      - "Home": index.md
+      - "Syllabus": syllabus.md
       - "Concept": concept.md
       - "Tools": tools.md
   - Part 1 - Local training and model evaluation:
@@ -52,6 +52,7 @@ nav:
 edit_uri: blob/main/docs/
 theme:
   language: en
+  custom_dir: docs/
   favicon: assets/images/favicon.svg
   icon:
     logo: material/all-inclusive
@@ -61,8 +62,8 @@ theme:
     # Palette toggle for light mode
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: blue
-      accent: blue
+      primary: indigo
+      accent: indigo
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
@@ -156,3 +157,4 @@ extra_javascript:
   - https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js
   - javascripts/mathjax.js
   - javascripts/tablesort.js
+  - javascripts/parallax.js

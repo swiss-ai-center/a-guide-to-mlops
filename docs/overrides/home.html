@@ -1,0 +1,289 @@
+{% extends "main.html" %}
+
+<!-- Render hero under tabs -->
+{% block tabs %}
+{{ super() }}
+
+<!-- Additional styles for landing page -->
+<style>
+    :root {
+        --md-primary-bg-gradient-color: rgb(0, 0, 0);
+        --md-secondary-bg-gradient-color: rgb(34, 34, 37);
+        --bg-gradient: linear-gradient(-20deg,
+        var(--md-primary-bg-gradient-color) 0%,
+        var(--md-secondary-bg-gradient-color) 100%);
+        --md-color-text-primary: rgb(255, 255, 255);
+        --md-default-fg-color--light: rgb(255, 255, 255);
+        --text-gradient: linear-gradient(-54deg,
+                var(--md-primary-fg-color) 0%,
+                var(--md-primary-fg-color) 30%,
+                var(--md-accent-fg-color) 100%);
+
+    }
+
+    body {
+        overflow: hidden;
+    }
+
+    .md-typeset h1 {
+        display: none;
+    }
+
+    .md-typeset .md-content__button {
+        display: none;
+
+    }
+
+    /* Application header should be static for the landing page */
+    .md-header {
+        position: initial;
+        background-color: transparent;
+        box-shadow: none;
+    }
+
+    .md-header,
+    [data-md-color-scheme=default] {
+        color: var(--md-color-text-primary);
+    }
+
+    .md-tabs {
+        background-color: transparent;
+    }
+
+    .md-tabs,
+    [data-md-color-scheme=default] {
+        color: var(--md-color-text-primary);
+    }
+
+    /* These two are commented out but can be used to hide the header and tabs completely */
+    /* Remove spacing, as we cannot hide it completely */
+    /* .md-main__inner {
+        margin: 0;
+    } */
+
+    /* Hide main content for now */
+    /* .md-content {
+        display: none;
+    } */
+
+    /* Hide table of contents */
+    @media screen and (min-width: 60em) {
+        .md-sidebar--secondary {
+            display: none;
+        }
+    }
+
+    /* Hide navigation */
+    @media screen and (min-width: 76.25em) {
+        .md-sidebar--primary {
+            display: none;
+        }
+    }
+
+    .gradient {
+        background: rgb(35, 35, 40);
+        background: var(--bg-gradient);
+        top: 0;
+        height: 100vh;
+        width: 100vw;
+        position: fixed;
+        z-index: -50;
+    }
+
+    section {
+        padding: 4rem 10rem;
+    }
+
+    @media screen and (max-width: 76.25em) {
+        section {
+            padding: 3rem 2rem;
+        }
+    }
+
+    @media screen and (max-width: 65em) {
+        .home-section {
+            height: 100vh;
+            flex-direction: column-reverse;
+            text-align: center;
+            gap: 1rem;
+        }
+
+        .home-section h1 {
+            font-size: 5rem !important;
+        }
+
+        .home-section h2 {
+            font-size: 2rem !important
+        }
+
+        .home-image {
+            width: 350px !important;
+        }
+
+        .home-image-hesso {
+            width: 150px !important;
+        }
+
+        .home-button-logo {
+            justify-content: center;
+            flex-direction: column;
+            gap: 2rem !important;
+        }
+
+        .features-section {
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .features-section .icon-feature {
+            max-width: unset !important;
+        }
+    }
+
+    .home-section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2.5rem;
+        padding: 5rem 10rem;
+        text-align: center;
+        height: calc(100vh - 116px); /* 116px = header height */
+    }
+
+    .home-section h1 {
+        font-size: 10rem;
+        margin-top: 0;
+        margin-bottom: 1rem;
+        white-space: nowrap;
+    }
+
+    .home-section h2 {
+        font-size: 2.5rem;
+        margin: 0;
+    }
+
+    .home-section p {
+        font-size: 1.25rem;
+        margin: 0 auto;
+        max-width: 35ch;
+        text-align: center;
+    }
+    
+    .text-gradient {
+        background: var(--md-primary-fg-color);
+        background: var(--text-gradient);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .planets {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        right: 0;
+        overflow: hidden;
+        pointer-events: none;
+    }
+
+    .planet {
+        position: fixed;
+        transition: transform 0.1s ease-out;
+    }
+
+    .planet[data-name="earth"] {
+        width: 25vw;
+        bottom: -5%;
+        right: -2%;
+        z-index: -12;
+        filter: brightness(0.9);
+    }
+
+    .planet[data-name="moon"] {
+        width: 4vw;
+        bottom: 30%;
+        right: 15%;
+        z-index: -13;
+        filter: brightness(0.9);
+    }
+
+    .planet[data-name="mars"] {
+        width: 17.5vw;
+        bottom: 15%;
+        left: 17.5%;
+        z-index: 1;
+        filter: brightness(0.7);
+    }
+
+    .planet[data-name="saturn"] {
+        width: 27.5vw;
+        top: 15%;
+        left: 2.5%;
+        z-index: -14;
+        filter: brightness(0.55);
+    }
+
+    .planet[data-name="neptune"] {
+        width: 15vw;
+        top: 10%;
+        right: 20%;
+        z-index: -14;
+        filter: brightness(0.45);
+    }
+
+    .stars {
+        position: absolute;
+        width: 100vw;
+        height: 100%;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        z-index: -20;
+        opacity: 0.75;
+        background-image:
+            radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 10px),
+            radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 5px),
+            radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 7px),
+            radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 2px, transparent 5px),
+            radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 1px, transparent 3px);
+        background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px, 100px 100px; 
+        background-position: 0 0, 40px 60px, 130px 270px, 70px 100px, 30px 140px
+    }
+</style>
+
+
+<div class="gradient"></div>
+<div class="stars parallax" data-speed="-10"></div>
+<section class="home-section">
+    <div>
+        <h2>A Guide to</h2>
+        <h1><span class="text-gradient">MLOps</span></h1>
+        <p>
+            Classify planets using MLOps best practices
+        </p>
+    </div>
+    <div class="planets">
+        <!-- <img src="assets/images/planets/mercury.png" alt="planet" class="planet parallax" data-speed="0.2">
+        <img src="assets/images/planets/venus.png" alt="planet" class="planet parallax" data-speed="0.3"> -->
+        <img src="assets/images/planets/earth.png" alt="planet" class="planet parallax" data-speed="0.4" data-name="earth"> 
+        <img src="assets/images/planets/moon.png" alt="planet" class="planet parallax" data-speed="0.5" data-name="moon">
+        <img src="assets/images/planets/mars.png" alt="planet" class="planet parallax" data-speed="0.6" data-name="mars">
+        <!-- <img src="assets/images/planets/jupiter.png" alt="planet" class="planet parallax" data-speed="0.7"> -->
+        <img src="assets/images/planets/saturn.png" alt="planet" class="planet parallax" data-speed="0.8" data-name="saturn">
+        <!-- <img src="assets/images/planets/uranus.png" alt="planet" class="planet parallax" data-speed="0.9"> -->
+        <img src="assets/images/planets/neptune.png" alt="planet" class="planet parallax" data-speed="1" data-name="neptune">
+    </div>
+</section>
+
+{% endblock %}
+
+<!-- Content -->
+{% block content %}
+{{ super() }}
+{% endblock %}
+
+<!-- Application footer -->
+{% block footer %}
+{{ super() }}
+{% endblock %}
