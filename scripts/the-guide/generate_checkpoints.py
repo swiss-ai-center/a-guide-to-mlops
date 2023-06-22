@@ -53,10 +53,7 @@ class CommandAction(AbstractAction):
     def run(self) -> None:
         print(esc(94), f"[RUN] {self.command}", esc(0), sep="")
         task = subprocess.Popen(self.command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        # Get exit code
-        out, err = task.communicate()
-        out = out.decode("utf-8")
-        err = err.decode("utf-8")
+        out, err = [c.decode("utf-8") for c in task.communicate()]
         if task.returncode != 0:
             error(f"Command failed: {self.command}\n{err}")
         if out:
