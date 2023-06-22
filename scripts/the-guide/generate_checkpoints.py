@@ -52,17 +52,18 @@ class CommandAction(AbstractAction):
 
     def run(self) -> None:
         print(esc(94), f"[RUN] {self.command}", esc(0), sep="")
-        task = subprocess.Popen(self.command, shell=True, stdout=subprocess.PIPE)
+        task = subprocess.Popen(self.command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         # Get exit code
-        task.wait()
-        data = task.stdout.read().decode("utf-8")
+        out, err = task.communicate()
+        out = out.decode("utf-8")
+        err = err.decode("utf-8")
         if task.returncode != 0:
-            error(f"Command failed: {self.command}")
-        if data:
-            print(esc(90), data, esc(0), sep="")
+            error(f"Command failed: {self.command}\n{err}")
+        if out:
+            print(esc(90), out, esc(0), sep="")
         if self.log_output:
             write_output(f"> {self.command}\n")
-            write_output(f"```\n{data}```\n")
+            write_output(f"```\n{out}```\n")
             write_output(f"----\n")
 
 
