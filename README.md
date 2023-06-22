@@ -10,6 +10,20 @@ You can install the required packages with poetry:
 poetry install
 ```
 
+## Configuration
+
+Then, enter the virtual environment with:
+
+```bash
+poetry shell
+```
+
+and install the pre-commit hooks with:
+
+```bash
+pre-commit install
+```
+
 ## Usage
 
 The code is divided in 4 scripts:
