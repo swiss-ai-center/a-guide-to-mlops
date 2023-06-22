@@ -26,13 +26,13 @@ def get_preview_plot(ds: tf.data.Dataset, labels: List[str]) -> plt.Figure:
 def main() -> None:
     if len(sys.argv) != 3:
         print("Arguments error. Usage:\n")
-        print("\tpython3 prepare.py <dataset-path> <prepared-dataset-folder>\n")
+        print("\tpython3 prepare.py <raw-dataset-folder> <prepared-dataset-folder>\n")
         exit(1)
 
     # Load parameters
     prepare_params = yaml.safe_load(open("params.yaml"))["prepare"]
 
-    input_dataset_path = Path(sys.argv[1])
+    raw_dataset_folder = Path(sys.argv[1])
     prepared_dataset_folder = Path(sys.argv[2])
     seed = prepare_params["seed"]
     split = prepare_params["split"]
@@ -44,7 +44,7 @@ def main() -> None:
 
     # Read data
     ds_train, ds_test = tf.keras.utils.image_dataset_from_directory(
-        input_dataset_path,
+        raw_dataset_folder,
         labels="inferred",
         label_mode="int",
         color_mode="grayscale" if grayscale else "rgb",

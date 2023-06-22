@@ -3,9 +3,9 @@ import sys
 from pathlib import Path
 from typing import List
 
+import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
-import matplotlib.pyplot as plt
 
 
 def get_training_plot(model_history: dict) -> plt.Figure:
@@ -44,21 +44,18 @@ def get_pred_preview_plot(
             # Add red border if the prediction is wrong else add green border
             img = np.pad(img, pad_width=((1, 1), (1, 1), (0, 0)))
             if true_label != pred_label:
-                img[0,:,0] = 255  # Top border
-                img[-1,:,0] = 255  # Bottom border
-                img[:,0,0] = 255  # Left border
-                img[:,-1,0] = 255  # Right border
+                img[0, :, 0] = 255  # Top border
+                img[-1, :, 0] = 255  # Bottom border
+                img[:, 0, 0] = 255  # Left border
+                img[:, -1, 0] = 255  # Right border
             else:
-                img[0,:,1] = 255
-                img[-1,:,1] = 255
-                img[:,0,1] = 255
-                img[:,-1,1] = 255
+                img[0, :, 1] = 255
+                img[-1, :, 1] = 255
+                img[:, 0, 1] = 255
+                img[:, -1, 1] = 255
 
             plt.imshow(img)
-            plt.title(
-                f"True: {true_label}\n"
-                f"Pred: {pred_label}"
-            )
+            plt.title(f"True: {true_label}\n" f"Pred: {pred_label}")
             plt.axis("off")
 
     return fig
