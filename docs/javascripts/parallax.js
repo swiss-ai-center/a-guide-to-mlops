@@ -17,7 +17,7 @@ function parallax(elements) {
         const speed = element.getAttribute('data-speed');
 
         // get scroll position
-        const scroll = window.pageYOffset;
+        const scroll = window.scrollY;
 
         const offset = -scroll / speed;
 

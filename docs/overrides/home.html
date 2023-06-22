@@ -232,6 +232,15 @@
         filter: brightness(0.45);
     }
 
+    #planetsAttribution {
+        position: fixed;
+        bottom: 40px;
+        left: 40px;
+        font-size: 0.7rem;
+        opacity: 0.5;
+        transition: opacity 0.2s ease-out;
+    }
+
     .stars {
         position: absolute;
         width: 100vw;
@@ -260,21 +269,18 @@
         <h2>A Guide to</h2>
         <h1><span class="text-gradient">MLOps</span></h1>
         <p>
-            Classify planets using MLOps best practices
+            Classify celestial bodies using MLOps best practices
         </p>
     </div>
     <div class="planets">
-        <!-- <img src="assets/images/planets/mercury.png" alt="planet" class="planet parallax" data-speed="0.2">
-        <img src="assets/images/planets/venus.png" alt="planet" class="planet parallax" data-speed="0.3"> -->
         <img src="assets/images/planets/earth.png" alt="planet" class="planet parallax" data-speed="0.4" data-name="earth"> 
         <img src="assets/images/planets/moon.png" alt="planet" class="planet parallax" data-speed="0.5" data-name="moon">
         <img src="assets/images/planets/mars.png" alt="planet" class="planet parallax" data-speed="0.6" data-name="mars">
-        <!-- <img src="assets/images/planets/jupiter.png" alt="planet" class="planet parallax" data-speed="0.7"> -->
         <img src="assets/images/planets/saturn.png" alt="planet" class="planet parallax" data-speed="0.8" data-name="saturn">
-        <!-- <img src="assets/images/planets/uranus.png" alt="planet" class="planet parallax" data-speed="0.9"> -->
         <img src="assets/images/planets/neptune.png" alt="planet" class="planet parallax" data-speed="1" data-name="neptune">
     </div>
 </section>
+<div class="scroll-fade-out" id="planetsAttribution" data-offset="100"><a href="https://solarsystem.nasa.gov" target="_blank">© NASA Solar System</a></div>
 
 {% endblock %}
 

@@ -158,3 +158,4 @@ extra_javascript:
   - javascripts/mathjax.js
   - javascripts/tablesort.js
   - javascripts/parallax.js
+  - javascripts/scrollAnimations.js
