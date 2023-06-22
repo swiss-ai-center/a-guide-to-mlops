@@ -34,9 +34,9 @@ this chapter:
 
 ```mermaid
 flowchart
-	subgraph localGraph[LOCAL]
-		data[data.csv] <--> notebook[notebook.ipynb]
-	end
+    subgraph localGraph[LOCAL]
+        data[data.csv] <--> notebook[notebook.ipynb]
+    end
 ```
 
 Let's get started!
@@ -107,19 +107,19 @@ Examine the notebook and the dataset to get a better understanding of their cont
 
 Your working directory should now look like this:
 
-TODO: Update the tree
-
 ```yaml hl_lines="2-4"
 .
 ├── data # (1)!
 │   ├── README.md
-│   └── data.csv
+│   └── raw # (2)!
+│       └── ...
 ├── README.md
 ├── notebook.ipynb
 └── requirements.txt
 ```
 
 1. This, and all its sub-directory, is new.
+2. The `raw` directory include the unprocessed dataset images.
 
 ### Create the virtual environment
 
@@ -154,21 +154,8 @@ A browser window should open with the Jupyter Notebook.
 
 Execute each step of the notebook to train the model and evaluate its performance.
 
-TODO: Improve this section
-
-The notebook is useful for the following elements:
-
-- Single file for the entire experiment
-- Data visualization
-- Presentation of the results
-
-The notebook lacks the following elements:
-
-- Difficult to share with others (no versioning)
-- Difficult to reproduce
-- Cluttered with previous outputs
-
-Once done, you can close the notebook and shut down the Jupyter server by pressing ++ctrl+c++ in the terminal and pressing ++y++.
+Once done, you can close the notebook and shut down the Jupyter server by
+pressing ++ctrl+c++ in the terminal and pressing ++y++.
 
 Exit the virtual environment with the following command.
 
@@ -176,6 +163,15 @@ Exit the virtual environment with the following command.
 # Exit the virtual environment
 deactivate
 ```
+
+The Jupyter notebook serves as a valuable tool for consolidating an entire
+experiment into a single file, facilitating data visualization, and enabling the
+presentation of results. However, it does have severe limitations such as being
+challenging to share with others due to a lack of versioning capabilities,
+difficulty in reproducing the experiment, and the potential for clutter from
+previous outputs.
+
+In the next chapter we will see how to address these shortcomings.
 
 ## Summary
 
@@ -214,5 +210,5 @@ In the next chapters, you will enhance the workflow to fix those issues.
 
 Highly inspired by:
 
-* the [_CA04 - Habitability of Distant Planets_ -
-kaggle.com](https://www.kaggle.com/competitions/dat200-ca4-2021/) community prediction competition.
+* the [_Planets and Moons Dataset - AI in Space_ -
+kaggle.com](https://www.kaggle.com/datasets/emirhanai/planets-and-moons-dataset-ai-in-space) community prediction competition.
