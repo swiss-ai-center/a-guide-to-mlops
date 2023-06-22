@@ -2,25 +2,25 @@ base_tmp_path: tmp/the-guide/generated_checkpoints
 base_save_path: docs
 
 saves:
-  part-1-local-training-and-model-evaluation/chapter-1-run-a-simple-ml-experiment-with-jupyter-notebook:
-    save_git: false
-    actions:
-      # Download the notebook
-      - run: wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/jupyter-notebook.zip -O jupyter-notebook.zip
-      - run: unzip jupyter-notebook.zip
-      - run: mv a-guide-to-mlops-jupyter-notebook/* .
-      - run: rm -r jupyter-notebook.zip a-guide-to-mlops-jupyter-notebook
-      # Download and set up the dataset
-      - run: wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/59-data.zip -O data.zip
-      - run: unzip data.zip
-      - run: mv a-guide-to-mlops-59-data/ data/
-      - run: rm data.zip
-      # Log the codebase tree
-      - run: tree --dirsfirst
-        log: true
-      # Create the virtual environment
-      - run: python3 -m venv .venv
-      - run: source .venv/bin/activate && pip install --requirement requirements.txt
+#  part-1-local-training-and-model-evaluation/chapter-1-run-a-simple-ml-experiment-with-jupyter-notebook:
+#    save_git: false
+#    actions:
+#      # Download the notebook
+#      - run: wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/jupyter-notebook.zip -O jupyter-notebook.zip
+#      - run: unzip jupyter-notebook.zip
+#      - run: mv a-guide-to-mlops-jupyter-notebook/* .
+#      - run: rm -r jupyter-notebook.zip a-guide-to-mlops-jupyter-notebook
+#      # Download and set up the dataset
+#      - run: wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/59-data.zip -O data.zip
+#      - run: unzip data.zip
+#      - run: mv a-guide-to-mlops-59-data/ data/
+#      - run: rm data.zip
+#      # Log the codebase tree
+#      - run: tree --dirsfirst
+#        log: true
+#      # Create the virtual environment
+#      - run: python3 -m venv .venv
+#      - run: source .venv/bin/activate && pip install --requirement requirements.txt
 
   part-1-local-training-and-model-evaluation/chapter-2-adapt-and-move-the-jupyter-notebook-to-python-scripts:
     save_git: false
@@ -34,7 +34,8 @@ saves:
       - run: rm data.zip
       # Initialize poetry
       - run: poetry init --no-interaction
-      - run: poetry add "jupyterlab==^4.0.2" "pandas==^2.0.2" "matplotlib==^3.7.1" "scikit-learn==^1.2.2" "seaborn==^0.12.2"
+      - run: sed -i 's/python = "^3.11"/python = ">=3.8,<3.12"/g' pyproject.toml # avoid dependency resolution issue
+      - run: poetry add "matplotlib==3.7.1" "tensorflow==2.12.0" "pyyaml==6.0"
       # Add new files
       - replace_from_md:
         file: params.yaml
@@ -48,13 +49,20 @@ saves:
       - replace_from_md:
         file: src/evaluate.py
         occurance_index: 0
+      - replace_from_md:
+        file: src/explain.py
+        occurance_index: 0
+      - replace_from_md:
+        file: src/utils/seed.py
+        occurance_index: 0
       # Log the codebase tree
       - run: tree --dirsfirst
         log: true
       # Run the experiment
-      - run: poetry run python3 src/prepare.py data/data.csv data/prepared
+      - run: poetry run python3 src/prepare.py data/raw data/prepared
       - run: poetry run python3 src/train.py data/prepared model.pkl
       - run: poetry run python3 src/evaluate.py model.pkl data/prepared
+      - run: poetry run python3 src/explain.py model.pkl data/raw
       # Log the codebase tree
       - run: tree --dirsfirst
         log: true
