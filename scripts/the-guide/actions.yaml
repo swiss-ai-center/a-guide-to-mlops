@@ -59,10 +59,10 @@ saves:
       - run: tree --dirsfirst
         log: true
       # Run the experiment
-      - run: poetry run python3 src/prepare.py data/raw data/prepared
-      - run: poetry run python3 src/train.py data/prepared model
-      - run: poetry run python3 src/evaluate.py modeldata/prepared
-      - run: poetry run python3 src/explain.py model data/raw
+      - run: poetry run python src/prepare.py data/raw data/prepared
+      - run: poetry run python src/train.py data/prepared model
+      - run: poetry run python src/evaluate.py model data/prepared
+      - run: poetry run python src/explain.py model data/raw
       # Log the codebase tree
       - run: tree --dirsfirst
         log: true
@@ -98,63 +98,61 @@ saves:
         log: true
       - run: git commit -m "My ML experiment data is saved with DVC"
 
-  # chapter-4-reproduce-the-experiment-with-dvc:
-  #   save_git: true
-  #   actions:
-  #     - replace_from_md:
-  #       file: .gitignore
-  #       occurance_index: 0
-  #     - run: git diff .gitignore
-  #       log: true
-  #     - run: |-
-  #         poetry run dvc stage add -n prepare \
-  #             -p prepare.seed,prepare.split \
-  #             -d src/prepare.py -d data/data.xml \
-  #             -o data/prepared \
-  #             python src/prepare.py data/data.xml
-  #     - run: |-
-  #         poetry run dvc stage add -n featurize \
-  #             -p featurize.max_features,featurize.ngrams \
-  #             -d src/featurization.py -d data/prepared \
-  #             -o data/features/test.pkl -o data/features/train.pkl \
-  #             python src/featurization.py data/prepared data/features
-  #     - run: |-
-  #         poetry run dvc stage add -n train \
-  #             -p train.seed,train.n_est,train.min_split \
-  #             -d src/train.py -d data/features \
-  #             -o model.pkl \
-  #             python src/train.py data/features model.pkl
-  #     - run: |-
-  #         poetry run dvc stage add -n evaluate \
-  #             -d src/evaluate.py -d model.pkl \
-  #             -o evaluation/plots/metrics \
-  #             -o evaluation/report.html \
-  #             --metrics evaluation/metrics.json \
-  #             --plots evaluation/plots/prc.json \
-  #             --plots evaluation/plots/sklearn/roc.json \
-  #             --plots evaluation/plots/sklearn/confusion_matrix.json \
-  #             --plots evaluation/plots/importance.png \
-  #             python src/evaluate.py model.pkl data/features
-  #     - run: |-
-  #         poetry run dvc plots modify evaluation/plots/prc.json \
-  #             -x recall \
-  #             -y precision
-  #     - run: |-
-  #         poetry run dvc plots modify evaluation/plots/sklearn/roc.json \
-  #             -x fpr \
-  #             -y tpr
-  #     - run: |-
-  #         poetry run dvc plots modify evaluation/plots/sklearn/confusion_matrix.json \
-  #             -x actual \
-  #             -y predicted \
-  #             -t confusion
-  #     - run: poetry run dvc dag
-  #     - run: poetry run dvc repro
-  #     - run: git add .
-  #     - run: git status
-  #       log: true
-  #     - run: poetry run dvc push
-  #     - run: git commit -m "My ML experiment commands are saved with DVC"
+  part-1-local-training-and-model-evaluation/chapter-4-reproduce-the-ml-experiment-with-dvc:
+    save_git: true
+    actions:
+      - replace_from_md:
+        file: .gitignore
+        occurance_index: 0
+      - run: git diff .gitignore
+        log: true
+      - run: |-
+          poetry run dvc stage add -n prepare \
+            -p prepare.seed,prepare.split,prepare.image_size,prepare.grayscale \
+            -d src/prepare.py -d data/raw \
+            -o data/prepared \
+            python src/prepare.py data/raw data/prepared
+      - run: |-
+          poetry run dvc stage add -n train \
+            -p train.seed,train.lr,train.epochs,train.conv_size,train.dense_size,train.output_classes \
+            -d src/train.py -d data/prepared \
+            -o model \
+            python src/train.py data/prepared model
+      - run: |-
+          poetry run dvc stage add -n evaluate \
+            -d src/evaluate.py -d model \
+            -o evaluation/plots/metrics \
+            --metrics evaluation/metrics.json \
+            --plots evaluation/plots/confusion_matrix.png \
+            --plots evaluation/plots/pred_preview.png \
+            --plots evaluation/plots/training_history.png \
+            python src/evaluate.py model data/prepared
+      - run: |-
+          poetry run dvc stage add -n explain \
+            -d src/explain.py -d model -d data/raw \
+            -o explanation/plots/metrics \
+            --plots explanation/plots/grad_cam.png \
+            python src/explain.py model data/raw
+#       - run: |-
+#           poetry run dvc plots modify evaluation/plots/prc.json \
+#               -x recall \
+#               -y precision
+#       - run: |-
+#           poetry run dvc plots modify evaluation/plots/sklearn/roc.json \
+#               -x fpr \
+#               -y tpr
+#       - run: |-
+#           poetry run dvc plots modify evaluation/plots/sklearn/confusion_matrix.json \
+#               -x actual \
+#               -y predicted \
+#               -t confusion
+      - run: poetry run dvc dag
+      - run: poetry run dvc repro
+      - run: git add .
+      - run: git status
+        log: true
+      - run: poetry run dvc push
+      - run: git commit -m "My ML experiment commands are saved with DVC"
 
   # chapter-5-track-model-evolutions-with-dvc:
   #   save_git: true

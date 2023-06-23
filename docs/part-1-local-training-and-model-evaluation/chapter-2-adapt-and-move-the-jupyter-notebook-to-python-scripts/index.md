@@ -263,14 +263,14 @@ making it ideal for automation tasks.
 
 The following table describes the files that you will create in this codebase.
 
-| **File**                | **Description**                                   | **Input**                                       | **Output**                                                    |
-| ----------------------- | ------------------------------------------------- | ----------------------------------------------- | ------------------------------------------------------------- |
-| `params.yaml`           | The parameters to run the ML experiment           | -                                               | -                                                             |
-| `src/prepare.py`        | Prepare the dataset to run the ML experiment      | The dataset to prepare in `data/raw` directory  | The prepared data in `data/prepared` directory                |
-| `src/train.py`          | Train the ML model                                | The prepared dataset                            | The model trained with the dataset                            |
-| `src/evaluate.py`       | Evaluate the ML model using scikit-learn          | The model to evaluate                           | The results of the model evaluation in `evaluation` directory |
-| `src/explain.py`        | Explain the ML model                              | The model to explain                            | The results of the model explanation                          |
-| `src/utils/seed.py`     | Util function to fix the seed                     | -                                               | -                                                             |
+| **File**                | **Description**                                   | **Input**                                       | **Output**                                                      |
+| ----------------------- | ------------------------------------------------- | ----------------------------------------------- | --------------------------------------------------------------- |
+| `params.yaml`           | The parameters to run the ML experiment           | -                                               | -                                                               |
+| `src/prepare.py`        | Prepare the dataset to run the ML experiment      | The dataset to prepare in `data/raw` directory  | The prepared data in `data/prepared` directory                  |
+| `src/train.py`          | Train the ML model                                | The prepared dataset                            | The model trained with the dataset                              |
+| `src/evaluate.py`       | Evaluate the ML model using scikit-learn          | The model to evaluate                           | The results of the model evaluation in `evaluation` directory   |
+| `src/explain.py`        | Explain the ML model                              | The model to explain                            | The results of the model explanation in `explanation` directory |
+| `src/utils/seed.py`     | Util function to fix the seed                     | -                                               | -                                                               |
 
 #### Move the parameters to its own file
 

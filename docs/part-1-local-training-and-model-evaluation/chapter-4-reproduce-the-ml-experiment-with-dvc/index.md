@@ -9,17 +9,18 @@ have changed. This way, we don't have to waste time re-running unnecessary
 steps.
 
 By using DVC stages to create a pipeline, we can execute all of our experiment's
-steps in a streamlined manner by simply running the `dvc repro` command. As a result, DVC
-makes it easy to reproduce the experiment and track the effects of changes.
+steps in a streamlined manner by simply running the `dvc repro` command.
+As a result, DVC makes it easy to reproduce the experiment and track the effects
+of changes.
 
 In this chapter, you will learn how to:
 
 1. Remove custom rules from the `.gitignore` file
 2. Set up four DVC pipeline stages:
 - `prepare`
-- `featurize`
 - `train`
 - `evaluate`
+- `explain`
 1. Visualize the pipeline
 2. Execute the pipeline
 3. Push the changes to DVC and Git
@@ -31,7 +32,7 @@ this chapter:
 flowchart LR
 	dot_dvc[(.dvc)]
 	dot_git[(.git)]
-	data[data.csv] <-.-> dot_dvc
+	data[data/raw] <-.-> dot_dvc
     localGraph <-....-> dot_git
 	subgraph cacheGraph[CACHE]
 		dot_dvc
@@ -41,10 +42,12 @@ flowchart LR
 		prepare[prepare.py] <-.-> dot_dvc
 		train[train.py] <-.-> dot_dvc
 		evaluate[evaluate.py] <-.-> dot_dvc
+        explain[explain.py] <-.-> dot_dvc
 		data --> prepare
 		subgraph dvcGraph["dvc.yaml (dvc repro)"]
 			prepare --> train
 			train --> evaluate
+            evaluate --> explain
 		end
         params[params.yaml] -.- prepare
         params -.- train
@@ -63,16 +66,16 @@ As a reminder, the current steps to run the experiment are as follow:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Prepare the dataset
-python src/prepare.py data/data.xml
+python src/prepare.py data/raw data/prepared
 
-# Perform feature extraction
-python src/featurization.py data/prepared data/features
-
-# Train the model with the extracted features and save it
-python src/train.py data/features model.pkl
+# Train the model with the train dataset and save it
+python src/train.py data/prepared model
 
 # Evaluate the model performances
-python src/evaluate.py model.pkl data/features
+python src/evaluate.py model data/prepared
+
+# Explain the model
+python src/explain.py model data/raw
 ```
 
 Let's get started!
@@ -118,25 +121,25 @@ The output should be similar to this:
 
 ```diff
 diff --git a/.gitignore b/.gitignore
-index d65f97a..554f913 100644
+index 737d782..2dea70c 100644
 --- a/.gitignore
 +++ b/.gitignore
-@@ -1,14 +1,8 @@
+@@ -1,15 +1,9 @@
 -# Data used to train the models
--data/features
--data/prepared
+-data/raw/
+-data/prepared/
 -
 -# Artifacts
 -evaluation
 -
 -# The models
--*.pkl
+-model/
 -
 ## Python
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
-+
+
 +## DVC
 +
 +# DVC will add new files after this line
@@ -174,45 +177,22 @@ Run the following command to add a new stage called _prepare_ that prepares the 
 
 ```sh title="Execute the following command(s) in a terminal"
 dvc stage add -n prepare \
--p prepare.seed,prepare.split \
--d src/prepare.py -d data/data.xml \
--o data/prepared \
-python src/prepare.py data/data.xml
+ -p prepare.seed,prepare.split,prepare.image_size,prepare.grayscale \
+ -d src/prepare.py -d data/raw \
+ -o data/prepared \
+ python src.prepare.py data/raw data/prepared
 ```
 
-The values of the parameters `prepare.seed` and `prepare.split` are referenced in the `params.yaml` file.
+The values of the parameters `prepare.seed`, `prepare.split`, `prepare.image_size`
+and `prepare.grayscale` are referenced in the `params.yaml` file.
 
-This stage has the `src/prepare.py` and `data/data.xml` files as dependencies.
+This stage has the `src/prepare.py` and `data/raw` files as dependencies.
 If any of these files change, DVC will run the command
-`python src/prepare.py data/data.xml` when using `dvc repro`.
+`python src/prepare.py data/raw` when using `dvc repro`.
 
 The output of this command is stored in the `data/prepared` directory.
 
 Take some time to explore the `dvc.yaml` file and to understand how the pipeline is updated.
-
-#### `featurize` stage
-
-Run the following command to create a new stage called _featurize_ that performs the features extraction.
-
-```sh title="Execute the following command(s) in a terminal"
-dvc stage add -n featurize \
--p featurize.max_features,featurize.ngrams \
--d src/featurization.py -d data/prepared \
--o data/features/test.pkl -o data/features/train.pkl \
-python src/featurization.py data/prepared data/features
-```
-
-The values of the parameters `featurize.max_features` and `featurize.ngrams` are referenced in the `params.yaml` file.
-
-This stage has the `src/featurization.py` file and `data/prepared` directory as dependencies.
-If any of these files change, DVC will run the command
-`python src/featurization.py data/prepared data/features`
-when using `dvc repro`.
-
-The outputs of this command are stored in the `data/features/test.pkl` and
-`data/features/train.pkl` files.
-
-Explore the `dvc.yaml` file to understand how the pipeline is updated.
 
 #### `train` stage
 
@@ -220,19 +200,21 @@ Run the following command to create a new stage called _train_ that trains the m
 
 ```sh title="Execute the following command(s) in a terminal"
 dvc stage add -n train \
--p train.seed,train.n_est,train.min_split \
--d src/train.py -d data/features \
--o model.pkl \
-python src/train.py data/features model.pkl
+-p train.seed,train.lr,train.epochs,train.conv_size,train.dense_size,train.output_classes \
+-d src/train.py -d data/prepared \
+-o model \
+python src/train.py data/prepared model
 ```
 
-The values of the parameters `train.seed`, `train.n_est` and `train.min_split` are referenced in the `params.yaml` file.
+The values of the parameters `train.seed`, `train.lr`, `train.epochs`,
+`train.conv_size`, `train.dense_size`, `train.output_classesand ` are referenced
+in the `params.yaml` file.
 
-This stage has the `src/train.py` and `data/features` files as dependencies.
+This stage has the `src/train.py` and `data/prepared` files as dependencies.
 If any of these files change, DVC will run the command
-`python src/train.py data/features model.pkl` when using `dvc repro`.
+`python src/evaluate.py model data/prepared` when using `dvc repro`.
 
-The output of this command is stored in the `model.pkl` file.
+The output of this command is stored in the `model` directory.
 
 Explore the `dvc.yaml` file to understand how the pipeline is updated.
 
@@ -242,15 +224,13 @@ Run the following command to create a new stage called _evaluate_ that evaluates
 
 ```sh title="Execute the following command(s) in a terminal"
 dvc stage add -n evaluate \
--d src/evaluate.py -d model.pkl \
+-d src/evaluate.py -d model \
 -o evaluation/plots/metrics \
--o evaluation/report.html \
 --metrics evaluation/metrics.json \
---plots evaluation/plots/prc.json \
---plots evaluation/plots/sklearn/roc.json \
---plots evaluation/plots/sklearn/confusion_matrix.json \
---plots evaluation/plots/importance.png \
-python src/evaluate.py model.pkl data/features
+--plots evaluation/plots/confusion_matrix.png \
+--plots evaluation/plots/pred_preview.png \
+--plots evaluation/plots/training_history.png \
+python src/evaluate.py model data/prepared
 ```
 
 This stage has the `src/evaluate.py` file and `model.pkl` file, and the `data/features` directory as dependencies.
@@ -258,13 +238,22 @@ If any of these files change, DVC will run the command
 `python src/evaluate.py model.pkl data/features` when using `dvc repro`.
 
 This command writes the model's metrics to `evaluation/metrics.json`. It writes
-the `confusion_matrix` to `evaluation/plots/sklearn/confusion_matrix.json`, the
-`precision_recall_curve` to `evaluation/plots/prc.json ` and the `roc_curve` to
-`evaluation/plots/sklearn/roc.json` that will be used to create plots.
+the `confusion_matrix` to `evaluation/plots/confusion_matrix.png`, the
+`pred_preview` to `evaluation/plots/pred_preview.png` and the `training_history.png` to
+`evaluation/plots/training_history.png` that display some plots.
 Here, `no-cache` prevents DVC from caching the metrics and plots.
 
 DVC has the ability to generate images for the plots.
 The following command are used to tune the axes of the plots.
+
+TODO: generate plots from metrics instead?
+
+!! tips
+
+    If working on a ML project that produces only text metrics, you can make use
+    of DVC ability to generate images for the plots from these metrics. See [plots](https://dvc.org/doc/command-reference/plots)
+
+TODO: Remove the following?
 
 ```sh title="Execute the following command(s) in a terminal"
 # Set the axes for the `precision_recall_curve`
@@ -276,6 +265,29 @@ dvc plots modify evaluation/plots/sklearn/roc.json -x fpr -y tpr
 # Set the axes for the `confusion_matrix`
 dvc plots modify evaluation/plots/sklearn/confusion_matrix.json -x actual -y predicted -t confusion
 ```
+
+Explore the `dvc.yaml` file to understand how the pipeline is updated.
+
+
+#### `explain` stage
+
+Run the following command to create a new stage called _explain_ that performs an explanation through GRAD-CAM.
+
+```sh title="Execute the following command(s) in a terminal"
+dvc stage add -n explain \
+-d src/explain.py -d model -d data/raw \
+-o explanation/plots/metrics \
+--plots explanation/plots/grad_cam.png \
+python src/explain.py model data/raw
+```
+
+This stage has the `src/explain.py` file, `model` and `data/raw` directory
+as dependencies.
+If any of these files change, DVC will run the command
+`python src/explain.py model data/raw`
+when using `dvc repro`.
+
+The outputs of this command are stored in the `evaluation/plots/metrics/plots/grad_cam.png` file.
 
 Explore the `dvc.yaml` file to understand how the pipeline is updated.
 
@@ -313,33 +325,27 @@ dvc dag
 ```
 
 ```
-+-------------------+
-| data/data.xml.dvc |
-+-------------------+
-          *
-          *
-          *
-     +---------+
-     | prepare |
-     +---------+
-          *
-          *
-          *
-    +-----------+
-    | featurize |
-    +-----------+
-          *
-          *
-          *
-      +-------+
-      | train |
-      +-------+
-          *
-          *
-          *
-    +----------+
-    | evaluate |
-    +----------+
+        +--------------+
+        | data/raw.dvc |
+        +--------------+
+           **        **
+         **            *
+        *               **
++---------+               *
+| prepare |               *
++---------+               *
+      *                   *
+      *                   *
+      *                   *
+  +-------+               *
+  | train |               *
+  +-------+****           *
+      *        ***        *
+      *           ****    *
+      *               **  *
++----------+         +---------+
+| evaluate |         | explain |
++----------+         +---------+
 ```
 
 If any dependencies/outputs change, the affected stages will be re-executed.
@@ -450,3 +456,4 @@ collaboration. Continue the guide to learn how.
 Highly inspired by:
 
 * the [_Get Started: Data Pipelines_ - dvc.org](https://dvc.org/doc/start/data-management/data-pipelines) guide.
+* [_plots_ - dvc.org](https://dvc.org/doc/command-reference/plots)
