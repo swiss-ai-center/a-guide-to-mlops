@@ -268,7 +268,7 @@ The following table describes the files that you will create in this codebase.
 | `src/prepare.py`        | Prepare the dataset to run the ML experiment      | The dataset to prepare in `data/raw` directory  | The prepared data in `data/prepared` directory                |
 | `src/train.py`          | Train the ML model                                | The prepared dataset                            | The model trained with the dataset                            |
 | `src/evaluate.py`       | Evaluate the ML model using scikit-learn          | The model to evaluate                           | The results of the model evaluation in `evaluation` directory |
-| `src/explain.py`        | Explain the ML model                              | The model to evaluate                           | The results of the model explanation                          |
+| `src/explain.py`        | Explain the ML model                              | The model to explain                            | The results of the model explanation                          |
 | `src/utils/seed.py`     | Util function to fix the seed                     | -                                               | -                                                             |
 
 #### Move the parameters to its own file
@@ -801,13 +801,13 @@ You can now follow these steps to reproduce the experiment.
 python3 src/prepare.py data/raw data/prepared
 
 # Train the model with the train dataset and save it
-python3 src/train.py data/prepared model.pkl
+python3 src/train.py data/prepared model.keras
 
 # Evaluate the model performances
-python3 src/evaluate.py model.pkl data/prepared
+python3 src/evaluate.py model.keras data/prepared
 
 # Explain the model
-python3 src/explain.py model.pkl data/raw
+python3 src/explain.py model.keras data/raw
 ```
 
 ### Check the results
@@ -836,7 +836,8 @@ Your working directory should now be similar to this:
 │   ├── train.py
 │   └── utils
 │       └── seed.py
-├── model.pkl # (4)!
+├── model.keras # (4)!
+│   └── ...
 ├── params.yaml
 ├── poetry.lock
 └── pyproject.toml

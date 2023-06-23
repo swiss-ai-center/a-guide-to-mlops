@@ -60,7 +60,7 @@ saves:
         log: true
       # Run the experiment
       - run: poetry run python3 src/prepare.py data/raw data/prepared
-      - run: poetry run python3 src/train.py data/prepared model.pkl
+      - run: poetry run python3 src/train.py data/prepared model.keras
       - run: poetry run python3 src/evaluate.py model.pkl data/prepared
       - run: poetry run python3 src/explain.py model.pkl data/raw
       # Log the codebase tree
