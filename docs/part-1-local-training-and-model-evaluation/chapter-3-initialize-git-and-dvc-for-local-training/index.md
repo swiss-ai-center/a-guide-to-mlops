@@ -37,7 +37,7 @@ this chapter:
 flowchart LR
 	dot_dvc[(.dvc)]
 	dot_git[(.git)]
-	data[data.csv] <-.-> dot_dvc
+	data[data/raw] <-.-> dot_dvc
     localGraph <-....-> dot_git
 	subgraph cacheGraph[CACHE]
 		dot_dvc
@@ -47,7 +47,8 @@ flowchart LR
         data --> prepare
         prepare[prepare.py] --> train
 		train[train.py] --> evaluate
-		evaluate[evaluate.py]
+        evaluate[evaluate.py] --> explain
+        explain[explain.py]
         params[params.yaml] -.- prepare
         params -.- train
 	end
@@ -55,6 +56,7 @@ flowchart LR
     style prepare opacity:0.4,color:#7f7f7f80
     style train opacity:0.4,color:#7f7f7f80
     style evaluate opacity:0.4,color:#7f7f7f80
+    style explain opacity:0.4,color:#7f7f7f80
     style params opacity:0.4,color:#7f7f7f80
     linkStyle 2 opacity:0.4,color:#7f7f7f80
     linkStyle 3 opacity:0.4,color:#7f7f7f80
@@ -101,7 +103,7 @@ Untracked files:
 (use "git add <file>..." to include in what will be committed)
     data/
     evaluation/
-    model.pkl
+    model/
     params.yaml
     poetry.lock
     pyproject.toml
@@ -121,13 +123,13 @@ remain optimized.
 
 ```sh title=".gitignore"
 # Data used to train the models
-data
+data/
 
 # Artifacts
-evaluation
+evaluation/
 
 # The models
-*.pkl
+model/
 
 ## Python
 
@@ -166,9 +168,10 @@ Changes to be committed:
     new file:   poetry.lock
     new file:   pyproject.toml
     new file:   src/evaluate.py
-    new file:   src/featurization.py
+    new file:   src/explain.py
     new file:   src/prepare.py
     new file:   src/train.py
+    new file:   src/utils/seed.py
 ```
 
 #### Commit the changes
@@ -187,7 +190,7 @@ git commit -m "My first ML experiment shared on Git"
 Install the main `dvc` package.
 
 ```sh title="Execute the following command(s) in a terminal"
-poetry add "dvc==2.58.2"
+poetry add "dvc==3.2.1"
 ```
 
 Check the differences with Git to validate the changes.
@@ -201,17 +204,17 @@ The output should be similar to this.
 
 ```diff
 diff --git a/pyproject.toml b/pyproject.toml
-index 8a57399..ff11768 100644
+index cc65f8e..eceb001 100644
 --- a/pyproject.toml
 +++ b/pyproject.toml
-@@ -13,6 +13,7 @@ pyaml = "21.10.1"
-scikit-learn = "1.1.3"
-scipy = "1.10.1"
-matplotlib = "3.6.2"
-+dvc = "2.37.0"
+@@ -11,6 +11,7 @@ python = ">=3.8,<3.12"
+matplotlib = "3.7.1"
+tensorflow = "2.12.0"
+pyyaml = "^6.0"
++dvc = "^3.2.1"
+
 
 [build-system]
-requires = ["poetry-core"]
 ```
 
 #### Initialize DVC
@@ -235,31 +238,32 @@ Try to add the experiment data. Spoiler: it will fail.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Try to add the experiment data to DVC
-dvc add data/data.csv
+dvc add data/raw/
 ```
 
 When executing this command, the following output occurs.
 
 ```sh
-ERROR: bad DVC file name 'data/data.csv.dvc' is git-ignored.
+ERROR: bad DVC file name 'data/data.raw.dvc' is git-ignored.
 ```
 
 You will have to update the `.gitignore` file so that DVC can create files in
 the `data` directory. However, you still don't want the directories
-`data/features` and `data/prepared` to be added to Git.
+`data/raw` and `data/prepared` to be added to Git.
 
-Update the `.gitignore` file by changing `data` to `data/features` and
-`data/prepared`.
+Update the `.gitignore` file by changing `data/` to `data/raw/` and
+`data/prepared/`.
 
 ```sh title=".gitignore" hl_lines="2-3"
 # Data used to train the models
-data/prepared
+data/raw/
+data/prepared/
 
 # Artifacts
-evaluation
+evaluation/
 
 # The models
-*.pkl
+model/
 
 ## Python
 
@@ -288,18 +292,18 @@ index be315d6..d65f97a 100644
 @@ -1,5 +1,6 @@
 # Data used to train the models
 -data
-+data/features
-+data/prepared
++data/raw/
++data/prepared/
 
 # Artifacts
-evaluation
+evaluation/
 ```
 
 You can now add the experiment data to DVC without complain!
 
 ```sh title="Execute the following command(s) in a terminal"
 # Add the experiment data to DVC
-dvc add data/data.csv
+dvc add data/raw/
 ```
 
 The output should be similar to this. You can safely ignore the warning.
@@ -307,17 +311,17 @@ The output should be similar to this. You can safely ignore the warning.
 ```
 To track the changes with git, run:
 
-git add data/data.csv.dvc data/.gitignore
+git add data/raw.dvc data/.gitignore
 
 To enable auto staging, run:
 
 dvc config core.autostage true
 ```
 
-The effect of the `dvc add` command is to create a `data/data.csv.dvc` file and
+The effect of the `dvc add` command is to create a `data/data.raw.dvc` file and
 a `data/.gitignore`. The `.dvc` file contains the metadata of the file that is
 used by DVC to download and check the integrity of the files. The `.gitignore`
-file is created to add the `data.csv` file to be ignored by Git. The `.dvc`
+file is created to add the files in `data/raw` to be ignored by Git. The `.dvc`
 files must be added to Git.
 
 Various DVC commands will automatically try to update the `.gitignore` files. If a
@@ -349,7 +353,7 @@ Changes to be committed:
     modified:   .gitignore
     new file:   data/.gitignore
     new file:   data/README.md
-    new file:   data/data.csv.dvc
+    new file:   data/raw.dvc
     modified:   poetry.lock
     modified:   pyproject.toml
 ```

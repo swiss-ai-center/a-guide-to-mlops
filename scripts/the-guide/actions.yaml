@@ -82,7 +82,7 @@ saves:
         log: true
       - run: git commit -m "My first ML experiment shared on Git"
       # Create a DVC repository
-      - run: poetry add "dvc==2.58.2"
+      - run: poetry add "dvc==3.2.1"
       - run: git diff pyproject.toml
         log: true
       - run: poetry run dvc init
@@ -91,32 +91,12 @@ saves:
         occurance_index: 1
       - run: git diff .gitignore
         log: true
-      - run: poetry run dvc add data/data.csv
+      - run: poetry run dvc add data/raw/
         log: true
       - run: git add .
       - run: git status
         log: true
       - run: git commit -m "My ML experiment data is saved with DVC"
-
-  # chapter-3-share-your-ml-experiment-data-with-dvc:
-  #   save_git: true
-  #   actions:
-  #     - run: poetry add "dvc[gs]==2.37.0"
-  #     - run: git diff pyproject.toml
-  #       log: true
-  #     - run: poetry run dvc init
-  #     - run: poetry run dvc remote add -d data gs://mlopsdemo/dvcstore
-  #     - replace_from_md:
-  #       file: .gitignore
-  #       occurance_index: 0
-  #     - run: git diff .gitignore
-  #       log: true
-  #     - run: poetry run dvc add data/data.xml
-  #     - run: poetry run dvc push
-  #     - run: git add .
-  #     - run: git status
-  #       log: true
-  #     - run: git commit -m "My ML experiment data is saved with DVC"
 
   # chapter-4-reproduce-the-experiment-with-dvc:
   #   save_git: true
