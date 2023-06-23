@@ -92,10 +92,11 @@ this chapter:
 ```mermaid
 flowchart
     subgraph localGraph[LOCAL]
-        data[data.csv] --> prepare
+        data[data/raw] --> prepare
         prepare[prepare.py] --> train
         train[train.py] --> evaluate
-        evaluate[evaluate.py]
+        evaluate[evaluate.py] --> explain
+        explain[explain.py]
         params[params.yaml] -.- prepare
         params -.- train
     end
@@ -801,13 +802,13 @@ You can now follow these steps to reproduce the experiment.
 python3 src/prepare.py data/raw data/prepared
 
 # Train the model with the train dataset and save it
-python3 src/train.py data/prepared model.keras
+python3 src/train.py data/prepared model
 
 # Evaluate the model performances
-python3 src/evaluate.py model.keras data/prepared
+python3 src/evaluate.py model data/prepared
 
 # Explain the model
-python3 src/explain.py model.keras data/raw
+python3 src/explain.py model data/raw
 ```
 
 ### Check the results
@@ -836,7 +837,7 @@ Your working directory should now be similar to this:
 │   ├── train.py
 │   └── utils
 │       └── seed.py
-├── model.keras # (4)!
+├── model # (4)!
 │   └── ...
 ├── params.yaml
 ├── poetry.lock
@@ -852,8 +853,8 @@ Here, the following should be noted:
 
 - the `prepare.py` script created the `data/prepared` directory and divided the
 dataset into a training set and a test set
-- the `train.py` script created the `model.pkl` file and trained the model with
-the extracted features
+- the `train.py` script created the `model` directory and trained the model with
+the prepared data.
 - the `evaluate.py` script created the `evaluation` directory and generated some
 plots and metrics to evaluate the model
 - the `explain.py` script generated a GRAD-CAM heatmap to explain the model
