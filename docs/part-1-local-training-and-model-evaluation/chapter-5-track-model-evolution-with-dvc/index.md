@@ -24,19 +24,20 @@ Let's get started!
 Update your experiment with the following parameters by editing the
 `params.yaml` file.
 
-```yaml title="params.yaml" hl_lines="6-7"
+```yaml title="params.yaml" hl_lines="9-12"
 prepare:
-split: 0.20
-seed: 20170428
-
-featurize:
-max_features: 200
-ngrams: 2
+  seed: 77
+  split: 0.2
+  image_size: [32, 32]
+  grayscale: True
 
 train:
-seed: 20170428
-n_est: 50
-min_split: 2
+  seed: 77
+  lr: 0.001
+  epochs: 10
+  conv_size: 64
+  dense_size: 128
+  output_classes: 11
 ```
 
 Check the differences with Git to validate the changes.
@@ -50,24 +51,26 @@ The output should be similar to this.
 
 ```diff
 diff --git a/params.yaml b/params.yaml
-index 83e7649..586d3e2 100644
+index 5bb698e..4572100 100644
 --- a/params.yaml
 +++ b/params.yaml
-@@ -3,8 +3,8 @@ prepare:
-seed: 20170428
+@@ -6,8 +6,8 @@ prepare:
 
-featurize:
--  max_features: 100
--  ngrams: 1
-+  max_features: 200
-+  ngrams: 2
-
-train:
-seed: 20170428
+ train:
+   seed: 77
+-  lr: 0.0001
+-  epochs: 5
+-  conv_size: 32
+-  dense_size: 64
++  lr: 0.001
++  epochs: 10
++  conv_size: 64
++  dense_size: 128
+   output_classes: 11
 ```
 
-Here, we simply changed the `max_features` and `ngrams` parameters of the
-`featurize` stage, which should slightly affect the model's performance.
+Here, we simply changed the `lr` (learning rate), `epochs`, `conv_size` (convolutional layer dimension) and `dense_size` (dense layer dimension) parameters of the
+`train` stage, which should slightly affect the model's performance.
 
 ### Reproduce the experiment
 
@@ -106,9 +109,11 @@ dvc params diff
 The output should look like this.
 
 ```
-Path         Param                   HEAD    workspace
-params.yaml  featurize.max_features  100     200
-params.yaml  featurize.ngrams        1       2
+Path         Param             HEAD    workspace
+params.yaml  train.conv_size   32      64
+params.yaml  train.dense_size  64      128
+params.yaml  train.epochs      5       10
+params.yaml  train.lr          0.0001  0.001
 ```
 
 DVC displays the differences between `HEAD` and `workspace`, so you can easily
@@ -129,8 +134,8 @@ The output should look like this.
 
 ```
 Path                     Metric    HEAD     workspace    Change
-evaluation/metrics.json  avg_prec  0.89668  0.9202       0.02353
-evaluation/metrics.json  roc_auc   0.92729  0.94096      0.01368
+evaluation/metrics.json  val_acc   0.67601  0.97508      0.29907
+evaluation/metrics.json  val_loss  1.33409  0.10623      -1.22786
 ```
 
 Again, DVC shows you the differences, so you can easily compare the two
@@ -180,7 +185,7 @@ __pycache__/
 dvc_plots
 
 # DVC will add new files after this line
-/model.pkl
+/model
 ```
 
 !!! info
@@ -198,18 +203,18 @@ The output should be similar to this.
 
 ```diff
 diff --git a/.gitignore b/.gitignore
-index 165e2c9..a2e21d2 100644
+index 20ed99e..8f83021 100644
 --- a/.gitignore
 +++ b/.gitignore
 @@ -5,5 +5,8 @@ __pycache__/
 
-## DVC
+ ## DVC
 
 +# DVC plots
 +dvc_plots
 +
-# DVC will add new files after this line
-/model.pkl
+ # DVC will add new files after this line
+ /model
 ```
 
 ### Check the changes

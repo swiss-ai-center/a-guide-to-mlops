@@ -212,8 +212,10 @@ Run the following command to create a new stage called _evaluate_ that evaluates
 ```sh title="Execute the following command(s) in a terminal"
 poetry run dvc stage add -n evaluate \
 -d src/evaluate.py -d model \
--o evaluation/plots \
 --metrics evaluation/metrics.json \
+--plots evaluation/plots/confusion_matrix.png \
+--plots evaluation/plots/pred_preview.png \
+--plots evaluation/plots/training_history.png \
 python src/evaluate.py model data/prepared
 ```
 
@@ -221,13 +223,16 @@ This stage has the `src/evaluate.py` file and then `model` folder as dependencie
 If any of these files change, DVC will run the command
 `python src/evaluate.py model data/prepared` when using `dvc repro`.
 
-<!-- TODO: Use dvclive?
-This command writes the model's metrics to `evaluation/metrics.json`. It writes
+The script writes the model's metrics to `evaluation/metrics.json`,
 the `confusion_matrix` to `evaluation/plots/confusion_matrix.png`, the
 `pred_preview` to `evaluation/plots/pred_preview.png` and the `training_history.png` to
-`evaluation/plots/training_history.png` that display some plots.
-Here, `no-cache` prevents DVC from caching the metrics and plots.
+`evaluation/plots/training_history.png`.
 
+<!-- TODO: Cache with Git?
+Here, `no-cache` prevents DVC from caching the metrics and plots.
+-->
+
+<!-- TODO: Use DVCLive?
 DVC has the ability to generate images for the plots.
 The following command are used to tune the axes of the plots.
 
@@ -271,7 +276,7 @@ __pycache__/
 ## DVC
 
 # DVC will add new files after this line
-/model.pkl
+/model
 ```
 
 !!! info
@@ -288,27 +293,27 @@ dvc dag
 ```
 
 ```
-+--------------+ 
-| data/raw.dvc | 
-+--------------+ 
-        *        
-        *        
-        *        
-  +---------+    
-  | prepare |    
-  +---------+    
-        *        
-        *        
-        *        
-    +-------+    
-    | train |    
-    +-------+    
-        *        
-        *        
-        *        
-  +----------+   
-  | evaluate |   
-  +----------+  
++--------------+
+| data/raw.dvc |
++--------------+
+        *
+        *
+        *
+  +---------+
+  | prepare |
+  +---------+
+        *
+        *
+        *
+    +-------+
+    | train |
+    +-------+
+        *
+        *
+        *
+  +----------+
+  | evaluate |
+  +----------+
 ```
 
 If any dependencies/outputs change, the affected stages will be re-executed.

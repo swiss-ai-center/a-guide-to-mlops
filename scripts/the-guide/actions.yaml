@@ -118,8 +118,10 @@ saves:
       - run: |-
           poetry run dvc stage add -n evaluate \
             -d src/evaluate.py -d model \
-            -o evaluation/plots \
             --metrics evaluation/metrics.json \
+            --plots evaluation/plots/confusion_matrix.png \
+            --plots evaluation/plots/pred_preview.png \
+            --plots evaluation/plots/training_history.png \
             python src/evaluate.py model data/prepared
       - run: poetry run dvc dag
         log: true
@@ -129,27 +131,29 @@ saves:
         log: true
       - run: git commit -m "My ML experiment commands are saved with DVC"
 
-  # chapter-5-track-model-evolutions-with-dvc:
-  #   save_git: true
-  #   actions:
-  #     - replace_from_md:
-  #       file: params.yaml
-  #       occurance_index: 0
-  #     - run: git diff params.yaml
-  #       log: true
-  #     - run: poetry run dvc repro
-  #     - run: poetry run dvc params diff
-  #       log: true
-  #     - run: poetry run dvc metrics diff
-  #       log: true
-  #     - run: poetry run dvc plots diff
-  #     - replace_from_md:
-  #       file: .gitignore
-  #       occurance_index: 0
-  #     - run: git diff .gitignore
-  #       log: true
-  #     - run: git status
-  #       log: true
+  part-1-local-training-and-model-evaluation/chapter-5-track-model-evolution-with-dvc:
+    save_git: true
+    actions:
+      - replace_from_md:
+        file: params.yaml
+        occurance_index: 0
+      - run: git diff params.yaml
+        log: true
+      - run: poetry run dvc repro
+      - run: poetry run dvc params diff
+        log: true
+      - run: poetry run dvc metrics diff
+        log: true
+      - run: poetry run dvc plots diff
+      - replace_from_md:
+        file: .gitignore
+        occurance_index: 0
+      - run: git diff .gitignore
+        log: true
+      - run: git add .
+      - run: git status
+        log: true
+      - run: git commit -m "My ML experiment changes are tracked"
 
   # chapter-6-orchestrate-the-workflow-with-a-cicd-pipeline:
   #   save_git: true
