@@ -16,7 +16,7 @@ saves:
       - run: mv a-guide-to-mlops-59-data/ data/
       - run: rm data.zip
       # Log the codebase tree
-      - run: tree --dirsfirst
+      - run: tree --dirsfirst -I '*.jpg'
         log: true
       # Create the virtual environment
       - run: python3 -m venv .venv
@@ -33,8 +33,9 @@ saves:
       - run: mv a-guide-to-mlops-59-data/ data/
       - run: rm data.zip
       # Initialize poetry
-      - run: poetry init --no-interaction
-      - run: sed -i 's/python = "^3.11"/python = ">=3.8,<3.12"/g' pyproject.toml # avoid dependency resolution issue
+      - replace_from_md:  
+        file: pyproject.toml
+        occurance_index: 0
       - run: poetry add "matplotlib==3.7.1" "tensorflow==2.12.0" "pyyaml==6.0"
       # Add new files
       - replace_from_md:
@@ -50,21 +51,17 @@ saves:
         file: src/evaluate.py
         occurance_index: 0
       - replace_from_md:
-        file: src/explain.py
-        occurance_index: 0
-      - replace_from_md:
         file: src/utils/seed.py
         occurance_index: 0
       # Log the codebase tree
-      - run: tree --dirsfirst
+      - run: tree --dirsfirst -I '*.jpg'
         log: true
       # Run the experiment
       - run: poetry run python src/prepare.py data/raw data/prepared
       - run: poetry run python src/train.py data/prepared model
       - run: poetry run python src/evaluate.py model data/prepared
-      - run: poetry run python src/explain.py model data/raw
       # Log the codebase tree
-      - run: tree --dirsfirst
+      - run: tree --dirsfirst -I '*.jpg'
         log: true
 
   part-1-local-training-and-model-evaluation/chapter-3-initialize-git-and-dvc-for-local-training:
@@ -108,50 +105,28 @@ saves:
         log: true
       - run: |-
           poetry run dvc stage add -n prepare \
-            -p prepare.seed,prepare.split,prepare.image_size,prepare.grayscale \
-            -d src/prepare.py -d data/raw \
+            -p prepare \
+            -d src/prepare.py -d src/utils/seed.py -d data/raw \
             -o data/prepared \
             python src/prepare.py data/raw data/prepared
       - run: |-
           poetry run dvc stage add -n train \
-            -p train.seed,train.lr,train.epochs,train.conv_size,train.dense_size,train.output_classes \
-            -d src/train.py -d data/prepared \
+            -p train \
+            -d src/train.py -d src/utils/seed.py -d data/prepared \
             -o model \
             python src/train.py data/prepared model
       - run: |-
           poetry run dvc stage add -n evaluate \
             -d src/evaluate.py -d model \
-            -o evaluation/plots/metrics \
+            -o evaluation/plots \
             --metrics evaluation/metrics.json \
-            --plots evaluation/plots/confusion_matrix.png \
-            --plots evaluation/plots/pred_preview.png \
-            --plots evaluation/plots/training_history.png \
             python src/evaluate.py model data/prepared
-      - run: |-
-          poetry run dvc stage add -n explain \
-            -d src/explain.py -d model -d data/raw \
-            -o explanation/plots/metrics \
-            --plots explanation/plots/grad_cam.png \
-            python src/explain.py model data/raw
-#       - run: |-
-#           poetry run dvc plots modify evaluation/plots/prc.json \
-#               -x recall \
-#               -y precision
-#       - run: |-
-#           poetry run dvc plots modify evaluation/plots/sklearn/roc.json \
-#               -x fpr \
-#               -y tpr
-#       - run: |-
-#           poetry run dvc plots modify evaluation/plots/sklearn/confusion_matrix.json \
-#               -x actual \
-#               -y predicted \
-#               -t confusion
       - run: poetry run dvc dag
+        log: true
       - run: poetry run dvc repro
       - run: git add .
       - run: git status
         log: true
-      - run: poetry run dvc push
       - run: git commit -m "My ML experiment commands are saved with DVC"
 
   # chapter-5-track-model-evolutions-with-dvc:

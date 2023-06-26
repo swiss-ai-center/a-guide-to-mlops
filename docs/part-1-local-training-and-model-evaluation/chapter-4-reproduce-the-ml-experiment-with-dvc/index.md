@@ -16,14 +16,13 @@ of changes.
 In this chapter, you will learn how to:
 
 1. Remove custom rules from the `.gitignore` file
-2. Set up four DVC pipeline stages:
+2. Set up three DVC pipeline stages:
 - `prepare`
 - `train`
 - `evaluate`
-- `explain`
-1. Visualize the pipeline
-2. Execute the pipeline
-3. Push the changes to DVC and Git
+3. Visualize the pipeline
+4. Execute the pipeline
+5. Push the changes to DVC and Git
 
 The following diagram illustrates control flow of the experiment at the end of
 this chapter:
@@ -42,12 +41,10 @@ flowchart LR
 		prepare[prepare.py] <-.-> dot_dvc
 		train[train.py] <-.-> dot_dvc
 		evaluate[evaluate.py] <-.-> dot_dvc
-        explain[explain.py] <-.-> dot_dvc
 		data --> prepare
 		subgraph dvcGraph["dvc.yaml (dvc repro)"]
 			prepare --> train
 			train --> evaluate
-            evaluate --> explain
 		end
         params[params.yaml] -.- prepare
         params -.- train
@@ -57,9 +54,6 @@ flowchart LR
     style data opacity:0.4,color:#7f7f7f80
     linkStyle 0 opacity:0.4,color:#7f7f7f80
     linkStyle 1 opacity:0.4,color:#7f7f7f80
-    linkStyle 5 opacity:0.4,color:#7f7f7f80
-    linkStyle 8 opacity:0.4,color:#7f7f7f80
-    linkStyle 9 opacity:0.4,color:#7f7f7f80
 ```
 
 As a reminder, the current steps to run the experiment are as follow:
@@ -73,15 +67,11 @@ python src/train.py data/prepared model
 
 # Evaluate the model performances
 python src/evaluate.py model data/prepared
-
-# Explain the model
-python src/explain.py model data/raw
 ```
 
 Let's get started!
 
 ## Steps
-
 
 ### Remove custom rules from the .gitignore file
 
@@ -177,18 +167,17 @@ Run the following command to add a new stage called _prepare_ that prepares the 
 
 ```sh title="Execute the following command(s) in a terminal"
 dvc stage add -n prepare \
- -p prepare.seed,prepare.split,prepare.image_size,prepare.grayscale \
- -d src/prepare.py -d data/raw \
+ -p prepare \
+ -d src/prepare.py -d src/utils/seed.py -d data/raw \
  -o data/prepared \
  python src.prepare.py data/raw data/prepared
 ```
 
-The values of the parameters `prepare.seed`, `prepare.split`, `prepare.image_size`
-and `prepare.grayscale` are referenced in the `params.yaml` file.
+The values of the parameters is `prepare` which includes all the `prepare` parameters referenced in the `params.yaml` file.
 
-This stage has the `src/prepare.py` and `data/raw` files as dependencies.
+This stage has the `src/prepare.py`, the `src/utils/seed.py` and `data/raw` files as dependencies.
 If any of these files change, DVC will run the command
-`python src/prepare.py data/raw` when using `dvc repro`.
+`python src/prepare.py data/raw data/prepared` when using `dvc repro`.
 
 The output of this command is stored in the `data/prepared` directory.
 
@@ -200,19 +189,17 @@ Run the following command to create a new stage called _train_ that trains the m
 
 ```sh title="Execute the following command(s) in a terminal"
 dvc stage add -n train \
--p train.seed,train.lr,train.epochs,train.conv_size,train.dense_size,train.output_classes \
--d src/train.py -d data/prepared \
+-p train \
+-d src/train.py -d src/utils/seed.py -d data/prepared \
 -o model \
 python src/train.py data/prepared model
 ```
 
-The values of the parameters `train.seed`, `train.lr`, `train.epochs`,
-`train.conv_size`, `train.dense_size`, `train.output_classesand ` are referenced
-in the `params.yaml` file.
+TheThe values of the parameters is `train` which includes all the `train` parameters referenced in the `params.yaml` file.
 
-This stage has the `src/train.py` and `data/prepared` files as dependencies.
+This stage has the `src/train.py`, the `src/utils/seed.py` and `data/prepared` files as dependencies.
 If any of these files change, DVC will run the command
-`python src/evaluate.py model data/prepared` when using `dvc repro`.
+`python src/evaluate.py data/prepared model` when using `dvc repro`.
 
 The output of this command is stored in the `model` directory.
 
@@ -223,20 +210,18 @@ Explore the `dvc.yaml` file to understand how the pipeline is updated.
 Run the following command to create a new stage called _evaluate_ that evaluates the model.
 
 ```sh title="Execute the following command(s) in a terminal"
-dvc stage add -n evaluate \
+poetry run dvc stage add -n evaluate \
 -d src/evaluate.py -d model \
--o evaluation/plots/metrics \
+-o evaluation/plots \
 --metrics evaluation/metrics.json \
---plots evaluation/plots/confusion_matrix.png \
---plots evaluation/plots/pred_preview.png \
---plots evaluation/plots/training_history.png \
 python src/evaluate.py model data/prepared
 ```
 
-This stage has the `src/evaluate.py` file and `model.pkl` file, and the `data/features` directory as dependencies.
+This stage has the `src/evaluate.py` file and then `model` folder as dependencies.
 If any of these files change, DVC will run the command
-`python src/evaluate.py model.pkl data/features` when using `dvc repro`.
+`python src/evaluate.py model data/prepared` when using `dvc repro`.
 
+<!-- TODO: Use dvclive?
 This command writes the model's metrics to `evaluation/metrics.json`. It writes
 the `confusion_matrix` to `evaluation/plots/confusion_matrix.png`, the
 `pred_preview` to `evaluation/plots/pred_preview.png` and the `training_history.png` to
@@ -265,29 +250,7 @@ dvc plots modify evaluation/plots/sklearn/roc.json -x fpr -y tpr
 # Set the axes for the `confusion_matrix`
 dvc plots modify evaluation/plots/sklearn/confusion_matrix.json -x actual -y predicted -t confusion
 ```
-
-Explore the `dvc.yaml` file to understand how the pipeline is updated.
-
-
-#### `explain` stage
-
-Run the following command to create a new stage called _explain_ that performs an explanation through GRAD-CAM.
-
-```sh title="Execute the following command(s) in a terminal"
-dvc stage add -n explain \
--d src/explain.py -d model -d data/raw \
--o explanation/plots/metrics \
---plots explanation/plots/grad_cam.png \
-python src/explain.py model data/raw
-```
-
-This stage has the `src/explain.py` file, `model` and `data/raw` directory
-as dependencies.
-If any of these files change, DVC will run the command
-`python src/explain.py model data/raw`
-when using `dvc repro`.
-
-The outputs of this command are stored in the `evaluation/plots/metrics/plots/grad_cam.png` file.
+-->
 
 Explore the `dvc.yaml` file to understand how the pipeline is updated.
 
@@ -325,27 +288,27 @@ dvc dag
 ```
 
 ```
-        +--------------+
-        | data/raw.dvc |
-        +--------------+
-           **        **
-         **            *
-        *               **
-+---------+               *
-| prepare |               *
-+---------+               *
-      *                   *
-      *                   *
-      *                   *
-  +-------+               *
-  | train |               *
-  +-------+****           *
-      *        ***        *
-      *           ****    *
-      *               **  *
-+----------+         +---------+
-| evaluate |         | explain |
-+----------+         +---------+
++--------------+ 
+| data/raw.dvc | 
++--------------+ 
+        *        
+        *        
+        *        
+  +---------+    
+  | prepare |    
+  +---------+    
+        *        
+        *        
+        *        
+    +-------+    
+    | train |    
+    +-------+    
+        *        
+        *        
+        *        
+  +----------+   
+  | evaluate |   
+  +----------+  
 ```
 
 If any dependencies/outputs change, the affected stages will be re-executed.
@@ -383,15 +346,12 @@ On branch main
 Your branch is up to date with 'origin/main'.
 
 Changes to be committed:
-(use "git restore --staged <file>..." to unstage)
-    modified:   .gitignore
-    modified:   data/.gitignore
-    new file:   data/features/.gitignore
-    new file:   dvc.lock
-    new file:   dvc.yaml
-    new file:   evaluation/.gitignore
-    new file:   evaluation/plots/.gitignore
-    new file:   evaluation/plots/sklearn/.gitignore
+  (use "git restore --staged <file>..." to unstage)
+	modified:   .gitignore
+	modified:   data/.gitignore
+	new file:   dvc.lock
+	new file:   dvc.yaml
+	new file:   evaluation/.gitignore
 ```
 
 ### Commit the changes
@@ -413,11 +373,10 @@ Congrats! You have defined a pipeline and know how to reproduce your experiment.
 In this chapter, you have successfully:
 
 1. Removed custom rules from the `.gitignore` file
-2. Set up four DVC pipeline stages
-- `prepare`
-- `featurize`
-- `train`
-- `evaluate`
+2. Set up three DVC pipeline stages
+   - `prepare`
+   - `train`
+   - `evaluate`
 3. Visualized the pipeline
 4. Executed the pipeline
 5. Committed the changes

@@ -46,9 +46,7 @@ flowchart LR
 	subgraph localGraph[LOCAL]
         data --> prepare
         prepare[prepare.py] --> train
-		train[train.py] --> evaluate
-        evaluate[evaluate.py] --> explain
-        explain[explain.py]
+		train[train.py] --> evaluate[evaluate.py]
         params[params.yaml] -.- prepare
         params -.- train
 	end
@@ -56,7 +54,6 @@ flowchart LR
     style prepare opacity:0.4,color:#7f7f7f80
     style train opacity:0.4,color:#7f7f7f80
     style evaluate opacity:0.4,color:#7f7f7f80
-    style explain opacity:0.4,color:#7f7f7f80
     style params opacity:0.4,color:#7f7f7f80
     linkStyle 2 opacity:0.4,color:#7f7f7f80
     linkStyle 3 opacity:0.4,color:#7f7f7f80
@@ -100,14 +97,14 @@ On branch main
 No commits yet
 
 Untracked files:
-(use "git add <file>..." to include in what will be committed)
-    data/
-    evaluation/
-    model/
-    params.yaml
-    poetry.lock
-    pyproject.toml
-    src/
+  (use "git add <file>..." to include in what will be committed)
+	data/
+	evaluation/
+	model/
+	params.yaml
+	poetry.lock
+	pyproject.toml
+	src/
 ```
 
 As you can see, no files have been added to Git yet.
@@ -162,16 +159,15 @@ On branch main
 No commits yet
 
 Changes to be committed:
-(use "git rm --cached <file>..." to unstage)
-    new file:   .gitignore
-    new file:   params.yaml
-    new file:   poetry.lock
-    new file:   pyproject.toml
-    new file:   src/evaluate.py
-    new file:   src/explain.py
-    new file:   src/prepare.py
-    new file:   src/train.py
-    new file:   src/utils/seed.py
+  (use "git rm --cached <file>..." to unstage)
+	new file:   .gitignore
+	new file:   params.yaml
+	new file:   poetry.lock
+	new file:   pyproject.toml
+	new file:   src/evaluate.py
+	new file:   src/prepare.py
+	new file:   src/train.py
+	new file:   src/utils/seed.py
 ```
 
 #### Commit the changes
@@ -311,11 +307,11 @@ The output should be similar to this. You can safely ignore the warning.
 ```
 To track the changes with git, run:
 
-git add data/raw.dvc data/.gitignore
+	git add data/raw.dvc data/.gitignore
 
 To enable auto staging, run:
 
-dvc config core.autostage true
+	dvc config core.autostage true
 ```
 
 The effect of the `dvc add` command is to create a `data/data.raw.dvc` file and
@@ -346,16 +342,16 @@ The output of the `git status` command should be similar to this.
 ```
 On branch main
 Changes to be committed:
-(use "git restore --staged <file>..." to unstage)
-    new file:   .dvc/.gitignore
-    new file:   .dvc/config
-    new file:   .dvcignore
-    modified:   .gitignore
-    new file:   data/.gitignore
-    new file:   data/README.md
-    new file:   data/raw.dvc
-    modified:   poetry.lock
-    modified:   pyproject.toml
+  (use "git restore --staged <file>..." to unstage)
+	new file:   .dvc/.gitignore
+	new file:   .dvc/config
+	new file:   .dvcignore
+	modified:   .gitignore
+	new file:   data/.gitignore
+	new file:   data/README.md
+	new file:   data/raw.dvc
+	modified:   poetry.lock
+	modified:   pyproject.toml
 ```
 
 #### Commit the changes to Git
