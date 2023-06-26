@@ -16,10 +16,10 @@ of changes.
 In this chapter, you will learn how to:
 
 1. Remove custom rules from the `.gitignore` file
-2. Set up three DVC pipeline stages:
-- `prepare`
-- `train`
-- `evaluate`
+2. Set up DVC pipeline stages:
+    - `prepare`
+    - `train`
+    - `evaluate`
 3. Visualize the pipeline
 4. Execute the pipeline
 5. Push the changes to DVC and Git
@@ -29,27 +29,27 @@ this chapter:
 
 ```mermaid
 flowchart LR
-	dot_dvc[(.dvc)]
-	dot_git[(.git)]
-	data[data/raw] <-.-> dot_dvc
+    dot_dvc[(.dvc)]
+    dot_git[(.git)]
+    data[data/raw] <-.-> dot_dvc
     localGraph <-....-> dot_git
-	subgraph cacheGraph[CACHE]
-		dot_dvc
-		dot_git
-	end
-	subgraph localGraph[LOCAL]
-		prepare[prepare.py] <-.-> dot_dvc
-		train[train.py] <-.-> dot_dvc
-		evaluate[evaluate.py] <-.-> dot_dvc
-		data --> prepare
-		subgraph dvcGraph["dvc.yaml (dvc repro)"]
-			prepare --> train
-			train --> evaluate
-		end
+    subgraph cacheGraph[CACHE]
+        dot_dvc
+        dot_git
+    end
+    subgraph localGraph[LOCAL]
+        prepare[prepare.py] <-.-> dot_dvc
+        train[train.py] <-.-> dot_dvc
+        evaluate[evaluate.py] <-.-> dot_dvc
+        data --> prepare
+        subgraph dvcGraph["dvc.yaml (dvc repro)"]
+            prepare --> train
+            train --> evaluate
+        end
         params[params.yaml] -.- prepare
         params -.- train
         params <-.-> dot_dvc
-	end
+    end
     style dot_git opacity:0.4,color:#7f7f7f80
     style data opacity:0.4,color:#7f7f7f80
     linkStyle 0 opacity:0.4,color:#7f7f7f80
@@ -347,11 +347,11 @@ Your branch is up to date with 'origin/main'.
 
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
-	modified:   .gitignore
-	modified:   data/.gitignore
-	new file:   dvc.lock
-	new file:   dvc.yaml
-	new file:   evaluation/.gitignore
+    modified:   .gitignore
+    modified:   data/.gitignore
+    new file:   dvc.lock
+    new file:   dvc.yaml
+    new file:   evaluation/.gitignore
 ```
 
 ### Commit the changes
