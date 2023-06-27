@@ -1,6 +1,13 @@
 base_tmp_path: tmp/the-guide/generated_checkpoints
 base_save_path: docs
 
+variables:
+  DVC_VERSION: 3.2.2
+  MATPLOTLIB_VERSION: 3.7.1
+  TENSORFLOW_VERSION: 2.12.0
+  PYYAML_VERSION: 6.0
+  TREE_CMD: tree --dirsfirst -I '*.jpg'
+
 saves:
   part-1-local-training-and-model-evaluation/chapter-1-run-a-simple-ml-experiment-with-jupyter-notebook:
     save_git: false
@@ -16,7 +23,7 @@ saves:
       - run: mv a-guide-to-mlops-59-data/ data/
       - run: rm data.zip
       # Log the codebase tree
-      - run: tree --dirsfirst -I '*.jpg'
+      - run: "{{ TREE_CMD }}"
         log: true
       # Create the virtual environment
       - run: python3 -m venv .venv
@@ -36,7 +43,7 @@ saves:
       - replace_from_md:
         file: pyproject.toml
         occurance_index: 0
-      - run: poetry add "matplotlib==3.7.1" "tensorflow==2.12.0" "pyyaml==6.0"
+      - run: poetry add "matplotlib=={{ MATPLOTLIB_VERSION }}" "tensorflow=={{ TENSORFLOW_VERSION }}" "pyyaml=={{ PYYAML_VERSION }}"
       # Add new files
       - replace_from_md:
         file: params.yaml
@@ -54,14 +61,14 @@ saves:
         file: src/utils/seed.py
         occurance_index: 0
       # Log the codebase tree
-      - run: tree --dirsfirst -I '*.jpg'
+      - run: "{{ TREE_CMD }}"
         log: true
       # Run the experiment
       - run: poetry run python src/prepare.py data/raw data/prepared
       - run: poetry run python src/train.py data/prepared model
       - run: poetry run python src/evaluate.py model data/prepared
       # Log the codebase tree
-      - run: tree --dirsfirst -I '*.jpg'
+      - run: "{{ TREE_CMD }}"
         log: true
 
   part-1-local-training-and-model-evaluation/chapter-3-initialize-git-and-dvc-for-local-training:
@@ -79,7 +86,7 @@ saves:
         log: true
       - run: git commit -m "My first ML experiment shared on Git"
       # Create a DVC repository
-      - run: poetry add "dvc==3.2.2"
+      - run: poetry add "dvc=={{ DVC_VERSION }}"
       - run: git diff pyproject.toml
         log: true
       - run: poetry run dvc init
@@ -158,7 +165,7 @@ saves:
   part-2-move-to-the-cloud/chapter-6-move-the-ml-experiment-data-to-the-cloud:
     save_git: false
     actions:
-      - run: poetry add "dvc[gs]==3.2.2"
+      - run: poetry add "dvc[gs]=={{ DVC_VERSION }}"
       - run: git diff pyproject.toml
         log: true
       - run: poetry run dvc remote add -d data gs://mlopsdemo/dvcstore
