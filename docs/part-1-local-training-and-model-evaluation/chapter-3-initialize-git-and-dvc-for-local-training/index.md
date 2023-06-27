@@ -186,7 +186,7 @@ git commit -m "My first ML experiment shared on Git"
 Install the main `dvc` package.
 
 ```sh title="Execute the following command(s) in a terminal"
-poetry add "dvc==3.2.1"
+poetry add "dvc==3.2.2"
 ```
 
 Check the differences with Git to validate the changes.

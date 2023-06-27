@@ -233,7 +233,7 @@ Install the DVC Storage plugin for the chosen cloud provider.
     Here, the `dvc[gs]` package enables support for Google Cloud Storage.
 
     ```sh title="Execute the following command(s) in a terminal"
-    poetry add "dvc[gs]==2.37.0"
+    poetry add "dvc[gs]==3.2.2"
     ```
     Check the differences with Git to validate the changes.
 
