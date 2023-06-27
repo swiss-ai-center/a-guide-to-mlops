@@ -33,7 +33,7 @@ saves:
       - run: mv a-guide-to-mlops-59-data/ data/
       - run: rm data.zip
       # Initialize poetry
-      - replace_from_md:  
+      - replace_from_md:
         file: pyproject.toml
         occurance_index: 0
       - run: poetry add "matplotlib==3.7.1" "tensorflow==2.12.0" "pyyaml==6.0"
@@ -118,10 +118,10 @@ saves:
       - run: |-
           poetry run dvc stage add -n evaluate \
             -d src/evaluate.py -d model \
-            --metrics evaluation/metrics.json \
-            --plots evaluation/plots/confusion_matrix.png \
-            --plots evaluation/plots/pred_preview.png \
-            --plots evaluation/plots/training_history.png \
+            --metrics-no-cache evaluation/metrics.json \
+            --plots-no-cache evaluation/plots/confusion_matrix.png \
+            --plots-no-cache evaluation/plots/pred_preview.png \
+            --plots-no-cache evaluation/plots/training_history.png \
             python src/evaluate.py model data/prepared
       - run: poetry run dvc dag
         log: true

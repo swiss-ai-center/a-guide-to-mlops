@@ -212,10 +212,10 @@ Run the following command to create a new stage called _evaluate_ that evaluates
 ```sh title="Execute the following command(s) in a terminal"
 poetry run dvc stage add -n evaluate \
 -d src/evaluate.py -d model \
---metrics evaluation/metrics.json \
---plots evaluation/plots/confusion_matrix.png \
---plots evaluation/plots/pred_preview.png \
---plots evaluation/plots/training_history.png \
+--metrics-no-cache evaluation/metrics.json \
+--plots-no-cache evaluation/plots/confusion_matrix.png \
+--plots-no-cache evaluation/plots/pred_preview.png \
+--plots-no-cache evaluation/plots/training_history.png \
 python src/evaluate.py model data/prepared
 ```
 
@@ -228,9 +228,7 @@ the `confusion_matrix` to `evaluation/plots/confusion_matrix.png`, the
 `pred_preview` to `evaluation/plots/pred_preview.png` and the `training_history.png` to
 `evaluation/plots/training_history.png`.
 
-<!-- TODO: Cache with Git?
-Here, `no-cache` prevents DVC from caching the metrics and plots.
--->
+Here, `*-no-cache` prevents DVC from caching the metrics and plots.
 
 <!-- TODO: Use DVCLive?
 DVC has the ability to generate images for the plots.
