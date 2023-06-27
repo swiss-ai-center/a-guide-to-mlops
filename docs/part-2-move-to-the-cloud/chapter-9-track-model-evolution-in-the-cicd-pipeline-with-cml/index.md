@@ -216,50 +216,35 @@ collaboration and decision-making within the team.
               dvc metrics diff main --show-md >> report.md
               echo >> report.md
 
+              # Compare plots (images) to main branch
+              dvc plots diff
+
               # Create plots
               echo "# Plots" >> report.md
               echo >> report.md
 
-              echo "## Precision recall curve" >> report.md
+              # Create training history plot
+              echo "## Training History" >> report.md
               echo >> report.md
-              dvc plots diff \
-              --target evaluation/plots/prc.json \
-              -x recall \
-              -y precision \
-              --show-vega main > vega.json
-              vl2png vega.json > prc.png
-              echo '![](./prc.png "Precision recall curve")' >> report.md
+              echo '![](./dvc_plots/static/main_training_history.png "Training History")' >> report.md
+              echo >> report.md
+              echo '![](./dvc_plots/static/workspace_training_history.png "Training History")' >> report.md
               echo >> report.md
 
-              echo "## Roc curve" >> report.md
+              # Create predictions preview
+              echo "## Predictions Preview" >> report.md
               echo >> report.md
-              dvc plots diff \
-              --target evaluation/plots/sklearn/roc.json \
-              -x fpr \
-              -y tpr \
-              --show-vega main > vega.json
-              vl2png vega.json > roc.png
-              echo '![](./roc.png "Roc curve")' >> report.md
+              echo '![](./dvc_plots/static/main_pred_preview.png "Predictions Preview")' >> report.md
+              echo >> report.md
+              echo '![](./dvc_plots/static/workspace_pred_preview.png "Predictions Preview")' >> report.md
               echo >> report.md
 
-              echo "## Confusion matrix" >> report.md
+              # Create confusion matrix
+              echo "## Confusion Matrix" >> report.md
               echo >> report.md
-              dvc plots diff \
-              --target evaluation/plots/sklearn/confusion_matrix.json \
-              --template confusion \
-              -x actual \
-              -y predicted \
-              --show-vega main > vega.json
-              vl2png vega.json > confusion_matrix.png
-              echo '![](./confusion_matrix.png "Confusion Matrix")' >> report.md
+              echo '![](./dvc_plots/static/main_confusion_matrix.png "Confusion Matrix")' >> report.md
               echo >> report.md
-
-              echo "## Importance" >> report.md
-              echo >> report.md
-              dvc plots diff --target evaluation/plots/importance.png -- main
-              echo '![](./dvc_plots/static/main_evaluation_plots_importance.png "Importance (main)")' >> report.md
-              echo >> report.md
-              echo '![](./dvc_plots/static/workspace_evaluation_plots_importance.png "Importance (workspace)")' >> report.md
+              echo '![](./dvc_plots/static/workspace_confusion_matrix.png "Confusion Matrix")' >> report.md
               echo >> report.md
 
               # Publish the CML report
@@ -500,50 +485,35 @@ collaboration and decision-making within the team.
           dvc metrics diff main --show-md >> report.md
           echo >> report.md
 
+          # Compare plots (images) to main branch
+          dvc plots diff
+
           # Create plots
           echo "# Plots" >> report.md
           echo >> report.md
 
-          echo "## Precision recall curve" >> report.md
+          # Create training history plot
+          echo "## Training History" >> report.md
           echo >> report.md
-          dvc plots diff \
-          --target evaluation/plots/prc.json \
-          -x recall \
-          -y precision \
-          --show-vega main > vega.json
-          vl2png vega.json > prc.png
-          echo '![](./prc.png "Precision recall curve")' >> report.md
+          echo '![](./dvc_plots/static/main_training_history.png "Training History")' >> report.md
+          echo >> report.md
+          echo '![](./dvc_plots/static/workspace_training_history.png "Training History")' >> report.md
           echo >> report.md
 
-          echo "## Roc curve" >> report.md
+          # Create predictions preview
+          echo "## Predictions Preview" >> report.md
           echo >> report.md
-          dvc plots diff \
-          --target evaluation/plots/sklearn/roc.json \
-          -x fpr \
-          -y tpr \
-          --show-vega main > vega.json
-          vl2png vega.json > roc.png
-          echo '![](./roc.png "Roc curve")' >> report.md
+          echo '![](./dvc_plots/static/main_pred_preview.png "Predictions Preview")' >> report.md
+          echo >> report.md
+          echo '![](./dvc_plots/static/workspace_pred_preview.png "Predictions Preview")' >> report.md
           echo >> report.md
 
-          echo "## Confusion matrix" >> report.md
+          # Create confusion matrix
+          echo "## Confusion Matrix" >> report.md
           echo >> report.md
-          dvc plots diff \
-          --target evaluation/plots/sklearn/confusion_matrix.json \
-          --template confusion \
-          -x actual \
-          -y predicted \
-          --show-vega main > vega.json
-          vl2png vega.json > confusion_matrix.png
-          echo '![](./confusion_matrix.png "Confusion Matrix")' >> report.md
+          echo '![](./dvc_plots/static/main_confusion_matrix.png "Confusion Matrix")' >> report.md
           echo >> report.md
-
-          echo "## Importance" >> report.md
-          echo >> report.md
-          dvc plots diff --target evaluation/plots/importance.png -- main
-          echo '![](./dvc_plots/static/main_evaluation_plots_importance.png "Importance (main)")' >> report.md
-          echo >> report.md
-          echo '![](./dvc_plots/static/workspace_evaluation_plots_importance.png "Importance (workspace)")' >> report.md
+          echo '![](./dvc_plots/static/workspace_confusion_matrix.png "Confusion Matrix")' >> report.md
           echo >> report.md
 
           # Publish the CML report
