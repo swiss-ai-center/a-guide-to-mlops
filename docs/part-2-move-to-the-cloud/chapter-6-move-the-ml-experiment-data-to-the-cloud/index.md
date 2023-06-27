@@ -246,18 +246,18 @@ Install the DVC Storage plugin for the chosen cloud provider.
 
     ```diff
     diff --git a/pyproject.toml b/pyproject.toml
-    index 8a57399..ff11768 100644
+    index b8e9173..258ab12 100644
     --- a/pyproject.toml
     +++ b/pyproject.toml
-    @@ -13,6 +13,7 @@ pyaml = "21.10.1"
-    scikit-learn = "1.1.3"
-    scipy = "1.10.1"
-    matplotlib = "3.6.2"
-    -dvc = {version = "2.37.0"}
-    +dvc = {version = "2.37.0", extras = ["gs"]}
+    @@ -11,7 +11,7 @@ python = ">=3.8,<3.12"
+    matplotlib = "3.7.1"
+    tensorflow = "2.12.0"
+    pyyaml = "6.0"
+    -dvc = "3.2.1"
+    +dvc = {version = "3.2.2", extras = ["gs"]}
 
-    [build-system]
-    requires = ["poetry-core"]
+
+     [build-system]
     ```
 
 === ":simple-microsoftazure: Microsoft Azure"
@@ -292,37 +292,6 @@ Configure DVC to use the Storage Bucket on the chosen cloud provider.
 === ":simple-rancher: Self-hosted Rancher"
 
 	TODO
-
-### Add the experiment data to DVC
-
-Now that DVC has been setup, you can add files to DVC.
-
-```sh title="Execute the following command(s) in a terminal"
-# Add the experiment data to DVC
-dvc add data/data.xml
-```
-
-The output should be similar to this. You can safely ignore the message.
-
-```
-To track the changes with git, run:
-
-        git add data/data.xml.dvc data/.gitignore
-
-To enable auto staging, run:
-
-        dvc config core.autostage true
-```
-
-The effect of the `dvc add` command is to create a `data/data.csv.dvc` file and
-a `data/.gitignore`. The `.dvc` file contains the metadata of the file that is
-used by DVC to download and check the integrity of the files. The `.gitignore`
-file is created to add the `data.csv` file to be ignored by Git. The `.dvc`
-files must be added to Git.
-
-Various DVC commands will automatically try to update the `.gitignore` files. If a
-`.gitignore` file is already present, it will be updated to include the newly
-ignored files.
 
 ### Push the data files to DVC
 
