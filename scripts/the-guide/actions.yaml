@@ -167,11 +167,18 @@ saves:
   part-2-move-to-the-cloud/chapter-6-move-the-ml-experiment-data-to-the-cloud:
     save_git: false
     actions:
-      - run: poetry add "dvc[gs]=={{ DVC_VERSION }}"
-      - run: git diff pyproject.toml
+      - replace_from_md:
+        file: requirements.txt
+        occurance_index: 0
+      - run: source .venv/bin/activate && pip install -r requirements.txt
+      - run: source .venv/bin/activate && pip freeze --local --all > requirements-freeze.txt
+      - run: git diff requirements.txt
         log: true
-      - run: poetry run dvc remote add -d data gs://mlopsdemo/dvcstore
-      - run: poetry run dvc push
+      - run: source .venv/bin/activate && dvc remote add -d data gs://mlopsdemo/dvcstore
+      - run: source .venv/bin/activate && dvc push
+      - run: git add .
+      - run: git status
+        log: true
       - run: git commit -m "My ML experiment data is saved with DVC"
 
   part-2-move-to-the-cloud/chapter-8-reproduce-the-ml-experiment-in-a-cicd-pipeline:

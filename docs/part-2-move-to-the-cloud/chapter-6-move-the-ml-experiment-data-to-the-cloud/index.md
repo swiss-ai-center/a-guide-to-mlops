@@ -26,31 +26,31 @@ this chapter:
 
 ```mermaid
 flowchart LR
-	dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]
-	s3_storage -->|dvc pull| dot_dvc
-	dot_git[(.git)]
+    dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]
+    s3_storage -->|dvc pull| dot_dvc
+    dot_git[(.git)]
     localGraph <-....-> dot_git
-	data[data.csv] <-.-> dot_dvc
+    data[data.csv] <-.-> dot_dvc
     subgraph cloudGraph[CLOUD]
-		s3_storage
-	end
-	subgraph cacheGraph[CACHE]
-		dot_dvc
-		dot_git
-	end
-	subgraph localGraph[LOCAL]
-		prepare[prepare.py] <-.-> dot_dvc
-		train[train.py] <-.-> dot_dvc
-		evaluate[evaluate.py] <-.-> dot_dvc
-		data --> prepare
-		subgraph dvcGraph["dvc.yaml (dvc repro)"]
-			prepare --> train
-			train --> evaluate
-		end
+        s3_storage
+    end
+    subgraph cacheGraph[CACHE]
+        dot_dvc
+        dot_git
+    end
+    subgraph localGraph[LOCAL]
+        prepare[prepare.py] <-.-> dot_dvc
+        train[train.py] <-.-> dot_dvc
+        evaluate[evaluate.py] <-.-> dot_dvc
+        data --> prepare
+        subgraph dvcGraph["dvc.yaml (dvc repro)"]
+            prepare --> train
+            train --> evaluate
+        end
         params[params.yaml] -.- prepare
         params -.- train
         params <-.-> dot_dvc
-	end
+    end
     style localGraph opacity:0.4,color:#7f7f7f80
     style dvcGraph opacity:0.4,color:#7f7f7f80
     style cacheGraph opacity:0.4,color:#7f7f7f80
@@ -81,7 +81,7 @@ Create a project on a cloud provider to host the data.
 
 === ":simple-amazonaws: Amazon Web Services"
 
-	TODO
+    TODO
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -109,11 +109,11 @@ Create a project on a cloud provider to host the data.
 
 === ":simple-microsoftazure: Microsoft Azure"
 
-	TODO
+    TODO
 
 === ":simple-rancher: Self-hosted Rancher"
 
-	TODO
+    TODO
 
 ### Install and configure the cloud provider CLI
 
@@ -121,7 +121,7 @@ Install and configure the cloud provider CLI tool to manage the cloud resources.
 
 === ":simple-amazonaws: Amazon Web Services"
 
-	TODO
+    TODO
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -163,11 +163,11 @@ Install and configure the cloud provider CLI tool to manage the cloud resources.
 
 === ":simple-microsoftazure: Microsoft Azure"
 
-	TODO
+    TODO
 
 === ":simple-rancher: Self-hosted Rancher"
 
-	TODO
+    TODO
 
 ### Create the Storage Bucket on the cloud provider
 
@@ -179,7 +179,7 @@ Create the Storage Bucket to store the data with the cloud provider CLI.
 
 === ":simple-amazonaws: Amazon Web Services"
 
-	TODO
+    TODO
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -214,11 +214,11 @@ Create the Storage Bucket to store the data with the cloud provider CLI.
 
 === ":simple-microsoftazure: Microsoft Azure"
 
-	TODO
+    TODO
 
 === ":simple-rancher: Self-hosted Rancher"
 
-	TODO
+    TODO
 
 ### Install the DVC Storage plugin
 
@@ -226,47 +226,57 @@ Install the DVC Storage plugin for the chosen cloud provider.
 
 === ":simple-amazonaws: Amazon Web Services"
 
-	TODO
+    TODO
 
 === ":simple-googlecloud: Google Cloud"
 
-    Here, the `dvc[gs]` package enables support for Google Cloud Storage.
+    Here, the `dvc[gs]` package enables support for Google Cloud Storage. Update the `requirements.txt` file.
+
+    ```txt title="requirements.txt"
+    tensorflow==2.12.0
+    matplotlib==3.7.1
+    pyyaml==6.0
+    dvc[gs]==3.2.2
+    ```
+
+    Install the package and update the freeze file.
 
     ```sh title="Execute the following command(s) in a terminal"
-    poetry add "dvc[gs]==3.2.2"
+    # Install the packages
+    pip install -r requirements.txt
+    # Freeze the packages
+    pip freeze --local --all > requirements-freeze.txt
     ```
+
     Check the differences with Git to validate the changes.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Show the differences with Git
-    git diff pyproject.toml
+    git diff requirements.txt
     ```
 
     The output should be similar to this.
 
     ```diff
-    diff --git a/pyproject.toml b/pyproject.toml
-    index b8e9173..258ab12 100644
-    --- a/pyproject.toml
-    +++ b/pyproject.toml
-    @@ -11,7 +11,7 @@ python = ">=3.8,<3.12"
-    matplotlib = "3.7.1"
-    tensorflow = "2.12.0"
-    pyyaml = "6.0"
-    -dvc = "3.2.1"
-    +dvc = {version = "3.2.2", extras = ["gs"]}
-
-
-     [build-system]
+    diff --git a/requirements.txt b/requirements.txt
+    index 193ebac..8ccc2df 100644
+    --- a/requirements.txt
+    +++ b/requirements.txt
+    @@ -1,4 +1,4 @@
+    tensorflow==2.12.0
+    matplotlib==3.7.1
+    pyyaml==6.0
+    -dvc==3.2.2
+    +dvc[gs]==3.2.2
     ```
 
 === ":simple-microsoftazure: Microsoft Azure"
 
-	TODO
+    TODO
 
 === ":simple-rancher: Self-hosted Rancher"
 
-	TODO
+    TODO
 
 ### Configure DVC to use the Storage Bucket
 
@@ -274,7 +284,7 @@ Configure DVC to use the Storage Bucket on the chosen cloud provider.
 
 === ":simple-amazonaws: Amazon Web Services"
 
-	TODO
+    TODO
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -287,11 +297,34 @@ Configure DVC to use the Storage Bucket on the chosen cloud provider.
 
 === ":simple-microsoftazure: Microsoft Azure"
 
-	TODO
+    TODO
 
 === ":simple-rancher: Self-hosted Rancher"
 
-	TODO
+    TODO
+
+#### Check the changes
+
+Check the changes with Git to ensure all wanted files are here.
+
+```sh title="Execute the following command(s) in a terminal"
+# Add all the available files
+git add .
+
+# Check the changes
+git status
+```
+
+The output of the `git status` command should be similar to this.
+
+```
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+    modified:   .dvc/config
+    modified:   requirements-freeze.txt
+    modified:   requirements.txt
+```
 
 ### Push the data files to DVC
 
