@@ -148,12 +148,12 @@ saves:
         occurance_index: 0
       - run: git diff params.yaml
         log: true
-      - run: poetry run dvc repro
-      - run: poetry run dvc params diff
+      - run: source .venv/bin/activate && dvc repro
+      - run: source .venv/bin/activate && dvc params diff
         log: true
-      - run: poetry run dvc metrics diff
+      - run: source .venv/bin/activate && dvc metrics diff
         log: true
-      - run: poetry run dvc plots diff
+      - run: source .venv/bin/activate && dvc plots diff
       - replace_from_md:
         file: .gitignore
         occurance_index: 0
