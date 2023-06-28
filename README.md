@@ -4,24 +4,17 @@ This branch contains the source code in order to prepare, train and evaluate a m
 
 ## Installation
 
-You can install the required packages with poetry:
+Firstly, create a virtual environment with:
 
 ```bash
-poetry install
+python3 -m venv .venv
+source .venv/bin/activate
 ```
 
-## Configuration
-
-Then, enter the virtual environment with:
+Then, install the dependencies with:
 
 ```bash
-poetry shell
-```
-
-and install the pre-commit hooks with:
-
-```bash
-pre-commit install
+pip install -r requirements.txt
 ```
 
 ## Usage
