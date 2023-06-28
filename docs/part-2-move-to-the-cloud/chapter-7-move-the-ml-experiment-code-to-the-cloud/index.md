@@ -14,35 +14,35 @@ this chapter:
 
 ```mermaid
 flowchart LR
-	dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]
-	s3_storage -->|dvc pull| dot_dvc
-	dot_git[(.git)] -->|git push| gitGraph[Git Remote]
-	gitGraph -->|git pull| dot_git
+    dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]
+    s3_storage -->|dvc pull| dot_dvc
+    dot_git[(.git)] -->|git push| gitGraph[Git Remote]
+    gitGraph -->|git pull| dot_git
     localGraph <-....-> dot_git
-	data[data.csv] <-.-> dot_dvc
+    data[data.csv] <-.-> dot_dvc
     subgraph cloudGraph[CLOUD]
-		s3_storage
-		subgraph gitGraph[Git Remote]
-			repository[Repository]
-		end
-	end
-	subgraph cacheGraph[CACHE]
-		dot_dvc
-		dot_git
-	end
-	subgraph localGraph[LOCAL]
-		prepare[prepare.py] <-.-> dot_dvc
-		train[train.py] <-.-> dot_dvc
-		evaluate[evaluate.py] <-.-> dot_dvc
-		data --> prepare
-		subgraph dvcGraph["dvc.yaml (dvc repro)"]
-			prepare --> train
-			train --> evaluate
-		end
+        s3_storage
+        subgraph gitGraph[Git Remote]
+            repository[Repository]
+        end
+    end
+    subgraph cacheGraph[CACHE]
+        dot_dvc
+        dot_git
+    end
+    subgraph localGraph[LOCAL]
+        prepare[prepare.py] <-.-> dot_dvc
+        train[train.py] <-.-> dot_dvc
+        evaluate[evaluate.py] <-.-> dot_dvc
+        data --> prepare
+        subgraph dvcGraph["dvc.yaml (dvc repro)"]
+            prepare --> train
+            train --> evaluate
+        end
         params[params.yaml] -.- prepare
         params -.- train
         params <-.-> dot_dvc
-	end
+    end
     style localGraph opacity:0.4,color:#7f7f7f80
     style dvcGraph opacity:0.4,color:#7f7f7f80
     style cacheGraph opacity:0.4,color:#7f7f7f80
