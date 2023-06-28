@@ -709,20 +709,21 @@ The output should be similar to this.
 
 ```diff
 diff --git a/params.yaml b/params.yaml
-index 83e7649..586d3e2 100644
+index 6a6ff45..4572100 100644
 --- a/params.yaml
 +++ b/params.yaml
-@@ -3,8 +3,8 @@ prepare:
-seed: 20170428
+@@ -6,8 +6,8 @@ prepare:
 
-featurize:
--  max_features: 200
--  ngrams: 2
-+  max_features: 400
-+  ngrams: 4
-
-train:
-seed: 20170428
+ train:
+   seed: 77
+-  lr: 0.0001
++  lr: 0.001
+   epochs: 10
+-  conv_size: 32
+-  dense_size: 64
++  conv_size: 64
++  dense_size: 128
+   output_classes: 11
 ```
 
 Here, we simply changed the `max_features` and `ngrams` parameters of the
@@ -746,13 +747,11 @@ git status
 The output of the `git status` command should be similar to this.
 
 ```
-On branch main
-Your branch is up to date with 'origin/main'.
+On branch cml-report
+Your branch is up to date with 'cml-report'.
 
 Changes to be committed:
-(use "git restore --staged <file>..." to unstage)
-    modified:   .gitignore
-    modified:   dvc.lock
+  (use "git restore --staged <file>..." to unstage)
     modified:   params.yaml
 ```
 

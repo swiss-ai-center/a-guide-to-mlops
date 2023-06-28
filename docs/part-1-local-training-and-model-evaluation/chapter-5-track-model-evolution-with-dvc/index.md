@@ -33,10 +33,10 @@ prepare:
 
 train:
   seed: 77
-  lr: 0.001
+  lr: 0.0001
   epochs: 10
-  conv_size: 64
-  dense_size: 128
+  conv_size: 32
+  dense_size: 64
   output_classes: 11
 ```
 
@@ -51,21 +51,17 @@ The output should be similar to this.
 
 ```diff
 diff --git a/params.yaml b/params.yaml
-index 5bb698e..4572100 100644
+index 5bb698e..6a6ff45 100644
 --- a/params.yaml
 +++ b/params.yaml
-@@ -6,8 +6,8 @@ prepare:
-
+@@ -7,7 +7,7 @@ prepare:
  train:
    seed: 77
--  lr: 0.0001
+   lr: 0.0001
 -  epochs: 5
--  conv_size: 32
--  dense_size: 64
-+  lr: 0.001
 +  epochs: 10
-+  conv_size: 64
-+  dense_size: 128
+   conv_size: 32
+   dense_size: 64
    output_classes: 11
 ```
 
@@ -109,11 +105,8 @@ dvc params diff
 The output should look like this.
 
 ```
-Path         Param             HEAD    workspace
-params.yaml  train.conv_size   32      64
-params.yaml  train.dense_size  64      128
-params.yaml  train.epochs      5       10
-params.yaml  train.lr          0.0001  0.001
+Path         Param         HEAD    workspace
+params.yaml  train.epochs  5       10
 ```
 
 DVC displays the differences between `HEAD` and `workspace`, so you can easily
@@ -134,8 +127,8 @@ The output should look like this.
 
 ```
 Path                     Metric    HEAD     workspace    Change
-evaluation/metrics.json  val_acc   0.67601  0.97508      0.29907
-evaluation/metrics.json  val_loss  1.33409  0.10623      -1.22786
+evaluation/metrics.json  val_acc   0.67601  0.92835      0.25234
+evaluation/metrics.json  val_loss  1.33409  0.25104      -1.08305
 ```
 
 Again, DVC shows you the differences, so you can easily compare the two
