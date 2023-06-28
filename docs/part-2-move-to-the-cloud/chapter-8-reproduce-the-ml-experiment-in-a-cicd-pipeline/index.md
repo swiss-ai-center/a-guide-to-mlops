@@ -26,12 +26,12 @@ this chapter:
 
 ```mermaid
 flowchart LR
-	dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]
-	s3_storage -->|dvc pull| dot_dvc
-	dot_git[(.git)] -->|git push| gitGraph[Git Remote]
-	gitGraph -->|git pull| dot_git
+    dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]
+    s3_storage -->|dvc pull| dot_dvc
+    dot_git[(.git)] -->|git push| gitGraph[Git Remote]
+    gitGraph -->|git pull| dot_git
     localGraph <-....-> dot_git
-	data[data.csv] <-.-> dot_dvc
+    data[data.csv] <-.-> dot_dvc
     subgraph cloudGraph[CLOUD]
         s3_storage
         subgraph gitGraph[Git Remote]
@@ -39,24 +39,24 @@ flowchart LR
             action -->|dvc pull| action_data[data.csv]
             action_data -->|dvc repro| action_out[metrics & plots]
         end
-	end
-	subgraph cacheGraph[CACHE]
-		dot_dvc
-		dot_git
-	end
-	subgraph localGraph[LOCAL]
-		prepare[prepare.py] <-.-> dot_dvc
-		train[train.py] <-.-> dot_dvc
-		evaluate[evaluate.py] <-.-> dot_dvc
-		data --> prepare
-		subgraph dvcGraph["dvc.yaml (dvc repro)"]
-			prepare --> train
-			train --> evaluate
-		end
+    end
+    subgraph cacheGraph[CACHE]
+        dot_dvc
+        dot_git
+    end
+    subgraph localGraph[LOCAL]
+        prepare[prepare.py] <-.-> dot_dvc
+        train[train.py] <-.-> dot_dvc
+        evaluate[evaluate.py] <-.-> dot_dvc
+        data --> prepare
+        subgraph dvcGraph["dvc.yaml (dvc repro)"]
+            prepare --> train
+            train --> evaluate
+        end
         params[params.yaml] -.- prepare
         params -.- train
         params <-.-> dot_dvc
-	end
+    end
     style cacheGraph opacity:0.4,color:#7f7f7f80
     style localGraph opacity:0.4,color:#7f7f7f80
     style dot_git opacity:0.4,color:#7f7f7f80
@@ -220,15 +220,12 @@ Please refer to the correct instructions based on your Git repository provider.
         steps:
           - name: Checkout repository
             uses: actions/checkout@v3
-          - name: Install poetry
-            run: pip install poetry==1.4.0
           - name: Setup Python
             uses: actions/setup-python@v4
             with:
               python-version: '3.10'
-              cache: 'poetry'
           - name: Install dependencies
-            run: poetry install
+            run: pip install -r requirements-freeze.txt
           - name: Login to Google Cloud
             uses: 'google-github-actions/auth@v1'
             with:
@@ -236,12 +233,10 @@ Please refer to the correct instructions based on your Git repository provider.
           - name: Train model
             run: |
               # Pull data from DVC
-              poetry run dvc pull
+              dvc pull
               # Run the experiment
-              poetry run dvc repro
+              dvc repro
     ```
-
-    You may notice the usage of the `poetry run` prefix before each command. As we are in the context of a GitHub Workflow, we need to prefix each command with `poetry run` to ensure that the command is executed in the virtual environment created by Poetry. Locally, you enabled the Poetry virtual environment with `poetry shell` that is not needed in the context of a GitHub Workflow.
 
 === ":simple-gitlab: GitLab"
 
@@ -258,9 +253,6 @@ Please refer to the correct instructions based on your Git repository provider.
       # Change pip's cache directory to be inside the project directory since we can
       # only cache local items.
       PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
-      # Change poetry's cache directory to be inside the project directory since we can
-      # only cache local items.
-      POETRY_CACHE_DIR: "$CI_PROJECT_DIR/.cache/poetry"
       # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
       GIT_DEPTH: "0"
 
@@ -269,7 +261,6 @@ Please refer to the correct instructions based on your Git repository provider.
     cache:
       paths:
         - .cache/pip
-        - .cache/poetry
 
     train:
       stage: train
@@ -283,18 +274,14 @@ Please refer to the correct instructions based on your Git repository provider.
       before_script:
         # Set the Google Service Account key
         - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
-        # Install Poetry
-        - pip install poetry==1.4.0
         # Install dependencies
-        - poetry install
+        - pip install -r requirements-freeze.txt
       script:
         # Pull data from DVC
-        - poetry run dvc pull
+        - dvc pull
         # Run the experiment
-        - poetry run dvc repro
+        - dvc repro
     ```
-
-    You may notice the usage of the `poetry run` prefix before each command. As we are in the context of a GitLab CI pipeline, we need to prefix each command with `poetry run` to ensure that the command is executed in the virtual environment created by Poetry. Locally, you enabled the Poetry virtual environment with `poetry shell` that is not needed in the context of a GitLab CI pipeline.
 
 ### Push the CI/CD pipeline configuration file to Git
 
