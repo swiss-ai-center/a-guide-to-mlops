@@ -27,12 +27,12 @@ this chapter:
 
 ```mermaid
 flowchart LR
-	dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]
-	s3_storage -->|dvc pull| dot_dvc
-	dot_git[(.git)] -->|git push| gitGraph[Git Remote]
-	gitGraph -->|git pull| dot_git
+    dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]
+    s3_storage -->|dvc pull| dot_dvc
+    dot_git[(.git)] -->|git push| gitGraph[Git Remote]
+    gitGraph -->|git pull| dot_git
     localGraph <-....-> dot_git
-	data[data.csv] <-.-> dot_dvc
+    data[data.csv] <-.-> dot_dvc
     subgraph cloudGraph[CLOUD]
         s3_storage
         subgraph gitGraph[Git Remote]
@@ -42,24 +42,24 @@ flowchart LR
             action_out -->|cml publish| pr[Pull Request]
             pr --> repository
         end
-	end
-	subgraph cacheGraph[CACHE]
-		dot_dvc
-		dot_git
-	end
-	subgraph localGraph[LOCAL]
-		prepare[prepare.py] <-.-> dot_dvc
-		train[train.py] <-.-> dot_dvc
-		evaluate[evaluate.py] <-.-> dot_dvc
-		data --> prepare
-		subgraph dvcGraph["dvc.yaml (dvc repro)"]
-			prepare --> train
-			train --> evaluate
-		end
+    end
+    subgraph cacheGraph[CACHE]
+        dot_dvc
+        dot_git
+    end
+    subgraph localGraph[LOCAL]
+        prepare[prepare.py] <-.-> dot_dvc
+        train[train.py] <-.-> dot_dvc
+        evaluate[evaluate.py] <-.-> dot_dvc
+        data --> prepare
+        subgraph dvcGraph["dvc.yaml (dvc repro)"]
+            prepare --> train
+            train --> evaluate
+        end
         params[params.yaml] -.- prepare
         params -.- train
         params <-.-> dot_dvc
-	end
+    end
     style localGraph opacity:0.4,color:#7f7f7f80
     style dvcGraph opacity:0.4,color:#7f7f7f80
     style cacheGraph opacity:0.4,color:#7f7f7f80
@@ -151,15 +151,12 @@ collaboration and decision-making within the team.
         steps:
           - name: Checkout repository
             uses: actions/checkout@v3
-          - name: Install poetry
-            run: pip install poetry==1.4.0
           - name: Setup Python
             uses: actions/setup-python@v4
             with:
               python-version: '3.10'
-              cache: 'poetry'
           - name: Install dependencies
-            run: poetry install
+            run: pip install -r requirements-freeze.txt
           - name: Login to Google Cloud
             uses: 'google-github-actions/auth@v1'
             with:
@@ -167,9 +164,9 @@ collaboration and decision-making within the team.
           - name: Train model
             run: |
               # Pull data from DVC
-              poetry run dvc pull
+              dvc pull
               # Run the experiment
-              poetry run dvc repro
+              dvc repro
 
       report:
         permissions: write-all
@@ -251,9 +248,9 @@ collaboration and decision-making within the team.
               cml comment update --target=pr --publish report.md
     ```
 
-    You may notice that the `report` job doesn't use Poetry. As we do not need to
+    You may notice that the `report` job doesn't use project dependencies. As we do not need to
     reproduce the experiment, we can install DVC using the `iterative/setup-dvc@v1`
-    GitHub action without Poetry. DVC will then retrieve the data stored on the
+    GitHub action without project dependencies. DVC will then retrieve the data stored on the
     bucket on its own.
 
     Check the differences with Git to validate the changes.
@@ -265,14 +262,14 @@ collaboration and decision-making within the team.
 
     The output should be similar to this:
 
-    ```diff
+    ```
     diff --git a/.github/workflows/mlops.yml b/.github/workflows/mlops.yml
-    index f4232c9..9041212 100644
+    index 2a1914a..af1a0cb 100644
     --- a/.github/workflows/mlops.yml
     +++ b/.github/workflows/mlops.yml
     @@ -6,6 +6,9 @@ on:
     branches:
-    - main
+        - main
 
     +  # Runs on pull requests
     +  pull_request:
@@ -280,10 +277,10 @@ collaboration and decision-making within the team.
     # Allows you to run this workflow manually from the Actions tab
     workflow_dispatch:
 
-    @@ -34,3 +37,93 @@ jobs:
-    poetry run dvc pull
-    # Run the experiment
-    poetry run dvc repro
+    @@ -31,3 +34,82 @@ jobs:
+            dvc pull
+            # Run the experiment
+            dvc repro
     +
     +  report:
     +    permissions: write-all
@@ -303,14 +300,14 @@ collaboration and decision-making within the team.
     +        uses: 'google-github-actions/auth@v1'
     +        with:
     +          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
-    +      - name: Setup CML
-    +        uses: iterative/setup-cml@v1
-    +        with:
-    +          version: '0.18.17'
     +      - name: Setup Node
     +        uses: actions/setup-node@v3
     +        with:
     +          node-version: '16'
+    +      - name: Setup CML
+    +        uses: iterative/setup-cml@v1
+    +        with:
+    +          version: '0.18.17'
     +      - name: Create CML report
     +        env:
     +          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -330,50 +327,35 @@ collaboration and decision-making within the team.
     +          dvc metrics diff main --show-md >> report.md
     +          echo >> report.md
     +
+    +          # Compare plots (images) to main branch
+    +          dvc plots diff
+    +
     +          # Create plots
     +          echo "# Plots" >> report.md
     +          echo >> report.md
     +
-    +          echo "## Precision recall curve" >> report.md
+    +          # Create training history plot
+    +          echo "## Training History" >> report.md
     +          echo >> report.md
-    +          dvc plots diff \
-    +            --target evaluation/plots/prc.json \
-    +            -x recall \
-    +            -y precision \
-    +            --show-vega main > vega.json
-    +          vl2png vega.json > prc.png
-    +          echo '![](./prc.png "Precision recall curve")' >> report.md
+    +          echo '![](./dvc_plots/static/main_training_history.png "Training History")' >> report.md
+    +          echo >> report.md
+    +          echo '![](./dvc_plots/static/workspace_training_history.png "Training History")' >> report.md
     +          echo >> report.md
     +
-    +          echo "## Roc curve" >> report.md
+    +          # Create predictions preview
+    +          echo "## Predictions Preview" >> report.md
     +          echo >> report.md
-    +          dvc plots diff \
-    +            --target evaluation/plots/sklearn/roc.json \
-    +            -x fpr \
-    +            -y tpr \
-    +            --show-vega main > vega.json
-    +          vl2png vega.json > roc.png
-    +          echo '![](./roc.png "Roc curve")' >> report.md
+    +          echo '![](./dvc_plots/static/main_pred_preview.png "Predictions Preview")' >> report.md
+    +          echo >> report.md
+    +          echo '![](./dvc_plots/static/workspace_pred_preview.png "Predictions Preview")' >> report.md
     +          echo >> report.md
     +
-    +          echo "## Confusion matrix" >> report.md
+    +          # Create confusion matrix
+    +          echo "## Confusion Matrix" >> report.md
     +          echo >> report.md
-    +          dvc plots diff \
-    +            --target evaluation/plots/sklearn/confusion_matrix.json \
-    +            --template confusion \
-    +            -x actual \
-    +            -y predicted \
-    +            --show-vega main > vega.json
-    +          vl2png vega.json > confusion_matrix.png
-    +          echo '![](./confusion_matrix.png "Confusion Matrix")' >> report.md
+    +          echo '![](./dvc_plots/static/main_confusion_matrix.png "Confusion Matrix")' >> report.md
     +          echo >> report.md
-    +
-    +          echo "## Importance" >> report.md
-    +          echo >> report.md
-    +          dvc plots diff --target evaluation/plots/importance.png -- main
-    +          echo '![](./dvc_plots/static/main_evaluation_plots_importance.png "Importance (main)")' >> report.md
-    +          echo >> report.md
-    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_importance.png "Importance (workspace)")' >> report.md
+    +          echo '![](./dvc_plots/static/workspace_confusion_matrix.png "Confusion Matrix")' >> report.md
     +          echo >> report.md
     +
     +          # Publish the CML report
@@ -422,9 +404,6 @@ collaboration and decision-making within the team.
       # Change pip's cache directory to be inside the project directory since we can
       # only cache local items.
       PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
-      # Change poetry's cache directory to be inside the project directory since we can
-      # only cache local items.
-      POETRY_CACHE_DIR: "$CI_PROJECT_DIR/.cache/poetry"
       # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
       GIT_DEPTH: "0"
 
@@ -433,7 +412,6 @@ collaboration and decision-making within the team.
     cache:
       paths:
         - .cache/pip
-        - .cache/poetry
 
     train:
       stage: train
@@ -447,15 +425,13 @@ collaboration and decision-making within the team.
       before_script:
         # Set the Google Service Account key
         - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
-        # Install Poetry
-        - pip install poetry==1.4.0
         # Install dependencies
-        - poetry install
+        - pip install -r requirements-freeze.txt
       script:
         # Pull data from DVC
-        - poetry run dvc pull
+        - dvc pull
         # Run the experiment
-        - poetry run dvc repro
+        - dvc repro
 
     report:
       stage: report
@@ -520,7 +496,7 @@ collaboration and decision-making within the team.
           cml comment update --target=pr --publish report.md
     ```
 
-    You may notice that the `report` stage doesn't use Poetry. As we do not need to reproduce the experiment, we can use DVC from the `iterativeai/cml:0-dvc2-base1` Docker image without Poetry. DVC will then retrieve the data stored on the bucket on its own.
+    You may notice that the `report` stage doesn't use the project dependencies. As we do not need to reproduce the experiment, we can use DVC from the `iterativeai/cml:0-dvc2-base1` Docker image without the project dependencies. DVC will then retrieve the data stored on the bucket on its own.
 
     Check the differences with Git to validate the changes.
 
@@ -531,9 +507,9 @@ collaboration and decision-making within the team.
 
     The output should be similar to this:
 
-    ```diff
+    ```
     diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-    index aa15df3..0587f9b 100644
+    index e104669..a946523 100644
     --- a/.gitlab-ci.yml
     +++ b/.gitlab-ci.yml
     @@ -1,5 +1,6 @@
@@ -543,15 +519,10 @@ collaboration and decision-making within the team.
 
     variables:
     # Change pip's cache directory to be inside the project directory since we can
-    @@ -34,8 +35,87 @@ train:
-    - pip install poetry==1.4.0
-    # Install dependencies
-    - poetry install
-    script:
-    # Pull data from DVC
-    - poetry run dvc pull
-    # Run the experiment
-    - poetry run dvc repro
+    @@ -33,3 +34,65 @@ train:
+        - dvc pull
+        # Run the experiment
+        - dvc repro
     +
     +report:
     +  stage: report
@@ -581,50 +552,35 @@ collaboration and decision-making within the team.
     +      dvc metrics diff main --show-md >> report.md
     +      echo >> report.md
     +
+    +      # Compare plots (images) to main branch
+    +      dvc plots diff
+    +
     +      # Create plots
     +      echo "# Plots" >> report.md
     +      echo >> report.md
     +
-    +      echo "## Precision recall curve" >> report.md
+    +      # Create training history plot
+    +      echo "## Training History" >> report.md
     +      echo >> report.md
-    +      dvc plots diff \
-    +        --target evaluation/plots/prc.json \
-    +        -x recall \
-    +        -y precision \
-    +        --show-vega main > vega.json
-    +      vl2png vega.json > prc.png
-    +      echo '![](./prc.png "Precision recall curve")' >> report.md
+    +      echo '![](./dvc_plots/static/main_training_history.png "Training History")' >> report.md
+    +      echo >> report.md
+    +      echo '![](./dvc_plots/static/workspace_training_history.png "Training History")' >> report.md
     +      echo >> report.md
     +
-    +      echo "## Roc curve" >> report.md
+    +      # Create predictions preview
+    +      echo "## Predictions Preview" >> report.md
     +      echo >> report.md
-    +      dvc plots diff \
-    +        --target evaluation/plots/sklearn/roc.json \
-    +        -x fpr \
-    +        -y tpr \
-    +        --show-vega main > vega.json
-    +      vl2png vega.json > roc.png
-    +      echo '![](./roc.png "Roc curve")' >> report.md
+    +      echo '![](./dvc_plots/static/main_pred_preview.png "Predictions Preview")' >> report.md
+    +      echo >> report.md
+    +      echo '![](./dvc_plots/static/workspace_pred_preview.png "Predictions Preview")' >> report.md
     +      echo >> report.md
     +
-    +      echo "## Confusion matrix" >> report.md
+    +      # Create confusion matrix
+    +      echo "## Confusion Matrix" >> report.md
     +      echo >> report.md
-    +      dvc plots diff \
-    +        --target evaluation/plots/sklearn/confusion_matrix.json \
-    +        --template confusion \
-    +        -x actual \
-    +        -y predicted \
-    +        --show-vega main > vega.json
-    +      vl2png vega.json > confusion_matrix.png
-    +      echo '![](./confusion_matrix.png "Confusion Matrix")' >> report.md
+    +      echo '![](./dvc_plots/static/main_confusion_matrix.png "Confusion Matrix")' >> report.md
     +      echo >> report.md
-    +
-    +      echo "## Importance" >> report.md
-    +      echo >> report.md
-    +      dvc plots diff --target evaluation/plots/importance.png -- main
-    +      echo '![](./dvc_plots/static/main_evaluation_plots_importance.png "Importance (main)")' >> report.md
-    +      echo >> report.md
-    +      echo '![](./dvc_plots/static/workspace_evaluation_plots_importance.png "Importance (workspace)")' >> report.md
+    +      echo '![](./dvc_plots/static/workspace_confusion_matrix.png "Confusion Matrix")' >> report.md
     +      echo >> report.md
     +
     +      # Publish the CML report
@@ -666,7 +622,6 @@ Take some time to understand the changes made to the file.
     # Push the changes
     git push
     ```
-
 
 ### Open an issue
 
@@ -729,17 +684,18 @@ Update your experiment with the following parameters by editing the
 
 ```yaml title="params.yaml" hl_lines="6-7"
 prepare:
-split: 0.20
-seed: 20170428
-
-featurize:
-max_features: 400
-ngrams: 4
+  seed: 77
+  split: 0.2
+  image_size: [32, 32]
+  grayscale: True
 
 train:
-seed: 20170428
-n_est: 50
-min_split: 2
+  seed: 77
+  lr: 0.001
+  epochs: 10
+  conv_size: 64
+  dense_size: 128
+  output_classes: 11
 ```
 
 Check the differences with Git to validate the changes.
@@ -787,7 +743,7 @@ git add .
 git status
 ```
 
-    The output of the `git status` command should be similar to this.
+The output of the `git status` command should be similar to this.
 
 ```
 On branch main
@@ -871,9 +827,7 @@ git push
     evaluation data that was pulled DVC, it can uses it to display all the
     plots.
 
-
 ### Merge the pull request/merge request
-
 
 === ":simple-github: GitHub"
 

@@ -210,11 +210,19 @@ saves:
       - run: git add .github/workflows/mlops.yml
       - run: git add .gitlab-ci.yml
       - run: git commit -m "Enable CML reports on pull requests"
+      - run: git checkout -b cml-report
+      - replace_from_md:
+        file: params.yaml
+        occurance_index: 0
+      - run: git diff params.yaml
+        log: true
       - run: git add .
       - run: git status
         log: true
-      - run: poetry run dvc push
+      - run: source .venv/bin/activate && dvc push
       - run: git commit -m "I made some changes to the model"
+      - run: git checkout main
+      - run: git merge cml-report
 
   # chapter-8-serve-the-model-with-mlem:
   #   save_git: true
