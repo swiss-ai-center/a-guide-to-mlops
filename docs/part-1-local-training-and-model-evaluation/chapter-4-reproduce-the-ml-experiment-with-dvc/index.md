@@ -60,13 +60,13 @@ As a reminder, the current steps to run the experiment are as follow:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Prepare the dataset
-python src/prepare.py data/raw data/prepared
+python3 src/prepare.py data/raw data/prepared
 
 # Train the model with the train dataset and save it
-python src/train.py data/prepared model
+python3 src/train.py data/prepared model
 
 # Evaluate the model performances
-python src/evaluate.py model data/prepared
+python3 src/evaluate.py model data/prepared
 ```
 
 Let's get started!
@@ -87,6 +87,7 @@ to be ignored will then be added by DVC.
 
 ```sh title=".gitignore" hl_lines="6-8"
 ## Python
+.venv/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -111,7 +112,7 @@ The output should be similar to this:
 
 ```diff
 diff --git a/.gitignore b/.gitignore
-index 737d782..2dea70c 100644
+index 442ea27..2492093 100644
 --- a/.gitignore
 +++ b/.gitignore
 @@ -1,15 +1,9 @@
@@ -120,16 +121,17 @@ index 737d782..2dea70c 100644
 -data/prepared/
 -
 -# Artifacts
--evaluation
+-evaluation/
 -
 -# The models
 -model/
 -
-## Python
+ ## Python
+ .venv/
 
-# Byte-compiled / optimized / DLL files
-__pycache__/
-
+ # Byte-compiled / optimized / DLL files
+ __pycache__/
++
 +## DVC
 +
 +# DVC will add new files after this line
@@ -210,12 +212,12 @@ Explore the `dvc.yaml` file to understand how the pipeline is updated.
 Run the following command to create a new stage called _evaluate_ that evaluates the model.
 
 ```sh title="Execute the following command(s) in a terminal"
-poetry run dvc stage add -n evaluate \
+dvc stage add -n evaluate \
 -d src/evaluate.py -d model \
---metrics-no-cache evaluation/metrics.json \
---plots-no-cache evaluation/plots/confusion_matrix.png \
---plots-no-cache evaluation/plots/pred_preview.png \
---plots-no-cache evaluation/plots/training_history.png \
+--metrics evaluation/metrics.json \
+--plots evaluation/plots/confusion_matrix.png \
+--plots evaluation/plots/pred_preview.png \
+--plots evaluation/plots/training_history.png \
 python src/evaluate.py model data/prepared
 ```
 
@@ -227,33 +229,6 @@ The script writes the model's metrics to `evaluation/metrics.json`,
 the `confusion_matrix` to `evaluation/plots/confusion_matrix.png`, the
 `pred_preview` to `evaluation/plots/pred_preview.png` and the `training_history.png` to
 `evaluation/plots/training_history.png`.
-
-Here, `*-no-cache` prevents DVC from caching the metrics and plots.
-
-<!-- TODO: Use DVCLive?
-DVC has the ability to generate images for the plots.
-The following command are used to tune the axes of the plots.
-
-TODO: generate plots from metrics instead?
-
-!! tips
-
-    If working on a ML project that produces only text metrics, you can make use
-    of DVC ability to generate images for the plots from these metrics. See [plots](https://dvc.org/doc/command-reference/plots)
-
-TODO: Remove the following?
-
-```sh title="Execute the following command(s) in a terminal"
-# Set the axes for the `precision_recall_curve`
-dvc plots modify evaluation/plots/prc.json -x recall -y precision
-
-# Set the axes for the `roc_curve`
-dvc plots modify evaluation/plots/sklearn/roc.json -x fpr -y tpr
-
-# Set the axes for the `confusion_matrix`
-dvc plots modify evaluation/plots/sklearn/confusion_matrix.json -x actual -y predicted -t confusion
-```
--->
 
 Explore the `dvc.yaml` file to understand how the pipeline is updated.
 
@@ -267,6 +242,7 @@ Notice that DVC also updated the main `.gitignore` file with the model, as it is
 
 ```sh title=".gitignore" hl_lines="9"
 ## Python
+.venv/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -346,8 +322,6 @@ The output of the `git status` command should be similar to this.
 
 ```
 On branch main
-Your branch is up to date with 'origin/main'.
-
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
     modified:   .gitignore
@@ -355,6 +329,7 @@ Changes to be committed:
     new file:   dvc.lock
     new file:   dvc.yaml
     new file:   evaluation/.gitignore
+    new file:   evaluation/plots/.gitignore
 ```
 
 ### Commit the changes
@@ -367,7 +342,6 @@ git commit -m "My ML experiment commands are saved with DVC"
 ```
 
 This chapter is done, you can check the summary.
-
 
 ## Summary
 

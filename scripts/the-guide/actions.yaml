@@ -113,28 +113,28 @@ saves:
       - run: git diff .gitignore
         log: true
       - run: |-
-          poetry run dvc stage add -n prepare \
+          source .venv/bin/activate && dvc stage add -n prepare \
             -p prepare \
             -d src/prepare.py -d src/utils/seed.py -d data/raw \
             -o data/prepared \
             python src/prepare.py data/raw data/prepared
       - run: |-
-          poetry run dvc stage add -n train \
+          source .venv/bin/activate && dvc stage add -n train \
             -p train \
             -d src/train.py -d src/utils/seed.py -d data/prepared \
             -o model \
             python src/train.py data/prepared model
       - run: |-
-          poetry run dvc stage add -n evaluate \
+          source .venv/bin/activate && dvc stage add -n evaluate \
             -d src/evaluate.py -d model \
-            --metrics-no-cache evaluation/metrics.json \
-            --plots-no-cache evaluation/plots/confusion_matrix.png \
-            --plots-no-cache evaluation/plots/pred_preview.png \
-            --plots-no-cache evaluation/plots/training_history.png \
+            --metrics evaluation/metrics.json \
+            --plots evaluation/plots/confusion_matrix.png \
+            --plots evaluation/plots/pred_preview.png \
+            --plots evaluation/plots/training_history.png \
             python src/evaluate.py model data/prepared
-      - run: poetry run dvc dag
+      - run: source .venv/bin/activate && dvc dag
         log: true
-      - run: poetry run dvc repro
+      - run: source .venv/bin/activate && dvc repro
       - run: git add .
       - run: git status
         log: true
