@@ -2,10 +2,6 @@ base_tmp_path: tmp/the-guide/generated_checkpoints
 base_save_path: docs
 
 variables:
-  DVC_VERSION: 3.2.2
-  MATPLOTLIB_VERSION: 3.7.1
-  TENSORFLOW_VERSION: 2.12.0
-  PYYAML_VERSION: 6.0
   TREE_CMD: tree --dirsfirst -I '*.jpg'
 
 saves:
@@ -39,11 +35,13 @@ saves:
       - run: unzip data.zip
       - run: mv a-guide-to-mlops-59-data/ data/
       - run: rm data.zip
-      # Initialize poetry
+      # Initialize the environment
+      - run: python3 -m venv .venv
       - replace_from_md:
-        file: pyproject.toml
+        file: requirements.txt
         occurance_index: 0
-      - run: poetry add "matplotlib=={{ MATPLOTLIB_VERSION }}" "tensorflow=={{ TENSORFLOW_VERSION }}" "pyyaml=={{ PYYAML_VERSION }}"
+      - run: source .venv/bin/activate && pip install -r requirements.txt
+      - run: source .venv/bin/activate && pip freeze --local --all > requirements-freeze.txt
       # Add new files
       - replace_from_md:
         file: params.yaml
@@ -64,9 +62,9 @@ saves:
       - run: "{{ TREE_CMD }}"
         log: true
       # Run the experiment
-      - run: poetry run python src/prepare.py data/raw data/prepared
-      - run: poetry run python src/train.py data/prepared model
-      - run: poetry run python src/evaluate.py model data/prepared
+      - run: source .venv/bin/activate && python src/prepare.py data/raw data/prepared
+      - run: source .venv/bin/activate && python src/train.py data/prepared model
+      - run: source .venv/bin/activate && python src/evaluate.py model data/prepared
       # Log the codebase tree
       - run: "{{ TREE_CMD }}"
         log: true
