@@ -35,21 +35,21 @@ this chapter:
 
 ```mermaid
 flowchart LR
-	dot_dvc[(.dvc)]
-	dot_git[(.git)]
-	data[data/raw] <-.-> dot_dvc
+    dot_dvc[(.dvc)]
+    dot_git[(.git)]
+    data[data/raw] <-.-> dot_dvc
     localGraph <-....-> dot_git
-	subgraph cacheGraph[CACHE]
-		dot_dvc
-		dot_git
-	end
-	subgraph localGraph[LOCAL]
+    subgraph cacheGraph[CACHE]
+        dot_dvc
+        dot_git
+    end
+    subgraph localGraph[LOCAL]
         data --> prepare
         prepare[prepare.py] --> train
-		train[train.py] --> evaluate[evaluate.py]
+        train[train.py] --> evaluate[evaluate.py]
         params[params.yaml] -.- prepare
         params -.- train
-	end
+    end
     style localGraph opacity:0.4,color:#7f7f7f80
     style prepare opacity:0.4,color:#7f7f7f80
     style train opacity:0.4,color:#7f7f7f80
@@ -98,13 +98,16 @@ No commits yet
 
 Untracked files:
   (use "git add <file>..." to include in what will be committed)
-	data/
-	evaluation/
-	model/
-	params.yaml
-	poetry.lock
-	pyproject.toml
-	src/
+    .venv/
+    data/
+    evaluation/
+    model/
+    params.yaml
+    requirements-freeze.txt
+    requirements.txt
+    src/
+
+nothing added to commit but untracked files present (use "git add" to track)
 ```
 
 As you can see, no files have been added to Git yet.
@@ -129,6 +132,7 @@ evaluation/
 model/
 
 ## Python
+.venv/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -139,7 +143,6 @@ __pycache__/
     If using macOS, you might want to ignore `.DS_Store` files as well to avoid pushing Apple's metadata files to your repository.
 
 #### Check the changes
-
 
 Check the changes with Git to ensure all wanted files are here.
 
@@ -160,14 +163,14 @@ No commits yet
 
 Changes to be committed:
   (use "git rm --cached <file>..." to unstage)
-	new file:   .gitignore
-	new file:   params.yaml
-	new file:   poetry.lock
-	new file:   pyproject.toml
-	new file:   src/evaluate.py
-	new file:   src/prepare.py
-	new file:   src/train.py
-	new file:   src/utils/seed.py
+    new file:   .gitignore
+    new file:   params.yaml
+    new file:   requirements-freeze.txt
+    new file:   requirements.txt
+    new file:   src/evaluate.py
+    new file:   src/prepare.py
+    new file:   src/train.py
+    new file:   src/utils/seed.py
 ```
 
 #### Commit the changes
@@ -183,34 +186,43 @@ git commit -m "My first ML experiment shared on Git"
 
 #### Install DVC
 
-Install the main `dvc` package.
+Add the main `dvc` package to the `requirements.txt` file.
+
+```txt title="requirements.txt"
+tensorflow==2.12.0
+matplotlib==3.7.1
+pyyaml==6.0
+dvc==3.2.2
+```
+
+Install the package and update the freeze file.
 
 ```sh title="Execute the following command(s) in a terminal"
-poetry add "dvc==3.2.2"
+# Install the packages
+pip install -r requirements.txt
+# Freeze the packages
+pip freeze --local --all > requirements-freeze.txt
 ```
 
 Check the differences with Git to validate the changes.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Show the differences with Git
-git diff pyproject.toml
+git diff requirements.txt
 ```
 
 The output should be similar to this.
 
 ```diff
-diff --git a/pyproject.toml b/pyproject.toml
-index cc65f8e..eceb001 100644
---- a/pyproject.toml
-+++ b/pyproject.toml
-@@ -11,6 +11,7 @@ python = ">=3.8,<3.12"
-matplotlib = "3.7.1"
-tensorflow = "2.12.0"
-pyyaml = "^6.0"
-+dvc = "^3.2.1"
-
-
-[build-system]
+diff --git a/requirements.txt b/requirements.txt
+index 250f32c..193ebac 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,3 +1,4 @@
+ tensorflow==2.12.0
+ matplotlib==3.7.1
+ pyyaml==6.0
++dvc==3.2.2
 ```
 
 #### Initialize DVC
@@ -224,7 +236,6 @@ dvc init
 
 The `dvc init` command creates a `.dvc` directory in the working directory,
 which serves as the configuration directory for DVC.
-
 
 #### Update the .gitignore file and add the experiment data to DVC
 
@@ -262,6 +273,7 @@ evaluation/
 model/
 
 ## Python
+.venv/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -282,17 +294,17 @@ The output should be similar to this.
 
 ```diff
 diff --git a/.gitignore b/.gitignore
-index be315d6..d65f97a 100644
+index bd28df9..442ea27 100644
 --- a/.gitignore
 +++ b/.gitignore
 @@ -1,5 +1,6 @@
-# Data used to train the models
--data
+ # Data used to train the models
+-data/
 +data/raw/
 +data/prepared/
 
-# Artifacts
-evaluation/
+ # Artifacts
+ evaluation/
 ```
 
 You can now add the experiment data to DVC without complain!
@@ -307,11 +319,11 @@ The output should be similar to this. You can safely ignore the warning.
 ```
 To track the changes with git, run:
 
-	git add data/raw.dvc data/.gitignore
+    git add data/raw.dvc data/.gitignore
 
 To enable auto staging, run:
 
-	dvc config core.autostage true
+    dvc config core.autostage true
 ```
 
 The effect of the `dvc add` command is to create a `data/data.raw.dvc` file and
@@ -323,7 +335,6 @@ files must be added to Git.
 Various DVC commands will automatically try to update the `.gitignore` files. If a
 `.gitignore` file is already present, it will be updated to include the newly
 ignored files. You might need to update existing `.gitignore` files accordingly.
-
 
 #### Check the changes
 
@@ -343,15 +354,15 @@ The output of the `git status` command should be similar to this.
 On branch main
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
-	new file:   .dvc/.gitignore
-	new file:   .dvc/config
-	new file:   .dvcignore
-	modified:   .gitignore
-	new file:   data/.gitignore
-	new file:   data/README.md
-	new file:   data/raw.dvc
-	modified:   poetry.lock
-	modified:   pyproject.toml
+    new file:   .dvc/.gitignore
+    new file:   .dvc/config
+    new file:   .dvcignore
+    modified:   .gitignore
+    new file:   data/.gitignore
+    new file:   data/README.md
+    new file:   data/raw.dvc
+    modified:   requirements-freeze.txt
+    modified:   requirements.txt
 ```
 
 #### Commit the changes to Git

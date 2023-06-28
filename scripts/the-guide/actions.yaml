@@ -84,16 +84,20 @@ saves:
         log: true
       - run: git commit -m "My first ML experiment shared on Git"
       # Create a DVC repository
-      - run: poetry add "dvc=={{ DVC_VERSION }}"
-      - run: git diff pyproject.toml
+      - replace_from_md:
+        file: requirements.txt
+        occurance_index: 0
+      - run: source .venv/bin/activate && pip install -r requirements.txt
+      - run: source .venv/bin/activate && pip freeze --local --all > requirements-freeze.txt
+      - run: git diff requirements.txt
         log: true
-      - run: poetry run dvc init
+      - run: source .venv/bin/activate && dvc init
       - replace_from_md:
         file: .gitignore
         occurance_index: 1
       - run: git diff .gitignore
         log: true
-      - run: poetry run dvc add data/raw/
+      - run: source .venv/bin/activate && dvc add data/raw/
         log: true
       - run: git add .
       - run: git status
