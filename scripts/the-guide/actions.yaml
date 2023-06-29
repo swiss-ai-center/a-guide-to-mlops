@@ -226,74 +226,32 @@ saves:
       - run: git checkout main
       - run: git merge cml-report
 
-  # chapter-8-serve-the-model-with-mlem:
-  #   save_git: true
-  #   actions:
-  #     - run: poetry add "mlem[fastapi]==0.4.3"
-  #     - run: git diff pyproject.toml
-  #       log: true
-  #     - run: poetry run mlem init
-  #     - run: poetry run mlem config set core.storage.type dvc
-  #     - run: echo "/**/?*.mlem" >> .dvcignore
-  #     - replace_from_md:
-  #       file: src/featurization.py
-  #       occurance_index: 0
-  #     - run: git diff src/featurization.py
-  #       log: true
-  #     - replace_from_md:
-  #       file: src/train.py
-  #       occurance_index: 0
-  #     - run: git diff src/train.py
-  #       log: true
-  #     - replace_from_md:
-  #       file: src/evaluate.py
-  #       occurance_index: 0
-  #     - run: git diff src/evaluate.py
-  #       log: true
-  #     - run: |-
-  #         poetry run dvc stage add --force \
-  #             -n featurize \
-  #             -p featurize.max_features,featurize.ngrams \
-  #             -d src/featurization.py -d data/prepared \
-  #             -o data/features/test.pkl -o data/features/train.pkl -o data/features/vectorizer -o data/features/tfidf \
-  #             python src/featurization.py data/prepared data/features
-  #     - run: |-
-  #         poetry run dvc stage add --force \
-  #             -n train \
-  #             -p train.seed,train.n_est,train.min_split \
-  #             -d src/train.py -d data/features \
-  #             -o models/rf \
-  #             python src/train.py data/features models/rf
-  #     - run: |-
-  #         poetry run dvc stage add --force \
-  #             -n evaluate \
-  #             -d src/evaluate.py -d models/rf \
-  #             -o evaluation/plots/metrics \
-  #             -o evaluation/report.html \
-  #             --metrics evaluation/metrics.json \
-  #             --plots evaluation/plots/prc.json \
-  #             --plots evaluation/plots/sklearn/roc.json \
-  #             --plots evaluation/plots/sklearn/confusion_matrix.json \
-  #             --plots evaluation/plots/importance.png \
-  #             python src/evaluate.py models/rf data/features
-  #     - run: |-
-  #         poetry run dvc plots modify evaluation/plots/prc.json \
-  #             -x recall \
-  #             -y precision
-  #     - run: |-
-  #         poetry run dvc plots modify evaluation/plots/sklearn/roc.json \
-  #             -x fpr \
-  #             -y tpr
-  #     - run: |-
-  #         poetry run dvc plots modify evaluation/plots/sklearn/confusion_matrix.json \
-  #             -x actual \
-  #             -y predicted \
-  #             -t confusion
-  #     - run: git diff dvc.yaml
-  #       log: true
-  #     - run: poetry run dvc repro
-  #     - run: git add .
-  #     - run: git status
-  #       log: true
-  #     - run: poetry run dvc push
-  #     - run: git commit -m "MLEM can save, load and serve the model"
+  part-3-serve-and-deploy-the-model-online/chapter-10-save-and-load-the-model-with-mlem:
+    save_git: true
+    actions:
+      - replace_from_md:
+        file: requirements.txt
+        occurance_index: 0
+      - run: source .venv/bin/activate && pip install -r requirements.txt
+      - run: source .venv/bin/activate && pip freeze --local --all > requirements-freeze.txt
+      - run: git diff requirements.txt
+        log: true
+      - run: source .venv/bin/activate && mlem init
+      - run: source .venv/bin/activate && mlem config set core.storage.type dvc
+      - run: echo "/**/?*.mlem" >> .dvcignore
+      - replace_from_md:
+        file: src/train.py
+        occurance_index: 0
+      - run: git diff src/train.py
+        log: true
+      - replace_from_md:
+        file: src/evaluate.py
+        occurance_index: 0
+      - run: git diff src/evaluate.py
+        log: true
+      - run: source .venv/bin/activate && dvc repro
+      - run: git add .
+      - run: git status
+        log: true
+      - run: source .venv/bin/activate && dvc push
+      - run: git commit -m "MLEM can save, load and serve the model"

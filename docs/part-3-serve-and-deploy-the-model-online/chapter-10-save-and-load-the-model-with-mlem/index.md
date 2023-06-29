@@ -19,32 +19,42 @@ In this chapter, you will learn how to:
 
 Add the `mlem[fastapi]` package to install MLEM with FastAPI support.
 
+```txt title="requirements.txt"
+tensorflow==2.12.0
+matplotlib==3.7.1
+pyyaml==6.0
+dvc[gs]==3.2.2
+mlem[fastapi]==0.4.13
+```
+
+Install the package and update the freeze file.
+
 ```sh title="Execute the following command(s) in a terminal"
-poetry add "mlem[fastapi]==0.4.3"
+# Install the packages
+pip install -r requirements.txt
+# Freeze the packages
+pip freeze --local --all > requirements-freeze.txt
 ```
 
 Check the differences with Git to validate the changes.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Show the differences with Git
-git diff pyproject.toml
+git diff requirements.txt
 ```
 
 The output should be similar to this.
 
 ```diff
-diff --git a/pyproject.toml b/pyproject.toml
-index ff11768..f28f832 100644
---- a/pyproject.toml
-+++ b/pyproject.toml
-@@ -14,6 +14,7 @@ scikit-learn = "1.1.3"
-scipy = "1.10.1"
-matplotlib = "3.6.2"
-dvc = {version = "2.37.0", extras = ["gs"]}
-+mlem = {version = "0.4.3", extras = ["fastapi"]}
-
-[build-system]
-requires = ["poetry-core"]
+diff --git a/requirements.txt b/requirements.txt
+index 8ccc2df..fcdd460 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -2,3 +2,4 @@ tensorflow==2.12.0
+ matplotlib==3.7.1
+ pyyaml==6.0
+ dvc[gs]==3.2.2
++mlem[fastapi]==0.4.13
 ```
 
 ### Initialize and configure MLEM.
@@ -65,197 +75,148 @@ working directory. This file contains the configuration of MLEM.
 
 ### Update the experiment
 
-#### Update `src/featurization.py`
-
-
-Update the `src/featurization.py` file to save the `CountVectorizer` and the
-`TfidfTransformer` with MLEM.
-
-```py title="src/featurization.py" hl_lines="11 74-75"
-import os
-import pickle
-import sys
-
-import numpy as np
-import pandas as pd
-import scipy.sparse as sparse
-import yaml
-from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
-
-from mlem.api import save
-
-params = yaml.safe_load(open("params.yaml"))["featurize"]
-
-np.set_printoptions(suppress=True)
-
-if len(sys.argv) != 3 and len(sys.argv) != 5:
-    sys.stderr.write("Arguments error. Usage:\n")
-    sys.stderr.write("\tpython featurization.py data-dir-path features-dir-path\n")
-    sys.exit(1)
-
-train_input = os.path.join(sys.argv[1], "train.tsv")
-test_input = os.path.join(sys.argv[1], "test.tsv")
-train_output = os.path.join(sys.argv[2], "train.pkl")
-test_output = os.path.join(sys.argv[2], "test.pkl")
-
-max_features = params["max_features"]
-ngrams = params["ngrams"]
-
-
-def get_df(data):
-    df = pd.read_csv(
-        data,
-        encoding="utf-8",
-        header=None,
-        delimiter="\t",
-        names=["id", "label", "text"],
-    )
-    sys.stderr.write(f"The input data frame {data} size is {df.shape}\n")
-    return df
-
-
-def save_matrix(df, matrix, names, output):
-    id_matrix = sparse.csr_matrix(df.id.astype(np.int64)).T
-    label_matrix = sparse.csr_matrix(df.label.astype(np.int64)).T
-
-    result = sparse.hstack([id_matrix, label_matrix, matrix], format="csr")
-
-    msg = "The output matrix {} size is {} and data type is {}\n"
-    sys.stderr.write(msg.format(output, result.shape, result.dtype))
-
-    with open(output, "wb") as fd:
-        pickle.dump((result, names), fd)
-    pass
-
-
-os.makedirs(sys.argv[2], exist_ok=True)
-
-# Generate train feature matrix
-df_train = get_df(train_input)
-train_words = np.array(df_train.text.str.lower().values.astype("U"))
-
-bag_of_words = CountVectorizer(
-    stop_words="english", max_features=max_features, ngram_range=(1, ngrams)
-)
-
-bag_of_words.fit(train_words)
-train_words_binary_matrix = bag_of_words.transform(train_words)
-feature_names = bag_of_words.get_feature_names_out()
-tfidf = TfidfTransformer(smooth_idf=False)
-tfidf.fit(train_words_binary_matrix)
-train_words_tfidf_matrix = tfidf.transform(train_words_binary_matrix)
-
-save(bag_of_words.transform, "data/features/vectorizer")
-save(tfidf.transform, "data/features/tfidf")
-
-save_matrix(df_train, train_words_tfidf_matrix, feature_names, train_output)
-
-# Generate test feature matrix
-df_test = get_df(test_input)
-test_words = np.array(df_test.text.str.lower().values.astype("U"))
-test_words_binary_matrix = bag_of_words.transform(test_words)
-test_words_tfidf_matrix = tfidf.transform(test_words_binary_matrix)
-
-save_matrix(df_test, test_words_tfidf_matrix, feature_names, test_output)
-```
-
-Check the differences with Git to better understand the changes.
-
-```sh title="Execute the following command(s) in a terminal"
-# Show the differences with Git
-git diff src/featurization.py
-```
-
-The output should be similar to this.
-
-```diff
-diff --git a/src/featurization.py b/src/featurization.py
-index 4afb10e..a61d371 100644
---- a/src/featurization.py
-+++ b/src/featurization.py
-@@ -8,6 +8,8 @@ import scipy.sparse as sparse
-import yaml
-from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
-
-+from mlem.api import save
-+
-params = yaml.safe_load(open("params.yaml"))["featurize"]
-
-np.set_printoptions(suppress=True)
-@@ -69,6 +71,9 @@ tfidf = TfidfTransformer(smooth_idf=False)
-tfidf.fit(train_words_binary_matrix)
-train_words_tfidf_matrix = tfidf.transform(train_words_binary_matrix)
-
-+save(bag_of_words.transform, "data/features/vectorizer")
-+save(tfidf.transform, "data/features/tfidf")
-+
-save_matrix(df_train, train_words_tfidf_matrix, feature_names, train_output)
-
-# Generate test feature matrix
-```
-
 #### Update `src/train.py`
 
 Update the `src/train.py` file to save the model with its artifacts with MLEM.
 
 ```py title="src/train.py" hl_lines="9 40-48"
-import os
-import pickle
+import json
 import sys
+from pathlib import Path
+from typing import Tuple
 
 import numpy as np
+import tensorflow as tf
 import yaml
-from sklearn.ensemble import RandomForestClassifier
+from mlem.api import save
 
-from mlem.api import load, save
+from utils.seed import set_seed
 
-params = yaml.safe_load(open("params.yaml"))["train"]
 
-if len(sys.argv) != 3:
-    sys.stderr.write("Arguments error. Usage:\n")
-    sys.stderr.write("\tpython train.py features model\n")
-    sys.exit(1)
+def get_model(
+    image_shape: Tuple[int, int, int],
+    conv_size: int,
+    dense_size: int,
+    output_classes: int,
+) -> tf.keras.Model:
+    """Create a simple CNN model"""
+    model = tf.keras.models.Sequential(
+        [
+            tf.keras.layers.Conv2D(
+                conv_size, (3, 3), activation="relu", input_shape=image_shape
+            ),
+            tf.keras.layers.MaxPooling2D((3, 3)),
+            tf.keras.layers.Flatten(),
+            tf.keras.layers.Dense(dense_size, activation="relu"),
+            tf.keras.layers.Dense(output_classes),
+        ]
+    )
+    return model
 
-input = sys.argv[1]
-output = sys.argv[2]
-seed = params["seed"]
-n_est = params["n_est"]
-min_split = params["min_split"]
 
-with open(os.path.join(input, "train.pkl"), "rb") as fd:
-    matrix, _ = pickle.load(fd)
+def main() -> None:
+    if len(sys.argv) != 3:
+        print("Arguments error. Usage:\n")
+        print("\tpython3 train.py <prepared-dataset-folder> <model-folder>\n")
+        exit(1)
 
-labels = np.squeeze(matrix[:, 1].toarray())
-x = matrix[:, 2:]
+    # Load parameters
+    prepare_params = yaml.safe_load(open("params.yaml"))["prepare"]
+    train_params = yaml.safe_load(open("params.yaml"))["train"]
 
-sys.stderr.write("Input matrix size {}\n".format(matrix.shape))
-sys.stderr.write("X matrix size {}\n".format(x.shape))
-sys.stderr.write("Y matrix size {}\n".format(labels.shape))
+    prepared_dataset_folder = Path(sys.argv[1])
+    model_folder = Path(sys.argv[2])
 
-clf = RandomForestClassifier(
-    n_estimators=n_est, min_samples_split=min_split, n_jobs=2, random_state=seed
-)
+    image_size = prepare_params["image_size"]
+    grayscale = prepare_params["grayscale"]
+    image_shape = (*image_size, 1 if grayscale else 3)
 
-clf.fit(x, labels)
+    seed = train_params["seed"]
+    lr = train_params["lr"]
+    epochs = train_params["epochs"]
+    conv_size = train_params["conv_size"]
+    dense_size = train_params["dense_size"]
+    output_classes = train_params["output_classes"]
 
-tfidf = load("data/features/tfidf")
-vectorizer = load("data/features/vectorizer")
+    # Set seed for reproducibility
+    set_seed(seed)
 
-save(
-    clf,
-    output,
-    preprocess=lambda x: tfidf(vectorizer(x)),
-    sample_data=["This is a sample text."]
-)
+    # Load data
+    ds_train = tf.data.Dataset.load(str(prepared_dataset_folder / "train"))
+    ds_test = tf.data.Dataset.load(str(prepared_dataset_folder / "test"))
+
+    labels = None
+    with open(prepared_dataset_folder / "labels.json") as f:
+        labels = json.load(f)
+
+    # Define the model
+    model = get_model(image_shape, conv_size, dense_size, output_classes)
+    model.compile(
+        optimizer=tf.keras.optimizers.Adam(lr),
+        loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+        metrics=[tf.keras.metrics.SparseCategoricalAccuracy()],
+    )
+    model.summary()
+
+    # Train the model
+    model.fit(
+        ds_train,
+        epochs=epochs,
+        validation_data=ds_test,
+    )
+
+    # Save the model
+    model_folder.mkdir(parents=True, exist_ok=True)
+
+    def preprocess(x):
+        # convert bytes to tensor
+        x = tf.io.decode_image(x, channels=1 if grayscale else 3)
+        x = tf.image.resize(x, image_size)
+        x = tf.cast(x, tf.float32)
+        x = x / 255.0
+        # add batch dimension
+        x = tf.expand_dims(x, axis=0)
+        return x
+
+    def postprocess(x):
+        return {
+            "probabilities": {
+                labels[i]: prob
+                for i, prob in enumerate(tf.nn.softmax(x).numpy()[0].tolist())
+            },
+            "prediction": labels[tf.argmax(x, axis=-1).numpy()[0]],
+        }
+
+    def get_sample_data():
+        x = np.ones((128, 128, 3), dtype=np.uint8)
+        x *= 255
+        # convert array to png bytes
+        x = tf.io.encode_png(x)
+        # tensor to bytes
+        x = x.numpy()
+        return x
+
+    save(
+        model,
+        str(model_folder),
+        preprocess=preprocess,
+        # Convert output to probabilities
+        postprocess=postprocess,
+        # encode array to png bytes
+        sample_data=get_sample_data(),
+    )
+
+    # Save the model history
+    np.save(model_folder / "history.npy", model.history.history)
+
+    print(f"\nModel saved at {model_folder.absolute()}")
+
+
+if __name__ == "__main__":
+    main()
 ```
 
-!!! note
-
-    Did you pay attention to the last lines? The
-    `preprocess` lambda loads the `TfidfTransformer` with the `CountVectorizer`.
-    These will be saved along the model for future predictions. The `sample_data`
-    will be used to generate the right input for when the model is deployed (seen
-    later on). MLEM will store the model's metadata in the `models/rf.mlem` file.
+TODO: explain the changes and why we save the model with MLEM.
 
 Check the differences with Git to better understand the changes.
 
@@ -268,33 +229,79 @@ The output should be similar to this.
 
 ```diff
 diff --git a/src/train.py b/src/train.py
-index 483fb50..fd1b6d9 100644
+index ab7724a..fe35a9b 100644
 --- a/src/train.py
 +++ b/src/train.py
-@@ -6,6 +6,8 @@ import numpy as np
-import yaml
-from sklearn.ensemble import RandomForestClassifier
+@@ -1,3 +1,4 @@
++import json
+ import sys
+ from pathlib import Path
+ from typing import Tuple
+@@ -5,6 +6,7 @@ from typing import Tuple
+ import numpy as np
+ import tensorflow as tf
+ import yaml
++from mlem.api import save
 
-+from mlem.api import load, save
+ from utils.seed import set_seed
+
+@@ -61,6 +63,10 @@ def main() -> None:
+     ds_train = tf.data.Dataset.load(str(prepared_dataset_folder / "train"))
+     ds_test = tf.data.Dataset.load(str(prepared_dataset_folder / "test"))
+
++    labels = None
++    with open(prepared_dataset_folder / "labels.json") as f:
++        labels = json.load(f)
 +
-params = yaml.safe_load(open("params.yaml"))["train"]
+     # Define the model
+     model = get_model(image_shape, conv_size, dense_size, output_classes)
+     model.compile(
+@@ -79,7 +85,45 @@ def main() -> None:
 
-if len(sys.argv) != 3:
-@@ -35,5 +37,12 @@ clf = RandomForestClassifier(
-
-clf.fit(x, labels)
-
--with open(output, "wb") as fd:
--    pickle.dump(clf, fd)
-+tfidf = load("data/features/tfidf")
-+vectorizer = load("data/features/vectorizer")
+     # Save the model
+     model_folder.mkdir(parents=True, exist_ok=True)
+-    model.save(str(model_folder))
 +
-+save(
-+    clf,
-+    output,
-+    preprocess=lambda x: tfidf(vectorizer(x)),
-+    sample_data=["This is a sample text."]
-+)
++    def preprocess(x):
++        # convert bytes to tensor
++        x = tf.io.decode_image(x, channels=1 if grayscale else 3)
++        x = tf.image.resize(x, image_size)
++        x = tf.cast(x, tf.float32)
++        x = x / 255.0
++        # add batch dimension
++        x = tf.expand_dims(x, axis=0)
++        return x
++
++    def postprocess(x):
++        return {
++            "probabilities": {
++                labels[i]: prob
++                for i, prob in enumerate(tf.nn.softmax(x).numpy()[0].tolist())
++            },
++            "prediction": labels[tf.argmax(x, axis=-1).numpy()[0]],
++        }
++
++    def get_sample_data():
++        x = np.ones((128, 128, 3), dtype=np.uint8)
++        x *= 255
++        # convert array to png bytes
++        x = tf.io.encode_png(x)
++        # tensor to bytes
++        x = x.numpy()
++        return x
++
++    save(
++        model,
++        str(model_folder),
++        preprocess=preprocess,
++        # Convert output to probabilities
++        postprocess=postprocess,
++        # encode array to png bytes
++        sample_data=get_sample_data(),
++    )
++
+     # Save the model history
+     np.save(model_folder / "history.npy", model.history.history)
 ```
 
 #### Update `src/evaluate.py`
@@ -303,83 +310,144 @@ Update the `src/evaluate.py` file to load the model from MLEM.
 
 ```py title="src/evaluate.py" hl_lines="13 23"
 import json
-import math
-import os
-import pickle
 import sys
+from pathlib import Path
+from typing import List
 
-import pandas as pd
-from sklearn import metrics
-from sklearn import tree
-from dvclive import Live
-from matplotlib import pyplot as plt
-
+import matplotlib.pyplot as plt
+import numpy as np
+import tensorflow as tf
 from mlem.api import load
 
-if len(sys.argv) != 3:
-    sys.stderr.write("Arguments error. Usage:\n")
-    sys.stderr.write("\tpython evaluate.py model features\n")
-    sys.exit(1)
 
-model_file = sys.argv[1]
-matrix_file = os.path.join(sys.argv[2], "test.pkl")
+def get_training_plot(model_history: dict) -> plt.Figure:
+    """Plot the training and validation loss"""
+    epochs = range(1, len(model_history["loss"]) + 1)
 
-model = load(model_file)
+    fig = plt.figure(figsize=(10, 4))
+    plt.plot(epochs, model_history["loss"], label="Training loss")
+    plt.plot(epochs, model_history["val_loss"], label="Validation loss")
+    plt.xticks(epochs)
+    plt.title("Training and validation loss")
+    plt.xlabel("Epochs")
+    plt.ylabel("Loss")
+    plt.legend()
+    plt.grid(True)
 
-with open(matrix_file, "rb") as fd:
-    matrix, feature_names = pickle.load(fd)
+    return fig
 
-labels = matrix[:, 1].toarray().astype(int)
-x = matrix[:, 2:]
 
-predictions_by_class = model.predict_proba(x)
-predictions = predictions_by_class[:, 1]
+def get_pred_preview_plot(
+    model: tf.keras.Model, ds_test: tf.data.Dataset, labels: List[str]
+) -> plt.Figure:
+    """Plot a preview of the predictions"""
+    fig = plt.figure(figsize=(10, 5), tight_layout=True)
+    for images, label_idxs in ds_test.take(1):
+        preds = model.predict(images)
+        for i in range(10):
+            plt.subplot(2, 5, i + 1)
+            img = (images[i].numpy() * 255).astype("uint8")
+            # Convert image to rgb if grayscale
+            if img.shape[-1] == 1:
+                img = np.squeeze(img, axis=-1)
+                img = np.stack((img,) * 3, axis=-1)
+            true_label = labels[label_idxs[i].numpy()]
+            pred_label = labels[np.argmax(preds[i])]
+            # Add red border if the prediction is wrong else add green border
+            img = np.pad(img, pad_width=((1, 1), (1, 1), (0, 0)))
+            if true_label != pred_label:
+                img[0, :, 0] = 255  # Top border
+                img[-1, :, 0] = 255  # Bottom border
+                img[:, 0, 0] = 255  # Left border
+                img[:, -1, 0] = 255  # Right border
+            else:
+                img[0, :, 1] = 255
+                img[-1, :, 1] = 255
+                img[:, 0, 1] = 255
+                img[:, -1, 1] = 255
 
-with Live("evaluation", report="html") as live:
+            plt.imshow(img)
+            plt.title(f"True: {true_label}\n" f"Pred: {pred_label}")
+            plt.axis("off")
 
-    # Use dvclive to log a few simple metrics...
-    avg_prec = metrics.average_precision_score(labels, predictions)
-    roc_auc = metrics.roc_auc_score(labels, predictions)
-    live.log_metric("avg_prec", avg_prec)
-    live.log_metric("roc_auc", roc_auc)
+    return fig
 
-    # ... and plots...
-    live.log_sklearn_plot("roc", labels, predictions)
 
-    # ... but actually it can be done with dumping data points into a file:
-    # ROC has a drop_intermediate arg that reduces the number of points.
-    # https://scikit-learn.org/stable/modules/generated/sklearn.metrics.roc_curve.html#sklearn.metrics.roc_curve.
-    # PRC lacks this arg, so we manually reduce to 1000 points as a rough estimate.
-    precision, recall, prc_thresholds = metrics.precision_recall_curve(labels,predictions)
-    nth_point = math.ceil(len(prc_thresholds) / 1000)
-    prc_points = list(zip(precision, recall, prc_thresholds))[::nth_point]
-    prc_file = os.path.join("evaluation", "plots", "prc.json")
-    with open(prc_file, "w") as fd:
-    json.dump(
-        {
-            "prc": [
-                {"precision": p, "recall": r, "threshold": t}
-                for p, r, t in prc_points
-            ]
-        },
-        fd,
-        indent=4,
+def get_confusion_matrix_plot(
+    model: tf.keras.Model, ds_test: tf.data.Dataset, labels: List[str]
+) -> plt.Figure:
+    """Plot the confusion matrix"""
+    fig = plt.figure(figsize=(6, 6), tight_layout=True)
+    preds = model.predict(ds_test)
+
+    conf_matrix = tf.math.confusion_matrix(
+        labels=tf.concat([y for _, y in ds_test], axis=0),
+        predictions=tf.argmax(preds, axis=1),
+        num_classes=len(labels),
     )
 
-    # ... confusion matrix plot
-    live.log_sklearn_plot("confusion_matrix",
-        labels.squeeze(),
-        predictions_by_class.argmax(-1)
+    conf_matrix = conf_matrix / tf.reduce_sum(conf_matrix, axis=1)
+    plt.imshow(conf_matrix)
+    plt.colorbar()
+    plt.xticks(range(len(labels)), labels, rotation=90)
+    plt.yticks(range(len(labels)), labels)
+    plt.xlabel("Predicted label")
+    plt.ylabel("True label")
+    plt.title("Confusion matrix")
+
+    return fig
+
+
+def main() -> None:
+    if len(sys.argv) != 3:
+        print("Arguments error. Usage:\n")
+        print("\tpython3 evaluate.py <model-folder> <prepared-dataset-folder>\n")
+        exit(1)
+
+    model_folder = Path(sys.argv[1])
+    prepared_dataset_folder = Path(sys.argv[2])
+    evaluation_folder = Path("evaluation")
+    plots_folder = Path("plots")
+
+    # Create folders
+    (evaluation_folder / plots_folder).mkdir(parents=True, exist_ok=True)
+
+    # Load files
+    ds_test = tf.data.Dataset.load(str(prepared_dataset_folder / "test"))
+    labels = None
+    with open(prepared_dataset_folder / "labels.json") as f:
+        labels = json.load(f)
+
+    # Load model
+    model = load(model_folder)
+    model_history = np.load(model_folder / "history.npy", allow_pickle=True).item()
+
+    # Log metrics
+    val_loss, val_acc = model.evaluate(ds_test)
+    print(f"Validation loss: {val_loss:.2f}")
+    print(f"Validation accuracy: {val_acc * 100:.2f}%")
+    with open(evaluation_folder / "metrics.json", "w") as f:
+        json.dump({"val_loss": val_loss, "val_acc": val_acc}, f)
+
+    # Save training history plot
+    fig = get_training_plot(model_history)
+    fig.savefig(evaluation_folder / plots_folder / "training_history.png")
+
+    # Save predictions preview plot
+    fig = get_pred_preview_plot(model, ds_test, labels)
+    fig.savefig(evaluation_folder / plots_folder / "pred_preview.png")
+
+    # Save confusion matrix plot
+    fig = get_confusion_matrix_plot(model, ds_test, labels)
+    fig.savefig(evaluation_folder / plots_folder / "confusion_matrix.png")
+
+    print(
+        f"\nEvaluation metrics and plot files saved at {evaluation_folder.absolute()}"
     )
 
-    # ... and finally, we can dump an image, it's also supported:
-    fig, axes = plt.subplots(dpi=100)
-    fig.subplots_adjust(bottom=0.2, top=0.95)
-    importances = model.feature_importances_
-    forest_importances = pd.Series(importances, index=feature_names).nlargest(n=30)
-    axes.set_ylabel("Mean decrease in impurity")
-    forest_importances.plot.bar(ax=axes)
-    fig.savefig(os.path.join("evaluation", "plots", "importance.png"))
+
+if __name__ == "__main__":
+    main()
 ```
 
 Check the differences with Git to better understand the changes.
@@ -393,124 +461,31 @@ The output should be similar to this.
 
 ```diff
 diff --git a/src/evaluate.py b/src/evaluate.py
-index 89d616f..ba21f0e 100644
+index aa36089..cc9b5a5 100644
 --- a/src/evaluate.py
 +++ b/src/evaluate.py
-@@ -10,6 +10,7 @@ from sklearn import tree
-from dvclive import Live
-from matplotlib import pyplot as plt
-
+@@ -6,6 +6,7 @@ from typing import List
+ import matplotlib.pyplot as plt
+ import numpy as np
+ import tensorflow as tf
 +from mlem.api import load
 
-if len(sys.argv) != 3:
-sys.stderr.write("Arguments error. Usage:\n")
-@@ -19,8 +20,7 @@ if len(sys.argv) != 3:
-model_file = sys.argv[1]
-matrix_file = os.path.join(sys.argv[2], "test.pkl")
 
--with open(model_file, "rb") as fd:
--    model = pickle.load(fd)
-+model = load(model_file)
+ def get_training_plot(model_history: dict) -> plt.Figure:
+@@ -107,7 +108,7 @@ def main() -> None:
+         labels = json.load(f)
 
-with open(matrix_file, "rb") as fd:
-matrix, feature_names = pickle.load(fd)
+     # Load model
+-    model = tf.keras.models.load_model(model_folder)
++    model = load(model_folder)
+     model_history = np.load(model_folder / "history.npy", allow_pickle=True).item()
+
+     # Log metrics
 ```
 
 !!! info
 
-    When a MLEM model is loaded with `mlem.api.load`, it
-    will automatically load the artifacts as well. In this case,
-    `mlem.api.load("models/rf")` will automatically load the `preprocess` lambda
-    described earlier.
-
-### Update the DVC pipeline
-
-
-Update the DVC pipeline to reflect the changes in the stages.
-
-```sh title="Execute the following command(s) in a terminal"
-# Update the featurization stage
-dvc stage add --force \
--n featurize \
--p featurize.max_features,featurize.ngrams \
--d src/featurization.py -d data/prepared \
--o data/features/test.pkl -o data/features/train.pkl -o data/features/vectorizer -o data/features/tfidf \
-python src/featurization.py data/prepared data/features
-
-# Update the train stage
-dvc stage add --force \
--n train \
--p train.seed,train.n_est,train.min_split \
--d src/train.py -d data/features \
--o models/rf \
-python src/train.py data/features models/rf
-
-# Update the evaluate stage
-dvc stage add --force \
--n evaluate \
--d src/evaluate.py -d models/rf \
--o evaluation/plots/metrics \
--o evaluation/report.html \
---metrics evaluation/metrics.json \
---plots evaluation/plots/prc.json \
---plots evaluation/plots/sklearn/roc.json \
---plots evaluation/plots/sklearn/confusion_matrix.json \
---plots evaluation/plots/importance.png \
-python src/evaluate.py models/rf data/features
-
-# Set the axes for the `precision_recall_curve`
-dvc plots modify evaluation/plots/prc.json -x recall -y precision
-
-# Set the axes for the `roc_curve`
-dvc plots modify evaluation/plots/sklearn/roc.json -x fpr -y tpr
-
-# Set the axes for the `confusion_matrix`
-dvc plots modify evaluation/plots/sklearn/confusion_matrix.json -x actual -y predicted -t confusion
-```
-
-Check the differences with Git to better understand the changes.
-
-```sh title="Execute the following command(s) in a terminal"
-# Show the differences with Git
-git diff dvc.yaml
-```
-
-The output should be similar to this.
-
-```diff
-diff --git a/dvc.yaml b/dvc.yaml
-index fdb2bc3..3f2eaeb 100644
---- a/dvc.yaml
-+++ b/dvc.yaml
-@@ -19,9 +19,11 @@ stages:
-- featurize.ngrams
-outs:
-- data/features/test.pkl
-+    - data/features/tfidf
-- data/features/train.pkl
-+    - data/features/vectorizer
-train:
--    cmd: python src/train.py data/features model.pkl
-+    cmd: python src/train.py data/features models/rf
-deps:
-- data/features
-- src/train.py
-@@ -30,11 +32,11 @@ stages:
-- train.n_est
-- train.seed
-outs:
--    - model.pkl
-+    - models/rf
-evaluate:
--    cmd: python src/evaluate.py model.pkl data/features
-+    cmd: python src/evaluate.py models/rf data/features
-deps:
--    - model.pkl
-+    - models/rf
-- src/evaluate.py
-outs:
-- evaluation/plots/metrics
-```
+    When a MLEM model is loaded with `mlem.api.load`, loads the model as it was saved without the preprocessing and postprocessing functions.
 
 ### Run the experiment
 
@@ -522,6 +497,34 @@ dvc repro
 The experiment now uses MLEM to save and load the model. DVC stores the model
 and its metadata.
 
+### Check the changes
+
+Check the changes with Git to ensure that all the necessary files are tracked.
+
+```sh title="Execute the following command(s) in a terminal"
+# Add all the files
+git add .
+
+# Check the changes
+git status
+```
+
+The output should look like this.
+
+```
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+    modified:   .dvcignore
+    new file:   .mlem.yaml
+    modified:   dvc.lock
+    new file:   model.mlem
+    modified:   requirements-freeze.txt
+    modified:   requirements.txt
+    modified:   src/evaluate.py
+    modified:   src/train.py
+```
+
 ### Commit the changes to DVC and Git
 
 Commit the changes to DVC and Git.
@@ -532,6 +535,9 @@ dvc push
 
 # Commit the changes
 git commit -m "MLEM can save, load and serve the model"
+
+# Push the changes
+git push
 ```
 
 ## Summary
