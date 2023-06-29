@@ -27,7 +27,7 @@ Serve the model with FastAPI.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Serve the model with FastAPI
-mlem serve fastapi --model models/rf
+mlem serve fastapi --model model
 ```
 
 MLEM will load the model, create the FastAPI app and start it. You can then
@@ -38,16 +38,9 @@ access the auto-generated model documentation on <http://localhost:8080/docs>{:t
     Remember the `sample_data` variable discussed in the previous chapter? This will be used by MLEM
     to generate the FastAPI endpoints with the right OpenAPI/Swagger specifications.
 
-The following endpoints have been created:
+The following endpoint has been created:
 
-- `/predict`: Get a string as the input and display the prediction of the input
-as true (1) if it is related to the R programming language or as false (0) if
-it is is not related to the R programming language.
-- `/predict_proba`: Get a string as the input and display the probability of the
-input as a array of two numbers. The first number is the probability from 0 to
-1 of the input as not related to the R programming language. The second number
-is the probability from 0 to 1 of the input as related to the R programming
-language.
+- `/predict`: Upload a `png` or `jpg` image and get a prediction from the model.
 
 You can try out predictions by inputing some sentences to the model through the
 REST API!
@@ -56,168 +49,33 @@ Here are some request bodies you can use as examples.
 
 !!! warning
 
-    Please be aware that this model is a toy. Some
+    Please be aware that this model is for demonstration purposes. Some
     inputs may be incorrectly predicted.
 
-#### Input example 1
-
-**Request body**
-
-```json
-{
-    "data": [
-    "How to create a plot in R?"
-    ]
-}
-```
+#### Input example
 
 **Prediction output**
 
-This output means that the input is related to the R programming language.
-
-```json
-[
-    1
-]
-```
-
-**Probabilities output**
-
-This output means a 94% probability that the input is related to the R
-programming language.
-
-```json
-[
-    [
-        0.06,
-        0.94
-    ]
-]
-```
-
-#### Input example 2
-
-**Request body**
+Below is a sample output of the prediction endpoint.
 
 ```json
 {
-    "data": [
-    "This should not be related as I talk about dogs"
-    ]
+  "prediction": "MakeMake",
+  "probabilities": {
+    "Earth": 5.705472982953097e-9,
+    "Jupiter": 0.0072588552720844746,
+    "MakeMake": 0.9552229046821594,
+    "Mars": 0.0019777403213083744,
+    "Mercury": 0.006808419246226549,
+    "Moon": 0.021822085604071617,
+    "Neptune": 0.000005649140803143382,
+    "Pluto": 0.0005069805774837732,
+    "Saturn": 1.4994084862607338e-9,
+    "Uranus": 8.170881642399763e-7,
+    "Venus": 0.006396543234586716
+  }
 }
 ```
-
-**Prediction output**
-
-This output means that the input is not related to the R programming language.
-
-```json
-[
-    0
-]
-```
-
-**Probabilities output**
-
-This output means a 22% probability that the input is related to the R
-programming language.
-
-```json
-[
-    [
-        0.77650959300044,
-        0.22349040699956035
-    ]
-]
-```
-
-#### Input example 3
-
-**Request body**
-
-```json
-{
-    "data": [
-        "My favorite programming language is Python!"
-    ]
-}
-```
-
-**Prediction output**
-
-This output means that the input is not related to the R programming language.
-
-```json
-[
-    0
-]
-```
-
-**Probabilities output**
-
-This output means a 10% probability that the input is related to the R
-programming language.
-
-```json
-[
-    [
-        0.8910538088128949,
-        0.10894619118710518
-    ]
-]
-```
-
-### Check the changes
-
-Check the changes with Git to ensure all wanted files are here.
-
-```sh title="Execute the following command(s) in a terminal"
-# Add all the files
-git add .
-
-# Check the changes
-git status
-```
-
-The output of the `git status` command should be similar to this.
-
-```
-On branch main
-Your branch is up to date with 'origin/main'.
-
-Changes to be committed:
-(use "git restore --staged <file>..." to unstage)
-    modified:   .dvcignore
-    new file:   .mlem.yaml
-    modified:   data/features/.gitignore
-    new file:   data/features/tfidf.mlem
-    new file:   data/features/vectorizer.mlem
-    modified:   dvc.lock
-    modified:   dvc.yaml
-    new file:   models/.gitignore
-    new file:   models/rf.mlem
-    modified:   poetry.lock
-    modified:   pyproject.toml
-    modified:   src/evaluate.py
-    modified:   src/featurization.py
-    modified:   src/train.py
-```
-
-### Push the changes to DVC and Git
-
-Push the changes to DVC and Git.
-
-```sh title="Execute the following command(s) in a terminal"
-# Upload the experiment data and cache to the remote bucket
-dvc push
-
-# Commit the changes
-git commit -m "MLEM can save, load and serve the model"
-
-# Push the changes
-git push
-```
-
 ### Check the results
 
 Congrats! You now have a model served over a REST API!
