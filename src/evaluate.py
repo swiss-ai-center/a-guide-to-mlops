@@ -34,7 +34,7 @@ def get_pred_preview_plot(
         preds = model.predict(images)
         for i in range(10):
             plt.subplot(2, 5, i + 1)
-            img = images[i].numpy().astype("uint8")
+            img = (images[i].numpy() * 255).astype("uint8")
             # Convert image to rgb if grayscale
             if img.shape[-1] == 1:
                 img = np.squeeze(img, axis=-1)

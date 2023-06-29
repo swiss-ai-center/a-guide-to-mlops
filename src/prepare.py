@@ -64,6 +64,13 @@ def main() -> None:
     preview_plot = get_preview_plot(ds_train, labels)
     preview_plot.savefig(prepared_dataset_folder / "preview.png")
 
+    # Normalize the data
+    normalization_layer = tf.keras.layers.experimental.preprocessing.Rescaling(
+        1.0 / 255
+    )
+    ds_train = ds_train.map(lambda x, y: (normalization_layer(x), y))
+    ds_test = ds_test.map(lambda x, y: (normalization_layer(x), y))
+
     # Save the prepared dataset
     with open(prepared_dataset_folder / "labels.json", "w") as f:
         json.dump(labels, f)
