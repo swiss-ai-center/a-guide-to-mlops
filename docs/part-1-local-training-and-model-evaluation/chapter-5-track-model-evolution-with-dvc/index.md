@@ -127,8 +127,8 @@ The output should look like this.
 
 ```
 Path                     Metric    HEAD     workspace    Change
-evaluation/metrics.json  val_acc   0.67601  0.92835      0.25234
-evaluation/metrics.json  val_loss  1.33409  0.25104      -1.08305
+evaluation/metrics.json  val_acc   0.58879  0.74143      0.15265
+evaluation/metrics.json  val_loss  1.89269  1.34434      -0.54835
 ```
 
 Again, DVC shows you the differences, so you can easily compare the two

@@ -55,6 +55,8 @@ saves:
       - replace_from_md:
         file: src/evaluate.py
         occurance_index: 0
+      - run: mkdir src/utils
+      - run: touch src/utils/__init__.py
       - replace_from_md:
         file: src/utils/seed.py
         occurance_index: 0

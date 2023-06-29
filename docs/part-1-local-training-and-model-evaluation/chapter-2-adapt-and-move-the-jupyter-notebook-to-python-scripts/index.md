@@ -249,6 +249,13 @@ def main() -> None:
     preview_plot = get_preview_plot(ds_train, labels)
     preview_plot.savefig(prepared_dataset_folder / "preview.png")
 
+    # Normalize the data
+    normalization_layer = tf.keras.layers.experimental.preprocessing.Rescaling(
+        1.0 / 255
+    )
+    ds_train = ds_train.map(lambda x, y: (normalization_layer(x), y))
+    ds_test = ds_test.map(lambda x, y: (normalization_layer(x), y))
+
     # Save the prepared dataset
     with open(prepared_dataset_folder / "labels.json", "w") as f:
         json.dump(labels, f)
@@ -400,7 +407,7 @@ def get_pred_preview_plot(
         preds = model.predict(images)
         for i in range(10):
             plt.subplot(2, 5, i + 1)
-            img = images[i].numpy().astype("uint8")
+            img = (images[i].numpy() * 255).astype("uint8")
             # Convert image to rgb if grayscale
             if img.shape[-1] == 1:
                 img = np.squeeze(img, axis=-1)
@@ -506,7 +513,14 @@ if __name__ == "__main__":
 
 #### Create the seed helper function
 
-Finally, add the small `src/utils/seed.py` script to handle the fixing of the
+Finally, add a module for utils.
+
+```sh title="Execute the following command(s) in a terminal"
+mkdir src/utils
+touch src/utils/__init__.py
+```
+
+In this module, include `src/utils/seed.py` to handle the fixing of the
 seed parameters. This ensure the results are reproducible.
 
 ```py title="src/utils/seed.py"
@@ -545,11 +559,12 @@ Your working directory should now look like this:
 │   │   └── ...
 │   └── README.md
 ├── src # (1)!
-│   ├── evaluate.py
-│   ├── prepare.py
-│   ├── train.py
-│   └── utils
-│       └── seed.py
+│   ├── utils
+│   │   ├── __init__.py
+│   │   └── seed.py
+│   ├── evaluate.py
+│   ├── prepare.py
+│   └── train.py
 ├── params.yaml # (2)!
 ├── requirements-freeze.txt # (3)!
 └── requirements.txt # (4)!
@@ -602,14 +617,15 @@ Your working directory should now be similar to this:
 │   │   ├── pred_preview.png
 │   │   └── training_history.png
 │   └── metrics.json
-├── src
-│   ├── evaluate.py
-│   ├── prepare.py
-│   ├── train.py
-│   └── utils
-│       └── seed.py
 ├── model # (4)!
 │   └── ...
+├── src
+│   ├── utils
+│   │   ├── __init__.py
+│   │   └── seed.py
+│   ├── evaluate.py
+│   ├── prepare.py
+│   └── train.py
 ├── params.yaml
 ├── requirements-freeze.txt
 └── requirements.txt
