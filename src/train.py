@@ -1,3 +1,4 @@
+import json
 import sys
 from pathlib import Path
 from typing import Tuple
@@ -5,6 +6,7 @@ from typing import Tuple
 import numpy as np
 import tensorflow as tf
 import yaml
+from mlem.api import save
 
 from utils.seed import set_seed
 
@@ -61,6 +63,10 @@ def main() -> None:
     ds_train = tf.data.Dataset.load(str(prepared_dataset_folder / "train"))
     ds_test = tf.data.Dataset.load(str(prepared_dataset_folder / "test"))
 
+    labels = None
+    with open(prepared_dataset_folder / "labels.json") as f:
+        labels = json.load(f)
+
     # Define the model
     model = get_model(image_shape, conv_size, dense_size, output_classes)
     model.compile(
@@ -79,7 +85,45 @@ def main() -> None:
 
     # Save the model
     model_folder.mkdir(parents=True, exist_ok=True)
-    model.save(str(model_folder))
+
+    def preprocess(x):
+        # convert bytes to tensor
+        x = tf.io.decode_image(x, channels=1 if grayscale else 3)
+        x = tf.image.resize(x, image_size)
+        x = tf.cast(x, tf.float32)
+        x = x / 255.0
+        # add batch dimension
+        x = tf.expand_dims(x, axis=0)
+        return x
+
+    def postprocess(x):
+        return {
+            "probabilities": {
+                labels[i]: prob
+                for i, prob in enumerate(tf.nn.softmax(x).numpy()[0].tolist())
+            },
+            "prediction": labels[tf.argmax(x, axis=-1).numpy()[0]],
+        }
+
+    def get_sample_data():
+        x = np.ones((128, 128, 3), dtype=np.uint8)
+        x *= 255
+        # convert array to png bytes
+        x = tf.io.encode_png(x)
+        # tensor to bytes
+        x = x.numpy()
+        return x
+
+    save(
+        model,
+        str(model_folder),
+        preprocess=preprocess,
+        # Convert output to probabilities
+        postprocess=postprocess,
+        # encode array to png bytes
+        sample_data=get_sample_data(),
+    )
+
     # Save the model history
     np.save(model_folder / "history.npy", model.history.history)
 

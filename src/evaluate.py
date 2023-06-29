@@ -6,6 +6,7 @@ from typing import List
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
+from mlem.api import load
 
 
 def get_training_plot(model_history: dict) -> plt.Figure:
@@ -107,7 +108,7 @@ def main() -> None:
         labels = json.load(f)
 
     # Load model
-    model = tf.keras.models.load_model(model_folder)
+    model = load(model_folder)
     model_history = np.load(model_folder / "history.npy", allow_pickle=True).item()
 
     # Log metrics

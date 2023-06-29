@@ -1,0 +1,144 @@
+artifacts:
+  model/data:
+    hash: d8da34aa958c8d83b1c657790332f4d1
+    size: 2505432
+    uri: model/model
+  postprocess/data.pkl:
+    hash: 96e7656a7046851fa1d766c6c1f7ef07
+    size: 1392
+    uri: model/postprocess
+  preprocess/data.pkl:
+    hash: 50d6eb698bf629567e71fdd94de97163
+    size: 1004
+    uri: model/preprocess
+call_orders:
+  __call__:
+  - - preprocess
+    - __call__
+  - - model
+    - __call__
+  - - postprocess
+    - __call__
+object_type: model
+processors:
+  model:
+    io:
+      save_format: h5
+      type: tf_keras
+    methods:
+      __call__:
+        args: []
+        name: __call__
+        returns:
+          dtype: float32
+          shape:
+          - null
+          - 11
+          type: tf_tensor
+        varargs: args
+        varargs_type:
+          dtype: float32
+          shape:
+          - null
+          - 32
+          - 32
+          - 1
+          type: tf_tensor
+        varkw: kwargs
+    type: tf_keras
+  postprocess:
+    io:
+      type: pickle
+    methods:
+      __call__:
+        args:
+        - name: x
+          type_:
+            dtype: float32
+            shape:
+            - null
+            - 11
+            type: tf_tensor
+        name: __call__
+        returns:
+          item_types:
+            prediction:
+              ptype: str
+              type: primitive
+            probabilities:
+              item_types:
+                Earth:
+                  ptype: float
+                  type: primitive
+                Jupiter:
+                  ptype: float
+                  type: primitive
+                MakeMake:
+                  ptype: float
+                  type: primitive
+                Mars:
+                  ptype: float
+                  type: primitive
+                Mercury:
+                  ptype: float
+                  type: primitive
+                Moon:
+                  ptype: float
+                  type: primitive
+                Neptune:
+                  ptype: float
+                  type: primitive
+                Pluto:
+                  ptype: float
+                  type: primitive
+                Saturn:
+                  ptype: float
+                  type: primitive
+                Uranus:
+                  ptype: float
+                  type: primitive
+                Venus:
+                  ptype: float
+                  type: primitive
+              type: dict
+          type: dict
+    type: callable
+  preprocess:
+    io:
+      type: pickle
+    methods:
+      __call__:
+        args:
+        - name: x
+          type_:
+            type: binary
+        name: __call__
+        returns:
+          dtype: float32
+          shape:
+          - null
+          - 32
+          - 32
+          - 1
+          type: tf_tensor
+    type: callable
+requirements:
+- module: tensorflow
+  version: 2.12.0
+- module: numpy
+  version: 1.23.5
+- is_package: false
+  module: __main__
+  name: __main__
+  source64zip: eJydV0uP2zYQvvtXsNqLFHjZfSBAYEQBFl701AQBsj15DYGWKJtdilRJamM32P/e4UOiZHs3bX2QJc7w08zwm4dY00pl0J9aihnz9/qgZ7WSDWqJ2XG2QWH9Kzx6gTm0TGz79Yeu5XTW7xZd0x4Q0Ui0/ZKhQktVc/ndrpu6Xz+QhnvAhtMGk5b1kJo8A6ITdYZxjTWl1SCkprDPs9msojXawmMjK8rTGYIfa8iWFnpHWrrwpq2YMHPUX9Zzp1ZK8Vxo9jcoWYlbq8BOerwoO9N2pig50ZrqIMjQ5SdwBD9RRTT+bN++cNpJkiwVJYYigjTYyylafvmCnH0gczruAeVxv1vQ+Bv9q6PCMBI8sb/VcGd/ww5ODlRpvAQnbu7Tic7EuTlKb+foNpsjUhr2TAyTIk8U5V1ig2Edc5HKR1GboGXzNw34TPZfpeRABjDDv+onO37jxAAf0p+o3dujSOOBnHHgXyFMT2+0Ze3uMndV1HRK+HMJpGoIAxvtKX+RgvqzZTXiYDmkByZq+5yhX3J0uxgQWwXUSJM7te0aOEaNqFJSYfSHhtAuHkWSHas+mvZgdlLcIqPgfRjy5mOraEsUrS4rYggw/bKWvKLqE/rozOsfJ3B0z0x6nc3cwgX6XZIKcleRhhqIxMy/0cEWblkD+WzuYU1qWnBQT2ULniVeiq0sybJVEnYlPljOyP+I4PbA/rERVRF8K7wzgGVLyxDY1fU6i4nymtLNOjgcqAskAZ2pn6skCoMTW0UOuiT8nPIgC7qjpADt9F0Em6NrS4cIBvlLgfzeIles8km8VoldDLhcnUi5CjLaynKnT+R+OegM6X2iNkiCZkygE9UoCrrTVDnRn4r7I71A36jxDtdSQSa1SlZdyTaMM3MI0fDlOrWXKUktD7ydunBv81XRLuN7zxHsyKWNSl9jz68osCzLBiyqzf+Fgq0WyR8U2cDBApItAm7lOzM75Kj+Bobfhm1PTTLb8upYJQZIK/UW1UNQ7mnNBEVmR0MxGrIANsQ+N+LlfFzrx+XyqPBFJFzKpmWcxq4hW8Ma2KTyoYYOSxrfVaRJuRqVTi61jqr2iULzgmBouoTOt5WKQU4slRUIo2R7SG0nhzKxZUbnD6qjIzQoUqCv81Vsh37lFPKuLDtFykOahSY+dkt3TUMUyPpgPjhCnYklrqFcDu/vqRct8rmW+7+4/Ew4q1wDckeeB571lvTpAJPLuZcGeuDmqWJAQGCOCLGY2/qtTSGffGjGPgGYI+wYoienbVOtS7iSap3us0iyC8cKCrPS5gA2IiPDDDZo7H16MIkrWgJ44TiV7oFPOyIEUDR/pcIdI9h9WFHLOrs91sgT1ZJoY1XgFmZBYm5vpip7yJ2b9+/x1cgPUlVoQ0y5QxWDrqoh+sewdN8SAWnIGm3RCQQzv4rIobnvR0GT2pyLWtD8MRkroAfKDXHljEHZWxyJXT64lF6x9QJZ5RO5LYxs7mQwcyEKEzLw3NAUjBcCa1mbhuzBFOxm5zRbXa2xgakKwpVlE7iX+bFxtGKl5SRYFuwAVGiQDjFE4/J6DL2OGC8xKLa6aGIHVsfudMKmDSfiyR/tJPqixVAYdZpe33yAlmgvdtas4PuA5iDsYMz5MD7kd7k94TM8JQqIZnnawneFI+0ZqlLhqAoqEKwRiOe23X26c997/gohXIrFYmTzLMbnJPWiKGZeHm/nI6OWwTNfiJ1rYyZFoMjGfHQ/hvJ+vxWj0cnlJyf5ZoVCO6CZVL5Vw5G5eEwGL2hoQQeL9gDfDb429WvhP+tHPDvZ1smjcB9FLrwVIgb9mFRBstGSd5AC2QvMsfDtWKOiEDCwFgXKc5QUhR3AiyLxLPTT+OwfhB2G3A==
+  type: custom
+- module: yaml
+  package_name: PyYAML
+  version: '6.0'
+- module: keras
+  version: 2.12.0
+- is_package: true
+  module: utils
+  name: utils
+  source64zip: eJw9yttugjAAgOFXMdyyTA4KdMkuHFUOWhijOuDGgJyKCMxWqyx79y3Lsv/2/z6FCyMtne73pCNsv38c7sLTRChcDhe/LZ+Fh8kfokWR/4P76ohWH3xcoPoCRHNY4YNMKlly7N5oHdhFm2OtWhaK6eGUO67l6ZZ61VmgD17TK/YMy9qUtkqUSLrp8aWdasVWAo3i+lq0k2xtAY/upSUvOD7N7BKrvRT0VQGDEK0JVIjsxVX6HnOwlUMzOZj451VReJruUAM6sU+ZSs/zQdPTj/uFu3JtEgxig+covWVdPbjOeVPRaMxYttsleZ7lLPE8ZdxmDJyk9BgqoypCrwy7Fhs0wSqXIsWfvuJ1SQyAbrW2Fn33Dcxj38RMXNjnFW46BjCsYuT3LgloewXatdShyFsq9wYSvr4B2i13gA==
+  type: custom
