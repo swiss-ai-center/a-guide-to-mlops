@@ -6,7 +6,7 @@ import numpy as np
 import tensorflow as tf
 import yaml
 
-from src.utils.seed import set_seed
+from utils.seed import set_seed
 
 
 def get_model(
