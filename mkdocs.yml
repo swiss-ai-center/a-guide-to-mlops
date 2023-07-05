@@ -48,7 +48,6 @@ nav:
   - Conclusion:
     - "Clean up": cleanup.md
     - "Conclusion": conclusion.md
-    - "Testing": conclusion.md
 edit_uri: blob/main/docs/
 theme:
   language: en
