@@ -6,66 +6,84 @@ unnecessary incurring costs and potential security concerns.
 
 Here's a step-by-step guide to help you do that.
 
+1. Clean up your local environment
+3. Clean up your repository
+2. Clean up your cloud provider resources
+
 !!! warning
 
-    If you are using a new Google Cloud account, make sure to delete the resources
+    If you are using a new cloud account such as Google Cloud, make sure to delete the resources
     you created before the credits are consumed. Otherwise, **you will be charged**
     for the resources you created.
 
-### Google Cloud
+### Cloud provider¶
 
-#### Delete the Google Storage bucket
+=== ":simple-amazonaws: Amazon Web Services"
 
-!!! warning
+    TODO
 
-    If you intend to delete the git repository, disregard this step. However, if you proceed with deleting the Google Storage bucket, the DVC remote will be disrupted. To continue using DVC with the Git repository, you will need to reconfigure it with a new remote.
+=== ":simple-googlecloud: Google Cloud"
 
-To delete the Google Storage bucket you created you can execute the following command :
+    #### Delete the Google Storage bucket
 
-```sh title="Execute the following command(s) in a terminal"
-gcloud storage rm --recursive gs://<your bucket name>
-```
+    !!! warning
 
-Alternatively, you can delete the bucket from the Google Cloud Console:
+        If you intend to keep the git repository but proceed with deleting the Google Storage bucket, the DVC remote will be disrupted. To continue using DVC with the Git repository, you will need to reconfigure it with a new remote.
 
-1. Go to the [Google Cloud Storage Console](https://console.cloud.google.com/storage){:target="\_blank"}.
-2. Make sure you selected the correct project.
-3. Select the bucket you want to delete from the bucket list.
-4. Click on **Delete** at the top of the page.
-5. Follow the instructions to delete the bucket.
+    To delete the Google Storage bucket you created you can execute the following command :
 
-#### Delete the Service Account
+    ```sh title="Execute the following command(s) in a terminal"
+    gcloud storage rm --recursive gs://<your bucket name>
+    ```
 
-To delete the service account you created you can execute the following command :
+    Alternatively, you can delete the bucket from the Google Cloud Console:
 
-```sh title="Execute the following command(s) in a terminal"
-gcloud iam service-accounts delete dvc-service-account@<id of your gcp project>.iam.gserviceaccount.com
-```
+    1. Go to the [Google Cloud Storage Console](https://console.cloud.google.com/storage){:target="\_blank"}.
+    2. Make sure you selected the correct project.
+    3. Select the bucket you want to delete from the bucket list.
+    4. Click on **Delete** at the top of the page.
+    5. Follow the instructions to delete the bucket.
 
-Alternatively, you can delete the service account from the Google Cloud Console:
+    #### Delete the Service Account
 
-1. Go to the [Google Cloud IAM Console](https://console.cloud.google.com/iam-admin/serviceaccounts){:target="\_blank"}.
-2. Make sure you selected the correct project.
-3. Select the service account you want to delete from the service account list.
-4. Click on **Delete** at the top of the page.
-5. Follow the instructions to delete the service account.
+    To delete the service account you created you can execute the following command :
 
-#### Delete the local Service Account key
+    ```sh title="Execute the following command(s) in a terminal"
+    gcloud iam service-accounts delete dvc-service-account@<id of your gcp project>.iam.gserviceaccount.com
+    ```
 
-You can run the following command to delete the service account key you created locally:
+    Alternatively, you can delete the service account from the Google Cloud Console:
 
-```sh title="Execute the following command(s) in a terminal"
-rm ~/.config/gcloud/dvc-google-service-account-key.json
-```
+    1. Go to the [Google Cloud IAM Console](https://console.cloud.google.com/iam-admin/serviceaccounts){:target="\_blank"}.
+    2. Make sure you selected the correct project.
+    3. Select the service account you want to delete from the service account list.
+    4. Click on **Delete** at the top of the page.
+    5. Follow the instructions to delete the service account.
 
-#### Delete the Google Cloud project
+    #### Delete the local Service Account key
 
-To delete the Google Cloud project you created:
+    You can run the following command to delete the service account key you created locally:
 
-1. Go to the [Google Cloud Resource Manager Console](https://console.cloud.google.com/cloud-resource-manager){:target="\_blank"}.
-2. Select the project you created.
-3. Click on **Delete** at the top of the page.
-4. Follow the instructions to shut down the project.
+    ```sh title="Execute the following command(s) in a terminal"
+    rm ~/.config/gcloud/dvc-google-service-account-key.json
+    ```
+
+    #### Delete the Google Cloud project
+
+    To delete the Google Cloud project you created:
+
+    1. Go to the [Google Cloud Resource Manager Console](https://console.cloud.google.com/cloud-resource-manager){:target="\_blank"}.
+    2. Select the project you created.
+    3. Click on **Delete** at the top of the page.
+    4. Follow the instructions to shut down the project.
+
+=== ":simple-microsoftazure: Microsoft Azure"
+
+    TODO
+
+=== ":simple-rancher: Self-hosted Rancher"
+
+    TODO
 
 ### Repository
 
