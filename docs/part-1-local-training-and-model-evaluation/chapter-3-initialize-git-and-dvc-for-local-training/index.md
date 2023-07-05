@@ -131,7 +131,7 @@ remain optimized.
 # Data used to train the models
 data/
 
-# Artifacts
+# Evaluation results
 evaluation/
 
 # The models
@@ -195,7 +195,7 @@ git commit -m "My first ML experiment shared on Git"
 
 Add the main `dvc` package to the `requirements.txt` file.
 
-```txt title="requirements.txt"
+```txt title="requirements.txt" hl_lines="4"
 tensorflow==2.12.0
 matplotlib==3.7.1
 pyyaml==6.0
@@ -205,9 +205,10 @@ dvc==3.2.2
 Install the package and update the freeze file.
 
 ```sh title="Execute the following command(s) in a terminal"
-# Install the packages
-pip install -r requirements.txt
-# Freeze the packages
+# Install the requirements
+pip install --requirements requirements.txt
+
+# Freeze the requirements
 pip freeze --local --all > requirements-freeze.txt
 ```
 
@@ -428,8 +429,8 @@ collaboration. Continue the guide to learn how.
 
 Highly inspired by:
 
-* the [_Creating a new repository_ - docs.github.com](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository)
+- [_Creating a new repository_ - docs.github.com](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository)
 and the [_Create a project_ - docs.gitlab.com](https://docs.gitlab.com/ee/user/project/working_with_projects.html#create-a-project)
 guides.
-* the [_Get Started_ - dvc.org](https://dvc.org/doc/start) guide.
-* the [_Get Started: Data Versioning_ -dvc.org](https://dvc.org/doc/start/data-management) guide.
+- [_Get Started_ - dvc.org](https://dvc.org/doc/start) guide.
+- [_Get Started: Data Versioning_ -dvc.org](https://dvc.org/doc/start/data-management) guide.
