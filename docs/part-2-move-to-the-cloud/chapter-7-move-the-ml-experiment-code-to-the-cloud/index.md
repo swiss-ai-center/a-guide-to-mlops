@@ -95,12 +95,8 @@ git remote add origin <your git repository url>
 Set the remote as the upstream branch and push the changes to Git.
 
 ```sh title="Execute the following command(s) in a terminal"
-
-# Set remote origin
-git branch --set-upstream origin main
-
-# Push the changes
-git push
+# Set remote origin and push the changes
+git push -u origin main
 ```
 
 After setting the upstream branch, you can simply use `git push` and `git pull`
