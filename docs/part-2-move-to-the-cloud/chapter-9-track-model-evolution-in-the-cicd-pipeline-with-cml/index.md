@@ -214,7 +214,7 @@ collaboration and decision-making within the team.
               echo >> report.md
 
               # Compare plots (images) to main branch
-              dvc plots diff
+              dvc plots diff main
 
               # Create plots
               echo "# Plots" >> report.md
@@ -328,7 +328,7 @@ collaboration and decision-making within the team.
     +          echo >> report.md
     +
     +          # Compare plots (images) to main branch
-    +          dvc plots diff
+    +          dvc plots diff main
     +
     +          # Create plots
     +          echo "# Plots" >> report.md
@@ -462,7 +462,7 @@ collaboration and decision-making within the team.
           echo >> report.md
 
           # Compare plots (images) to main branch
-          dvc plots diff
+          dvc plots diff main
 
           # Create plots
           echo "# Plots" >> report.md
@@ -553,7 +553,7 @@ collaboration and decision-making within the team.
     +      echo >> report.md
     +
     +      # Compare plots (images) to main branch
-    +      dvc plots diff
+    +      dvc plots diff main
     +
     +      # Create plots
     +      echo "# Plots" >> report.md
