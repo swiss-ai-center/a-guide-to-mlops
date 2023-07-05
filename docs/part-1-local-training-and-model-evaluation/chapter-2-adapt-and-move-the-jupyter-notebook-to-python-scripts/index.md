@@ -481,8 +481,30 @@ def get_confusion_matrix_plot(
         num_classes=len(labels),
     )
 
+    # Plot the confusion matrix
     conf_matrix = conf_matrix / tf.reduce_sum(conf_matrix, axis=1)
-    plt.imshow(conf_matrix)
+    plt.imshow(conf_matrix, cmap="Blues")
+
+    # Plot cell values
+    for i in range(len(labels)):
+        for j in range(len(labels)):
+            value = conf_matrix[i, j].numpy()
+            if value == 0:
+                color = "lightgray"
+            elif value > 0.5:
+                color = "white"
+            else:
+                color = "black"
+            plt.text(
+                j,
+                i,
+                f"{value:.2f}",
+                ha="center",
+                va="center",
+                color=color,
+                fontsize=8,
+            )
+
     plt.colorbar()
     plt.xticks(range(len(labels)), labels, rotation=90)
     plt.yticks(range(len(labels)), labels)
