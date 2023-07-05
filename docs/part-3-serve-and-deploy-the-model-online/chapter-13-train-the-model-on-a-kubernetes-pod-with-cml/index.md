@@ -80,7 +80,7 @@ You'll now update the CI/CD configuration file to start a runner on the Kubernet
 
 	Update the `.github/workflows/mlops.yml` file.
 
-	```yaml  title=".github/workflows/mlops.yml" hl_lines="15-18 21-51 54-56"
+	```yaml title=".github/workflows/mlops.yml" hl_lines="15-18 21-51 54-56"
 	name: MLOps
 
 	on:

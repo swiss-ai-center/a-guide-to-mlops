@@ -136,7 +136,7 @@ collaboration and decision-making within the team.
 
     Take some time to understand the report job and its steps.
 
-    ```yaml  title=".github/workflows/mlops.yml" hl_lines="9-10 38-115"
+    ```yaml title=".github/workflows/mlops.yml" hl_lines="9-10 16-17 32-39 46-98"
     name: MLOps
 
     on:
@@ -152,7 +152,8 @@ collaboration and decision-making within the team.
       workflow_dispatch:
 
     jobs:
-      train:
+      train-and-report:
+        permissions: write-all
         runs-on: ubuntu-latest
         steps:
           - name: Checkout repository
@@ -167,31 +168,6 @@ collaboration and decision-making within the team.
             uses: 'google-github-actions/auth@v1'
             with:
               credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
-          - name: Train model
-            run: |
-              # Pull data from DVC
-              dvc pull
-              # Run the experiment
-              dvc repro
-
-      report:
-        permissions: write-all
-        needs: train
-        if: github.event_name == 'pull_request'
-        runs-on: ubuntu-latest
-        steps:
-          - name: Checkout repository
-            uses: actions/checkout@v3
-            with:
-              ref: ${{ github.event.pull_request.head.sha }}
-          - name: Setup DVC
-            uses: iterative/setup-dvc@v1
-            with:
-              version: '3.2.2'
-          - name: Login to Google Cloud
-            uses: 'google-github-actions/auth@v1'
-            with:
-              credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
           - name: Setup Node
             uses: actions/setup-node@v3
             with:
@@ -200,7 +176,14 @@ collaboration and decision-making within the team.
             uses: iterative/setup-cml@v1
             with:
               version: '0.19.1'
+          - name: Train model
+            run: |
+              # Pull data from DVC
+              dvc pull
+              # Run the experiment
+              dvc repro
           - name: Create CML report
+            if: ${{ github.event_name == 'pull_request' }}
             env:
               REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             run: |
@@ -921,8 +904,6 @@ pipeline
 - ✅ Changes to model can be thoroughly reviewed and discussed before integrating them into the codebase
 - ❌ Model may have required artifacts that are forgotten or omitted in saved/loaded state
 - ❌ Model cannot be easily used from outside of the experiment context
-- ❌ Model cannot be deployed on and accessed from a Kubernetes cluster
-- ❌ Model cannot be trained on hardware other than the local machine
 
 You will address these issues in the next chapters for improved efficiency and
 collaboration. Continue the guide to learn how.
