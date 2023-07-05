@@ -208,8 +208,8 @@ Please refer to the correct instructions based on your Git repository provider.
     on:
       # Runs on pushes targeting main branch
       push:
-      branches:
-        - main
+        branches:
+          - main
 
       # Allows you to run this workflow manually from the Actions tab
       workflow_dispatch:
@@ -264,7 +264,7 @@ Please refer to the correct instructions based on your Git repository provider.
 
     train:
       stage: train
-      image: iterativeai/cml:0-dvc2-base1
+      image: iterativeai/cml:0-dvc3-base1
       rules:
         - if: $CI_COMMIT_BRANCH == "main"
         - if: $CI_PIPELINE_SOURCE == "merge_request_event"
