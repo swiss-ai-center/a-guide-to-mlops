@@ -204,13 +204,13 @@ collaboration and decision-making within the team.
               # Compare parameters to main branch
               echo "# Params workflow vs. main" >> report.md
               echo >> report.md
-              dvc params diff main --show-md >> report.md
+              dvc params diff main --md >> report.md
               echo >> report.md
 
               # Compare metrics to main branch
               echo "# Metrics workflow vs. main" >> report.md
               echo >> report.md
-              dvc metrics diff main --show-md >> report.md
+              dvc metrics diff main --md >> report.md
               echo >> report.md
 
               # Compare plots (images) to main branch
@@ -318,13 +318,13 @@ collaboration and decision-making within the team.
     +          # Compare parameters to main branch
     +          echo "# Params workflow vs. main" >> report.md
     +          echo >> report.md
-    +          dvc params diff main --show-md >> report.md
+    +          dvc params diff main --md >> report.md
     +          echo >> report.md
     +
     +          # Compare metrics to main branch
     +          echo "# Metrics workflow vs. main" >> report.md
     +          echo >> report.md
-    +          dvc metrics diff main --show-md >> report.md
+    +          dvc metrics diff main --md >> report.md
     +          echo >> report.md
     +
     +          # Compare plots (images) to main branch
@@ -452,13 +452,13 @@ collaboration and decision-making within the team.
           # Compare parameters to main branch
           echo "# Params workflow vs. main" >> report.md
           echo >> report.md
-          dvc params diff main --show-md >> report.md
+          dvc params diff main --md >> report.md
           echo >> report.md
 
           # Compare metrics to main branch
           echo "# Metrics workflow vs. main" >> report.md
           echo >> report.md
-          dvc metrics diff main --show-md >> report.md
+          dvc metrics diff main --md >> report.md
           echo >> report.md
 
           # Compare plots (images) to main branch
@@ -543,13 +543,13 @@ collaboration and decision-making within the team.
     +      # Compare parameters to main branch
     +      echo "# Params workflow vs. main" >> report.md
     +      echo >> report.md
-    +      dvc params diff main --show-md >> report.md
+    +      dvc params diff main --md >> report.md
     +      echo >> report.md
     +
     +      # Compare metrics to main branch
     +      echo "# Metrics workflow vs. main" >> report.md
     +      echo >> report.md
-    +      dvc metrics diff main --show-md >> report.md
+    +      dvc metrics diff main --md >> report.md
     +      echo >> report.md
     +
     +      # Compare plots (images) to main branch
