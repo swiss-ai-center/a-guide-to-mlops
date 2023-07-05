@@ -1,5 +1,11 @@
 # Chapter 7: Move the ML experiment code to the cloud
 
+??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
+
+    _Work in progress._
+
+    [//]: # "TODO"
+
 ## Introduction
 
 At this point, the data is made available to team members using DVC, but the

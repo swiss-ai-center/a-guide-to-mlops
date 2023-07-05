@@ -1,5 +1,11 @@
 # Chapter 13: Train the model on a Kubernetes pod with CML
 
+??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
+
+    _Work in progress._
+
+    [//]: # "TODO"
+
 ## Introduction
 
 Some experiments can require specific hardware to run. For example, you may need a GPU to train a deep learning model.

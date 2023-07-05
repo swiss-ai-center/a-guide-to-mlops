@@ -1,5 +1,11 @@
 # Chapter 8: Reproduce the ML experiment in a CI/CD pipeline
 
+??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
+
+    _Work in progress._
+
+    [//]: # "TODO"
+
 ## Introduction
 
 At this point, your code, your data and your execution process should be

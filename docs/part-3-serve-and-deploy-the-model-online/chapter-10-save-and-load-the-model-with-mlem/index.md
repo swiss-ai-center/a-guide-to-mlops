@@ -1,5 +1,11 @@
 # Chapter 10: Save and load the model with MLEM
 
+??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
+
+    _Work in progress._
+
+    [//]: # "TODO"
+
 ## Introduction
 
 The purpose of this chapter is to serve and use the model for usage outside of

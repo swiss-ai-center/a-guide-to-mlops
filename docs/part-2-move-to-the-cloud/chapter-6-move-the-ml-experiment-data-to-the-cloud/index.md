@@ -1,5 +1,11 @@
 # Chapter 6: Move the ML experiment data to the cloud
 
+??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
+
+    _Work in progress._
+
+    [//]: # "TODO"
+
 ## Introduction
 
 Now that we have configured DVC and can reproduce the experiment, let's set up

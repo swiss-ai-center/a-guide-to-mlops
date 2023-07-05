@@ -1,5 +1,11 @@
 # Chapter 11: Serve the model locally with MLEM
 
+??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
+
+    _Work in progress._
+
+    [//]: # "TODO"
+
 ## Introduction
 
 Now that the model is using MLEM, enabling the extraction of metadata upon saving, we will serve the

@@ -1,5 +1,11 @@
 # Chapter 9: Track model evolution in the CI/CD pipeline with CML
 
+??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
+
+    _Work in progress._
+
+    [//]: # "TODO"
+
 ## Introduction
 
 The objective of this chapter is to effectively track the evolution of the model

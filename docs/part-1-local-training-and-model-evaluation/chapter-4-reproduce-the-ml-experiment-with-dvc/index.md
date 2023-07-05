@@ -1,5 +1,11 @@
 # Chapter 4: Reproduce the ML experiment with DVC
 
+??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
+
+    _Work in progress._
+
+    [//]: # "TODO"
+
 ## Introduction
 
 A key component of DVC is the concept of "stages". Stages are essentially

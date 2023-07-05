@@ -1,5 +1,11 @@
 # Chapter 3: Initialize Git and DVC for local training
 
+??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
+
+    _Work in progress._
+
+    [//]: # "TODO"
+
 ## Introduction
 
 Now that you have a good understanding of the experiment, it's time to
