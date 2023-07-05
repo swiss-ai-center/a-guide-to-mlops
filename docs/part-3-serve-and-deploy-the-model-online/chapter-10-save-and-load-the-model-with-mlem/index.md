@@ -19,7 +19,7 @@ In this chapter, you will learn how to:
 
 Add the `mlem[fastapi]` package to install MLEM with FastAPI support.
 
-```txt title="requirements.txt"
+```txt title="requirements.txt" hl_lines="5"
 tensorflow==2.12.0
 matplotlib==3.7.1
 pyyaml==6.0
@@ -79,7 +79,7 @@ working directory. This file contains the configuration of MLEM.
 
 Update the `src/train.py` file to save the model with its artifacts with MLEM.
 
-```py title="src/train.py" hl_lines="9 40-48"
+```py title="src/train.py" hl_lines="9 66-68 89-125"
 import json
 import sys
 from pathlib import Path
@@ -308,7 +308,7 @@ index ab7724a..fe35a9b 100644
 
 Update the `src/evaluate.py` file to load the model from MLEM.
 
-```py title="src/evaluate.py" hl_lines="13 23"
+```py title="src/evaluate.py" hl_lines="9 111"
 import json
 import sys
 from pathlib import Path

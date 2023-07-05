@@ -107,12 +107,12 @@ Examine the notebook and the dataset to get a better understanding of their cont
 
 Your working directory should now look like this:
 
-```yaml hl_lines="2-4"
+```yaml hl_lines="2-5"
 .
 ├── data # (1)!
-│   ├── README.md
-│   └── raw # (2)!
-│       └── ...
+│   ├── raw # (2)!
+│   │   └── ...
+│   └── README.md
 ├── README.md
 ├── notebook.ipynb
 └── requirements.txt
