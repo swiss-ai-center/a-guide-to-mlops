@@ -314,7 +314,7 @@ index ab7724a..fe35a9b 100644
 
 Update the `src/evaluate.py` file to load the model from MLEM.
 
-```py title="src/evaluate.py" hl_lines="9 111"
+```py title="src/evaluate.py" hl_lines="9 133"
 import json
 import sys
 from pathlib import Path
@@ -392,8 +392,30 @@ def get_confusion_matrix_plot(
         num_classes=len(labels),
     )
 
+    # Plot the confusion matrix
     conf_matrix = conf_matrix / tf.reduce_sum(conf_matrix, axis=1)
-    plt.imshow(conf_matrix)
+    plt.imshow(conf_matrix, cmap="Blues")
+
+    # Plot cell values
+    for i in range(len(labels)):
+        for j in range(len(labels)):
+            value = conf_matrix[i, j].numpy()
+            if value == 0:
+                color = "lightgray"
+            elif value > 0.5:
+                color = "white"
+            else:
+                color = "black"
+            plt.text(
+                j,
+                i,
+                f"{value:.2f}",
+                ha="center",
+                va="center",
+                color=color,
+                fontsize=8,
+            )
+
     plt.colorbar()
     plt.xticks(range(len(labels)), labels, rotation=90)
     plt.yticks(range(len(labels)), labels)
@@ -575,9 +597,8 @@ pipeline
 - ✅ Changes to model can be thoroughly reviewed and discussed before integrating them into the codebase
 - ✅ Model can be saved and loaded with all required artifacts for future usage
 - ❌ Model cannot be easily used from outside of the experiment context
-
-You will address these issues in the next chapters for improved efficiency and
-collaboration. Continue the guide to learn how.
+- ❌ Model cannot be deployed on and accessed from a Kubernetes cluster
+- ❌ Model cannot be trained on hardware other than the local machine
 
 ## Sources
 

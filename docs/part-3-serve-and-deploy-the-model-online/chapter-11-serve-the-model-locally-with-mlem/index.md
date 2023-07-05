@@ -103,8 +103,7 @@ You could serve this model from anywhere. Additional services could submit
 predictions to your model. The usage of FastAPI creates endpoints that are
 automatically documented to interact with the model.
 
-You can now safely continue to the next chapter of this guide concluding your
-journey and the next things you could do with your model.
+You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
@@ -120,10 +119,9 @@ directory in order to run the experiment
 pipeline
 - ✅ Changes to model can be thoroughly reviewed and discussed before integrating them into the codebase
 - ✅ Model can be saved and loaded with all required artifacts for future usage
-- ✅ Model can be easily used outside of the experiment context.
-
-You will address these issues in the next chapters for improved efficiency and
-collaboration. Continue the guide to learn how.
+- ✅ Model can be easily used outside of the experiment context
+- ❌ Model cannot be deployed on and accessed from a Kubernetes cluster
+- ❌ Model cannot be trained on hardware other than the local machine
 
 ## Sources
 
