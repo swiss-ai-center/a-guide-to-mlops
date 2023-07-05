@@ -130,7 +130,7 @@ collaboration and decision-making within the team.
 
     Take some time to understand the report job and its steps.
 
-    ```yaml  title=".github/workflows/mlops.yml" hl_lines="9-10 41-133"
+    ```yaml  title=".github/workflows/mlops.yml" hl_lines="9-10 38-115"
     name: MLOps
 
     on:
@@ -395,7 +395,7 @@ collaboration and decision-making within the team.
 
     Explore this file to understand the report stage and its steps.
 
-    ```yaml title=".gitlab-ci.yml" hl_lines="3 44-119"
+    ```yaml title=".gitlab-ci.yml" hl_lines="3 38-98"
     stages:
       - train
       - report
@@ -682,7 +682,7 @@ repro`. You can then commit the changes.
 Update your experiment with the following parameters by editing the
 `params.yaml` file.
 
-```yaml title="params.yaml" hl_lines="6-7"
+```yaml title="params.yaml" hl_lines="9 11-12"
 prepare:
   seed: 77
   split: 0.2

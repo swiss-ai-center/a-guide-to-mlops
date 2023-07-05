@@ -598,7 +598,7 @@ python3 src/evaluate.py model data/prepared
 
 Your working directory should now be similar to this:
 
-```yaml hl_lines="3-7 12-16 23-24"
+```yaml hl_lines="3-9 13-20"
 .
 ├── data
 │   ├── prepared # (1)!

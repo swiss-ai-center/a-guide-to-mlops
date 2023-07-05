@@ -24,7 +24,7 @@ Let's get started!
 Update your experiment with the following parameters by editing the
 `params.yaml` file.
 
-```yaml title="params.yaml" hl_lines="9-12"
+```yaml title="params.yaml" hl_lines="10"
 prepare:
   seed: 77
   split: 0.2
@@ -166,7 +166,7 @@ This directory should be ignored by Git.
 
 Add the `dvc_plots` directory to the `.gitignore` file.
 
-```sh title=".gitignore" hl_lines="8-9"
+```sh title=".gitignore" hl_lines="9-10"
 ## Python
 .venv/
 
