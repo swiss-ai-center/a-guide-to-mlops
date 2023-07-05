@@ -73,8 +73,12 @@ For more, check out their documentation: [_Get started with Label Studio_ - labe
 
 ## Related tools
 
-This is a list of related tools that can laternatively be used to address each part of the workflow.
-Another good collection of tools can be found here: [https://mlops.toys](https://mlops.toys).
+While this guide concentrates solely on the setup and utilization of the mentioned
+tools, it is worth noting that there are alternative tools available for each stage
+of the workflow.
+
+Here is a list of related tools that can be explored as alternatives. Additionally,
+you can find another valuable compilation of tools at [https://mlops.toys](https://mlops.toys).
 
 ### Data management
 
