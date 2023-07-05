@@ -7,13 +7,13 @@ on:
       - main
     paths:
       - .github/workflows/mlops-the-guide.yml
-      - docs/the-guide/**/*
+      # TODO: add the paths to the parts
 
   # Runs on pull requests
   pull_request:
     paths:
       - .github/workflows/mlops-the-guide.yml
-      - docs/the-guide/**/*
+      # TODO: add the paths to the parts
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
