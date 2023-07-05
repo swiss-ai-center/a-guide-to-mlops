@@ -11,7 +11,7 @@ nav:
       - "Syllabus": syllabus.md
       - "Concept": concept.md
       - "Tools": tools.md
-  - Part 1 - Local training and model evaluation:
+  - Local training and model evaluation:
       - "Introduction": part-1-local-training-and-model-evaluation/introduction.md
       - "Chapter 1 - Run a simple ML experiment with Jupyter Notebook": part-1-local-training-and-model-evaluation/chapter-1-run-a-simple-ml-experiment-with-jupyter-notebook/index.md
       - "Chapter 2 - Adapt and move the Jupyter Notebook to Python scripts": part-1-local-training-and-model-evaluation/chapter-2-adapt-and-move-the-jupyter-notebook-to-python-scripts/index.md
@@ -20,7 +20,7 @@ nav:
       - "Chapter 5 - Track model evolution with DVC": part-1-local-training-and-model-evaluation/chapter-5-track-model-evolution-with-dvc/index.md
       - "Clean up": part-1-local-training-and-model-evaluation/clean-up.md
       - "Conclusion": part-1-local-training-and-model-evaluation/conclusion.md
-  - Part 2 - Move to the cloud:
+  - Move to the cloud:
       - "Introduction": part-2-move-to-the-cloud/introduction.md
       - "Chapter 6 - Move the ML experiment data to the cloud": part-2-move-to-the-cloud/chapter-6-move-the-ml-experiment-data-to-the-cloud/index.md
       - "Chapter 7 - Move the ML experiment code to the cloud": part-2-move-to-the-cloud/chapter-7-move-the-ml-experiment-code-to-the-cloud/index.md
@@ -28,7 +28,7 @@ nav:
       - "Chapter 9 - Track model evolution in the CI/CD pipeline with CML": part-2-move-to-the-cloud/chapter-9-track-model-evolution-in-the-cicd-pipeline-with-cml/index.md
       - "Clean up": part-2-move-to-the-cloud/clean-up.md
       - "Conclusion": part-2-move-to-the-cloud/conclusion.md
-  - Part 3 - Serve and deploy the model online:
+  - Serve and deploy the model online:
       - "Introduction": part-3-serve-and-deploy-the-model-online/introduction.md
       - "Chapter 10 - Save and load the model with MLEM": part-3-serve-and-deploy-the-model-online/chapter-10-save-and-load-the-model-with-mlem/index.md
       - "Chapter 11 - Serve the model locally with MLEM": part-3-serve-and-deploy-the-model-online/chapter-11-serve-the-model-locally-with-mlem/index.md
@@ -36,7 +36,7 @@ nav:
       - "Chapter 13 - Train the model on a Kubernetes pod with CML": part-3-serve-and-deploy-the-model-online/chapter-13-train-the-model-on-a-kubernetes-pod-with-cml/index.md
       - "Clean up": part-3-serve-and-deploy-the-model-online/clean-up.md
       - "Conclusion": part-3-serve-and-deploy-the-model-online/conclusion.md
-  - Part 4 - Labeling the data and retrain:
+  - Labeling the data and retrain:
       - "Introduction": part-4-labeling-the-data-and-retrain/introduction.md
       - "Chapter 14 - Setup Label Studio": part-4-labeling-the-data-and-retrain/chapter-14-setup-label-studio/index.md
       - "Chapter 15 - Import existing data to Label Studio": part-4-labeling-the-data-and-retrain/chapter-15-import-existing-data-to-label-studio/index.md

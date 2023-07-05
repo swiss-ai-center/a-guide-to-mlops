@@ -2,6 +2,8 @@
 
 ## Introduction
 
+[//]: # "TODO: Update the introduction"
+
 You have just joined a new ML team whose goal is to build a model that can
 classify a planet as **habitable or non-habitable** based on its features.
 

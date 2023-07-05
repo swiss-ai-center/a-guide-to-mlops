@@ -6,6 +6,16 @@
 
         It might be easier to start from the previous chapter(s). Only follow this section if you are confortable with the content of the previous chapter(s).
 
+    Set up the project directory
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Create the working directory
+    mkdir a-guide-to-mlops-jupyter-notebook
+
+    # Switch to the working directory
+    cd a-guide-to-mlops-jupyter-notebook
+    ```
+
     Get the required files for this chapter.
 
     ```sh title="Execute the following command(s) in a terminal"
