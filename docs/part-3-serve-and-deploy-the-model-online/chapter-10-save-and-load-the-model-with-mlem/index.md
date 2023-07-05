@@ -575,9 +575,8 @@ pipeline
 - ✅ Changes to model can be thoroughly reviewed and discussed before integrating them into the codebase
 - ✅ Model can be saved and loaded with all required artifacts for future usage
 - ❌ Model cannot be easily used from outside of the experiment context
-
-You will address these issues in the next chapters for improved efficiency and
-collaboration. Continue the guide to learn how.
+- ❌ Model cannot be deployed on and accessed from a Kubernetes cluster
+- ❌ Model cannot be trained on hardware other than the local machine
 
 ## Sources
 

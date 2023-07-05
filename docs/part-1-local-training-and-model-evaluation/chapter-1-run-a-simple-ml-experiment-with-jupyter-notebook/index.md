@@ -222,6 +222,8 @@ In the next chapters, you will enhance the workflow to fix those issues.
 - ❌ Changes to model are not thoroughly reviewed and discussed before integration
 - ❌ Model may have required artifacts that are forgotten or omitted in saved/loaded state
 - ❌ Model cannot be easily used from outside of the experiment context
+- ❌ Model cannot be deployed on and accessed from a Kubernetes cluster
+- ❌ Model cannot be trained on hardware other than the local machine
 
 ## Sources
 
