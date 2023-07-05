@@ -30,7 +30,7 @@ flowchart LR
     s3_storage -->|dvc pull| dot_dvc
     dot_git[(.git)]
     localGraph <-....-> dot_git
-    data[data.csv] <-.-> dot_dvc
+    data[data/raw] <-.-> dot_dvc
     subgraph cloudGraph[CLOUD]
         s3_storage
     end

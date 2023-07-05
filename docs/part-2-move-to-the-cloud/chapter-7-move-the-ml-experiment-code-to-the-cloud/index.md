@@ -19,7 +19,7 @@ flowchart LR
     dot_git[(.git)] -->|git push| gitGraph[Git Remote]
     gitGraph -->|git pull| dot_git
     localGraph <-....-> dot_git
-    data[data.csv] <-.-> dot_dvc
+    data[data/raw] <-.-> dot_dvc
     subgraph cloudGraph[CLOUD]
         s3_storage
         subgraph gitGraph[Git Remote]

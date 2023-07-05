@@ -8,7 +8,7 @@ title: "Part 1 - Conclusion"
 flowchart LR
 	dot_dvc[(.dvc)]
 	dot_git[(.git)]
-	data[data.csv] <-.-> dot_dvc
+	data[data/raw] <-.-> dot_dvc
     localGraph <-....-> dot_git
 	subgraph cacheGraph[CACHE]
 		dot_dvc
