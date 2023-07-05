@@ -7,7 +7,6 @@ site_description: >-
   A simple yet complete guide to MLOps tools and practices - from a conventional way to a modern approach of working with ML projects.
 copyright: Copyright &copy; 2022 - 2023 CSIA-PME
 nav:
-  - Home: index.md
   - Introduction:
       - "Syllabus": syllabus.md
       - "Concept": concept.md
