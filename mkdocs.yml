@@ -149,12 +149,12 @@ markdown_extensions:
   - toc:
       permalink: true
 extra_css:
-  - stylesheets/extra.css
+  - assets/stylesheets/extra.css
 extra_javascript:
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
   - https://polyfill.io/v3/polyfill.min.js?features=es6
   - https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js
-  - javascripts/mathjax.js
-  - javascripts/tablesort.js
-  - javascripts/parallax.js
-  - javascripts/scrollAnimations.js
+  - assets/javascripts/mathjax.js
+  - assets/javascripts/tablesort.js
+  - assets/javascripts/parallax.js
+  - assets/javascripts/scrollAnimations.js
