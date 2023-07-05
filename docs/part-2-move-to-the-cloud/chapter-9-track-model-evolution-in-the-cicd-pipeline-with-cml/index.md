@@ -223,25 +223,25 @@ collaboration and decision-making within the team.
               # Create training history plot
               echo "## Training History" >> report.md
               echo >> report.md
-              echo '![](./dvc_plots/static/main_training_history.png "Training History")' >> report.md
+              echo '![](./dvc_plots/static/main_evaluation_plots_training_history.png "Training History")' >> report.md
               echo >> report.md
-              echo '![](./dvc_plots/static/workspace_training_history.png "Training History")' >> report.md
+              echo '![](./dvc_plots/static/workspace_evaluation_plots_training_history.png "Training History")' >> report.md
               echo >> report.md
 
               # Create predictions preview
               echo "## Predictions Preview" >> report.md
               echo >> report.md
-              echo '![](./dvc_plots/static/main_pred_preview.png "Predictions Preview")' >> report.md
+              echo '![](./dvc_plots/static/main_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
               echo >> report.md
-              echo '![](./dvc_plots/static/workspace_pred_preview.png "Predictions Preview")' >> report.md
+              echo '![](./dvc_plots/static/workspace_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
               echo >> report.md
 
               # Create confusion matrix
               echo "## Confusion Matrix" >> report.md
               echo >> report.md
-              echo '![](./dvc_plots/static/main_confusion_matrix.png "Confusion Matrix")' >> report.md
+              echo '![](./dvc_plots/static/main_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
               echo >> report.md
-              echo '![](./dvc_plots/static/workspace_confusion_matrix.png "Confusion Matrix")' >> report.md
+              echo '![](./dvc_plots/static/workspace_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
               echo >> report.md
 
               # Publish the CML report
@@ -337,25 +337,25 @@ collaboration and decision-making within the team.
     +          # Create training history plot
     +          echo "## Training History" >> report.md
     +          echo >> report.md
-    +          echo '![](./dvc_plots/static/main_training_history.png "Training History")' >> report.md
+    +          echo '![](./dvc_plots/static/main_evaluation_plots_training_history.png "Training History")' >> report.md
     +          echo >> report.md
-    +          echo '![](./dvc_plots/static/workspace_training_history.png "Training History")' >> report.md
+    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_training_history.png "Training History")' >> report.md
     +          echo >> report.md
     +
     +          # Create predictions preview
     +          echo "## Predictions Preview" >> report.md
     +          echo >> report.md
-    +          echo '![](./dvc_plots/static/main_pred_preview.png "Predictions Preview")' >> report.md
+    +          echo '![](./dvc_plots/static/main_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
     +          echo >> report.md
-    +          echo '![](./dvc_plots/static/workspace_pred_preview.png "Predictions Preview")' >> report.md
+    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
     +          echo >> report.md
     +
     +          # Create confusion matrix
     +          echo "## Confusion Matrix" >> report.md
     +          echo >> report.md
-    +          echo '![](./dvc_plots/static/main_confusion_matrix.png "Confusion Matrix")' >> report.md
+    +          echo '![](./dvc_plots/static/main_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
     +          echo >> report.md
-    +          echo '![](./dvc_plots/static/workspace_confusion_matrix.png "Confusion Matrix")' >> report.md
+    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
     +          echo >> report.md
     +
     +          # Publish the CML report
@@ -471,25 +471,25 @@ collaboration and decision-making within the team.
           # Create training history plot
           echo "## Training History" >> report.md
           echo >> report.md
-          echo '![](./dvc_plots/static/main_training_history.png "Training History")' >> report.md
+          echo '![](./dvc_plots/static/main_evaluation_plots_training_history.png "Training History")' >> report.md
           echo >> report.md
-          echo '![](./dvc_plots/static/workspace_training_history.png "Training History")' >> report.md
+          echo '![](./dvc_plots/static/workspace_evaluation_plots_training_history.png "Training History")' >> report.md
           echo >> report.md
 
           # Create predictions preview
           echo "## Predictions Preview" >> report.md
           echo >> report.md
-          echo '![](./dvc_plots/static/main_pred_preview.png "Predictions Preview")' >> report.md
+          echo '![](./dvc_plots/static/main_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
           echo >> report.md
-          echo '![](./dvc_plots/static/workspace_pred_preview.png "Predictions Preview")' >> report.md
+          echo '![](./dvc_plots/static/workspace_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
           echo >> report.md
 
           # Create confusion matrix
           echo "## Confusion Matrix" >> report.md
           echo >> report.md
-          echo '![](./dvc_plots/static/main_confusion_matrix.png "Confusion Matrix")' >> report.md
+          echo '![](./dvc_plots/static/main_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
           echo >> report.md
-          echo '![](./dvc_plots/static/workspace_confusion_matrix.png "Confusion Matrix")' >> report.md
+          echo '![](./dvc_plots/static/workspace_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
           echo >> report.md
 
           # Publish the CML report
@@ -562,25 +562,25 @@ collaboration and decision-making within the team.
     +      # Create training history plot
     +      echo "## Training History" >> report.md
     +      echo >> report.md
-    +      echo '![](./dvc_plots/static/main_training_history.png "Training History")' >> report.md
+    +      echo '![](./dvc_plots/static/main_evaluation_plots_training_history.png "Training History")' >> report.md
     +      echo >> report.md
-    +      echo '![](./dvc_plots/static/workspace_training_history.png "Training History")' >> report.md
+    +      echo '![](./dvc_plots/static/workspace_evaluation_plots_training_history.png "Training History")' >> report.md
     +      echo >> report.md
     +
     +      # Create predictions preview
     +      echo "## Predictions Preview" >> report.md
     +      echo >> report.md
-    +      echo '![](./dvc_plots/static/main_pred_preview.png "Predictions Preview")' >> report.md
+    +      echo '![](./dvc_plots/static/main_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
     +      echo >> report.md
-    +      echo '![](./dvc_plots/static/workspace_pred_preview.png "Predictions Preview")' >> report.md
+    +      echo '![](./dvc_plots/static/workspace_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
     +      echo >> report.md
     +
     +      # Create confusion matrix
     +      echo "## Confusion Matrix" >> report.md
     +      echo >> report.md
-    +      echo '![](./dvc_plots/static/main_confusion_matrix.png "Confusion Matrix")' >> report.md
+    +      echo '![](./dvc_plots/static/main_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
     +      echo >> report.md
-    +      echo '![](./dvc_plots/static/workspace_confusion_matrix.png "Confusion Matrix")' >> report.md
+    +      echo '![](./dvc_plots/static/workspace_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
     +      echo >> report.md
     +
     +      # Publish the CML report
