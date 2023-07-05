@@ -1,3 +1,5 @@
+# Syllabus
+
 What you will learn from this guide.
 
 - Introduction - Learn [about MLOps](./concept.md) and [the tools](./tools.md) used in this guide.
