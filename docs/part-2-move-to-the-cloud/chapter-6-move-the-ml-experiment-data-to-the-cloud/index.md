@@ -87,7 +87,11 @@ Create a project on a cloud provider to host the data.
 
 === ":simple-amazonaws: Amazon Web Services"
 
-    TODO
+    _This is a work in progress._
+
+=== ":simple-exoscale: Exoscale"
+
+    _This is a work in progress._
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -115,11 +119,11 @@ Create a project on a cloud provider to host the data.
 
 === ":simple-microsoftazure: Microsoft Azure"
 
-    TODO
+    _This is a work in progress._
 
-=== ":simple-rancher: Self-hosted Rancher"
+=== ":simple-kubernetes: Self-hosted Kubernetes"
 
-    TODO
+    _This is a work in progress._
 
 ### Install and configure the cloud provider CLI
 
@@ -127,7 +131,11 @@ Install and configure the cloud provider CLI tool to manage the cloud resources.
 
 === ":simple-amazonaws: Amazon Web Services"
 
-    TODO
+    _This is a work in progress._
+
+=== ":simple-exoscale: Exoscale"
+
+    _This is a work in progress._
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -169,11 +177,11 @@ Install and configure the cloud provider CLI tool to manage the cloud resources.
 
 === ":simple-microsoftazure: Microsoft Azure"
 
-    TODO
+    _This is a work in progress._
 
-=== ":simple-rancher: Self-hosted Rancher"
+=== ":simple-kubernetes: Self-hosted Kubernetes"
 
-    TODO
+    _This is a work in progress._
 
 ### Create the Storage Bucket on the cloud provider
 
@@ -185,7 +193,11 @@ Create the Storage Bucket to store the data with the cloud provider CLI.
 
 === ":simple-amazonaws: Amazon Web Services"
 
-    TODO
+    _This is a work in progress._
+
+=== ":simple-exoscale: Exoscale"
+
+    _This is a work in progress._
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -220,11 +232,11 @@ Create the Storage Bucket to store the data with the cloud provider CLI.
 
 === ":simple-microsoftazure: Microsoft Azure"
 
-    TODO
+    _This is a work in progress._
 
-=== ":simple-rancher: Self-hosted Rancher"
+=== ":simple-kubernetes: Self-hosted Kubernetes"
 
-    TODO
+    _This is a work in progress._
 
 ### Install the DVC Storage plugin
 
@@ -232,7 +244,11 @@ Install the DVC Storage plugin for the chosen cloud provider.
 
 === ":simple-amazonaws: Amazon Web Services"
 
-    TODO
+    _This is a work in progress._
+
+=== ":simple-exoscale: Exoscale"
+
+    _This is a work in progress._
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -248,9 +264,9 @@ Install the DVC Storage plugin for the chosen cloud provider.
     Install the package and update the freeze file.
 
     ```sh title="Execute the following command(s) in a terminal"
-    # Install the packages
+    # Install the requirements
     pip install -r requirements.txt
-    # Freeze the packages
+    # Freeze the requirements
     pip freeze --local --all > requirements-freeze.txt
     ```
 
@@ -278,11 +294,11 @@ Install the DVC Storage plugin for the chosen cloud provider.
 
 === ":simple-microsoftazure: Microsoft Azure"
 
-    TODO
+    _This is a work in progress._
 
-=== ":simple-rancher: Self-hosted Rancher"
+=== ":simple-kubernetes: Self-hosted Kubernetes"
 
-    TODO
+    _This is a work in progress._
 
 ### Configure DVC to use the Storage Bucket
 
@@ -290,7 +306,11 @@ Configure DVC to use the Storage Bucket on the chosen cloud provider.
 
 === ":simple-amazonaws: Amazon Web Services"
 
-    TODO
+    _This is a work in progress._
+
+=== ":simple-exoscale: Exoscale"
+
+    _This is a work in progress._
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -303,13 +323,13 @@ Configure DVC to use the Storage Bucket on the chosen cloud provider.
 
 === ":simple-microsoftazure: Microsoft Azure"
 
-    TODO
+    _This is a work in progress._
 
-=== ":simple-rancher: Self-hosted Rancher"
+=== ":simple-kubernetes: Self-hosted Kubernetes"
 
-    TODO
+    _This is a work in progress._
 
-#### Check the changes
+### Check the changes
 
 Check the changes with Git to ensure all wanted files are here.
 
@@ -356,7 +376,7 @@ git commit -m "My ML experiment data is saved with DVC"
 
 Open the Bucket Storage on the cloud provider and check that the data files have been uploaded.
 
-TODO: Add explanation on how to check the files on the cloud provider, the difference between the data and the cache, and how to download the data from the cloud provider.
+[//]: # "TODO: Add explanation on how to check the files on the cloud provider, the difference between the data and the cache, and how to download the data from the cloud provider."
 
 ## Summary
 

@@ -162,5 +162,5 @@ collaboration. Continue the guide to learn how.
 
 Highly inspired by:
 
-* [Managing remote repositories - github.com](https://docs.github.com/en/get-started/getting-started-with-git/managing-remote-repositories)
-* [git-remote - git-scm.com](https://git-scm.com/docs/git-remote)
+* [_Managing remote repositories_ - github.com](https://docs.github.com/en/get-started/getting-started-with-git/managing-remote-repositories)
+* [_git-remote_ - git-scm.com](https://git-scm.com/docs/git-remote)

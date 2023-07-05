@@ -22,8 +22,13 @@ The following requirements are necessary to follow this part in addition to thos
 
 !!! note
 
-    **A credit card might be necessary to use the cloud services.** Please check you have a valid payment method before starting this part.
+    **A credit card might be necessary to use cloud services.**
 
-    At the end of this part, you will have to delete the resources created in the cloud to avoid being charged.
+    Before proceeding with this section, please ensure that you have a valid
+    payment method, as it may be required to utilize cloud services. It is
+    important to note that at the conclusion of this section, you will need to
+    [delete the cloud resources](../../clean-up/) that were created to avoid any potential charges.
 
-    In this part, **the costs should be minimal**. However, please check the pricing of the cloud services before starting this part.
+    While the costs associated with this section are **expected to be free**, it
+    is recommended to review the pricing details of cloud services before
+    initiating this part.

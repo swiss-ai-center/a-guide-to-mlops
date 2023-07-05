@@ -36,9 +36,9 @@ mlem[fastapi]==0.4.13
 Install the package and update the freeze file.
 
 ```sh title="Execute the following command(s) in a terminal"
-# Install the packages
+# Install the requirements
 pip install -r requirements.txt
-# Freeze the packages
+# Freeze the requirements
 pip freeze --local --all > requirements-freeze.txt
 ```
 
