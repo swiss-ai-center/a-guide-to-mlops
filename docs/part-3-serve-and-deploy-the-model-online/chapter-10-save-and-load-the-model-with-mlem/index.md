@@ -314,7 +314,7 @@ index ab7724a..fe35a9b 100644
 
 Update the `src/evaluate.py` file to load the model from MLEM.
 
-```py title="src/evaluate.py" hl_lines="9 111"
+```py title="src/evaluate.py" hl_lines="9 133"
 import json
 import sys
 from pathlib import Path
