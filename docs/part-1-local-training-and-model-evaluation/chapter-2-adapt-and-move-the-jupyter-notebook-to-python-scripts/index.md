@@ -20,7 +20,7 @@
     cd a-guide-to-mlops
 
     # Get the files for this chapter
-    git sparse-checkout set --no-cone docs/the-guide/chapter-1-run-a-simple-ml-experiment
+    git sparse-checkout set --no-cone docs/part-1-local-training-and-model-evaluation/chapter-1-run-a-simple-ml-experiment-with-jupyter-notebook
 
     # Clone the files locally
     git checkout
@@ -29,7 +29,7 @@
     cd ..
 
     # Copy the chapter files to the working directory
-    cp -r a-guide-to-mlops/docs/the-guide/chapter-1-run-a-simple-ml-experiment/* .
+    cp -r a-guide-to-mlops/docs/part-1-local-training-and-model-evaluation/chapter-1-run-a-simple-ml-experiment-with-jupyter-notebook/* .
 
     # Delete the cloned repository
     rm -rf a-guide-to-mlops
@@ -37,7 +37,17 @@
 
     Set up the environment.
 
-    TODO FOR EACH CHAPTER
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Create the virtual environment
+    python3 -m venv .venv
+
+    # Activate the virtual environment
+    source .venv/bin/activate
+
+    # Install the requirements
+    pip install --requirement requirements.txt
+    ```
 
 ## Introduction
 
@@ -94,7 +104,14 @@ deactivate
 Next, exit from the current directory and create a new one.
 
 ```sh title="Execute the following command(s) in a terminal"
-cd .. && mkdir a-guide-to-mlops && cd a-guide-to-mlops
+# Move back to the root directory
+cd ..
+
+# Create the new working directory
+mkdir a-guide-to-mlops
+
+# Switch to the new working directory
+cd a-guide-to-mlops
 ```
 
 ### Set up the dataset
@@ -110,9 +127,16 @@ cp -r ../a-guide-to-mlops-jupyter-notebook/data .
 
 Firstly, create the virtual environment.
 
+??? tip "Not familiar with virtual environments? Read this!"
+
+    [//]: # "TODO"
+
+    _Work in progress._
+
 ```sh title="Execute the following command(s) in a terminal"
 # Create the environment
 python3 -m venv .venv
+
 # Activate the environment
 source .venv/bin/activate
 ```
@@ -128,7 +152,7 @@ pyyaml==6.0
 Install the dependencies.
 
 ```sh title="Execute the following command(s) in a terminal"
-pip install -r requirements.txt
+pip install --requirement requirements.txt
 ```
 
 Create a freeze file to list the dependencies with their versions.
@@ -516,7 +540,10 @@ if __name__ == "__main__":
 Finally, add a module for utils.
 
 ```sh title="Execute the following command(s) in a terminal"
+# Create the utils module
 mkdir src/utils
+
+# Create the __init__.py file to make the utils module a package
 touch src/utils/__init__.py
 ```
 
@@ -546,7 +573,9 @@ def set_seed(seed: int) -> None:
 
 ### Make usage of the scripts in the Jupyter Notebook
 
-TODO: Update the notebook to use the scripts and the parameters file as well in a hybrid approach: Notebook to visualize the data and results and scripts to run the experiment.
+_Work in progress._
+
+[//]: # "TODO: Update the notebook to use the scripts and the parameters file as well in a hybrid approach: Notebook to visualize the data and results and scripts to run the experiment."
 
 ### Check the results
 
@@ -578,7 +607,7 @@ Your working directory should now look like this:
 ### Run the experiment
 
 Awesome! You now have everything you need to run the experiment: the codebase and
-the dataset are in place, the new virtual environment is set up, and you are ready to run the experiment for the first
+the dataset are in place, the new virtual environment is set up, and you are ready to run the experiment using scripts for the first
 time.
 
 You can now follow these steps to reproduce the experiment.
@@ -690,7 +719,7 @@ collaboration. Continue the guide to learn how.
 
 Highly inspired by:
 
-* the [_Get Started: Data Pipelines_ -
+- [_Get Started: Data Pipelines_ -
 dvc.org](https://dvc.org/doc/start/data-management/data-pipelines) guide.
-* [_How to get stable results with TensorFlow, setting random seed_ -
+- [_How to get stable results with TensorFlow, setting random seed_ -
 stackoverflow.com](https://stackoverflow.com/questions/36288235/how-to-get-stable-results-with-tensorflow-setting-random-seed)

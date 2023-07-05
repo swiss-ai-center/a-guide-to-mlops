@@ -50,10 +50,10 @@ breaking ML experiment. This directory will serve as your working directory for
 this first chapter.
 
 ```sh title="Execute the following command(s) in a terminal"
-# Create the directory
+# Create the working directory
 mkdir a-guide-to-mlops-jupyter-notebook
 
-# Switch to the directory
+# Switch to the working directory
 cd a-guide-to-mlops-jupyter-notebook
 ```
 
@@ -128,13 +128,7 @@ Your working directory should now look like this:
 Create the virtual environment and install necessary dependencies in your
 working directory.
 
-??? tip "Not familiar with virtual environments? Read this!"
-
-    [//]: # "TODO"
-
-    _Work in progress._
-
-```sh
+```sh title="Execute the following command(s) in a terminal"
 # Create the virtual environment
 python3 -m venv .venv
 
@@ -160,7 +154,19 @@ jupyter-lab notebook.ipynb
 
 A browser window should open with the Jupyter Notebook.
 
-Execute each step of the notebook to train the model and evaluate its performance.
+You may notice all the previous outputs from the notebook are still present. This
+is because the notebook was not cleared before being shared with you.
+
+This can be useful to see the results of previous runs. In most cases however,
+it can also be a source of confusion and clutter.
+
+This is one of the limitations of the Jupyter Notebook: they are not easy to share
+with others.
+
+For the time being, execute each step of the notebook to train the model and evaluate its performance.
+Previous outputs will be overwritten.
+
+Ensure the experiment runs without errors.
 
 Once done, you can close the browser window.
 
