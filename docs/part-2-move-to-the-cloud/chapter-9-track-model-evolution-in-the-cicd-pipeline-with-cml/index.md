@@ -193,7 +193,7 @@ collaboration and decision-making within the team.
           - name: Setup CML
             uses: iterative/setup-cml@v1
             with:
-              version: '0.18.17'
+              version: '0.19.1'
           - name: Create CML report
             env:
               REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -307,7 +307,7 @@ collaboration and decision-making within the team.
     +      - name: Setup CML
     +        uses: iterative/setup-cml@v1
     +        with:
-    +          version: '0.18.17'
+    +          version: '0.19.1'
     +      - name: Create CML report
     +        env:
     +          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
