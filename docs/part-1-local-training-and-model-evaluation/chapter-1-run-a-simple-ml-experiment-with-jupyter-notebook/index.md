@@ -50,7 +50,11 @@ breaking ML experiment. This directory will serve as your working directory for
 this first chapter.
 
 ```sh title="Execute the following command(s) in a terminal"
-mkdir a-guide-to-mlops-jupyter-notebook && cd a-guide-to-mlops-jupyter-notebook
+# Create the directory
+mkdir a-guide-to-mlops-jupyter-notebook
+
+# Switch to the directory
+cd a-guide-to-mlops-jupyter-notebook
 ```
 
 ### Download the notebook
@@ -80,11 +84,9 @@ rm -r jupyter-notebook.zip a-guide-to-mlops-jupyter-notebook
 Your colleague provided you the following URL to download an archive containing
 the dataset for this machine learning experiment.
 
-TODO: Update the branch name once the branch is merged
-
 ```sh title="Execute the following command(s) in a terminal"
 # Download the archive containing the dataset
-wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/59-data.zip -O data.zip
+wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/data.zip -O data.zip
 ```
 
 This archive must be decompressed and its contents be moved in the
@@ -124,7 +126,13 @@ Your working directory should now look like this:
 ### Create the virtual environment
 
 Create the virtual environment and install necessary dependencies in your
-working directory using these commands.
+working directory.
+
+??? tip "Not familiar with virtual environments? Read this!"
+
+    [//]: # "TODO"
+
+    _Work in progress._
 
 ```sh
 # Create the virtual environment
@@ -143,7 +151,7 @@ Awesome! You now have everything you need to run the experiment: the notebook an
 the dataset are in place, the virtual environment is ready; and you're ready to run the experiment for the first
 time.
 
-Launch the notebook with the following command.
+Launch the notebook.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Launch the experiment
@@ -154,8 +162,9 @@ A browser window should open with the Jupyter Notebook.
 
 Execute each step of the notebook to train the model and evaluate its performance.
 
-Once done, you can close the notebook and shut down the Jupyter server by
-pressing ++ctrl+c++ in the terminal and pressing ++y++.
+Once done, you can close the browser window.
+
+Shut down the Jupyter server by pressing ++ctrl+c++ in the terminal and pressing ++y++.
 
 Exit the virtual environment with the following command.
 
@@ -210,5 +219,5 @@ In the next chapters, you will enhance the workflow to fix those issues.
 
 Highly inspired by:
 
-* the [_Planets and Moons Dataset - AI in Space_ -
+- [_Planets and Moons Dataset - AI in Space_ -
 kaggle.com](https://www.kaggle.com/datasets/emirhanai/planets-and-moons-dataset-ai-in-space) community prediction competition.
