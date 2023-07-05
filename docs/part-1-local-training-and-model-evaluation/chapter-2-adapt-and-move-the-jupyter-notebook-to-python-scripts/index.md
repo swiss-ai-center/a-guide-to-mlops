@@ -754,6 +754,6 @@ collaboration. Continue the guide to learn how.
 Highly inspired by:
 
 - [_Get Started: Data Pipelines_ -
-dvc.org](https://dvc.org/doc/start/data-management/data-pipelines) guide.
+dvc.org](https://dvc.org/doc/start/data-management/data-pipelines)
 - [_How to get stable results with TensorFlow, setting random seed_ -
 stackoverflow.com](https://stackoverflow.com/questions/36288235/how-to-get-stable-results-with-tensorflow-setting-random-seed)

@@ -432,7 +432,6 @@ collaboration. Continue the guide to learn how.
 Highly inspired by:
 
 - [_Creating a new repository_ - docs.github.com](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository)
-and the [_Create a project_ - docs.gitlab.com](https://docs.gitlab.com/ee/user/project/working_with_projects.html#create-a-project)
-guides.
-- [_Get Started_ - dvc.org](https://dvc.org/doc/start) guide.
-- [_Get Started: Data Versioning_ -dvc.org](https://dvc.org/doc/start/data-management) guide.
+- [_Create a project_ - docs.gitlab.com](https://docs.gitlab.com/ee/user/project/working_with_projects.html#create-a-project)
+- [_Get Started_ - dvc.org](https://dvc.org/doc/start)
+- [_Get Started: Data Versioning_ -dvc.org](https://dvc.org/doc/start/data-management)

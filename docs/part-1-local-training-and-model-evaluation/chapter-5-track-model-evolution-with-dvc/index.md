@@ -71,7 +71,7 @@ index 5bb698e..6a6ff45 100644
    output_classes: 11
 ```
 
-Here, we simply changed the `lr` (learning rate), `epochs`, `conv_size` (convolutional layer dimension) and `dense_size` (dense layer dimension) parameters of the
+Here, we simply changed the `epochs` parameter of the
 `train` stage, which should slightly affect the model's performance.
 
 ### Reproduce the experiment
@@ -95,7 +95,7 @@ working directory.
 
     Remember? We did set the parameters, metrics and plots
     in the previous chapter: [Chapter 4: Reproduce the ML experiment with
-    DVC](../chapter-4-reproduce-the-ml-experiment-with-dvc).
+    DVC](../chapter-4-reproduce-the-ml-experiment-with-dvc/index.md).
 
 #### Compare the parameters difference
 
@@ -292,4 +292,4 @@ differences between iterations
 
 Highly inspired by:
 
-* the [_Get Started: Metrics, Parameters, and Plots_ - dvc.org](https://dvc.org/doc/start/data-management/metrics-parameters-plots) guide.
+- [_Get Started: Metrics, Parameters, and Plots_ - dvc.org](https://dvc.org/doc/start/data-management/metrics-parameters-plots)

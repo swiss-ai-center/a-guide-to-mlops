@@ -178,7 +178,7 @@ dvc stage add -n prepare \
  -p prepare \
  -d src/prepare.py -d src/utils/seed.py -d data/raw \
  -o data/prepared \
- python src.prepare.py data/raw data/prepared
+ python src/prepare.py data/raw data/prepared
 ```
 
 The values of the parameters is `prepare` which includes all the `prepare` parameters referenced in the `params.yaml` file.
@@ -357,9 +357,9 @@ In this chapter, you have successfully:
 
 1. Removed custom rules from the `.gitignore` file
 2. Set up three DVC pipeline stages
-   - `prepare`
-   - `train`
-   - `evaluate`
+    - `prepare`
+    - `train`
+    - `evaluate`
 3. Visualized the pipeline
 4. Executed the pipeline
 5. Committed the changes
@@ -399,5 +399,5 @@ collaboration. Continue the guide to learn how.
 
 Highly inspired by:
 
-* the [_Get Started: Data Pipelines_ - dvc.org](https://dvc.org/doc/start/data-management/data-pipelines) guide.
+* [_Get Started: Data Pipelines_ - dvc.org](https://dvc.org/doc/start/data-management/data-pipelines)
 * [_plots_ - dvc.org](https://dvc.org/doc/command-reference/plots)
