@@ -232,7 +232,7 @@ Install the DVC Storage plugin for the chosen cloud provider.
 
     Here, the `dvc[gs]` package enables support for Google Cloud Storage. Update the `requirements.txt` file.
 
-    ```txt title="requirements.txt"
+    ```txt title="requirements.txt" hl_lines="4"
     tensorflow==2.12.0
     matplotlib==3.7.1
     pyyaml==6.0
