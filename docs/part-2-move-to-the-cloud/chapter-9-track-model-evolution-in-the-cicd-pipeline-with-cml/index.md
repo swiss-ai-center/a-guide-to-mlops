@@ -181,7 +181,7 @@ collaboration and decision-making within the team.
           - name: Setup DVC
             uses: iterative/setup-dvc@v1
             with:
-              version: '2.37.0'
+              version: '3.2.2'
           - name: Login to Google Cloud
             uses: 'google-github-actions/auth@v1'
             with:
@@ -295,7 +295,7 @@ collaboration and decision-making within the team.
     +      - name: Setup DVC
     +        uses: iterative/setup-dvc@v1
     +        with:
-    +          version: '2.37.0'
+    +          version: '3.2.2'
     +      - name: Login to Google Cloud
     +        uses: 'google-github-actions/auth@v1'
     +        with:
@@ -415,7 +415,7 @@ collaboration and decision-making within the team.
 
     train:
       stage: train
-      image: iterativeai/cml:0-dvc2-base1
+      image: iterativeai/cml:0-dvc3-base1
       rules:
         - if: $CI_COMMIT_BRANCH == "main"
         - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -435,7 +435,7 @@ collaboration and decision-making within the team.
 
     report:
       stage: report
-      image: iterativeai/cml:0-dvc2-base1
+      image: iterativeai/cml:0-dvc3-base1
       needs:
         - train
       rules:
@@ -526,7 +526,7 @@ collaboration and decision-making within the team.
     +
     +report:
     +  stage: report
-    +  image: iterativeai/cml:0-dvc2-base1
+    +  image: iterativeai/cml:0-dvc3-base1
     +  needs:
     +    - train
     +  rules:
