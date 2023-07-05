@@ -46,6 +46,7 @@ nav:
       - "Clean up": part-4-labeling-the-data-and-retrain/clean-up.md
       - "Conclusion": part-4-labeling-the-data-and-retrain/conclusion.md
   - Conclusion:
+    - "Clean up": cleanup.md
     - "Conclusion": conclusion.md
     - "Testing": conclusion.md
 edit_uri: blob/main/docs/
