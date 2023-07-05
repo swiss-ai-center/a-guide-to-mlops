@@ -6,9 +6,9 @@ unnecessary incurring costs and potential security concerns.
 
 Here's a step-by-step guide to help you do that.
 
-1. Clean up your local environment
-3. Clean up your repository
-2. Clean up your cloud provider resources
+- Clean up your cloud provider resources
+- Clean up your local environment
+- Clean up your repository
 
 !!! warning
 
@@ -147,5 +147,3 @@ Here is a checklist of all the resources and environments you created:
 ### Summary
 
 By following these steps, you have successfully cleaned up the resources and environments you created during the guide. We hope you found this guide helpful and that it has given you a good understanding of the importance of cleaning up after yourself in cloud computing environments.
-
-If you have any questions or concerns, please do not hesitate to contact us on [GitHub](https://github.com/csia-pme/a-guide-to-mlops){:target="\_blank"}.
