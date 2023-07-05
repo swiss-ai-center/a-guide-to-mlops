@@ -2,14 +2,15 @@
 
 ## Introduction
 
-[//]: # "TODO: Update the introduction"
+As a recent addition to the ML team, your objective is to contribute to the
+development of a model capable of **visually identifying planets or moons**
+within our solar system from images.
 
-You have just joined a new ML team whose goal is to build a model that can
-classify a planet as **habitable or non-habitable** based on its features.
-
-The data scientists of your team have been working with a Jupyter Notebook that
-they promptly share with you. Their dataset consists of 20,000 planets, each
-with 8 features including the habitability label.
+The data scientists of your team have been actively collaborating on a Jupyter
+Notebook, which they have readily shared with you. The dataset they have gathered
+comprises approximately 1,650 images capturing 11 distinct planets and moons.
+Each celestial body is represented by around 150 images, each taken from a unique
+angle.
 
 The training process is as follows:
 
@@ -19,9 +20,9 @@ The training process is as follows:
 - Evaluate the model's performance using metrics, a receiver operating characteristic (ROC) curve
 and a confusion matrix.
 
-Your goal is to streamline the team's workflow by setting up MLOps tools,
-documenting the process, tracking changes, and making the model accessible to
-others.
+Your primary objective is to enhance the team's workflow by implementing MLOps
+tools, documenting the procedures, tracking changes, and ensuring the model is
+accessible to others.
 
 In this chapter, you will learn how to:
 
