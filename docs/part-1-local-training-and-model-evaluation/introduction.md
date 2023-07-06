@@ -26,6 +26,11 @@ The following requirements are necessary to follow this part:
 
 ??? danger "Using a virtual environment manager other than vanilla Python (Conda, Anaconda, etc)? Read this!"
 
-    [//]: # "TODO"
-
-    _Work in progress._
+    While conda/anaconda/etc might be widely used tools for Python dependency management, it does come with certain
+    drawbacks. Despite being designed to simplify the installation of Python and its packages, they can be complex to
+    work with. This irony arises from the fact that it is praised for simplifying processes, yet its usage can
+    challenging. Additionally, conda introduces a variety of failure modes, which can be numerous and intricate.
+    
+    Addressing these failures often requires significant resources and troubleshooting skills, leading to a diminished
+    overall benefit for the average Python user. Consequently, considering these factors, some users may find that the
+    effort and time required to deal with conda-related issues outweigh the advantages it provides.
