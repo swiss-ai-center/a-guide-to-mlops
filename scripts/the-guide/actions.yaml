@@ -183,6 +183,10 @@ saves:
         log: true
       - run: git commit -m "My ML experiment data is saved with DVC"
 
+  part-2-move-to-the-cloud/chapter-7-move-the-ml-experiment-code-to-the-cloud:
+    save_git: true
+    actions:
+
   part-2-move-to-the-cloud/chapter-8-reproduce-the-ml-experiment-in-a-cicd-pipeline:
     save_git: true
     actions:
