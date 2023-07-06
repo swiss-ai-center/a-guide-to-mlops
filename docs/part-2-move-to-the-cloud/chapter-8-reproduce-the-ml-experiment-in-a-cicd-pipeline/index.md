@@ -216,6 +216,22 @@ Please refer to the correct instructions based on your Git repository provider.
       push:
         branches:
           - main
+        paths:
+            - src/**
+            - dvc.yaml
+            - params.yaml
+            - requirements.txt
+            - requirements-freeze.txt
+            - .github/workflows/mlops.yml
+      # Runs on pull requests
+      pull_request:
+        paths:
+            - src/**
+            - dvc.yaml
+            - params.yaml
+            - requirements.txt
+            - requirements-freeze.txt
+            - .github/workflows/mlops.yml
 
       # Allows you to run this workflow manually from the Actions tab
       workflow_dispatch:
@@ -238,10 +254,15 @@ Please refer to the correct instructions based on your Git repository provider.
               credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
           - name: Train model
             run: |
-              # Pull data from DVC
-              dvc pull
               # Run the experiment
-              dvc repro
+              dvc repro --pull --allow-missing
+              # Push the changes to the remote repository
+              dvc push
+          - name: Commit changes in dvc.lock
+            uses: stefanzweifel/git-auto-commit-action@v4
+            with:
+              commit_message: Commit changes in dvc.lock
+              file_pattern: dvc.lock
     ```
 
 === ":simple-gitlab: GitLab"
@@ -252,8 +273,12 @@ Please refer to the correct instructions based on your Git repository provider.
     Explore this file to understand the train stage and its steps.
 
     ```yaml title=".gitlab-ci.yml"
+    # ---------------------------------------------------------------
+    # NOT WORKING - cannot push to current branch whithin ci pipeline
+    # ---------------------------------------------------------------
     stages:
       - train
+      - report
 
     variables:
       # Change pip's cache directory to be inside the project directory since we can
@@ -261,32 +286,45 @@ Please refer to the correct instructions based on your Git repository provider.
       PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
       # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
       GIT_DEPTH: "0"
+      # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
+      GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
+      # CML and git token
+      REPO_TOKEN: $CML_PAT
 
     # Pip's cache doesn't store the python packages
     # https://pip.pypa.io/en/stable/reference/pip_install/#caching
     cache:
       paths:
         - .cache/pip
+        - venv/
+
+    before_script:
+      # Set the Google Service Account key
+      - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+      # Install dependencies
+      - pip install virtualenv
+      - virtualenv venv
+      - source venv/bin/activate
+      - pip install -r requirements.txt
 
     train:
       stage: train
-      image: iterativeai/cml:0-dvc3-base1
+      image: python:3.10
       rules:
         - if: $CI_COMMIT_BRANCH == "main"
         - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      variables:
-        # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
-        GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
-      before_script:
-        # Set the Google Service Account key
-        - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
-        # Install dependencies
-        - pip install -r requirements-freeze.txt
       script:
-        # Pull data from DVC
-        - dvc pull
         # Run the experiment
-        - dvc repro
+        - dvc repro --pull --allow-missing
+        # Push the changes to the remote repository
+        - dvc push
+        # Commit changes in dvc.lock
+        - |
+          git config --global user.name "gitlab-ci[bot]"
+          git config --global user.email "gitlab-ci[bot]@users.noreply.gitlab.com"
+          git add dvc.lock
+          git commit -m "Commit changes in dvc.lock"
+          git push -o ci.skip "https://${GITLAB_USER_NAME}:${REPO_TOKEN}@${CI_REPOSITORY_URL#*@}" "HEAD:${CI_COMMIT_BRANCH}"
     ```
 
 ### Push the CI/CD pipeline configuration file to Git
