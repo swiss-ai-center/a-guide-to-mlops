@@ -183,8 +183,8 @@ collaboration and decision-making within the team.
               credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
           - name: Train model
             run: dvc repro --pull --allow-missing
-            # After the experiment is done we update the dvc.lock and push the changes with dvc. This allows dvc to cache the experiment
-            # results and use them in locally and remotely on pipelines without running the experiment again.
+          # After the experiment is done we update the dvc.lock and push the changes with dvc. This allows dvc to cache the experiment
+          # results and use them in locally and remotely on pipelines without running the experiment again.
           - name: Commit changes in dvc.lock
             uses: stefanzweifel/git-auto-commit-action@v4
             with:
@@ -192,6 +192,7 @@ collaboration and decision-making within the team.
               file_pattern: dvc.lock
           - name: Push experiment results to DVC remote storage
             run: dvc push
+          # Node is required to run CML
           - name: Setup Node
             if: github.event_name == 'pull_request'
             uses: actions/setup-node@v3
