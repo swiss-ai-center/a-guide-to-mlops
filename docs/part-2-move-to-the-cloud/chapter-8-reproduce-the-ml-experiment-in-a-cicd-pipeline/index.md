@@ -364,7 +364,6 @@ Depending on the CI/CD platform you are using, the process will be different.
 
     stages:
       - train
-      - report
 
     variables:
       # Change pip's cache directory to be inside the project directory since we can

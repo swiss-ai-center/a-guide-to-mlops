@@ -275,51 +275,36 @@ collaboration and decision-making within the team.
 
     ```diff
     diff --git a/.github/workflows/mlops.yml b/.github/workflows/mlops.yml
-    index 2a1914a..af1a0cb 100644
+    index 8610a7e..e8913f3 100644
     --- a/.github/workflows/mlops.yml
     +++ b/.github/workflows/mlops.yml
-    @@ -6,6 +6,9 @@ on:
-    branches:
-        - main
+    @@ -26,7 +26,8 @@ on:
+       workflow_dispatch:
 
-    +  # Runs on pull requests
-    +  pull_request:
-    +
-    # Allows you to run this workflow manually from the Actions tab
-    workflow_dispatch:
-
-    @@ -31,3 +34,82 @@ jobs:
-            dvc pull
-            # Run the experiment
-            dvc repro
-    +
-    +  report:
+     jobs:
+    -  train:
+    +  train-and-report:
     +    permissions: write-all
-    +    needs: train
-    +    if: github.event_name == 'pull_request'
-    +    runs-on: ubuntu-latest
-    +    steps:
-    +      - name: Checkout repository
-    +        uses: actions/checkout@v3
-    +        with:
-    +          ref: ${{ github.event.pull_request.head.sha }}
-    +      - name: Setup DVC
-    +        uses: iterative/setup-dvc@v1
-    +        with:
-    +          version: '3.2.2'
-    +      - name: Login to Google Cloud
-    +        uses: 'google-github-actions/auth@v1'
-    +        with:
-    +          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
+         runs-on: ubuntu-latest
+         steps:
+           - name: Checkout repository
+    @@ -52,3 +53,67 @@ jobs:
+               file_pattern: dvc.lock
+           - name: Push experiment results to DVC remote storage
+             run: dvc push
+    +      # Node is required to run CML
     +      - name: Setup Node
+    +        if: github.event_name == 'pull_request'
     +        uses: actions/setup-node@v3
     +        with:
     +          node-version: '16'
     +      - name: Setup CML
+    +        if: github.event_name == 'pull_request'
     +        uses: iterative/setup-cml@v1
     +        with:
     +          version: '0.19.1'
     +      - name: Create CML report
+    +        if: github.event_name == 'pull_request'
     +        env:
     +          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     +        run: |
@@ -379,7 +364,7 @@ collaboration and decision-making within the team.
 
     Explore this file to understand the report stage and its steps.
 
-    ```yaml title=".gitlab-ci.yml" hl_lines="19 57-122"
+    ```yaml title=".gitlab-ci.yml" hl_lines="19 29-30 59-121"
     .git-push-dvc-lock: &git-push-dvc-lock |
       # Check if there are changes in dvc.lock
       if [[ -n $(git status --porcelain dvc.lock) ]]; then
@@ -408,6 +393,8 @@ collaboration and decision-making within the team.
       GIT_DEPTH: "0"
       # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
       GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
+      # Environment variable for CML
+	  REPO_TOKEN: $GITLAB_PAT
 
     train:
       stage: train
@@ -443,9 +430,6 @@ collaboration and decision-making within the team.
         - train
       rules:
         - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      variables:
-        # Environment variable for CML
-        REPO_TOKEN: $GITLAB_PAT
       before_script:
         # Set the Google Service Account key
         - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
@@ -517,20 +501,30 @@ collaboration and decision-making within the team.
 
     ```diff
     diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-    index e104669..a946523 100644
+    index 1415c53..b0f46f0 100644
     --- a/.gitlab-ci.yml
     +++ b/.gitlab-ci.yml
-    @@ -1,5 +1,6 @@
-    stages:
-    - train
+    @@ -16,6 +16,7 @@
+
+     stages:
+       - train
     +  - report
 
-    variables:
-    # Change pip's cache directory to be inside the project directory since we can
-    @@ -33,3 +34,65 @@ train:
-        - dvc pull
-        # Run the experiment
-        - dvc repro
+     variables:
+       # Change pip's cache directory to be inside the project directory since we can
+    @@ -25,6 +26,8 @@ variables:
+       GIT_DEPTH: "0"
+       # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
+       GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
+    +  # Environment variable for CML
+    +  REPO_TOKEN: $GITLAB_PAT
+
+     train:
+       stage: train
+    @@ -52,3 +55,67 @@ train:
+         # results and use them in locally and remotely on pipelines without running the experiment again.
+         - *git-push-dvc-lock
+         - dvc push
     +
     +report:
     +  stage: report
@@ -539,15 +533,17 @@ collaboration and decision-making within the team.
     +    - train
     +  rules:
     +    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    +  variables:
-    +    # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
-    +    GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
-    +    REPO_TOKEN: $CML_PAT
     +  before_script:
     +    # Set the Google Service Account key
     +    - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
     +  script:
     +    - |
+    +      # Fetch the experiment changes
+    +      dvc pull
+    +
+    +      # Fetch all other Git branches
+    +      git fetch --depth=1 origin main:main
+    +
     +      # Compare parameters to main branch
     +      echo "# Params workflow vs. main" >> report.md
     +      echo >> report.md
