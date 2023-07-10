@@ -299,18 +299,42 @@ Depending on the CI/CD platform you are using, the process will be different.
 
 === ":simple-gitlab: GitLab"
 
+    In order to allow commit from the CI and later generate reports with CML, a Personal Access Token (PAT) must be
+    created. A Project or a Group Access Token are not sufficient for the usage of
+    CML's runners that will be used in the next steps.
+
+    To create a Personal Access Token, go in your **Profile preferences > Access
+    Tokens**.
+
+    - **Token name**: _gitlab-ci[bot]_
+    - **Expiration date**: _None_
+    - **Select a role**: _Developer_
+    - **Select scopes**: `api`, `read_repository` and `write_repository`
+
+    Select **Create personal access token** to create the token. Copy it. It will be
+    displayed only once.
+
+    Store the PAT as a CI/CD Variable by going to **Settings > CI/CD** from the left
+    sidebar of your GitLab project.
+
+    Select **Variables** and select **Add variable**.
+
+    Create a new variable named `GITLAB_PAT` with the PAT value as its value.
+
+    - **Protect variable**: _Unchecked_
+    - **Mask variable**: _Checked_
+    - **Expand variable reference**: _Unchecked_
+
+    Save the variable by clicking **Add variable**.
+
     At the root level of your Git repository, create a GitLab CI configuration
     file `.gitlab-ci.yml`.
 
     Explore this file to understand the train stage and its steps.
 
     ```yaml title=".gitlab-ci.yml"
-    # ---------------------------------------------------------------
-    # NOT WORKING - cannot push to current branch whithin ci pipeline
-    # ---------------------------------------------------------------
     stages:
       - train
-      - report
 
     variables:
       # Change pip's cache directory to be inside the project directory since we can
@@ -321,23 +345,7 @@ Depending on the CI/CD platform you are using, the process will be different.
       # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
       GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
       # CML and git token
-      REPO_TOKEN: $CML_PAT
-
-    # Pip's cache doesn't store the python packages
-    # https://pip.pypa.io/en/stable/reference/pip_install/#caching
-    cache:
-      paths:
-        - .cache/pip
-        - venv/
-
-    before_script:
-      # Set the Google Service Account key
-      - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
-      # Install dependencies
-      - pip install virtualenv
-      - virtualenv venv
-      - source venv/bin/activate
-      - pip install -r requirements.txt
+      REPO_TOKEN: $GITLAB_PAT
 
     train:
       stage: train
@@ -345,18 +353,40 @@ Depending on the CI/CD platform you are using, the process will be different.
       rules:
         - if: $CI_COMMIT_BRANCH == "main"
         - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      cache:
+        paths:
+          # Pip's cache doesn't store the python packages
+          # https://pip.pypa.io/en/stable/reference/pip_install/#caching
+          - .cache/pip
+          - .venv/
+      before_script:
+        # Set the Google Service Account key
+        - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+        # Install dependencies
+        - python3 -m venv .venv
+        - source .venv/bin/activate
+        - pip install -r requirements.txt
       script:
         # Run the experiment
         - dvc repro --pull --allow-missing
         # Push the changes to the remote repository
         - dvc push
-        # Commit changes in dvc.lock
+        # Commit and push changes in dvc.lock
         - |
-          git config --global user.name "gitlab-ci[bot]"
-          git config --global user.email "gitlab-ci[bot]@users.noreply.gitlab.com"
-          git add dvc.lock
-          git commit -m "Commit changes in dvc.lock"
-          git push -o ci.skip "https://${GITLAB_USER_NAME}:${REPO_TOKEN}@${CI_REPOSITORY_URL#*@}" "HEAD:${CI_COMMIT_BRANCH}"
+		  # Check if there are changes in dvc.lock
+          if [[ -n $(git status --porcelain dvc.lock) ]]; then
+            git config --global user.name "gitlab-ci[bot]"
+            git config --global user.email "gitlab-ci[bot]@users.noreply.gitlab.com"
+            git add dvc.lock
+            git commit -m "Commit changes in dvc.lock"
+            # Get current branch name
+            if [[ -n "${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}" ]]; then
+              BRANCH_NAME=${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}
+            else
+              BRANCH_NAME=${CI_COMMIT_BRANCH}
+            fi
+            git push -o ci.skip https://${GITLAB_USER_LOGIN}:${REPO_TOKEN}@${CI_REPOSITORY_URL#*@} HEAD:${BRANCH_NAME}
+          fi
     ```
 
 ### Push the CI/CD pipeline configuration file to Git
