@@ -232,7 +232,7 @@ class SavesFactory:
         save_path.mkdir(parents=True, exist_ok=True)
 
         actions = []
-        for action in save["actions"]:
+        for action in save["actions"] or []:
             if "run" in action:
                 actions.append(
                     CommandAction(
