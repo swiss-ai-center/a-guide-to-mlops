@@ -378,7 +378,7 @@ collaboration and decision-making within the team.
 
     Explore this file to understand the report stage and its steps.
 
-    ```yaml title=".gitlab-ci.yml" hl_lines="19 57-122"
+    ```yaml title=".gitlab-ci.yml" hl_lines="19 29-30 59-121"
     .git-push-dvc-lock: &git-push-dvc-lock |
       # Check if there are changes in dvc.lock
       if [[ -n $(git status --porcelain dvc.lock) ]]; then
@@ -407,6 +407,8 @@ collaboration and decision-making within the team.
       GIT_DEPTH: "0"
       # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
       GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
+      # Environment variable for CML
+	  REPO_TOKEN: $GITLAB_PAT
 
     train:
       stage: train
@@ -442,9 +444,6 @@ collaboration and decision-making within the team.
         - train
       rules:
         - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      variables:
-        # Environment variable for CML
-        REPO_TOKEN: $GITLAB_PAT
       before_script:
         # Set the Google Service Account key
         - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
