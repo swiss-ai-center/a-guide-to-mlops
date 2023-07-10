@@ -6,70 +6,24 @@ Introduction to the tools used in this guide.
 
 In this guide, we will use the following tools to demonstrate the MLOps process:
 
-- Code management: [Git](https://git-scm.com/)
-- Package management: [pip](https://pip.pypa.io/)
-- Data management: [DVC](https://dvc.org/)
-- Model reproducibility: [DVC](https://dvc.org/)
-- Model tracking: [DVC](https://dvc.org/) & [CML](https://cml.dev/)
-- Model orchestration: [GitHub Actions](https://github.com/features/actions) or [GitLab CI](https://about.gitlab.com/topics/ci-cd/)
-- Cloud provider: [Amazon Web Services](https://aws.amazon.com), [Exoscale](https://www.exoscale.com), [Google Cloud Platform](https://cloud.google.com), [Microsoft Azure](https://azure.microsoft.com) or [Self-hosted Kubernetes](https://kubernetes.io)
+- Code management: [:simple-git: Git](https://git-scm.com/)
+- Package management: [:simple-python: pip](https://pip.pypa.io/)
+- Data management: [:simple-dvc: DVC](https://dvc.org/)
+- Model reproducibility: [:simple-dvc: DVC](https://dvc.org/)
+- Model tracking: [:simple-dvc: DVC](https://dvc.org/) & [CML](https://cml.dev/)
+- Model orchestration: [:simple-github: GitHub Actions](https://github.com/features/actions) or [:simple-gitlab: GitLab CI](https://about.gitlab.com/topics/ci-cd/)
+- A cloud provider account:
+    - [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com) (coming soon)
+    - [:simple-exoscale: Exoscale](https://www.exoscale.com) (coming soon)
+    - [:simple-googlecloud: Google Cloud Platform](https://cloud.google.com)
+    - [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) (coming soon)
+    - [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) (coming soon)
 - Model serving, distributing and deploying: [MLEM](https://mlem.ai/)
 - Data annotation: [Label Studio](https://labelstud.io/)
 
 You will go into details about each tool in the following parts of this guide.
 
 [//]: # "TODO: Add an illustration to display the different tools and their purposes?"
-
-### Git
-
-[Git](https://git-scm.com/)
-
-For more, check out their documentation: [_Documentation_ - git-scm.com](https://git-scm.com/doc).
-
-### Poetry
-
-[Poetry](https://python-poetry.org/)
-
-For more, check out their documentation: [_Documentation_ - python-poetry.org](https://python-poetry.org/docs/).
-
-### DVC
-
-[DVC](https://dvc.org/)
-
-For more, check out their documentation: [_DVC Documentation_ - dvc.org](https://dvc.org/doc).
-
-### Google Cloud Storage
-
-[Google Cloud Storage](https://cloud.google.com/storage)
-
-For more, check out their documentation: [_Google Cloud Storage Documentation_ - cloud.google.com](https://cloud.google.com/storage/docs).
-
-### CML
-
-[CML](https://cml.dev/)
-
-For more, check out their documentation: [_CML Documentation_ - cml.dev](https://cml.dev/doc/).
-
-### GitHub Actions or GitLab CI
-
-[GitHub Actions](https://github.com/features/actions) or [GitLab CI](https://about.gitlab.com/topics/ci-cd/)
-
-For more, check out their documentation:
-
-For more, check out their documentation: [_GitHub Actions_ - docs.github.com](https://docs.github.com/en/actions) or [_GitLab CI/CD_ - docs.gitlab.com](https://docs.gitlab.com/ee/ci/).
-
-### MLEM
-
-[MLEM](https://mlem.ai/)
-
-For more, check out their documentation: [_MLEM Documentation_ - mlem.ai](https://mlem.ai/doc).
-
-### Label Studio
-
-[Label Studio](https://labelstud.io/)
-
-For more, check out their documentation: [_Get started with Label Studio_ - labelstud.io](https://labelstud.io/guide/).
-
 
 ## Related tools
 
@@ -105,7 +59,6 @@ At the moment, Label Studio is the only solution that allows to annotate many ki
 
 These are alternatives to MLEM.
 
-- [DVC](https://dvc.org) - DVC is built to make ML models shareable and reproducible
 - [Kubeflow](https://www.kubeflow.org/) - The Kubeflow project is dedicated to making deployments of machine learning (ML) workflows on Kubernetes simple, portable and scalable
 - [BentoML](https://www.bentoml.com/) - An open platform that simplifies ML model deployment and enables you to serve your models at production scale in minutes
 

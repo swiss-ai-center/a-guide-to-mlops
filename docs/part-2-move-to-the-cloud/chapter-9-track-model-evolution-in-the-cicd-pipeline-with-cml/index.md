@@ -924,7 +924,7 @@ In this chapter, you have successfully:
 
 However, you might have identified the following areas for improvement:
 
-- ❌ How can I serve my model to the rest of the world?
+- [ ] How can I serve my model to the rest of the world?
 
 In the next chapters, you will enhance the workflow to fix those issues.
 
@@ -932,22 +932,21 @@ You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
-- ✅ Notebook has been transformed into scripts for production
-- ✅ Codebase and dataset are versioned
-- ✅ Steps used to create the model are documented and can be re-executed
-- ✅ Changes done to a model can be visualized with parameters, metrics and plots to identify
+- [x] Notebook has been transformed into scripts for production
+- [x] Codebase and dataset are versioned
+- [x] Steps used to create the model are documented and can be re-executed
+- [x] Changes done to a model can be visualized with parameters, metrics and plots to identify
 differences between iterations
-- ✅ Dataset can be shared among the developers and is placed in the right
+- [x] Dataset can be shared among the developers and is placed in the right
 directory in order to run the experiment
-- ✅ Codebase can be shared and improved by multiple developers
-- ✅ Experiment can be executed on a clean machine with the help of a CI/CD
+- [x] Codebase can be shared and improved by multiple developers
+- [x] Experiment can be executed on a clean machine with the help of a CI/CD
 pipeline
-- ✅ Changes to model can be thoroughly reviewed and discussed before integrating them into the codebase
-- ❌ Model may have required artifacts that are forgotten or omitted in saved/loaded state
-- ❌ Model cannot be easily used from outside of the experiment context
+- [x] Changes to model can be thoroughly reviewed and discussed before integrating them into the codebase
+- [ ] Model may have required artifacts that are forgotten or omitted in saved/loaded state
+- [ ] Model cannot be easily used from outside of the experiment context
 
-You will address these issues in the next chapters for improved efficiency and
-collaboration. Continue the guide to learn how.
+You will address these issues in the next chapters for improved efficiency and collaboration. Continue the guide to learn how.
 
 ## Sources
 

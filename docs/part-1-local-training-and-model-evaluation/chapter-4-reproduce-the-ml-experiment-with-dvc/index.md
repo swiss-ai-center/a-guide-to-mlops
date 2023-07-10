@@ -175,10 +175,10 @@ Run the following command to add a new stage called _prepare_ that prepares the 
 
 ```sh title="Execute the following command(s) in a terminal"
 dvc stage add -n prepare \
- -p prepare \
- -d src/prepare.py -d src/utils/seed.py -d data/raw \
- -o data/prepared \
- python src/prepare.py data/raw data/prepared
+    -p prepare \
+    -d src/prepare.py -d src/utils/seed.py -d data/raw \
+    -o data/prepared \
+    python src/prepare.py data/raw data/prepared
 ```
 
 The values of the parameters is `prepare` which includes all the `prepare` parameters referenced in the `params.yaml` file.
@@ -197,13 +197,13 @@ Run the following command to create a new stage called _train_ that trains the m
 
 ```sh title="Execute the following command(s) in a terminal"
 dvc stage add -n train \
--p train \
--d src/train.py -d src/utils/seed.py -d data/prepared \
--o model \
-python src/train.py data/prepared model
+    -p train \
+    -d src/train.py -d src/utils/seed.py -d data/prepared \
+    -o model \
+    python src/train.py data/prepared model
 ```
 
-TheThe values of the parameters is `train` which includes all the `train` parameters referenced in the `params.yaml` file.
+The values of the parameters is `train` which includes all the `train` parameters referenced in the `params.yaml` file.
 
 This stage has the `src/train.py`, the `src/utils/seed.py` and `data/prepared` files as dependencies.
 If any of these files change, DVC will run the command
@@ -219,12 +219,12 @@ Run the following command to create a new stage called _evaluate_ that evaluates
 
 ```sh title="Execute the following command(s) in a terminal"
 dvc stage add -n evaluate \
--d src/evaluate.py -d model \
---metrics evaluation/metrics.json \
---plots evaluation/plots/confusion_matrix.png \
---plots evaluation/plots/pred_preview.png \
---plots evaluation/plots/training_history.png \
-python src/evaluate.py model data/prepared
+    -d src/evaluate.py -d model \
+    --metrics evaluation/metrics.json \
+    --plots evaluation/plots/confusion_matrix.png \
+    --plots evaluation/plots/pred_preview.png \
+    --plots evaluation/plots/training_history.png \
+    python src/evaluate.py model data/prepared
 ```
 
 This stage has the `src/evaluate.py` file and then `model` folder as dependencies.
@@ -366,12 +366,12 @@ In this chapter, you have successfully:
 
 You fixed some of the previous issues:
 
-- ✅ The steps used to create the model are documented and can be reproduced.
+- [x] The steps used to create the model are documented and can be reproduced.
 
 However, you might have identified the following areas for improvement:
 
-- ❌ How can I ensure my changes helps to improve the model?
-- ❌ How can I ensure my model still can be run on someone's computer?
+- [ ] How can I ensure my changes helps to improve the model?
+- [ ] How can I ensure my model still can be run on someone's computer?
 
 In the next chapters, you will enhance the workflow to fix these issues.
 
@@ -379,21 +379,20 @@ You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
-- ✅ Notebook has been transformed into scripts for production
-- ✅ Codebase and dataset are versioned
-- ✅ Steps used to create the model are documented and can be re-executed
-- ❌ Changes to model are not easily visualized
-- ❌ Dataset requires manual download and placement
-- ❌ Codebase requires manual download and setup
-- ❌ Experiment may not be reproducible on other machines
-- ❌ Changes to model are not thoroughly reviewed and discussed before integration
-- ❌ Model may have required artifacts that are forgotten or omitted in saved/loaded state
-- ❌ Model cannot be easily used from outside of the experiment context
-- ❌ Model cannot be deployed on and accessed from a Kubernetes cluster
-- ❌ Model cannot be trained on hardware other than the local machine
+- [x] Notebook has been transformed into scripts for production
+- [x] Codebase and dataset are versioned
+- [x] Steps used to create the model are documented and can be re-executed
+- [ ] Changes to model are not easily visualized
+- [ ] Dataset requires manual download and placement
+- [ ] Codebase requires manual download and setup
+- [ ] Experiment may not be reproducible on other machines
+- [ ] Changes to model are not thoroughly reviewed and discussed before integration
+- [ ] Model may have required artifacts that are forgotten or omitted in saved/loaded state
+- [ ] Model cannot be easily used from outside of the experiment context
+- [ ] Model cannot be deployed on and accessed from a Kubernetes cluster
+- [ ] Model cannot be trained on hardware other than the local machine
 
-You will address these issues in the next chapters for improved efficiency and
-collaboration. Continue the guide to learn how.
+You will address these issues in the next chapters for improved efficiency and collaboration. Continue the guide to learn how.
 
 ## Sources
 

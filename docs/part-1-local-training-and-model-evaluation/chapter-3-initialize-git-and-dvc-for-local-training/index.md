@@ -202,16 +202,6 @@ pyyaml==6.0
 dvc==3.2.2
 ```
 
-Install the package and update the freeze file.
-
-```sh title="Execute the following command(s) in a terminal"
-# Install the requirements
-pip install --requirements requirements.txt
-
-# Freeze the requirements
-pip freeze --local --all > requirements-freeze.txt
-```
-
 Check the differences with Git to validate the changes.
 
 ```sh title="Execute the following command(s) in a terminal"
@@ -231,6 +221,16 @@ index 250f32c..193ebac 100644
  matplotlib==3.7.1
  pyyaml==6.0
 +dvc==3.2.2
+```
+
+Install the package and update the freeze file.
+
+```sh title="Execute the following command(s) in a terminal"
+# Install the requirements
+pip install --requirements requirements.txt
+
+# Freeze the requirements
+pip freeze --local --all > requirements-freeze.txt
 ```
 
 #### Initialize DVC
@@ -404,28 +404,27 @@ In this chapter, you have successfully:
 
 You fixed some of the previous issues:
 
-- ✅ Data no longer needs manual download and is placed in the right directory.
-- ✅ Codebase is versioned
+- [x] Data no longer needs manual download and is placed in the right directory.
+- [x] Codebase is versioned
 
 You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
-- ✅ Notebook has been transformed into scripts for production
-- ✅ Codebase and dataset are versioned
-- ❌ Model steps rely on verbal communication and may be undocumented
-- ❌ Changes to model are not easily visualized
-- ❌ Dataset requires manual download and placement
-- ❌ Codebase requires manual download and setup
-- ❌ Experiment may not be reproducible on other machines
-- ❌ Changes to model are not thoroughly reviewed and discussed before integration
-- ❌ Model may have required artifacts that are forgotten or omitted in saved/loaded state
-- ❌ Model cannot be easily used from outside of the experiment context
-- ❌ Model cannot be deployed on and accessed from a Kubernetes cluster
-- ❌ Model cannot be trained on hardware other than the local machine
+- [x] Notebook has been transformed into scripts for production
+- [x] Codebase and dataset are versioned
+- [ ] Model steps rely on verbal communication and may be undocumented
+- [ ] Changes to model are not easily visualized
+- [ ] Dataset requires manual download and placement
+- [ ] Codebase requires manual download and setup
+- [ ] Experiment may not be reproducible on other machines
+- [ ] Changes to model are not thoroughly reviewed and discussed before integration
+- [ ] Model may have required artifacts that are forgotten or omitted in saved/loaded state
+- [ ] Model cannot be easily used from outside of the experiment context
+- [ ] Model cannot be deployed on and accessed from a Kubernetes cluster
+- [ ] Model cannot be trained on hardware other than the local machine
 
-You will address these issues in the next chapters for improved efficiency and
-collaboration. Continue the guide to learn how.
+You will address these issues in the next chapters for improved efficiency and collaboration. Continue the guide to learn how.
 
 ## Sources
 

@@ -616,21 +616,21 @@ gcloud container clusters delete --zone europe-west6-a mlops-kubernetes
 
 ## State of the MLOps process
 
-- ✅ Notebook has been transformed into scripts for production
-- ✅ Codebase and dataset are versioned
-- ✅ Steps used to create the model are documented and can be re-executed
-- ✅ Changes done to a model can be visualized with parameters, metrics and plots to identify
+- [x] Notebook has been transformed into scripts for production
+- [x] Codebase and dataset are versioned
+- [x] Steps used to create the model are documented and can be re-executed
+- [x] Changes done to a model can be visualized with parameters, metrics and plots to identify
 differences between iterations
-- ✅ Dataset can be shared among the developers and is placed in the right
+- [x] Dataset can be shared among the developers and is placed in the right
 directory in order to run the experiment
-- ✅ Codebase can be shared and improved by multiple developers
-- ✅ Experiment can be executed on a clean machine with the help of a CI/CD
+- [x] Codebase can be shared and improved by multiple developers
+- [x] Experiment can be executed on a clean machine with the help of a CI/CD
 pipeline
-- ✅ Changes to model can be thoroughly reviewed and discussed before integrating them into the codebase
-- ✅ Model can be saved and loaded with all required artifacts for future usage
-- ✅ Model can be easily used outside of the experiment context.
-- ✅ Model can be accessed from a Kubernetes cluster
-- ✅ Model can be trained on a custom infrastructure with custom hardware for specific use-cases
+- [x] Changes to model can be thoroughly reviewed and discussed before integrating them into the codebase
+- [x] Model can be saved and loaded with all required artifacts for future usage
+- [x] Model can be easily used outside of the experiment context.
+- [x] Model can be accessed from a Kubernetes cluster
+- [x] Model can be trained on a custom infrastructure with custom hardware for specific use-cases
 
 You can now safely continue to the next chapter of this guide concluding your
 journey and the next things you could do with your model.

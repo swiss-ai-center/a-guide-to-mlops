@@ -20,9 +20,8 @@ differently across different environments.
 
 In this chapter, you will learn how to:
 
-1. Create a Google Service Account to grant access to the Google Cloud project
-from the CI/CD pipeline
-2. Store the Google Service Account key in GitHub/GitLab CI/CD configuration
+1. Set up access to the S3 bucket of your cloud provider
+2. Store the cloud provider credentials in the CI/CD configuration
 3. Create the CI/CD pipeline configuration file
 4. Push the CI/CD pipeline configuration file to Git
 5. Visualize the execution of the CI/CD pipeline
@@ -94,110 +93,143 @@ flowchart LR
 
 ## Steps
 
-### Create a Google Service Account key to be used by the CI/CD pipeline
+### Set up access to the S3 bucket of your cloud provider
 
-DVC will need to log in to Google Cloud to download the data inside the
-CI/CD pipeline.
+DVC will need to log in to the S3 bucket of your cloud provider to download the data inside the CI/CD pipeline.
 
-Google Cloud allows the creation of a "Service Account", so you don't have to
-store/share your own credentials. A Service Account can be deleted, hence
-revoking all the access it had.
+=== ":simple-amazonaws: Amazon Web Services"
 
-Create the Google Service Account and its associated Google Service Account Key
-to access Google Cloud without your own credentials.
+    _This is a work in progress._
 
-Replace `<id of your gcp project>` with your own project ID.
+=== ":simple-exoscale: Exoscale"
 
-The key will be stored in your **~/.config/gcloud** directory under the name
-`dvc-google-service-account-key.json`.
+    _This is a work in progress._
 
-!!! danger
+=== ":simple-googlecloud: Google Cloud"
 
-    You must **never** add and commit this file to your working directory.
-    It is a sensitive data that you must keep safe.
+    Google Cloud allows the creation of a "Service Account", so you don't have to
+    store/share your own credentials. A Service Account can be deleted, hence
+    revoking all the access it had.
 
-```sh title="Execute the following command(s) in a terminal"
-# Create the Google Service Account
-gcloud iam service-accounts create dvc-service-account \
---display-name="DVC Service Account"
+    Create the Google Service Account and its associated Google Service Account Key
+    to access Google Cloud without your own credentials.
 
-# Set the permissions for the Google Service Account
-gcloud projects add-iam-policy-binding <id of your gcp project> \
-    --member="serviceAccount:dvc-service-account@<id of your gcp project>.iam.gserviceaccount.com" \
-    --role="roles/viewer"
+    The key will be stored in your **~/.config/gcloud** directory under the name
+    `dvc-google-service-account-key.json`.
 
-# Create the Google Service Account Key
-gcloud iam service-accounts keys create ~/.config/gcloud/dvc-google-service-account-key.json \
-    --iam-account=dvc-service-account@<id of your gcp project>.iam.gserviceaccount.com
-```
+    !!! danger
 
-!!! info
-
-    The path `~/.config/gcloud` should be created when installing `gcloud`. If
-    it does not exist, you can create it by running `mkdir -p ~/.config/gcloud`
-
-### Store the Google Service Account key and setup the CI/CD pipeline
-
-You are about the setup the CI/CD pipeline to run the experiment each time there
-is a pull request or a push to the main branch.
-
-Please refer to the correct instructions based on your Git repository provider.
-
-### Display the Google Service Account key
-
-=== ":simple-github: GitHub"
-
-    Display the Google Service Account key that you have downloaded from Google
-    Cloud.
+        You must **never** add and commit this file to your working directory.
+        It is a sensitive data that you must keep safe.
 
     ```sh title="Execute the following command(s) in a terminal"
-    # Display the Google Service Account key
-    cat ~/.config/gcloud/dvc-google-service-account-key.json
+    # Create the Google Service Account
+    gcloud iam service-accounts create dvc-service-account \
+        --display-name="DVC Service Account"
+
+    # Set the permissions for the Google Service Account
+    gcloud projects add-iam-policy-binding $GCP_PROJECT_ID \
+        --member="serviceAccount:dvc-service-account@${GCP_PROJECT_ID}.iam.  gserviceaccount.com" \
+        --role="roles/viewer"
+
+    # Create the Google Service Account Key
+    gcloud iam service-accounts keys create ~/.config/gcloud/dvc-google-service-account-key.    json \
+        --iam-account=dvc-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com
     ```
 
-=== ":simple-gitlab: GitLab"
+    !!! info
 
-    Encode and display the Google Service Account key that you have downloaded from
-    Google Cloud as `base64`. It allows to hide the secret in GitLab CI logs as a
-    security measure.
+        The path `~/.config/gcloud` should be created when installing `gcloud`. If
+        it does not exist, you can create it by running `mkdir -p ~/.config/gcloud`
 
-    !!! tip
+=== ":simple-microsoftazure: Microsoft Azure"
 
-        If on Linux, you can use the command `base64 -w 0 -i ~/.config/gcloud/dvc-google-service-account-key.json`.
+    _This is a work in progress._
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Encode the Google Service Account key to base64
-    base64 -i ~/.config/gcloud/dvc-google-service-account-key.json
-    ```
+=== ":simple-kubernetes: Self-hosted Kubernetes"
 
-### Store the Google Service Account key as a CI/CD variable
+    _This is a work in progress._
 
-=== ":simple-github: GitHub"
+### Store the cloud provider credentials in the CI/CD configuration
 
-    Store the output as a CI/CD variable by going to the **Settings** section from
-    the top header of your GitHub repository.
+Now that the credentials are created, you need to store them in the CI/CD
+configuration.
 
-    Select **Secrets and variables > Actions** and select **New repository secret**.
+Depending on the CI/CD platform you are using, the process will be different.
 
-    Create a new variable named `GCP_SERVICE_ACCOUNT_KEY` with the output value of
-    the Google Service Account key file as its value. Save the variable by selecting
-    **Add secret**.
+=== ":simple-amazonaws: Amazon Web Services"
 
-=== ":simple-gitlab: GitLab"
+    _This is a work in progress._
 
-    Store the output as a CI/CD Variable by going to **Settings > CI/CD** from
-    the left sidebar of your GitLab project.
+=== ":simple-exoscale: Exoscale"
 
-    Select **Variables** and select **Add variable**.
+    _This is a work in progress._
 
-    Create a new variable named `GCP_SERVICE_ACCOUNT_KEY` with
-    the Google Service Account key file encoded in `base64` as its value.
+=== ":simple-googlecloud: Google Cloud"
 
-    - **Protect variable**: _Unchecked_
-    - **Mask variable**: _Checked_
-    - **Expand variable reference**: _Unchecked_
+    **Display the Google Service Account key**
 
-    Save the variable by clicking **Add variable**.
+    === ":simple-github: GitHub"
+
+        Display the Google Service Account key that you have downloaded from Google
+        Cloud.
+
+        ```sh title="Execute the following command(s) in a terminal"
+        # Display the Google Service Account key
+        cat ~/.config/gcloud/dvc-google-service-account-key.json
+        ```
+
+    === ":simple-gitlab: GitLab"
+
+        Encode and display the Google Service Account key that you have downloaded from
+        Google Cloud as `base64`. It allows to hide the secret in GitLab CI logs as a
+        security measure.
+
+        !!! tip
+
+            If on Linux, you can use the command `base64 -w 0 -i ~/.config/gcloud/  dvc-google-service-account-key.json`.
+
+        ```sh title="Execute the following command(s) in a terminal"
+        # Encode the Google Service Account key to base64
+        base64 -i ~/.config/gcloud/dvc-google-service-account-key.json
+        ```
+
+    **Store the Google Service Account key as a CI/CD variable**
+
+    === ":simple-github: GitHub"
+
+        Store the output as a CI/CD variable by going to the **Settings** section from
+        the top header of your GitHub repository.
+
+        Select **Secrets and variables > Actions** and select **New repository secret**.
+
+        Create a new variable named `GCP_SERVICE_ACCOUNT_KEY` with the output value of
+        the Google Service Account key file as its value. Save the variable by selecting
+        **Add secret**.
+
+    === ":simple-gitlab: GitLab"
+
+        Store the output as a CI/CD Variable by going to **Settings > CI/CD** from
+        the left sidebar of your GitLab project.
+
+        Select **Variables** and select **Add variable**.
+
+        Create a new variable named `GCP_SERVICE_ACCOUNT_KEY` with
+        the Google Service Account key file encoded in `base64` as its value.
+
+        - **Protect variable**: _Unchecked_
+        - **Mask variable**: _Checked_
+        - **Expand variable reference**: _Unchecked_
+
+        Save the variable by clicking **Add variable**.
+
+=== ":simple-microsoftazure: Microsoft Azure"
+
+    _This is a work in progress._
+
+=== ":simple-kubernetes: Self-hosted Kubernetes"
+
+    _This is a work in progress._
 
 ### Create the CI/CD pipeline configuration file
 
@@ -396,7 +428,7 @@ from the CI/CD pipeline
 
 You fixed some of the previous issues:
 
-- ✅ The experiment can be executed on a clean machine with the help of a CI/CD
+- [x] The experiment can be executed on a clean machine with the help of a CI/CD
 pipeline
 
 You have a CI/CD pipeline to ensure the whole experiment can still be reproduced
@@ -406,24 +438,23 @@ You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
-- ✅ Notebook has been transformed into scripts for production
-- ✅ Codebase and dataset are versioned
-- ✅ Steps used to create the model are documented and can be re-executed
-- ✅ Changes done to a model can be visualized with parameters, metrics and plots to identify
+- [x] Notebook has been transformed into scripts for production
+- [x] Codebase and dataset are versioned
+- [x] Steps used to create the model are documented and can be re-executed
+- [x] Changes done to a model can be visualized with parameters, metrics and plots to identify
 differences between iterations
-- ✅ Dataset can be shared among the developers and is placed in the right
+- [x] Dataset can be shared among the developers and is placed in the right
 directory in order to run the experiment
-- ✅ Codebase can be shared and improved by multiple developers
-- ✅ Experiment can be executed on a clean machine with the help of a CI/CD
+- [x] Codebase can be shared and improved by multiple developers
+- [x] Experiment can be executed on a clean machine with the help of a CI/CD
 pipeline
-- ❌ Changes to model are not thoroughly reviewed and discussed before integration
-- ❌ Model may have required artifacts that are forgotten or omitted in saved/loaded state
-- ❌ Model cannot be easily used from outside of the experiment context
-- ❌ Model cannot be deployed on and accessed from a Kubernetes cluster
-- ❌ Model cannot be trained on hardware other than the local machine
+- [ ] Changes to model are not thoroughly reviewed and discussed before integration
+- [ ] Model may have required artifacts that are forgotten or omitted in saved/loaded state
+- [ ] Model cannot be easily used from outside of the experiment context
+- [ ] Model cannot be deployed on and accessed from a Kubernetes cluster
+- [ ] Model cannot be trained on hardware other than the local machine
 
-You will address these issues in the next chapters for improved efficiency and
-collaboration. Continue the guide to learn how.
+You will address these issues in the next chapters for improved efficiency and collaboration. Continue the guide to learn how.
 
 ## Sources
 

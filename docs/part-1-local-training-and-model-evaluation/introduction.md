@@ -26,11 +26,13 @@ The following requirements are necessary to follow this part:
 
 ??? danger "Using a virtual environment manager other than vanilla Python (Conda, Anaconda, etc)? Read this!"
 
-    While conda/anaconda/etc might be widely used tools for Python dependency management, it does come with certain
+    While Conda, Anaconda and other Python virtual environment managers might be widely used tools for Python dependency management, it does come with certain
     drawbacks. Despite being designed to simplify the installation of Python and its packages, they can be complex to
-    work with. This irony arises from the fact that it is praised for simplifying processes, yet its usage can
-    challenging. Additionally, conda introduces a variety of failure modes, which can be numerous and intricate.
-    
+    work with. This irony arises from the fact that it is praised for simplifying processes, yet its usage can be
+    challenging. Additionally, Conda introduces a variety of failure modes, which can be numerous and intricate.
+
     Addressing these failures often requires significant resources and troubleshooting skills, leading to a diminished
     overall benefit for the average Python user. Consequently, considering these factors, some users may find that the
-    effort and time required to deal with conda-related issues outweigh the advantages it provides.
+    effort and time required to deal with Conda-related issues outweigh the advantages it provides.
+
+    In the context of this guide, we highly recommend you to follow it using the vanilla Python environment as it has been tested and validated with it. If you still want to use Conda/Anaconda/etc, please be aware that you might encounter issues.

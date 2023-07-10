@@ -162,17 +162,9 @@ Firstly, create the virtual environment.
 
     **How to manage virtual environments?**
 
-    * Create a virtual environment:
-
-        `python -m venv .venv``
-
-    * Activate the virtual environment:
-
-        `.venv/bin/activate`
-
-    * Deactivate the virtual environment:
-
-        `deactivate`
+    - Create a virtual environment: `#!sh python -m venv .venv`
+    - Activate the virtual environment: `#!sh source .venv/bin/activate`
+    - Deactivate the virtual environment: `#!sh deactivate`
 
 
 ```sh title="Execute the following command(s) in a terminal"
@@ -753,11 +745,11 @@ In this chapter, you have:
 
 However, you may have identified the following areas for improvement:
 
-- ❌ Codebase is not versioned
-- ❌ Dataset still needs manual download and placement
-- ❌ Steps to run the experiment were not documented
-- ❌ Codebase is not easily sharable
-- ❌ Dataset is not easily sharable
+- [ ] Codebase is not versioned
+- [ ] Dataset still needs manual download and placement
+- [ ] Steps to run the experiment were not documented
+- [ ] Codebase is not easily sharable
+- [ ] Dataset is not easily sharable
 
 In the next chapters, you will enhance the workflow to fix those issues.
 
@@ -765,21 +757,20 @@ You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
-- ✅ Notebook has been transformed into scripts for production
-- ❌ Codebase and dataset are not versioned
-- ❌ Model steps rely on verbal communication and may be undocumented
-- ❌ Changes to model are not easily visualized
-- ❌ Dataset requires manual download and placement
-- ❌ Codebase requires manual download and setup
-- ❌ Experiment may not be reproducible on other machines
-- ❌ Changes to model are not thoroughly reviewed and discussed before integration
-- ❌ Model may have required artifacts that are forgotten or omitted in saved/loaded state
-- ❌ Model cannot be easily used from outside of the experiment context
-- ❌ Model cannot be deployed on and accessed from a Kubernetes cluster
-- ❌ Model cannot be trained on hardware other than the local machine
+- [x] Notebook has been transformed into scripts for production
+- [ ] Codebase and dataset are not versioned
+- [ ] Model steps rely on verbal communication and may be undocumented
+- [ ] Changes to model are not easily visualized
+- [ ] Dataset requires manual download and placement
+- [ ] Codebase requires manual download and setup
+- [ ] Experiment may not be reproducible on other machines
+- [ ] Changes to model are not thoroughly reviewed and discussed before integration
+- [ ] Model may have required artifacts that are forgotten or omitted in saved/loaded state
+- [ ] Model cannot be easily used from outside of the experiment context
+- [ ] Model cannot be deployed on and accessed from a Kubernetes cluster
+- [ ] Model cannot be trained on hardware other than the local machine
 
-You will address these issues in the next chapters for improved efficiency and
-collaboration. Continue the guide to learn how.
+You will address these issues in the next chapters for improved efficiency and collaboration. Continue the guide to learn how.
 
 ## Sources
 

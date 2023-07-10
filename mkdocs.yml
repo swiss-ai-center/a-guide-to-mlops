@@ -51,7 +51,7 @@ nav:
 edit_uri: blob/main/docs/
 theme:
   language: en
-  custom_dir: docs/
+  custom_dir: docs
   favicon: assets/images/favicon.svg
   icon:
     logo: material/all-inclusive
@@ -144,6 +144,7 @@ markdown_extensions:
       alternate_style: true
   - pymdownx.tasklist:
       custom_checkbox: true
+      clickable_checkbox: true
   - pymdownx.tilde
   - tables
   - toc:

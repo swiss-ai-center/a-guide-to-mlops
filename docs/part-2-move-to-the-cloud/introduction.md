@@ -18,11 +18,12 @@ you use Windows, you might encounter issues. Please use
 The following requirements are necessary to follow this part in addition to those described in the [first part](../part-1-local-training-and-model-evaluation/introduction.md#requirements):
 
 - A [:simple-github: GitHub](https://github.com) or a [:simple-gitlab: GitLab](https://gitlab.com) account
-- A [:simple-googlecloud: Google Cloud](https://cloud.google.com) account
-
-Soon available in the guide:
-
-- An [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com), an [:simple-exoscale: Exoscale](https://exoscale.com), a [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or a [:simple-kubernetes: Self-hosted Kubernetes](https://rancher.com) account.
+- A cloud provider account:
+    - [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com) (coming soon)
+    - [:simple-exoscale: Exoscale](https://www.exoscale.com) (coming soon)
+    - [:simple-googlecloud: Google Cloud Platform](https://cloud.google.com)
+    - [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) (coming soon)
+    - [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) (coming soon)
 
 !!! note
 

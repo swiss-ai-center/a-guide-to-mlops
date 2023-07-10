@@ -80,11 +80,19 @@ Create a Git repository on your preferred service to collaborate with peers.
 
 === ":simple-github: GitHub"
 
-    Create a new GitHub repository for this chapter by accessing <https://github.com/new>. Configure the repository as you wish but **do not** check the box _"Add a README file"_.
+    Create a new GitHub repository for this chapter by accessing <https://github.com/new>.
+
+    !!! warning
+
+        Configure the repository as you wish but **do not** check the box _"Add a README file"_.
 
 === ":simple-gitlab: GitLab"
 
-    Create a new GitLab blank project for this chapter by accessing <https://gitlab.com/projects/new>. Configure the repository as you wish but **do not** check the box _"Initialize repository with a README"_.
+    Create a new GitLab blank project for this chapter by accessing <https://gitlab.com/projects/new>.
+
+    !!! warning
+
+        Configure the repository as you wish but **do not** check the box _"Initialize repository with a README"_.
 
 ## Configure Git for the remote branch
 
@@ -126,7 +134,7 @@ In this chapter, you have successfully:
 
 You fixed some of the previous issues:
 
-- ✅ Codebase no longer needs manual download and is versioned
+- [x] Codebase no longer needs manual download and is versioned
 
 Another member of your team can easily clone the experiment
 with the following commands.
@@ -140,23 +148,22 @@ You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
-- ✅ Notebook has been transformed into scripts for production
-- ✅ Codebase and dataset are versioned
-- ✅ Steps used to create the model are documented and can be re-executed
-- ✅ Changes done to a model can be visualized with parameters, metrics and plots to identify
+- [x] Notebook has been transformed into scripts for production
+- [x] Codebase and dataset are versioned
+- [x] Steps used to create the model are documented and can be re-executed
+- [x] Changes done to a model can be visualized with parameters, metrics and plots to identify
 differences between iterations
-- ✅ Dataset can be shared among the developers and is placed in the right
+- [x] Dataset can be shared among the developers and is placed in the right
 directory in order to run the experiment
-- ✅ Codebase can be shared and improved by multiple developers
-- ❌ Experiment may not be reproducible on other machines
-- ❌ Changes to model are not thoroughly reviewed and discussed before integration
-- ❌ Model may have required artifacts that are forgotten or omitted in saved/loaded state
-- ❌ Model cannot be easily used from outside of the experiment context
-- ❌ Model cannot be deployed on and accessed from a Kubernetes cluster
-- ❌ Model cannot be trained on hardware other than the local machine
+- [x] Codebase can be shared and improved by multiple developers
+- [ ] Experiment may not be reproducible on other machines
+- [ ] Changes to model are not thoroughly reviewed and discussed before integration
+- [ ] Model may have required artifacts that are forgotten or omitted in saved/loaded state
+- [ ] Model cannot be easily used from outside of the experiment context
+- [ ] Model cannot be deployed on and accessed from a Kubernetes cluster
+- [ ] Model cannot be trained on hardware other than the local machine
 
-You will address these issues in the next chapters for improved efficiency and
-collaboration. Continue the guide to learn how.
+You will address these issues in the next chapters for improved efficiency and collaboration. Continue the guide to learn how.
 
 ## Sources
 

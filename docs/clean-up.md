@@ -90,7 +90,7 @@ Here's a step-by-step guide to help you do that.
 === ":simple-github: GitHub"
 
     To delete the GitHub repository you created:
-    
+
     1. Go to the repository page in GitHub.
     2. Click on **Settings** above the repository.
     3. Scroll down to the "Danger Zone" section at the bottom of the page.
@@ -100,16 +100,16 @@ Here's a step-by-step guide to help you do that.
 === ":simple-gitlab: GitLab"
 
     To delete the GitLab repository you created:
-    
+
     1. Go to the repository page in GitLab.
     2. Click on the **Settings** button on the left side of the page.
     3. Scroll down to the "Advanced" section at the bottom of the page and click on "Expand".
     4. Scroll down to "Delete this project".
     5. Click on the **Delete project** button.
     6. Follow the instructions to delete the repository.
-    
+
     To delete the GitLab Personal Access Token you created:
-    
+
     1. Go to your GitLab **Profile preferences** at the top right of the page.
     2. Click on **Access Tokens** in the left sidebar.
     3. Find the Personal Access Token you created for this guide.
@@ -136,13 +136,13 @@ Before you finish, double-check that you have deleted all the resources and envi
 
 Here is a checklist of all the resources and environments you created:
 
-- Google Cloud project
-- Google Cloud Storage bucket
-- Google Cloud Service Account
-- Google Cloud Service Account key
-- GitHub/GitLab repository
-- If you used GitLab, you also created a Personal Access Token
-- Project directory on your local machine
+- [ ] Google Cloud project
+- [ ] Google Cloud Storage bucket
+- [ ] Google Cloud Service Account
+- [ ] Google Cloud Service Account key
+- [ ] GitHub/GitLab repository
+- [ ] If you used GitLab, you also created a Personal Access Token
+- [ ] Project directory on your local machine
 
 ### Summary
 
