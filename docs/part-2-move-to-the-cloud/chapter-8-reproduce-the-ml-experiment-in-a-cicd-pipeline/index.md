@@ -297,6 +297,16 @@ Depending on the CI/CD platform you are using, the process will be different.
             run: dvc push
     ```
 
+    !!! info
+
+        Note we push the `dvc.lock` file and the experiment results to the DVC remote storage at the end of the
+        pipeline. This is to allow DVC to cache the experiment results and use them in locally and remotely on
+        pipelines without running the experiment again.
+
+        As an example, if you merge a pull request, the pipeline will be triggered twice: once for the pull request
+        and once for the merge. If you don't push the `dvc.lock` file and the experiment results to the DVC remote
+        storage whithin the pipeline, it will run the experiment twice.
+
 === ":simple-gitlab: GitLab"
 
     In order to allow commit from the CI and later generate reports with CML, a Personal Access Token (PAT) must be
@@ -389,6 +399,16 @@ Depending on the CI/CD platform you are using, the process will be different.
         - *git-push-dvc-lock
         - dvc push
     ```
+
+    !!! info
+
+        Note we push the `dvc.lock` file and the experiment results to the DVC remote storage at the end of the
+        pipeline. This is to allow DVC to cache the experiment results and use them in locally and remotely on
+        pipelines without running the experiment again.
+
+        As an example, if you merge a pull request, the pipeline will be triggered twice: once for the pull request
+        and once for the merge. If you don't push the `dvc.lock` file and the experiment results to the DVC remote
+        storage whithin the pipeline, it will run the experiment twice.
 
 ### Push the CI/CD pipeline configuration file to Git
 
