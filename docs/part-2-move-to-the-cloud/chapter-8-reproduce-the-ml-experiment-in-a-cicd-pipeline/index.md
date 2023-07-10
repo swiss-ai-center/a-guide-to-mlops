@@ -288,17 +288,26 @@ Depending on the CI/CD platform you are using, the process will be different.
             with:
               credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
           - name: Train model
-            run: |
-              # Run the experiment
-              dvc repro --pull --allow-missing
-              # Push the changes to the remote repository
-              dvc push
+            run: dvc repro --pull --allow-missing
+          # After the experiment is done we update the dvc.lock and push the changes with dvc. This allows dvc to cache the experiment
+          # results and use them in locally and remotely on pipelines without running the experiment again.
           - name: Commit changes in dvc.lock
             uses: stefanzweifel/git-auto-commit-action@v4
             with:
               commit_message: Commit changes in dvc.lock
               file_pattern: dvc.lock
+          - name: Push experiment results to DVC remote storage
+            run: dvc push
     ```
+
+    !!! info
+
+        Note we push the `dvc.lock` file and the experiment results to the DVC remote storage at the end of the
+        pipeline. This is to allows DVC to cache the experiment results for the next pipeline and to reproduce the
+        experiment locally.
+
+        This also means that you will need to run `git pull` locally to get the latest `dvc.lock` file once the
+        pipeline is done.
 
 === ":simple-gitlab: GitLab"
 
@@ -336,8 +345,25 @@ Depending on the CI/CD platform you are using, the process will be different.
     Explore this file to understand the train stage and its steps.
 
     ```yaml title=".gitlab-ci.yml"
+    .git-push-dvc-lock: &git-push-dvc-lock |
+      # Check if there are changes in dvc.lock
+      if [[ -n $(git status --porcelain dvc.lock) ]]; then
+        git config --global user.name "gitlab-ci[bot]"
+        git config --global user.email "gitlab-ci[bot]@users.noreply.gitlab.com"
+        git add dvc.lock
+        git commit -m "Commit changes in dvc.lock"
+        # Get current branch name
+        if [[ -n "${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}" ]]; then
+          BRANCH_NAME=${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}
+        else
+          BRANCH_NAME=${CI_COMMIT_BRANCH}
+        fi
+        git push -o ci.skip https://${GITLAB_USER_LOGIN}:${GITLAB_PAT}@${CI_REPOSITORY_URL#*@} HEAD:${BRANCH_NAME}
+      fi
+
     stages:
       - train
+      - report
 
     variables:
       # Change pip's cache directory to be inside the project directory since we can
@@ -347,8 +373,6 @@ Depending on the CI/CD platform you are using, the process will be different.
       GIT_DEPTH: "0"
       # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
       GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
-      # CML and git token
-      REPO_TOKEN: $GITLAB_PAT
 
     train:
       stage: train
@@ -372,25 +396,20 @@ Depending on the CI/CD platform you are using, the process will be different.
       script:
         # Run the experiment
         - dvc repro --pull --allow-missing
-        # Push the changes to the remote repository
+        # After the experiment is done we update the dvc.lock and push the changes with dvc. This allows dvc to cache the experiment
+        # results and use them in locally and remotely on pipelines without running the experiment again.
+        - *git-push-dvc-lock
         - dvc push
-        # Commit and push changes in dvc.lock
-        - |
-		  # Check if there are changes in dvc.lock
-          if [[ -n $(git status --porcelain dvc.lock) ]]; then
-            git config --global user.name "gitlab-ci[bot]"
-            git config --global user.email "gitlab-ci[bot]@users.noreply.gitlab.com"
-            git add dvc.lock
-            git commit -m "Commit changes in dvc.lock"
-            # Get current branch name
-            if [[ -n "${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}" ]]; then
-              BRANCH_NAME=${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}
-            else
-              BRANCH_NAME=${CI_COMMIT_BRANCH}
-            fi
-            git push -o ci.skip https://${GITLAB_USER_LOGIN}:${REPO_TOKEN}@${CI_REPOSITORY_URL#*@} HEAD:${BRANCH_NAME}
-          fi
     ```
+
+    !!! info
+
+        Note we push the `dvc.lock` file and the experiment results to the DVC remote storage at the end of the
+        pipeline. This is to allows DVC to cache the experiment results for the next pipeline and to reproduce the
+        experiment locally.
+
+        This also means that you will need to run `git pull` locally to get the latest `dvc.lock` file once the
+        pipeline is done.
 
 ### Push the CI/CD pipeline configuration file to Git
 

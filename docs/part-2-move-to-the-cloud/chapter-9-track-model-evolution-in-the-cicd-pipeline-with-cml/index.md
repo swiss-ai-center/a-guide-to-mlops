@@ -182,16 +182,17 @@ collaboration and decision-making within the team.
             with:
               credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
           - name: Train model
-            run: |
-              # Run the experiment
-              dvc repro --pull --allow-missing
-              # Push the changes to the remote repository
-              dvc push
+            run: dvc repro --pull --allow-missing
+          # After the experiment is done we update the dvc.lock and push the changes with dvc. This allows dvc to cache the experiment
+          # results and use them in locally and remotely on pipelines without running the experiment again.
           - name: Commit changes in dvc.lock
             uses: stefanzweifel/git-auto-commit-action@v4
             with:
               commit_message: Commit changes in dvc.lock
               file_pattern: dvc.lock
+          - name: Push experiment results to DVC remote storage
+            run: dvc push
+          # Node is required to run CML
           - name: Setup Node
             if: github.event_name == 'pull_request'
             uses: actions/setup-node@v3
@@ -377,7 +378,23 @@ collaboration and decision-making within the team.
 
     Explore this file to understand the report stage and its steps.
 
-    ```yaml title=".gitlab-ci.yml" hl_lines="3 57-124"
+    ```yaml title=".gitlab-ci.yml" hl_lines="19 57-122"
+    .git-push-dvc-lock: &git-push-dvc-lock |
+      # Check if there are changes in dvc.lock
+      if [[ -n $(git status --porcelain dvc.lock) ]]; then
+        git config --global user.name "gitlab-ci[bot]"
+        git config --global user.email "gitlab-ci[bot]@users.noreply.gitlab.com"
+        git add dvc.lock
+        git commit -m "Commit changes in dvc.lock"
+        # Get current branch name
+        if [[ -n "${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}" ]]; then
+          BRANCH_NAME=${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}
+        else
+          BRANCH_NAME=${CI_COMMIT_BRANCH}
+        fi
+        git push -o ci.skip https://${GITLAB_USER_LOGIN}:${GITLAB_PAT}@${CI_REPOSITORY_URL#*@} HEAD:${BRANCH_NAME}
+      fi
+
     stages:
       - train
       - report
@@ -390,8 +407,6 @@ collaboration and decision-making within the team.
       GIT_DEPTH: "0"
       # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
       GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
-      # CML and git token
-      REPO_TOKEN: $GITLAB_PAT
 
     train:
       stage: train
@@ -415,24 +430,10 @@ collaboration and decision-making within the team.
       script:
         # Run the experiment
         - dvc repro --pull --allow-missing
-        # Push the changes to the remote repository
+        # After the experiment is done we update the dvc.lock and push the changes with dvc. This allows dvc to cache the experiment
+        # results and use them in locally and remotely on pipelines without running the experiment again.
+        - *git-push-dvc-lock
         - dvc push
-        # Commit and push changes in dvc.lock
-        - |
-		  # Check if there are changes in dvc.lock
-          if [[ -n $(git status --porcelain dvc.lock) ]]; then
-            git config --global user.name "gitlab-ci[bot]"
-            git config --global user.email "gitlab-ci[bot]@users.noreply.gitlab.com"
-            git add dvc.lock
-            git commit -m "Commit changes in dvc.lock"
-            # Get current branch name
-            if [[ -n "${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}" ]]; then
-              BRANCH_NAME=${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}
-            else
-              BRANCH_NAME=${CI_COMMIT_BRANCH}
-            fi
-            git push -o ci.skip https://${GITLAB_USER_LOGIN}:${REPO_TOKEN}@${CI_REPOSITORY_URL#*@} HEAD:${BRANCH_NAME}
-          fi
 
     report:
       stage: report
@@ -441,14 +442,12 @@ collaboration and decision-making within the team.
         - train
       rules:
         - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      cache:
-        paths:
-          - .cache/pip
+      variables:
+        # Environment variable for CML
+        REPO_TOKEN: $GITLAB_PAT
       before_script:
         # Set the Google Service Account key
         - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
-        # Install dependencies
-        - pip install -r requirements.txt
       script:
         - |
           # Fetch the experiment changes
