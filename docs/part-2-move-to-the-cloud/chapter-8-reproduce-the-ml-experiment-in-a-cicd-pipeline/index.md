@@ -300,12 +300,11 @@ Depending on the CI/CD platform you are using, the process will be different.
     !!! info
 
         Note we push the `dvc.lock` file and the experiment results to the DVC remote storage at the end of the
-        pipeline. This is to allow DVC to cache the experiment results and use them in locally and remotely on
-        pipelines without running the experiment again.
+        pipeline. This is to allows DVC to cache the experiment results for the next pipeline and to reproduce the
+        experiment locally.
 
-        As an example, if you merge a pull request, the pipeline will be triggered twice: once for the pull request
-        and once for the merge. If you don't push the `dvc.lock` file and the experiment results to the DVC remote
-        storage whithin the pipeline, it will run the experiment twice.
+        This also means that you will need to run `git pull` locally to get the latest `dvc.lock` file once the
+        pipeline is done.
 
 === ":simple-gitlab: GitLab"
 
@@ -403,12 +402,11 @@ Depending on the CI/CD platform you are using, the process will be different.
     !!! info
 
         Note we push the `dvc.lock` file and the experiment results to the DVC remote storage at the end of the
-        pipeline. This is to allow DVC to cache the experiment results and use them in locally and remotely on
-        pipelines without running the experiment again.
+        pipeline. This is to allows DVC to cache the experiment results for the next pipeline and to reproduce the
+        experiment locally.
 
-        As an example, if you merge a pull request, the pipeline will be triggered twice: once for the pull request
-        and once for the merge. If you don't push the `dvc.lock` file and the experiment results to the DVC remote
-        storage whithin the pipeline, it will run the experiment twice.
+        This also means that you will need to run `git pull` locally to get the latest `dvc.lock` file once the
+        pipeline is done.
 
 ### Push the CI/CD pipeline configuration file to Git
 
