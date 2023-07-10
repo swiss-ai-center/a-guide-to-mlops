@@ -230,7 +230,7 @@ saves:
       - run: git checkout main
       - run: git merge cml-report
 
-  part-3-serve-and-deploy-the-model-online/chapter-10-save-and-load-the-model-with-mlem:
+  part-3-serve-and-deploy-the-model/chapter-10-save-and-load-the-model-with-mlem:
     save_git: true
     actions:
       - replace_from_md:

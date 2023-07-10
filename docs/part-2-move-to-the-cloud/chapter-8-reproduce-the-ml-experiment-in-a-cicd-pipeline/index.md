@@ -258,6 +258,7 @@ Depending on the CI/CD platform you are using, the process will be different.
             - requirements.txt
             - requirements-freeze.txt
             - .github/workflows/mlops.yml
+
       # Runs on pull requests
       pull_request:
         paths:

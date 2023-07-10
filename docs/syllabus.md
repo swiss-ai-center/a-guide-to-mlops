@@ -14,11 +14,11 @@ What you will learn from this guide.
     - [Chapter 7 - Move the ML experiment code to the cloud](./part-2-move-to-the-cloud/chapter-7-move-the-ml-experiment-code-to-the-cloud/index.md)
     - [Chapter 8 - Reproduce the ML experiment in a CI/CD pipeline](./part-2-move-to-the-cloud/chapter-8-reproduce-the-ml-experiment-in-a-cicd-pipeline/index.md)
     - [Chapter 9 - Track model evolution in the CI/CD pipeline with CML](./part-2-move-to-the-cloud/chapter-9-track-model-evolution-in-the-cicd-pipeline-with-cml/index.md)
-- [Part 3 - Serve and deploy the model online](./part-3-serve-and-deploy-the-model-online/introduction.md) - Learn how to serve and deploy the model online using MLEM and CML.
-    - [Chapter 10 - Save and load the model with MLEM](./part-3-serve-and-deploy-the-model-online/chapter-10-save-and-load-the-model-with-mlem/index.md)
-    - [Chapter 11 - Serve the model locally with MLEM](./part-3-serve-and-deploy-the-model-online/chapter-11-serve-the-model-locally-with-mlem/index.md)
-    - [Chapter 12 - Deploy and access the model on Kubernetes with MLEM](./part-3-serve-and-deploy-the-model-online/chapter-12-deploy-and-access-the-model-on-kubernetes-with-mlem/index.md)
-    - [Chapter 13 - Train the model on a Kubernetes pod with CML](./part-3-serve-and-deploy-the-model-online/chapter-13-train-the-model-on-a-kubernetes-pod-with-cml/index.md)
+- [Part 3 - Serve and deploy the model](./part-3-serve-and-deploy-the-model/introduction.md) - Learn how to serve and deploy the model using MLEM and CML.
+    - [Chapter 10 - Save and load the model with MLEM](./part-3-serve-and-deploy-the-model/chapter-10-save-and-load-the-model-with-mlem/index.md)
+    - [Chapter 11 - Serve the model locally with MLEM](./part-3-serve-and-deploy-the-model/chapter-11-serve-the-model-locally-with-mlem/index.md)
+    - [Chapter 12 - Deploy and access the model on Kubernetes with MLEM](./part-3-serve-and-deploy-the-model/chapter-12-deploy-and-access-the-model-on-kubernetes-with-mlem/index.md)
+    - [Chapter 13 - Train the model on a Kubernetes pod with CML](./part-3-serve-and-deploy-the-model/chapter-13-train-the-model-on-a-kubernetes-pod-with-cml/index.md)
 - [Part 4 - Labeling the data and retrain the model](./part-4-labeling-the-data-and-retrain/introduction.md) - Learn how to label new data and retrain the model using Label Studio.
     - [Chapter 14 - Setup Label Studio](./part-4-labeling-the-data-and-retrain/chapter-14-setup-label-studio/index.md)
     - [Chapter 15 - Import existing data to Label Studio](./part-4-labeling-the-data-and-retrain/chapter-15-import-existing-data-to-label-studio/index.md)

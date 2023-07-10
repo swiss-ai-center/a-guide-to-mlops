@@ -105,7 +105,7 @@ flowchart LR
 
     CML can do much more than just generating reports.
     Have a look to the [Train the model on a Kubernetes cluster with
-    CML](../../part-3-serve-and-deploy-the-model-online/chapter-13-train-the-model-on-a-kubernetes-pod-with-cml/) guide.
+    CML](../../part-3-serve-and-deploy-the-model/chapter-13-train-the-model-on-a-kubernetes-pod-with-cml/) guide.
 
 ## Steps
 
@@ -136,7 +136,7 @@ collaboration and decision-making within the team.
 
     Take some time to understand the report job and its steps.
 
-    ```yaml title=".github/workflows/mlops.yml" hl_lines="29-30 56-118"
+    ```yaml title=".github/workflows/mlops.yml" hl_lines="30-31 57-120"
     name: MLOps
 
     on:
@@ -151,6 +151,7 @@ collaboration and decision-making within the team.
             - requirements.txt
             - requirements-freeze.txt
             - .github/workflows/mlops.yml
+
       # Runs on pull requests
       pull_request:
         paths:
@@ -272,7 +273,7 @@ collaboration and decision-making within the team.
 
     The output should be similar to this:
 
-    ```
+    ```diff
     diff --git a/.github/workflows/mlops.yml b/.github/workflows/mlops.yml
     index 2a1914a..af1a0cb 100644
     --- a/.github/workflows/mlops.yml
@@ -503,7 +504,7 @@ collaboration and decision-making within the team.
           cml comment update --target=pr --publish report.md
     ```
 
-    You may notice that the `report` stage doesn't use the project dependencies. As we do not need to reproduce the experiment, we can use DVC from the `iterativeai/cml:0-dvc2-base1` Docker image without the project dependencies. DVC will then retrieve the data stored on the bucket on its own.
+    You may notice that the `report` stage doesn't use the project dependencies. As we do not need to reproduce the experiment, we can use DVC from the `iterativeai/cml:0-dvc3-base1` Docker image without the project dependencies. DVC will then retrieve the data stored on the bucket on its own.
 
     Check the differences with Git to validate the changes.
 
