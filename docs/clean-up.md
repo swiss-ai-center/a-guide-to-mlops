@@ -16,15 +16,21 @@ Here's a step-by-step guide to help you do that.
     you created before the credits are consumed. Otherwise, **you will be charged**
     for the resources you created.
 
-### Cloud provider¶
+### Clean up cloud provider resources
+
+In this section, you will delete the resources you created on your cloud provider.
 
 === ":simple-amazonaws: Amazon Web Services"
 
-    TODO
+    _This is a work in progress._
+
+=== ":simple-exoscale: Exoscale"
+
+    _This is a work in progress._
 
 === ":simple-googlecloud: Google Cloud"
 
-    #### Delete the Google Storage bucket
+    **Delete the Google Storage bucket**
 
     !!! warning
 
@@ -33,7 +39,7 @@ Here's a step-by-step guide to help you do that.
     To delete the Google Storage bucket you created you can execute the following command :
 
     ```sh title="Execute the following command(s) in a terminal"
-    gcloud storage rm --recursive gs://<your bucket name>
+    gcloud storage rm --recursive gs://$GCP_BUCKET_NAME
     ```
 
     Alternatively, you can delete the bucket from the Google Cloud Console:
@@ -44,12 +50,12 @@ Here's a step-by-step guide to help you do that.
     4. Click on **Delete** at the top of the page.
     5. Follow the instructions to delete the bucket.
 
-    #### Delete the Service Account
+    **Delete the Service Account**
 
     To delete the service account you created you can execute the following command :
 
     ```sh title="Execute the following command(s) in a terminal"
-    gcloud iam service-accounts delete dvc-service-account@<id of your gcp project>.iam.gserviceaccount.com
+    gcloud iam service-accounts delete dvc-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com
     ```
 
     Alternatively, you can delete the service account from the Google Cloud Console:
@@ -60,7 +66,7 @@ Here's a step-by-step guide to help you do that.
     4. Click on **Delete** at the top of the page.
     5. Follow the instructions to delete the service account.
 
-    #### Delete the local Service Account key
+    **Delete the local Service Account key**
 
     You can run the following command to delete the service account key you created locally:
 
@@ -68,7 +74,7 @@ Here's a step-by-step guide to help you do that.
     rm ~/.config/gcloud/dvc-google-service-account-key.json
     ```
 
-    #### Delete the Google Cloud project
+    **Delete the Google Cloud project**
 
     To delete the Google Cloud project you created:
 
@@ -79,13 +85,15 @@ Here's a step-by-step guide to help you do that.
 
 === ":simple-microsoftazure: Microsoft Azure"
 
-    TODO
+    _This is a work in progress._
 
-=== ":simple-rancher: Self-hosted Rancher"
+=== ":simple-kubernetes: Self-hosted Kubernetes"
 
-    TODO
+    _This is a work in progress._
 
-### Repository
+### Clean up your repository
+
+In this section, you will delete the repository you created on GitHub or GitLab.
 
 === ":simple-github: GitHub"
 
@@ -118,31 +126,46 @@ Here's a step-by-step guide to help you do that.
 
 ### Clean up your local environment
 
-In order to remove the packages installed with Poetry, you can run the following commands:
+In this section, you will delete the local environment you created for this guide.
+
+Start by ensuring you have left the virtual environment created in the previous chapter.
 
 ```sh title="Execute the following command(s) in a terminal"
-# Exit the poetry shell
-exit
-
-# Remove the virtual environment
-poetry env remove --all
+# Deactivate the virtual environment
+deactivate
 ```
 
-To clean up your local environment, you can simply delete the project directory you created for this guide.
+Then, you can delete the Python virtual environment directory.
+
+```sh title="Execute the following command(s) in a terminal"
+# Move back to the root directory
+cd ..
+
+# Delete the a-guide-to-mlops-jupyter-notebook
+rm -rf a-guide-to-mlops-jupyter-notebook
+
+# Delete the a-guide-to-mlops directory
+rm -rf a-guide-to-mlops
+```
 
 ### Double-check everything
 
 Before you finish, double-check that you have deleted all the resources and environments you created. This will ensure that you don't incur unexpected costs or leave any security vulnerabilities.
 
-Here is a checklist of all the resources and environments you created:
+Here is a checklist of all the resources and environments you created.
 
-- [ ] Google Cloud project
-- [ ] Google Cloud Storage bucket
-- [ ] Google Cloud Service Account
-- [ ] Google Cloud Service Account key
-- [ ] GitHub/GitLab repository
-- [ ] If you used GitLab, you also created a Personal Access Token
-- [ ] Project directory on your local machine
+!!! tip
+
+    You can click on the list items to mark them as completed if needed.
+
+- [ ] The cloud provider S3 bucket
+- [ ] The cloud provider credentials
+- [ ] The cloud provider project
+- [ ] The GitHub or GitLab repository
+    - [ ] If you used GitLab, the Personal Access Token
+- [ ] The projects directories
+    - [ ] The `a-guide-to-mlops-jupyter-notebook` directory
+    - [ ] The `a-guide-to-mlops` directory
 
 ### Summary
 
