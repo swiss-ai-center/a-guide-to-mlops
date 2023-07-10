@@ -285,16 +285,16 @@ Depending on the CI/CD platform you are using, the process will be different.
             with:
               credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
           - name: Train model
-            run: |
-              # Run the experiment
-              dvc repro --pull --allow-missing
-              # Push the changes to the remote repository
-              dvc push
+            run: dvc repro --pull --allow-missing
+            # After the experiment is done we update the dvc.lock and push the changes with dvc. This allows dvc to cache the experiment
+            # results and use them in locally and remotely on pipelines without running the experiment again.
           - name: Commit changes in dvc.lock
             uses: stefanzweifel/git-auto-commit-action@v4
             with:
               commit_message: Commit changes in dvc.lock
               file_pattern: dvc.lock
+          - name: Push experiment results to DVC remote storage
+            run: dvc push
     ```
 
 === ":simple-gitlab: GitLab"
