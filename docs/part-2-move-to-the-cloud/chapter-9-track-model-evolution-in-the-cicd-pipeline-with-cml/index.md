@@ -515,7 +515,7 @@ collaboration and decision-making within the team.
 
     The output should be similar to this:
 
-    ```
+    ```diff
     diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
     index e104669..a946523 100644
     --- a/.gitlab-ci.yml

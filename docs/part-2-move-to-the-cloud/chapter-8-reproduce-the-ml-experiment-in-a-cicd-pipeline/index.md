@@ -169,6 +169,9 @@ Depending on the CI/CD platform you are using, the process will be different.
 
     **Display the Google Service Account key**
 
+    The service account key is stored on your computer as a JSON file. You need to
+    display it and store it as a CI/CD variable in a text format.
+
     === ":simple-github: GitHub"
 
         Display the Google Service Account key that you have downloaded from Google
