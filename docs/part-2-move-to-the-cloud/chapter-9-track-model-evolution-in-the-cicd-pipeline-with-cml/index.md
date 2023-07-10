@@ -377,7 +377,7 @@ collaboration and decision-making within the team.
 
     Explore this file to understand the report stage and its steps.
 
-    ```yaml title=".gitlab-ci.yml" hl_lines="19 57-125"
+    ```yaml title=".gitlab-ci.yml" hl_lines="19 57-122"
     .git-push-dvc-lock: &git-push-dvc-lock |
       # Check if there are changes in dvc.lock
       if [[ -n $(git status --porcelain dvc.lock) ]]; then
@@ -441,9 +441,6 @@ collaboration and decision-making within the team.
         - train
       rules:
         - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      cache:
-        paths:
-          - .cache/pip
       variables:
         # Environment variable for CML
         REPO_TOKEN: $GITLAB_PAT
