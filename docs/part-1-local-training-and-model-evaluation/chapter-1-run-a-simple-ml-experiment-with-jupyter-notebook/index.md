@@ -62,7 +62,8 @@ cd a-guide-to-mlops-jupyter-notebook
 
 ### Download the notebook
 
-Your colleague provided you the following URL to download an archive containing the Jupyter Notebook for this machine learning experiment.
+Your colleague provided you the following URL to download an archive containing the Jupyter Notebook for this machine
+learning experiment.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Download the archive containing the Jupyter Notebook
@@ -157,22 +158,16 @@ jupyter-lab notebook.ipynb
 
 A browser window should open with the Jupyter Notebook.
 
-You may notice all the previous outputs from the notebook are still present. This
-is because the notebook was not cleared before being shared with you.
+You may notice all the previous outputs from the notebook are still present. This is because the notebook was not
+cleared before being shared with you. This can be useful to see the results of previous runs.
 
-This can be useful to see the results of previous runs. In most cases however,
-it can also be a source of confusion and clutter.
-
-This is one of the limitations of the Jupyter Notebook: they are not easy to share
-with others.
+In most cases however, it can also be a source of confusion and clutter. This is one of the limitations of the Jupyter
+Notebook, which makme them not always easy to share with others.
 
 For the time being, execute each step of the notebook to train the model and evaluate its performance.
 Previous outputs will be overwritten.
 
-Ensure the experiment runs without errors.
-
-Once done, you can close the browser window.
-
+Ensure the experiment runs without errors. Once done, you can close the browser window.
 Shut down the Jupyter server by pressing ++ctrl+c++ in the terminal and pressing ++y++.
 
 Exit the virtual environment with the following command.
