@@ -52,17 +52,17 @@ class CommandAction(AbstractAction):
 
     def run(self) -> None:
         print(esc(94), f"[RUN] {self.command}", esc(0), sep="")
-        task = subprocess.Popen(self.command, shell=True, stdout=subprocess.PIPE)
-        # Get exit code
-        task.wait()
-        data = task.stdout.read().decode("utf-8")
+        task = subprocess.Popen(
+            self.command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
+        out, err = [c.decode("utf-8") for c in task.communicate()]
         if task.returncode != 0:
-            error(f"Command failed: {self.command}")
-        if data:
-            print(esc(90), data, esc(0), sep="")
+            error(f"Command failed: {self.command}\n{err}")
+        if out:
+            print(esc(90), out, esc(0), sep="")
         if self.log_output:
             write_output(f"> {self.command}\n")
-            write_output(f"```\n{data}```\n")
+            write_output(f"```\n{out}```\n")
             write_output(f"----\n")
 
 
@@ -214,19 +214,31 @@ class SavesFactory:
     base_tmp_path: Path
     base_save_path: Path
 
-    def create(self, saves: dict) -> List[Save]:
-        return [self._create_save(save_dir, save) for save_dir, save in saves.items()]
+    def create(self, saves: dict, variables: dict) -> List[Save]:
+        return [
+            self._create_save(save_dir, save, variables)
+            for save_dir, save in saves.items()
+        ]
 
-    def _create_save(self, save_dir: str, save: dict) -> Save:
+    def _template_string(self, string: str, variables: dict) -> str:
+        """Replace variables in a string under the format {{ variable }}"""
+        for key, value in variables.items():
+            string = string.replace("{{ " + key + " }}", str(value))
+        return string
+
+    def _create_save(self, save_dir: str, save: dict, variables: dict) -> Save:
+        """Create a Save instance from a dict"""
         save_path = self.base_save_path / save_dir
         save_path.mkdir(parents=True, exist_ok=True)
 
         actions = []
-        for action in save["actions"]:
+        for action in save["actions"] or []:
             if "run" in action:
                 actions.append(
                     CommandAction(
-                        command=action["run"],
+                        command=self._template_string(
+                            string=action["run"], variables=variables
+                        ),
                         log_output=action.get("log", False),
                     )
                 )
@@ -260,6 +272,9 @@ def main() -> None:
     ```yaml
     base_tmp_path: The path to the tmp directory
     base_save_path: The path to the save directory
+
+    variables: # Variables to replace in the 'run' actions
+        <variable_name>: <variable_value>
 
     saves:
         <save_dir>: # The directory to save the result in
@@ -305,7 +320,9 @@ def main() -> None:
     base_save_path = Path(actions["base_save_path"])
     saves_factory = SavesFactory(base_tmp_path, base_save_path)
 
-    saves = saves_factory.create(saves=actions["saves"])
+    saves = saves_factory.create(
+        saves=actions["saves"], variables=actions.get("variables", {})
+    )
     saves_manager = SavesManager(
         base_tmp_path=base_tmp_path,
         saves=saves,

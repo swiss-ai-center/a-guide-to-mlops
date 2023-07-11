@@ -1,40 +1,45 @@
+# Conclusion
 
-## Related tools
+Congratulations! You did it! You were able to convert a ML experiment with a traditional approach to a well-defined,
+well-documented workflow that can scale and serve a model to the outside world! Let's take the time to make a summary
+of what you have done.
 
-This is a list of related tools that address each part of the workflow. A good collection of tools can be found here: [https://mlops.toys](https://mlops.toys).
+## Summary of what you have done
 
-### Data management
+- [x] The codebase can be shared among the developers
 
-These are alternatives to DVC.
+Thanks to Git, the codebase can be shared and improved collectively among the developers.
 
-- [LakeFS](https://lakefs.io/) - Transform your data lake into a Git-like repository
-- [DagsHub](https://dagshub.com/) - Open Source Data Science Collaboration
-- [DoltHub](https://www.dolthub.com/) - DoltHub is where people collaboratively build, manage, and distribute structured data
-- [Delta Lake](https://delta.io/) - An open-source storage framework that enables building a Lakehouse architecture with compute engines
+- [x] The dataset can be shared among the developers
 
-### Monitoring/tracking
+Thanks to DVC, the dataset can be shared and improved collectively among the developers.
 
-These are alternatives to CML.
+- [x] The model can be reproduced
 
-- [GuildAi](https://guild.ai/) - An open source experiment tracking toolkit. Use it to build better machine learning models faster
-- [Aim](https://aimstack.io/) - An open-source, self-hosted ML experiment tracking tool
-- [Evidently AI](https://evidentlyai.com/) - A first-of-its-kind monitoring tool that makes debugging machine learning models simple and interactive
+Thanks to DVC, the steps to create the model are documented and can be executed in order to reproduce the model.
 
-### Data annotation
+- [x] The experiment can be executed on a clean machine
 
-At the moment, Label Studio is the only solution that allows to annotate many kinds of data. Other competitors only allow a certain kind of data. Have a look at the [`awesome-data-labeling`](https://github.com/heartexlabs/awesome-data-labeling) Git repository for specific alternatives.
+Thanks to the CI/CD pipeline, the experiment can be executed on a clean machine. Erasing the "but it works on my machine" issue.
 
-### Model management/deployment
+- [x]  The changes done to a model can be tracked
 
-These are alternatives to MLEM.
+Thanks to DVC and CML, the changes done to a model can be tracked, discussed and visualized before merging them.
 
-- [DVC](https://dvc.org) - DVC is built to make ML models shareable and reproducible
-- [Kubeflow](https://www.kubeflow.org/) - The Kubeflow project is dedicated to making deployments of machine learning (ML) workflows on Kubernetes simple, portable and scalable
-- [BentoML](https://www.bentoml.com/) - An open platform that simplifies ML model deployment and enables you to serve your models at production scale in minutes
+- [x] The model can be used outside of the experiment context
 
-### End-to-end
+Thanks to MLEM, the model can be served and be used outside of the experiment context.
 
-These tools can be used to manage the entire lifecycle of the ML experiment. These tools were considered at the beginning of this document redaction. But as most of the tools are often opinionated and may lack the flexibility needed for the scope of this project, they were omitted.
+- [x] The model can be deployed and accessed on Kubernetes
 
-- [MLFlow](https://mlflow.org/) - An open source platform for the machine learning lifecycle
-- [MLRun](https://www.mlrun.org/) - An open source framework to orchestrate MLOps from the research stage to production-ready AI applications
+Thanks to MLEM, the model can be deployed and be accessed on a Kubernetes server.
+
+- [x] The model can be trained on a Kubernetes pod
+
+Thanks to CML, the model can be trained on specialized hardware on a Kubernetes pod.
+
+## End of your journey
+
+We appreciate your continued support! We trust that you found this guide enjoyable and informative. We have additional content available on advanced concepts and labelization topics, which we believe might pique your interest. Feel free to explore the left sidebar for more MLOps-related resources.
+
+If you encounter any difficulties, please don't hesitate to reach out to us on [GitHub](https://github.com/csia-pme/a-guide-to-mlops). Happy learning! :)

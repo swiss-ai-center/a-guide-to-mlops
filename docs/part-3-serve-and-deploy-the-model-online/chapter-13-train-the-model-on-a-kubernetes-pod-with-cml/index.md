@@ -1,1 +1,0 @@
-# Chapter 13: Train the model on a Kubernetes pod with CML

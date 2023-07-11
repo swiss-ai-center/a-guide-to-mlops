@@ -1,29 +1,78 @@
 base_tmp_path: tmp/the-guide/generated_checkpoints
-base_save_path: docs/the-guide
+base_save_path: docs
+
+variables:
+  TREE_CMD: tree --dirsfirst -I '*.jpg'
 
 saves:
-  chapter-1-run-a-simple-ml-experiment:
+  part-1-local-training-and-model-evaluation/chapter-1-run-a-simple-ml-experiment-with-jupyter-notebook:
     save_git: false
     actions:
-      # Download and set up the codebase
-      - run: wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/code.zip -O code.zip
-      - run: unzip -o code.zip
-      - run: mv a-guide-to-mlops-code/* .
-      - run: rm -r code.zip a-guide-to-mlops-code
+      # Download the notebook
+      - run: wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/jupyter-notebook.zip -O jupyter-notebook.zip
+      - run: unzip jupyter-notebook.zip
+      - run: mv a-guide-to-mlops-jupyter-notebook/* .
+      - run: rm -r jupyter-notebook.zip a-guide-to-mlops-jupyter-notebook
       # Download and set up the dataset
-      - run: wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/data.zip -O data.zip
-      - run: unzip -o data.zip
-      - run: mv a-guide-to-mlops-data/ data/
+      - run: wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/59-data.zip -O data.zip
+      - run: unzip data.zip
+      - run: mv a-guide-to-mlops-59-data/ data/
       - run: rm data.zip
-      # Run the experiment
-      - run: poetry install
-      - run: poetry run python src/prepare.py data/data.xml
-      - run: poetry run python src/featurization.py data/prepared data/features
-      - run: poetry run python src/train.py data/features model.pkl
-      - run: poetry run python src/evaluate.py model.pkl data/features
+      # Log the codebase tree
+      - run: "{{ TREE_CMD }}"
+        log: true
+      # Create the virtual environment
+      - run: python3 -m venv .venv
+      - run: . .venv/bin/activate && pip install --requirement requirements.txt
 
-  chapter-2-share-your-ml-experiment-code-with-git:
-    save_git: true
+  part-1-local-training-and-model-evaluation/chapter-2-adapt-and-move-the-jupyter-notebook-to-python-scripts:
+    save_git: false
+    actions:
+      # Clean the directory including hidden files
+      - run: rm -rf .[!.]* *
+      # Download and set up the dataset
+      - run: wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/59-data.zip -O data.zip
+      - run: unzip data.zip
+      - run: mv a-guide-to-mlops-59-data/ data/
+      - run: rm data.zip
+      # Initialize the environment
+      - run: python3 -m venv .venv
+      - replace_from_md:
+        file: requirements.txt
+        occurance_index: 0
+      - run: . .venv/bin/activate && pip install -r requirements.txt
+      - run: . .venv/bin/activate && pip freeze --local --all > requirements-freeze.txt
+      # Add new files
+      - replace_from_md:
+        file: params.yaml
+        occurance_index: 0
+      - replace_from_md:
+        file: src/prepare.py
+        occurance_index: 0
+      - replace_from_md:
+        file: src/train.py
+        occurance_index: 0
+      - replace_from_md:
+        file: src/evaluate.py
+        occurance_index: 0
+      - run: mkdir src/utils
+      - run: touch src/utils/__init__.py
+      - replace_from_md:
+        file: src/utils/seed.py
+        occurance_index: 0
+      # Log the codebase tree
+      - run: "{{ TREE_CMD }}"
+        log: true
+      # Run the experiment
+      - run: . .venv/bin/activate && python src/prepare.py data/raw data/prepared
+      - run: . .venv/bin/activate && python src/train.py data/prepared model
+      - run: . .venv/bin/activate && python src/evaluate.py model data/prepared
+      # Log the codebase tree
+      - run: "{{ TREE_CMD }}"
+        log: true
+
+  part-1-local-training-and-model-evaluation/chapter-3-initialize-git-and-dvc-for-local-training:
+    save_git: false
     actions:
       # Create a new Git repository
       - run: git init --initial-branch=main
@@ -36,29 +85,29 @@ saves:
       - run: git status
         log: true
       - run: git commit -m "My first ML experiment shared on Git"
-  
-  chapter-3-share-your-ml-experiment-data-with-dvc:
-    save_git: true
-    actions:
-      - run: poetry add "dvc[gs]==2.37.0"
-      - run: git diff pyproject.toml
+      # Create a DVC repository
+      - replace_from_md:
+        file: requirements.txt
+        occurance_index: 0
+      - run: . .venv/bin/activate && pip install -r requirements.txt
+      - run: . .venv/bin/activate && pip freeze --local --all > requirements-freeze.txt
+      - run: git diff requirements.txt
         log: true
-      - run: poetry run dvc init
-      - run: poetry run dvc remote add -d data gs://mlopsdemo/dvcstore
+      - run: . .venv/bin/activate && dvc init
       - replace_from_md:
         file: .gitignore
-        occurance_index: 0
+        occurance_index: 1
       - run: git diff .gitignore
         log: true
-      - run: poetry run dvc add data/data.xml
-      - run: poetry run dvc push
+      - run: . .venv/bin/activate && dvc add data/raw/
+        log: true
       - run: git add .
       - run: git status
         log: true
       - run: git commit -m "My ML experiment data is saved with DVC"
 
-  chapter-4-reproduce-the-experiment-with-dvc:
-    save_git: true
+  part-1-local-training-and-model-evaluation/chapter-4-reproduce-the-ml-experiment-with-dvc:
+    save_git: false
     actions:
       - replace_from_md:
         file: .gitignore
@@ -66,78 +115,79 @@ saves:
       - run: git diff .gitignore
         log: true
       - run: |-
-          poetry run dvc stage add -n prepare \
-              -p prepare.seed,prepare.split \
-              -d src/prepare.py -d data/data.xml \
-              -o data/prepared \
-              python src/prepare.py data/data.xml
+          . .venv/bin/activate && dvc stage add -n prepare \
+            -p prepare \
+            -d src/prepare.py -d src/utils/seed.py -d data/raw \
+            -o data/prepared \
+            python src/prepare.py data/raw data/prepared
       - run: |-
-          poetry run dvc stage add -n featurize \
-              -p featurize.max_features,featurize.ngrams \
-              -d src/featurization.py -d data/prepared \
-              -o data/features/test.pkl -o data/features/train.pkl \
-              python src/featurization.py data/prepared data/features
+          . .venv/bin/activate && dvc stage add -n train \
+            -p train \
+            -d src/train.py -d src/utils/seed.py -d data/prepared \
+            -o model \
+            python src/train.py data/prepared model
       - run: |-
-          poetry run dvc stage add -n train \
-              -p train.seed,train.n_est,train.min_split \
-              -d src/train.py -d data/features \
-              -o model.pkl \
-              python src/train.py data/features model.pkl
-      - run: |-
-          poetry run dvc stage add -n evaluate \
-              -d src/evaluate.py -d model.pkl \
-              -o evaluation/plots/metrics \
-              -o evaluation/report.html \
-              --metrics evaluation/metrics.json \
-              --plots evaluation/plots/prc.json \
-              --plots evaluation/plots/sklearn/roc.json \
-              --plots evaluation/plots/sklearn/confusion_matrix.json \
-              --plots evaluation/plots/importance.png \
-              python src/evaluate.py model.pkl data/features
-      - run: |-
-          poetry run dvc plots modify evaluation/plots/prc.json \
-              -x recall \
-              -y precision
-      - run: |-
-          poetry run dvc plots modify evaluation/plots/sklearn/roc.json \
-              -x fpr \
-              -y tpr
-      - run: |-
-          poetry run dvc plots modify evaluation/plots/sklearn/confusion_matrix.json \
-              -x actual \
-              -y predicted \
-              -t confusion
-      - run: poetry run dvc dag
-      - run: poetry run dvc repro
+          . .venv/bin/activate && dvc stage add -n evaluate \
+            -d src/evaluate.py -d model \
+            --metrics evaluation/metrics.json \
+            --plots evaluation/plots/confusion_matrix.png \
+            --plots evaluation/plots/pred_preview.png \
+            --plots evaluation/plots/training_history.png \
+            python src/evaluate.py model data/prepared
+      - run: . .venv/bin/activate && dvc dag
+        log: true
+      - run: . .venv/bin/activate && dvc repro
       - run: git add .
       - run: git status
         log: true
-      - run: poetry run dvc push
       - run: git commit -m "My ML experiment commands are saved with DVC"
 
-  chapter-5-track-model-evolutions-with-dvc:
-    save_git: true
+  part-1-local-training-and-model-evaluation/chapter-5-track-model-evolution-with-dvc:
+    save_git: false
     actions:
       - replace_from_md:
         file: params.yaml
         occurance_index: 0
       - run: git diff params.yaml
         log: true
-      - run: poetry run dvc repro
-      - run: poetry run dvc params diff
+      - run: . .venv/bin/activate && dvc repro
+      - run: . .venv/bin/activate && dvc params diff
         log: true
-      - run: poetry run dvc metrics diff
+      - run: . .venv/bin/activate && dvc metrics diff
         log: true
-      - run: poetry run dvc plots diff
+      - run: . .venv/bin/activate && dvc plots diff
       - replace_from_md:
         file: .gitignore
         occurance_index: 0
       - run: git diff .gitignore
         log: true
+      - run: git add .
       - run: git status
         log: true
+      - run: git commit -m "My ML experiment changes are tracked"
 
-  chapter-6-orchestrate-the-workflow-with-a-cicd-pipeline:
+  part-2-move-to-the-cloud/chapter-6-move-the-ml-experiment-data-to-the-cloud:
+    save_git: false
+    actions:
+      - replace_from_md:
+        file: requirements.txt
+        occurance_index: 0
+      - run: . .venv/bin/activate && pip install -r requirements.txt
+      - run: . .venv/bin/activate && pip freeze --local --all > requirements-freeze.txt
+      - run: git diff requirements.txt
+        log: true
+      - run: . .venv/bin/activate && dvc remote add -d data gs://mlopsdemo/dvcstore
+      - run: . .venv/bin/activate && dvc push
+      - run: git add .
+      - run: git status
+        log: true
+      - run: git commit -m "My ML experiment data is saved with DVC"
+
+  part-2-move-to-the-cloud/chapter-7-move-the-ml-experiment-code-to-the-cloud:
+    save_git: true
+    actions:
+
+  part-2-move-to-the-cloud/chapter-8-reproduce-the-ml-experiment-in-a-cicd-pipeline:
     save_git: true
     actions:
       - replace_from_md:
@@ -150,7 +200,7 @@ saves:
       - run: git add .gitlab-ci.yml
       - run: git commit -m "A pipeline will run my experiment on each push"
 
-  chapter-7-track-model-evolutions-in-the-cicd-pipeline-with-cml:
+  part-2-move-to-the-cloud/chapter-9-track-model-evolution-in-the-cicd-pipeline-with-cml:
     save_git: true
     actions:
       - replace_from_md:
@@ -166,26 +216,33 @@ saves:
       - run: git add .github/workflows/mlops.yml
       - run: git add .gitlab-ci.yml
       - run: git commit -m "Enable CML reports on pull requests"
+      - run: git checkout -b cml-report
+      - replace_from_md:
+        file: params.yaml
+        occurance_index: 0
+      - run: git diff params.yaml
+        log: true
       - run: git add .
       - run: git status
         log: true
-      - run: poetry run dvc push
+      - run: . .venv/bin/activate && dvc push
       - run: git commit -m "I made some changes to the model"
+      - run: git checkout main
+      - run: git merge cml-report
 
-  chapter-8-serve-the-model-with-mlem:
+  part-3-serve-and-deploy-the-model/chapter-10-save-and-load-the-model-with-mlem:
     save_git: true
     actions:
-      - run: poetry add "mlem[fastapi]==0.4.3"
-      - run: git diff pyproject.toml
-        log: true
-      - run: poetry run mlem init
-      - run: poetry run mlem config set core.storage.type dvc
-      - run: echo "/**/?*.mlem" >> .dvcignore
       - replace_from_md:
-        file: src/featurization.py
+        file: requirements.txt
         occurance_index: 0
-      - run: git diff src/featurization.py
+      - run: . .venv/bin/activate && pip install -r requirements.txt
+      - run: . .venv/bin/activate && pip freeze --local --all > requirements-freeze.txt
+      - run: git diff requirements.txt
         log: true
+      - run: . .venv/bin/activate && mlem init
+      - run: . .venv/bin/activate && mlem config set core.storage.type dvc
+      - run: echo "/**/?*.mlem" >> .dvcignore
       - replace_from_md:
         file: src/train.py
         occurance_index: 0
@@ -196,50 +253,9 @@ saves:
         occurance_index: 0
       - run: git diff src/evaluate.py
         log: true
-      - run: |-
-          poetry run dvc stage add --force \
-              -n featurize \
-              -p featurize.max_features,featurize.ngrams \
-              -d src/featurization.py -d data/prepared \
-              -o data/features/test.pkl -o data/features/train.pkl -o data/features/vectorizer -o data/features/tfidf \
-              python src/featurization.py data/prepared data/features
-      - run: |-
-          poetry run dvc stage add --force \
-              -n train \
-              -p train.seed,train.n_est,train.min_split \
-              -d src/train.py -d data/features \
-              -o models/rf \
-              python src/train.py data/features models/rf
-      - run: |-
-          poetry run dvc stage add --force \
-              -n evaluate \
-              -d src/evaluate.py -d models/rf \
-              -o evaluation/plots/metrics \
-              -o evaluation/report.html \
-              --metrics evaluation/metrics.json \
-              --plots evaluation/plots/prc.json \
-              --plots evaluation/plots/sklearn/roc.json \
-              --plots evaluation/plots/sklearn/confusion_matrix.json \
-              --plots evaluation/plots/importance.png \
-              python src/evaluate.py models/rf data/features
-      - run: |-
-          poetry run dvc plots modify evaluation/plots/prc.json \
-              -x recall \
-              -y precision
-      - run: |-
-          poetry run dvc plots modify evaluation/plots/sklearn/roc.json \
-              -x fpr \
-              -y tpr
-      - run: |-
-          poetry run dvc plots modify evaluation/plots/sklearn/confusion_matrix.json \
-              -x actual \
-              -y predicted \
-              -t confusion
-      - run: git diff dvc.yaml
-        log: true
-      - run: poetry run dvc repro
+      - run: . .venv/bin/activate && dvc repro
       - run: git add .
       - run: git status
         log: true
-      - run: poetry run dvc push
+      - run: . .venv/bin/activate && dvc push
       - run: git commit -m "MLEM can save, load and serve the model"

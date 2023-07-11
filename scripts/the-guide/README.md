@@ -34,6 +34,9 @@ The actions.yaml file is structured as follows:
 base_tmp_path: <the path to the tmp directory>
 base_save_path: <the path to the save directory>
 
+variables: # Variables to replace in the 'run' actions
+  <variable_name>: <variable_value>
+
 saves:
   <save_dir>: # The directory to save the result in
     save_git: True # Whether to save the gitignored files
@@ -47,8 +50,3 @@ saves:
 ```
 
 The output of the actions is saved in the GENERATED_OUTPUT_PATH file (see `generate_checkpoints.py`) which is at the parent directory of the tmp working directory.
-
-
-
-
-    

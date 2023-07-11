@@ -1,1 +1,0 @@
-# Chapter 12: Deploy and access the model on Kubernetes with MLEM

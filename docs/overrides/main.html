@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+<!-- Custom front matter -->
+{% block extrahead %}
+{% endblock %}
+
+<!-- Announcement bar -->
+{% block announce %}
+{% endblock %}
+
+<!-- Theme-related JavaScript -->
+{% block scripts %}
+  <script defer>
+    document.addEventListener("DOMContentLoaded", function() {
+    location$.subscribe(function(url) {
+      console.log("Hello from custom.js")
+    })
+  })
+  </script>
+  {{ super() }}
+
+  <!-- Extra JavaScript (can't be set in mkdocs.yml due to content hash) -->
+  <!-- <script src="{{ 'assets/javascripts/custom.js' | url }}"></script> -->
+{% endblock %}
