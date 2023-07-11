@@ -16,7 +16,7 @@ saves:
       # Download and set up the dataset
       - run: wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/59-data.zip -O data.zip
       - run: unzip data.zip
-      - run: mv a-guide-to-mlops-59-data/ data/
+      - run: mv a-guide-to-mlops-data/ data/
       - run: rm data.zip
       # Log the codebase tree
       - run: "{{ TREE_CMD }}"
@@ -33,7 +33,7 @@ saves:
       # Download and set up the dataset
       - run: wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/59-data.zip -O data.zip
       - run: unzip data.zip
-      - run: mv a-guide-to-mlops-59-data/ data/
+      - run: mv a-guide-to-mlops-data/ data/
       - run: rm data.zip
       # Initialize the environment
       - run: python3 -m venv .venv
