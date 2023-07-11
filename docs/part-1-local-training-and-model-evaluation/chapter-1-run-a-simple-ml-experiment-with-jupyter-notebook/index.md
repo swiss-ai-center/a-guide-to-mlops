@@ -15,10 +15,9 @@ angle.
 The training process is as follows:
 
 - Preprocess the dataset
-- Split the posts into training/testing datasets
-- Train a model to classify the habitability of a given planet using the training dataset
-- Evaluate the model's performance using metrics, a receiver operating characteristic (ROC) curve
-and a confusion matrix.
+- Split the celestial bodies into training/testing datasets
+- Train a model to classify the celestial bodies using the training dataset
+- Evaluate the model's performance using metrics, training history, predictions preview and a confusion matrix.
 
 Your primary objective is to enhance the team's workflow by implementing MLOps
 tools, documenting the procedures, tracking changes, and ensuring the model is
@@ -101,7 +100,7 @@ This archive must be decompressed and its contents be moved in the
 unzip data.zip
 
 # Move the `data.xml` file to the working directory
-mv a-guide-to-mlops-59-data/ data/
+mv a-guide-to-mlops-data/ data/
 
 # Remove the archive and the directory
 rm data.zip
@@ -168,7 +167,7 @@ For the time being, execute each step of the notebook to train the model and eva
 Previous outputs will be overwritten.
 
 Ensure the experiment runs without errors. Once done, you can close the browser window.
-Shut down the Jupyter server by pressing ++ctrl+c++ in the terminal and pressing ++y++.
+Shut down the Jupyter server by pressing ++ctrl+c++ in the terminal, followed with ++y++ and ++enter++.
 
 Exit the virtual environment with the following command.
 
@@ -181,8 +180,8 @@ The Jupyter notebook serves as a valuable tool for consolidating an entire
 experiment into a single file, facilitating data visualization, and enabling the
 presentation of results. However, it does have severe limitations such as being
 challenging to share with others due to a lack of versioning capabilities,
-difficulty in reproducing the experiment, and the potential for clutter from
-previous outputs.
+difficulty in reproducing the experiment, and the potential for clutter and data
+leaks from previous outputs.
 
 In the next chapter we will see how to address these shortcomings.
 

@@ -186,6 +186,7 @@ pyyaml==6.0
 Install the dependencies.
 
 ```sh title="Execute the following command(s) in a terminal"
+# Install the requirements
 pip install --requirement requirements.txt
 ```
 

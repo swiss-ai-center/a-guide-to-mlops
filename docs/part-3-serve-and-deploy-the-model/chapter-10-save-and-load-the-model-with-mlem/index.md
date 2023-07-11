@@ -37,7 +37,8 @@ Install the package and update the freeze file.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Install the requirements
-pip install -r requirements.txt
+pip install --requirement requirements.txt
+
 # Freeze the requirements
 pip freeze --local --all > requirements-freeze.txt
 ```

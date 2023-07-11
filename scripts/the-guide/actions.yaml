@@ -40,7 +40,7 @@ saves:
       - replace_from_md:
         file: requirements.txt
         occurance_index: 0
-      - run: . .venv/bin/activate && pip install -r requirements.txt
+      - run: . .venv/bin/activate && pip install --requirement requirements.txt
       - run: . .venv/bin/activate && pip freeze --local --all > requirements-freeze.txt
       # Add new files
       - replace_from_md:
@@ -89,7 +89,7 @@ saves:
       - replace_from_md:
         file: requirements.txt
         occurance_index: 0
-      - run: . .venv/bin/activate && pip install -r requirements.txt
+      - run: . .venv/bin/activate && pip install --requirement requirements.txt
       - run: . .venv/bin/activate && pip freeze --local --all > requirements-freeze.txt
       - run: git diff requirements.txt
         log: true
@@ -172,7 +172,7 @@ saves:
       - replace_from_md:
         file: requirements.txt
         occurance_index: 0
-      - run: . .venv/bin/activate && pip install -r requirements.txt
+      - run: . .venv/bin/activate && pip install --requirement requirements.txt
       - run: . .venv/bin/activate && pip freeze --local --all > requirements-freeze.txt
       - run: git diff requirements.txt
         log: true
@@ -236,7 +236,7 @@ saves:
       - replace_from_md:
         file: requirements.txt
         occurance_index: 0
-      - run: . .venv/bin/activate && pip install -r requirements.txt
+      - run: . .venv/bin/activate && pip install --requirement requirements.txt
       - run: . .venv/bin/activate && pip freeze --local --all > requirements-freeze.txt
       - run: git diff requirements.txt
         log: true

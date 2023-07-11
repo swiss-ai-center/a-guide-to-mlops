@@ -12,4 +12,5 @@ If you decide to conclude your progress with the guide at this point, we recomme
 visiting the [Clean up](../clean-up.md) section to ensure the proper removal of
 the resources and environments you have generated.
 
-This is necessary to avoid unnecessary incurring costs and potential security concerns.
+This is necessary in order to return to a clean state on your computer, avoid unnecessary incurring costs and
+potential security concerns when using cloud services.
