@@ -19,12 +19,12 @@ flowchart LR
 	dot_dvc[(.dvc)]
 	dot_git[(.git)]
 	data[data/raw] <-.-> dot_dvc
-    localGraph <-....-> dot_git
+	workspaceGraph <-....-> dot_git
 	subgraph cacheGraph[CACHE]
 		dot_dvc
 		dot_git
 	end
-	subgraph localGraph[LOCAL]
+	subgraph workspaceGraph[WORKSPACE]
 		prepare[prepare.py] <-.-> dot_dvc
 		train[train.py] <-.-> dot_dvc
 		evaluate[evaluate.py] <-.-> dot_dvc
@@ -40,5 +40,5 @@ flowchart LR
 ```
 
 Do not forget to [Clean up](./clean-up.md) if you want to stop here or continue
-with [Part 2 - Move to the cloud](../part-2-move-to-the-cloud/introduction.md)
+with [Part 2 - Move to the cloud](../part-2-move-the-model-to-the-cloud/introduction.md)
 of the MLOps guide!

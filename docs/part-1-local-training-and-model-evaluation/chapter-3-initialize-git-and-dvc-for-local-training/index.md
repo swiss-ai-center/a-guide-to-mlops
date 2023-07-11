@@ -44,19 +44,19 @@ flowchart LR
     dot_dvc[(.dvc)]
     dot_git[(.git)]
     data[data/raw] <-.-> dot_dvc
-    localGraph <-....-> dot_git
+    workspaceGraph <-....-> dot_git
     subgraph cacheGraph[CACHE]
         dot_dvc
         dot_git
     end
-    subgraph localGraph[LOCAL]
+    subgraph workspaceGraph[WORKSPACE]
         data --> prepare
         prepare[prepare.py] --> train
         train[train.py] --> evaluate[evaluate.py]
         params[params.yaml] -.- prepare
         params -.- train
     end
-    style localGraph opacity:0.4,color:#7f7f7f80
+    style workspaceGraph opacity:0.4,color:#7f7f7f80
     style prepare opacity:0.4,color:#7f7f7f80
     style train opacity:0.4,color:#7f7f7f80
     style evaluate opacity:0.4,color:#7f7f7f80

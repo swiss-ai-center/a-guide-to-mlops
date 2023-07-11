@@ -150,6 +150,18 @@
         height: calc(100vh - 116px); /* 116px = header height */
     }
 
+    .navigation-section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .navigation-section p {
+        text-align: center;
+        font-size: 0.8rem;
+    }
+
     .home-section h1 {
         font-size: 10rem;
         margin-top: 0;
@@ -168,7 +180,7 @@
         max-width: 35ch;
         text-align: center;
     }
-    
+
     .text-gradient {
         background: var(--md-primary-fg-color);
         background: var(--text-gradient);
@@ -256,7 +268,7 @@
             radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 7px),
             radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 2px, transparent 5px),
             radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 1px, transparent 3px);
-        background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px, 100px 100px; 
+        background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px, 100px 100px;
         background-position: 0 0, 40px 60px, 130px 270px, 70px 100px, 30px 140px
     }
 </style>
@@ -266,18 +278,40 @@
 <div class="stars parallax" data-speed="-10"></div>
 <section class="home-section">
     <div>
-        <h2>A Guide to</h2>
+        <h2>A guide to</h2>
         <h1><span class="text-gradient">MLOps</span></h1>
         <p>
             Classify celestial bodies using MLOps best practices
         </p>
     </div>
     <div class="planets">
-        <img src="assets/images/planets/earth.png" alt="planet" class="planet parallax" data-speed="0.4" data-name="earth"> 
+        <img src="assets/images/planets/earth.png" alt="planet" class="planet parallax" data-speed="0.4" data-name="earth">
         <img src="assets/images/planets/moon.png" alt="planet" class="planet parallax" data-speed="0.5" data-name="moon">
         <img src="assets/images/planets/mars.png" alt="planet" class="planet parallax" data-speed="0.6" data-name="mars">
         <img src="assets/images/planets/saturn.png" alt="planet" class="planet parallax" data-speed="0.8" data-name="saturn">
         <img src="assets/images/planets/neptune.png" alt="planet" class="planet parallax" data-speed="1" data-name="neptune">
+    </div>
+</section>
+<section class="navigation-section">
+    <div>
+        <p>
+            <a href="syllabus">🏁 Introduction</a>
+        </p>
+        <p>
+            <a href="part-1-local-training-and-model-evaluation/introduction">🏠 Local training and model evaluation</a>
+        </p>
+        <p>
+            <a href="part-2-move-the-model-to-the-cloud/introduction">☁️ Move the model to the cloud</a>
+        </p>
+        <p>
+            <a href="part-3-serve-and-deploy-the-model/introduction">🚚 Serve and deploy the model</a>
+        </p>
+        <p>
+            <a href="part-4-labeling-the-data-and-retrain/introduction">🏷️ Labeling the data and retrain</a>
+        </p>
+        <p>
+            <a href="clean-up">🪄 Conclusion</a>
+        </p>
     </div>
 </section>
 <div class="scroll-fade-out" id="planetsAttribution" data-offset="100"><a href="https://solarsystem.nasa.gov" target="_blank">© NASA Solar System</a></div>

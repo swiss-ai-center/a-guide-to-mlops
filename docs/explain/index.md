@@ -4,7 +4,7 @@
 
 ```mermaid
 flowchart
-    subgraph localGraph[LOCAL]
+    subgraph workspaceGraph[WORKSPACE]
         data[data/raw] --> prepare
         prepare[prepare.py] --> train
         train[train.py] --> evaluate
