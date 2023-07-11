@@ -84,7 +84,7 @@ Create a Git repository on your preferred service to collaborate with peers.
 
     !!! warning
 
-        Configure the repository as you wish but **do not** check the box _"Add a README file"_.
+        Configure the repository as you wish but **do not** check the boxex _"Add a README file"_, _"Add .gitignore"_ nor _"Choose a license"_.
 
 === ":simple-gitlab: GitLab"
 
@@ -96,7 +96,8 @@ Create a Git repository on your preferred service to collaborate with peers.
 
 ## Configure Git for the remote branch
 
-Add the remote origin to your repository. Your Git service should provide these
+Add the remote origin to your repository. Replace `<your git repository url>` with the URL of your
+Git repository. Your Git service should provide these
 instructions as well.
 
 ```sh title="Execute the following command(s) in a terminal"

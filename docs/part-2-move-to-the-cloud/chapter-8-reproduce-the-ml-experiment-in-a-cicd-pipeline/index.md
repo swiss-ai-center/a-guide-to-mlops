@@ -20,7 +20,7 @@ differently across different environments.
 
 In this chapter, you will learn how to:
 
-1. Set up access to the S3 bucket of your cloud provider
+1. Grant access to the S3 bucket on your cloud provider
 2. Store the cloud provider credentials in the CI/CD configuration
 3. Create the CI/CD pipeline configuration file
 4. Push the CI/CD pipeline configuration file to Git
@@ -129,11 +129,11 @@ DVC will need to log in to the S3 bucket of your cloud provider to download the 
 
     # Set the permissions for the Google Service Account
     gcloud projects add-iam-policy-binding $GCP_PROJECT_ID \
-        --member="serviceAccount:dvc-service-account@${GCP_PROJECT_ID}.iam.  gserviceaccount.com" \
+        --member="serviceAccount:dvc-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com" \
         --role="roles/viewer"
 
     # Create the Google Service Account Key
-    gcloud iam service-accounts keys create ~/.config/gcloud/dvc-google-service-account-key.    json \
+    gcloud iam service-accounts keys create ~/.config/gcloud/dvc-google-service-account-key.json \
         --iam-account=dvc-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com
     ```
 
@@ -283,7 +283,7 @@ Depending on the CI/CD platform you are using, the process will be different.
             with:
               python-version: '3.10'
           - name: Install dependencies
-            run: pip install -r requirements-freeze.txt
+            run: pip install --requirement requirements-freeze.txt
           - name: Login to Google Cloud
             uses: 'google-github-actions/auth@v1'
             with:
@@ -392,7 +392,7 @@ Depending on the CI/CD platform you are using, the process will be different.
         # Install dependencies
         - python3 -m venv .venv
         - source .venv/bin/activate
-        - pip install -r requirements.txt
+        - pip install --requirement requirements.txt
       script:
         # Run the experiment
         - dvc repro --pull --allow-missing
@@ -471,9 +471,8 @@ commit.
 
 In this chapter, you have successfully:
 
-1. Created a Google Service Account to grant access to the Google Cloud project
-from the CI/CD pipeline
-2. Stored the Google Service Account key in GitHub/GitLab CI/CD configuration
+1. Granted access to the S3 bucket on your cloud provider
+2. Stored the cloud provider credentials in the CI/CD configuration
 3. Created the CI/CD pipeline configuration file
 4. Pushed the CI/CD pipeline configuration file to Git
 5. Visualized the execution of the CI/CD pipeline

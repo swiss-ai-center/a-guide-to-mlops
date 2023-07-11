@@ -126,7 +126,7 @@ index 442ea27..2492093 100644
 -data/raw/
 -data/prepared/
 -
--# Artifacts
+-# Evaluation results
 -evaluation/
 -
 -# The models
@@ -311,6 +311,19 @@ dvc repro
 
     You can force the execution of the entire pipeline with the command
     `dvc repro --force`.
+
+The first execution will generate a `dvc.lock` file that contains the
+information about the pipeline and the outputs of the stages.
+
+Try to run the command again and notice that DVC will not re-execute the stages.
+
+```
+'data/raw.dvc' didn't change, skipping
+Stage 'prepare' didn't change, skipping
+Stage 'train' didn't change, skipping
+Stage 'evaluate' didn't change, skipping
+Data and pipelines are up to date.
+```
 
 ### Check the changes
 

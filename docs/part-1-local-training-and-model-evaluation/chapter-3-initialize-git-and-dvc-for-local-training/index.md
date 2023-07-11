@@ -186,14 +186,14 @@ Commit the changes to Git.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
-git commit -m "My first ML experiment shared on Git"
+git commit -m "My first ML experiment versioned with Git"
 ```
 
 ### Create a DVC repository
 
 #### Install DVC
 
-Add the main `dvc` package to the `requirements.txt` file.
+Add the main `dvc` dependency to the `requirements.txt` file.
 
 ```txt title="requirements.txt" hl_lines="4"
 tensorflow==2.12.0
@@ -223,11 +223,11 @@ index 250f32c..193ebac 100644
 +dvc==3.2.2
 ```
 
-Install the package and update the freeze file.
+Install the dependencies and update the freeze file.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Install the requirements
-pip install --requirements requirements.txt
+pip install --requirement requirements.txt
 
 # Freeze the requirements
 pip freeze --local --all > requirements-freeze.txt
@@ -274,7 +274,7 @@ Update the `.gitignore` file by changing `data/` to `data/raw/` and
 data/raw/
 data/prepared/
 
-# Artifacts
+# Evaluation results
 evaluation/
 
 # The models
@@ -311,7 +311,7 @@ index bd28df9..442ea27 100644
 +data/raw/
 +data/prepared/
 
- # Artifacts
+ # Evaluation results
  evaluation/
 ```
 
@@ -322,7 +322,7 @@ You can now add the experiment data to DVC without complain!
 dvc add data/raw/
 ```
 
-The output should be similar to this. You can safely ignore the warning.
+The output should be similar to this. You can safely ignore the message.
 
 ```
 To track the changes with git, run:
@@ -380,7 +380,7 @@ changes as well.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
-git commit -m "My ML experiment data is saved with DVC"
+git commit -m "My first ML experiment data versioned with DVC"
 ```
 
 This chapter is done, you can check the summary.

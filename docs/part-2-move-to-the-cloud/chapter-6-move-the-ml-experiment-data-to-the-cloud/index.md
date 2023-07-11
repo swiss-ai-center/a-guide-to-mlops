@@ -283,11 +283,11 @@ Install the DVC Storage plugin for the chosen cloud provider.
     +dvc[gs]==3.2.2
     ```
 
-    Install the package and update the freeze file.
+    Install the dependencies and update the freeze file.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Install the requirements
-    pip install -r requirements.txt
+    pip install --requirement requirements.txt
 
     # Freeze the requirements
     pip freeze --local --all > requirements-freeze.txt
@@ -370,7 +370,7 @@ DVC as well.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
-git commit -m "My ML experiment data is saved with DVC"
+git commit -m "My ML experiment data is shared with DVC"
 ```
 
 ### Check the results

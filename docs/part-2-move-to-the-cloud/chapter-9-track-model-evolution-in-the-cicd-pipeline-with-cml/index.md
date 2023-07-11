@@ -104,8 +104,8 @@ flowchart LR
 !!! info
 
     CML can do much more than just generating reports.
-    Have a look to the [Train the model on a Kubernetes cluster with
-    CML](../../part-3-serve-and-deploy-the-model/chapter-13-train-the-model-on-a-kubernetes-pod-with-cml/) guide.
+    Have a look at the chapter [Train the model on a Kubernetes cluster with
+    CML](../../part-3-serve-and-deploy-the-model/chapter-13-train-the-model-on-a-kubernetes-pod-with-cml/) for more details.
 
 ## Steps
 
@@ -177,7 +177,7 @@ collaboration and decision-making within the team.
             with:
               python-version: '3.10'
           - name: Install dependencies
-            run: pip install -r requirements-freeze.txt
+            run: pip install --requirement requirements-freeze.txt
           - name: Login to Google Cloud
             uses: 'google-github-actions/auth@v1'
             with:
@@ -358,6 +358,12 @@ collaboration and decision-making within the team.
     +          cml comment update --target=pr --publish report.md
     ```
 
+    The updated `train-and-report` job is responsible for reporting the results of the model
+    evaluation and comparing it with the main branch. This job is triggered only
+    on pull requests. The job checks out the
+    repository, sets up DVC and CML, creates and publishes the report as a pull
+    request comment.
+
 === ":simple-gitlab: GitLab"
 
     Update the `.gitlab-ci.yml` file.
@@ -414,7 +420,7 @@ collaboration and decision-making within the team.
         # Install dependencies
         - python3 -m venv .venv
         - source .venv/bin/activate
-        - pip install -r requirements.txt
+        - pip install --requirement requirements.txt
       script:
         # Run the experiment
         - dvc repro --pull --allow-missing
@@ -591,11 +597,10 @@ collaboration and decision-making within the team.
     +      cml comment update --target=pr --publish report.md
     ```
 
-The new `report` job is responsible for reporting the results of the model
-evaluation and comparing it with the main branch. This job is triggered only
-when a pull request is opened and commits are made to it. The job checks out the
-repository, sets up DVC and CML, creates and publishes the report as a pull
-request or merge request comment.
+    The new `report` job is responsible for reporting the results of the model
+    evaluation and comparing it with the main branch. This job is triggered only
+    on merge requests. The job checks out the
+    repository, sets up DVC and CML, creates and publishes the report as a merge request comment.
 
 Take some time to understand the changes made to the file.
 
@@ -663,7 +668,8 @@ Take some time to understand the changes made to the file.
 
 ### Checkout the new branch
 
-On your machine, check out the new branch.
+On your machine, check out the new branch. Replace `<the name of the new branch>` with
+the name of the branch to checkout to.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Get the latest updates from the remote origin
@@ -678,10 +684,6 @@ git checkout <the name of the new branch>
 Similarly to what we have done in [Chapter 5: Track model evolutions with
 DVC](../../part-1-local-training-and-model-evaluation/chapter-5-track-model-evolution-with-dvc),
 we will update the experiment to see the evolution being tracked remotely by CML.
-
-If you don't have changes in your working directory, just update the parameters
-of the experiment in `params.yaml` and reproduce the experiment with `dvc
-repro`. You can then commit the changes.
 
 Update your experiment with the following parameters by editing the
 `params.yaml` file.
@@ -730,8 +732,15 @@ index 6a6ff45..4572100 100644
    output_classes: 11
 ```
 
-Here, we simply changed the `max_features` and `ngrams` parameters of the
-`featurize` stage, which should slightly affect the model's performance.
+Here, we simply changed the `lr` (learning rate), `conv_size` and `dense_size` parameters of the
+`train` stage, which should slightly affect the model's performance.
+
+Reproduce the experiment with DVC.
+
+```sh title="Execute the following command(s) in a terminal"
+# Reproduce the experiment
+dvc repro
+```
 
 ### Commit and push the experiment changes
 
@@ -756,7 +765,8 @@ Your branch is up to date with 'cml-report'.
 
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
-    modified:   params.yaml
+        modified:   dvc.lock
+        modified:   params.yaml
 ```
 
 ```sh title="Execute the following command(s) in a terminal"
@@ -775,7 +785,7 @@ git push
 === ":simple-github: GitHub"
 
     Go back to your GitHub repository. A new **Compare & pull request** button
-    should automatically appear. Click on it. Name the pull request and select
+    should automatically appear. Click on it. Name the pull request _Demonstrate model evolution tracking_ and select
     **Create pull request**.
 
     !!! info
