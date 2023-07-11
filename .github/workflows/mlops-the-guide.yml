@@ -7,7 +7,11 @@ on:
       - main
     paths:
       - .github/workflows/mlops-the-guide.yml
-      # TODO: add the paths to the parts
+      - docs/part-1-local-training-and-model-evaluation
+      - docs/part-2-move-to-the-cloud
+      - docs/part-3-serve-and-deploy-the-model
+      - docs/part-4-labeling-the-data-and-retrain
+      - scripts/the-guide
 
   # Runs on pull requests
   pull_request:
@@ -43,4 +47,4 @@ jobs:
           git config --global user.name "${GITHUB_ACTOR}"
           git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
       - name: Test by generating the chapters
-        run: poetry run python scripts/the-guide/generate_checkpoints.py
+        run: poetry run python scripts/the-guide/generate_checkpoints.py --no-save
