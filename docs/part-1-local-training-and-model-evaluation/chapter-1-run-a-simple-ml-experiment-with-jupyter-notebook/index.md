@@ -162,7 +162,7 @@ You may notice all the previous outputs from the notebook are still present. Thi
 cleared before being shared with you. This can be useful to see the results of previous runs.
 
 In most cases however, it can also be a source of confusion and clutter. This is one of the limitations of the Jupyter
-Notebook, which makme them not always easy to share with others.
+Notebook, which make them not always easy to share with others.
 
 For the time being, execute each step of the notebook to train the model and evaluate its performance.
 Previous outputs will be overwritten.
