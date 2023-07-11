@@ -1,51 +1,84 @@
-import io
-import os
-import random
-import re
+import json
 import sys
-import xml.etree.ElementTree
+from pathlib import Path
+from typing import List
 
+import matplotlib.pyplot as plt
+import tensorflow as tf
 import yaml
 
-params = yaml.safe_load(open("params.yaml"))["prepare"]
-
-if len(sys.argv) != 2:
-    sys.stderr.write("Arguments error. Usage:\n")
-    sys.stderr.write("\tpython prepare.py data-file\n")
-    sys.exit(1)
-
-# Test data set split ratio
-split = params["split"]
-random.seed(params["seed"])
-
-input = sys.argv[1]
-output_train = os.path.join("data", "prepared", "train.tsv")
-output_test = os.path.join("data", "prepared", "test.tsv")
+from utils.seed import set_seed
 
 
-def process_posts(fd_in, fd_out_train, fd_out_test, target_tag):
-    num = 1
-    for line in fd_in:
-        try:
-            fd_out = fd_out_train if random.random() > split else fd_out_test
-            attr = xml.etree.ElementTree.fromstring(line).attrib
+def get_preview_plot(ds: tf.data.Dataset, labels: List[str]) -> plt.Figure:
+    """Plot a preview of the prepared dataset"""
+    fig = plt.figure(figsize=(10, 5), tight_layout=True)
+    for images, label_idxs in ds.take(1):
+        for i in range(10):
+            plt.subplot(2, 5, i + 1)
+            plt.imshow(images[i].numpy().astype("uint8"), cmap="gray")
+            plt.title(labels[label_idxs[i].numpy()])
+            plt.axis("off")
 
-            pid = attr.get("Id", "")
-            label = 1 if target_tag in attr.get("Tags", "") else 0
-            title = re.sub(r"\s+", " ", attr.get("Title", "")).strip()
-            body = re.sub(r"\s+", " ", attr.get("Body", "")).strip()
-            text = title + " " + body
-
-            fd_out.write("{}\t{}\t{}\n".format(pid, label, text))
-
-            num += 1
-        except Exception as ex:
-            sys.stderr.write(f"Skipping the broken line {num}: {ex}\n")
+    return fig
 
 
-os.makedirs(os.path.join("data", "prepared"), exist_ok=True)
+def main() -> None:
+    if len(sys.argv) != 3:
+        print("Arguments error. Usage:\n")
+        print("\tpython3 prepare.py <raw-dataset-folder> <prepared-dataset-folder>\n")
+        exit(1)
 
-with io.open(input, encoding="utf8") as fd_in:
-    with io.open(output_train, "w", encoding="utf8") as fd_out_train:
-        with io.open(output_test, "w", encoding="utf8") as fd_out_test:
-            process_posts(fd_in, fd_out_train, fd_out_test, "<r>")
+    # Load parameters
+    prepare_params = yaml.safe_load(open("params.yaml"))["prepare"]
+
+    raw_dataset_folder = Path(sys.argv[1])
+    prepared_dataset_folder = Path(sys.argv[2])
+    seed = prepare_params["seed"]
+    split = prepare_params["split"]
+    image_size = prepare_params["image_size"]
+    grayscale = prepare_params["grayscale"]
+
+    # Set seed for reproducibility
+    set_seed(seed)
+
+    # Read data
+    ds_train, ds_test = tf.keras.utils.image_dataset_from_directory(
+        raw_dataset_folder,
+        labels="inferred",
+        label_mode="int",
+        color_mode="grayscale" if grayscale else "rgb",
+        batch_size=32,
+        image_size=image_size,
+        shuffle=True,
+        seed=seed,
+        validation_split=split,
+        subset="both",
+    )
+    labels = ds_train.class_names
+
+    if not prepared_dataset_folder.exists():
+        prepared_dataset_folder.mkdir(parents=True)
+
+    # Save the preview plot
+    preview_plot = get_preview_plot(ds_train, labels)
+    preview_plot.savefig(prepared_dataset_folder / "preview.png")
+
+    # Normalize the data
+    normalization_layer = tf.keras.layers.experimental.preprocessing.Rescaling(
+        1.0 / 255
+    )
+    ds_train = ds_train.map(lambda x, y: (normalization_layer(x), y))
+    ds_test = ds_test.map(lambda x, y: (normalization_layer(x), y))
+
+    # Save the prepared dataset
+    with open(prepared_dataset_folder / "labels.json", "w") as f:
+        json.dump(labels, f)
+    tf.data.Dataset.save(ds_train, str(prepared_dataset_folder / "train"))
+    tf.data.Dataset.save(ds_test, str(prepared_dataset_folder / "test"))
+
+    print(f"\nDataset saved at {prepared_dataset_folder.absolute()}")
+
+
+if __name__ == "__main__":
+    main()
