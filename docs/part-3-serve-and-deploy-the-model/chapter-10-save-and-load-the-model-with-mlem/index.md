@@ -86,7 +86,7 @@ working directory. This file contains the configuration of MLEM.
 
 Update the `src/train.py` file to save the model with its artifacts with MLEM.
 
-```py title="src/train.py" hl_lines="9 66-68 89-125"
+```py title="src/train.py" hl_lines="1 9 66-68 89-125"
 import json
 import sys
 from pathlib import Path

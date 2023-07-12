@@ -22,10 +22,12 @@ those described in the
 
 - A [:simple-github: GitHub](https://github.com) or a
   [:simple-gitlab: GitLab](https://gitlab.com) account
-- A [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com), a
-  [:simple-googlecloud: Google Cloud](https://cloud.google.com), a
-  [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or a
-  [:simple-rancher: Self-hosted Rancher](https://rancher.com) account
+- A cloud provider account:
+    - [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com) (coming soon)
+    - [:simple-exoscale: Exoscale](https://www.exoscale.com) (coming soon)
+    - [:simple-googlecloud: Google Cloud Platform](https://cloud.google.com)
+    - [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) (coming soon)
+    - [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) (coming soon)
 
 !!! note
 
