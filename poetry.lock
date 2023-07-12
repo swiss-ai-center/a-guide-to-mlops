@@ -929,9 +929,9 @@ develop = false
 
 [package.source]
 type = "git"
-url = "https://github.com/leonardcser/mdwrap.git"
-reference = "main"
-resolved_reference = "8e1d90bf29fc7280706ed5e003afbb21e7ffee55"
+url = "https://github.com/csia-pme/mdwrap.git"
+reference = "0.1.0"
+resolved_reference = "858562064478b693663f541339774b1cf4ff4fd7"
 
 [[package]]
 name = "mergedeep"
@@ -1905,4 +1905,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8.1,<3.12"
-content-hash = "8f2c6dc4d27551ff78b48c5e53875160b48271d9c714e4accfa581a400e695ab"
+content-hash = "3f0f081fe06ff0590ac1f0a2e40458823382203fb4898fb779a071e6dec603ec"
