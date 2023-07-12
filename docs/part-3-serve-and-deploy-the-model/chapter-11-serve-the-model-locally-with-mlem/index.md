@@ -8,9 +8,10 @@
 
 ## Introduction
 
-Now that the model is using MLEM, enabling the extraction of metadata upon saving, we will serve the
-model and leverage the capabilities of [FastAPI](https://fastapi.tiangolo.com/) to create local
-endpoints for interacting with the model.
+Now that the model is using MLEM, enabling the extraction of metadata upon
+saving, we will serve the model and leverage the capabilities of
+[FastAPI](https://fastapi.tiangolo.com/) to create local endpoints for
+interacting with the model.
 
 In this chapter, you will learn how to:
 
@@ -26,8 +27,8 @@ model.
 
 !!! info
 
-    FastAPI is only one of the available backends that MLEM can use to serve the model. Check out
-    their official documentation for more options.
+    FastAPI is only one of the available backends that MLEM can use to serve the
+    model. Check out their official documentation for more options.
 
 Serve the model with FastAPI.
 
@@ -37,12 +38,14 @@ mlem serve fastapi --model model
 ```
 
 MLEM will load the model, create the FastAPI app and start it. You can then
-access the auto-generated model documentation on <http://localhost:8080/docs>{:target="\_blank"}.
+access the auto-generated model documentation on
+<http://localhost:8080/docs>{:target="\_blank"}.
 
 !!! info
 
-    Remember the `sample_data` variable discussed in the previous chapter? This will be used by MLEM
-    to generate the FastAPI endpoints with the right OpenAPI/Swagger specifications.
+    Remember the `sample_data` variable discussed in the previous chapter? This will
+    be used by MLEM to generate the FastAPI endpoints with the right OpenAPI/Swagger
+    specifications.
 
 The following endpoint has been created:
 
@@ -55,8 +58,8 @@ Here are some request bodies you can use as examples.
 
 !!! warning
 
-    Please be aware that this model is for demonstration purposes. Some
-    inputs may be incorrectly predicted.
+    Please be aware that this model is for demonstration purposes. Some inputs may
+    be incorrectly predicted.
 
 #### Input example
 
@@ -110,20 +113,22 @@ You can now safely continue to the next chapter.
 - [x] Notebook has been transformed into scripts for production
 - [x] Codebase and dataset are versioned
 - [x] Steps used to create the model are documented and can be re-executed
-- [x] Changes done to a model can be visualized with parameters, metrics and plots to identify
-differences between iterations
+- [x] Changes done to a model can be visualized with parameters, metrics and
+      plots to identify differences between iterations
 - [x] Dataset can be shared among the developers and is placed in the right
-directory in order to run the experiment
+      directory in order to run the experiment
 - [x] Codebase can be shared and improved by multiple developers
 - [x] Experiment can be executed on a clean machine with the help of a CI/CD
-pipeline
-- [x] Changes to model can be thoroughly reviewed and discussed before integrating them into the codebase
+      pipeline
+- [x] Changes to model can be thoroughly reviewed and discussed before
+      integrating them into the codebase
 - [x] Model can be saved and loaded with all required artifacts for future usage
 - [x] Model can be easily used outside of the experiment context
 - [ ] Model cannot be deployed on and accessed from a Kubernetes cluster
 - [ ] Model cannot be trained on hardware other than the local machine
 
-You will address these issues in the next chapters for improved efficiency and collaboration. Continue the guide to learn how.
+You will address these issues in the next chapters for improved efficiency and
+collaboration. Continue the guide to learn how.
 
 ## Sources
 

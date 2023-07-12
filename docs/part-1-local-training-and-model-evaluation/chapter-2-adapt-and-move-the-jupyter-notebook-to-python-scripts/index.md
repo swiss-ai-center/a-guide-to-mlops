@@ -4,7 +4,8 @@
 
     !!! warning
 
-        It might be easier to start from the previous chapter(s). Only follow this section if you are confortable with the content of the previous chapter(s).
+        It might be easier to start from the previous chapter(s). Only follow this
+        section if you are confortable with the content of the previous chapter(s).
 
     Set up the project directory
 
@@ -46,7 +47,6 @@
     ```
 
     Set up the environment.
-
 
     ```sh title="Execute the following command(s) in a terminal"
     # Create the virtual environment
@@ -102,9 +102,11 @@ Let's get started!
 
 ### Set up a new project directory
 
-For the rest of the guide, you will work in a new directory. This will allow you to use the Jupyter Notebook directory as a reference.
+For the rest of the guide, you will work in a new directory. This will allow you
+to use the Jupyter Notebook directory as a reference.
 
-Start by ensuring you have left the virtual environment created in the previous chapter.
+Start by ensuring you have left the virtual environment created in the previous
+chapter.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Deactivate the virtual environment
@@ -126,7 +128,8 @@ cd a-guide-to-mlops
 
 ### Set up the dataset
 
-You will use the same dataset as in the previous chapter. Copy the `data` folder from the previous chapter to your new directory.
+You will use the same dataset as in the previous chapter. Copy the `data` folder
+from the previous chapter to your new directory.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Copy the data folder from the previous chapter
@@ -146,8 +149,8 @@ Firstly, create the virtual environment.
     self-contained environments for different projects, ensuring that each project
     has its own set of dependencies **without interfering** with one another.
 
-    This is particularly important when working on multiple projects with
-    different versions of libraries or packages.
+    This is particularly important when working on multiple projects with different
+    versions of libraries or packages.
 
     **How do virtual environments work?**
 
@@ -157,15 +160,14 @@ Firstly, create the virtual environment.
     interpreter and packages within the local directory.
 
     This ensures that when running Python commands, the system uses the specific
-    interpreter and packages from the virtual environment, effectively isolating
-    the project from the global Python installation.
+    interpreter and packages from the virtual environment, effectively isolating the
+    project from the global Python installation.
 
     **How to manage virtual environments?**
 
     - Create a virtual environment: `#!sh python -m venv .venv`
     - Activate the virtual environment: `#!sh source .venv/bin/activate`
     - Deactivate the virtual environment: `#!sh deactivate`
-
 
 ```sh title="Execute the following command(s) in a terminal"
 # Create the environment
@@ -196,16 +198,19 @@ Create a freeze file to list the dependencies with their versions.
 pip freeze --local --all > requirements-freeze.txt
 ```
 
-We freeze the dependencies to ensure that transitive dependencies are also listed. This will help with reproducibility.
+We freeze the dependencies to ensure that transitive dependencies are also
+listed. This will help with reproducibility.
 
-- The `--local` flag ensures that if a virtualenv has global access, it will not output globally-installed packages.
-- The `--all` flag ensures that it does not skip these packages in the output: `setuptools`, `wheel`, `pip`, `distribute`.
+- The `--local` flag ensures that if a virtualenv has global access, it will not
+  output globally-installed packages.
+- The `--all` flag ensures that it does not skip these packages in the output:
+  `setuptools`, `wheel`, `pip`, `distribute`.
 
 ### Split the Jupyter Notebook into scripts
 
-You will split the Jupyter Notebook in a codebase made of separate Python scripts with
-well defined role. These scripts will be able to be called on the command line,
-making it ideal for automation tasks.
+You will split the Jupyter Notebook in a codebase made of separate Python
+scripts with well defined role. These scripts will be able to be called on the
+command line, making it ideal for automation tasks.
 
 The following table describes the files that you will create in this codebase.
 
@@ -604,8 +609,8 @@ mkdir src/utils
 touch src/utils/__init__.py
 ```
 
-In this module, include `src/utils/seed.py` to handle the fixing of the
-seed parameters. This ensure the results are reproducible.
+In this module, include `src/utils/seed.py` to handle the fixing of the seed
+parameters. This ensure the results are reproducible.
 
 ```py title="src/utils/seed.py"
 import os
@@ -663,9 +668,9 @@ Your working directory should now look like this:
 
 ### Run the experiment
 
-Awesome! You now have everything you need to run the experiment: the codebase and
-the dataset are in place, the new virtual environment is set up, and you are ready to run the experiment using scripts for the first
-time.
+Awesome! You now have everything you need to run the experiment: the codebase
+and the dataset are in place, the new virtual environment is set up, and you are
+ready to run the experiment using scripts for the first time.
 
 You can now follow these steps to reproduce the experiment.
 
@@ -725,18 +730,18 @@ Your working directory should now be similar to this:
 Here, the following should be noted:
 
 - the `prepare.py` script created the `data/prepared` directory and divided the
-dataset into a training set and a test set
+  dataset into a training set and a test set
 - the `train.py` script created the `model` directory and trained the model with
-the prepared data.
+  the prepared data.
 - the `evaluate.py` script created the `evaluation` directory and generated some
-plots and metrics to evaluate the model
+  plots and metrics to evaluate the model
 
 Take some time to get familiar with the scripts and the results.
 
 ## Summary
 
-Congratulations! You have successfully reproduced the experiment on your machine,
-this time using a modular approach that can be put into production.
+Congratulations! You have successfully reproduced the experiment on your
+machine, this time using a modular approach that can be put into production.
 
 In this chapter, you have:
 
@@ -765,19 +770,20 @@ You can now safely continue to the next chapter.
 - [ ] Dataset requires manual download and placement
 - [ ] Codebase requires manual download and setup
 - [ ] Experiment may not be reproducible on other machines
-- [ ] Changes to model are not thoroughly reviewed and discussed before integration
-- [ ] Model may have required artifacts that are forgotten or omitted in saved/loaded state
+- [ ] Changes to model are not thoroughly reviewed and discussed before
+      integration
+- [ ] Model may have required artifacts that are forgotten or omitted in
+      saved/loaded state
 - [ ] Model cannot be easily used from outside of the experiment context
 - [ ] Model cannot be deployed on and accessed from a Kubernetes cluster
 - [ ] Model cannot be trained on hardware other than the local machine
 
-You will address these issues in the next chapters for improved efficiency and collaboration. Continue the guide to learn how.
+You will address these issues in the next chapters for improved efficiency and
+collaboration. Continue the guide to learn how.
 
 ## Sources
 
 Highly inspired by:
 
-- [_Get Started: Data Pipelines_ -
-dvc.org](https://dvc.org/doc/start/data-management/data-pipelines)
-- [_How to get stable results with TensorFlow, setting random seed_ -
-stackoverflow.com](https://stackoverflow.com/questions/36288235/how-to-get-stable-results-with-tensorflow-setting-random-seed)
+- [_Get Started: Data Pipelines_ - dvc.org](https://dvc.org/doc/start/data-management/data-pipelines)
+- [_How to get stable results with TensorFlow, setting random seed_ - stackoverflow.com](https://stackoverflow.com/questions/36288235/how-to-get-stable-results-with-tensorflow-setting-random-seed)

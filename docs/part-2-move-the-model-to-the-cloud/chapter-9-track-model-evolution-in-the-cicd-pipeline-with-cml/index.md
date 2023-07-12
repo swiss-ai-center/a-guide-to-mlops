@@ -103,9 +103,9 @@ flowchart LR
 
 !!! info
 
-    CML can do much more than just generating reports.
-    Have a look at the chapter [Train the model on a Kubernetes cluster with
-    CML](../../part-3-serve-and-deploy-the-model/chapter-13-train-the-model-on-a-kubernetes-pod-with-cml/) for more details.
+    CML can do much more than just generating reports. Have a look at the chapter
+    [Train the model on a Kubernetes cluster with CML](../../part-3-serve-and-deploy-the-model/chapter-13-train-the-model-on-a-kubernetes-pod-with-cml/)
+    for more details.
 
 ## Steps
 
@@ -118,14 +118,14 @@ Alternatively, it can be a branch, enabling a comparison between the current run
 and the run linked to the target branch.
 
 Numerous workflows facilitate discussions and the integration of work into a
-target reference. In this guide, we will focus on two  methods that are commonly
+target reference. In this guide, we will focus on two methods that are commonly
 used on GitHub - pull requests (PRs) - and GitLab - merge requests (MRs) - to
 incorporate the work performed into the `main` branch.
 
 ### Update the CI/CD pipeline configuration file
 
-We will enhance the CI/CD pipeline by adding an automated report comparing
-new parameters and new metrics to the main branch, and published as a comment.
+We will enhance the CI/CD pipeline by adding an automated report comparing new
+parameters and new metrics to the main branch, and published as a comment.
 
 These additions will enable a comprehensive analysis of branches and facilitate
 collaboration and decision-making within the team.
@@ -259,10 +259,10 @@ collaboration and decision-making within the team.
               cml comment update --target=pr --publish report.md
     ```
 
-    You may notice that the `report` job doesn't use project dependencies. As we do not need to
-    reproduce the experiment, we can install DVC using the `iterative/setup-dvc@v1`
-    GitHub action without project dependencies. DVC will then retrieve the data stored on the
-    bucket on its own.
+    You may notice that the `report` job doesn't use project dependencies. As we do
+    not need to reproduce the experiment, we can install DVC using the
+    `iterative/setup-dvc@v1` GitHub action without project dependencies. DVC will
+    then retrieve the data stored on the bucket on its own.
 
     Check the differences with Git to validate the changes.
 
@@ -358,11 +358,10 @@ collaboration and decision-making within the team.
     +          cml comment update --target=pr --publish report.md
     ```
 
-    The updated `train-and-report` job is responsible for reporting the results of the model
-    evaluation and comparing it with the main branch. This job is triggered only
-    on pull requests. The job checks out the
-    repository, sets up DVC and CML, creates and publishes the report as a pull
-    request comment.
+    The updated `train-and-report` job is responsible for reporting the results of
+    the model evaluation and comparing it with the main branch. This job is
+    triggered only on pull requests. The job checks out the repository, sets up DVC
+    and CML, creates and publishes the report as a pull request comment.
 
 === ":simple-gitlab: GitLab"
 
@@ -494,7 +493,10 @@ collaboration and decision-making within the team.
           cml comment update --target=pr --publish report.md
     ```
 
-    You may notice that the `report` stage doesn't use the project dependencies. As we do not need to reproduce the experiment, we can use DVC from the `iterativeai/cml:0-dvc3-base1` Docker image without the project dependencies. DVC will then retrieve the data stored on the bucket on its own.
+    You may notice that the `report` stage doesn't use the project dependencies. As
+    we do not need to reproduce the experiment, we can use DVC from the
+    `iterativeai/cml:0-dvc3-base1` Docker image without the project dependencies.
+    DVC will then retrieve the data stored on the bucket on its own.
 
     Check the differences with Git to validate the changes.
 
@@ -598,9 +600,9 @@ collaboration and decision-making within the team.
     ```
 
     The new `report` job is responsible for reporting the results of the model
-    evaluation and comparing it with the main branch. This job is triggered only
-    on merge requests. The job checks out the
-    repository, sets up DVC and CML, creates and publishes the report as a merge request comment.
+    evaluation and comparing it with the main branch. This job is triggered only on
+    merge requests. The job checks out the repository, sets up DVC and CML, creates
+    and publishes the report as a merge request comment.
 
 Take some time to understand the changes made to the file.
 
@@ -639,37 +641,37 @@ Take some time to understand the changes made to the file.
     Create a new issue by going to the **Issues** section from the top header of
     your GitHub repository. Select **New issue** and describe the
     work/improvements/ideas that you want to integrate to the codebase. In this
-    guide, we will name the issue _Demonstrate model evolution tracking_. Create
-    the issue by selecting **Submit new issue**.
+    guide, we will name the issue _Demonstrate model evolution tracking_. Create the
+    issue by selecting **Submit new issue**.
 
 === ":simple-gitlab: GitLab"
 
     Create a new issue by going to the **Issues** section from the left sidebar of
     your GitLab project. Select **New issue** and describe the
     work/improvements/ideas that you want to integrate to the codebase. In this
-    guide, we will name the issue _Demonstrate model evolution tracking_. Create
-    the issue by selecting **Submit new issue**.
+    guide, we will name the issue _Demonstrate model evolution tracking_. Create the
+    issue by selecting **Submit new issue**.
 
 ### Create a branch for the issue
 
 === ":simple-github: GitHub"
 
-    In the newly created issue, select **Create a branch for this issue or link a
-    pull request** from the right sidebar. Create the branch by selecting **Create
-    branch**. A new pop-up opens with the name of the branch you want to checkout
-    to.
+    In the newly created issue, select
+    **Create a branch for this issue or link a pull request** from the right
+    sidebar. Create the branch by selecting **Create branch**. A new pop-up opens
+    with the name of the branch you want to checkout to.
 
 === ":simple-gitlab: GitLab"
 
-    In the newly created issue, select **Create merge request** and change the
-    merge request configuration if needed. Create the merge request by selecting
-    **Create merge request**. This will automatically create a new branch linked
-    to the issue.
+    In the newly created issue, select **Create merge request** and change the merge
+    request configuration if needed. Create the merge request by selecting
+    **Create merge request**. This will automatically create a new branch linked to
+    the issue.
 
 ### Checkout the new branch
 
-On your machine, check out the new branch. Replace `<the name of the new branch>` with
-the name of the branch to checkout to.
+On your machine, check out the new branch. Replace
+`<the name of the new branch>` with the name of the branch to checkout to.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Get the latest updates from the remote origin
@@ -681,9 +683,10 @@ git checkout <the name of the new branch>
 
 ### Update the parameters of the experiment
 
-Similarly to what we have done in [Chapter 5: Track model evolutions with
-DVC](../../part-1-local-training-and-model-evaluation/chapter-5-track-model-evolution-with-dvc),
-we will update the experiment to see the evolution being tracked remotely by CML.
+Similarly to what we have done in
+[Chapter 5: Track model evolutions with DVC](../../part-1-local-training-and-model-evaluation/chapter-5-track-model-evolution-with-dvc),
+we will update the experiment to see the evolution being tracked remotely by
+CML.
 
 Update your experiment with the following parameters by editing the
 `params.yaml` file.
@@ -732,8 +735,9 @@ index 6a6ff45..4572100 100644
    output_classes: 11
 ```
 
-Here, we simply changed the `lr` (learning rate), `conv_size` and `dense_size` parameters of the
-`train` stage, which should slightly affect the model's performance.
+Here, we simply changed the `lr` (learning rate), `conv_size` and `dense_size`
+parameters of the `train` stage, which should slightly affect the model's
+performance.
 
 Reproduce the experiment with DVC.
 
@@ -785,8 +789,8 @@ git push
 === ":simple-github: GitHub"
 
     Go back to your GitHub repository. A new **Compare & pull request** button
-    should automatically appear. Click on it. Name the pull request _Demonstrate model evolution tracking_ and select
-    **Create pull request**.
+    should automatically appear. Click on it. Name the pull request
+    _Demonstrate model evolution tracking_ and select **Create pull request**.
 
     !!! info
 
@@ -801,9 +805,9 @@ git push
 
 === ":simple-github: GitHub"
 
-    The pull request opens and automatically starts the workflow `MLOps / train
-    (pull_request)` under the **Some checks haven’t completed yet** section. You can
-    click on **Details** to see the execution details.
+    The pull request opens and automatically starts the workflow
+    `MLOps / train (pull_request)` under the **Some checks haven’t completed yet**
+    section. You can click on **Details** to see the execution details.
 
     Explore the output and try to identify the steps that are executed.
 
@@ -813,8 +817,9 @@ git push
 
     Explore the output and try to see how the configuration file shows up in GitHub.
 
-    Once all workflows have successfully been executed, the **Some checks haven't
-    completed yet** section should become **All checks have passed**.
+    Once all workflows have successfully been executed, the
+    **Some checks haven't completed yet** section should become
+    **All checks have passed**.
 
 === ":simple-gitlab: GitLab"
 
@@ -837,8 +842,7 @@ git push
 
     When the CI/CD pipeline completes, a new comment is added to your merge request.
     Check the merge request and examine the report made by CML. As it uses the
-    evaluation data that was pulled DVC, it can uses it to display all the
-    plots.
+    evaluation data that was pulled DVC, it can uses it to display all the plots.
 
 ### Merge the pull request/merge request
 
@@ -846,8 +850,8 @@ git push
 
     Once you are satisfied with the model's performance, you can merge the changes.
 
-    Go back to the pull request. At the end of the page, select **Merge pull
-    request**. Confirm the merge by selecting **Confirm merge**.
+    Go back to the pull request. At the end of the page, select
+    **Merge pull request**. Confirm the merge by selecting **Confirm merge**.
 
     The associated issue will be automatically closed as well.
 
@@ -919,18 +923,21 @@ You can now safely continue to the next chapter.
 - [x] Notebook has been transformed into scripts for production
 - [x] Codebase and dataset are versioned
 - [x] Steps used to create the model are documented and can be re-executed
-- [x] Changes done to a model can be visualized with parameters, metrics and plots to identify
-differences between iterations
+- [x] Changes done to a model can be visualized with parameters, metrics and
+      plots to identify differences between iterations
 - [x] Dataset can be shared among the developers and is placed in the right
-directory in order to run the experiment
+      directory in order to run the experiment
 - [x] Codebase can be shared and improved by multiple developers
 - [x] Experiment can be executed on a clean machine with the help of a CI/CD
-pipeline
-- [x] Changes to model can be thoroughly reviewed and discussed before integrating them into the codebase
-- [ ] Model may have required artifacts that are forgotten or omitted in saved/loaded state
+      pipeline
+- [x] Changes to model can be thoroughly reviewed and discussed before
+      integrating them into the codebase
+- [ ] Model may have required artifacts that are forgotten or omitted in
+      saved/loaded state
 - [ ] Model cannot be easily used from outside of the experiment context
 
-You will address these issues in the next chapters for improved efficiency and collaboration. Continue the guide to learn how.
+You will address these issues in the next chapters for improved efficiency and
+collaboration. Continue the guide to learn how.
 
 ## Sources
 

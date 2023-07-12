@@ -11,9 +11,9 @@
 In the previous chapter, you did set up a DVC pipeline to reproduce your
 experiment.
 
-Once this stage is created, you will be able to change our model's configuration,
-evaluate the new configuration and compare its performance with the last
-commited ones.
+Once this stage is created, you will be able to change our model's
+configuration, evaluate the new configuration and compare its performance with
+the last commited ones.
 
 In this chapter, you will learn how to:
 
@@ -71,8 +71,8 @@ index 5bb698e..6a6ff45 100644
    output_classes: 11
 ```
 
-Here, we simply changed the `epochs` parameter of the
-`train` stage, which should slightly affect the model's performance.
+Here, we simply changed the `epochs` parameter of the `train` stage, which
+should slightly affect the model's performance.
 
 ### Reproduce the experiment
 
@@ -86,16 +86,15 @@ dvc repro
 
 ### Compare the two iterations
 
-We will now use DVC to compare your changes with the last commited ones. For DVC,
-`HEAD` refers to the last commit on the branch you are working on (at this
+We will now use DVC to compare your changes with the last commited ones. For
+DVC, `HEAD` refers to the last commit on the branch you are working on (at this
 moment, the branch `main`), and `workspace` refers to the current state of your
 working directory.
 
 !!! note
 
-    Remember? We did set the parameters, metrics and plots
-    in the previous chapter: [Chapter 4: Reproduce the ML experiment with
-    DVC](../chapter-4-reproduce-the-ml-experiment-with-dvc/index.md).
+    Remember? We did set the parameters, metrics and plots in the previous chapter:
+    [Chapter 4: Reproduce the ML experiment with DVC](../chapter-4-reproduce-the-ml-experiment-with-dvc/index.md).
 
 #### Compare the parameters difference
 
@@ -190,7 +189,8 @@ dvc_plots
 
 !!! info
 
-    If using macOS, you might want to ignore `.DS_Store` files as well to avoid pushing Apple's metadata files to your repository.
+    If using macOS, you might want to ignore `.DS_Store` files as well to avoid
+    pushing Apple's metadata files to your repository.
 
 Check the differences with Git to validate the changes.
 
@@ -253,7 +253,8 @@ This chapter is done, you can check the summary.
 
 ## Summary
 
-Congrats! You now have a simple way to compare the two iterations of your experiment.
+Congrats! You now have a simple way to compare the two iterations of your
+experiment.
 
 In this chapter, you have successfully:
 
@@ -265,7 +266,7 @@ In this chapter, you have successfully:
 You fixed some of the previous issues:
 
 - [x] The changes done to a model can be visualized with parameters, metrics and
-plots to identify differences between iterations
+      plots to identify differences between iterations
 
 You have solid metrics to evaluate the changes before integrating your work in
 the code codebase.
@@ -277,18 +278,21 @@ You can now safely continue to the next chapter.
 - [x] Notebook has been transformed into scripts for production
 - [x] Codebase and dataset are versioned
 - [x] Steps used to create the model are documented and can be re-executed
-- [x] Changes done to a model can be visualized with parameters, metrics and plots to identify
-differences between iterations
+- [x] Changes done to a model can be visualized with parameters, metrics and
+      plots to identify differences between iterations
 - [ ] Dataset requires manual download and placement
 - [ ] Codebase requires manual download and setup
 - [ ] Experiment may not be reproducible on other machines
-- [ ] Changes to model are not thoroughly reviewed and discussed before integration
-- [ ] Model may have required artifacts that are forgotten or omitted in saved/loaded state
+- [ ] Changes to model are not thoroughly reviewed and discussed before
+      integration
+- [ ] Model may have required artifacts that are forgotten or omitted in
+      saved/loaded state
 - [ ] Model cannot be easily used from outside of the experiment context
 - [ ] Model cannot be deployed on and accessed from a Kubernetes cluster
 - [ ] Model cannot be trained on hardware other than the local machine
 
-You will address these issues in the next chapters for improved efficiency and collaboration. Continue the guide to learn how.
+You will address these issues in the next chapters for improved efficiency and
+collaboration. Continue the guide to learn how.
 
 ## Sources
 
