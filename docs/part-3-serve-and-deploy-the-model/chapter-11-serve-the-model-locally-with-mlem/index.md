@@ -204,6 +204,43 @@ prediced Uranus instead!
 }
 ```
 
+### Check the changes
+
+Check the changes with Git to ensure that all the necessary files are tracked.
+
+```sh title="Execute the following command(s) in a terminal"
+# Add all the files
+git add .
+
+# Check the changes
+git status
+```
+
+The output should look like this.
+
+```
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+    modified:   requirements-freeze.txt
+    modified:   requirements.txt
+```
+
+### Commit the changes to DVC and Git
+
+Commit the changes to DVC and Git.
+
+```sh title="Execute the following command(s) in a terminal"
+# Upload the experiment data and cache to the remote bucket
+dvc push
+
+# Commit the changes
+git commit -m "MLEM can serve the model with FastAPI"
+
+# Push the changes
+git push
+```
+
 ### Check the results
 
 Congrats! You now have a model served over a REST API!
@@ -244,7 +281,7 @@ You can now safely continue to the next chapter.
       integrating them into the codebase
 - [x] Model can be saved and loaded with all required artifacts for future usage
 - [x] Model can be easily used outside of the experiment context
-- [ ] Model is not deployed on a public endpoint I can use everywhere
+- [ ] Model is not deployed on a public endpoint that can be used anywhere
 - [ ] Model cannot be trained on hardware other than the local machine
 
 You will address these issues in the next chapters for improved efficiency and

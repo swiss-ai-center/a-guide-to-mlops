@@ -30,6 +30,7 @@ those described in the
       soon)
     - [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) (coming
       soon)
+- [:simple-docker: Docker](https://www.docker.com/)
 
 !!! note
 

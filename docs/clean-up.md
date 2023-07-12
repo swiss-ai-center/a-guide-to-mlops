@@ -31,18 +31,29 @@ provider.
 
 === ":simple-googlecloud: Google Cloud"
 
+    **Delete the Kubernetes cluster**
+
+    To delete the Kubernetes cluster you created you can execute the following
+    command:
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Delete the Kubernetes cluster
+    gcloud container clusters delete --zone $GCP_CLUSTER_ZONE $GCP_CLUSTER_NAME
+    ```
+
     **Delete the Google Storage bucket**
 
     !!! warning
 
-        If you intend to keep the git repository but proceed with deleting the Google
+        If you intend to keep the Git repository but proceed with deleting the Google
         Storage bucket, the DVC remote will be disrupted. To continue using DVC with the
         Git repository, you will need to reconfigure it with a new remote.
 
     To delete the Google Storage bucket you created you can execute the following
-    command :
+    command:
 
     ```sh title="Execute the following command(s) in a terminal"
+    # Delete the Google Storage bucket
     gcloud storage rm --recursive gs://$GCP_BUCKET_NAME
     ```
 
@@ -57,10 +68,10 @@ provider.
 
     **Delete the Service Account**
 
-    To delete the service account you created you can execute the following command
-    :
+    To delete the service account you created you can execute the following command:
 
     ```sh title="Execute the following command(s) in a terminal"
+    # Delete the Service Account key
     gcloud iam service-accounts delete dvc-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com
     ```
 
@@ -79,6 +90,7 @@ provider.
     locally:
 
     ```sh title="Execute the following command(s) in a terminal"
+    # Delete the local Service Account key
     rm ~/.config/gcloud/dvc-google-service-account-key.json
     ```
 
@@ -141,6 +153,15 @@ In this section, you will delete the repository you created on GitHub or GitLab.
     4. Click on **Delete this repository**.
     5. Follow the instructions to delete the repository.
 
+    To delete the GitHub Personal Access Token you created:
+
+    1. Go to your GitHub **Settings** at the top right of the page.
+    2. Click on **Developers settings** in the left sidebar.
+    3. Click on **Personal access tokens** in the left sidebar and then on **Tokens (classic)**.
+    4. Find the Personal Access Token you created for this guide.
+    5. Click on the **Delete** button next to it.
+    6. Follow the instructions to delete the token.
+
 === ":simple-gitlab: GitLab"
 
     To delete the GitLab repository you created:
@@ -199,11 +220,12 @@ Here is a checklist of all the resources and environments you created.
 
     You can click on the list items to mark them as completed if needed.
 
+- [ ] The cloud provider Kubernetes cluster
 - [ ] The cloud provider S3 bucket
 - [ ] The cloud provider credentials
 - [ ] The cloud provider project
+- [ ] The GitHub or GitLab Personal Access Token
 - [ ] The GitHub or GitLab repository
-    - [ ] If you used GitLab, the Personal Access Token
 - [ ] The projects directories
     - [ ] The `a-guide-to-mlops-jupyter-notebook` directory
     - [ ] The `a-guide-to-mlops` directory
