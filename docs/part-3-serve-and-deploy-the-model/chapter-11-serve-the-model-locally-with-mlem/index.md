@@ -204,7 +204,6 @@ prediced Uranus instead!
 }
 ```
 
-<<<<<<< HEAD
 ### Check the changes
 
 Check the changes with Git to ensure that all the necessary files are tracked.
@@ -242,8 +241,6 @@ git commit -m "MLEM can serve the model with FastAPI"
 git push
 ```
 
-=======
->>>>>>> 52f2ee0 (Finish chapters 10 and 11 improvements)
 ### Check the results
 
 Congrats! You now have a model served over a REST API!
@@ -284,7 +281,7 @@ You can now safely continue to the next chapter.
       integrating them into the codebase
 - [x] Model can be saved and loaded with all required artifacts for future usage
 - [x] Model can be easily used outside of the experiment context
-- [ ] Model is not deployed on a public endpoint I can use everywhere
+- [ ] Model is not deployed on a public endpoint that can be used anywhere
 - [ ] Model cannot be trained on hardware other than the local machine
 
 You will address these issues in the next chapters for improved efficiency and

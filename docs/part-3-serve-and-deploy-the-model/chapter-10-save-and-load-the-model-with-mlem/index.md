@@ -625,7 +625,7 @@ You can now safely continue to the next chapter.
       integrating them into the codebase
 - [x] Model can be saved and loaded with all required artifacts for future usage
 - [ ] Model cannot be easily used from outside of the experiment context
-- [ ] Model is not deployed on a public endpoint I can use everywhere
+- [ ] Model is not deployed on a public endpoint that can be used anywhere
 - [ ] Model cannot be trained on hardware other than the local machine
 
 You will address these issues in the next chapters for improved efficiency and

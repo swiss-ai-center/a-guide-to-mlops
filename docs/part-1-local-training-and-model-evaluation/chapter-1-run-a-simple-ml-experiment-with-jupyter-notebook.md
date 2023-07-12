@@ -226,7 +226,7 @@ In the next chapters, you will enhance the workflow to fix those issues.
 - [ ] Model may have required artifacts that are forgotten or omitted in
       saved/loaded state
 - [ ] Model cannot be easily used from outside of the experiment context
-- [ ] Model is not deployed on a public endpoint I can use everywhere
+- [ ] Model is not deployed on a public endpoint that can be used anywhere
 - [ ] Model cannot be trained on hardware other than the local machine
 
 You will address these issues in the next chapters for improved efficiency and
