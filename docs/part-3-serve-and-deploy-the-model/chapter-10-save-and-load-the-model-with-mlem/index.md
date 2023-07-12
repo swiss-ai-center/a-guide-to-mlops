@@ -25,14 +25,14 @@ In this chapter, you will learn how to:
 
 ### Install MLEM
 
-Add the `mlem[fastapi]` package to install MLEM with FastAPI support.
+Add the `mlem` package to install MLEM support.
 
 ```txt title="requirements.txt" hl_lines="5"
 tensorflow==2.12.0
 matplotlib==3.7.1
 pyyaml==6.0
 dvc[gs]==3.2.2
-mlem[fastapi]==0.4.13
+mlem==0.4.13
 ```
 
 Install the package and update the freeze file.
@@ -63,7 +63,7 @@ index 8ccc2df..fcdd460 100644
  matplotlib==3.7.1
  pyyaml==6.0
  dvc[gs]==3.2.2
-+mlem[fastapi]==0.4.13
++mlem==0.4.13
 ```
 
 ### Initialize and configure MLEM.
@@ -625,7 +625,7 @@ You can now safely continue to the next chapter.
       integrating them into the codebase
 - [x] Model can be saved and loaded with all required artifacts for future usage
 - [ ] Model cannot be easily used from outside of the experiment context
-- [ ] Model cannot be deployed on and accessed from a Kubernetes cluster
+- [ ] Model is not deployed on a public endpoint I can use everywhere
 - [ ] Model cannot be trained on hardware other than the local machine
 
 You will address these issues in the next chapters for improved efficiency and
