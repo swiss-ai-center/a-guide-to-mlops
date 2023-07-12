@@ -92,9 +92,9 @@ In this chapter, you will learn how to:
 !!! danger
 
     The following steps will create resources on your cloud provider. These
-    resources will be deleted at the end of the guide, but you might be charged
-    for them. Kubernetes clusters are not free on most cloud providers and can
-    be expensive. Make sure to delete the resources at the end of the guide.
+    resources will be deleted at the end of the guide, but you might be charged for
+    them. Kubernetes clusters are not free on most cloud providers and can be
+    expensive. Make sure to delete the resources at the end of the guide.
 
 ## Steps
 
@@ -314,16 +314,16 @@ pip freeze --local --all > requirements-freeze.txt
 
 ### Deploy the model on Kubernetes with MLEM
 
-Deploy the model on Kubernetes with MLEM. This will create a Docker image,
-push it to the remote Container Registry and deploy the model on Kubernetes.
+Deploy the model on Kubernetes with MLEM. This will create a Docker image, push
+it to the remote Container Registry and deploy the model on Kubernetes.
 
 The name `celestial_bodies_classifier` is the name of the deployment. It can be
 changed to anything you want.
 
 ??? question "Having issues to deploy the model on Kubernetes?"
 
-    If you have issues to deploy the model on Kubernetes, it can be because of
-    the following reasons:
+    If you have issues to deploy the model on Kubernetes, it can be because of the
+    following reasons:
 
     - The Kubernetes cluster is not ready yet. Wait a few minutes and try again.
     - The image published on GitHub Container Registry is private. By default, the
@@ -450,7 +450,7 @@ In this chapter, you have successfully:
       integrating them into the codebase
 - [x] Model can be saved and loaded with all required artifacts for future usage
 - [x] Model can be easily used outside of the experiment context
-- [x] Model is deployed on a public endpoint that can be used anywhere
+- [x] Model is accessible from the Internet and can be used anywhere
 - [ ] Model cannot be trained on hardware other than the local machine
 
 You will address these issues in the next chapters for improved efficiency and
