@@ -157,7 +157,8 @@ In this section, you will delete the repository you created on GitHub or GitLab.
 
     1. Go to your GitHub **Settings** at the top right of the page.
     2. Click on **Developers settings** in the left sidebar.
-    3. Click on **Personal access tokens** in the left sidebar and then on **Tokens (classic)**.
+    3. Click on **Personal access tokens** in the left sidebar and then on **Tokens
+       (classic)**.
     4. Find the Personal Access Token you created for this guide.
     5. Click on the **Delete** button next to it.
     6. Follow the instructions to delete the token.

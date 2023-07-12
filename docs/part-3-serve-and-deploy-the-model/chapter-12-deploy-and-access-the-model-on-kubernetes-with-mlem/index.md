@@ -92,9 +92,9 @@ In this chapter, you will learn how to:
 !!! danger
 
     The following steps will create resources on your cloud provider. These
-    resources will be deleted at the end of the guide, but you might be charged
-    for them. Kubernetes clusters are not free on most cloud providers and can
-    be expensive. Make sure to delete the resources at the end of the guide.
+    resources will be deleted at the end of the guide, but you might be charged for
+    them. Kubernetes clusters are not free on most cloud providers and can be
+    expensive. Make sure to delete the resources at the end of the guide.
 
 ## Steps
 
@@ -208,11 +208,13 @@ kube-system       Active   25m
 
 ### Install MLEM with FastAPI and Kubernetes support
 
-Update the `requirements.txt` file to include the `mlem[fastapi,kubernetes]` package.
+Update the `requirements.txt` file to include the `mlem[fastapi,kubernetes]`
+package.
 
 !!! info
 
-    Kubernetes is only one of the available backend that MLEM can deploy to. Check out their official documentation for more options.
+    Kubernetes is only one of the available backend that MLEM can deploy to. Check
+    out their official documentation for more options.
 
 ```txt title="requirements.txt" hl_lines="5"
 tensorflow==2.12.0
@@ -256,7 +258,6 @@ pip freeze --local --all > requirements-freeze.txt
 
 ### Login to the remote Container Registry
 
-
 === ":simple-github: GitHub"
 
     A personal access token is required to push the Docker image to the GitHub
@@ -264,21 +265,26 @@ pip freeze --local --all > requirements-freeze.txt
 
     1. Go to your GitHub **Settings** at the top right of the page.
     2. Click on **Developers settings** in the left sidebar.
-    3. Click on **Personal access tokens** in the left sidebar and then on **Tokens (classic)**.
+    3. Click on **Personal access tokens** in the left sidebar and then on **Tokens
+       (classic)**.
     4. Click on **Generate new token** and then **Generate a new token (classic)**
-    5. Give the token a name (`MLEM_CONTAINER_REGISTRY` for example) and select the following scopes:
+    5. Give the token a name (`MLEM_CONTAINER_REGISTRY` for example) and select the
+       following scopes:
         - `read:packages`
         - `write:packages`
         - `delete:packages`
-    6. Save the token. It will reload the page and show the newly created token value.
+    6. Save the token. It will reload the page and show the newly created token
+       value.
 
-    Copy and export the value of the newly created token as an environment variable. Replace `<your github personal access token>` with your own token.
+    Copy and export the value of the newly created token as an environment variable.
+    Replace `<your github personal access token>` with your own token.
 
     ```sh title="Execute the following command(s) in a terminal"
     export GITHUB_PAT=<your github personal access token>
     ```
 
-    Export your GitHub username as an environment variable. Replace `<your github username>` with your own username.
+    Export your GitHub username as an environment variable. Replace
+    `<your github username>` with your own username.
 
     ```sh title="Execute the following command(s) in a terminal"
     export GITHUB_USERNAME=<your github username>
@@ -308,19 +314,25 @@ pip freeze --local --all > requirements-freeze.txt
 
 ### Deploy the model on Kubernetes with MLEM
 
-Deploy the model on Kubernetes with MLEM. This will create a Docker image,
-push it to the remote Container Registry and deploy the model on Kubernetes.
+Deploy the model on Kubernetes with MLEM. This will create a Docker image, push
+it to the remote Container Registry and deploy the model on Kubernetes.
 
 The name `celestial_bodies_classifier` is the name of the deployment. It can be
 changed to anything you want.
 
 ??? question "Having issues to deploy the model on Kubernetes?"
 
-    If you have issues to deploy the model on Kubernetes, it can be because of
-    the following reasons:
+    If you have issues to deploy the model on Kubernetes, it can be because of the
+    following reasons:
 
     - The Kubernetes cluster is not ready yet. Wait a few minutes and try again.
-    - The image published on GitHub Container Registry is private. By default, the image is private. You can make it public by going to the Packages page of your profile and changing the visibility of the image to public. TODO: Improve this section. More specificely, how can we associate the container to the GitHub project instead of the user profile using the following documentation <https://docs.github.com/en/packages/learn-github-packages/connecting-a-repository-to-a-package> ?
+    - The image published on GitHub Container Registry is private. By default, the
+      image is private. You can make it public by going to the Packages page of your
+      profile and changing the visibility of the image to public. TODO: Improve this
+      section. More specificely, how can we associate the container to the GitHub
+      project instead of the user profile using the following documentation
+      <https://docs.github.com/en/packages/learn-github-packages/connecting-a-repository-to-a-package>
+      ?
 
 ```sh title="Execute the following command(s) in a terminal"
 # Deploy the model on Kubernetes with MLEM
@@ -354,13 +366,17 @@ ghcr.io/ludelafo
 
 !!! tip
 
-    A MLEM Kubernetes deployment can be deleted with the command `mlem deploy remove <deployment name>`.
+    A MLEM Kubernetes deployment can be deleted with the command
+    `mlem deploy remove <deployment name>`.
 
-TODO: Add "This should create two files in your repository: `celestial_bodies_classifier.mlem` and `celestial_bodies_classifier.mlem.state` [...]" explanation and how to use them to redeploy the model on Kubernetes.
+TODO: Add "This should create two files in your repository:
+`celestial_bodies_classifier.mlem` and `celestial_bodies_classifier.mlem.state`
+[...]" explanation and how to use them to redeploy the model on Kubernetes.
 
 ### Access the model
 
-By default, MLEM deploys the model as a service named `ml` in the `mlem` namespace.
+By default, MLEM deploys the model as a service named `ml` in the `mlem`
+namespace.
 
 To access the model, you will need to find the external IP address of the
 service. You can do so with the following command.
@@ -434,7 +450,7 @@ In this chapter, you have successfully:
       integrating them into the codebase
 - [x] Model can be saved and loaded with all required artifacts for future usage
 - [x] Model can be easily used outside of the experiment context
-- [x] Model is deployed on a public endpoint that can be used anywhere
+- [x] Model is accessible from the Internet and can be used anywhere
 - [ ] Model cannot be trained on hardware other than the local machine
 
 You will address these issues in the next chapters for improved efficiency and
