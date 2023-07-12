@@ -6,6 +6,7 @@ on:
     paths:
       - docs/**/*
       - mkdocs.yml
+      - .github/workflows/documentation.yml
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -27,26 +28,41 @@ defaults:
     shell: bash
 
 jobs:
+  # Linting job
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install poetry
+        run: pipx install poetry
+      - uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+          cache: 'poetry'
+      - name: Install dependencies
+        run: poetry install --only dev
+      - name: Lint
+        run: poetry run mdwrap --fmt --check docs/
   # Build job
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      
+
       - uses: actions/setup-python@v4
         with:
           python-version: 3.x
-      
+
       - uses: actions/cache@v3
         with:
           key: ${{ github.ref }}
           path: .cache
-      
+
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v2
-      
+
       - name: Install Material for MkDocs dependencies
         run: |
           sudo apt install --yes \
@@ -63,11 +79,11 @@ jobs:
             mkdocs-git-revision-date-localized-plugin \
             mkdocs-glightbox \
             pillow
-      
+
       - name: Build Material for MkDocs
         run: |
           mkdocs build --site-dir public
-      
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
