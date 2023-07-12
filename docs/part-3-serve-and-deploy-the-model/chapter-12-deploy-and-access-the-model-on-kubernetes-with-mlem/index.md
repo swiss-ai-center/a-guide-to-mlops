@@ -86,8 +86,7 @@ Follow the steps below to create one.
     You must enable the Google Kubernetes Engine API to create Kubernetes clusters
     on Google Cloud.
 
-    [Enable Google Kubernetes Engine API :octicons-arrow-up-right-16:](https://console.cloud.google.com/flows/  enableapi?apiid=container.googleapis.com){
-    .md-button .md-button--primary }
+    [Enable Google Kubernetes Engine API :octicons-arrow-up-right-16:](https://console.cloud.google.com/flows/enableapi?apiid=container.googleapis.com){ .md-button .md-button--primary }
 
     **Create the Kubernetes cluster**
 
