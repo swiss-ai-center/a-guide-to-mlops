@@ -26,8 +26,10 @@ those described in the
     - [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com) (coming soon)
     - [:simple-exoscale: Exoscale](https://www.exoscale.com) (coming soon)
     - [:simple-googlecloud: Google Cloud Platform](https://cloud.google.com)
-    - [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) (coming soon)
-    - [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) (coming soon)
+    - [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) (coming
+      soon)
+    - [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) (coming
+      soon)
 
 !!! note
 

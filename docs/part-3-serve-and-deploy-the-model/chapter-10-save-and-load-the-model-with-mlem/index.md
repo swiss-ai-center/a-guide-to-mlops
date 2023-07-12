@@ -11,7 +11,9 @@
 The purpose of this chapter is to serve and use the model for usage outside of
 the experiment context with the help of [MLEM](../../tools.md). MLEM allows to
 do this by saving the model with metadata information that can be used to load
-the model for future usage.
+the model for future usage. the experiment context with the help of
+[MLEM](../../tools.md). MLEM allows to do this by saving the model with metadata
+information that can be used to load the model for future usage.
 
 In this chapter, you will learn how to:
 
@@ -84,7 +86,17 @@ working directory. This file contains the configuration of MLEM.
 
 #### Update `src/train.py`
 
-Update the `src/train.py` file to save the model with its artifacts with MLEM.
+Update the `src/train.py` file to save the model with MLEM.
+
+!!! info
+
+    MLEM can save model artifacts as well such as TFIDF vectorizer, etc.
+
+    When loading a model using MLEM, it will automatically load the artifacts if
+    they are present, so you don't have to worry about it.
+
+    This is not covered in this guide as the model does not use any artifacts but
+    can be really useful in some cases.
 
 ```py title="src/train.py" hl_lines="1 9 66-68 89-125"
 import json
@@ -223,7 +235,20 @@ if __name__ == "__main__":
     main()
 ```
 
-TODO: explain the changes and why we save the model with MLEM.
+MLEM can save the model with a preprocessing, postprocessing and sample_data
+functions.
+
+These functions are used to save the model with the necessary information to
+load it later.
+
+- `preprocess` is used to preprocess the input data before feeding it to the
+  model.
+- `postprocess` is used to postprocess the output of the model.
+- `sample_data` is used to save a sample of data that can be used to test the
+  model after loading it.
+
+These functions will be used later to generate the API documentation and to test
+the model through the REST API.
 
 Check the differences with Git to better understand the changes.
 
