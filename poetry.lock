@@ -919,7 +919,7 @@ python-dateutil = ">=2.7"
 
 [[package]]
 name = "mdwrap"
-version = "0.1.0"
+version = "0.1.1"
 description = "A python based markdown line wrapper"
 category = "dev"
 optional = false
@@ -930,8 +930,8 @@ develop = false
 [package.source]
 type = "git"
 url = "https://github.com/csia-pme/mdwrap.git"
-reference = "0.1.0"
-resolved_reference = "858562064478b693663f541339774b1cf4ff4fd7"
+reference = "0.1.1"
+resolved_reference = "3e0ac0f01a62aa6e53b6faf943e6bbc6f8d4c94c"
 
 [[package]]
 name = "mergedeep"
@@ -1905,4 +1905,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8.1,<3.12"
-content-hash = "3f0f081fe06ff0590ac1f0a2e40458823382203fb4898fb779a071e6dec603ec"
+content-hash = "d28c57e001c5d5fd2c47a467ea0be4a760ece88bc65440e22f25739149fcee91"
