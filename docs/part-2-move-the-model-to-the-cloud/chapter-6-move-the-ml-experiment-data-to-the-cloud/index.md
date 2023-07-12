@@ -8,12 +8,12 @@
 
 ## Introduction
 
-Now that we have configured DVC and can reproduce the experiment, let's set up
-a remote repository for sharing the data with the team.
+Now that we have configured DVC and can reproduce the experiment, let's set up a
+remote repository for sharing the data with the team.
 
 Similarly to other version control system, DVC allows for storing the dataset in
-a remote storage, typically a cloud storage provider, ensuring effective tracking
-of modifications and smooth maintenance workflow.
+a remote storage, typically a cloud storage provider, ensuring effective
+tracking of modifications and smooth maintenance workflow.
 
 This guide will demonstrate the use of a remote Storage Bucket for storing the
 dataset.
@@ -95,9 +95,10 @@ Create a project on a cloud provider to host the data.
 
 === ":simple-googlecloud: Google Cloud"
 
-    Create a Google Cloud Project by going to the [Google Cloud
-    console](https://console.cloud.google.com/), select **Select a project** in the
-    upper left corner of the screen and select **New project**.
+    Create a Google Cloud Project by going to the
+    [Google Cloud console](https://console.cloud.google.com/), select
+    **Select a project** in the upper left corner of the screen and select
+    **New project**.
 
     Name your project and select **Create** to create the project.
 
@@ -139,8 +140,8 @@ Install and configure the cloud provider CLI tool to manage the cloud resources.
 
 === ":simple-googlecloud: Google Cloud"
 
-    To install `gcloud`, follow the official documentation: [_Install the Google
-    Cloud CLI_ - cloud.google.com](https://cloud.google.com/sdk/docs/install-sdk)
+    To install `gcloud`, follow the official documentation:
+    [_Install the Google Cloud CLI_ - cloud.google.com](https://cloud.google.com/sdk/docs/install-sdk)
 
     **Initialize and configure the Google Cloud CLI**
 
@@ -166,7 +167,8 @@ Install and configure the cloud provider CLI tool to manage the cloud resources.
     gcloud config set project $GCP_PROJECT_ID
     ```
 
-    Then run the following command to authenticate to Google Cloud with the Application Default.
+    Then run the following command to authenticate to Google Cloud with the
+    Application Default.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Set authentication for our ML experiment
@@ -189,7 +191,9 @@ Create the Storage Bucket to store the data with the cloud provider CLI.
 
 !!! info
 
-    On most cloud providers, the project must be linked to an active billing account to be able to create the bucket. You must set up a valid billing account for your cloud provider.
+    On most cloud providers, the project must be linked to an active billing account
+    to be able to create the bucket. You must set up a valid billing account for
+    your cloud provider.
 
 === ":simple-amazonaws: Amazon Web Services"
 
@@ -201,19 +205,26 @@ Create the Storage Bucket to store the data with the cloud provider CLI.
 
 === ":simple-googlecloud: Google Cloud"
 
-    Create the Google Storage Bucket to store the data with the Google Cloud CLI. You should ideally select a location close to where most of the expected traffic will come from. You can view the available regions at [Cloud locations](https://cloud.google.com/about/locations).
+    Create the Google Storage Bucket to store the data with the Google Cloud CLI.
+    You should ideally select a location close to where most of the expected traffic
+    will come from. You can view the available regions at
+    [Cloud locations](https://cloud.google.com/about/locations).
 
-    Export the bucket name as an environment variable. Replace `<my bucket name>` with your own bucket name (ex: `mlopsdemo`).
+    Export the bucket name as an environment variable. Replace `<my bucket name>`
+    with your own bucket name (ex: `mlopsdemo`).
 
     !!! warning
 
-        The bucket name must be unique across all Google Cloud projects and users. Change the `<my bucket name>` to your own bucket name.
+        The bucket name must be unique across all Google Cloud projects and users.
+        Change the `<my bucket name>` to your own bucket name.
 
     ```sh title="Execute the following command(s) in a terminal"
     export GCP_BUCKET_NAME=<my bucket name>
     ```
 
-    Export the bucket region as an environment variable. Replace `<my bucket region>` with your own zone. For example, use `EUROPE-WEST6` for Switzerland.
+    Export the bucket region as an environment variable. Replace
+    `<my bucket region>` with your own zone. For example, use `EUROPE-WEST6` for
+    Switzerland.
 
     ```sh title="Execute the following command(s) in a terminal"
     export GCP_BUCKET_REGION=<my bucket region>
@@ -252,7 +263,8 @@ Install the DVC Storage plugin for the chosen cloud provider.
 
 === ":simple-googlecloud: Google Cloud"
 
-    Here, the `dvc[gs]` package enables support for Google Cloud Storage. Update the `requirements.txt` file.
+    Here, the `dvc[gs]` package enables support for Google Cloud Storage. Update the
+    `requirements.txt` file.
 
     ```txt title="requirements.txt" hl_lines="4"
     tensorflow==2.12.0
@@ -315,7 +327,8 @@ Configure DVC to use the Storage Bucket on the chosen cloud provider.
 
 === ":simple-googlecloud: Google Cloud"
 
-    Configure DVC to use a Google Storage remote bucket. The `dvcstore` is a user-defined path on the bucket. You can change it if needed.
+    Configure DVC to use a Google Storage remote bucket. The `dvcstore` is a
+    user-defined path on the bucket. You can change it if needed.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Add the Google Storage remote bucket
@@ -375,7 +388,8 @@ git commit -m "My ML experiment data is shared with DVC"
 
 ### Check the results
 
-Open the Bucket Storage on the cloud provider and check that the data files have been uploaded.
+Open the Bucket Storage on the cloud provider and check that the data files have
+been uploaded.
 
 [//]: # "TODO: Add explanation on how to check the files on the cloud provider, the difference between the data and the cache, and how to download the data from the cloud provider."
 
@@ -406,8 +420,8 @@ experiment data from DVC with the following command.
 dvc pull
 ```
 
-With the help of DVC, they can also easily reproduce your experiment and,
-thanks to caching, only the required steps will be executed.
+With the help of DVC, they can also easily reproduce your experiment and, thanks
+to caching, only the required steps will be executed.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Execute the pipeline
@@ -421,19 +435,22 @@ You can now safely continue to the next chapter.
 - [x] Notebook has been transformed into scripts for production
 - [x] Codebase and dataset are versioned
 - [x] Steps used to create the model are documented and can be re-executed
-- [x] Changes done to a model can be visualized with parameters, metrics and plots to identify
-differences between iterations
+- [x] Changes done to a model can be visualized with parameters, metrics and
+      plots to identify differences between iterations
 - [x] Dataset can be shared among the developers and is placed in the right
-directory in order to run the experiment
+      directory in order to run the experiment
 - [ ] Codebase requires manual download and setup
 - [ ] Experiment may not be reproducible on other machines
-- [ ] Changes to model are not thoroughly reviewed and discussed before integration
-- [ ] Model may have required artifacts that are forgotten or omitted in saved/loaded state
+- [ ] Changes to model are not thoroughly reviewed and discussed before
+      integration
+- [ ] Model may have required artifacts that are forgotten or omitted in
+      saved/loaded state
 - [ ] Model cannot be easily used from outside of the experiment context
 - [ ] Model cannot be deployed on and accessed from a Kubernetes cluster
 - [ ] Model cannot be trained on hardware other than the local machine
 
-You will address these issues in the next chapters for improved efficiency and collaboration. Continue the guide to learn how.
+You will address these issues in the next chapters for improved efficiency and
+collaboration. Continue the guide to learn how.
 
 ## Sources
 

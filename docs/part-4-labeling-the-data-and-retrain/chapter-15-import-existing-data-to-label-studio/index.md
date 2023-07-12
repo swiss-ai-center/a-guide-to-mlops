@@ -8,4 +8,5 @@
 
 !!! warning "This is a work in progress"
 
-    This chapter is a work in progress. Please check back later for updates. Thank you!
+    This chapter is a work in progress. Please check back later for updates. Thank
+    you!

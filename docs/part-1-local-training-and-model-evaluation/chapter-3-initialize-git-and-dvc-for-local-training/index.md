@@ -16,19 +16,18 @@ However, when it comes to managing large files, Git has some limitations.
 Although Git LFS is an option for handling large files in Git repositories, it
 may not be the most efficient solution.
 
-This is the reason we will use [DVC](../../tools#dvc),
-a version control system specifically designed for efficient data management
-that seamlessly integrates with Git. DVC utilizes chunking to efficiently store
-large files and track their changes.
+This is the reason we will use [DVC](../../tools#dvc), a version control system
+specifically designed for efficient data management that seamlessly integrates
+with Git. DVC utilizes chunking to efficiently store large files and track their
+changes.
 
 In this chapter, you will learn how to:
 
-1. Set up a new [Git](../../tools#git)
-repository
+1. Set up a new [Git](../../tools#git) repository
 2. Initialize Git in your project directory
 3. Verify Git tracking for your files
 4. Exclude experiment results, data, models and Python environment files from
-Git commits
+   Git commits
 5. Commit your changes to the Git repository
 6. Install DVC
 7. Initialize and configure DVC
@@ -146,7 +145,8 @@ __pycache__/
 
 !!! info
 
-    If using macOS, you might want to ignore `.DS_Store` files as well to avoid pushing Apple's metadata files to your repository.
+    If using macOS, you might want to ignore `.DS_Store` files as well to avoid
+    pushing Apple's metadata files to your repository.
 
 #### Check the changes
 
@@ -263,8 +263,8 @@ ERROR: bad DVC file name 'data/data.raw.dvc' is git-ignored.
 ```
 
 You will have to update the `.gitignore` file so that DVC can create files in
-the `data` directory. However, you still don't want the directories
-`data/raw` and `data/prepared` to be added to Git.
+the `data` directory. However, you still don't want the directories `data/raw`
+and `data/prepared` to be added to Git.
 
 Update the `.gitignore` file by changing `data/` to `data/raw/` and
 `data/prepared/`.
@@ -289,7 +289,8 @@ __pycache__/
 
 !!! info
 
-    If using macOS, you might want to ignore `.DS_Store` files as well to avoid pushing Apple's metadata files to your repository.
+    If using macOS, you might want to ignore `.DS_Store` files as well to avoid
+    pushing Apple's metadata files to your repository.
 
 Check the differences with Git to validate the changes.
 
@@ -340,8 +341,8 @@ used by DVC to download and check the integrity of the files. The `.gitignore`
 file is created to add the files in `data/raw` to be ignored by Git. The `.dvc`
 files must be added to Git.
 
-Various DVC commands will automatically try to update the `.gitignore` files. If a
-`.gitignore` file is already present, it will be updated to include the newly
+Various DVC commands will automatically try to update the `.gitignore` files. If
+a `.gitignore` file is already present, it will be updated to include the newly
 ignored files. You might need to update existing `.gitignore` files accordingly.
 
 #### Check the changes
@@ -394,7 +395,8 @@ In this chapter, you have successfully:
 1. Set up a new Git repository
 2. Initialized Git in your project directory
 3. Verified Git tracking for your files
-4. Excluded experiment results, data, models and Python environment files from Git commits
+4. Excluded experiment results, data, models and Python environment files from
+   Git commits
 4. Commited your changes to the Git repository
 5. Installed DVC
 6. Initialized DVC
@@ -418,13 +420,16 @@ You can now safely continue to the next chapter.
 - [ ] Dataset requires manual download and placement
 - [ ] Codebase requires manual download and setup
 - [ ] Experiment may not be reproducible on other machines
-- [ ] Changes to model are not thoroughly reviewed and discussed before integration
-- [ ] Model may have required artifacts that are forgotten or omitted in saved/loaded state
+- [ ] Changes to model are not thoroughly reviewed and discussed before
+      integration
+- [ ] Model may have required artifacts that are forgotten or omitted in
+      saved/loaded state
 - [ ] Model cannot be easily used from outside of the experiment context
 - [ ] Model cannot be deployed on and accessed from a Kubernetes cluster
 - [ ] Model cannot be trained on hardware other than the local machine
 
-You will address these issues in the next chapters for improved efficiency and collaboration. Continue the guide to learn how.
+You will address these issues in the next chapters for improved efficiency and
+collaboration. Continue the guide to learn how.
 
 ## Sources
 

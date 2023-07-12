@@ -15,9 +15,9 @@ have changed. This way, we don't have to waste time re-running unnecessary
 steps.
 
 By using DVC stages to create a pipeline, we can execute all of our experiment's
-steps in a streamlined manner by simply running the `dvc repro` command.
-As a result, DVC makes it easy to reproduce the experiment and track the effects
-of changes.
+steps in a streamlined manner by simply running the `dvc repro` command. As a
+result, DVC makes it easy to reproduce the experiment and track the effects of
+changes.
 
 In this chapter, you will learn how to:
 
@@ -105,7 +105,8 @@ __pycache__/
 
 !!! info
 
-    If using macOS, you might want to ignore `.DS_Store` files as well to avoid pushing Apple's metadata files to your repository.
+    If using macOS, you might want to ignore `.DS_Store` files as well to avoid
+    pushing Apple's metadata files to your repository.
 
 Check the differences with Git to validate the changes.
 
@@ -145,33 +146,37 @@ index 442ea27..2492093 100644
 
 ### Setup the DVC pipeline stages
 
-A DVC pipeline is a set of stages that are executed in a specific order based on the
-dependencies between the stages (deps and outs). The `dvc repro` command
+A DVC pipeline is a set of stages that are executed in a specific order based on
+the dependencies between the stages (deps and outs). The `dvc repro` command
 executes the pipeline to reproduce the experiment.
 
-In the following sections, each step of the experiment will be converted into a stage of a DVC pipeline.
-The `dvc stage add` command creates a new stage in the pipeline.
-This stage will be added to the `dvc.yaml` file that describes the pipeline.
-This file can also be edited manually.
+In the following sections, each step of the experiment will be converted into a
+stage of a DVC pipeline. The `dvc stage add` command creates a new stage in the
+pipeline. This stage will be added to the `dvc.yaml` file that describes the
+pipeline. This file can also be edited manually.
 
 The `dvc stage add` accepts some options:
 
 - `-n` specifies the name of the stage
-- `-p` specifies the parameters of the stage (referenced in the `params.yaml` file)
+- `-p` specifies the parameters of the stage (referenced in the `params.yaml`
+  file)
 - `-d` specifies the dependencies of the stage
 - `-o` specifies the outputs of the stage (cached by DVC)
 - `--metrics` specifies the metrics of the stage (cached by DVC)
 - `--plots` specifies the plots of the stage (cached by DVC)
 
-As parameters are an important part of the experiment, they are versioned in a `params.yaml` file.
-DVC keeps track of these parameters and of the corresponding results.
+As parameters are an important part of the experiment, they are versioned in a
+`params.yaml` file. DVC keeps track of these parameters and of the corresponding
+results.
 
-Dependencies and outputs are files or directories that are used or produced by the stage.
-If any of these files change, DVC will re-run the command of the stage when using `dvc repro`.
+Dependencies and outputs are files or directories that are used or produced by
+the stage. If any of these files change, DVC will re-run the command of the
+stage when using `dvc repro`.
 
 #### `prepare` stage
 
-Run the following command to add a new stage called _prepare_ that prepares the dataset.
+Run the following command to add a new stage called _prepare_ that prepares the
+dataset.
 
 ```sh title="Execute the following command(s) in a terminal"
 dvc stage add -n prepare \
@@ -181,19 +186,22 @@ dvc stage add -n prepare \
     python src/prepare.py data/raw data/prepared
 ```
 
-The values of the parameters is `prepare` which includes all the `prepare` parameters referenced in the `params.yaml` file.
+The values of the parameters is `prepare` which includes all the `prepare`
+parameters referenced in the `params.yaml` file.
 
-This stage has the `src/prepare.py`, the `src/utils/seed.py` and `data/raw` files as dependencies.
-If any of these files change, DVC will run the command
+This stage has the `src/prepare.py`, the `src/utils/seed.py` and `data/raw`
+files as dependencies. If any of these files change, DVC will run the command
 `python src/prepare.py data/raw data/prepared` when using `dvc repro`.
 
 The output of this command is stored in the `data/prepared` directory.
 
-Take some time to explore the `dvc.yaml` file and to understand how the pipeline is updated.
+Take some time to explore the `dvc.yaml` file and to understand how the pipeline
+is updated.
 
 #### `train` stage
 
-Run the following command to create a new stage called _train_ that trains the model.
+Run the following command to create a new stage called _train_ that trains the
+model.
 
 ```sh title="Execute the following command(s) in a terminal"
 dvc stage add -n train \
@@ -203,10 +211,11 @@ dvc stage add -n train \
     python src/train.py data/prepared model
 ```
 
-The values of the parameters is `train` which includes all the `train` parameters referenced in the `params.yaml` file.
+The values of the parameters is `train` which includes all the `train`
+parameters referenced in the `params.yaml` file.
 
-This stage has the `src/train.py`, the `src/utils/seed.py` and `data/prepared` files as dependencies.
-If any of these files change, DVC will run the command
+This stage has the `src/train.py`, the `src/utils/seed.py` and `data/prepared`
+files as dependencies. If any of these files change, DVC will run the command
 `python src/evaluate.py data/prepared model` when using `dvc repro`.
 
 The output of this command is stored in the `model` directory.
@@ -215,7 +224,8 @@ Explore the `dvc.yaml` file to understand how the pipeline is updated.
 
 #### `evaluate` stage
 
-Run the following command to create a new stage called _evaluate_ that evaluates the model.
+Run the following command to create a new stage called _evaluate_ that evaluates
+the model.
 
 ```sh title="Execute the following command(s) in a terminal"
 dvc stage add -n evaluate \
@@ -227,24 +237,24 @@ dvc stage add -n evaluate \
     python src/evaluate.py model data/prepared
 ```
 
-This stage has the `src/evaluate.py` file and then `model` folder as dependencies.
-If any of these files change, DVC will run the command
+This stage has the `src/evaluate.py` file and then `model` folder as
+dependencies. If any of these files change, DVC will run the command
 `python src/evaluate.py model data/prepared` when using `dvc repro`.
 
-The script writes the model's metrics to `evaluation/metrics.json`,
-the `confusion_matrix` to `evaluation/plots/confusion_matrix.png`, the
-`pred_preview` to `evaluation/plots/pred_preview.png` and the `training_history.png` to
-`evaluation/plots/training_history.png`.
+The script writes the model's metrics to `evaluation/metrics.json`, the
+`confusion_matrix` to `evaluation/plots/confusion_matrix.png`, the
+`pred_preview` to `evaluation/plots/pred_preview.png` and the
+`training_history.png` to `evaluation/plots/training_history.png`.
 
 Explore the `dvc.yaml` file to understand how the pipeline is updated.
 
 #### Summary of the DVC pipeline
 
-The pipeline is now entirely defined. You can explore the `dvc.yaml` file to
-see all the stages and their dependencies.
+The pipeline is now entirely defined. You can explore the `dvc.yaml` file to see
+all the stages and their dependencies.
 
-Notice that DVC also updated the main `.gitignore` file with the model, as it is an output of the
-`train` stage.
+Notice that DVC also updated the main `.gitignore` file with the model, as it is
+an output of the `train` stage.
 
 ```sh title=".gitignore" hl_lines="10"
 ## Python
@@ -261,7 +271,8 @@ __pycache__/
 
 !!! info
 
-    If using macOS, you might want to ignore `.DS_Store` files as well to avoid pushing Apple's metadata files to your repository.
+    If using macOS, you might want to ignore `.DS_Store` files as well to avoid
+    pushing Apple's metadata files to your repository.
 
 ### Visualize the pipeline
 
@@ -300,7 +311,8 @@ If any dependencies/outputs change, the affected stages will be re-executed.
 
 ### Execute the pipeline
 
-Now that the pipeline has been defined, you can execute it and reproduce the experiment.
+Now that the pipeline has been defined, you can execute it and reproduce the
+experiment.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Execute only the required pipeline stages
@@ -399,13 +411,16 @@ You can now safely continue to the next chapter.
 - [ ] Dataset requires manual download and placement
 - [ ] Codebase requires manual download and setup
 - [ ] Experiment may not be reproducible on other machines
-- [ ] Changes to model are not thoroughly reviewed and discussed before integration
-- [ ] Model may have required artifacts that are forgotten or omitted in saved/loaded state
+- [ ] Changes to model are not thoroughly reviewed and discussed before
+      integration
+- [ ] Model may have required artifacts that are forgotten or omitted in
+      saved/loaded state
 - [ ] Model cannot be easily used from outside of the experiment context
 - [ ] Model cannot be deployed on and accessed from a Kubernetes cluster
 - [ ] Model cannot be trained on hardware other than the local machine
 
-You will address these issues in the next chapters for improved efficiency and collaboration. Continue the guide to learn how.
+You will address these issues in the next chapters for improved efficiency and
+collaboration. Continue the guide to learn how.
 
 ## Sources
 

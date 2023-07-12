@@ -1,8 +1,8 @@
 # Clean up
 
-Now that you have completed the guide, it is crucial to properly manage and remove
-the resources and environments you have created. This is necessary to avoid
-unnecessary incurring costs and potential security concerns.
+Now that you have completed the guide, it is crucial to properly manage and
+remove the resources and environments you have created. This is necessary to
+avoid unnecessary incurring costs and potential security concerns.
 
 Here's a step-by-step guide to help you do that.
 
@@ -12,13 +12,14 @@ Here's a step-by-step guide to help you do that.
 
 !!! warning
 
-    If you are using a new cloud account such as Google Cloud, make sure to delete the resources
-    you created before the credits are consumed. Otherwise, **you will be charged**
-    for the resources you created.
+    If you are using a new cloud account such as Google Cloud, make sure to delete
+    the resources you created before the credits are consumed. Otherwise,
+    **you will be charged** for the resources you created.
 
 ### Clean up cloud provider resources
 
-In this section, you will delete the resources you created on your cloud provider.
+In this section, you will delete the resources you created on your cloud
+provider.
 
 === ":simple-amazonaws: Amazon Web Services"
 
@@ -34,9 +35,12 @@ In this section, you will delete the resources you created on your cloud provide
 
     !!! warning
 
-        If you intend to keep the git repository but proceed with deleting the Google Storage bucket, the DVC remote will be disrupted. To continue using DVC with the Git repository, you will need to reconfigure it with a new remote.
+        If you intend to keep the git repository but proceed with deleting the Google
+        Storage bucket, the DVC remote will be disrupted. To continue using DVC with the
+        Git repository, you will need to reconfigure it with a new remote.
 
-    To delete the Google Storage bucket you created you can execute the following command :
+    To delete the Google Storage bucket you created you can execute the following
+    command :
 
     ```sh title="Execute the following command(s) in a terminal"
     gcloud storage rm --recursive gs://$GCP_BUCKET_NAME
@@ -44,7 +48,8 @@ In this section, you will delete the resources you created on your cloud provide
 
     Alternatively, you can delete the bucket from the Google Cloud Console:
 
-    1. Go to the [Google Cloud Storage Console](https://console.cloud.google.com/storage){:target="\_blank"}.
+    1. Go to the
+       [Google Cloud Storage Console](https://console.cloud.google.com/storage){:target="\_blank"}.
     2. Make sure you selected the correct project.
     3. Select the bucket you want to delete from the bucket list.
     4. Click on **Delete** at the top of the page.
@@ -52,7 +57,8 @@ In this section, you will delete the resources you created on your cloud provide
 
     **Delete the Service Account**
 
-    To delete the service account you created you can execute the following command :
+    To delete the service account you created you can execute the following command
+    :
 
     ```sh title="Execute the following command(s) in a terminal"
     gcloud iam service-accounts delete dvc-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com
@@ -60,7 +66,8 @@ In this section, you will delete the resources you created on your cloud provide
 
     Alternatively, you can delete the service account from the Google Cloud Console:
 
-    1. Go to the [Google Cloud IAM Console](https://console.cloud.google.com/iam-admin/serviceaccounts){:target="\_blank"}.
+    1. Go to the
+       [Google Cloud IAM Console](https://console.cloud.google.com/iam-admin/serviceaccounts){:target="\_blank"}.
     2. Make sure you selected the correct project.
     3. Select the service account you want to delete from the service account list.
     4. Click on **Delete** at the top of the page.
@@ -68,7 +75,8 @@ In this section, you will delete the resources you created on your cloud provide
 
     **Delete the local Service Account key**
 
-    You can run the following command to delete the service account key you created locally:
+    You can run the following command to delete the service account key you created
+    locally:
 
     ```sh title="Execute the following command(s) in a terminal"
     rm ~/.config/gcloud/dvc-google-service-account-key.json
@@ -78,7 +86,8 @@ In this section, you will delete the resources you created on your cloud provide
 
     To delete the Google Cloud project you created:
 
-    1. Go to the [Google Cloud Resource Manager Console](https://console.cloud.google.com/cloud-resource-manager){:target="\_blank"}.
+    1. Go to the
+       [Google Cloud Resource Manager Console](https://console.cloud.google.com/cloud-resource-manager){:target="\_blank"}.
     2. Select the project you created.
     3. Click on **Delete** at the top of the page.
     4. Follow the instructions to shut down the project.
@@ -111,7 +120,8 @@ In this section, you will delete the repository you created on GitHub or GitLab.
 
     1. Go to the repository page in GitLab.
     2. Click on the **Settings** button on the left side of the page.
-    3. Scroll down to the "Advanced" section at the bottom of the page and click on "Expand".
+    3. Scroll down to the "Advanced" section at the bottom of the page and click on
+       "Expand".
     4. Scroll down to "Delete this project".
     5. Click on the **Delete project** button.
     6. Follow the instructions to delete the repository.
@@ -126,9 +136,11 @@ In this section, you will delete the repository you created on GitHub or GitLab.
 
 ### Clean up your local environment
 
-In this section, you will delete the local environment you created for this guide.
+In this section, you will delete the local environment you created for this
+guide.
 
-Start by ensuring you have left the virtual environment created in the previous chapter.
+Start by ensuring you have left the virtual environment created in the previous
+chapter.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Deactivate the virtual environment
@@ -150,7 +162,9 @@ rm -rf a-guide-to-mlops
 
 ### Double-check everything
 
-Before you finish, double-check that you have deleted all the resources and environments you created. This will ensure that you don't incur unexpected costs or leave any security vulnerabilities.
+Before you finish, double-check that you have deleted all the resources and
+environments you created. This will ensure that you don't incur unexpected costs
+or leave any security vulnerabilities.
 
 Here is a checklist of all the resources and environments you created.
 
@@ -169,4 +183,7 @@ Here is a checklist of all the resources and environments you created.
 
 ### Summary
 
-By following these steps, you have successfully cleaned up the resources and environments you created during the guide. We hope you found this guide helpful and that it has given you a good understanding of the importance of cleaning up after yourself in cloud computing environments.
+By following these steps, you have successfully cleaned up the resources and
+environments you created during the guide. We hope you found this guide helpful
+and that it has given you a good understanding of the importance of cleaning up
+after yourself in cloud computing environments.

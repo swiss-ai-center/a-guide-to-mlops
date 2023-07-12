@@ -8,8 +8,8 @@
 
 ## Introduction
 
-At this point, your code, your data and your execution process should be
-shared with Git and DVC.
+At this point, your code, your data and your execution process should be shared
+with Git and DVC.
 
 Now, it's time to enhance your workflow further by incorporating a CI/CD
 (Continuous Integration/Continuous Deployment) pipeline. This addition will
@@ -95,7 +95,8 @@ flowchart LR
 
 ### Set up access to the S3 bucket of your cloud provider
 
-DVC will need to log in to the S3 bucket of your cloud provider to download the data inside the CI/CD pipeline.
+DVC will need to log in to the S3 bucket of your cloud provider to download the
+data inside the CI/CD pipeline.
 
 === ":simple-amazonaws: Amazon Web Services"
 
@@ -119,8 +120,8 @@ DVC will need to log in to the S3 bucket of your cloud provider to download the 
 
     !!! danger
 
-        You must **never** add and commit this file to your working directory.
-        It is a sensitive data that you must keep safe.
+        You must **never** add and commit this file to your working directory. It is a
+        sensitive data that you must keep safe.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Create the Google Service Account
@@ -139,8 +140,8 @@ DVC will need to log in to the S3 bucket of your cloud provider to download the 
 
     !!! info
 
-        The path `~/.config/gcloud` should be created when installing `gcloud`. If
-        it does not exist, you can create it by running `mkdir -p ~/.config/gcloud`
+        The path `~/.config/gcloud` should be created when installing `gcloud`. If it
+        does not exist, you can create it by running `mkdir -p ~/.config/gcloud`
 
 === ":simple-microsoftazure: Microsoft Azure"
 
@@ -190,7 +191,8 @@ Depending on the CI/CD platform you are using, the process will be different.
 
         !!! tip
 
-            If on Linux, you can use the command `base64 -w 0 -i ~/.config/gcloud/  dvc-google-service-account-key.json`.
+            If on Linux, you can use the command
+            `base64 -w 0 -i ~/.config/gcloud/  dvc-google-service-account-key.json`.
 
         ```sh title="Execute the following command(s) in a terminal"
         # Encode the Google Service Account key to base64
@@ -212,13 +214,13 @@ Depending on the CI/CD platform you are using, the process will be different.
 
     === ":simple-gitlab: GitLab"
 
-        Store the output as a CI/CD Variable by going to **Settings > CI/CD** from
-        the left sidebar of your GitLab project.
+        Store the output as a CI/CD Variable by going to **Settings > CI/CD** from the
+        left sidebar of your GitLab project.
 
         Select **Variables** and select **Add variable**.
 
-        Create a new variable named `GCP_SERVICE_ACCOUNT_KEY` with
-        the Google Service Account key file encoded in `base64` as its value.
+        Create a new variable named `GCP_SERVICE_ACCOUNT_KEY` with the Google Service
+        Account key file encoded in `base64` as its value.
 
         - **Protect variable**: _Unchecked_
         - **Mask variable**: _Checked_
@@ -238,8 +240,8 @@ Depending on the CI/CD platform you are using, the process will be different.
 
 === ":simple-github: GitHub"
 
-    At the root level of your Git repository, create a GitHub Workflow
-    configuration file `.github/workflows/mlops.yml`.
+    At the root level of your Git repository, create a GitHub Workflow configuration
+    file `.github/workflows/mlops.yml`.
 
     Take some time to understand the train job and its steps.
 
@@ -303,21 +305,23 @@ Depending on the CI/CD platform you are using, the process will be different.
 
     !!! info
 
-        Note we push the `dvc.lock` file and the experiment results to the DVC remote storage at the end of the
-        pipeline. This is to allows DVC to cache the experiment results for the next pipeline and to reproduce the
-        experiment locally.
+        Note we push the `dvc.lock` file and the experiment results to the DVC remote
+        storage at the end of the pipeline. This is to allows DVC to cache the
+        experiment results for the next pipeline and to reproduce the experiment
+        locally.
 
-        This also means that you will need to run `git pull` locally to get the latest `dvc.lock` file once the
-        pipeline is done.
+        This also means that you will need to run `git pull` locally to get the latest
+        `dvc.lock` file once the pipeline is done.
 
 === ":simple-gitlab: GitLab"
 
-    In order to allow commit from the CI and later generate reports with CML, a Personal Access Token (PAT) must be
-    created. A Project or a Group Access Token are not sufficient for the usage of
-    CML's runners that will be used in the next steps.
+    In order to allow commit from the CI and later generate reports with CML, a
+    Personal Access Token (PAT) must be created. A Project or a Group Access Token
+    are not sufficient for the usage of CML's runners that will be used in the next
+    steps.
 
-    To create a Personal Access Token, go in your **Profile preferences > Access
-    Tokens**.
+    To create a Personal Access Token, go in your
+    **Profile preferences > Access Tokens**.
 
     - **Token name**: _gitlab-ci[bot]_
     - **Expiration date**: _None_
@@ -340,8 +344,8 @@ Depending on the CI/CD platform you are using, the process will be different.
 
     Save the variable by clicking **Add variable**.
 
-    At the root level of your Git repository, create a GitLab CI configuration
-    file `.gitlab-ci.yml`.
+    At the root level of your Git repository, create a GitLab CI configuration file
+    `.gitlab-ci.yml`.
 
     Explore this file to understand the train stage and its steps.
 
@@ -404,12 +408,13 @@ Depending on the CI/CD platform you are using, the process will be different.
 
     !!! info
 
-        Note we push the `dvc.lock` file and the experiment results to the DVC remote storage at the end of the
-        pipeline. This is to allows DVC to cache the experiment results for the next pipeline and to reproduce the
-        experiment locally.
+        Note we push the `dvc.lock` file and the experiment results to the DVC remote
+        storage at the end of the pipeline. This is to allows DVC to cache the
+        experiment results for the next pipeline and to reproduce the experiment
+        locally.
 
-        This also means that you will need to run `git pull` locally to get the latest `dvc.lock` file once the
-        pipeline is done.
+        This also means that you will need to run `git pull` locally to get the latest
+        `dvc.lock` file once the pipeline is done.
 
 ### Push the CI/CD pipeline configuration file to Git
 
@@ -480,7 +485,7 @@ In this chapter, you have successfully:
 You fixed some of the previous issues:
 
 - [x] The experiment can be executed on a clean machine with the help of a CI/CD
-pipeline
+      pipeline
 
 You have a CI/CD pipeline to ensure the whole experiment can still be reproduced
 using the data and the commands to run using DVC over time.
@@ -492,20 +497,23 @@ You can now safely continue to the next chapter.
 - [x] Notebook has been transformed into scripts for production
 - [x] Codebase and dataset are versioned
 - [x] Steps used to create the model are documented and can be re-executed
-- [x] Changes done to a model can be visualized with parameters, metrics and plots to identify
-differences between iterations
+- [x] Changes done to a model can be visualized with parameters, metrics and
+      plots to identify differences between iterations
 - [x] Dataset can be shared among the developers and is placed in the right
-directory in order to run the experiment
+      directory in order to run the experiment
 - [x] Codebase can be shared and improved by multiple developers
 - [x] Experiment can be executed on a clean machine with the help of a CI/CD
-pipeline
-- [ ] Changes to model are not thoroughly reviewed and discussed before integration
-- [ ] Model may have required artifacts that are forgotten or omitted in saved/loaded state
+      pipeline
+- [ ] Changes to model are not thoroughly reviewed and discussed before
+      integration
+- [ ] Model may have required artifacts that are forgotten or omitted in
+      saved/loaded state
 - [ ] Model cannot be easily used from outside of the experiment context
 - [ ] Model cannot be deployed on and accessed from a Kubernetes cluster
 - [ ] Model cannot be trained on hardware other than the local machine
 
-You will address these issues in the next chapters for improved efficiency and collaboration. Continue the guide to learn how.
+You will address these issues in the next chapters for improved efficiency and
+collaboration. Continue the guide to learn how.
 
 ## Sources
 

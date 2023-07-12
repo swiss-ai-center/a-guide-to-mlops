@@ -7,17 +7,18 @@ development of a model capable of **visually identifying planets or moons**
 within our solar system from images.
 
 The data scientists of your team have been actively collaborating on a Jupyter
-Notebook, which they have readily shared with you. The dataset they have gathered
-comprises approximately 1,650 images capturing 11 distinct planets and moons.
-Each celestial body is represented by around 150 images, each taken from a unique
-angle.
+Notebook, which they have readily shared with you. The dataset they have
+gathered comprises approximately 1,650 images capturing 11 distinct planets and
+moons. Each celestial body is represented by around 150 images, each taken from
+a unique angle.
 
 The training process is as follows:
 
 - Preprocess the dataset
 - Split the celestial bodies into training/testing datasets
 - Train a model to classify the celestial bodies using the training dataset
-- Evaluate the model's performance using metrics, training history, predictions preview and a confusion matrix.
+- Evaluate the model's performance using metrics, training history, predictions
+  preview and a confusion matrix.
 
 Your primary objective is to enhance the team's workflow by implementing MLOps
 tools, documenting the procedures, tracking changes, and ensuring the model is
@@ -47,9 +48,9 @@ Let's get started!
 
 ### Set up the project directory
 
-As a new team member, set up a project directory on your computer for this ground
-breaking ML experiment. This directory will serve as your working directory for
-this first chapter.
+As a new team member, set up a project directory on your computer for this
+ground breaking ML experiment. This directory will serve as your working
+directory for this first chapter.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Create the working directory
@@ -61,8 +62,8 @@ cd a-guide-to-mlops-jupyter-notebook
 
 ### Download the notebook
 
-Your colleague provided you the following URL to download an archive containing the Jupyter Notebook for this machine
-learning experiment.
+Your colleague provided you the following URL to download an archive containing
+the Jupyter Notebook for this machine learning experiment.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Download the archive containing the Jupyter Notebook
@@ -92,8 +93,8 @@ the dataset for this machine learning experiment.
 wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/data.zip -O data.zip
 ```
 
-This archive must be decompressed and its contents be moved in the
-`data` directory in the working directory of the experiment.
+This archive must be decompressed and its contents be moved in the `data`
+directory in the working directory of the experiment.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Extract the dataset
@@ -108,7 +109,8 @@ rm data.zip
 
 ### Explore the notebook and dataset
 
-Examine the notebook and the dataset to get a better understanding of their contents.
+Examine the notebook and the dataset to get a better understanding of their
+contents.
 
 Your working directory should now look like this:
 
@@ -144,9 +146,9 @@ pip install --requirement requirements.txt
 
 ### Run the experiment
 
-Awesome! You now have everything you need to run the experiment: the notebook and
-the dataset are in place, the virtual environment is ready; and you're ready to run the experiment for the first
-time.
+Awesome! You now have everything you need to run the experiment: the notebook
+and the dataset are in place, the virtual environment is ready; and you're ready
+to run the experiment for the first time.
 
 Launch the notebook.
 
@@ -157,17 +159,20 @@ jupyter-lab notebook.ipynb
 
 A browser window should open with the Jupyter Notebook.
 
-You may notice all the previous outputs from the notebook are still present. This is because the notebook was not
-cleared before being shared with you. This can be useful to see the results of previous runs.
+You may notice all the previous outputs from the notebook are still present.
+This is because the notebook was not cleared before being shared with you. This
+can be useful to see the results of previous runs.
 
-In most cases however, it can also be a source of confusion and clutter. This is one of the limitations of the Jupyter
-Notebook, which make them not always easy to share with others.
+In most cases however, it can also be a source of confusion and clutter. This is
+one of the limitations of the Jupyter Notebook, which make them not always easy
+to share with others.
 
-For the time being, execute each step of the notebook to train the model and evaluate its performance.
-Previous outputs will be overwritten.
+For the time being, execute each step of the notebook to train the model and
+evaluate its performance. Previous outputs will be overwritten.
 
-Ensure the experiment runs without errors. Once done, you can close the browser window.
-Shut down the Jupyter server by pressing ++ctrl+c++ in the terminal, followed with ++y++ and ++enter++.
+Ensure the experiment runs without errors. Once done, you can close the browser
+window. Shut down the Jupyter server by pressing ++ctrl+c++ in the terminal,
+followed with ++y++ and ++enter++.
 
 Exit the virtual environment with the following command.
 
@@ -187,7 +192,8 @@ In the next chapter we will see how to address these shortcomings.
 
 ## Summary
 
-Congratulations! You have successfully reproduced the experiment on your machine.
+Congratulations! You have successfully reproduced the experiment on your
+machine.
 
 In this chapter, you have:
 
@@ -214,17 +220,20 @@ In the next chapters, you will enhance the workflow to fix those issues.
 - [ ] Dataset requires manual download and placement
 - [ ] Codebase requires manual download and setup
 - [ ] Experiment may not be reproducible on other machines
-- [ ] Changes to model are not thoroughly reviewed and discussed before integration
-- [ ] Model may have required artifacts that are forgotten or omitted in saved/loaded state
+- [ ] Changes to model are not thoroughly reviewed and discussed before
+      integration
+- [ ] Model may have required artifacts that are forgotten or omitted in
+      saved/loaded state
 - [ ] Model cannot be easily used from outside of the experiment context
 - [ ] Model cannot be deployed on and accessed from a Kubernetes cluster
 - [ ] Model cannot be trained on hardware other than the local machine
 
-You will address these issues in the next chapters for improved efficiency and collaboration. Continue the guide to learn how.
+You will address these issues in the next chapters for improved efficiency and
+collaboration. Continue the guide to learn how.
 
 ## Sources
 
 Highly inspired by:
 
-- [_Planets and Moons Dataset - AI in Space_ -
-kaggle.com](https://www.kaggle.com/datasets/emirhanai/planets-and-moons-dataset-ai-in-space) community prediction competition.
+- [_Planets and Moons Dataset - AI in Space_ - kaggle.com](https://www.kaggle.com/datasets/emirhanai/planets-and-moons-dataset-ai-in-space)
+  community prediction competition.

@@ -8,16 +8,21 @@
 
 ## Introduction
 
-Some experiments can require specific hardware to run. For example, you may need a GPU to train a deep learning model.
+Some experiments can require specific hardware to run. For example, you may need
+a GPU to train a deep learning model.
 
-Training these experiments locally can be challenging. You may not have the required hardware, or you may not want to use your local machine for training. In this case, you can use a specialized Kubernetes pod to train your model.
+Training these experiments locally can be challenging. You may not have the
+required hardware, or you may not want to use your local machine for training.
+In this case, you can use a specialized Kubernetes pod to train your model.
 
-In this chapter, you will learn how to train the model on a Kubernetes pod with CML.
+In this chapter, you will learn how to train the model on a Kubernetes pod with
+CML.
 
 In this chapter, you will learn how to:
 
 1. Configure CML to start a runner on Kubernetes
-2. Start the training of the model from your CI/CD pipeline on the Kubernetes cluster
+2. Start the training of the model from your CI/CD pipeline on the Kubernetes
+   cluster
 
 ## Steps
 
@@ -29,7 +34,8 @@ Display the nodes with the following command.
 kubectl get nodes --show-labels
 ```
 
-The output should be similar to this. As noticed, you have two nodes in your cluster with their labels.
+The output should be similar to this. As noticed, you have two nodes in your
+cluster with their labels.
 
 ```
 NAME                                              STATUS   ROLES    AGE   VERSION            LABELS
@@ -37,7 +43,10 @@ gke-mlops-kubernetes-default-pool-d4f966ea-8rbn   Ready    <none>   49s   v1.24.
 gke-mlops-kubernetes-default-pool-d4f966ea-p7qm   Ready    <none>   50s   v1.24.9-gke.3200   beta.kubernetes.io/arch=amd64,[...]
 ```
 
-Export the name of the two nodes as environment variables. Replace the `<your node 1 name>` and `<your node 2 name>` placeholders with the names of your nodes (`gke-mlops-kubernetes-default-pool-d4f966ea-8rbn` and `gke-mlops-kubernetes-default-pool-d4f966ea-p7qm` in this example).
+Export the name of the two nodes as environment variables. Replace the
+`<your node 1 name>` and `<your node 2 name>` placeholders with the names of
+your nodes (`gke-mlops-kubernetes-default-pool-d4f966ea-8rbn` and
+`gke-mlops-kubernetes-default-pool-d4f966ea-p7qm` in this example).
 
 ```sh title="Execute the following command(s) in a terminal"
 export K8S_NODE_1_NAME=<your node 1 name>
@@ -49,34 +58,41 @@ export K8S_NODE_2_NAME=<your node 2 name>
 
 ### Labelize the nodes
 
-Let's imagine one node has a GPU and the other one doesn't. You can labelize the nodes to be able to use the GPU node for the training of the model. For our expiriment, there is no need to have a GPU to train the model but it's for demonstration purposes.
+Let's imagine one node has a GPU and the other one doesn't. You can labelize the
+nodes to be able to use the GPU node for the training of the model. For our
+expiriment, there is no need to have a GPU to train the model but it's for
+demonstration purposes.
 
 ```sh title="Execute the following command(s) in a terminal"
 kubectl label nodes $K8S_NODE_1_NAME gpu=true
 kubectl label nodes $K8S_NODE_2_NAME gpu=false
 ```
 
-You can check the labels with the `kubectl get nodes --show-labels` command. You should see the node with the `gpu=true`/`gpu=false` labels.
+You can check the labels with the `kubectl get nodes --show-labels` command. You
+should see the node with the `gpu=true`/ `gpu=false` labels.
 
 ### Update the CI/CD configuration file
 
-You'll now update the CI/CD configuration file to start a runner on the Kubernetes cluster with the help of CML. Using the labels defined previously, you'll be able to start the training of the model on the node with the GPU.
+You'll now update the CI/CD configuration file to start a runner on the
+Kubernetes cluster with the help of CML. Using the labels defined previously,
+you'll be able to start the training of the model on the node with the GPU.
 
 === ":simple-github: GitHub"
 
-	In order to allow CML to create a self-hosted runner, a Personal Access Token (PAT) must be
-	created.
+ In order to allow CML to create a self-hosted runner, a Personal Access Token
+ (PAT) must be created.
 
-	Follow the [_Personal Access Token_ - cml.dev](https://cml.dev/doc/self-hosted-runners?tab=GitHub#personal-access-token) guide to create a personal access token named `CML_PAT` with the `repo` scope.
+ Follow the
+ [_Personal Access Token_ - cml.dev](https://cml.dev/doc/self-hosted-runners?tab=GitHub#personal-access-token)
+ guide to create a personal access token named `CML_PAT` with the `repo` scope.
 
-	Store the Personal Access Token as a CI/CD variable by going to the **Settings** section from
-	the top header of your GitHub repository.
+ Store the Personal Access Token as a CI/CD variable by going to the **Settings**
+ section from the top header of your GitHub repository.
 
-	Select **Secrets and variables > Actions** and select **New repository secret**.
+ Select **Secrets and variables > Actions** and select **New repository secret**.
 
-	Create a new variable named `CML_PAT` with the value of
-	the Personal Access Token as its value. Save the variable by selecting
-	**Add secret**.
+ Create a new variable named `CML_PAT` with the value of the Personal Access
+ Token as its value. Save the variable by selecting **Add secret**.
 
 	Update the `.github/workflows/mlops.yml` file.
 
@@ -575,14 +591,17 @@ On GitHub, you can see the pipeline running on the **Actions** page.
 
 The pod should be created on the Kubernetes Cluster.
 
-
 === ":simple-amazonaws: Amazon Web Services"
 
 	TODO
 
 === ":simple-googlecloud: Google Cloud"
 
-    On Google Cloud Console, you can see the pod that has been created on the **Kubernetes Engine > Workloads** page. Open the pod and go to the **YAML** tab to see the configuration of the pod. You should notice that the pod has been created with the node selector `gpu=true` and that it has been created on the right node.
+    On Google Cloud Console, you can see the pod that has been created on the
+    **Kubernetes Engine > Workloads** page. Open the pod and go to the **YAML** tab
+    to see the configuration of the pod. You should notice that the pod has been
+    created with the node selector `gpu=true` and that it has been created on the
+    right node.
 
 === ":simple-microsoftazure: Microsoft Azure"
 
@@ -596,7 +615,8 @@ This chapter is done, you can check the summary.
 
 ## Summary
 
-Congrats! You now can train your model on on a custom infrastructure with custom hardware for specific use-cases.
+Congrats! You now can train your model on on a custom infrastructure with custom
+hardware for specific use-cases.
 
 In this chapter, you have successfully:
 
@@ -604,7 +624,8 @@ In this chapter, you have successfully:
 2. Configured CML to start a runner on Kubernetes
 3. Trained the model on the Kubernetes cluster
 
-For more information, you can check the following resources: [CML Command Reference: `runner` #Using `--cloud-kubernetes-node-selector`](https://cml.dev/doc/ref/runner#using---cloud-kubernetes-node-selector).
+For more information, you can check the following resources:
+[CML Command Reference: `runner` #Using `--cloud-kubernetes-node-selector`](https://cml.dev/doc/ref/runner#using---cloud-kubernetes-node-selector).
 
 ### Destroy the Kubernetes cluster
 
@@ -619,25 +640,35 @@ gcloud container clusters delete --zone europe-west6-a mlops-kubernetes
 - [x] Notebook has been transformed into scripts for production
 - [x] Codebase and dataset are versioned
 - [x] Steps used to create the model are documented and can be re-executed
-- [x] Changes done to a model can be visualized with parameters, metrics and plots to identify
-differences between iterations
+- [x] Changes done to a model can be visualized with parameters, metrics and
+      plots to identify differences between iterations
 - [x] Dataset can be shared among the developers and is placed in the right
-directory in order to run the experiment
+      directory in order to run the experiment
 - [x] Codebase can be shared and improved by multiple developers
 - [x] Experiment can be executed on a clean machine with the help of a CI/CD
-pipeline
-- [x] Changes to model can be thoroughly reviewed and discussed before integrating them into the codebase
+      pipeline
+- [x] Changes to model can be thoroughly reviewed and discussed before
+      integrating them into the codebase
 - [x] Model can be saved and loaded with all required artifacts for future usage
 - [x] Model can be easily used outside of the experiment context.
 - [x] Model can be accessed from a Kubernetes cluster
-- [x] Model can be trained on a custom infrastructure with custom hardware for specific use-cases
+- [x] Model can be trained on a custom infrastructure with custom hardware for
+      specific use-cases
 
 You can now safely continue to the next chapter of this guide concluding your
 journey and the next things you could do with your model.
 
 ## Sources
 
-Highly inspired by the [_Self-hosted (On-premise or Cloud) Runners_ - cml.dev](https://cml.dev/doc/self-hosted-runners), [_Install kubectl and configure cluster access_ - cloud.google.com](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl), [_gcloud container clusters create_ - cloud.google.com](https://cloud.google.com/sdk/gcloud/reference/container/clusters/create), the [_Install Tools_ - kubernetes.io](https://kubernetes.io/docs/tasks/tools/), [_Assigning Pods to Nodes_ - kubernetes.io](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector) and [_Assign Pods to Nodes_ - kubernetes.io](https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/) guides.
+Highly inspired by the
+[_Self-hosted (On-premise or Cloud) Runners_ - cml.dev](https://cml.dev/doc/self-hosted-runners),
+[_Install kubectl and configure cluster access_ - cloud.google.com](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl),
+[_gcloud container clusters create_ - cloud.google.com](https://cloud.google.com/sdk/gcloud/reference/container/clusters/create),
+the [_Install Tools_ - kubernetes.io](https://kubernetes.io/docs/tasks/tools/),
+[_Assigning Pods to Nodes_ - kubernetes.io](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+and
+[_Assign Pods to Nodes_ - kubernetes.io](https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/)
+guides.
 
 Want to see what the result at the end of this chapter should look like? Have a
 look at the Git repository directory here:

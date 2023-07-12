@@ -11,8 +11,8 @@
 At this point, the data is made available to team members using DVC, but the
 experiment codebase itself is not.
 
-By linking your local project to a remote repository on platforms like GitHub
-or GitLab, you can seamlessly push, pull, and synchronize changes, facilitating
+By linking your local project to a remote repository on platforms like GitHub or
+GitLab, you can seamlessly push, pull, and synchronize changes, facilitating
 collaboration and ensuring smooth workflow.
 
 The following diagram illustrates control flow of the experiment at the end of
@@ -80,24 +80,28 @@ Create a Git repository on your preferred service to collaborate with peers.
 
 === ":simple-github: GitHub"
 
-    Create a new GitHub repository for this chapter by accessing <https://github.com/new>.
+    Create a new GitHub repository for this chapter by accessing
+    <https://github.com/new>.
 
     !!! warning
 
-        Configure the repository as you wish but **do not** check the boxex _"Add a README file"_, _"Add .gitignore"_ nor _"Choose a license"_.
+        Configure the repository as you wish but **do not** check the boxex
+        _"Add a README file"_, _"Add .gitignore"_ nor _"Choose a license"_.
 
 === ":simple-gitlab: GitLab"
 
-    Create a new GitLab blank project for this chapter by accessing <https://gitlab.com/projects/new>.
+    Create a new GitLab blank project for this chapter by accessing
+    <https://gitlab.com/projects/new>.
 
     !!! warning
 
-        Configure the repository as you wish but **do not** check the box _"Initialize repository with a README"_.
+        Configure the repository as you wish but **do not** check the box
+        _"Initialize repository with a README"_.
 
 ## Configure Git for the remote branch
 
-Add the remote origin to your repository. Replace `<your git repository url>` with the URL of your
-Git repository. Your Git service should provide these
+Add the remote origin to your repository. Replace `<your git repository url>`
+with the URL of your Git repository. Your Git service should provide these
 instructions as well.
 
 ```sh title="Execute the following command(s) in a terminal"
@@ -119,9 +123,11 @@ without additional arguments to interact with the remote branch.
 
 ## Check the results
 
-Go to your online Git repository and you will be able to view the files that are stored there.
+Go to your online Git repository and you will be able to view the files that are
+stored there.
 
-This chapter is now complete. Please review the summary for a recap of the key points.
+This chapter is now complete. Please review the summary for a recap of the key
+points.
 
 ## Summary
 
@@ -137,8 +143,8 @@ You fixed some of the previous issues:
 
 - [x] Codebase no longer needs manual download and is versioned
 
-Another member of your team can easily clone the experiment
-with the following commands.
+Another member of your team can easily clone the experiment with the following
+commands.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Clone the Git repository
@@ -152,19 +158,22 @@ You can now safely continue to the next chapter.
 - [x] Notebook has been transformed into scripts for production
 - [x] Codebase and dataset are versioned
 - [x] Steps used to create the model are documented and can be re-executed
-- [x] Changes done to a model can be visualized with parameters, metrics and plots to identify
-differences between iterations
+- [x] Changes done to a model can be visualized with parameters, metrics and
+      plots to identify differences between iterations
 - [x] Dataset can be shared among the developers and is placed in the right
-directory in order to run the experiment
+      directory in order to run the experiment
 - [x] Codebase can be shared and improved by multiple developers
 - [ ] Experiment may not be reproducible on other machines
-- [ ] Changes to model are not thoroughly reviewed and discussed before integration
-- [ ] Model may have required artifacts that are forgotten or omitted in saved/loaded state
+- [ ] Changes to model are not thoroughly reviewed and discussed before
+      integration
+- [ ] Model may have required artifacts that are forgotten or omitted in
+      saved/loaded state
 - [ ] Model cannot be easily used from outside of the experiment context
 - [ ] Model cannot be deployed on and accessed from a Kubernetes cluster
 - [ ] Model cannot be trained on hardware other than the local machine
 
-You will address these issues in the next chapters for improved efficiency and collaboration. Continue the guide to learn how.
+You will address these issues in the next chapters for improved efficiency and
+collaboration. Continue the guide to learn how.
 
 ## Sources
 
