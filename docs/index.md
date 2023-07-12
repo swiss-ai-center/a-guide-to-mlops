@@ -33,6 +33,5 @@ simplify the process and empower you to achieve greater success with your ML
 projects.
 
 <figure markdown>
-  [![Image title](./assets/images/hes-so-logo.png){ width="300"
-  }](https://www.hes-so.ch/swiss-ai-center){:target="\_blank"}
+  [![Image title](./assets/images/hes-so-logo.png){ width="300" }](https://www.hes-so.ch/swiss-ai-center){:target="\_blank"}
 </figure>
