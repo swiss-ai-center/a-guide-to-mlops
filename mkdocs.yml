@@ -7,12 +7,12 @@ site_description: >-
   A simple yet complete guide to MLOps tools and practices - from a conventional way to a modern approach of working with ML projects.
 copyright: Copyright &copy; 2022 - 2023 CSIA-PME
 nav:
-  - Introduction:
+  - 🏁 Introduction:
       - "Syllabus": syllabus.md
       - "Concept": concept.md
       - "Tools": tools.md
-  - Part 1 - Local training and model evaluation:
-      - "Introduction": part-1-local-training-and-model-evaluation/introduction.md
+  - 🏠 Local training and model evaluation:
+      - part-1-local-training-and-model-evaluation/introduction.md
       - "Chapter 1 - Run a simple ML experiment with Jupyter Notebook": part-1-local-training-and-model-evaluation/chapter-1-run-a-simple-ml-experiment-with-jupyter-notebook/index.md
       - "Chapter 2 - Adapt and move the Jupyter Notebook to Python scripts": part-1-local-training-and-model-evaluation/chapter-2-adapt-and-move-the-jupyter-notebook-to-python-scripts/index.md
       - "Chapter 3 - Initialize Git and DVC for local training": part-1-local-training-and-model-evaluation/chapter-3-initialize-git-and-dvc-for-local-training/index.md
@@ -20,15 +20,15 @@ nav:
       - "Chapter 5 - Track model evolution with DVC": part-1-local-training-and-model-evaluation/chapter-5-track-model-evolution-with-dvc/index.md
       - "Conclusion": part-1-local-training-and-model-evaluation/conclusion.md
       - "Clean up": part-1-local-training-and-model-evaluation/clean-up.md
-  - Part 2 - Move to the cloud:
-      - "Introduction": part-2-move-to-the-cloud/introduction.md
-      - "Chapter 6 - Move the ML experiment data to the cloud": part-2-move-to-the-cloud/chapter-6-move-the-ml-experiment-data-to-the-cloud/index.md
-      - "Chapter 7 - Move the ML experiment code to the cloud": part-2-move-to-the-cloud/chapter-7-move-the-ml-experiment-code-to-the-cloud/index.md
-      - "Chapter 8 - Reproduce the ML experiment in a CI/CD pipeline": part-2-move-to-the-cloud/chapter-8-reproduce-the-ml-experiment-in-a-cicd-pipeline/index.md
-      - "Chapter 9 - Track model evolution in the CI/CD pipeline with CML": part-2-move-to-the-cloud/chapter-9-track-model-evolution-in-the-cicd-pipeline-with-cml/index.md
-      - "Conclusion": part-2-move-to-the-cloud/conclusion.md
-      - "Clean up": part-2-move-to-the-cloud/clean-up.md
-  - Part 3 - Serve and deploy the model:
+  - ☁️ Move the model to the cloud:
+      - "Introduction": part-2-move-the-model-to-the-cloud/introduction.md
+      - "Chapter 6 - Move the ML experiment data to the cloud": part-2-move-the-model-to-the-cloud/chapter-6-move-the-ml-experiment-data-to-the-cloud/index.md
+      - "Chapter 7 - Move the ML experiment code to the cloud": part-2-move-the-model-to-the-cloud/chapter-7-move-the-ml-experiment-code-to-the-cloud/index.md
+      - "Chapter 8 - Reproduce the ML experiment in a CI/CD pipeline": part-2-move-the-model-to-the-cloud/chapter-8-reproduce-the-ml-experiment-in-a-cicd-pipeline/index.md
+      - "Chapter 9 - Track model evolution in the CI/CD pipeline with CML": part-2-move-the-model-to-the-cloud/chapter-9-track-model-evolution-in-the-cicd-pipeline-with-cml/index.md
+      - "Conclusion": part-2-move-the-model-to-the-cloud/conclusion.md
+      - "Clean up": part-2-move-the-model-to-the-cloud/clean-up.md
+  - 🚚 Serve and deploy the model:
       - "Introduction": part-3-serve-and-deploy-the-model/introduction.md
       - "Chapter 10 - Save and load the model with MLEM": part-3-serve-and-deploy-the-model/chapter-10-save-and-load-the-model-with-mlem/index.md
       - "Chapter 11 - Serve the model locally with MLEM": part-3-serve-and-deploy-the-model/chapter-11-serve-the-model-locally-with-mlem/index.md
@@ -36,7 +36,7 @@ nav:
       - "Chapter 13 - Train the model on a Kubernetes pod with CML": part-3-serve-and-deploy-the-model/chapter-13-train-the-model-on-a-kubernetes-pod-with-cml/index.md
       - "Conclusion": part-3-serve-and-deploy-the-model/conclusion.md
       - "Clean up": part-3-serve-and-deploy-the-model/clean-up.md
-  - Part 4 - Labeling the data and retrain:
+  - 🏷️ Labeling the data and retrain:
       - "Introduction": part-4-labeling-the-data-and-retrain/introduction.md
       - "Chapter 14 - Setup Label Studio": part-4-labeling-the-data-and-retrain/chapter-14-setup-label-studio/index.md
       - "Chapter 15 - Import existing data to Label Studio": part-4-labeling-the-data-and-retrain/chapter-15-import-existing-data-to-label-studio/index.md
@@ -45,7 +45,7 @@ nav:
       - "Chapter 18 - Link the model to Label Studio and get predictions": part-4-labeling-the-data-and-retrain/chapter-18-link-the-model-to-label-studio-and-get-predictions/index.md
       - "Conclusion": part-4-labeling-the-data-and-retrain/conclusion.md
       - "Clean up": part-4-labeling-the-data-and-retrain/clean-up.md
-  - Conclusion:
+  - 🪄 Conclusion:
     - "Clean up": clean-up.md
     - "Conclusion": conclusion.md
 edit_uri: blob/main/docs/
@@ -90,8 +90,6 @@ theme:
     - search.highlight
     - toc.follow
 plugins:
-  - minify:
-      minify_html: true
   - search
   - social
   - tags
@@ -99,6 +97,8 @@ plugins:
       type: datetime
       fallback_to_build_date: true
   - glightbox
+  - minify:
+      minify_html: true
 extra:
   social:
     - icon: material/earth

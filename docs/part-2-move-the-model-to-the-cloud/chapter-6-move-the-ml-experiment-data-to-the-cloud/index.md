@@ -35,16 +35,16 @@ flowchart LR
     dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]
     s3_storage -->|dvc pull| dot_dvc
     dot_git[(.git)]
-    localGraph <-....-> dot_git
+    workspaceGraph <-....-> dot_git
     data[data/raw] <-.-> dot_dvc
-    subgraph cloudGraph[CLOUD]
+    subgraph remoteGraph[REMOTE]
         s3_storage
     end
     subgraph cacheGraph[CACHE]
         dot_dvc
         dot_git
     end
-    subgraph localGraph[LOCAL]
+    subgraph workspaceGraph[WORKSPACE]
         prepare[prepare.py] <-.-> dot_dvc
         train[train.py] <-.-> dot_dvc
         evaluate[evaluate.py] <-.-> dot_dvc
@@ -57,7 +57,7 @@ flowchart LR
         params -.- train
         params <-.-> dot_dvc
     end
-    style localGraph opacity:0.4,color:#7f7f7f80
+    style workspaceGraph opacity:0.4,color:#7f7f7f80
     style dvcGraph opacity:0.4,color:#7f7f7f80
     style cacheGraph opacity:0.4,color:#7f7f7f80
     style dot_git opacity:0.4,color:#7f7f7f80

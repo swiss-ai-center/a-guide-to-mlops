@@ -38,12 +38,12 @@ flowchart LR
     dot_dvc[(.dvc)]
     dot_git[(.git)]
     data[data/raw] <-.-> dot_dvc
-    localGraph <-....-> dot_git
+    workspaceGraph <-....-> dot_git
     subgraph cacheGraph[CACHE]
         dot_dvc
         dot_git
     end
-    subgraph localGraph[LOCAL]
+    subgraph workspaceGraph[WORKSPACE]
         prepare[prepare.py] <-.-> dot_dvc
         train[train.py] <-.-> dot_dvc
         evaluate[evaluate.py] <-.-> dot_dvc

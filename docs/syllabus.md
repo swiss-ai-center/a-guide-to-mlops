@@ -9,11 +9,11 @@ What you will learn from this guide.
     - [Chapter 3 - Initialize Git and DVC for local training](./part-1-local-training-and-model-evaluation/chapter-3-initialize-git-and-dvc-for-local-training/index.md)
     - [Chapter 4 - Reproduce the ML experiment with DVC](./part-1-local-training-and-model-evaluation/chapter-4-reproduce-the-ml-experiment-with-dvc/index.md)
     - [Chapter 5 - Track model evolution with DVC](./part-1-local-training-and-model-evaluation/chapter-5-track-model-evolution-with-dvc/index.md)
-- [Part 2 - Move to the cloud](./part-2-move-to-the-cloud/introduction.md) - Learn how to collaborate online using Git, a CI/CD pipeline and CML.
-    - [Chapter 6 - Move the ML experiment data to the cloud](./part-2-move-to-the-cloud/chapter-6-move-the-ml-experiment-data-to-the-cloud/index.md)
-    - [Chapter 7 - Move the ML experiment code to the cloud](./part-2-move-to-the-cloud/chapter-7-move-the-ml-experiment-code-to-the-cloud/index.md)
-    - [Chapter 8 - Reproduce the ML experiment in a CI/CD pipeline](./part-2-move-to-the-cloud/chapter-8-reproduce-the-ml-experiment-in-a-cicd-pipeline/index.md)
-    - [Chapter 9 - Track model evolution in the CI/CD pipeline with CML](./part-2-move-to-the-cloud/chapter-9-track-model-evolution-in-the-cicd-pipeline-with-cml/index.md)
+- [Part 2 - Move the model to the cloud](./part-2-move-the-model-to-the-cloud/introduction.md) - Learn how to collaborate online using Git, a CI/CD pipeline and CML.
+    - [Chapter 6 - Move the ML experiment data to the cloud](./part-2-move-the-model-to-the-cloud/chapter-6-move-the-ml-experiment-data-to-the-cloud/index.md)
+    - [Chapter 7 - Move the ML experiment code to the cloud](./part-2-move-the-model-to-the-cloud/chapter-7-move-the-ml-experiment-code-to-the-cloud/index.md)
+    - [Chapter 8 - Reproduce the ML experiment in a CI/CD pipeline](./part-2-move-the-model-to-the-cloud/chapter-8-reproduce-the-ml-experiment-in-a-cicd-pipeline/index.md)
+    - [Chapter 9 - Track model evolution in the CI/CD pipeline with CML](./part-2-move-the-model-to-the-cloud/chapter-9-track-model-evolution-in-the-cicd-pipeline-with-cml/index.md)
 - [Part 3 - Serve and deploy the model](./part-3-serve-and-deploy-the-model/introduction.md) - Learn how to serve and deploy the model using MLEM and CML.
     - [Chapter 10 - Save and load the model with MLEM](./part-3-serve-and-deploy-the-model/chapter-10-save-and-load-the-model-with-mlem/index.md)
     - [Chapter 11 - Serve the model locally with MLEM](./part-3-serve-and-deploy-the-model/chapter-11-serve-the-model-locally-with-mlem/index.md)

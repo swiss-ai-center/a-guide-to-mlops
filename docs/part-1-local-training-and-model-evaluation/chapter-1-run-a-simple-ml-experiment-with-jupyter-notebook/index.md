@@ -36,7 +36,7 @@ this chapter:
 
 ```mermaid
 flowchart
-    subgraph localGraph[LOCAL]
+    subgraph workspaceGraph[WORKSPACE]
         data[data/raw] <--> notebook[notebook.ipynb]
     end
 ```
