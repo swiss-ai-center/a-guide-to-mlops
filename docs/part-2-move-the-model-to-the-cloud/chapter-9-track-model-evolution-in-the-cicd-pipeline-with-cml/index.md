@@ -212,14 +212,17 @@ collaboration and decision-making within the team.
               # Fetch all other Git branches
               git fetch --depth=1 origin main:main
 
+              # Add title to the report
+              echo "# Experiment Report (${{ github.sha }})" >> report.md
+
               # Compare parameters to main branch
-              echo "# Params workflow vs. main" >> report.md
+              echo "## Params workflow vs. main" >> report.md
               echo >> report.md
               dvc params diff main --md >> report.md
               echo >> report.md
 
               # Compare metrics to main branch
-              echo "# Metrics workflow vs. main" >> report.md
+              echo "## Metrics workflow vs. main" >> report.md
               echo >> report.md
               dvc metrics diff main --md >> report.md
               echo >> report.md
@@ -228,11 +231,11 @@ collaboration and decision-making within the team.
               dvc plots diff main
 
               # Create plots
-              echo "# Plots" >> report.md
+              echo "## Plots" >> report.md
               echo >> report.md
 
               # Create training history plot
-              echo "## Training History" >> report.md
+              echo "### Training History" >> report.md
               echo >> report.md
               echo '![](./dvc_plots/static/main_evaluation_plots_training_history.png "Training History")' >> report.md
               echo >> report.md
@@ -240,7 +243,7 @@ collaboration and decision-making within the team.
               echo >> report.md
 
               # Create predictions preview
-              echo "## Predictions Preview" >> report.md
+              echo "### Predictions Preview" >> report.md
               echo >> report.md
               echo '![](./dvc_plots/static/main_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
               echo >> report.md
@@ -248,7 +251,7 @@ collaboration and decision-making within the team.
               echo >> report.md
 
               # Create confusion matrix
-              echo "## Confusion Matrix" >> report.md
+              echo "### Confusion Matrix" >> report.md
               echo >> report.md
               echo '![](./dvc_plots/static/main_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
               echo >> report.md
@@ -311,14 +314,17 @@ collaboration and decision-making within the team.
     +          # Fetch all other Git branches
     +          git fetch --depth=1 origin main:main
     +
+    +          # Add title to the report
+    +          echo "# Experiment Report (${{ github.sha }})" >> report.md
+    +
     +          # Compare parameters to main branch
-    +          echo "# Params workflow vs. main" >> report.md
+    +          echo "## Params workflow vs. main" >> report.md
     +          echo >> report.md
     +          dvc params diff main --md >> report.md
     +          echo >> report.md
     +
     +          # Compare metrics to main branch
-    +          echo "# Metrics workflow vs. main" >> report.md
+    +          echo "## Metrics workflow vs. main" >> report.md
     +          echo >> report.md
     +          dvc metrics diff main --md >> report.md
     +          echo >> report.md
@@ -327,11 +333,11 @@ collaboration and decision-making within the team.
     +          dvc plots diff main
     +
     +          # Create plots
-    +          echo "# Plots" >> report.md
+    +          echo "## Plots" >> report.md
     +          echo >> report.md
     +
     +          # Create training history plot
-    +          echo "## Training History" >> report.md
+    +          echo "### Training History" >> report.md
     +          echo >> report.md
     +          echo '![](./dvc_plots/static/main_evaluation_plots_training_history.png "Training History")' >> report.md
     +          echo >> report.md
@@ -339,7 +345,7 @@ collaboration and decision-making within the team.
     +          echo >> report.md
     +
     +          # Create predictions preview
-    +          echo "## Predictions Preview" >> report.md
+    +          echo "### Predictions Preview" >> report.md
     +          echo >> report.md
     +          echo '![](./dvc_plots/static/main_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
     +          echo >> report.md
@@ -347,7 +353,7 @@ collaboration and decision-making within the team.
     +          echo >> report.md
     +
     +          # Create confusion matrix
-    +          echo "## Confusion Matrix" >> report.md
+    +          echo "### Confusion Matrix" >> report.md
     +          echo >> report.md
     +          echo '![](./dvc_plots/static/main_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
     +          echo >> report.md
@@ -446,14 +452,17 @@ collaboration and decision-making within the team.
           # Fetch all other Git branches
           git fetch --depth=1 origin main:main
 
+          # Add title to the report
+          echo "# Experiment Report (${CI_COMMIT_SHA})" >> report.md
+
           # Compare parameters to main branch
-          echo "# Params workflow vs. main" >> report.md
+          echo "## Params workflow vs. main" >> report.md
           echo >> report.md
           dvc params diff main --md >> report.md
           echo >> report.md
 
           # Compare metrics to main branch
-          echo "# Metrics workflow vs. main" >> report.md
+          echo "## Metrics workflow vs. main" >> report.md
           echo >> report.md
           dvc metrics diff main --md >> report.md
           echo >> report.md
@@ -462,11 +471,11 @@ collaboration and decision-making within the team.
           dvc plots diff main
 
           # Create plots
-          echo "# Plots" >> report.md
+          echo "## Plots" >> report.md
           echo >> report.md
 
           # Create training history plot
-          echo "## Training History" >> report.md
+          echo "### Training History" >> report.md
           echo >> report.md
           echo '![](./dvc_plots/static/main_evaluation_plots_training_history.png "Training History")' >> report.md
           echo >> report.md
@@ -474,7 +483,7 @@ collaboration and decision-making within the team.
           echo >> report.md
 
           # Create predictions preview
-          echo "## Predictions Preview" >> report.md
+          echo "### Predictions Preview" >> report.md
           echo >> report.md
           echo '![](./dvc_plots/static/main_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
           echo >> report.md
@@ -482,7 +491,7 @@ collaboration and decision-making within the team.
           echo >> report.md
 
           # Create confusion matrix
-          echo "## Confusion Matrix" >> report.md
+          echo "### Confusion Matrix" >> report.md
           echo >> report.md
           echo '![](./dvc_plots/static/main_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
           echo >> report.md
@@ -552,14 +561,17 @@ collaboration and decision-making within the team.
     +      # Fetch all other Git branches
     +      git fetch --depth=1 origin main:main
     +
+    +      # Add title to the report
+    +      echo "# Experiment Report (${CI_COMMIT_SHA})" >> report.md
+    +
     +      # Compare parameters to main branch
-    +      echo "# Params workflow vs. main" >> report.md
+    +      echo "## Params workflow vs. main" >> report.md
     +      echo >> report.md
     +      dvc params diff main --md >> report.md
     +      echo >> report.md
     +
     +      # Compare metrics to main branch
-    +      echo "# Metrics workflow vs. main" >> report.md
+    +      echo "## Metrics workflow vs. main" >> report.md
     +      echo >> report.md
     +      dvc metrics diff main --md >> report.md
     +      echo >> report.md
@@ -568,11 +580,11 @@ collaboration and decision-making within the team.
     +      dvc plots diff main
     +
     +      # Create plots
-    +      echo "# Plots" >> report.md
+    +      echo "## Plots" >> report.md
     +      echo >> report.md
     +
     +      # Create training history plot
-    +      echo "## Training History" >> report.md
+    +      echo "### Training History" >> report.md
     +      echo >> report.md
     +      echo '![](./dvc_plots/static/main_evaluation_plots_training_history.png "Training History")' >> report.md
     +      echo >> report.md
@@ -580,7 +592,7 @@ collaboration and decision-making within the team.
     +      echo >> report.md
     +
     +      # Create predictions preview
-    +      echo "## Predictions Preview" >> report.md
+    +      echo "### Predictions Preview" >> report.md
     +      echo >> report.md
     +      echo '![](./dvc_plots/static/main_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
     +      echo >> report.md
@@ -588,7 +600,7 @@ collaboration and decision-making within the team.
     +      echo >> report.md
     +
     +      # Create confusion matrix
-    +      echo "## Confusion Matrix" >> report.md
+    +      echo "### Confusion Matrix" >> report.md
     +      echo >> report.md
     +      echo '![](./dvc_plots/static/main_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
     +      echo >> report.md
