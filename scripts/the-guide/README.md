@@ -6,7 +6,8 @@ This script generates the checkpoints for the guide.
 
 ## Pre-requisites
 
-If the `GOOGLE_APPLICATION_CREDENTIALS` environment variable is not set, you need to set it to the path of the service account key file.
+If the `GOOGLE_APPLICATION_CREDENTIALS` environment variable is not set, you
+need to set it to the path of the service account key file.
 
 ```bash
 export GOOGLE_APPLICATION_CREDENTIALS=<path_to_service_account_key_file>
@@ -49,4 +50,6 @@ saves:
         occurance_index: <occurance_index> # The index of the code block to use
 ```
 
-The output of the actions is saved in the GENERATED_OUTPUT_PATH file (see `generate_checkpoints.py`) which is at the parent directory of the tmp working directory.
+The output of the actions is saved in the GENERATED_OUTPUT_PATH file (see
+`generate_checkpoints.py`) which is at the parent directory of the tmp working
+directory.

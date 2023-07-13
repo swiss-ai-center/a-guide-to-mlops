@@ -2,7 +2,9 @@
 
 ## Introduction
 
-This is the infrastructure used for the A guide to MLOps project. The instructions are meant to be used on a publicely available virtual machine. At the moment, the virtual machine (VM) is hosted by the HEIG-VD.
+This is the infrastructure used for the A guide to MLOps project. The
+instructions are meant to be used on a publicely available virtual machine. At
+the moment, the virtual machine (VM) is hosted by the HEIG-VD.
 
 ## Setup
 
@@ -86,11 +88,14 @@ git clone https://github.com/csia-pme/a-guide-to-mlops.git
 
 ## Configure and start the applications
 
-Each application has its own directory with its configuration. A detailed documentation is available in each directory.
+Each application has its own directory with its configuration. A detailed
+documentation is available in each directory.
 
-You might want to edit the `.env` and `*.env` files to change the FQDNs and the application's configuration based on your needs.
+You might want to edit the `.env` and `*.env` files to change the FQDNs and the
+application's configuration based on your needs.
 
-Each application has its Docker Compose configuration, allowing to manage the application individually.
+Each application has its Docker Compose configuration, allowing to manage the
+application individually.
 
 ```sh
 # Start Traefik

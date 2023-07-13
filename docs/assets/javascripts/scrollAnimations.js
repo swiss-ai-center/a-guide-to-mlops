@@ -8,7 +8,7 @@ function scrollFadeOut(elements) {
         const element = elements[i];
         const offset = element.getAttribute('data-offset');
         const scroll = window.scrollY;
-        
+
         if (scroll > offset) {
             element.style.opacity = 0;
         } else {

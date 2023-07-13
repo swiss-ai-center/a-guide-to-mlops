@@ -18,8 +18,10 @@ chmod 0600 acme.json
 
 You might want to change the email address defined in the `traefik.yaml` file.
 
-You might also want to edit the FQDN in the `.env` file and uncomment external HTTP/HTTPS configuration in `docker-compose.yaml` file to enable access.
+You might also want to edit the FQDN in the `.env` file and uncomment external
+HTTP/HTTPS configuration in `docker-compose.yaml` file to enable access.
 
 ## Additional resources
 
-- [Traefik](https://containo.us/traefik/) - Open-source Edge Router that makes publishing your services a fun and easy experience.
+- [Traefik](https://containo.us/traefik/) - Open-source Edge Router that makes
+  publishing your services a fun and easy experience.
