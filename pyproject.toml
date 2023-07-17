@@ -28,7 +28,7 @@ matplotlib = "3.6.2"
 [tool.poetry.group.dev.dependencies]
 pyaml = "^21.10.1"
 black = "^23.3.0"
-mdwrap = {git = "https://github.com/csia-pme/mdwrap.git", rev = "0.1.2"}
+mdwrap = {git = "https://github.com/csia-pme/mdwrap.git", rev = "0.2.1"}
 pre-commit = "^3.3.3"
 
 [build-system]
