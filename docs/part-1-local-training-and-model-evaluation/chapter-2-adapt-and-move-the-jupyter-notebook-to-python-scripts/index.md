@@ -653,7 +653,7 @@ The code is divided in 4 scripts:
 - `python3 src/explain.py <model-folder> <raw-dataset-folder>`: explain the model
 
 ## Notes
-<!-- Enter you notes below -->
+<!-- Enter your notes below -->
 ```
 
 ### Make usage of the scripts in the Jupyter Notebook
