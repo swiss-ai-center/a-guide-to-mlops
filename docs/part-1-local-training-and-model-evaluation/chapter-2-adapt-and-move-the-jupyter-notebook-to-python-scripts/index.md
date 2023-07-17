@@ -633,6 +633,29 @@ def set_seed(seed: int) -> None:
     tf.config.threading.set_intra_op_parallelism_threads(1)
 ```
 
+### Create `README.md`
+
+Finally, create a `README.md` file at the root of the project to describe the
+repository. Feel free to use the following template. As you progress though this
+guide, you can add your notes in the `## Notes` section.
+
+```md title="README.md"
+# MLOps - Planet Classification
+
+[A Guide to MLOps](https://csia-pme.github.io/a-guide-to-mlops/)
+
+## Usage
+
+The code is divided in 4 scripts:
+- `python3 src/prepare.py <raw-dataset-folder> <prepared-dataset-folder>`: prepare the dataset for training
+- `python3 src/train.py <prepared-dataset-folder> <model-folder>`: train the model
+- `python3 src/evaluate.py <model-folder> <prepared-dataset-folder>`: evaluate the model
+- `python3 src/explain.py <model-folder> <raw-dataset-folder>`: explain the model
+
+## Notes
+<!-- Enter you notes below -->
+```
+
 ### Make usage of the scripts in the Jupyter Notebook
 
 _Work in progress._
@@ -643,7 +666,7 @@ _Work in progress._
 
 Your working directory should now look like this:
 
-```yaml hl_lines="6-15"
+```yaml hl_lines="6-16"
 .
 ├── data
 │   ├── raw
@@ -658,7 +681,8 @@ Your working directory should now look like this:
 │   └── train.py
 ├── params.yaml # (2)!
 ├── requirements-freeze.txt # (3)!
-└── requirements.txt # (4)!
+├── requirements.txt # (4)!
+└── README.md # (5)!
 ```
 
 1. This, and all its sub-directory, is new.
@@ -719,7 +743,8 @@ Your working directory should now be similar to this:
 │   └── train.py
 ├── params.yaml
 ├── requirements-freeze.txt
-└── requirements.txt
+├── requirements.txt
+└── README.md
 ```
 
 1. This, and all its sub-directory, is new.
