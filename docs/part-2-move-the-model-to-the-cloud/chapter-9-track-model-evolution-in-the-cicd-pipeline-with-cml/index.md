@@ -844,6 +844,23 @@ git push
     Check the merge request and examine the report made by CML. As it uses the
     evaluation data that was pulled DVC, it can uses it to display all the plots.
 
+<!-- Note: Do not indent this code, this is the only way it displays the images
+     properly -->
+<div style="display: flex" markdown>
+<figure markdown>
+![Plots Diff 1 Light](../../assets/images/cml_report1_light.png#only-light){ loading=lazy }
+</figure>
+<figure markdown>
+![Plots Diff 1 Dark](../../assets/images/cml_report1_dark.png#only-dark){ loading=lazy }
+</figure>
+<figure markdown>
+![Plots Diff 2 Light](../../assets/images/cml_report2_light.png#only-light){ loading=lazy }
+</figure>
+<figure markdown>
+![Plots Diff 2 Dark](../../assets/images/cml_report2_dark.png#only-dark){ loading=lazy }
+</figure>
+</div>
+
 ### Merge the pull request/merge request
 
 === ":simple-github: GitHub"
