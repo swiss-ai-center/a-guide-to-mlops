@@ -640,7 +640,7 @@ repository. Feel free to use the following template. As you progress though this
 guide, you can add your notes in the `## Notes` section.
 
 ```md title="README.md"
-# MLOps - Celestial bodies Classification
+# MLOps - Celestial Body Classification
 
 [A Guide to MLOps](https://csia-pme.github.io/a-guide-to-mlops/)
 
