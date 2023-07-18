@@ -640,13 +640,13 @@ repository. Feel free to use the following template. As you progress though this
 guide, you can add your notes in the `## Notes` section.
 
 ```md title="README.md"
-# MLOps - Planet Classification
+# MLOps - Celestial bodies Classification
 
 [A Guide to MLOps](https://csia-pme.github.io/a-guide-to-mlops/)
 
 ## Usage
 
-The code is divided in 4 scripts:
+The code is divided in various scripts:
 - `python3 src/prepare.py <raw-dataset-folder> <prepared-dataset-folder>`: prepare the dataset for training
 - `python3 src/train.py <prepared-dataset-folder> <model-folder>`: train the model
 - `python3 src/evaluate.py <model-folder> <prepared-dataset-folder>`: evaluate the model

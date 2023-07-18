@@ -60,6 +60,9 @@ saves:
       - replace_from_md:
         file: src/utils/seed.py
         occurance_index: 0
+      - replace_from_md:
+        file: README.md
+        occurance_index: 0
       # Log the codebase tree
       - run: "{{ TREE_CMD }}"
         log: true
