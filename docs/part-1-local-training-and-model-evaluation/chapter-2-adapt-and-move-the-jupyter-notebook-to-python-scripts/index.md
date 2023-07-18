@@ -646,7 +646,7 @@ guide, you can add your notes in the `## Notes` section.
 
 ## Usage
 
-The code is divided in 4 scripts:
+The code is divided in various scripts:
 - `python3 src/prepare.py <raw-dataset-folder> <prepared-dataset-folder>`: prepare the dataset for training
 - `python3 src/train.py <prepared-dataset-folder> <model-folder>`: train the model
 - `python3 src/evaluate.py <model-folder> <prepared-dataset-folder>`: evaluate the model
