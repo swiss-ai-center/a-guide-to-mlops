@@ -119,7 +119,7 @@ The output should be similar to this:
 
 ```diff
 diff --git a/.gitignore b/.gitignore
-index 442ea27..2492093 100644
+index 1c13140..2492093 100644
 --- a/.gitignore
 +++ b/.gitignore
 @@ -1,15 +1,9 @@

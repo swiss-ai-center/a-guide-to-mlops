@@ -278,10 +278,10 @@ collaboration and decision-making within the team.
 
     ```diff
     diff --git a/.github/workflows/mlops.yml b/.github/workflows/mlops.yml
-    index 8610a7e..e8913f3 100644
+    index 176c713..8f7e95f 100644
     --- a/.github/workflows/mlops.yml
     +++ b/.github/workflows/mlops.yml
-    @@ -26,7 +26,8 @@ on:
+    @@ -27,7 +27,8 @@ on:
        workflow_dispatch:
 
      jobs:
@@ -291,7 +291,7 @@ collaboration and decision-making within the team.
          runs-on: ubuntu-latest
          steps:
            - name: Checkout repository
-    @@ -52,3 +53,67 @@ jobs:
+    @@ -53,3 +54,70 @@ jobs:
                file_pattern: dvc.lock
            - name: Push experiment results to DVC remote storage
              run: dvc push
