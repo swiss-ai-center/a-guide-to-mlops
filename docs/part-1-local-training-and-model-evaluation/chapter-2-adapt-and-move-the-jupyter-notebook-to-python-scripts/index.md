@@ -708,7 +708,8 @@ guide, you can add your notes in the `## Notes` section.
 ```md title="README.md"
 # MLOps - Celestial Body Classification
 
-[A Guide to MLOps](https://csia-pme.github.io/a-guide-to-mlops/)
+This repository contains the code from
+[A Guide to MLOps](https://csia-pme.github.io/a-guide-to-mlops/).
 
 ## Usage
 
