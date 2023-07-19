@@ -169,6 +169,13 @@ Firstly, create the virtual environment.
     - Activate the virtual environment: `#!sh source .venv/bin/activate`
     - Deactivate the virtual environment: `#!sh deactivate`
 
+    ***Conclusion***
+
+    Virtual environments are essential for dependency management and environment
+    isolation. They ensure stability, reproducibility, and clean project separation.
+    By using virtual environments, you achieve smoother collaboration, easier
+    debugging, and reliable deployment.
+
 ```sh title="Execute the following command(s) in a terminal"
 # Create the environment
 python3 -m venv .venv
@@ -193,6 +200,65 @@ pip install --requirement requirements.txt
 ```
 
 Create a freeze file to list the dependencies with their versions.
+
+??? tip "Not familiar with freezing dependencies? Read this!"
+
+    When working on Python projects, managing dependencies is crucial for
+    maintaining a **stable and reproducible** development environment.
+
+    **Understanding requirements.txt**
+
+    The requirements.txt file is a commonly used approach to specify project
+    dependencies. It lists all the high-level dependencies required for your
+    project, including their specific versions. Each line in the file typically
+    follows the format: `package_name==version`.
+
+    **Freezing dependencies**
+
+    Freezing dependencies refers to fixing the versions of all transitive
+    dependencies, ensuring that the same versions are installed consistently across
+    different environments. This is crucial for reproducibility, as it guarantees
+    that everyone working on the project has the exact same dependencies.
+
+    **Separating high-level and transitive dependencies**
+
+    To better control and manage your project's dependencies, it's beneficial to
+    separate high-level dependencies from transitive dependencies. This approach
+    allows for clearer identification of the core functionality packages and their
+    required versions, ensuring a more focused and stable development environment.
+
+    * `requirements.txt`: This file contains the high-level dependencies explicitly
+      required by your project. It should include packages necessary for your
+      project's core functionality while excluding packages that are indirectly
+      required by other dependencies. By isolating the high-level dependencies, you
+      maintain a clear distinction between the essential packages and the ones brought
+      in transitively.
+
+    * `requirements-freeze.txt`: This file includes all the transitive dependencies
+      required by the high-level dependencies. It ensures that all the packages needed
+      for the project, including their versions, are recorded in a separate file. This
+      separation allows for a more flexible and controlled approach when updating
+      transitive dependencies while maintaining the reproducibility of your project.
+
+    **How to update dependencies**
+
+    When updating dependencies, it is essential to primarily modify the high-level
+    `requirements.txt` file with the desired versions or new packages. Then,
+    generate an updated `requirements-freeze.txt` file to capture the updated
+    transitive dependencies accurately.
+
+    **Conclusion**
+
+    Prioritizing stability and reproducibility in your project's dependency
+    management is crucial for minimizing compatibility issues, avoiding unexpected
+    bugs, and ensuring a smooth and reliable development process.
+
+    By using separate requirements files for high-level and transitive dependencies,
+    you gain better visibility and control over the dependencies required by your
+    project. This approach promotes a stable and reproducible development
+    environment while allowing you to update specific packages and their versions
+    when needed. By following these practices, you can ensure the long-term success
+    of your Python projects.
 
 ```sh title="Execute the following command(s) in a terminal"
 pip freeze --local --all > requirements-freeze.txt
