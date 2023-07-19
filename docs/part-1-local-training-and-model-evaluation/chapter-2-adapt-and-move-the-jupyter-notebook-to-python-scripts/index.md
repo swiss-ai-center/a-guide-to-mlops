@@ -165,7 +165,7 @@ Firstly, create the virtual environment.
 
     **How to manage virtual environments?**
 
-    - Create a virtual environment: `#!sh python -m venv .venv`
+    - Create a virtual environment: `#!sh python3 -m venv .venv`
     - Activate the virtual environment: `#!sh source .venv/bin/activate`
     - Deactivate the virtual environment: `#!sh deactivate`
 

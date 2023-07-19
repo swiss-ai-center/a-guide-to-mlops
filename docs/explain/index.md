@@ -164,12 +164,12 @@ dvc stage add -n explain \
 -d src/explain.py -d model -d data/raw \
 -o explanation/plots/metrics \
 --plots explanation/plots/grad_cam.png \
-python src/explain.py model data/raw
+python3 src/explain.py model data/raw
 ```
 
 This stage has the `src/explain.py` file, `model` and `data/raw` directory as
 dependencies. If any of these files change, DVC will run the command
-`python src/explain.py model data/raw` when using `dvc repro`.
+`python3 src/explain.py model data/raw` when using `dvc repro`.
 
 The outputs of this command are stored in the
 `evaluation/plots/metrics/plots/grad_cam.png` file.

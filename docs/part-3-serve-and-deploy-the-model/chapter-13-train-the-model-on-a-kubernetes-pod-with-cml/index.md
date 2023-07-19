@@ -358,7 +358,7 @@ you'll be able to start the training of the model on the node with the GPU.
 	  # https://python-poetry.org/docs/#ci-recommendations
 	  POETRY_HOME: "$CI_PROJECT_DIR/.cache/poetry"
 
-	# Pip's cache doesn't store the python packages
+	# Pip's cache doesn't store the Python packages
 	# https://pip.pypa.io/en/stable/reference/pip_install/#caching
 	cache:
 	  paths:

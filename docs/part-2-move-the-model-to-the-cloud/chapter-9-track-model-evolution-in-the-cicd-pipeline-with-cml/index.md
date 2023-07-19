@@ -415,7 +415,7 @@ collaboration and decision-making within the team.
         - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       cache:
         paths:
-          # Pip's cache doesn't store the python packages
+          # Pip's cache doesn't store the Python packages
           # https://pip.pypa.io/en/stable/reference/pip_install/#caching
           - .cache/pip
           - .venv/
