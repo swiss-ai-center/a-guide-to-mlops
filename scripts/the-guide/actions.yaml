@@ -67,9 +67,9 @@ saves:
       - run: "{{ TREE_CMD }}"
         log: true
       # Run the experiment
-      - run: . .venv/bin/activate && python src/prepare.py data/raw data/prepared
-      - run: . .venv/bin/activate && python src/train.py data/prepared model
-      - run: . .venv/bin/activate && python src/evaluate.py model data/prepared
+      - run: . .venv/bin/activate && python3 src/prepare.py data/raw data/prepared
+      - run: . .venv/bin/activate && python3 src/train.py data/prepared model
+      - run: . .venv/bin/activate && python3 src/evaluate.py model data/prepared
       # Log the codebase tree
       - run: "{{ TREE_CMD }}"
         log: true
@@ -122,13 +122,13 @@ saves:
             -p prepare \
             -d src/prepare.py -d src/utils/seed.py -d data/raw \
             -o data/prepared \
-            python src/prepare.py data/raw data/prepared
+            python3 src/prepare.py data/raw data/prepared
       - run: |-
           . .venv/bin/activate && dvc stage add -n train \
             -p train \
             -d src/train.py -d src/utils/seed.py -d data/prepared \
             -o model \
-            python src/train.py data/prepared model
+            python3 src/train.py data/prepared model
       - run: |-
           . .venv/bin/activate && dvc stage add -n evaluate \
             -d src/evaluate.py -d model \
@@ -136,7 +136,7 @@ saves:
             --plots evaluation/plots/confusion_matrix.png \
             --plots evaluation/plots/pred_preview.png \
             --plots evaluation/plots/training_history.png \
-            python src/evaluate.py model data/prepared
+            python3 src/evaluate.py model data/prepared
       - run: . .venv/bin/activate && dvc dag
         log: true
       - run: . .venv/bin/activate && dvc repro

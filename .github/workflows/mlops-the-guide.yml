@@ -47,4 +47,4 @@ jobs:
           git config --global user.name "${GITHUB_ACTOR}"
           git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
       - name: Test by generating the chapters
-        run: poetry run python scripts/the-guide/generate_checkpoints.py --no-save
+        run: poetry run python3 scripts/the-guide/generate_checkpoints.py --no-save
