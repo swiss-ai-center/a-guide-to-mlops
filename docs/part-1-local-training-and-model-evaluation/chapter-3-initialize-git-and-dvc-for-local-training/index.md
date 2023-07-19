@@ -104,6 +104,7 @@ No commits yet
 Untracked files:
   (use "git add <file>..." to include in what will be committed)
     .venv/
+    README.md
     data/
     evaluation/
     model/
@@ -170,6 +171,7 @@ No commits yet
 Changes to be committed:
   (use "git rm --cached <file>..." to unstage)
     new file:   .gitignore
+    new file:   README.md
     new file:   params.yaml
     new file:   requirements-freeze.txt
     new file:   requirements.txt
@@ -303,7 +305,7 @@ The output should be similar to this.
 
 ```diff
 diff --git a/.gitignore b/.gitignore
-index bd28df9..442ea27 100644
+index dc17ed7..1c13140 100644
 --- a/.gitignore
 +++ b/.gitignore
 @@ -1,5 +1,6 @@

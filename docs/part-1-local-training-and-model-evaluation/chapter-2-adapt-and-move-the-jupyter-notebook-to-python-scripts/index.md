@@ -744,10 +744,10 @@ Your working directory should now look like this:
 │   ├── evaluate.py
 │   ├── prepare.py
 │   └── train.py
-├── params.yaml # (2)!
-├── requirements-freeze.txt # (3)!
-├── requirements.txt # (4)!
-└── README.md # (5)!
+├── README.md # (2)!
+├── params.yaml # (3)!
+├── requirements-freeze.txt # (4)!
+└── requirements.txt # (5)!
 ```
 
 1. This, and all its sub-directory, is new.
@@ -806,10 +806,10 @@ Your working directory should now be similar to this:
 │   ├── evaluate.py
 │   ├── prepare.py
 │   └── train.py
+├── README.md
 ├── params.yaml
 ├── requirements-freeze.txt
-├── requirements.txt
-└── README.md
+└── requirements.txt
 ```
 
 1. This, and all its sub-directory, is new.
