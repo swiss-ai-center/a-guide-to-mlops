@@ -239,7 +239,22 @@ Create the Storage Bucket to store the data with the cloud provider CLI.
         --public-access-prevention
     ```
 
-    You now have everything needed for DVC.
+    ??? info "Getting an 'The billing account for the owning project is disabled in state absent' error? Read this!"
+
+        Ensure a
+        [billing account](https://console.cloud.google.com/billing/linkedaccount) is
+        correctly set up for the project.
+
+        In case you get a "HTTPError 403: The billing account for the owning project is
+        disabled in state absent" error, ensure the billing account is correctly linked
+        to the project.
+
+        In the Google Cloud Interface, go to **Billing** in the main hamburger menu,
+        then choose the **My Projects** tab. If billing is *disabled*, then select
+        *Change billing* * in the **Actions** menu, and click the **Set Account**
+        button.
+
+    You now have everything you need for DVC.
 
 === ":simple-microsoftazure: Microsoft Azure"
 
