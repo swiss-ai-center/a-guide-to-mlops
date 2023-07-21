@@ -136,7 +136,7 @@ collaboration and decision-making within the team.
 
     Take some time to understand the report job and its steps.
 
-    ```yaml title=".github/workflows/mlops.yml" hl_lines="30-31 57-120"
+    ```yaml title=".github/workflows/mlops.yml" hl_lines="30-31 57-123"
     name: MLOps
 
     on:
