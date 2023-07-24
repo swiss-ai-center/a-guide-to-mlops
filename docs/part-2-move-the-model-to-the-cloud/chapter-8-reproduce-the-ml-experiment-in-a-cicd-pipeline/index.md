@@ -250,10 +250,10 @@ Depending on the CI/CD platform you are using, the process will be different.
 
     on:
       # Runs on pushes targeting main branch
-      push:
-        branches:
-          - main
-        paths:
+      push: # (1)!
+        branches: # (2)!
+            - main
+        paths: # (3)!
             - src/**
             - dvc.yaml
             - params.yaml
@@ -262,8 +262,8 @@ Depending on the CI/CD platform you are using, the process will be different.
             - .github/workflows/mlops.yml
 
       # Runs on pull requests
-      pull_request:
-        paths:
+      pull_request: # (4)!
+        paths: # (5)!
             - src/**
             - dvc.yaml
             - params.yaml
@@ -272,7 +272,7 @@ Depending on the CI/CD platform you are using, the process will be different.
             - .github/workflows/mlops.yml
 
       # Allows you to run this workflow manually from the Actions tab
-      workflow_dispatch:
+      workflow_dispatch: # (6)!
 
     jobs:
       train:
@@ -292,8 +292,10 @@ Depending on the CI/CD platform you are using, the process will be different.
               credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
           - name: Train model
             run: dvc repro --pull --allow-missing
-          # After the experiment is done we update the dvc.lock and push the changes with dvc. This allows dvc to cache the experiment
-          # results and use them in locally and remotely on pipelines without running the experiment again.
+          # After the experiment is done we update the dvc.lock and push the
+          # changes with dvc. This allows dvc to cache the experiment results
+          # and use them locally and remotely on pipelines without running the
+          # experiment again.
           - name: Commit changes in dvc.lock
             uses: stefanzweifel/git-auto-commit-action@v4
             with:
@@ -302,6 +304,15 @@ Depending on the CI/CD platform you are using, the process will be different.
           - name: Push experiment results to DVC remote storage
             run: dvc push
     ```
+
+    1. Runs on pushes.
+    2. ... target the `main` branch.
+    3. ... restrict trigger to a modification of one of these files (as to avoid
+       unnecessary trigger)
+    4. Runs on pull requests.
+    5. ... restrict trigger to a modification of one of these files (as to avoid
+       unnecessary trigger).
+    6. Allows you to run this workflow manually from the Actions tab.
 
     !!! info
 
@@ -525,3 +536,4 @@ Highly inspired by:
 * [_Using service accounts_ - dvc.org](https://dvc.org/doc/user-guide/setup-google-drive-remote#using-service-accounts)
 * [_Creating encrypted secrets for a repository_ - docs.github.com](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
 * [_Add a CI/CD variable to a project_ - docs.gitlab.com](https://docs.gitlab.com/ee/ci/variables/#add-a-cicd-variable-to-a-project)
+* [_Triggering a workflow_ - docs.github.com](https://docs.github.com/en/actions/using-workflows/triggering-a-workflow)

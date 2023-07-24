@@ -136,7 +136,7 @@ collaboration and decision-making within the team.
 
     Take some time to understand the report job and its steps.
 
-    ```yaml title=".github/workflows/mlops.yml" hl_lines="30-31 57-123"
+    ```yaml title=".github/workflows/mlops.yml" hl_lines="30-31 57-125"
     name: MLOps
 
     on:
@@ -184,8 +184,10 @@ collaboration and decision-making within the team.
               credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
           - name: Train model
             run: dvc repro --pull --allow-missing
-          # After the experiment is done we update the dvc.lock and push the changes with dvc. This allows dvc to cache the experiment
-          # results and use them in locally and remotely on pipelines without running the experiment again.
+          # After the experiment is done we update the dvc.lock and push the
+          # changes with dvc. This allows dvc to cache the experiment results
+          # and use them locally and remotely on pipelines without running the
+          # experiment again.
           - name: Commit changes in dvc.lock
             uses: stefanzweifel/git-auto-commit-action@v4
             with:
