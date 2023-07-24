@@ -9,11 +9,13 @@
 ## Introduction
 
 The purpose of this chapter is to serve and use the model for usage outside of
-the experiment context with the help of [MLEM](../../tools.md). MLEM allows to
-do this by saving the model with metadata information that can be used to load
-the model for future usage. the experiment context with the help of
-[MLEM](../../tools.md). MLEM allows to do this by saving the model with metadata
-information that can be used to load the model for future usage.
+the experiment context with the help of [MLEM](../../tools), a powerful tool
+designed for easy packaging, deployment, and serving of Machine Learning models.
+
+By transforming your model into a specialized MLEM model, it is possible to
+capture the essential metadata information that can then be used to load the
+model for future usage, unlocking true potential in facilitating seamless and
+efficient model deployment.
 
 In this chapter, you will learn how to:
 
@@ -83,6 +85,12 @@ The effect of the `mlem init` command is to create a `.mlem.yaml` file in the
 working directory. This file contains the configuration of MLEM.
 
 ### Update the experiment
+
+To make the most of MLEM's capabilities, you must start by converting your model
+into the specialized MLEM format, which allows for the capture of essential
+model metadata beyond traditional model-saving practices. This pivotal step is
+crucial for harnessing the comprehensive features and advantages offered by
+MLEM.
 
 #### Update `src/train.py`
 
@@ -235,8 +243,8 @@ if __name__ == "__main__":
     main()
 ```
 
-MLEM can save the model with a preprocessing, postprocessing and sample_data
-functions.
+MLEM can save the model with a `preprocessing`, `postprocessing` and
+`sample_data` functions.
 
 These functions are used to save the model with the necessary information to
 load it later.
