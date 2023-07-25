@@ -227,6 +227,7 @@ In the next chapters, you will enhance the workflow to fix those issues.
       saved/loaded state
 - [ ] Model cannot be easily used from outside of the experiment context
 - [ ] Model is not accessible on the Internet and cannot be used anywhere
+- [ ] Model requires manual deployment on the cluster
 - [ ] Model cannot be trained on hardware other than the local machine
 
 You will address these issues in the next chapters for improved efficiency and

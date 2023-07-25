@@ -652,6 +652,7 @@ gcloud container clusters delete --zone europe-west6-a mlops-kubernetes
 - [x] Model can be saved and loaded with all required artifacts for future usage
 - [x] Model can be easily used outside of the experiment context.
 - [x] Model can be accessed from a Kubernetes cluster
+- [x] Model is continuously deployed with the CI/CD
 - [x] Model can be trained on a custom infrastructure with custom hardware for
       specific use-cases
 
