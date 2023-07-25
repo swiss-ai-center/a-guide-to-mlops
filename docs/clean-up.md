@@ -92,7 +92,7 @@ provider.
     3. Click on **Delete** at the top of the page.
     4. Follow the instructions to shut down the project.
 
-    **Close the billing account**
+    **Close the Billing Account**
 
     To remove the project from the Billing Acocunt:
 
@@ -105,7 +105,7 @@ provider.
 
     1. Go to the
        [Google Cloud Billing Console](https://console.cloud.google.com/billing){:target="\_blank"}.
-    2. Select the billing account you created.
+    2. Select the Billing Account you created.
     3. Click on **Account management** in the menu.
     4. Select **Actions** from the project list and select **Disable billing**.
     5. Select *Close Billing Account* at the top of the page.
