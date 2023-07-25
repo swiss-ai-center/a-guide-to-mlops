@@ -92,6 +92,33 @@ provider.
     3. Click on **Delete** at the top of the page.
     4. Follow the instructions to shut down the project.
 
+    **Close the Billing Account**
+
+    To remove the project from the Billing Acocunt:
+
+    1. Go to the
+       [Google Cloud Billing Console](https://console.cloud.google.com/billing){:target="\_blank"}.
+    2. Select **MY Projects**
+    3. Select **Actions** from the project list and select **Disable billing**.
+
+    To close the Billing Account you created:
+
+    1. Go to the
+       [Google Cloud Billing Console](https://console.cloud.google.com/billing){:target="\_blank"}.
+    2. Select the Billing Account you created.
+    3. Click on **Account management** in the menu.
+    4. Select **Actions** from the project list and select **Disable billing**.
+    5. Select *Close Billing Account* at the top of the page.
+    6. Follow the instructions to close the account.
+
+    **Remove the Payment method**
+
+    To remove the payment method you added:
+
+    1. Go to the **Payment method** in the 3-dots top right menu.
+    2. Select the card you added and select **Remove**.
+    3. Follow the instructions to remove the payment method.
+
 === ":simple-microsoftazure: Microsoft Azure"
 
     _This is a work in progress._
