@@ -862,16 +862,16 @@ git push
      properly -->
 <div style="display: flex" markdown>
 <figure markdown>
-![Plots Diff 1 Light](../../assets/images/cml_report1_light.png#only-light){ loading=lazy }
+![Plots Diff 1 Light](../assets/images/cml_report1_light.png#only-light){ loading=lazy }
 </figure>
 <figure markdown>
-![Plots Diff 1 Dark](../../assets/images/cml_report1_dark.png#only-dark){ loading=lazy }
+![Plots Diff 1 Dark](../assets/images/cml_report1_dark.png#only-dark){ loading=lazy }
 </figure>
 <figure markdown>
-![Plots Diff 2 Light](../../assets/images/cml_report2_light.png#only-light){ loading=lazy }
+![Plots Diff 2 Light](../assets/images/cml_report2_light.png#only-light){ loading=lazy }
 </figure>
 <figure markdown>
-![Plots Diff 2 Dark](../../assets/images/cml_report2_dark.png#only-dark){ loading=lazy }
+![Plots Diff 2 Dark](../assets/images/cml_report2_dark.png#only-dark){ loading=lazy }
 </figure>
 </div>
 

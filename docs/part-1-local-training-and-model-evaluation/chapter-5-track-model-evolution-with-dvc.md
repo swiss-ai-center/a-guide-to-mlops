@@ -94,7 +94,7 @@ working directory.
 !!! note
 
     Remember? We did set the parameters, metrics and plots in the previous chapter:
-    [Chapter 4: Reproduce the ML experiment with DVC](../chapter-4-reproduce-the-ml-experiment-with-dvc/index.md).
+    [Chapter 4: Reproduce the ML experiment with DVC](./chapter-4-reproduce-the-ml-experiment-with-dvc.md).
 
 #### Compare the parameters difference
 
@@ -155,7 +155,7 @@ compare the two iterations.
 
 Here is a preview of the report:
 
-![Plots Diff](../../assets/images/plots_diff.png){ loading=lazy }
+![Plots Diff](../assets/images/plots_diff.png){ loading=lazy }
 
 #### Summary of the model evolutions
 

@@ -1,11 +1,11 @@
-base_tmp_path: tmp/the-guide/generated_checkpoints
-base_save_path: docs
+base_tmp_path: tmp/
+base_md_path: docs/
 
 variables:
   TREE_CMD: tree --dirsfirst -I '*.jpg'
 
 saves:
-  part-1-local-training-and-model-evaluation/chapter-1-run-a-simple-ml-experiment-with-jupyter-notebook:
+  part-1-local-training-and-model-evaluation/chapter-1-run-a-simple-ml-experiment-with-jupyter-notebook.md:
     save_git: false
     actions:
       # Download the notebook
@@ -25,7 +25,7 @@ saves:
       - run: python3 -m venv .venv
       - run: . .venv/bin/activate && pip install --requirement requirements.txt
 
-  part-1-local-training-and-model-evaluation/chapter-2-adapt-and-move-the-jupyter-notebook-to-python-scripts:
+  part-1-local-training-and-model-evaluation/chapter-2-adapt-and-move-the-jupyter-notebook-to-python-scripts.md:
     save_git: false
     actions:
       # Clean the directory including hidden files
@@ -74,7 +74,7 @@ saves:
       - run: "{{ TREE_CMD }}"
         log: true
 
-  part-1-local-training-and-model-evaluation/chapter-3-initialize-git-and-dvc-for-local-training:
+  part-1-local-training-and-model-evaluation/chapter-3-initialize-git-and-dvc-for-local-training.md:
     save_git: false
     actions:
       # Create a new Git repository
@@ -109,7 +109,7 @@ saves:
         log: true
       - run: git commit -m "My ML experiment data is saved with DVC"
 
-  part-1-local-training-and-model-evaluation/chapter-4-reproduce-the-ml-experiment-with-dvc:
+  part-1-local-training-and-model-evaluation/chapter-4-reproduce-the-ml-experiment-with-dvc.md:
     save_git: false
     actions:
       - replace_from_md:
@@ -145,7 +145,7 @@ saves:
         log: true
       - run: git commit -m "My ML experiment commands are saved with DVC"
 
-  part-1-local-training-and-model-evaluation/chapter-5-track-model-evolution-with-dvc:
+  part-1-local-training-and-model-evaluation/chapter-5-track-model-evolution-with-dvc.md:
     save_git: false
     actions:
       - replace_from_md:
@@ -169,7 +169,7 @@ saves:
         log: true
       - run: git commit -m "My ML experiment changes are tracked"
 
-  part-2-move-the-model-to-the-cloud/chapter-6-move-the-ml-experiment-data-to-the-cloud:
+  part-2-move-the-model-to-the-cloud/chapter-6-move-the-ml-experiment-data-to-the-cloud.md:
     save_git: false
     actions:
       - replace_from_md:
@@ -186,11 +186,11 @@ saves:
         log: true
       - run: git commit -m "My ML experiment data is saved with DVC"
 
-  part-2-move-the-model-to-the-cloud/chapter-7-move-the-ml-experiment-code-to-the-cloud:
+  part-2-move-the-model-to-the-cloud/chapter-7-move-the-ml-experiment-code-to-the-cloud.md:
     save_git: true
     actions:
 
-  part-2-move-the-model-to-the-cloud/chapter-8-reproduce-the-ml-experiment-in-a-cicd-pipeline:
+  part-2-move-the-model-to-the-cloud/chapter-8-reproduce-the-ml-experiment-in-a-cicd-pipeline.md:
     save_git: true
     actions:
       - replace_from_md:
@@ -203,7 +203,7 @@ saves:
       - run: git add .gitlab-ci.yml
       - run: git commit -m "A pipeline will run my experiment on each push"
 
-  part-2-move-the-model-to-the-cloud/chapter-9-track-model-evolution-in-the-cicd-pipeline-with-cml:
+  part-2-move-the-model-to-the-cloud/chapter-9-track-model-evolution-in-the-cicd-pipeline-with-cml.md:
     save_git: true
     actions:
       - replace_from_md:
@@ -233,7 +233,7 @@ saves:
       - run: git checkout main
       - run: git merge cml-report
 
-  part-3-serve-and-deploy-the-model/chapter-10-save-and-load-the-model-with-mlem:
+  part-3-serve-and-deploy-the-model/chapter-10-save-and-load-the-model-with-mlem/index.md:
     save_git: true
     actions:
       - replace_from_md:

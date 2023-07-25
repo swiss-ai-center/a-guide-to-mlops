@@ -106,15 +106,13 @@ class ReplaceFileFromMdAction(AbstractAction):
 class Save:
     """A save is a collection of actions to run and a path to save the result."""
 
-    tmp_path: Path
-    save_path: Path
+    abs_wd_tmp_path: Path
+    abs_save_path: Path
     save_git: bool
     actions: List[AbstractAction]
 
     def __post_init__(self) -> None:
-        self.name = self.save_path.name
-        self.tmp_path = self.tmp_path.resolve()
-        self.save_path = self.save_path.resolve()
+        self.name = self.abs_save_path.name
 
     def run(self) -> None:
         print(esc("92;1"), f"\nRunning action for save: {self.name}", esc(0), sep="")
@@ -122,19 +120,20 @@ class Save:
             action.run()
 
     def save(self) -> None:
+        self.abs_save_path.mkdir(parents=True, exist_ok=True)
         if self.save_git:
             # Copy all files, ignore by gitignore and unstaged files
             shutil.copytree(
                 ".",
-                self.save_path,
+                self.abs_save_path,
                 ignore=self._get_ignored_as_git,
                 dirs_exist_ok=True,
             )
         else:
             # Copy all files
             shutil.copytree(
-                self.tmp_path,
-                self.save_path,
+                self.abs_wd_tmp_path,
+                self.abs_save_path,
                 ignore=shutil.ignore_patterns(".git"),
                 dirs_exist_ok=True,
             )
@@ -176,7 +175,7 @@ class Save:
 class SavesManager:
     """A manager for a collection of saves. Creates a temporary directory to run the saves in."""
 
-    base_tmp_path: Path
+    tmp_wd_path: Path
     saves: List[Save]
     clean_tmp: bool = False
     run_until: Optional[int] = None
@@ -184,11 +183,11 @@ class SavesManager:
 
     def run(self) -> None:
         cwd = Path.cwd()
-        if self.base_tmp_path.exists():
-            shutil.rmtree(self.base_tmp_path)
+        if self.tmp_wd_path.exists():
+            shutil.rmtree(self.tmp_wd_path)
 
-        self.base_tmp_path.mkdir(parents=True, exist_ok=True)
-        os.chdir(self.base_tmp_path)
+        self.tmp_wd_path.mkdir(parents=True, exist_ok=True)
+        os.chdir(self.tmp_wd_path)
 
         if Path(GENERATED_OUTPUT_PATH).exists():
             os.remove(GENERATED_OUTPUT_PATH)
@@ -204,20 +203,21 @@ class SavesManager:
 
         os.chdir(cwd)
         if self.clean_tmp:
-            shutil.rmtree(self.base_tmp_path)
+            shutil.rmtree(self.tmp_wd_path)
 
 
 @dataclass
 class SavesFactory:
     """A factory for creating saves."""
 
-    base_tmp_path: Path
+    tmp_wd_path: Path
+    base_md_path: Path
     base_save_path: Path
 
     def create(self, saves: dict, variables: dict) -> List[Save]:
         return [
-            self._create_save(save_dir, save, variables)
-            for save_dir, save in saves.items()
+            self._create_save(md_path, save, variables)
+            for md_path, save in saves.items()
         ]
 
     def _template_string(self, string: str, variables: dict) -> str:
@@ -226,10 +226,9 @@ class SavesFactory:
             string = string.replace("{{ " + key + " }}", str(value))
         return string
 
-    def _create_save(self, save_dir: str, save: dict, variables: dict) -> Save:
+    def _create_save(self, md_path: str, save: dict, variables: dict) -> Save:
         """Create a Save instance from a dict"""
-        save_path = self.base_save_path / save_dir
-        save_path.mkdir(parents=True, exist_ok=True)
+        md_full_path = self.base_md_path / md_path
 
         actions = []
         for action in save["actions"] or []:
@@ -243,11 +242,10 @@ class SavesFactory:
                     )
                 )
             elif "replace_from_md" in action:
-                pass
                 actions.append(
                     ReplaceFileFromMdAction(
                         file_path=Path(action["file"]),
-                        md_path=save_path / action.get("md_path", "index.md"),
+                        md_path=md_full_path,
                         occurance_index=action["occurance_index"],
                     )
                 )
@@ -257,7 +255,12 @@ class SavesFactory:
                     "Available action types are 'run' and 'replace_from_md'."
                 )
 
-        return Save(self.base_tmp_path, save_path, save["save_git"], actions)
+        return Save(
+            abs_wd_tmp_path=self.tmp_wd_path.resolve(),
+            abs_save_path=(self.base_save_path.resolve() / md_path).with_suffix(""),
+            save_git=save["save_git"],
+            actions=actions,
+        )
 
 
 def main() -> None:
@@ -271,27 +274,34 @@ def main() -> None:
 
     ```yaml
     base_tmp_path: The path to the tmp directory
-    base_save_path: The path to the save directory
+    base_md_path: The base path to the markdown files
 
     variables: # Variables to replace in the 'run' actions
         <variable_name>: <variable_value>
 
     saves:
-        <save_dir>: # The directory to save the result in
+        <md_file_path>: # The path to the markdown file
             save_git: True # Whether to save the gitignored files
             actions:
                 - run: <command> # Run a command
                     log: True # Whether to log the output
                 - replace_from_md: # Replace a file with a code block from a markdown file
                     file: <file_path> # The path to the file to replace
-                    md_path: <md_path> # The path to the markdown file
                     occurance_index: <occurance_index> # The index of the code block to use
     ```
 
-    The output of the actions is saved in the GENERATED_OUTPUT_PATH file (see top of file).
+    The output of the actions is saved in the GENERATED_OUTPUT_PATH file (see top of file)
+    which is in the `base_tmp_path` directory.
     """
+    actions = yaml.safe_load(Path("checkpoint_generator/actions.yaml").read_text())
 
-    parser = argparse.ArgumentParser()
+    base_tmp_path = Path(actions["base_tmp_path"])
+    base_md_path = Path(actions["base_md_path"])
+    tmp_wd_path = base_tmp_path / "working-directory"
+
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
     parser.add_argument(
         "-c",
         "--clean",
@@ -312,19 +322,25 @@ def main() -> None:
         action="store_true",
         default=False,
     )
+    parser.add_argument(
+        "--save-path",
+        help="The path to the save directory.",
+        type=str,
+        default=base_tmp_path / "saves",
+    )
     args = parser.parse_args()
 
-    actions = yaml.safe_load(Path("scripts/the-guide/actions.yaml").read_text())
-
-    base_tmp_path = Path(actions["base_tmp_path"])
-    base_save_path = Path(actions["base_save_path"])
-    saves_factory = SavesFactory(base_tmp_path, base_save_path)
+    saves_factory = SavesFactory(
+        tmp_wd_path=tmp_wd_path,
+        base_md_path=base_md_path,
+        base_save_path=Path(args.save_path),
+    )
 
     saves = saves_factory.create(
         saves=actions["saves"], variables=actions.get("variables", {})
     )
     saves_manager = SavesManager(
-        base_tmp_path=base_tmp_path,
+        tmp_wd_path=tmp_wd_path,
         saves=saves,
         clean_tmp=args.clean,
         run_until=args.until,
