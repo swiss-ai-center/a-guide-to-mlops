@@ -203,22 +203,26 @@ saves:
       - run: git add .gitlab-ci.yml
       - run: git commit -m "A pipeline will run my experiment on each push"
 
-  part-2-move-the-model-to-the-cloud/chapter-9-track-model-evolution-in-the-cicd-pipeline-with-cml.md:
+  part-2-move-the-model-to-the-cloud/chapter-9-update-the-cicd-pipeline-with-cml.md:
     save_git: true
     actions:
       - replace_from_md:
         file: .github/workflows/mlops.yml
         occurance_index: 0
-      - run: git diff .github/workflows/mlops.yml
-        log: true
       - replace_from_md:
         file: .gitlab-ci.yml
         occurance_index: 0
+      - run: git diff .github/workflows/mlops.yml
+        log: true
       - run: git diff .gitlab-ci.yml
         log: true
       - run: git add .github/workflows/mlops.yml
       - run: git add .gitlab-ci.yml
-      - run: git commit -m "Enable CML reports on pull requests"
+      - run: git commit -m "Add cml reporting to CI/CD pipeline"
+
+  part-2-move-the-model-to-the-cloud/chapter-10-track-model-evolution-in-the-cicd-pipeline-with-cml.md:
+    save_git: true
+    actions:
       - run: git checkout -b cml-report
       - replace_from_md:
         file: params.yaml
