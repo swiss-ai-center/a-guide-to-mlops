@@ -1,4 +1,4 @@
-# Chapter 13: Continuous deployment of the model with MLEM and the CI/CD pipeline
+# Chapter 14: Continuous deployment of the model with MLEM and the CI/CD pipeline
 
 ??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
 

@@ -20,18 +20,18 @@ What you will learn from this guide.
     - [Chapter 10 - Track model evolution in the CI/CD pipeline with CML](./part-2-move-the-model-to-the-cloud/chapter-10-track-model-evolution-in-the-cicd-pipeline-with-cml.md)
 - [Part 3 - Serve and deploy the model](./part-3-serve-and-deploy-the-model/introduction.md) -
   Learn how to serve and deploy the model using MLEM and CML.
-    - [Chapter 10 - Save and load the model with MLEM](./part-3-serve-and-deploy-the-model/chapter-10-save-and-load-the-model-with-mlem.md)
-    - [Chapter 11 - Serve the model locally with MLEM](./part-3-serve-and-deploy-the-model/chapter-11-serve-the-model-locally-with-mlem.md)
-    - [Chapter 12 - Deploy and access the model on Kubernetes with MLEM](./part-3-serve-and-deploy-the-model/chapter-12-deploy-and-access-the-model-on-kubernetes-with-mlem.md)
-    - [Chapter 13 - Continuous deployment of the model with MLEM and the CI/CD pipeline](./part-3-serve-and-deploy-the-model/chapter-13-continuous-deployment-of-the-model-with-mlem-and-the-cicd-pipeline.md)
-    - [Chapter 14 - Train the model on a Kubernetes pod with CML](./part-3-serve-and-deploy-the-model/chapter-14-train-the-model-on-a-kubernetes-pod-with-cml.md)
+    - [Chapter 11 - Save and load the model with MLEM](./part-3-serve-and-deploy-the-model/chapter-11-save-and-load-the-model-with-mlem.md)
+    - [Chapter 12 - Serve the model locally with MLEM](./part-3-serve-and-deploy-the-model/chapter-12-serve-the-model-locally-with-mlem.md)
+    - [Chapter 13 - Deploy and access the model on Kubernetes with MLEM](./part-3-serve-and-deploy-the-model/chapter-13-deploy-and-access-the-model-on-kubernetes-with-mlem.md)
+    - [Chapter 14 - Continuous deployment of the model with MLEM and the CI/CD pipeline](./part-3-serve-and-deploy-the-model/chapter-14-continuous-deployment-of-the-model-with-mlem-and-the-cicd-pipeline.md)
+    - [Chapter 15 - Train the model on a Kubernetes pod with CML](./part-3-serve-and-deploy-the-model/chapter-15-train-the-model-on-a-kubernetes-pod-with-cml.md)
 - [Part 4 - Labeling the data and retrain the model](./part-4-labeling-the-data-and-retrain/introduction.md) -
   Learn how to label new data and retrain the model using Label Studio.
-    - [Chapter 15 - Setup Label Studio](./part-4-labeling-the-data-and-retrain/chapter-15-setup-label-studio.md)
-    - [Chapter 16 - Import existing data to Label Studio](./part-4-labeling-the-data-and-retrain/chapter-16-import-existing-data-to-label-studio.md)
-    - [Chapter 17 - Label new data with Label Studio](./part-4-labeling-the-data-and-retrain/chapter-17-label-new-data-with-label-studio.md)
-    - [Chapter 18 - Retrain the model from new data with DVC Sync](./part-4-labeling-the-data-and-retrain/chapter-18-retrain-the-model-from-new-data-with-dvc-sync.md)
-    - [Chapter 19 - Link the model to Label Studio and get predictions](./part-4-labeling-the-data-and-retrain/chapter-19-link-the-model-to-label-studio-and-get-predictions.md)
+    - [Chapter 16 - Setup Label Studio](./part-4-labeling-the-data-and-retrain/chapter-16-setup-label-studio.md)
+    - [Chapter 17 - Import existing data to Label Studio](./part-4-labeling-the-data-and-retrain/chapter-17-import-existing-data-to-label-studio.md)
+    - [Chapter 18 - Label new data with Label Studio](./part-4-labeling-the-data-and-retrain/chapter-18-label-new-data-with-label-studio.md)
+    - [Chapter 19 - Retrain the model from new data with DVC Sync](./part-4-labeling-the-data-and-retrain/chapter-19-retrain-the-model-from-new-data-with-dvc-sync.md)
+    - [Chapter 20 - Link the model to Label Studio and get predictions](./part-4-labeling-the-data-and-retrain/chapter-20-link-the-model-to-label-studio-and-get-predictions.md)
 - [Conclusion](./conclusion.md) - Summary of what you have done and what is left
   to be done.
 

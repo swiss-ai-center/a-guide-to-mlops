@@ -1,4 +1,4 @@
-# Chapter 15: Setup Label Studio
+# Chapter 16: Setup Label Studio
 
 ??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
 

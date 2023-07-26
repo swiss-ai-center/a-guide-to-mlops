@@ -1,4 +1,4 @@
-# Chapter 17: Label new data with Label Studio
+# Chapter 17: Import existing data to Label Studio
 
 ??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
 

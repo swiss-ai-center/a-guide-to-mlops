@@ -1,4 +1,4 @@
-# Chapter 10: Save and load the model with MLEM
+# Chapter 11: Save and load the model with MLEM
 
 ??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
 

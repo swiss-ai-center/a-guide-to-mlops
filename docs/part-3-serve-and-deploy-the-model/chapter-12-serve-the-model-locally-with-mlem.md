@@ -1,4 +1,4 @@
-# Chapter 11: Serve the model locally with MLEM
+# Chapter 12: Serve the model locally with MLEM
 
 ??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
 

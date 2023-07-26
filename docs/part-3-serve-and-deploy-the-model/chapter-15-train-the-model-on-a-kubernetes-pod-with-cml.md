@@ -1,4 +1,4 @@
-# Chapter 14: Train the model on a Kubernetes pod with CML
+# Chapter 15: Train the model on a Kubernetes pod with CML
 
 ??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
 

@@ -1,4 +1,4 @@
-# Chapter 12: Deploy and access the model on Kubernetes with MLEM
+# Chapter 13: Deploy and access the model on Kubernetes with MLEM
 
 ??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
 
