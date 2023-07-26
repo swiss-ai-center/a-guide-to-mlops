@@ -411,6 +411,7 @@ You can now safely continue to the next chapter.
 - [ ] Dataset requires manual download and placement
 - [ ] Codebase requires manual download and setup
 - [ ] Experiment may not be reproducible on other machines
+- [ ] CI/CD pipeline does not report the results of the experiment
 - [ ] Changes to model are not thoroughly reviewed and discussed before
       integration
 - [ ] Model may have required artifacts that are forgotten or omitted in

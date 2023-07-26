@@ -135,7 +135,7 @@ collaboration and decision-making within the team.
 
     Explore this file to understand the `train-and-report` stage and its steps.
 
-    ```yaml title=".github/workflows/mlops.yml" hl_lines="8-14 18-24 30-31 57-125"
+    ```yaml title=".github/workflows/mlops.yml" hl_lines="8-14 18-24 30-31 48-125"
     name: MLOps
 
     on:
@@ -652,7 +652,7 @@ Take some time to understand the changes made to the file.
     git add .github/workflows/mlops.yml
 
     # Commit the changes
-    git commit -m "Add report job to CI/CD pipeline"
+    git commit -m "Add cml reporting to CI/CD pipeline"
 
     # Push the changes
     git push
@@ -667,7 +667,7 @@ Take some time to understand the changes made to the file.
     git add .gitlab-ci.yml
 
     # Commit the changes
-    git commit -m "Add report job to CI/CD pipeline"
+    git commit -m "Add cml reporting to CI/CD pipeline"
 
     # Push the changes
     git push
@@ -707,11 +707,8 @@ In this chapter, you have successfully:
 
 You fixed some of the previous issues:
 
-- [x] The experiment can be executed on a clean machine with the help of a CI/CD
-      pipeline
-
-You have a CI/CD pipeline to ensure the whole experiment can still be reproduced
-using the data and the commands to run using DVC over time.
+- [x] CI/CD pipeline is triggered on pull requests and reports the results of
+      the experiment
 
 You can now safely continue to the next chapter.
 
@@ -727,6 +724,8 @@ You can now safely continue to the next chapter.
 - [x] Codebase can be shared and improved by multiple developers
 - [x] Experiment can be executed on a clean machine with the help of a CI/CD
       pipeline
+- [x] CI/CD pipeline is triggered on pull requests and reports the results of
+      the experiment
 - [ ] Changes to model are not thoroughly reviewed and discussed before
       integration
 - [ ] Model may have required artifacts that are forgotten or omitted in

@@ -411,6 +411,8 @@ You can now safely continue to the next chapter.
 - [x] Codebase can be shared and improved by multiple developers
 - [x] Experiment can be executed on a clean machine with the help of a CI/CD
       pipeline
+- [x] CI/CD pipeline is triggered on pull requests and reports the results of
+      the experiment
 - [x] Changes to model can be thoroughly reviewed and discussed before
       integrating them into the codebase
 - [ ] Model may have required artifacts that are forgotten or omitted in
@@ -422,7 +424,7 @@ collaboration. Continue the guide to learn how.
 
 ## Sources
 
-Highly inspired by the following guides:
+Highly inspired by:
 
 * [_Creating an issue_ - docs.github.com](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue)
 * [_Creating a branch to work on an issue_ - docs.github.com](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-a-branch-for-an-issue)

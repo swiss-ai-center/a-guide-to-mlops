@@ -457,6 +457,7 @@ You can now safely continue to the next chapter.
 - [x] Codebase can be shared and improved by multiple developers
 - [x] Experiment can be executed on a clean machine with the help of a CI/CD
       pipeline
+- [ ] CI/CD pipeline does not report the results of the experiment
 - [ ] Changes to model are not thoroughly reviewed and discussed before
       integration
 - [ ] Model may have required artifacts that are forgotten or omitted in
