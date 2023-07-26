@@ -72,12 +72,12 @@ Notebooks into Python scripts suitable for running ML experiments in a more
 modular and reproducible manner can help address these shortcomings and enhance
 the overall ML development process.
 
-[pip](../../tools.md) is the standard package manager for Python. It is used to
+[pip](../tools.md) is the standard package manager for Python. It is used to
 install and manage dependencies in a Python environment.
 
 In this chapter, you will learn how to:
 
-1. Set up a Python environment using [pip](../../tools.md)
+1. Set up a Python environment using [pip](../tools.md)
 2. Adapt the content of the Jupyter Notebook into Python scripts
 3. Launch the experiment locally
 
