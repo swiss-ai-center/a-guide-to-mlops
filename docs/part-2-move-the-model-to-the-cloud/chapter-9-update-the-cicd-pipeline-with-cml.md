@@ -533,46 +533,32 @@ collaboration and decision-making within the team.
     +
     +      # Compare parameters to main branch
     +      echo "## Params workflow vs. main" >> report.md
-    +      echo >> report.md
     +      dvc params diff main --md >> report.md
-    +      echo >> report.md
     +
     +      # Compare metrics to main branch
     +      echo "## Metrics workflow vs. main" >> report.md
-    +      echo >> report.md
     +      dvc metrics diff main --md >> report.md
-    +      echo >> report.md
     +
     +      # Compare plots (images) to main branch
     +      dvc plots diff main
     +
     +      # Create plots
     +      echo "## Plots" >> report.md
-    +      echo >> report.md
     +
     +      # Create training history plot
     +      echo "### Training History" >> report.md
-    +      echo >> report.md
     +      echo '![](./dvc_plots/static/main_evaluation_plots_training_history.png "Training History")' >> report.md
-    +      echo >> report.md
     +      echo '![](./dvc_plots/static/workspace_evaluation_plots_training_history.png "Training History")' >> report.md
-    +      echo >> report.md
     +
     +      # Create predictions preview
     +      echo "### Predictions Preview" >> report.md
-    +      echo >> report.md
     +      echo '![](./dvc_plots/static/main_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
-    +      echo >> report.md
     +      echo '![](./dvc_plots/static/workspace_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
-    +      echo >> report.md
     +
     +      # Create confusion matrix
     +      echo "### Confusion Matrix" >> report.md
-    +      echo >> report.md
     +      echo '![](./dvc_plots/static/main_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
-    +      echo >> report.md
     +      echo '![](./dvc_plots/static/workspace_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
-    +      echo >> report.md
     +
     +      # Publish the CML report
     +      cml comment update --target=pr --publish report.md
