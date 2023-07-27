@@ -16,14 +16,14 @@ However, when it comes to managing large files, Git has some limitations.
 Although Git LFS is an option for handling large files in Git repositories, it
 may not be the most efficient solution.
 
-This is the reason we will use [DVC](../../tools#dvc), a version control system
+This is the reason we will use [DVC](../tools.md), a version control system
 specifically designed for efficient data management that seamlessly integrates
 with Git. DVC utilizes chunking to efficiently store large files and track their
 changes.
 
 In this chapter, you will learn how to:
 
-1. Set up a new [Git](../../tools#git) repository
+1. Set up a new [Git](../tools.md) repository
 2. Initialize Git in your project directory
 3. Verify Git tracking for your files
 4. Exclude experiment results, data, models and Python environment files from
