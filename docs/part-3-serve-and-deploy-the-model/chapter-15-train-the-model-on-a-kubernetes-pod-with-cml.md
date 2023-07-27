@@ -79,20 +79,20 @@ you'll be able to start the training of the model on the node with the GPU.
 
 === ":simple-github: GitHub"
 
- In order to allow CML to create a self-hosted runner, a Personal Access Token
- (PAT) must be created.
+    In order to allow CML to create a self-hosted runner, a Personal Access Token
+    (PAT) must be created.
 
- Follow the
- [_Personal Access Token_ - cml.dev](https://cml.dev/doc/self-hosted-runners?tab=GitHub#personal-access-token)
- guide to create a personal access token named `CML_PAT` with the `repo` scope.
+    Follow the
+    [_Personal Access Token_ - cml.dev](https://cml.dev/doc/self-hosted-runners?tab=GitHub#personal-access-token)
+    guide to create a personal access token named `CML_PAT` with the `repo` scope.
 
- Store the Personal Access Token as a CI/CD variable by going to the **Settings**
- section from the top header of your GitHub repository.
+    Store the Personal Access Token as a CI/CD variable by going to the **Settings**
+    section from the top header of your GitHub repository.
 
- Select **Secrets and variables > Actions** and select **New repository secret**.
+    Select **Secrets and variables > Actions** and select **New repository secret**.
 
- Create a new variable named `CML_PAT` with the value of the Personal Access
- Token as its value. Save the variable by selecting **Add secret**.
+    Create a new variable named `CML_PAT` with the value of the Personal Access
+    Token as its value. Save the variable by selecting **Add secret**.
 
 	Update the `.github/workflows/mlops.yml` file.
 
