@@ -253,26 +253,12 @@ Depending on the CI/CD platform you are using, the process will be different.
       push: # (1)!
         branches: # (2)!
             - main
-        paths: # (3)!
-            - src/**
-            - dvc.yaml
-            - params.yaml
-            - requirements.txt
-            - requirements-freeze.txt
-            - .github/workflows/mlops.yml
 
       # Runs on pull requests
-      pull_request: # (4)!
-        paths: # (5)!
-            - src/**
-            - dvc.yaml
-            - params.yaml
-            - requirements.txt
-            - requirements-freeze.txt
-            - .github/workflows/mlops.yml
+      pull_request: # (3)!
 
       # Allows you to run this workflow manually from the Actions tab
-      workflow_dispatch: # (6)!
+      workflow_dispatch: # (4)!
 
     jobs:
       train:
@@ -291,38 +277,18 @@ Depending on the CI/CD platform you are using, the process will be different.
             with:
               credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
           - name: Train model
-            run: dvc repro --pull --allow-missing
-          # After the experiment is done we update the dvc.lock and push the
-          # changes with dvc. This allows dvc to cache the experiment results
-          # and use them locally and remotely on pipelines without running the
-          # experiment again.
-          - name: Commit changes in dvc.lock
-            uses: stefanzweifel/git-auto-commit-action@v4
-            with:
-              commit_message: Commit changes in dvc.lock
-              file_pattern: dvc.lock
-          - name: Push experiment results to DVC remote storage
-            run: dvc push
+            run: dvc repro --pull --allow-missing # (5)!
     ```
 
     1. Runs on pushes.
     2. ... target the `main` branch.
-    3. ... restrict trigger to a modification of one of these files (as to avoid
-       unnecessary trigger)
-    4. Runs on pull requests.
-    5. ... restrict trigger to a modification of one of these files (as to avoid
-       unnecessary trigger).
-    6. Allows you to run this workflow manually from the Actions tab.
-
-    !!! info
-
-        Note we push the `dvc.lock` file and the experiment results to the DVC remote
-        storage at the end of the pipeline. This is to allows DVC to cache the
-        experiment results for the next pipeline and to reproduce the experiment
-        locally.
-
-        This also means that you will need to run `git pull` locally to get the latest
-        `dvc.lock` file once the pipeline is done.
+    3. Runs on pull requests.
+    4. Allows you to run this workflow manually from the Actions tab.
+    5. Instead of running `dvc pull` and `dvc repro` separately, we can run them
+       together with `dvc repro --pull`. The `--allow-missing` flag allows DVC to skip
+       downloading unnecessary files that are not used in the repro step. For example,
+       if the prepare step is already cached, DVC will skip downloading the data again
+       and will only download the cached prepare step.
 
 === ":simple-gitlab: GitLab"
 
@@ -361,22 +327,6 @@ Depending on the CI/CD platform you are using, the process will be different.
     Explore this file to understand the train stage and its steps.
 
     ```yaml title=".gitlab-ci.yml"
-    .git-push-dvc-lock: &git-push-dvc-lock |
-      # Check if there are changes in dvc.lock
-      if [[ -n $(git status --porcelain dvc.lock) ]]; then
-        git config --global user.name "gitlab-ci[bot]"
-        git config --global user.email "gitlab-ci[bot]@users.noreply.gitlab.com"
-        git add dvc.lock
-        git commit -m "Commit changes in dvc.lock"
-        # Get current branch name
-        if [[ -n "${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}" ]]; then
-          BRANCH_NAME=${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}
-        else
-          BRANCH_NAME=${CI_COMMIT_BRANCH}
-        fi
-        git push -o ci.skip https://${GITLAB_USER_LOGIN}:${GITLAB_PAT}@${CI_REPOSITORY_URL#*@} HEAD:${BRANCH_NAME}
-      fi
-
     stages:
       - train
 
@@ -410,22 +360,14 @@ Depending on the CI/CD platform you are using, the process will be different.
         - pip install --requirement requirements.txt
       script:
         # Run the experiment
-        - dvc repro --pull --allow-missing
-        # After the experiment is done we update the dvc.lock and push the changes with dvc. This allows dvc to cache the experiment
-        # results and use them in locally and remotely on pipelines without running the experiment again.
-        - *git-push-dvc-lock
-        - dvc push
+        - dvc repro --pull --allow-missing # (1)!
     ```
 
-    !!! info
-
-        Note we push the `dvc.lock` file and the experiment results to the DVC remote
-        storage at the end of the pipeline. This is to allows DVC to cache the
-        experiment results for the next pipeline and to reproduce the experiment
-        locally.
-
-        This also means that you will need to run `git pull` locally to get the latest
-        `dvc.lock` file once the pipeline is done.
+    1. Instead of running `dvc pull` and `dvc repro` separately, we can run them
+       together with `dvc repro --pull`. The `--allow-missing` flag allows DVC to skip
+       downloading unnecessary files that are not used in the repro step. For example,
+       if the prepare step is already cached, DVC will skip downloading the data again
+       and will only download the cached prepare step.
 
 ### Push the CI/CD pipeline configuration file to Git
 
@@ -515,6 +457,7 @@ You can now safely continue to the next chapter.
 - [x] Codebase can be shared and improved by multiple developers
 - [x] Experiment can be executed on a clean machine with the help of a CI/CD
       pipeline
+- [ ] CI/CD pipeline does not report the results of the experiment
 - [ ] Changes to model are not thoroughly reviewed and discussed before
       integration
 - [ ] Model may have required artifacts that are forgotten or omitted in

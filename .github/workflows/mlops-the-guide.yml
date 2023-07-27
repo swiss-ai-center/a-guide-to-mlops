@@ -11,7 +11,7 @@ on:
       - docs/part-2-move-the-model-to-the-cloud
       - docs/part-3-serve-and-deploy-the-model
       - docs/part-4-labeling-the-data-and-retrain
-      - scripts/the-guide
+      - checkpoint_generator
 
   # Runs on pull requests
   pull_request:
