@@ -292,35 +292,6 @@ Depending on the CI/CD platform you are using, the process will be different.
 
 === ":simple-gitlab: GitLab"
 
-    In order to allow commit from the CI and later generate reports with CML, a
-    Personal Access Token (PAT) must be created. A Project or a Group Access Token
-    are not sufficient for the usage of CML's runners that will be used in the next
-    steps.
-
-    To create a Personal Access Token, go in your
-    **Profile preferences > Access Tokens**.
-
-    - **Token name**: _gitlab-ci[bot]_
-    - **Expiration date**: _None_
-    - **Select a role**: _Developer_
-    - **Select scopes**: `api`, `read_repository` and `write_repository`
-
-    Select **Create personal access token** to create the token. Copy it. It will be
-    displayed only once.
-
-    Store the PAT as a CI/CD Variable by going to **Settings > CI/CD** from the left
-    sidebar of your GitLab project.
-
-    Select **Variables** and select **Add variable**.
-
-    Create a new variable named `GITLAB_PAT` with the PAT value as its value.
-
-    - **Protect variable**: _Unchecked_
-    - **Mask variable**: _Checked_
-    - **Expand variable reference**: _Unchecked_
-
-    Save the variable by clicking **Add variable**.
-
     At the root level of your Git repository, create a GitLab CI configuration file
     `.gitlab-ci.yml`.
 
