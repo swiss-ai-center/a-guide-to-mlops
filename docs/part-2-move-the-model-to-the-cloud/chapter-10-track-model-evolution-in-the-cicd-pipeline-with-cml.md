@@ -9,7 +9,7 @@
 ## Introduction
 
 The objective of this chapter is to effectively track the evolution of the model
-and generate reports directly from the CI/CD pipeline, using [CML](../../tools).
+and generate reports directly from the CI/CD pipeline, using [CML](../tools.md).
 This capability empowers collaborators to engage in online discussions, enabling
 them to thoroughly review and deliberate on proposed changes before merging them
 into the codebase.
@@ -151,7 +151,7 @@ git checkout <the name of the new branch>
 ### Update the parameters of the experiment
 
 Similarly to what we have done in
-[Chapter 5: Track model evolutions with DVC](../../part-1-local-training-and-model-evaluation/chapter-5-track-model-evolution-with-dvc),
+[Chapter 5: Track model evolutions with DVC](../part-1-local-training-and-model-evaluation/chapter-5-track-model-evolution-with-dvc.md),
 we will update the experiment to see the evolution being tracked remotely by
 CML.
 

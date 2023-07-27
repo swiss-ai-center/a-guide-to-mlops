@@ -9,9 +9,9 @@
 ## Introduction
 
 The purpose of this chapter is to serve and use the model for usage outside of
-the experiment context with the help of [MLEM](../../tools). MLEM allows to do
-this by saving the model with metadata information that can be used to load the
-model for future usage.
+the experiment context with the help of [MLEM](../../tools.md). MLEM allows to
+do this by saving the model with metadata information that can be used to load
+the model for future usage.
 
 In this chapter, you will learn how to:
 

@@ -34,7 +34,7 @@ those described in the
     Before proceeding with this section, please ensure that you have a valid payment
     method, as it may be required to utilize cloud services. It is important to note
     that at the conclusion of this section, you will need to
-    [delete the cloud resources](../../clean-up/) that were created to avoid any
+    [delete the cloud resources](../clean-up.md) that were created to avoid any
     potential charges.
 
     While the costs associated with this section are **expected to be free**, it is
