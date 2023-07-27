@@ -294,11 +294,40 @@ collaboration and decision-making within the team.
 
     ```diff
     diff --git a/.github/workflows/mlops.yml b/.github/workflows/mlops.yml
-    index 176c713..8f7e95f 100644
+    index 493691a..f229c9b 100644
     --- a/.github/workflows/mlops.yml
     +++ b/.github/workflows/mlops.yml
-    @@ -27,7 +27,8 @@ on:
-       workflow_dispatch:
+    @@ -2,18 +2,33 @@ name: MLOps
+
+     on:
+       # Runs on pushes targeting main branch
+    -  push: # (1)!
+    -    branches: # (2)!
+    +  push:
+    +    branches:
+             - main
+    +    paths: # (1)!
+    +        - src/**
+    +        - dvc.yaml
+    +        - params.yaml
+    +        - requirements.txt
+    +        - requirements-freeze.txt
+    +        - .github/workflows/mlops.yml
+
+       # Runs on pull requests
+    -  pull_request: # (3)!
+    +  pull_request:
+    +    paths: # (2)!
+    +        - src/**
+    +        - dvc.yaml
+    +        - params.yaml
+    +        - requirements.txt
+    +        - requirements-freeze.txt
+    +        - .github/workflows/mlops.yml
+
+       # Allows you to run this workflow manually from the Actions tab
+    -  workflow_dispatch: # (4)!
+    +  workflow_dispatch:
 
      jobs:
     -  train:
@@ -307,10 +336,23 @@ collaboration and decision-making within the team.
          runs-on: ubuntu-latest
          steps:
            - name: Checkout repository
-    @@ -53,3 +54,70 @@ jobs:
-               file_pattern: dvc.lock
-           - name: Push experiment results to DVC remote storage
-             run: dvc push
+    @@ -29,4 +44,82 @@ jobs:
+             with:
+               credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
+           - name: Train model
+    -        run: dvc repro --pull --allow-missing # (5)!
+    +        run: dvc repro --pull --allow-missing
+    +      # After the experiment is done we update the dvc.lock and push the
+    +      # changes with dvc. This allows dvc to cache the experiment results
+    +      # and use them locally and remotely on pipelines without running the
+    +      # experiment again.
+    +      - name: Commit changes in dvc.lock
+    +        uses: stefanzweifel/git-auto-commit-action@v4
+    +        with:
+    +          commit_message: Commit changes in dvc.lock
+    +          file_pattern: dvc.lock
+    +      - name: Push experiment results to DVC remote storage
+    +        run: dvc push
     +      # Node is required to run CML
     +      - name: Setup Node
     +        if: github.event_name == 'pull_request'
@@ -546,97 +588,168 @@ collaboration and decision-making within the team.
 
     ```diff
     diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-    index 1415c53..b0f46f0 100644
+    index 726b176..6e2262d 100644
     --- a/.gitlab-ci.yml
     +++ b/.gitlab-ci.yml
-    @@ -16,6 +16,7 @@
-
-     stages:
-       - train
-    +  - report
-
-     variables:
-       # Change pip's cache directory to be inside the project directory since we can
-    @@ -25,6 +26,8 @@ variables:
-       GIT_DEPTH: "0"
-       # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
-       GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
-    +  # Environment variable for CML
-    +  REPO_TOKEN: $GITLAB_PAT
-
-     train:
-       stage: train
-    @@ -52,3 +55,67 @@ train:
-         # results and use them in locally and remotely on pipelines without running the experiment again.
-         - *git-push-dvc-lock
-         - dvc push
+    @@ -1,34 +1,124 @@
+    -stages:
+    -  - train
+    -
+    -variables:
+    -  # Change pip's cache directory to be inside the project directory since we can
+    -  # only cache local items.
+    -  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+    -  # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
+    -  GIT_DEPTH: "0"
+    -  # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
+    -  GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
+    -
+    -train:
+    -  stage: train
+    -  image: python:3.10
+    -  rules:
+    -    - if: $CI_COMMIT_BRANCH == "main"
+    -    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    -  cache:
+    -    paths:
+    -      # Pip's cache doesn't store the Python packages
+    -      # https://pip.pypa.io/en/stable/reference/pip_install/#caching
+    -      - .cache/pip
+    -      - .venv/
+    -  before_script:
+    -    # Set the Google Service Account key
+    -    - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+    -    # Install dependencies
+    -    - python3 -m venv .venv
+    -    - source .venv/bin/activate
+    -    - pip install --requirement requirements.txt
+    -  script:
+    -    # Run the experiment
+    -    - dvc repro --pull --allow-missing # (1)!
+    +    .git-push-dvc-lock: &git-push-dvc-lock |
+    +      # Check if there are changes in dvc.lock
+    +      if [[ -n $(git status --porcelain dvc.lock) ]]; then
+    +        git config --global user.name "gitlab-ci[bot]"
+    +        git config --global user.email "gitlab-ci[bot]@users.noreply.gitlab.com"
+    +        git add dvc.lock
+    +        git commit -m "Commit changes in dvc.lock"
+    +        # Get current branch name
+    +        if [[ -n "${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}" ]]; then
+    +          BRANCH_NAME=${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}
+    +        else
+    +          BRANCH_NAME=${CI_COMMIT_BRANCH}
+    +        fi
+    +        git push -o ci.skip https://${GITLAB_USER_LOGIN}:${GITLAB_PAT}@${CI_REPOSITORY_URL#*@} HEAD:${BRANCH_NAME}
+    +      fi
     +
-    +report:
-    +  stage: report
-    +  image: iterativeai/cml:0-dvc3-base1
-    +  needs:
-    +    - train
-    +  rules:
-    +    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    +  before_script:
-    +    # Set the Google Service Account key
-    +    - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
-    +  script:
-    +    - |
-    +      # Fetch the experiment changes
-    +      dvc pull
+    +    stages:
+    +      - train
+    +      - report
     +
-    +      # Fetch all other Git branches
-    +      git fetch --depth=1 origin main:main
+    +    variables:
+    +      # Change pip's cache directory to be inside the project directory since we can
+    +      # only cache local items.
+    +      PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+    +      # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
+    +      GIT_DEPTH: "0"
+    +      # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
+    +      GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
+    +      # Environment variable for CML
+    +	  REPO_TOKEN: $GITLAB_PAT
     +
-    +      # Add title to the report
-    +      echo "# Experiment Report (${CI_COMMIT_SHA})" >> report.md
+    +    train:
+    +      stage: train
+    +      image: python:3.10
+    +      rules:
+    +        - if: $CI_COMMIT_BRANCH == "main"
+    +        - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    +      cache:
+    +        paths:
+    +          # Pip's cache doesn't store the Python packages
+    +          # https://pip.pypa.io/en/stable/reference/pip_install/#caching
+    +          - .cache/pip
+    +          - .venv/
+    +      before_script:
+    +        # Set the Google Service Account key
+    +        - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+    +        # Install dependencies
+    +        - python3 -m venv .venv
+    +        - source .venv/bin/activate
+    +        - pip install --requirement requirements.txt
+    +      script:
+    +        # Run the experiment
+    +        - dvc repro --pull --allow-missing
+    +        # After the experiment is done we update the dvc.lock and push the changes with dvc. This allows dvc to cache the  experiment
+    +        # results and use them in locally and remotely on pipelines without running the experiment again.
+    +        - *git-push-dvc-lock
+    +        - dvc push
     +
-    +      # Compare parameters to main branch
-    +      echo "## Params workflow vs. main" >> report.md
-    +      echo >> report.md
-    +      dvc params diff main --md >> report.md
-    +      echo >> report.md
+    +    report:
+    +      stage: report
+    +      image: iterativeai/cml:0-dvc3-base1
+    +      needs:
+    +        - train
+    +      rules:
+    +        - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    +      before_script:
+    +        # Set the Google Service Account key
+    +        - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+    +      script:
+    +        - |
+    +          # Fetch the experiment changes
+    +          dvc pull
     +
-    +      # Compare metrics to main branch
-    +      echo "## Metrics workflow vs. main" >> report.md
-    +      echo >> report.md
-    +      dvc metrics diff main --md >> report.md
-    +      echo >> report.md
+    +          # Fetch all other Git branches
+    +          git fetch --depth=1 origin main:main
     +
-    +      # Compare plots (images) to main branch
-    +      dvc plots diff main
+    +          # Add title to the report
+    +          echo "# Experiment Report (${CI_COMMIT_SHA})" >> report.md
     +
-    +      # Create plots
-    +      echo "## Plots" >> report.md
-    +      echo >> report.md
+    +          # Compare parameters to main branch
+    +          echo "## Params workflow vs. main" >> report.md
+    +          echo >> report.md
+    +          dvc params diff main --md >> report.md
+    +          echo >> report.md
     +
-    +      # Create training history plot
-    +      echo "### Training History" >> report.md
-    +      echo >> report.md
-    +      echo '![](./dvc_plots/static/main_evaluation_plots_training_history.png "Training History")' >> report.md
-    +      echo >> report.md
-    +      echo '![](./dvc_plots/static/workspace_evaluation_plots_training_history.png "Training History")' >> report.md
-    +      echo >> report.md
+    +          # Compare metrics to main branch
+    +          echo "## Metrics workflow vs. main" >> report.md
+    +          echo >> report.md
+    +          dvc metrics diff main --md >> report.md
+    +          echo >> report.md
     +
-    +      # Create predictions preview
-    +      echo "### Predictions Preview" >> report.md
-    +      echo >> report.md
-    +      echo '![](./dvc_plots/static/main_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
-    +      echo >> report.md
-    +      echo '![](./dvc_plots/static/workspace_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
-    +      echo >> report.md
+    +          # Compare plots (images) to main branch
+    +          dvc plots diff main
     +
-    +      # Create confusion matrix
-    +      echo "### Confusion Matrix" >> report.md
-    +      echo >> report.md
-    +      echo '![](./dvc_plots/static/main_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
-    +      echo >> report.md
-    +      echo '![](./dvc_plots/static/workspace_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
-    +      echo >> report.md
+    +          # Create plots
+    +          echo "## Plots" >> report.md
+    +          echo >> report.md
     +
-    +      # Publish the CML report
-    +      cml comment update --target=pr --publish report.md
+    +          # Create training history plot
+    +          echo "### Training History" >> report.md
+    +          echo >> report.md
+    +          echo '![](./dvc_plots/static/main_evaluation_plots_training_history.png "Training History")' >> report.md
+    +          echo >> report.md
+    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_training_history.png "Training History")' >> report.md
+    +          echo >> report.md
+    +
+    +          # Create predictions preview
+    +          echo "### Predictions Preview" >> report.md
+    +          echo >> report.md
+    +          echo '![](./dvc_plots/static/main_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
+    +          echo >> report.md
+    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
+    +          echo >> report.md
+    +
+    +          # Create confusion matrix
+    +          echo "### Confusion Matrix" >> report.md
+    +          echo >> report.md
+    +          echo '![](./dvc_plots/static/main_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
+    +          echo >> report.md
+    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
+    +          echo >> report.md
+    +
+    +          # Publish the CML report
+    +          cml comment update --target=pr --publish report.md
     ```
 
 Take some time to understand the changes made to the file.
