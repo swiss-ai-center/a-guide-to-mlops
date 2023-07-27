@@ -241,13 +241,11 @@ Create the Storage Bucket to store the data with the cloud provider CLI.
 
     ??? info "Getting an 'The billing account for the owning project is disabled in state absent' error? Read this!"
 
-        Ensure a
+        In case you get a
+        **HTTPError 403: The billing account for the owning project is disabled in state absent**
+        error, ensure the
         [billing account](https://console.cloud.google.com/billing/linkedaccount) is
-        correctly set up for the project.
-
-        In case you get a "HTTPError 403: The billing account for the owning project is
-        disabled in state absent" error, ensure the billing account is correctly linked
-        to the project.
+        correctly linked to the project.
 
         In the Google Cloud Interface, go to **Billing** in the main hamburger menu,
         then choose the **My Projects** tab. If billing is *disabled*, then select
