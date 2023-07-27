@@ -206,13 +206,19 @@ Here, we simply changed the `lr` (learning rate), `conv_size` and `dense_size`
 parameters of the `train` stage, which should slightly affect the model's
 performance.
 
-!!! note
+Reproduce the experiment with DVC.
 
-    At this point, we would normally run the experiment locally to see the
-    differences. However, this is not always possible as the experiment might
-    require a lot of resources to run. This is why the experiment will be run in the
-    CI/CD pipeline. Later on, we will be further improving the CI/CD to run the
-    experiment on dedicated resources.
+```sh title="Execute the following command(s) in a terminal"
+# Reproduce the experiment
+dvc repro
+```
+
+!!! warning
+
+    The `dvc repro` command is important to execute after each change to the
+    experiment locally. It ensures that the experiment can be reproduced from the
+    CI/CD pipeline. Later in part 3, we will see what to do if the experiment is too
+    long to be reproduced locally and how to do it from the CI/CD pipeline.
 
 ### Commit and push the experiment changes
 
@@ -222,6 +228,9 @@ repository.
 Check the changes with Git to ensure all wanted files are here.
 
 ```sh title="Execute the following command(s) in a terminal"
+# Upload the experiment data and cache to the remote bucket
+dvc push
+
 # Add all the files
 git add .
 
@@ -289,9 +298,6 @@ git push
 
     Explore the stages and jobs and try to see how the configuration file shows up
     in GitLab.
-
-Once the pipeline is done, you should also be able to see a commit from the
-CI/CD pipeline in the pull request/merge request.
 
 ### Visualize the CML report
 
