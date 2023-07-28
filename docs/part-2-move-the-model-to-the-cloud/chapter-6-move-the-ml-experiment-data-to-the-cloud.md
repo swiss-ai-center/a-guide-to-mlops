@@ -172,7 +172,7 @@ Install and configure the cloud provider CLI tool to manage the cloud resources.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Set authentication for our ML experiment
-    # https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
+    # https://dvc.org/doc/user-guide/data-management/remote-storage/google-cloud-storage
     # https://cloud.google.com/sdk/gcloud/reference/auth/application-default/login
     gcloud auth application-default login
     ```
