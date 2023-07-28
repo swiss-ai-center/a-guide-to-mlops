@@ -547,8 +547,8 @@ index aa36089..cc9b5a5 100644
 
 !!! info
 
-    When a MLEM model is loaded with `mlem.api.load`, loads the model as it was
-    saved without the preprocessing and postprocessing functions.
+    The code `mlem.api.load` loads a MLEM model in its original state, excluding any
+    preprocessing and postprocessing functions applied during saving.
 
 ### Run the experiment
 
