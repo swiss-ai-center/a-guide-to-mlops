@@ -438,6 +438,44 @@ service. In this case, it is `34.65.29.146`.
 Try to access the model with the IP you found. You should access the FastAPI
 documentation page as earlier in the guide!
 
+### Check the changes
+
+Check the changes with Git to ensure that all the necessary files are tracked.
+
+```sh title="Execute the following command(s) in a terminal"
+# Add all the files
+git add .
+
+# Check the changes
+git status
+```
+
+The output should look like this.
+
+```
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+(use "git restore --staged <file>..." to unstage)
+    new file:   celestial_bodies_classifier.mlem
+    new file:   celestial_bodies_classifier.mlem.state
+    modified:   requirements-freeze.txt
+    modified:   requirements.txt
+```
+
+### Commit the changes to Git
+
+Commit the changes to Git.
+
+```sh title="Execute the following command(s) in a terminal"
+# Commit the changes
+git commit -m "MLEM provides k8s deployment files"
+
+# Push the changes
+git push
+```
+
 ## Summary
 
 Congratulations! You have successfully deployed the model on Kubernetes with
