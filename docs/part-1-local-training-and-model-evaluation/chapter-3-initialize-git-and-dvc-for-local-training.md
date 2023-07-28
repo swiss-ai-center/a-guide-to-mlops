@@ -227,6 +227,16 @@ index 250f32c..193ebac 100644
 
 Install the dependencies and update the freeze file.
 
+!!! warning
+
+    Prior to running any `pip` commands, it is crucial to ensure the virtual
+    environment is activated to avoid potential conflicts with system-wide Python
+    packages.
+
+    To check its status, simply run `pip -V`. If the virtual environment is active,
+    the output will show the path to the virtual environment's Python executable. If
+    it is not, you can activate it with `source .venv/bin/activate`.
+
 ```sh title="Execute the following command(s) in a terminal"
 # Install the requirements
 pip install --requirement requirements.txt
