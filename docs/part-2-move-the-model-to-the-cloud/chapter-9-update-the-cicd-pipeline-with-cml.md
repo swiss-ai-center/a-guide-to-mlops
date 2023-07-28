@@ -95,7 +95,7 @@ flowchart LR
 !!! info
 
     CML can do much more than just generating reports. Have a look at the chapter
-    [Train the model on a Kubernetes cluster with CML](../part-3-serve-and-deploy-the-model/chapter-13-train-the-model-on-a-kubernetes-pod-with-cml/index.md)
+    [Train the model on a Kubernetes cluster with CML](../part-3-serve-and-deploy-the-model/chapter-15-train-the-model-on-a-kubernetes-pod-with-cml.md)
     for more details.
 
 ## Steps

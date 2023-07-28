@@ -9,7 +9,7 @@
 ## Introduction
 
 The purpose of this chapter is to serve and use the model for usage outside of
-the experiment context with the help of [MLEM](../../tools), a powerful tool
+the experiment context with the help of [MLEM](../tools.md), a powerful tool
 designed for easy packaging, deployment, and serving of Machine Learning models.
 
 By transforming your model into a specialized MLEM model, it is possible to
