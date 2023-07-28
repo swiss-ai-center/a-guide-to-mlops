@@ -37,16 +37,6 @@ dvc[gs]==3.2.2
 mlem==0.4.13
 ```
 
-Install the package and update the freeze file.
-
-```sh title="Execute the following command(s) in a terminal"
-# Install the requirements
-pip install --requirement requirements.txt
-
-# Freeze the requirements
-pip freeze --local --all > requirements-freeze.txt
-```
-
 Check the differences with Git to validate the changes.
 
 ```sh title="Execute the following command(s) in a terminal"
@@ -66,6 +56,16 @@ index 8ccc2df..fcdd460 100644
  pyyaml==6.0
  dvc[gs]==3.2.2
 +mlem==0.4.13
+```
+
+Install the package and update the freeze file.
+
+```sh title="Execute the following command(s) in a terminal"
+# Install the requirements
+pip install --requirement requirements.txt
+
+# Freeze the requirements
+pip freeze --local --all > requirements-freeze.txt
 ```
 
 ### Initialize and configure MLEM.
