@@ -357,21 +357,30 @@ mlem deployment run kubernetes celestial_bodies_classifier \
 The output should be similar to this.
 
 ```
- Loading deployment from celestial_bodies_classifier.mlem
+💾 Saving deployment to celestial_bodies_classifier.mlem
 ⏳️ Loading model from model.mlem
 🛠 Creating docker image ml
   💼 Adding model files...
   🛠 Generating dockerfile...
   💼 Adding sources...
   💼 Generating requirements file...
-  🛠 Building docker image ghcr.io/ludelafo/ml:fe78c18fd64b31314b0536c64fd26a3a...
-2023-07-12 14:47:01,997 [WARNING] mlem.contrib.docker.base: Skipped logging in to remote registry at host ghcr.io/ludelafo because no credentials given. You could specify credentials as GHCR_IO/GITHUB_USERNAME and GHCR_IO/GITHUB_USERNAME_PASSWORD environment variables.
-  ✅  Built docker image ghcr.io/ludelafo/ml:fe78c18fd64b31314b0536c64fd26a3a
-  🔼 Pushing image ghcr.io/ludelafo/ml:fe78c18fd64b31314b0536c64fd26a3a to
-ghcr.io/ludelafo
-  ✅  Pushed image ghcr.io/ludelafo/ml:fe78c18fd64b31314b0536c64fd26a3a to
-ghcr.io/ludelafo
-✅  Deployment ml is up in mlem namespace
+  🛠 Building docker image ghcr.io/ludelafo/ml:ef7314d56e722349797f6721117748e0...
+2023-07-28 15:06:41,040 [WARNING] mlem.contrib.docker.base: Skipped logging in to remote registry at host ghcr.io/ludelafo because no credentials given. You could specify credentials as GHCR_IO/LUDELAFO_USERNAME and GHCR_IO/LUDELAFO_PASSWORD environment variables.
+  ✅  Built docker image ghcr.io/rmarquis/ml:ef7314d56e722349797f6721117748e0
+  🔼 Pushing image ghcr.io/ludelafo/ml:ef7314d56e722349797f6721117748e0 to ghcr.io/ludelafo
+  🔼 Pushing image ghcr.io/ludelafo/ml:ef7314d56e722349797f6721117748e0 to ghcr.io/ludelafo
+  ✅  Pushed image ghcr.io/ludelafo/ml:ef7314d56e722349797f6721117748e0 to ghcr.io/ludelafo
+  namespace created. status='{'conditions': None, 'phase': 'Active'}'
+  deployment created. status='{'available_replicas': None,
+  'collision_count': None,
+  'conditions': None,
+  'observed_generation': None,
+  'ready_replicas': None,
+  'replicas': None,
+  'unavailable_replicas': None,
+  'updated_replicas': None}'
+  service created. status='{'conditions': None, 'load_balancer': {'ingress': None}}'
+  ✅  Deployment ml is up in mlem namespace
 ```
 
 !!! tip
