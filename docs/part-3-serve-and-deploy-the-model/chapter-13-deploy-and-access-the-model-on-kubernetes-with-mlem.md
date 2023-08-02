@@ -327,8 +327,8 @@ pip freeze --local --all > requirements-freeze.txt
 Deploy the model on Kubernetes with MLEM. This will create a Docker image, push
 it to the remote Container Registry and deploy the model on Kubernetes.
 
-The name `celestial_bodies_classifier` is the name of the deployment. It can be
-changed to anything you want.
+The name `service_classifier` is the name of the deployment. It can be changed
+to anything you want.
 
 ??? question "Having issues to deploy the model on Kubernetes?"
 
@@ -346,7 +346,7 @@ changed to anything you want.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Deploy the model on Kubernetes with MLEM
-mlem deployment run kubernetes celestial_bodies_classifier \
+mlem deployment run kubernetes service_classifier \
     --model model \
     --registry remote \
     --registry.host=$CONTAINER_REGISTRY_HOST \
@@ -357,7 +357,7 @@ mlem deployment run kubernetes celestial_bodies_classifier \
 The output should be similar to this.
 
 ```
-💾 Saving deployment to celestial_bodies_classifier.mlem
+💾 Saving deployment to service_classifier.mlem
 ⏳️ Loading model from model.mlem
 🛠 Creating docker image ml
   💼 Adding model files...
@@ -389,8 +389,8 @@ The output should be similar to this.
     `mlem deploy remove <deployment name>`.
 
 TODO: Add "This should create two files in your repository:
-`celestial_bodies_classifier.mlem` and `celestial_bodies_classifier.mlem.state`
-[...]" explanation and how to use them to redeploy the model on Kubernetes.
+`service_classifier.mlem` and `service_classifier.mlem.state` [...]" explanation
+and how to use them to redeploy the model on Kubernetes.
 
 ### Access the model
 
@@ -458,8 +458,8 @@ Your branch is up to date with 'origin/main'.
 
 Changes to be committed:
 (use "git restore --staged <file>..." to unstage)
-    new file:   celestial_bodies_classifier.mlem
-    new file:   celestial_bodies_classifier.mlem.state
+    new file:   service_classifier.mlem
+    new file:   service_classifier.mlem.state
     modified:   requirements-freeze.txt
     modified:   requirements.txt
 ```
