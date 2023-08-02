@@ -281,14 +281,14 @@ Depending on the CI/CD platform you are using, the process will be different.
             run: dvc repro --pull --allow-missing
     ```
 
-A few notes:
+    A few notes:
 
-* Instead of running `dvc pull` and `dvc repro` separately, we can run
-        them together with `dvc repro --pull`.
-* The `--allow-missing` flag allows
-        DVC to skip downloading unnecessary files that are not used in the repro step.
-        For example, if the prepare step is already cached, DVC will skip downloading
-        the data again and will only download the cached prepare step.
+    * Instead of running `dvc pull` and `dvc repro` separately, we can run them
+      together with `dvc repro --pull`.
+    * The `--allow-missing` flag allows DVC to skip downloading unnecessary files
+      that are not used in the repro step. For example, if the prepare step is already
+      cached, DVC will skip downloading the data again and will only download the
+      cached prepare step.
 
 === ":simple-gitlab: GitLab"
 
