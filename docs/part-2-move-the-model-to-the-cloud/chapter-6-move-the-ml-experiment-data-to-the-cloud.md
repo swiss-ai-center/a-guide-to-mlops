@@ -23,9 +23,8 @@ In this chapter, you will learn how to:
 1. Create a project on the chosen cloud provider
 2. Create a storage bucket on the chosen cloud provider
 3. Configure DVC for remote storage
-4. Update the `.gitignore` file and add the experiment data to DVC
-5. Push the data files to DVC
-6. Push the metadata files to Git
+4. Push the data files to DVC
+5. Commit the metadata files to Git
 
 The following diagram illustrates control flow of the experiment at the end of
 this chapter:
