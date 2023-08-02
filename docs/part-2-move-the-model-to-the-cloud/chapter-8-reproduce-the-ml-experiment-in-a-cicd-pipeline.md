@@ -270,6 +270,7 @@ Depending on the CI/CD platform you are using, the process will be different.
             uses: actions/setup-python@v4
             with:
               python-version: '3.10'
+              cache: pip
           - name: Install dependencies
             run: pip install --requirement requirements-freeze.txt
           - name: Login to Google Cloud
