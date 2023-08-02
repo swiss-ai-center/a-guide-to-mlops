@@ -469,9 +469,9 @@ You can now safely continue to the next chapter.
 - [x] Steps used to create the model are documented and can be re-executed
 - [x] Changes done to a model can be visualized with parameters, metrics and
       plots to identify differences between iterations
+- [x] Codebase can be shared and improved by multiple developers
 - [x] Dataset can be shared among the developers and is placed in the right
       directory in order to run the experiment
-- [ ] Codebase requires manual download and setup
 - [ ] Experiment may not be reproducible on other machines
 - [ ] CI/CD pipeline does not report the results of the experiment
 - [ ] Changes to model are not thoroughly reviewed and discussed before

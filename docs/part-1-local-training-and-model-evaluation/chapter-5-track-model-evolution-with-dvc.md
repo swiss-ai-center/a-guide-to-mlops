@@ -280,8 +280,8 @@ You can now safely continue to the next chapter.
 - [x] Steps used to create the model are documented and can be re-executed
 - [x] Changes done to a model can be visualized with parameters, metrics and
       plots to identify differences between iterations
-- [ ] Dataset requires manual download and placement
 - [ ] Codebase requires manual download and setup
+- [ ] Dataset requires manual download and placement
 - [ ] Experiment may not be reproducible on other machines
 - [ ] CI/CD pipeline does not report the results of the experiment
 - [ ] Changes to model are not thoroughly reviewed and discussed before
