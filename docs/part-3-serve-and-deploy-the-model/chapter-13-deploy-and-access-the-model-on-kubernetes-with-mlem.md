@@ -391,6 +391,8 @@ Make sure to use the same bucket name as the one you created in chapter 6.
 mlem config set core.state.uri gs://$GCP_BUCKET_NAME
 ```
 
+This will update your `.mlem.yaml` configuration file.
+
 ### Deploy the model on Kubernetes with MLEM
 
 Deploy the model on Kubernetes with MLEM. This will create a Docker image, push
@@ -399,24 +401,9 @@ it to the remote Container Registry and deploy the model on Kubernetes.
 The name `service_classifier` is the name of the deployment. It can be changed
 to anything you want.
 
-??? question "Having issues to deploy the model on Kubernetes?"
-
-    If you have issues to deploy the model on Kubernetes, it can be because of the
-    following reasons:
-
-    - The Kubernetes cluster is not ready yet. Wait a few minutes and try again.
-    - The image published on GitHub Container Registry is private. By default, the
-      image is private. You can make it public by going to the Packages page of your
-      profile and changing the visibility of the image to public. TODO: Improve this
-      section. More specificely, how can we associate the container to the GitHub
-      project instead of the user profile using the following documentation
-      <https://docs.github.com/en/packages/learn-github-packages/connecting-a-repository-to-a-package>
-      ?
-
 ```sh title="Execute the following command(s) in a terminal"
-# Deploy the model on Kubernetes with MLEM
-mlem deployment run kubernetes service_classifier \
-    --model model \
+# Create the deployment configuration for MLEM
+mlem declare deployment kubernetes service_classifier \
     --namespace mlops \
     --image_name mlops-classifier \
     --image_uri mlops-classifier:latest \
@@ -428,7 +415,6 @@ mlem deployment run kubernetes service_classifier \
 
 The arguments are:
 
-- `--model <model name>`: The name of the model to deploy.
 - `--namespace <namespace>`: The namespace name where the model will be deployed
   in Kubernetes.
 - `--image_name <image name>`: The name of the Docker image.
@@ -438,43 +424,71 @@ The arguments are:
 - `--server fastapi`: Use FastAPI as the server.
 - `--service_type loadbalancer`: Use a load balancer to expose the service.
 
+This will create a new `service_classifier.mlem` file at the root of your
+project. This file contains the configuration of the deployment.
+
+Next, to deploy the model on Kubernetes, run the following command:
+
+```sh title="Execute the following command(s) in a terminal"
+# Deploy the model on Kubernetes with MLEM
+mlem deployment run --load service_classifier --model model
+```
+
+The arguments are:
+
+- `--load <deployment name>`: The name of the deployment configuration to load.
+- `--model <model name>`: The name of the model to deploy.
+
+??? question "Having issues to deploy the model on Kubernetes?"
+
+    If you have issues to deploy the model on Kubernetes, it can be because of the
+    following reasons:
+
+    - The Kubernetes cluster is not ready yet. Wait a few minutes and try again.
+    - The image published on GitHub Container Registry is private. By default, the
+      image is private. You can make it public by going to the Packages page of your
+      profile and changing the visibility of the image to public. TODO: Improve this
+      section. More specifically, how can we associate the container to the GitHub
+      project instead of the user profile using the following documentation
+      <https://docs.github.com/en/packages/learn-github-packages/connecting-a-repository-to-a-package>
+      ?
+
 The output should be similar to this.
 
 ```
 💾 Saving deployment to service_classifier.mlem
 ⏳️ Loading model from model.mlem
-🛠 Creating docker image ml
+🛠 Creating docker image mlops-classifier
   💼 Adding model files...
   🛠 Generating dockerfile...
   💼 Adding sources...
   💼 Generating requirements file...
-  🛠 Building docker image ghcr.io/ludelafo/ml:ef7314d56e722349797f6721117748e0...
-2023-07-28 15:06:41,040 [WARNING] mlem.contrib.docker.base: Skipped logging in to remote registry at host ghcr.io/ludelafo because no credentials given. You could specify credentials as GHCR_IO/LUDELAFO_USERNAME and GHCR_IO/LUDELAFO_PASSWORD environment variables.
-  ✅  Built docker image ghcr.io/rmarquis/ml:ef7314d56e722349797f6721117748e0
-  🔼 Pushing image ghcr.io/ludelafo/ml:ef7314d56e722349797f6721117748e0 to ghcr.io/ludelafo
-  🔼 Pushing image ghcr.io/ludelafo/ml:ef7314d56e722349797f6721117748e0 to ghcr.io/ludelafo
-  ✅  Pushed image ghcr.io/ludelafo/ml:ef7314d56e722349797f6721117748e0 to ghcr.io/ludelafo
-  namespace created. status='{'conditions': None, 'phase': 'Active'}'
-  deployment created. status='{'available_replicas': None,
-  'collision_count': None,
-  'conditions': None,
-  'observed_generation': None,
-  'ready_replicas': None,
-  'replicas': None,
-  'unavailable_replicas': None,
-  'updated_replicas': None}'
-  service created. status='{'conditions': None, 'load_balancer': {'ingress': None}}'
-  ✅  Deployment ml is up in mlem namespace
+  🛠 Building docker image europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry/mlops-classifier:dbdf5b923413970ed7cd31cc5da22455...
+2023-08-02 10:58:29,915 [WARNING] mlem.contrib.docker.base: Skipped logging in to remote registry at host europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry because no credentials given. You could specify credentials as EUROPE-WEST6-DOCKER_PKG_DEV/MLOPS-TEST-391911/MLOPS-REGISTRY_USERNAME and EUROPE-WEST6-DOCKER_PKG_DEV/MLOPS-TEST-391911/MLOPS-REGISTRY_PASSWORD environment variables.
+  ✅  Built docker image europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry/mlops-classifier:dbdf5b923413970ed7cd31cc5da22455
+  🔼 Pushing image europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry/mlops-classifier:dbdf5b923413970ed7cd31cc5da22455 to
+europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry
+  ✅  Pushed image
+europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry/mlops-classifier:dbdf
+5b923413970ed7cd31cc5da22455 to
+europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry
+namespace created. status='{'conditions': None, 'phase': 'Active'}'
+deployment created. status='{'available_replicas': None,
+ 'collision_count': None,
+ 'conditions': None,
+ 'observed_generation': None,
+ 'ready_replicas': None,
+ 'replicas': None,
+ 'unavailable_replicas': None,
+ 'updated_replicas': None}'
+service created. status='{'conditions': None, 'load_balancer': {'ingress': None}}'
+✅  Deployment mlops-classifier is up in mlops namespace
 ```
 
 !!! tip
 
     A MLEM Kubernetes deployment can be deleted with the command
     `mlem deploy remove <deployment name>`.
-
-TODO: Add "This should create two files in your repository:
-`service_classifier.mlem` and `service_classifier.mlem.state` [...]" explanation
-and how to use them to redeploy the model on Kubernetes.
 
 ### Access the model
 
@@ -486,27 +500,27 @@ service. You can do so with the following command.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Get the description of the service
-kubectl describe services ml --namespace mlem
+kubectl describe services mlops-classifier --namespace mlops
 ```
 
 The output should be similar to this.
 
 ```
-Name:                     ml
-Namespace:                mlem
-Labels:                   run=ml
+Name:                     mlops-classifier
+Namespace:                mlops
+Labels:                   run=mlops-classifier
 Annotations:              cloud.google.com/neg: {"ingress":true}
-Selector:                 app=ml
+Selector:                 app=mlops-classifier
 Type:                     LoadBalancer
 IP Family Policy:         SingleStack
 IP Families:              IPv4
-IP:                       10.44.1.7
-IPs:                      10.44.1.7
-LoadBalancer Ingress:     34.65.29.146
+IP:                       10.44.6.134
+IPs:                      10.44.6.134
+LoadBalancer Ingress:     34.65.72.237
 Port:                     <unset>  8080/TCP
 TargetPort:               8080/TCP
-NodePort:                 <unset>  31384/TCP
-Endpoints:                10.40.1.12:8080
+NodePort:                 <unset>  32723/TCP
+Endpoints:                10.40.0.12:8080
 Session Affinity:         None
 External Traffic Policy:  Cluster
 Events:
@@ -517,10 +531,11 @@ Events:
 ```
 
 The `LoadBalancer Ingress` field contains the external IP address of the
-service. In this case, it is `34.65.29.146`.
+service. In this case, it is `34.65.72.237`.
 
-Try to access the model with the IP you found. You should access the FastAPI
-documentation page as earlier in the guide!
+Try to access the model with the IP you found at the port `8080`
+(`<load balancer ingress ip>:8080`). You should access the FastAPI documentation
+page as earlier in the guide!
 
 ### Check the changes
 
@@ -542,10 +557,10 @@ Your branch is up to date with 'origin/main'.
 
 Changes to be committed:
 (use "git restore --staged <file>..." to unstage)
-    new file:   service_classifier.mlem
-    new file:   service_classifier.mlem.state
+    modified:   .mlem.yaml
     modified:   requirements-freeze.txt
     modified:   requirements.txt
+    new file:   service_classifier.mlem
 ```
 
 ### Commit the changes to Git
