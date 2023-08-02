@@ -122,12 +122,7 @@ Follow the steps below to create one.
 
     **Create the Kubernetes cluster**
 
-    Create the Google Kubernetes cluster with the Google Cloud CLI. You should
-    ideally select a location close to where most of the expected traffic will come
-    from. You can view the available zones at
-    [Regions and zones](https://cloud.google.com/compute/docs/regions-zones#available).
-    You can view the available types of machine with the
-    `gcloud compute machine-types list` command.
+    Create the Google Kubernetes cluster with the Google Cloud CLI.
 
     Export the cluster name as an environment variable. Replace `<my cluster name>`
     with your own name (ex: `mlops-kubernetes`).
@@ -138,6 +133,12 @@ Follow the steps below to create one.
 
     Export the cluster zone as an environment variable. Replace `<my cluster zone>`
     with your own zone (ex: `europe-west6-a` for Switzerland Zurich).
+
+    You should ideally select a location close to where most of the expected traffic
+    will come from. You can view the available zones at
+    [Regions and zones](https://cloud.google.com/compute/docs/regions-zones#available).
+    You can view the available types of machine with the
+    `gcloud compute machine-types list` command.
 
     ```sh title="Execute the following command(s) in a terminal"
     export GCP_CLUSTER_ZONE=<my cluster zone>
