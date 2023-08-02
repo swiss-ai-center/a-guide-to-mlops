@@ -250,15 +250,15 @@ Depending on the CI/CD platform you are using, the process will be different.
 
     on:
       # Runs on pushes targeting main branch
-      push: # (1)!
-        branches: # (2)!
-            - main
+      push:
+        branches:
+          - main
 
       # Runs on pull requests
-      pull_request: # (3)!
+      pull_request:
 
       # Allows you to run this workflow manually from the Actions tab
-      workflow_dispatch: # (4)!
+      workflow_dispatch:
 
     jobs:
       train:
@@ -277,18 +277,17 @@ Depending on the CI/CD platform you are using, the process will be different.
             with:
               credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
           - name: Train model
-            run: dvc repro --pull --allow-missing # (5)!
+            run: dvc repro --pull --allow-missing
     ```
 
-    1. Runs on pushes.
-    2. ... target the `main` branch.
-    3. Runs on pull requests.
-    4. Allows you to run this workflow manually from the Actions tab.
-    5. Instead of running `dvc pull` and `dvc repro` separately, we can run them
-       together with `dvc repro --pull`. The `--allow-missing` flag allows DVC to skip
-       downloading unnecessary files that are not used in the repro step. For example,
-       if the prepare step is already cached, DVC will skip downloading the data again
-       and will only download the cached prepare step.
+A few notes:
+
+* Instead of running `dvc pull` and `dvc repro` separately, we can run
+        them together with `dvc repro --pull`.
+* The `--allow-missing` flag allows
+        DVC to skip downloading unnecessary files that are not used in the repro step.
+        For example, if the prepare step is already cached, DVC will skip downloading
+        the data again and will only download the cached prepare step.
 
 === ":simple-gitlab: GitLab"
 
