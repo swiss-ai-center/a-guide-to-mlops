@@ -96,6 +96,11 @@ In this chapter, you will learn how to:
     them. Kubernetes clusters are not free on most cloud providers and can be
     expensive. Make sure to delete the resources at the end of the guide.
 
+The following diagram illustrates control flow of the experiment at the end of
+this chapter:
+
+TODO
+
 ## Steps
 
 ### Create the Kubernetes cluster
