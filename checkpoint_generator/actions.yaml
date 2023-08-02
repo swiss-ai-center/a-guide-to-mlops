@@ -169,7 +169,11 @@ saves:
         log: true
       - run: git commit -m "My ML experiment changes are tracked"
 
-  part-2-move-the-model-to-the-cloud/chapter-6-move-the-ml-experiment-data-to-the-cloud.md:
+  part-2-move-the-model-to-the-cloud/chapter-6-move-the-ml-experiment-code-to-the-cloud.md:
+    save_git: true
+    actions:
+
+  part-2-move-the-model-to-the-cloud/chapter-7-move-the-ml-experiment-data-to-the-cloud.md:
     save_git: false
     actions:
       - replace_from_md:
@@ -185,10 +189,6 @@ saves:
       - run: git status
         log: true
       - run: git commit -m "My ML experiment data is saved with DVC"
-
-  part-2-move-the-model-to-the-cloud/chapter-7-move-the-ml-experiment-code-to-the-cloud.md:
-    save_git: true
-    actions:
 
   part-2-move-the-model-to-the-cloud/chapter-8-reproduce-the-ml-experiment-in-a-cicd-pipeline.md:
     save_git: true
