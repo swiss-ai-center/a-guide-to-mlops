@@ -22,7 +22,8 @@ In this guide, we will use the following tools to demonstrate the MLOps process:
       soon)
     - [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) (coming
       soon)
-- Model serving, distributing and deploying: [MLEM](https://mlem.ai/)
+- Model serving, distributing and deploying: [MLEM](https://mlem.ai/) &
+  [:simple-docker: Docker](https://docker.com/)
 - Data annotation: [Label Studio](https://labelstud.io/)
 
 You will go into details about each tool in the following parts of this guide.

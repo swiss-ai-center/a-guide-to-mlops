@@ -14,6 +14,10 @@ you use Windows, you might encounter issues. Please use
 [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/)
 (WSL) for optimal results.
 
+For this part, you also need to have [Docker Desktop](https://www.docker.com/)
+installed. Docker will be utilized for setting up and managing the container
+registry.
+
 ## Requirements
 
 The following requirements are necessary to follow this part in addition to
