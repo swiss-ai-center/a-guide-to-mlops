@@ -27,7 +27,7 @@ flowchart LR
     subgraph remoteGraph[REMOTE]
         s3_storage
         subgraph gitGraph[Git Remote]
-            repository[Repository] --> action[Action]
+            repository[(Repository)] --> action[Action]
             action -->|dvc pull| action_data[data/raw]
             action_data -->|dvc repro| action_out[metrics & plots]
             action_out -->|cml publish| pr[Pull Request]

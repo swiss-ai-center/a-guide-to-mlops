@@ -1,4 +1,4 @@
-# Chapter 6: Move the ML experiment data to the cloud
+# Chapter 7: Move the ML experiment data to the cloud
 
 ??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
 
@@ -8,8 +8,8 @@
 
 ## Introduction
 
-Now that we have configured DVC and can reproduce the experiment, let's set up a
-remote repository for sharing the data with the team.
+At this point, the codebase is made available to team members using git, but the
+experiment data itself is not.
 
 Similarly to other version control system, DVC allows for storing the dataset in
 a remote storage, typically a cloud storage provider, ensuring effective
@@ -33,38 +33,46 @@ this chapter:
 flowchart LR
     dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]
     s3_storage -->|dvc pull| dot_dvc
-    dot_git[(.git)]
+    dot_git[(.git)] -->|git push| gitGraph[Git Remote]
+    gitGraph -->|git pull| dot_git
     workspaceGraph <-....-> dot_git
     data[data/raw] <-.-> dot_dvc
     subgraph remoteGraph[REMOTE]
-        s3_storage
+    s3_storage
+        subgraph gitGraph[Git Remote]
+            repository[(Repository)]
+        end
     end
     subgraph cacheGraph[CACHE]
         dot_dvc
         dot_git
     end
     subgraph workspaceGraph[WORKSPACE]
-        prepare[prepare.py] <-.-> dot_dvc
-        train[train.py] <-.-> dot_dvc
-        evaluate[evaluate.py] <-.-> dot_dvc
-        data --> prepare
-        subgraph dvcGraph["dvc.yaml (dvc repro)"]
-            prepare --> train
-            train --> evaluate
-        end
-        params[params.yaml] -.- prepare
-        params -.- train
-        params <-.-> dot_dvc
+    prepare[prepare.py] <-.-> dot_dvc
+    train[train.py] <-.-> dot_dvc
+    evaluate[evaluate.py] <-.-> dot_dvc
+    data --> prepare
+    subgraph dvcGraph["dvc.yaml (dvc repro)"]
+    prepare --> train
+    train --> evaluate
     end
+    params[params.yaml] -.- prepare
+    params -.- train
+    params <-.-> dot_dvc
+    end
+    style gitGraph opacity:0.4,color:#7f7f7f80
+    style repository opacity:0.4,color:#7f7f7f80
     style workspaceGraph opacity:0.4,color:#7f7f7f80
     style dvcGraph opacity:0.4,color:#7f7f7f80
     style cacheGraph opacity:0.4,color:#7f7f7f80
     style dot_git opacity:0.4,color:#7f7f7f80
+    style data opacity:0.4,color:#7f7f7f80
     style prepare opacity:0.4,color:#7f7f7f80
     style train opacity:0.4,color:#7f7f7f80
     style evaluate opacity:0.4,color:#7f7f7f80
     style params opacity:0.4,color:#7f7f7f80
     linkStyle 2 opacity:0.4,color:#7f7f7f80
+    linkStyle 3 opacity:0.4,color:#7f7f7f80
     linkStyle 4 opacity:0.4,color:#7f7f7f80
     linkStyle 5 opacity:0.4,color:#7f7f7f80
     linkStyle 6 opacity:0.4,color:#7f7f7f80
@@ -74,6 +82,8 @@ flowchart LR
     linkStyle 10 opacity:0.4,color:#7f7f7f80
     linkStyle 11 opacity:0.4,color:#7f7f7f80
     linkStyle 12 opacity:0.4,color:#7f7f7f80
+    linkStyle 13 opacity:0.4,color:#7f7f7f80
+    linkStyle 14 opacity:0.4,color:#7f7f7f80
 ```
 
 Let's get started!
