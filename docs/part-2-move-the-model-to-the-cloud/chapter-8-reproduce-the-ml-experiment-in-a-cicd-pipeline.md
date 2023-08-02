@@ -131,7 +131,7 @@ data inside the CI/CD pipeline.
     # Set the permissions for the Google Service Account
     gcloud projects add-iam-policy-binding $GCP_PROJECT_ID \
         --member="serviceAccount:dvc-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com" \
-        --role="roles/viewer"
+        --role="roles/storage.objectViewer"
 
     # Create the Google Service Account Key
     gcloud iam service-accounts keys create ~/.config/gcloud/dvc-google-service-account-key.json \
