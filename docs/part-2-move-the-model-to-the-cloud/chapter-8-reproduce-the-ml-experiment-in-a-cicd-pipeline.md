@@ -208,9 +208,9 @@ Depending on the CI/CD platform you are using, the process will be different.
 
         Select **Secrets and variables > Actions** and select **New repository secret**.
 
-        Create a new variable named `GCP_SERVICE_ACCOUNT_KEY` with the output value of
-        the Google Service Account key file as its value. Save the variable by selecting
-        **Add secret**.
+        Create a new variable named `DVC_GCP_SERVICE_ACCOUNT_KEY` with the output value
+        of the Google Service Account key file as its value. Save the variable by
+        selecting **Add secret**.
 
     === ":simple-gitlab: GitLab"
 
@@ -219,8 +219,8 @@ Depending on the CI/CD platform you are using, the process will be different.
 
         Select **Variables** and select **Add variable**.
 
-        Create a new variable named `GCP_SERVICE_ACCOUNT_KEY` with the Google Service
-        Account key file encoded in `base64` as its value.
+        Create a new variable named `DVC_GCP_SERVICE_ACCOUNT_KEY` with the Google
+        Service Account key file encoded in `base64` as its value.
 
         - **Protect variable**: _Unchecked_
         - **Mask variable**: _Checked_
@@ -276,7 +276,7 @@ Depending on the CI/CD platform you are using, the process will be different.
           - name: Login to Google Cloud
             uses: 'google-github-actions/auth@v1'
             with:
-              credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
+              credentials_json: '${{ secrets.DVC_GCP_SERVICE_ACCOUNT_KEY }}'
           - name: Train model
             run: dvc repro --pull --allow-missing
     ```
@@ -324,7 +324,7 @@ A few notes:
           - .venv/
       before_script:
         # Set the Google Service Account key
-        - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+        - echo "${DVC_GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
         # Install dependencies
         - python3 -m venv .venv
         - source .venv/bin/activate

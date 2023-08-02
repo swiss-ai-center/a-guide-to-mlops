@@ -159,7 +159,7 @@ collaboration and decision-making within the team.
           - name: Login to Google Cloud
             uses: 'google-github-actions/auth@v1'
             with:
-              credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
+              credentials_json: '${{ secrets.DVC_GCP_SERVICE_ACCOUNT_KEY }}'
           - name: Train model
             run: dvc repro --pull --allow-missing
           # Node is required to run CML
@@ -376,7 +376,7 @@ collaboration and decision-making within the team.
           - .venv/
       before_script:
         # Set the Google Service Account key
-        - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+        - echo "${DVC_GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
         # Install dependencies
         - python3 -m venv .venv
         - source .venv/bin/activate
@@ -394,7 +394,7 @@ collaboration and decision-making within the team.
         - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       before_script:
         # Set the Google Service Account key
-        - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+        - echo "${DVC_GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
       script:
         - |
           # Fetch the experiment changes
@@ -499,7 +499,7 @@ collaboration and decision-making within the team.
     +    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     +  before_script:
     +    # Set the Google Service Account key
-    +    - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+    +    - echo "${DVC_GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
     +  script:
     +    - |
     +      # Fetch the experiment changes
