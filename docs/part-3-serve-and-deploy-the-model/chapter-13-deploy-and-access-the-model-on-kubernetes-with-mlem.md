@@ -266,59 +266,89 @@ pip install --requirement requirements.txt
 pip freeze --local --all > requirements-freeze.txt
 ```
 
+### Create a Container Registry
+
+=== ":simple-amazonaws: Amazon Web Services"
+
+    _This is a work in progress._
+
+=== ":simple-exoscale: Exoscale"
+
+    _This is a work in progress._
+
+=== ":simple-googlecloud: Google Cloud"
+
+    **Enable the Google Artifact Registry API**
+
+    You must enable the Google Artifact Registry API to create a container registry
+    on Google Cloud.
+
+    [Enable Google Artifact Registry API :octicons-arrow-up-right-16:](https://console.cloud.google.com/flows/enableapi?apiid=artifactregistry.googleapis.com){ .md-button .md-button--primary }
+
+    **Create the Google Container Registry**
+
+    Export the repository name as an environment variable. Replace
+    `<my repository name>` with your own name (ex: `mlops-registry`).
+
+    ```sh title="Execute the following command(s) in a terminal"
+    export GCP_REPOSITORY_NAME=<my repository name>
+    ```
+
+    Export the repository location as an environment variable. Replace
+    `<my repository location>` with your own location (ex: `europe-west6` for
+    Switzerland Zurich).
+
+    ```sh title="Execute the following command(s) in a terminal"
+    export GCP_REPOSITORY_LOCATION=<my repository location>
+    ```
+
+    ```sh title="Execute the following command(s) in a terminal"
+    gcloud artifacts repositories create $GCP_REPOSITORY_NAME \
+    	--repository-format=docker \
+    	--location=$GCP_REPOSITORY_LOCATION \
+    ```
+
+=== ":simple-microsoftazure: Microsoft Azure"
+
+    _This is a work in progress._
+
+=== ":simple-kubernetes: Self-hosted Kubernetes"
+
+    _This is a work in progress._
+
 ### Login to the remote Container Registry
 
-=== ":simple-github: GitHub"
+=== ":simple-amazonaws: Amazon Web Services"
 
-    A personal access token is required to push the Docker image to the GitHub
-    Container Registry.
+    _This is a work in progress._
 
-    1. Go to your GitHub **Settings** at the top right of the page.
-    2. Click on **Developers settings** in the left sidebar.
-    3. Click on **Personal access tokens** in the left sidebar and then on **Tokens
-       (classic)**.
-    4. Click on **Generate new token** and then **Generate a new token (classic)**
-    5. Give the token a name (`MLEM_CONTAINER_REGISTRY` for example) and select the
-       following scopes:
-        - `read:packages`
-        - `write:packages`
-        - `delete:packages`
-    6. Save the token. It will reload the page and show the newly created token
-       value.
+=== ":simple-exoscale: Exoscale"
 
-    Copy and export the value of the newly created token as an environment variable.
-    Replace `<your github personal access token>` with your own token.
+    _This is a work in progress._
+
+=== ":simple-googlecloud: Google Cloud"
+
+    **Authenticate with the Google Container Registry**
 
     ```sh title="Execute the following command(s) in a terminal"
-    export GITHUB_PAT=<your github personal access token>
+    gcloud auth configure-docker ${GCP_REPOSITORY_LOCATION}-docker.pkg.dev
     ```
-
-    Export your GitHub username as an environment variable. Replace
-    `<your github username>` with your own username.
 
     ```sh title="Execute the following command(s) in a terminal"
-    export GITHUB_USERNAME=<your github username>
+    export GCP_PROJECT_ID=$(gcloud config get-value project)
     ```
 
-    Login to the GitHub Container Registry with Docker.
+    Export the container registry host:
 
     ```sh title="Execute the following command(s) in a terminal"
-    echo $GITHUB_PAT | docker login ghcr.io -u $GITHUB_USERNAME --password-stdin
+    export CONTAINER_REGISTRY_HOST=${GCP_REPOSITORY_LOCATION}-docker.pkg.dev/$GCP_PROJECT_ID/$GCP_REPOSITORY_NAME
     ```
 
-    The output should be similar to this.
+=== ":simple-microsoftazure: Microsoft Azure"
 
-    ```
-    Login Succeeded
-    ```
+    _This is a work in progress._
 
-    Export the GitHub Container Registry host as an environment variable.
-
-    ```sh title="Execute the following command(s) in a terminal"
-    export CONTAINER_REGISTRY_HOST=ghcr.io/${GITHUB_USERNAME}
-    ```
-
-=== ":simple-gitlab: GitLab"
+=== ":simple-kubernetes: Self-hosted Kubernetes"
 
     _This is a work in progress._
 
