@@ -722,12 +722,6 @@ The code is divided in various scripts:
 <!-- Enter your notes below -->
 ```
 
-### Make usage of the scripts in the Jupyter Notebook
-
-_Work in progress._
-
-[//]: # "TODO: Update the notebook to use the scripts and the parameters file as well in a hybrid approach: Notebook to visualize the data and results and scripts to run the experiment."
-
 ### Check the results
 
 Your working directory should now look like this:
