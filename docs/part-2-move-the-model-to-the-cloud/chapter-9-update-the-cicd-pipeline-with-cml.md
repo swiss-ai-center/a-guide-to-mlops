@@ -153,6 +153,7 @@ collaboration and decision-making within the team.
             uses: actions/setup-python@v4
             with:
               python-version: '3.10'
+              cache: pip
           - name: Install dependencies
             run: pip install --requirement requirements-freeze.txt
           - name: Login to Google Cloud
