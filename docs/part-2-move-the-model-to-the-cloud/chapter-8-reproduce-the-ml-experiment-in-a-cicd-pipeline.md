@@ -192,7 +192,7 @@ Depending on the CI/CD platform you are using, the process will be different.
         !!! tip
 
             If on Linux, you can use the command
-            `base64 -w 0 -i ~/.config/gcloud/  dvc-google-service-account-key.json`.
+            `base64 -w 0 -i ~/.config/gcloud/ dvc-google-service-account-key.json`.
 
         ```sh title="Execute the following command(s) in a terminal"
         # Encode the Google Service Account key to base64
