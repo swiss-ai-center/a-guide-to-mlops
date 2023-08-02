@@ -10,9 +10,9 @@ Learn how to train a model locally and evaluate it using DVC.
 
 This guide has been written with :simple-apple: macOS and :simple-linux: Linux
 operating systems in mind. If you use :simple-windows: Windows, you might
-encounter issues. Please use [GitBash](https://gitforwindows.org/) or the
+encounter issues. Please use the
 [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/)
-(WSL) for optimal results.
+(WSL2) for optimal results.
 
 ## Requirements
 

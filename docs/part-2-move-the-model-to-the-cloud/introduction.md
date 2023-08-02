@@ -10,10 +10,9 @@ CI/CD pipeline and visualize reports with CML.
 ## Environment
 
 This guide has been written with macOS and Linux operating systems in mind. If
-you use Windows, you might encounter issues. Please use
-[GitBash](https://gitforwindows.org/) or the
+you use Windows, you might encounter issues. Please use the
 [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/)
-(WSL) for optimal results.
+(WSL2) for optimal results.
 
 ## Requirements
 
