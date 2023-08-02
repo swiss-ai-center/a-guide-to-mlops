@@ -388,7 +388,7 @@ Make sure to use the same bucket name as the one you created in chapter 6.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Setup the MLEM Remote State Manager
-mlem config set core.state.uri gs://$GCP_BUCKET_NAME/mlemstate
+mlem config set core.state.uri gs://$GCP_BUCKET_NAME
 ```
 
 ### Deploy the model on Kubernetes with MLEM
