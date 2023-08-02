@@ -24,7 +24,7 @@ In this chapter, you will learn how to:
 2. Create a storage bucket on the chosen cloud provider
 3. Configure DVC for remote storage
 4. Push the data files to DVC
-5. Push the metadata files to Git
+5. Commit the metadata files to Git
 
 The following diagram illustrates control flow of the experiment at the end of
 this chapter:
