@@ -134,7 +134,7 @@ collaboration and decision-making within the team.
       # Runs on pushes targeting main branch
       push:
         branches:
-            - main
+          - main
 
       # Runs on pull requests
       pull_request:
