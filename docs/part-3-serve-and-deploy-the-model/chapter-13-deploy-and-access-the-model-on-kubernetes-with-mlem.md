@@ -322,6 +322,44 @@ pip freeze --local --all > requirements-freeze.txt
 
     _This is a work in progress._
 
+### Setup the MLEM Remote State Manager
+
+After the model is deployed on Kubernetes, MLEM will state as local files. This
+is fine if you are working alone, however, if you are working with a team, your
+local files will not be available to your colleagues. To solve this issue, MLEM
+can use a remote state manager to store the state of the infrastructure.
+
+Setting up remote state manager is a lot like setting DVC remote. All you need
+to do is provide URI where you want to store state files:
+
+Make sure to use the same bucket name as the one you created in chapter 6.
+
+!!! note
+
+    To get the URI of your bucket, you can use the Google Cloud CLI.
+
+    ```sh title="Execute the following command(s) in a terminal"
+    gcloud storage ls
+    ```
+
+    The output should be similar to this.
+
+    ```
+    gs://<my bucket name>/
+    ```
+
+    Copy the URI and export it as an environment variable. Replace
+    `<my bucket name>` with your own bucket name.
+
+    ```sh title="Execute the following command(s) in a terminal"
+    export GCP_BUCKET_NAME=<my bucket name>
+    ```
+
+```sh title="Execute the following command(s) in a terminal"
+# Setup the MLEM Remote State Manager
+mlem config set core.state.uri gs://$GCP_BUCKET_NAME/mlemstate
+```
+
 ### Deploy the model on Kubernetes with MLEM
 
 Deploy the model on Kubernetes with MLEM. This will create a Docker image, push
@@ -348,11 +386,26 @@ to anything you want.
 # Deploy the model on Kubernetes with MLEM
 mlem deployment run kubernetes service_classifier \
     --model model \
+    --namespace mlops \
+    --image_name mlops-classifier \
+    --image_uri mlops-classifier:latest \
     --registry remote \
     --registry.host=$CONTAINER_REGISTRY_HOST \
     --server fastapi \
     --service_type loadbalancer
 ```
+
+The arguments are:
+
+- `--model <model name>`: The name of the model to deploy.
+- `--namespace <namespace>`: The namespace name where the model will be deployed
+  in Kubernetes.
+- `--image_name <image name>`: The name of the Docker image.
+- `--image_uri <image uri>`: The URI of the Docker image.
+- `--registry remote`: Use a remote Container Registry.
+- `--registry.host <host>`: The host of the remote Container Registry.
+- `--server fastapi`: Use FastAPI as the server.
+- `--service_type loadbalancer`: Use a load balancer to expose the service.
 
 The output should be similar to this.
 
