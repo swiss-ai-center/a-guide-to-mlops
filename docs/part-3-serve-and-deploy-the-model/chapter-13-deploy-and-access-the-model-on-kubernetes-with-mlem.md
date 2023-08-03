@@ -404,7 +404,7 @@ to anything you want.
 ```sh title="Execute the following command(s) in a terminal"
 # Create the deployment configuration for MLEM
 mlem declare deployment kubernetes service_classifier \
-    --namespace mlops \
+    --namespace live \
     --image_name mlops-classifier \
     --image_uri mlops-classifier:latest \
     --registry remote \
@@ -482,7 +482,7 @@ deployment created. status='{'available_replicas': None,
  'unavailable_replicas': None,
  'updated_replicas': None}'
 service created. status='{'conditions': None, 'load_balancer': {'ingress': None}}'
-✅  Deployment mlops-classifier is up in mlops namespace
+✅  Deployment mlops-classifier is up in live namespace
 ```
 
 !!! tip
@@ -492,22 +492,22 @@ service created. status='{'conditions': None, 'load_balancer': {'ingress': None}
 
 ### Access the model
 
-By default, MLEM deploys the model as a service named `ml` in the `mlem`
-namespace.
+By default, MLEM deploys the model as a service named `service_classifier` in
+the `live` namespace.
 
 To access the model, you will need to find the external IP address of the
 service. You can do so with the following command.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Get the description of the service
-kubectl describe services mlops-classifier --namespace mlops
+kubectl describe services mlops-classifier --namespace live
 ```
 
 The output should be similar to this.
 
 ```
 Name:                     mlops-classifier
-Namespace:                mlops
+Namespace:                live
 Labels:                   run=mlops-classifier
 Annotations:              cloud.google.com/neg: {"ingress":true}
 Selector:                 app=mlops-classifier
