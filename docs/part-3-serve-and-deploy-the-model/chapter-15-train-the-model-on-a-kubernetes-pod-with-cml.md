@@ -208,6 +208,8 @@ Depending on the CI/CD platform you are using, the process will be different.
 
     _This is a work in progress._
 
+TODO: Create new GitHub PAT for CML.
+
 ### Update the CI/CD configuration file
 
 You'll now update the CI/CD configuration file to start a runner on the
