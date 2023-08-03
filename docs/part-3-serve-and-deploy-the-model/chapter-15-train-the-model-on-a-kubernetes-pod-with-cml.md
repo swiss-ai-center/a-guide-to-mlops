@@ -108,7 +108,7 @@ This is the same process as in
     # Set the Kubernetes Cluster permissions for the Google Service Account
     gcloud projects add-iam-policy-binding $GCP_PROJECT_ID \
         --member="serviceAccount:cml-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com" \
-        --role="roles/container.clusterAdmin"
+        --role="roles/container.admin"
 
     # Create the Google Service Account Key
     gcloud iam service-accounts keys create ~/.config/gcloud/cml-google-service-account-key.json \
@@ -406,122 +406,7 @@ you'll be able to start the training of the model on the node with the GPU.
     The output should be similar to this:
 
     ```diff
-    diff --git a/.github/workflows/mlops.yml b/.github/workflows/mlops.yml
-    index 15d713d..325658f 100644
-    --- a/.github/workflows/mlops.yml
-    +++ b/.github/workflows/mlops.yml
-    @@ -4,7 +4,7 @@ on:
-       # Runs on pushes targeting main branch
-       push:
-         branches:
-    -        - main
-    +      - main
-
-       # Runs on pull requests
-       pull_request:
-    @@ -12,10 +12,49 @@ on:
-       # Allows you to run this workflow manually from the Actions tab
-       workflow_dispatch:
-
-    +# Allow the creation and usage of self-hosted runners
-    +permissions:
-    +  contents: read
-    +  id-token: write
-    +
-     jobs:
-    -  train-and-report:
-    -    permissions: write-all
-    +  setup-runner:
-         runs-on: ubuntu-latest
-    +    steps:
-    +      - name: Checkout repository
-    +        uses: actions/checkout@v3
-    +      - name: Login to Google Cloud
-    +        uses: 'google-github-actions/auth@v1'
-    +        with:
-    +          credentials_json: '${{ secrets.CML_GCP_SERVICE_ACCOUNT_KEY }}'
-    +      - name: Get Google Cloud's Kubernetes credentials
-    +        uses: 'google-github-actions/get-gke-credentials@v1'
-    +        with:
-    +          cluster_name: 'mlops-kubernetes'
-    +          location: 'europe-west6-a'
-    +      - uses: iterative/setup-cml@v1
-    +        with:
-    +          version: '0.19.0'
-    +      - name: Initialize runner on Kubernetes
-    +        env:
-    +          REPO_TOKEN: ${{ secrets.CML_PAT }}
-    +        run: |
-    +          export KUBERNETES_CONFIGURATION=$(cat $KUBECONFIG)
-    +          # https://cml.dev/doc/ref/runner
-    +          # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#machine-type
-    +          # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#{cpu}-{memory}
-    +          cml runner \
-    +            --labels="cml-runner" \
-    +            --cloud="kubernetes" \
-    +            --cloud-type="1-2000" \
-    +            --cloud-kubernetes-node-selector="gpu=true" \
-    +            --single
-    +
-    +  train:
-    +    permissions: write-all
-    +    needs: setup-runner
-    +    runs-on: [self-hosted, cml-runner]
-    +    timeout-minutes: 50400 # 35 days
-         steps:
-           - name: Checkout repository
-             uses: actions/checkout@v3
-    @@ -23,27 +62,42 @@ jobs:
-             uses: actions/setup-python@v4
-             with:
-               python-version: '3.10'
-    +          cache: 'pip'
-           - name: Install dependencies
-             run: pip install --requirement requirements-freeze.txt
-           - name: Login to Google Cloud
-             uses: 'google-github-actions/auth@v1'
-             with:
-    -          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
-    +          credentials_json: '${{ secrets.DVC_GCP_SERVICE_ACCOUNT_KEY }}'
-           - name: Train model
-             run: dvc repro --pull --allow-missing
-    -      # Node is required to run CML
-    -      - name: Setup Node
-    -        if: github.event_name == 'pull_request'
-    -        uses: actions/setup-node@v3
-    +        # After the experiment is done we update the dvc.lock and push the
-    +        # changes with dvc. This allows dvc to cache the experiment results
-    +        # and use them locally and remotely on pipelines without running the
-    +        # experiment again.
-    +      - name: Commit changes in dvc.lock
-    +        uses: stefanzweifel/git-auto-commit-action@v4
-    +        with:
-    +          commit_message: Commit changes in dvc.lock
-    +          file_pattern: dvc.lock
-    +      - name: Push experiment results to DVC remote storage
-    +        run: dvc push
-    +
-    +  report:
-    +    permissions: write-all
-    +    needs: train
-    +    if: github.event_name == 'pull_request'
-    +    runs-on: ubuntu-latest
-    +    steps:
-    +      - name: Checkout repository
-    +        uses: actions/checkout@v3
-             with:
-    -          node-version: '16'
-    +          ref: ${{ github.event.pull_request.head.sha }}
-           - name: Setup CML
-    -        if: github.event_name == 'pull_request'
-             uses: iterative/setup-cml@v1
-             with:
-               version: '0.19.1'
-           - name: Create CML report
-    -        if: github.event_name == 'pull_request'
-             env:
-               REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-             run: |
+    + TODO
     ```
 
     Take some time to understand the changes made to the file.
