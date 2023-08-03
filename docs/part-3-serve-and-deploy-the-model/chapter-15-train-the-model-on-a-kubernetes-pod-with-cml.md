@@ -329,6 +329,14 @@ you'll be able to start the training of the model on the node with the GPU.
             uses: actions/checkout@v3
             with:
               ref: ${{ github.event.pull_request.head.sha }}
+          - name: Login to Google Cloud
+            uses: 'google-github-actions/auth@v1'
+            with:
+              credentials_json: '${{ secrets.DVC_GCP_SERVICE_ACCOUNT_KEY }}'
+          - name: Setup DVC
+            uses: iterative/setup-dvc@v1
+            with:
+              version: '3.2.2'
           - name: Setup CML
             uses: iterative/setup-cml@v1
             with:
@@ -380,6 +388,12 @@ you'll be able to start the training of the model on the node with the GPU.
 
               # Publish the CML report
               cml comment update --target=pr --publish report.md
+
+      deploy:
+        if: github.ref == 'refs/heads/main'
+        needs: train
+        name: Call Deploy
+        uses: ./.github/workflows/deploy.yml
     ```
 
     Check the differences with Git to validate the changes.

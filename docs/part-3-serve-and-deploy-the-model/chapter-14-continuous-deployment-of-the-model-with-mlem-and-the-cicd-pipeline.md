@@ -193,10 +193,8 @@ following steps will be performed:
     name: Deploy
 
     on:
-      # Runs on pushes targeting main branch
-      push:
-        branches:
-          - main
+      # Runs when called from another workflow
+      workflow_call:
 
       # Allows you to run this workflow manually from the Actions tab
       workflow_dispatch:
@@ -254,8 +252,12 @@ following steps will be performed:
 
 ### Check the results
 
-You should see the pipeline running. If you click on the pipeline, you should
-see the following output for the `Deploy the model` step:
+TODO: Add GitHub/GitLab manual trigger of the pipeline with instructions.
+
+TODO: Add a screenshot of the pipeline running.
+
+If you click on the pipeline, you should see the following output for the
+`Deploy the model` step:
 
 ```sh
 > mlem deployment run --load service_classifier --model model
