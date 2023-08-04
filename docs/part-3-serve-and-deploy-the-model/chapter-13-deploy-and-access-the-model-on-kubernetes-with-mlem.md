@@ -628,8 +628,16 @@ members to change the state of the Kubernetes server when required.
 To solve this issue, MLEM can use a remote state manager to store the state of
 the infrastructure.
 
+Let's start by removing the existing `service_classifier.mlem.state`. Instead of
+relaying on that file locally, we will configure MLEM to create it remotely
+directly.
+
+```sh title="Execute the following command(s) in a terminal"
+rm service_classifier.mlem.state
+```
+
 Setting up remote state manager is a lot like setting DVC remote. All you need
-to do is provide URI where you want to store state files:
+to do is provide a URI where you want to store state files:
 
 Make sure to use the same bucket name as the one you created in chapter 6.
 
