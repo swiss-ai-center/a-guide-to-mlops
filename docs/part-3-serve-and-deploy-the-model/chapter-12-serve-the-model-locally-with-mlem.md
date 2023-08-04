@@ -120,7 +120,9 @@ package.
 !!! info
 
     FastAPI is only one of the available backends that MLEM can use to serve the
-    model. Check out their official documentation for more options.
+    model. Check out their
+    [official documentation](https://mlem.ai/doc/user-guide/serving) for more
+    options.
 
 ```txt title="requirements.txt" hl_lines="5"
 tensorflow==2.12.0
