@@ -23,7 +23,7 @@ The following diagram illustrates control flow of the experiment at the end of
 this chapter:
 
 ```mermaid
-flowchart LR
+flowchart TB
     dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]
     s3_storage -->|dvc pull| dot_dvc
     dot_git[(.git)] -->|git push| gitGraph[Git Remote]

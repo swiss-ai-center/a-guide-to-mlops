@@ -23,6 +23,113 @@ In this chapter, you will learn how to:
 4. Push the CI/CD pipeline configuration file to Git
 5. Visualize the execution of the CI/CD pipeline
 
+The following diagram illustrates control flow of the experiment at the end of
+this chapter:
+
+```mermaid
+flowchart TB
+    dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]
+    s3_storage -->|dvc pull| dot_dvc
+    dot_git[(.git)] -->|git push| gitGraph[Git Remote]
+    gitGraph -->|git pull| dot_git
+    workspaceGraph <-....-> dot_git
+    data[data/raw] <-.-> dot_dvc
+    subgraph remoteGraph[REMOTE]
+        s3_storage
+        subgraph gitGraph[Git Remote]
+            repository[(Repository)] --> action[Action]
+            action -->|dvc pull| action_data[data/raw]
+            action_data -->|dvc repro| action_out[metrics & plots]
+            action_out -->|cml publish| pr[Pull Request]
+            pr --> repository
+        end
+        gitGraph --> registry[(Registry)]
+        subgraph clusterGraph[Kubernetes]
+            service_mlem_cluster[service_classifier]
+            service_mlem_cluster --> k8s[FastAPI]
+        end
+        s3_storage --> service_mlem_cluster_state[service_classifier.mlem.state]
+        service_mlem_cluster_state --> clusterGraph
+        registry --> clusterGraph
+    end
+    subgraph cacheGraph[CACHE]
+        dot_dvc
+        dot_git
+    end
+    subgraph workspaceGraph[WORKSPACE]
+        prepare[prepare.py] <-.-> dot_dvc
+        train[train.py] <-.-> dot_dvc
+        evaluate[evaluate.py] <-.-> dot_dvc
+        data --> prepare
+        subgraph dvcGraph["dvc.yaml (dvc repro)"]
+            prepare --> train
+            train --> evaluate
+        end
+        params[params.yaml] -.- prepare
+        params -.- train
+        params <-.-> dot_dvc
+        subgraph mlemGraph[.mlem.yaml]
+            mlem[model.mlem]
+            fastapi[FastAPI] <--> mlem
+            service_mlem[service_classifier.mlem]
+        end
+        mlem <-.-> dot_git
+        dvcGraph --> mlem
+        service_mlem <-.-> dot_git
+    end
+    subgraph browserGraph[BROWSER]
+        k8s <--> publicURL["public URL"]
+    end
+    style pr opacity:0.4,color:#7f7f7f80
+    style workspaceGraph opacity:0.4,color:#7f7f7f80
+    style dvcGraph opacity:0.4,color:#7f7f7f80
+    style cacheGraph opacity:0.4,color:#7f7f7f80
+    style data opacity:0.4,color:#7f7f7f80
+    style dot_git opacity:0.4,color:#7f7f7f80
+    style dot_dvc opacity:0.4,color:#7f7f7f80
+    style prepare opacity:0.4,color:#7f7f7f80
+    style train opacity:0.4,color:#7f7f7f80
+    style evaluate opacity:0.4,color:#7f7f7f80
+    style params opacity:0.4,color:#7f7f7f80
+    style s3_storage opacity:0.4,color:#7f7f7f80
+    style repository opacity:0.4,color:#7f7f7f80
+    style action opacity:0.4,color:#7f7f7f80
+    style action_data opacity:0.4,color:#7f7f7f80
+    style action_out opacity:0.4,color:#7f7f7f80
+    style remoteGraph opacity:0.4,color:#7f7f7f80
+    style gitGraph opacity:0.4,color:#7f7f7f80
+    style mlem opacity:0.4,color:#7f7f7f80
+    style fastapi opacity:0.4,color:#7f7f7f80
+    linkStyle 0 opacity:0.4,color:#7f7f7f80
+    linkStyle 1 opacity:0.4,color:#7f7f7f80
+    linkStyle 2 opacity:0.4,color:#7f7f7f80
+    linkStyle 3 opacity:0.4,color:#7f7f7f80
+    linkStyle 4 opacity:0.4,color:#7f7f7f80
+    linkStyle 5 opacity:0.4,color:#7f7f7f80
+    linkStyle 6 opacity:0.4,color:#7f7f7f80
+    linkStyle 7 opacity:0.4,color:#7f7f7f80
+    linkStyle 8 opacity:0.4,color:#7f7f7f80
+    linkStyle 9 opacity:0.4,color:#7f7f7f80
+    linkStyle 10 opacity:0.4,color:#7f7f7f80
+    linkStyle 11 opacity:0.4,color:#7f7f7f80
+    linkStyle 12 opacity:0.4,color:#7f7f7f80
+    linkStyle 13 opacity:0.4,color:#7f7f7f80
+    linkStyle 14 opacity:0.4,color:#7f7f7f80
+    linkStyle 15 opacity:0.4,color:#7f7f7f80
+    linkStyle 16 opacity:0.4,color:#7f7f7f80
+    linkStyle 17 opacity:0.4,color:#7f7f7f80
+    linkStyle 18 opacity:0.4,color:#7f7f7f80
+    linkStyle 19 opacity:0.4,color:#7f7f7f80
+    linkStyle 20 opacity:0.4,color:#7f7f7f80
+    linkStyle 21 opacity:0.4,color:#7f7f7f80
+    linkStyle 22 opacity:0.4,color:#7f7f7f80
+    linkStyle 23 opacity:0.4,color:#7f7f7f80
+    linkStyle 24 opacity:0.4,color:#7f7f7f80
+    linkStyle 25 opacity:0.4,color:#7f7f7f80
+    linkStyle 26 opacity:0.4,color:#7f7f7f80
+    linkStyle 27 opacity:0.4,color:#7f7f7f80
+```
+
 ## Steps
 
 ### Set up access to the container registry of your cloud provider
