@@ -86,8 +86,10 @@ In this chapter, you will learn how to:
 1. Create the Kubernetes cluster
 2. Validate kubectl can access the Kubernetes cluster
 3. Install MLEM with Kubernetes support
-4. Deploy the model on Kubernetes with MLEM
-5. Access the model
+4. Create a Model Registry
+5. Manage deployment declaration and state
+6. Deploy the model on Kubernetes with MLEM
+7. Access the model
 
 !!! danger
 
@@ -477,12 +479,189 @@ for an efficient models management.
 
     _This is a work in progress._
 
-### Setup the MLEM Remote State Manager
+### Deploy the model on Kubernetes with MLEM
+
+Deploy the model on Kubernetes with MLEM. This will create a Docker image, push
+it to the remote Container Registry and deploy the model on Kubernetes.
+
+??? question "Having issues to deploy the model on Kubernetes?"
+
+    If you have issues to deploy the model on Kubernetes, ensure the Kubernetes
+    cluster is actually ready. Wait a few minutes and try again.
+
+```sh title="Execute the following command(s) in a terminal"
+# Deploy the model on Kubernetes with MLEM
+mlem deployment run kubernetes service_classifier \
+--model model \
+--registry remote \
+--registry.host=$CONTAINER_REGISTRY_HOST \
+--server fastapi \
+--service_type loadbalancer
+```
+
+The name `service_classifier` is the name of the deployment. It can be changed
+to anything you want.
+
+The arguments are:
+
+- `--model`: The path to the MLEM model.
+- `--registry remote`: Use a remote Container Registry.
+- `--registry.host <host>`: The host of the remote Container Registry.
+- `--server fastapi`: Use FastAPI as the server.
+- `--service_type loadbalancer`: Use a load balancer to expose the service.
+
+The output should be similar to this.
+
+```
+💾 Saving deployment to service_classifier.mlem
+⏳️ Loading model from model.mlem
+🛠 Creating docker image ml
+💼 Adding model files...
+🛠 Generating dockerfile...
+💼 Adding sources...
+💼 Generating requirements file...
+🛠 Building docker image ghcr.io/ludelafo/ml:ef7314d56e722349797f6721117748e0...
+2023-07-28 15:06:41,040 [WARNING] mlem.contrib.docker.base: Skipped logging in to remote registry at host ghcr.io/ludelafo because no credentials given. You could specify credentials as GHCR_IO/LUDELAFO_USERNAME and GHCR_IO/LUDELAFO_PASSWORD environment variables.
+✅  Built docker image ghcr.io/rmarquis/ml:ef7314d56e722349797f6721117748e0
+🔼 Pushing image ghcr.io/ludelafo/ml:ef7314d56e722349797f6721117748e0 to ghcr.io/ludelafo
+🔼 Pushing image ghcr.io/ludelafo/ml:ef7314d56e722349797f6721117748e0 to ghcr.io/ludelafo
+✅  Pushed image ghcr.io/ludelafo/ml:ef7314d56e722349797f6721117748e0 to ghcr.io/ludelafo
+namespace created. status='{'conditions': None, 'phase': 'Active'}'
+deployment created. status='{'available_replicas': None,
+'collision_count': None,
+'conditions': None,
+'observed_generation': None,
+'ready_replicas': None,
+'replicas': None,
+'unavailable_replicas': None,
+'updated_replicas': None}'
+service created. status='{'conditions': None, 'load_balancer': {'ingress': None}}'
+✅  Deployment ml is up in mlem namespace
+```
+
+!!! tip
+
+    The status of a MLEM deployment can be checked with the command
+    `mlem deployment status <deployment name>`.
+
+    A MLEM Kubernetes deployment can be deleted with the command
+    `mlem deploy remove <deployment name>`.
+
+Running the deployment command not only deploys the model on the Kubernetes
+server, but it should also create two files in your repository, corresponding to
+the chosen deployment name.
+
+- `service_classifier.mlem`: This file contains the declaration of the
+  deployment, holding the main information such as where your model
+   is deployed as well as other additional parameters needed for the specificties
+   of the deployment. It is deployed to the Kubernetes target environment.
+
+- `service_classifier.mlem.state`: This file is a snapshot of the actual state
+  of your deployment.
+   It is created and updated by MLEM during the deployment process to keep track of
+   parameters needed for state management, which is stored separately from the
+   declaration.
+
+We will soon see how to use them to redeploy the model on Kubernetes.
+
+### Access the model
+
+By default, MLEM deploys the model as a service named `ml` in the `mlem`
+namespace.
+
+To access the model, you will need to find the external IP address of the
+service. You can do so with the following command.
+
+```sh title="Execute the following command(s) in a terminal"
+# Get the description of the service
+kubectl describe services ml --namespace mlem
+```
+
+The output should be similar to this.
+
+```
+Name:                     mlops-classifier
+Namespace:                live
+Labels:                   run=mlops-classifier
+Annotations:              cloud.google.com/neg: {"ingress":true}
+Selector:                 app=mlops-classifier
+Type:                     LoadBalancer
+IP Family Policy:         SingleStack
+IP Families:              IPv4
+IP:                       10.44.6.134
+IPs:                      10.44.6.134
+LoadBalancer Ingress:     34.65.72.237
+Port:                     <unset>  8080/TCP
+TargetPort:               8080/TCP
+NodePort:                 <unset>  32723/TCP
+Endpoints:                10.40.0.12:8080
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:
+  Type    Reason                Age   From                Message
+  ----    ------                ----  ----                -------
+  Normal  EnsuringLoadBalancer  99s   service-controller  Ensuring load balancer
+  Normal  EnsuredLoadBalancer   59s   service-controller  Ensured load balancer
+```
+
+The `LoadBalancer Ingress` field contains the external IP address of the
+service. In this case, it is `34.65.72.237`.
+
+Try to access the model with the IP you found at the port `8080`
+(`<load balancer ingress ip>:8080`). You should access the FastAPI documentation
+page as earlier in the guide!
+
+### Create and version deployment declaration
 
 After the model is deployed on Kubernetes, MLEM will state as local files. This
 is fine if you are working alone, however, if you are working with a team, your
-local files will not be available to your colleagues. To solve this issue, MLEM
-can use a remote state manager to store the state of the infrastructure.
+local files will not be available to your colleagues.
+
+It would also be useful to be able to create deployments configuration
+**without** actually running them, as to later trigger already configured
+deployments. This for example would allow you to track deployment parameters in
+Git and use it in CI/CD pipelines more easily.
+
+Let's create such deployment file, without actually deploying it. We will also
+take the opportunity to improve and customize the deployment parameters further.
+
+```sh title="Execute the following command(s) in a terminal"
+# Create the deployment configuration for MLEM
+mlem declare deployment kubernetes service_classifier \
+    --namespace live \
+    --image_name mlops-classifier \
+    --image_uri mlops-classifier:latest \
+    --registry remote \
+    --registry.host=$CONTAINER_REGISTRY_HOST \
+    --server fastapi \
+    --service_type loadbalancer
+```
+
+In addition to the previously mentioned arguments, we also make use of
+additionnal arguments to adjust the namespace and the image name.
+
+The corresponding arguments are:
+
+- `--namespace <namespace>`: The namespace name where the model will be deployed
+  in Kubernetes.
+- `--image_name <image name>`: The name of the Docker image.
+- `--image_uri <image uri>`: The URI of the Docker image.
+
+This will create a new `service_classifier.mlem` file at the root of your
+project, containing the configuration of the deployment.
+
+### Setup the MLEM Remote State Manager
+
+While the parameters of the declaration file of the deployment can be shared via
+Git, the state file, which represents the current snapshot of the state of the
+Kubernetes server, should be stored separately as the state is independent of
+the actual codebase.
+
+This file should however still be accessible remotely to permit each team
+members to change the state of the Kubernetes server when required.
+
+To solve this issue, MLEM can use a remote state manager to store the state of
+the infrastructure.
 
 Setting up remote state manager is a lot like setting DVC remote. All you need
 to do is provide URI where you want to store state files:
@@ -517,39 +696,7 @@ mlem config set core.state.uri gs://$GCP_BUCKET_NAME
 
 This will update your `.mlem.yaml` configuration file.
 
-### Deploy the model on Kubernetes with MLEM
-
-Deploy the model on Kubernetes with MLEM. This will create a Docker image, push
-it to the remote Container Registry and deploy the model on Kubernetes.
-
-The name `service_classifier` is the name of the deployment. It can be changed
-to anything you want.
-
-```sh title="Execute the following command(s) in a terminal"
-# Create the deployment configuration for MLEM
-mlem declare deployment kubernetes service_classifier \
-    --namespace live \
-    --image_name mlops-classifier \
-    --image_uri mlops-classifier:latest \
-    --registry remote \
-    --registry.host=$CONTAINER_REGISTRY_HOST \
-    --server fastapi \
-    --service_type loadbalancer
-```
-
-The arguments are:
-
-- `--namespace <namespace>`: The namespace name where the model will be deployed
-  in Kubernetes.
-- `--image_name <image name>`: The name of the Docker image.
-- `--image_uri <image uri>`: The URI of the Docker image.
-- `--registry remote`: Use a remote Container Registry.
-- `--registry.host <host>`: The host of the remote Container Registry.
-- `--server fastapi`: Use FastAPI as the server.
-- `--service_type loadbalancer`: Use a load balancer to expose the service.
-
-This will create a new `service_classifier.mlem` file at the root of your
-project. This file contains the configuration of the deployment.
+### Deploy the model again on Kubernete with MLEM
 
 Next, to deploy the model on Kubernetes, run the following command:
 
@@ -562,20 +709,6 @@ The arguments are:
 
 - `--load <deployment name>`: The name of the deployment configuration to load.
 - `--model <model name>`: The name of the model to deploy.
-
-??? question "Having issues to deploy the model on Kubernetes?"
-
-    If you have issues to deploy the model on Kubernetes, it can be because of the
-    following reasons:
-
-    - The Kubernetes cluster is not ready yet. Wait a few minutes and try again.
-    - The image published on GitHub Container Registry is private. By default, the
-      image is private. You can make it public by going to the Packages page of your
-      profile and changing the visibility of the image to public. TODO: Improve this
-      section. More specifically, how can we associate the container to the GitHub
-      project instead of the user profile using the following documentation
-      <https://docs.github.com/en/packages/learn-github-packages/connecting-a-repository-to-a-package>
-      ?
 
 The output should be similar to this.
 
@@ -609,15 +742,10 @@ service created. status='{'conditions': None, 'load_balancer': {'ingress': None}
 ✅  Deployment mlops-classifier is up in live namespace
 ```
 
-!!! tip
-
-    A MLEM Kubernetes deployment can be deleted with the command
-    `mlem deploy remove <deployment name>`.
-
 ### Access the model
 
-By default, MLEM deploys the model as a service named `service_classifier` in
-the `live` namespace.
+This time, MLEM deploys the model as a service named `service_classifier` in the
+defined `live` namespace.
 
 To access the model, you will need to find the external IP address of the
 service. You can do so with the following command.
@@ -627,35 +755,8 @@ service. You can do so with the following command.
 kubectl describe services mlops-classifier --namespace live
 ```
 
-The output should be similar to this.
-
-```
-Name:                     mlops-classifier
-Namespace:                live
-Labels:                   run=mlops-classifier
-Annotations:              cloud.google.com/neg: {"ingress":true}
-Selector:                 app=mlops-classifier
-Type:                     LoadBalancer
-IP Family Policy:         SingleStack
-IP Families:              IPv4
-IP:                       10.44.6.134
-IPs:                      10.44.6.134
-LoadBalancer Ingress:     34.65.72.237
-Port:                     <unset>  8080/TCP
-TargetPort:               8080/TCP
-NodePort:                 <unset>  32723/TCP
-Endpoints:                10.40.0.12:8080
-Session Affinity:         None
-External Traffic Policy:  Cluster
-Events:
-  Type    Reason                Age   From                Message
-  ----    ------                ----  ----                -------
-  Normal  EnsuringLoadBalancer  99s   service-controller  Ensuring load balancer
-  Normal  EnsuredLoadBalancer   59s   service-controller  Ensured load balancer
-```
-
-The `LoadBalancer Ingress` field contains the external IP address of the
-service. In this case, it is `34.65.72.237`.
+Again, use the the `LoadBalancer Ingress` field of the output as it contains the
+external IP address of the service.
 
 Try to access the model with the IP you found at the port `8080`
 (`<load balancer ingress ip>:8080`). You should access the FastAPI documentation
@@ -702,7 +803,8 @@ git push
 ## Summary
 
 Congratulations! You have successfully deployed the model on Kubernetes with
-MLEM and accessed it from an external IP address.
+MLEM, accessed it from an external IP address, and properly versionned and
+shared the deployment declaration and state.
 
 You can now use the model from anywhere.
 
@@ -711,8 +813,10 @@ In this chapter, you have successfully:
 1. Created a Kubernetes cluster
 2. Managed the Kubernetes cluster with kubectl
 3. Installed MLEM with Kubernetes support
-4. Deployed the model on Kubernetes with MLEM
-5. Accessed the model
+4. Create a Model Registry
+5. Manage deployment declaration and state
+6. Deploy the model on Kubernetes with MLEM
+7. Access the model
 
 ## State of the MLOps process
 
