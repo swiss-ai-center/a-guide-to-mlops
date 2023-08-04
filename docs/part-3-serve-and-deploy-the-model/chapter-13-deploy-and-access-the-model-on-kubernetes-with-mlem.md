@@ -611,49 +611,14 @@ Try to access the model with the IP you found at the port `8080`
 (`<load balancer ingress ip>:8080`). You should access the FastAPI documentation
 page as earlier in the guide!
 
-### Create and version deployment declaration
+### Setup the MLEM Remote State Manager
 
 After the model is deployed on Kubernetes, MLEM will state as local files. This
 is fine if you are working alone, however, if you are working with a team, your
 local files will not be available to your colleagues.
 
-It would also be useful to be able to create deployments configuration
-**without** actually running them, as to later trigger already configured
-deployments. This for example would allow you to track deployment parameters in
-Git and use it in CI/CD pipelines more easily.
-
-Let's create such deployment file, without actually deploying it. We will also
-take the opportunity to improve and customize the deployment parameters further.
-
-```sh title="Execute the following command(s) in a terminal"
-# Create the deployment configuration for MLEM
-mlem declare deployment kubernetes service_classifier \
-    --namespace live \
-    --image_name mlops-classifier \
-    --image_uri mlops-classifier:latest \
-    --registry remote \
-    --registry.host=$CONTAINER_REGISTRY_HOST \
-    --server fastapi \
-    --service_type loadbalancer
-```
-
-In addition to the previously mentioned arguments, we also make use of
-additionnal arguments to adjust the namespace and the image name.
-
-The corresponding arguments are:
-
-- `--namespace <namespace>`: The namespace name where the model will be deployed
-  in Kubernetes.
-- `--image_name <image name>`: The name of the Docker image.
-- `--image_uri <image uri>`: The URI of the Docker image.
-
-This will create a new `service_classifier.mlem` file at the root of your
-project, containing the configuration of the deployment.
-
-### Setup the MLEM Remote State Manager
-
-While the parameters of the declaration file of the deployment can be shared via
-Git, the state file, which represents the current snapshot of the state of the
+While the parameters of the deployment's declaration file can be shared via Git,
+the state file, which represents the current snapshot of the state of the
 Kubernetes server, should be stored separately as the state is independent of
 the actual codebase.
 
@@ -695,6 +660,41 @@ mlem config set core.state.uri gs://$GCP_BUCKET_NAME
 ```
 
 This will update your `.mlem.yaml` configuration file.
+
+### Create and version deployment declaration
+
+It would also be useful to be able to create deployments configuration
+**without** actually running them, as to later trigger already configured
+deployments. This for example would allow you to track deployment parameters in
+Git and use it in CI/CD pipelines more easily.
+
+Let's create such deployment file, without actually deploying it. We will also
+take the opportunity to improve and customize the deployment parameters further.
+
+```sh title="Execute the following command(s) in a terminal"
+# Create the deployment configuration for MLEM
+mlem declare deployment kubernetes service_classifier \
+    --namespace live \
+    --image_name mlops-classifier \
+    --image_uri mlops-classifier:latest \
+    --registry remote \
+    --registry.host=$CONTAINER_REGISTRY_HOST \
+    --server fastapi \
+    --service_type loadbalancer
+```
+
+In addition to the previously mentioned arguments, we also make use of
+additionnal arguments to adjust the namespace and the image name.
+
+The corresponding arguments are:
+
+- `--namespace <namespace>`: The namespace name where the model will be deployed
+  in Kubernetes.
+- `--image_name <image name>`: The name of the Docker image.
+- `--image_uri <image uri>`: The URI of the Docker image.
+
+This will create a new `service_classifier.mlem` file at the root of your
+project, containing the configuration of the deployment.
 
 ### Deploy the model again on Kubernete with MLEM
 
