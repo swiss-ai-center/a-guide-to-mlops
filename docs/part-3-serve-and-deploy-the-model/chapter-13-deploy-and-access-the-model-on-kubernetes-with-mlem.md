@@ -316,7 +316,8 @@ Update the `requirements.txt` file to add `kubernetes` support in addtion to
 !!! info
 
     Kubernetes is only one of the available backend that MLEM can deploy to. Check
-    out their official documentation for more options.
+    out their [official documentation](https://mlem.ai/doc/user-guide/deploying) for
+    more options.
 
 ```txt title="requirements.txt" hl_lines="5"
 tensorflow==2.12.0
