@@ -212,10 +212,10 @@ kube-public       Active   25m
 kube-system       Active   25m
 ```
 
-### Install MLEM with FastAPI and Kubernetes support
+### Add Kubernetes support to MLEM
 
-Update the `requirements.txt` file to include the `mlem[fastapi,kubernetes]`
-package.
+Update the `requirements.txt` file to add `kubernetes` support in addtion to
+`fastapi` to the `mlem` package.
 
 !!! info
 

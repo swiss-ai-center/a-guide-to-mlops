@@ -114,7 +114,8 @@ flowchart LR
 
 ### Install MLEM with FastAPI support
 
-Update the `requirements.txt` file to include the `mlem[fastapi]` package.
+Update the `requirements.txt` file to add `fastapi` support to the `mlem`
+package.
 
 !!! info
 
