@@ -369,7 +369,22 @@ pip install --requirement requirements.txt
 pip freeze --local --all > requirements-freeze.txt
 ```
 
-### Create a Container Registry
+### Create a Model Registry
+
+A model registry is a crucial component that provides a centralized system to
+manage ML models throughout their lifecycle. It serves as a repository for
+storing, versioning, and tracking models, as each version comes with essential
+metadata, including training data, hyperparameters, and performance metrics.
+
+This comprehensive information ensures reproducibility by preserving historical
+model versions, which aids in debugging and auditing. Additionally, it fosters
+transparency and simplifies model comparison and selection for deployment,
+allowing for seamless integration into production environments.
+
+The model registry also facilitates collaboration among team members, enabling
+standardized model formats and easy sharing of access. Its support for automated
+deployment pipelines ensures consistent and reliable model deployment, allowing
+for an efficient models management.
 
 === ":simple-amazonaws: Amazon Web Services"
 
@@ -380,6 +395,10 @@ pip freeze --local --all > requirements-freeze.txt
     _This is a work in progress._
 
 === ":simple-googlecloud: Google Cloud"
+
+    To streamline the deployment process on the Kubernetes server, we will utilize
+    Google Artifact Registry for the ML model registry, capitalizing on Google
+    Kubernetes Engine's ability to directly pull images from Docker repositories.
 
     **Enable the Google Artifact Registry API**
 
@@ -404,6 +423,9 @@ pip freeze --local --all > requirements-freeze.txt
     ```sh title="Execute the following command(s) in a terminal"
     export GCP_REPOSITORY_LOCATION=<my repository location>
     ```
+
+    Lastly, when creating the repository, remember to specify the repository format
+    as `docker`.
 
     ```sh title="Execute the following command(s) in a terminal"
     gcloud artifacts repositories create $GCP_REPOSITORY_NAME \
