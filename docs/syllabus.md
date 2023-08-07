@@ -16,8 +16,8 @@ What you will learn from this guide.
     - [Chapter 6 - Move the ML experiment data to the cloud](./part-2-move-the-model-to-the-cloud/chapter-6-move-the-ml-experiment-code-to-the-cloud.md)
     - [Chapter 7 - Move the ML experiment code to the cloud](./part-2-move-the-model-to-the-cloud/chapter-7-move-the-ml-experiment-data-to-the-cloud.md)
     - [Chapter 8 - Reproduce the ML experiment in a CI/CD pipeline](./part-2-move-the-model-to-the-cloud/chapter-8-reproduce-the-ml-experiment-in-a-cicd-pipeline.md)
-    - [Chapter 9 - Update the CI/CD pipeline with CML](./part-2-move-the-model-to-the-cloud/chapter-9-update-the-cicd-pipeline-with-cml.md)
-    - [Chapter 10 - Track model evolution in the CI/CD pipeline with CML](./part-2-move-the-model-to-the-cloud/chapter-10-track-model-evolution-in-the-cicd-pipeline-with-cml.md)
+    - [Chapter 9 - Track model evolution in the CI/CD pipeline with CML](./part-2-move-the-model-to-the-cloud/chapter-9-track-model-evolution-in-the-cicd-pipeline-with-cml.md)
+    - [Chapter 10 - Work efficiently and collaboratively with Git](./part-2-move-the-model-to-the-cloud/chapter-10-work-efficiently-and-collaboratively-with-git.md)
 - [Part 3 - Serve and deploy the model](./part-3-serve-and-deploy-the-model/introduction.md) -
   Learn how to serve and deploy the model using MLEM and CML.
     - [Chapter 11 - Save and load the model with MLEM](./part-3-serve-and-deploy-the-model/chapter-11-save-and-load-the-model-with-mlem.md)

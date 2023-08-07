@@ -149,14 +149,6 @@ push the Docker image.
 This is the same process as in
 [Chapter 8 - Reproduce the ML experiment in a CI/CD pipeline](../part-2-move-the-model-to-the-cloud/chapter-8-reproduce-the-ml-experiment-in-a-cicd-pipeline.md).
 
-=== ":simple-amazonaws: Amazon Web Services"
-
-    _This is a work in progress._
-
-=== ":simple-exoscale: Exoscale"
-
-    _This is a work in progress._
-
 === ":simple-googlecloud: Google Cloud"
 
     Create the Google Service Account and its associated Google Service Account Key
@@ -196,13 +188,19 @@ This is the same process as in
         --iam-account=mlem-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com
     ```
 
-=== ":simple-microsoftazure: Microsoft Azure"
+=== ":material-cloud: Using another cloud provider? Read this!"
 
-    _This is a work in progress._
+    This guide has been written with Google Cloud Platform in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
 
-=== ":simple-kubernetes: Self-hosted Kubernetes"
-
-    _This is a work in progress._
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
+    appreciated!
 
 ### Store the cloud provider credentials in the CI/CD configuration
 
@@ -210,14 +208,6 @@ Now that the credentials are created, you need to store them in the CI/CD
 configuration.
 
 Depending on the CI/CD platform you are using, the process will be different.
-
-=== ":simple-amazonaws: Amazon Web Services"
-
-    _This is a work in progress._
-
-=== ":simple-exoscale: Exoscale"
-
-    _This is a work in progress._
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -281,21 +271,27 @@ Depending on the CI/CD platform you are using, the process will be different.
 
         Save the variable by clicking **Add variable**.
 
-=== ":simple-microsoftazure: Microsoft Azure"
+=== ":material-cloud: Using another cloud provider? Read this!"
 
-    _This is a work in progress._
+    This guide has been written with Google Cloud Platform in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
 
-=== ":simple-kubernetes: Self-hosted Kubernetes"
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
+    appreciated!
 
-    _This is a work in progress._
+### Update the CI/CD pipeline configuration file
 
-### Create a CI/CD Pipeline for Deploying the Model
-
-We will create a pipeline for deploying the model to the Kubernetes cluster. The
+You will the pipeline to deploy the model to the Kubernetes cluster. The
 following steps will be performed:
 
 1. Detect a new commit on the `main` branch
-2. Authenticate with a Google Cloud service account
+2. Authenticate to your cloud provider
 3. Deploy the model with MLEM if `model.mlem` has changed
 
 === ":simple-github: GitHub"

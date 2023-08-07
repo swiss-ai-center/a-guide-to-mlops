@@ -98,14 +98,6 @@ flowchart LR
 DVC will need to log in to the S3 bucket of your cloud provider to download the
 data inside the CI/CD pipeline.
 
-=== ":simple-amazonaws: Amazon Web Services"
-
-    _This is a work in progress._
-
-=== ":simple-exoscale: Exoscale"
-
-    _This is a work in progress._
-
 === ":simple-googlecloud: Google Cloud"
 
     Google Cloud allows the creation of a "Service Account", so you don't have to
@@ -143,13 +135,19 @@ data inside the CI/CD pipeline.
         The path `~/.config/gcloud` should be created when installing `gcloud`. If it
         does not exist, you can create it by running `mkdir -p ~/.config/gcloud`
 
-=== ":simple-microsoftazure: Microsoft Azure"
+=== ":material-cloud: Using another cloud provider? Read this!"
 
-    _This is a work in progress._
+    This guide has been written with Google Cloud Platform in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
 
-=== ":simple-kubernetes: Self-hosted Kubernetes"
-
-    _This is a work in progress._
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
+    appreciated!
 
 ### Store the cloud provider credentials in the CI/CD configuration
 
@@ -157,14 +155,6 @@ Now that the credentials are created, you need to store them in the CI/CD
 configuration.
 
 Depending on the CI/CD platform you are using, the process will be different.
-
-=== ":simple-amazonaws: Amazon Web Services"
-
-    _This is a work in progress._
-
-=== ":simple-exoscale: Exoscale"
-
-    _This is a work in progress._
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -228,13 +218,19 @@ Depending on the CI/CD platform you are using, the process will be different.
 
         Save the variable by clicking **Add variable**.
 
-=== ":simple-microsoftazure: Microsoft Azure"
+=== ":material-cloud: Using another cloud provider? Read this!"
 
-    _This is a work in progress._
+    This guide has been written with Google Cloud Platform in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
 
-=== ":simple-kubernetes: Self-hosted Kubernetes"
-
-    _This is a work in progress._
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
+    appreciated!
 
 ### Create the CI/CD pipeline configuration file
 

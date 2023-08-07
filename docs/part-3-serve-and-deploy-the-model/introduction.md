@@ -26,14 +26,22 @@ those described in the
 - A [:simple-github: GitHub](https://github.com) or a
   [:simple-gitlab: GitLab](https://gitlab.com) account
 - A cloud provider account:
-    - [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com) (coming soon)
-    - [:simple-exoscale: Exoscale](https://www.exoscale.com) (coming soon)
     - [:simple-googlecloud: Google Cloud Platform](https://cloud.google.com)
-    - [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) (coming
-      soon)
-    - [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) (coming
-      soon)
 - [:simple-docker: Docker](https://www.docker.com/)
+
+??? info "Using another cloud provider? Read this!"
+
+    This guide has been written with Google Cloud Platform in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
+
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
+    appreciated!
 
 !!! note
 

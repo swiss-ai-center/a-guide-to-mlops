@@ -8,8 +8,10 @@
 
 ## Introduction
 
-The objective of this chapter is to effectively track the evolution of the model
-and generate reports directly from the CI/CD pipeline, using [CML](../tools.md).
+The objective of this chapter is to work effectively and collaboratively on the
+model with the help with [Git](../tools.md), [CML](../tools.md) and the CI/CD
+pipeline.
+
 This capability empowers collaborators to engage in online discussions, enabling
 them to thoroughly review and deliberate on proposed changes before merging them
 into the codebase.
@@ -316,20 +318,15 @@ git push
 
 <!-- Note: Do not indent this code, this is the only way it displays the images
      properly -->
-<div style="display: flex" markdown>
-<figure markdown>
+<div style="display: flex" markdown> <figure markdown>
 ![Plots Diff 1 Light](../assets/images/cml_report1_light.png#only-light){ loading=lazy }
-</figure>
-<figure markdown>
+</figure> <figure markdown>
 ![Plots Diff 1 Dark](../assets/images/cml_report1_dark.png#only-dark){ loading=lazy }
-</figure>
-<figure markdown>
+</figure> <figure markdown>
 ![Plots Diff 2 Light](../assets/images/cml_report2_light.png#only-light){ loading=lazy }
-</figure>
-<figure markdown>
+</figure> <figure markdown>
 ![Plots Diff 2 Dark](../assets/images/cml_report2_dark.png#only-dark){ loading=lazy }
-</figure>
-</div>
+</figure> </div>
 
 ### Merge the pull request/merge request
 

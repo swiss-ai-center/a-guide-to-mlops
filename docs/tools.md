@@ -15,16 +15,24 @@ In this guide, we will use the following tools to demonstrate the MLOps process:
   [:simple-github: GitHub Actions](https://github.com/features/actions) or
   [:simple-gitlab: GitLab CI](https://about.gitlab.com/topics/ci-cd/)
 - A cloud provider account:
-    - [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com) (coming soon)
-    - [:simple-exoscale: Exoscale](https://www.exoscale.com) (coming soon)
     - [:simple-googlecloud: Google Cloud Platform](https://cloud.google.com)
-    - [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) (coming
-      soon)
-    - [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) (coming
-      soon)
 - Model serving, distributing and deploying: [MLEM](https://mlem.ai/) &
   [:simple-docker: Docker](https://docker.com/)
 - Data annotation: [Label Studio](https://labelstud.io/)
+
+??? info "Using another cloud provider? Read this!"
+
+    This guide has been written with Google Cloud Platform in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
+
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
+    appreciated!
 
 You will go into details about each tool in the following parts of this guide.
 

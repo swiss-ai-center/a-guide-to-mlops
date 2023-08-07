@@ -6,14 +6,6 @@
 
     [//]: # "TODO"
 
-    === ":simple-amazonaws: Amazon Web Services"
-
-        _This is a work in progress._
-
-    === ":simple-exoscale: Exoscale"
-
-        _This is a work in progress._
-
     === ":simple-googlecloud: Google Cloud"
 
         **Create a Google Cloud Project**
@@ -64,13 +56,17 @@
         gcloud config set project $GCP_PROJECT_ID
         ```
 
-    === ":simple-microsoftazure: Microsoft Azure"
+    === ":material-cloud: Using another cloud provider? Read this!"
 
-        _This is a work in progress._
+        This guide has been written with Google Cloud Platform in mind. We are open to
+        contributions to add support for other cloud providers such as
+        :simple-amazonaws: Amazon Web Services, :simple-exoscale: Exoscale,
+        :simple-microsoftazure: Microsoft Azure or :simple-kubernetes: Self-hosted
+        Kubernetes but we might not officially support them.
 
-    === ":simple-kubernetes: Self-hosted Kubernetes"
-
-        If you have a self-hosted Kubertenes cluster, you can skip this step.
+        If you want to contribute, please open an issue or a pull request on the
+        [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
+        appreciated!
 
 ## Introduction
 
@@ -206,14 +202,6 @@ flowchart TB
 In order to deploy the model on Kubernetes, you will need a Kubernetes cluster.
 Follow the steps below to create one.
 
-=== ":simple-amazonaws: Amazon Web Services"
-
-    _This is a work in progress._
-
-=== ":simple-exoscale: Exoscale"
-
-    _This is a work in progress._
-
 === ":simple-googlecloud: Google Cloud"
 
     **Enable the Google Kubernetes Engine API**
@@ -257,23 +245,21 @@ Follow the steps below to create one.
     	$GCP_CLUSTER_NAME
     ```
 
-=== ":simple-microsoftazure: Microsoft Azure"
+=== ":material-cloud: Using another cloud provider? Read this!"
 
-    _This is a work in progress._
+    This guide has been written with Google Cloud Platform in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
 
-=== ":simple-kubernetes: Self-hosted Kubernetes"
-
-    If you have a self-hosted Kubertenes cluster, you can skip this step.
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
+    appreciated!
 
 Install the Kubernetes CLI (kubectl) on your machine.
-
-=== ":simple-amazonaws: Amazon Web Services"
-
-    _This is a work in progress._
-
-=== ":simple-exoscale: Exoscale"
-
-    _This is a work in progress._
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -284,13 +270,19 @@ Install the Kubernetes CLI (kubectl) on your machine.
     gcloud components install kubectl
     ```
 
-=== ":simple-microsoftazure: Microsoft Azure"
+=== ":material-cloud: Using another cloud provider? Read this!"
 
-    _This is a work in progress._
+    This guide has been written with Google Cloud Platform in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
 
-=== ":simple-kubernetes: Self-hosted Kubernetes"
-
-    _This is a work in progress._
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
+    appreciated!
 
 ### Validate kubectl can access the Kubernetes cluster
 
@@ -388,14 +380,6 @@ standardized model formats and easy sharing of access. Its support for automated
 deployment pipelines ensures consistent and reliable model deployment, allowing
 for an efficient models management.
 
-=== ":simple-amazonaws: Amazon Web Services"
-
-    _This is a work in progress._
-
-=== ":simple-exoscale: Exoscale"
-
-    _This is a work in progress._
-
 === ":simple-googlecloud: Google Cloud"
 
     To streamline the deployment process on the Kubernetes server, we will utilize
@@ -435,23 +419,21 @@ for an efficient models management.
     	--location=$GCP_REPOSITORY_LOCATION \
     ```
 
-=== ":simple-microsoftazure: Microsoft Azure"
+=== ":material-cloud: Using another cloud provider? Read this!"
 
-    _This is a work in progress._
+    This guide has been written with Google Cloud Platform in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
 
-=== ":simple-kubernetes: Self-hosted Kubernetes"
-
-    _This is a work in progress._
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
+    appreciated!
 
 ### Login to the remote Container Registry
-
-=== ":simple-amazonaws: Amazon Web Services"
-
-    _This is a work in progress._
-
-=== ":simple-exoscale: Exoscale"
-
-    _This is a work in progress._
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -471,13 +453,19 @@ for an efficient models management.
     export CONTAINER_REGISTRY_HOST=${GCP_REPOSITORY_LOCATION}-docker.pkg.dev/$GCP_PROJECT_ID/$GCP_REPOSITORY_NAME
     ```
 
-=== ":simple-microsoftazure: Microsoft Azure"
+=== ":material-cloud: Using another cloud provider? Read this!"
 
-    _This is a work in progress._
+    This guide has been written with Google Cloud Platform in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
 
-=== ":simple-kubernetes: Self-hosted Kubernetes"
-
-    _This is a work in progress._
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
+    appreciated!
 
 ### Deploy the model on Kubernetes with MLEM
 
@@ -515,31 +503,34 @@ The output should be similar to this.
 ```
 💾 Saving deployment to service_classifier.mlem
 ⏳️ Loading model from model.mlem
-🛠 Creating docker image ml
-💼 Adding model files...
-🛠 Generating dockerfile...
-💼 Adding sources...
-💼 Generating requirements file...
-🛠 Building docker image ghcr.io/ludelafo/ml:ef7314d56e722349797f6721117748e0...
-2023-07-28 15:06:41,040 [WARNING] mlem.contrib.docker.base: Skipped logging in to remote registry at host ghcr.io/ludelafo because no credentials given. You could specify credentials as GHCR_IO/LUDELAFO_USERNAME and GHCR_IO/LUDELAFO_PASSWORD environment variables.
-✅  Built docker image ghcr.io/rmarquis/ml:ef7314d56e722349797f6721117748e0
-🔼 Pushing image ghcr.io/ludelafo/ml:ef7314d56e722349797f6721117748e0 to ghcr.io/ludelafo
-🔼 Pushing image ghcr.io/ludelafo/ml:ef7314d56e722349797f6721117748e0 to ghcr.io/ludelafo
-✅  Pushed image ghcr.io/ludelafo/ml:ef7314d56e722349797f6721117748e0 to ghcr.io/ludelafo
+🛠 Creating docker image mlops-classifier
+  💼 Adding model files...
+  🛠 Generating dockerfile...
+  💼 Adding sources...
+  💼 Generating requirements file...
+  🛠 Building docker image europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry/mlops-classifier:dbdf5b923413970ed7cd31cc5da22455...
+2023-08-02 10:58:29,915 [WARNING] mlem.contrib.docker.base: Skipped logging in to remote registry at host europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry because no credentials given. You could specify credentials as EUROPE-WEST6-DOCKER_PKG_DEV/MLOPS-TEST-391911/MLOPS-REGISTRY_USERNAME and EUROPE-WEST6-DOCKER_PKG_DEV/MLOPS-TEST-391911/MLOPS-REGISTRY_PASSWORD environment variables.
+  ✅  Built docker image europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry/mlops-classifier:dbdf5b923413970ed7cd31cc5da22455
+  🔼 Pushing image europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry/mlops-classifier:dbdf5b923413970ed7cd31cc5da22455 to
+europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry
+  ✅  Pushed image
+europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry/mlops-classifier:dbdf
+5b923413970ed7cd31cc5da22455 to
+europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry
 namespace created. status='{'conditions': None, 'phase': 'Active'}'
 deployment created. status='{'available_replicas': None,
-'collision_count': None,
-'conditions': None,
-'observed_generation': None,
-'ready_replicas': None,
-'replicas': None,
-'unavailable_replicas': None,
-'updated_replicas': None}'
+ 'collision_count': None,
+ 'conditions': None,
+ 'observed_generation': None,
+ 'ready_replicas': None,
+ 'replicas': None,
+ 'unavailable_replicas': None,
+ 'updated_replicas': None}'
 service created. status='{'conditions': None, 'load_balancer': {'ingress': None}}'
-✅  Deployment ml is up in mlem namespace
+✅  Deployment mlops-classifier is up in mlem namespace
 ```
 
-!!! tip
+!!! tip "Tips"
 
     The status of a MLEM deployment can be checked with the command
     `mlem deployment status <deployment name>`.
@@ -579,9 +570,9 @@ kubectl describe services ml --namespace mlem
 
 The output should be similar to this.
 
-```
+```text hl_lines="11"
 Name:                     mlops-classifier
-Namespace:                live
+Namespace:                mlem
 Labels:                   run=mlops-classifier
 Annotations:              cloud.google.com/neg: {"ingress":true}
 Selector:                 app=mlops-classifier
@@ -607,15 +598,16 @@ Events:
 The `LoadBalancer Ingress` field contains the external IP address of the
 service. In this case, it is `34.65.72.237`.
 
-Try to access the model with the IP you found at the port `8080`
-(`<load balancer ingress ip>:8080`). You should access the FastAPI documentation
-page as earlier in the guide!
+Try to access the model at the port `8080` using the external IP address of the
+service. You should be able to access the FastAPI documentation page at
+`http://<load balancer ingress ip>:8080/docs`. In this case, it is
+`http://34.65.72.237:8080/docs`.
 
 ### Setup the MLEM Remote State Manager
 
-After the model is deployed on Kubernetes, MLEM will state as local files. This
-is fine if you are working alone, however, if you are working with a team, your
-local files will not be available to your colleagues.
+After the model is deployed on Kubernetes, MLEM will save the deployment state
+as local files. This is fine if you are working alone, however, if you are
+working with a team, your local files will not be available to your colleagues.
 
 While the parameters of the deployment's declaration file can be shared via Git,
 the state file, which represents the current snapshot of the state of the
@@ -632,7 +624,10 @@ Let's start by deleting the current deployment on the server and by removing the
 existing `service_classifier.mlem.state` file.
 
 ```sh title="Execute the following command(s) in a terminal"
+# Delete the deployment on Kubernetes
 mlem deploy remove service_classifier
+
+# Remove the state file
 rm service_classifier.mlem.state
 ```
 
@@ -640,37 +635,54 @@ Instead of relaying on that state file locally, we will configure MLEM to create
 it remotely directly.
 
 Setting up remote state manager is a lot like setting DVC remote. All you need
-to do is provide a URI where you want to store state files:
+to do is provide a URI where you want to store state files.
 
-Make sure to use the same bucket name as the one you created in chapter 6.
+!!! warning
 
-!!! note
+    Make sure to use the same bucket name as the one you created in chapter 6.
 
-    To get the URI of your bucket, you can use the Google Cloud CLI.
-
+=== ":simple-googlecloud: Google Cloud"
     ```sh title="Execute the following command(s) in a terminal"
-    gcloud storage ls
+    # Setup the MLEM Remote State Manager
+    mlem config set core.state.uri gs://$GCP_BUCKET_NAME
     ```
 
-    The output should be similar to this.
+    !!! tip
 
-    ```
-    gs://<my bucket name>/
-    ```
+        To get the URI of your bucket, you can use the Google Cloud CLI.
 
-    Copy the URI and export it as an environment variable. Replace
-    `<my bucket name>` with your own bucket name.
+        ```sh title="Execute the following command(s) in a terminal"
+        gcloud storage ls
+        ```
 
-    ```sh title="Execute the following command(s) in a terminal"
-    export GCP_BUCKET_NAME=<my bucket name>
-    ```
+        The output should be similar to this.
 
-```sh title="Execute the following command(s) in a terminal"
-# Setup the MLEM Remote State Manager
-mlem config set core.state.uri gs://$GCP_BUCKET_NAME
-```
+        ```
+        gs://<my bucket name>/
+        ```
 
-This will update your `.mlem.yaml` configuration file.
+        Copy the URI and export it as an environment variable. Replace
+        `<my bucket name>` with your own bucket name.
+
+        ```sh title="Execute the following command(s) in a terminal"
+        export GCP_BUCKET_NAME=<my bucket name>
+        ```
+
+    This will update your `.mlem.yaml` configuration file.
+
+=== ":material-cloud: Using another cloud provider? Read this!"
+
+    This guide has been written with Google Cloud Platform in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
+
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
+    appreciated!
 
 ### Create and version deployment declaration
 
@@ -685,7 +697,7 @@ take the opportunity to improve and customize the deployment parameters further.
 ```sh title="Execute the following command(s) in a terminal"
 # Create the deployment configuration for MLEM
 mlem declare deployment kubernetes service_classifier \
-    --namespace live \
+    --namespace mlem \
     --image_name mlops-classifier \
     --image_uri mlops-classifier:latest \
     --registry remote \
@@ -695,7 +707,7 @@ mlem declare deployment kubernetes service_classifier \
 ```
 
 In addition to the previously mentioned arguments, we also make use of
-additionnal arguments to adjust the namespace and the image name.
+additional arguments to adjust the namespace and the image name.
 
 The corresponding arguments are:
 
@@ -750,28 +762,28 @@ deployment created. status='{'available_replicas': None,
  'unavailable_replicas': None,
  'updated_replicas': None}'
 service created. status='{'conditions': None, 'load_balancer': {'ingress': None}}'
-✅  Deployment mlops-classifier is up in live namespace
+✅  Deployment mlops-classifier is up in mlem namespace
 ```
 
 ### Access the model
 
 This time, MLEM deploys the model as a service named `service_classifier` in the
-defined `live` namespace.
+defined `mlem` namespace.
 
 To access the model, you will need to find the external IP address of the
 service. You can do so with the following command.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Get the description of the service
-kubectl describe services mlops-classifier --namespace live
+kubectl describe services mlops-classifier --namespace mlem
 ```
 
 Again, use the the `LoadBalancer Ingress` field of the output as it contains the
 external IP address of the service.
 
-Try to access the model with the IP you found at the port `8080`
-(`<load balancer ingress ip>:8080`). You should access the FastAPI documentation
-page as earlier in the guide!
+Try to access the model at the port `8080` using the external IP address of the
+service. You should be able to access the FastAPI documentation page at
+`http://<load balancer ingress ip>:8080/docs` as earlier in the guide!
 
 ### Check the changes
 
