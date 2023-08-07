@@ -215,9 +215,6 @@ Create the Storage Bucket to store the data with the cloud provider CLI.
 === ":simple-googlecloud: Google Cloud"
 
     Create the Google Storage Bucket to store the data with the Google Cloud CLI.
-    You should ideally select a location close to where most of the expected traffic
-    will come from. You can view the available regions at
-    [Cloud locations](https://cloud.google.com/about/locations).
 
     Export the bucket name as an environment variable. Replace `<my bucket name>`
     with your own bucket name (ex: `mlopsdemo`).
@@ -231,9 +228,11 @@ Create the Storage Bucket to store the data with the cloud provider CLI.
     export GCP_BUCKET_NAME=<my bucket name>
     ```
 
-    Export the bucket region as an environment variable. Replace
-    `<my bucket region>` with your own zone. For example, use `EUROPE-WEST6` for
-    Switzerland.
+    Export the bucket region as an environment variable. You can view the available
+    regions at [Cloud locations](https://cloud.google.com/about/locations). You
+    should ideally select a location close to where most of the expected traffic
+    will come from. Replace `<my bucket region>` with your own zone. For example,
+    use `EUROPE-WEST6` for Switzerland.
 
     ```sh title="Execute the following command(s) in a terminal"
     export GCP_BUCKET_REGION=<my bucket region>
