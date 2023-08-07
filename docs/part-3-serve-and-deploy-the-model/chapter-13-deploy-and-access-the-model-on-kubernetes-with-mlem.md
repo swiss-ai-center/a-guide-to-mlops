@@ -120,7 +120,7 @@ flowchart TB
         end
         subgraph clusterGraph[Kubernetes]
             service_mlem_cluster[service_classifier]
-            service_mlem_cluster --> k8s[FastAPI]
+            service_mlem_cluster --> k8s_fastapi[FastAPI]
         end
         s3_storage --> service_mlem_cluster_state[service_classifier.mlem.state]
         service_mlem_cluster_state --> clusterGraph
@@ -153,7 +153,7 @@ flowchart TB
     end
     mlemGraph -->|mlem deploy| registry
     subgraph browserGraph[BROWSER]
-        k8s <--> publicURL["public URL"]
+        k8s_fastapi <--> publicURL["public URL"]
     end
     style pr opacity:0.4,color:#7f7f7f80
     style workspaceGraph opacity:0.4,color:#7f7f7f80

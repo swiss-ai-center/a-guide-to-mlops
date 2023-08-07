@@ -46,7 +46,7 @@ flowchart TB
         gitGraph --> registry[(Registry)]
         subgraph clusterGraph[Kubernetes]
             service_mlem_cluster[service_classifier]
-            service_mlem_cluster --> k8s[FastAPI]
+            service_mlem_cluster --> k8s_fastapi[FastAPI]
         end
         s3_storage --> service_mlem_cluster_state[service_classifier.mlem.state]
         service_mlem_cluster_state --> clusterGraph
@@ -78,7 +78,7 @@ flowchart TB
         service_mlem <-.-> dot_git
     end
     subgraph browserGraph[BROWSER]
-        k8s <--> publicURL["public URL"]
+        k8s_fastapi <--> publicURL["public URL"]
     end
     style pr opacity:0.4,color:#7f7f7f80
     style workspaceGraph opacity:0.4,color:#7f7f7f80
@@ -100,6 +100,14 @@ flowchart TB
     style gitGraph opacity:0.4,color:#7f7f7f80
     style mlem opacity:0.4,color:#7f7f7f80
     style fastapi opacity:0.4,color:#7f7f7f80
+    style service_mlem_cluster_state opacity:0.4,color:#7f7f7f80
+    style mlemGraph opacity:0.4,color:#7f7f7f80
+    style service_mlem opacity:0.4,color:#7f7f7f80
+    style clusterGraph opacity:0.4,color:#7f7f7f80
+    style service_mlem_cluster opacity:0.4,color:#7f7f7f80
+    style k8s_fastapi opacity:0.4,color:#7f7f7f80
+    style browserGraph opacity:0.4,color:#7f7f7f80
+    style publicURL opacity:0.4,color:#7f7f7f80
     linkStyle 0 opacity:0.4,color:#7f7f7f80
     linkStyle 1 opacity:0.4,color:#7f7f7f80
     linkStyle 2 opacity:0.4,color:#7f7f7f80
@@ -111,11 +119,9 @@ flowchart TB
     linkStyle 8 opacity:0.4,color:#7f7f7f80
     linkStyle 9 opacity:0.4,color:#7f7f7f80
     linkStyle 10 opacity:0.4,color:#7f7f7f80
-    linkStyle 11 opacity:0.4,color:#7f7f7f80
     linkStyle 12 opacity:0.4,color:#7f7f7f80
     linkStyle 13 opacity:0.4,color:#7f7f7f80
     linkStyle 14 opacity:0.4,color:#7f7f7f80
-    linkStyle 15 opacity:0.4,color:#7f7f7f80
     linkStyle 16 opacity:0.4,color:#7f7f7f80
     linkStyle 17 opacity:0.4,color:#7f7f7f80
     linkStyle 18 opacity:0.4,color:#7f7f7f80
@@ -128,6 +134,8 @@ flowchart TB
     linkStyle 25 opacity:0.4,color:#7f7f7f80
     linkStyle 26 opacity:0.4,color:#7f7f7f80
     linkStyle 27 opacity:0.4,color:#7f7f7f80
+    linkStyle 28 opacity:0.4,color:#7f7f7f80
+    linkStyle 29 opacity:0.4,color:#7f7f7f80
 ```
 
 ## Steps
