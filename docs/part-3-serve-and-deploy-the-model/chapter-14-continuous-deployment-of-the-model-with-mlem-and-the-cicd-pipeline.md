@@ -355,7 +355,7 @@ following steps will be performed:
     git add .github/workflows/deploy.yml
 
     # Commit the changes
-    git commit -m "The model is deployed on the Kubernetes cluster"
+    git commit -m "A pipeline will deploy the model on the Kubernetes cluster"
 
     # Push the changes
     git push
