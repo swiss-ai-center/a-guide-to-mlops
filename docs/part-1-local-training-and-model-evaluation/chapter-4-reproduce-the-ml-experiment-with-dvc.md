@@ -173,7 +173,7 @@ Dependencies and outputs are files or directories that are used or produced by
 the stage. If any of these files change, DVC will re-run the command of the
 stage when using `dvc repro`.
 
-#### `prepare` stage
+#### Prepare stage
 
 Run the following command to add a new stage called _prepare_ that prepares the
 dataset.
@@ -198,7 +198,7 @@ The output of this command is stored in the `data/prepared` directory.
 Take some time to explore the `dvc.yaml` file and to understand how the pipeline
 is updated.
 
-#### `train` stage
+#### Train stage
 
 Run the following command to create a new stage called _train_ that trains the
 model.
@@ -222,7 +222,7 @@ The output of this command is stored in the `model` directory.
 
 Explore the `dvc.yaml` file to understand how the pipeline is updated.
 
-#### `evaluate` stage
+#### Evaluate stage
 
 Run the following command to create a new stage called _evaluate_ that evaluates
 the model.
