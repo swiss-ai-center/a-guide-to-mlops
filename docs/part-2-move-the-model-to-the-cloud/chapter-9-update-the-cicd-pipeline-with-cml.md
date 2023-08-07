@@ -127,7 +127,7 @@ collaboration and decision-making within the team.
 
     Explore this file to understand the `train-and-report` stage and its steps.
 
-    ```yaml title=".github/workflows/mlops.yml" hl_lines="16-17 34-100"
+    ```yaml title=".github/workflows/mlops.yml" hl_lines="16-17 35-100"
     name: MLOps
 
     on:
