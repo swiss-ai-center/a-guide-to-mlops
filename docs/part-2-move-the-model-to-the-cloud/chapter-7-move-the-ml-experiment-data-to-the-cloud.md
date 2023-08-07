@@ -415,6 +415,9 @@ DVC as well.
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
 git commit -m "My ML experiment data is shared with DVC"
+
+# Push the changes
+git push
 ```
 
 ### Check the results
