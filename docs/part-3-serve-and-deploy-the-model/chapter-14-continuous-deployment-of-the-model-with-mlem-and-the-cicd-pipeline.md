@@ -42,8 +42,9 @@ flowchart TB
             action_data -->|dvc repro| action_out[metrics & plots]
             action_out -->|cml publish| pr[Pull Request]
             pr --> repository
+            repository --> action_deploy
         end
-        gitGraph --> registry[(Registry)]
+        action_deploy[Action] -->|mlem deployment| registry[(Registry)]
         subgraph clusterGraph[Kubernetes]
             service_mlem_cluster[service_classifier]
             service_mlem_cluster --> k8s_fastapi[FastAPI]
@@ -119,10 +120,9 @@ flowchart TB
     linkStyle 8 opacity:0.4,color:#7f7f7f80
     linkStyle 9 opacity:0.4,color:#7f7f7f80
     linkStyle 10 opacity:0.4,color:#7f7f7f80
-    linkStyle 12 opacity:0.4,color:#7f7f7f80
     linkStyle 13 opacity:0.4,color:#7f7f7f80
     linkStyle 14 opacity:0.4,color:#7f7f7f80
-    linkStyle 16 opacity:0.4,color:#7f7f7f80
+    linkStyle 15 opacity:0.4,color:#7f7f7f80
     linkStyle 17 opacity:0.4,color:#7f7f7f80
     linkStyle 18 opacity:0.4,color:#7f7f7f80
     linkStyle 19 opacity:0.4,color:#7f7f7f80
@@ -136,6 +136,7 @@ flowchart TB
     linkStyle 27 opacity:0.4,color:#7f7f7f80
     linkStyle 28 opacity:0.4,color:#7f7f7f80
     linkStyle 29 opacity:0.4,color:#7f7f7f80
+    linkStyle 30 opacity:0.4,color:#7f7f7f80
 ```
 
 ## Steps
