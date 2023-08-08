@@ -301,7 +301,7 @@ following steps will be performed:
 
     Take some time to understand the deploy job and its steps.
 
-    ```yaml
+    ```yaml title=".github/workflows/deploy.yml"
     name: Deploy
 
     on:
@@ -337,34 +337,157 @@ following steps will be performed:
             run: mlem deployment run --load service_classifier --model model
     ```
 
-=== ":simple-gitlab: GitLab"
+    By utilizing the `workflow_call` function, it becomes possible to directly
+    invoke this action from our primary `mlops.yml` workflow. Let's proceed to make
+    the necessary modifications to achieve this seamlessly:
 
-    _Work in progress._
+    ```yaml title=".github/workflows/mlops.yml" hl_lines="95-100"
+    name: MLOps
 
-### Push the CI/CD pipeline configuration file to Git
+    on:
+      # Runs on pushes targeting main branch
+      push:
+        branches:
+          - main
 
-=== ":simple-github: GitHub"
+        # Runs on pull requests
+        pull_request:
 
-    Push the CI/CD pipeline configuration file to Git.
+        # Allows you to run this workflow manually from the Actions tab
+        workflow_dispatch:
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Add the configuration file
-    git add .github/workflows/deploy.yml
+    jobs:
+      train-and-report:
+        permissions: write-all
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout repository
+            uses: actions/checkout@v3
+          - name: Setup Python
+            uses: actions/setup-python@v4
+            with:
+              python-version: '3.10'
+              cache: pip
+          - name: Install dependencies
+            run: pip install --requirement requirements-freeze.txt
+          - name: Login to Google Cloud
+            uses: 'google-github-actions/auth@v1'
+            with:
+              credentials_json: '${{ secrets.DVC_GCP_SERVICE_ACCOUNT_KEY }}'
+          - name: Train model
+            run: dvc repro --pull --allow-missing
+            # Node is required to run CML
+          - name: Setup Node
+            if: github.event_name == 'pull_request'
+            uses: actions/setup-node@v3
+            with:
+              node-version: '16'
+          - name: Setup CML
+            if: github.event_name == 'pull_request'
+            uses: iterative/setup-cml@v1
+            with:
+              version: '0.19.1'
+          - name: Create CML report
+            if: github.event_name == 'pull_request'
+            env:
+              REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            run: |
+              # Fetch all other Git branches
+              git fetch --depth=1 origin main:main
 
-    # Commit the changes
-    git commit -m "A pipeline will deploy the model on the Kubernetes cluster"
+              # Add title to the report
+              echo "# Experiment Report (${{ github.sha }})" >> report.md
 
-    # Push the changes
-    git push
+              # Compare parameters to main branch
+              echo "## Params workflow vs. main" >> report.md
+              dvc params diff main --md >> report.md
+
+              # Compare metrics to main branch
+              echo "## Metrics workflow vs. main" >> report.md
+              dvc metrics diff main --md >> report.md
+
+              # Compare plots (images) to main branch
+              dvc plots diff main
+
+              # Create plots
+              echo "## Plots" >> report.md
+
+              # Create training history plot
+              echo "### Training History" >> report.md
+              echo "#### main" >> report.md
+              echo '![](./dvc_plots/static/main_evaluation_plots_training_history.png "Training History")' >> report.md
+              echo "#### workspace" >> report.md
+              echo '![](./dvc_plots/static/workspace_evaluation_plots_training_history.png "Training History")' >> report.md
+
+              # Create predictions preview
+              echo "### Predictions Preview" >> report.md
+              echo "#### main" >> report.md
+              echo '![](./dvc_plots/static/main_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
+              echo "#### workspace" >> report.md
+              echo '![](./dvc_plots/static/workspace_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
+
+              # Create confusion matrix
+              echo "### Confusion Matrix" >> report.md
+              echo "#### main" >> report.md
+              echo '![](./dvc_plots/static/main_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
+              echo "#### workspace" >> report.md
+              echo '![](./dvc_plots/static/workspace_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
+
+              # Publish the CML report
+              cml comment update --target=pr --publish report.md
+
+      deploy:
+        # Runs on main branch only
+        if: github.ref == 'refs/heads/main'
+        needs: train-and-report
+        name: Call Deploy
+        uses: ./.github/workflows/deploy.yml
     ```
 
 === ":simple-gitlab: GitLab"
 
     _Work in progress._
 
+### Check the changes
+
+Check the changes with Git to ensure that all the necessary files are tracked.
+
+```sh title="Execute the following command(s) in a terminal"
+# Add all the files
+git add .
+
+# Check the changes
+git status
+```
+
+The output should look like this.
+
+```
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+(use "git restore --staged <file>..." to unstage)
+    new file:   .github/workflows/deploy.yml
+    modified:   .github/workflows/mlops.yml
+```
+
+### Commit the changes to Git
+
+Push the CI/CD pipeline configuration file to Git.
+
+```sh title="Execute the following command(s) in a terminal"
+# Commit the changes
+git commit -m "A pipeline will deploy the model on the Kubernetes cluster"
+
+# Push the changes
+git push
+```
+
 ### Check the results
 
-TODO: Add GitHub/GitLab manual trigger of the pipeline with instructions.
+Since the 11 TODO: Add GitHub/GitLab manual trigger of the pipeline with
+instructions.
 
 TODO: Add a screenshot of the pipeline running.
 
