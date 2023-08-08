@@ -1,4 +1,4 @@
-# Chapter 9: Update the CI/CD pipeline with CML
+# Chapter 9: Track model evolution in the CI/CD pipeline with CML
 
 ??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
 

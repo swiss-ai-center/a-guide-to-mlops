@@ -1,4 +1,4 @@
-# Chapter 10: Track model evolution in the CI/CD pipeline with CML
+# Chapter 10: Work efficiently and collaboratively with Git
 
 ??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
 
