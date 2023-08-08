@@ -486,22 +486,28 @@ git push
 
 ### Check the results
 
-Since the 11 TODO: Add GitHub/GitLab manual trigger of the pipeline with
-instructions.
+With the new configuration in place, each and every commit that makes its way to
+the main branch will serve as a trigger for the pipeline, which will
+automatically set in motion the deployment of the model, ensuring that the
+latest version is consistently available on the Kubernetes server for use.
 
-TODO: Add a screenshot of the pipeline running.
+=== ":simple-github: GitHub"
 
-If you click on the pipeline, you should see the following output for the
-`Deploy the model` step:
+    In the **Actions** tab, if you click on the **Call Deploy** > **deploy**
+    pipeline, you should see the following output for the `Deploy the model` step:
 
-```sh
-> mlem deployment run --load service_classifier --model model
+    ```sh
+    > mlem deployment run --load service_classifier --model model
 
-⏳️ Loading model from model.mlem
-⏳️ Loading deployment from service_classifier.mlem
-```
+    ⏳️ Loading model from model.mlem
+    ⏳️ Loading deployment from service_classifier.mlem
+    ```
 
-Note that since the model has not changed, MLEM has not re-deployed the model.
+    Note that since the model has not changed, MLEM has not re-deployed the model.
+
+=== ":simple-gitlab: GitLab"
+
+    _Work in progress._
 
 ## State of the MLOps process
 
