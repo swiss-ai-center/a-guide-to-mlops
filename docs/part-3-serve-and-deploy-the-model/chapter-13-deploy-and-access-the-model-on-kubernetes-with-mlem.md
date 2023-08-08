@@ -246,6 +246,21 @@ Follow the steps below to create one.
     	$GCP_CLUSTER_NAME
     ```
 
+    The output should be similar to this.
+
+    ```
+    Default change: VPC-native is the default mode during cluster creation for versions greater than 1.21.0-gke.1500. To create advanced routes based clusters, please pass the `--no-enable-ip-alias` flag
+    Default change: During creation of nodepools or autoscaling configuration changes for cluster versions greater than 1.24.1-gke.800 a default location policy is applied. For Spot and PVM it defaults to ANY, and for all other VM kinds a BALANCED policy is used. To change the default values use the `--location-policy` flag.
+    Note: Your Pod address range (`--cluster-ipv4-cidr`) can accommodate at most 1008 node(s).
+    Creating cluster mlops-kubernetes in europe-west6-a... Cluster is being health-checked (master is hea
+    lthy)...done.
+    Created [https://container.googleapis.com/v1/projects/mlops-code-395207/zones/europe-west6-a/clusters/mlops-kubernetes].
+    To inspect the contents of your cluster, go to: https://console.cloud.google.com/kubernetes/workload_/gcloud/europe-west6-a/mlops-kubernetes?project=mlops-code-395207
+    kubeconfig entry generated for mlops-kubernetes.
+    NAME              LOCATION        MASTER_VERSION   MASTER_IP    MACHINE_TYPE   NODE_VERSION     NUM_NODES  STATUS
+    mlops-kubernetes  europe-west6-a  1.27.2-gke.1200  34.65.19.80  e2-standard-2  1.27.2-gke.1200  2          RUNNING
+    ```
+
 === ":material-cloud: Using another cloud provider? Read this!"
 
     This guide has been written with Google Cloud Platform in mind. We are open to
@@ -416,8 +431,17 @@ for an efficient models management.
 
     ```sh title="Execute the following command(s) in a terminal"
     gcloud artifacts repositories create $GCP_REPOSITORY_NAME \
-    	--repository-format=docker \
-    	--location=$GCP_REPOSITORY_LOCATION \
+        --repository-format=docker \
+        --location=$GCP_REPOSITORY_LOCATION
+    ```
+
+    The output should be similar to this.
+
+    ```
+    Create request issued for: [mlops-registry]
+    Waiting for operation [projects/mlops-code-395207/locations/europe-west6/operations/be8b09fa-279c-468
+    5-b451-1f3c900d4a36] to complete...done.
+    Created repository [mlops-registry].
     ```
 
 === ":material-cloud: Using another cloud provider? Read this!"
@@ -471,7 +495,8 @@ for an efficient models management.
 ### Deploy the model on Kubernetes with MLEM
 
 Deploy the model on Kubernetes with MLEM. This will create a Docker image, push
-it to the remote Container Registry and deploy the model on Kubernetes.
+it to the remote Container Registry and deploy the model on Kubernetes. The
+operation can takes a few minutes.
 
 ??? question "Having issues to deploy the model on Kubernetes?"
 
@@ -504,19 +529,18 @@ The output should be similar to this.
 ```
 💾 Saving deployment to service_classifier.mlem
 ⏳️ Loading model from model.mlem
-🛠 Creating docker image mlops-classifier
+🛠 Creating docker image ml
   💼 Adding model files...
   🛠 Generating dockerfile...
   💼 Adding sources...
   💼 Generating requirements file...
-  🛠 Building docker image europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry/mlops-classifier:dbdf5b923413970ed7cd31cc5da22455...
+  🛠 Building docker image europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry/ml:dbdf5b923413970ed7cd31cc5da22455...
 2023-08-02 10:58:29,915 [WARNING] mlem.contrib.docker.base: Skipped logging in to remote registry at host europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry because no credentials given. You could specify credentials as EUROPE-WEST6-DOCKER_PKG_DEV/MLOPS-TEST-391911/MLOPS-REGISTRY_USERNAME and EUROPE-WEST6-DOCKER_PKG_DEV/MLOPS-TEST-391911/MLOPS-REGISTRY_PASSWORD environment variables.
-  ✅  Built docker image europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry/mlops-classifier:dbdf5b923413970ed7cd31cc5da22455
-  🔼 Pushing image europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry/mlops-classifier:dbdf5b923413970ed7cd31cc5da22455 to
+✅  Built docker image europe-west6-docker.pkg.dev/mlops-registry/mlops-registry/ml:dbdf5b923413970ed7cd31cc5da22455
+  🔼 Pushing image europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry/ml:dbdf5b923413970ed7cd31cc5da22455 to
 europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry
   ✅  Pushed image
-europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry/mlops-classifier:dbdf
-5b923413970ed7cd31cc5da22455 to
+europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry/ml:dbdf5b923413970ed7cd31cc5da22455 to
 europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry
 namespace created. status='{'conditions': None, 'phase': 'Active'}'
 deployment created. status='{'available_replicas': None,
@@ -528,7 +552,7 @@ deployment created. status='{'available_replicas': None,
  'unavailable_replicas': None,
  'updated_replicas': None}'
 service created. status='{'conditions': None, 'load_balancer': {'ingress': None}}'
-✅  Deployment mlops-classifier is up in mlem namespace
+✅  Deployment ml is up in mlem namespace
 ```
 
 !!! tip "Tips"
