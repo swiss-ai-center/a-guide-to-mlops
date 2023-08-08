@@ -9,7 +9,7 @@
 ## Introduction
 
 The objective of this chapter is to work effectively and collaboratively on the
-model with the help with [Git](../tools.md), [CML](../tools.md) and the CI/CD
+model with the help of [Git](../tools.md), [CML](../tools.md) and the CI/CD
 pipeline.
 
 This capability empowers collaborators to engage in online discussions, enabling
