@@ -222,13 +222,14 @@ Follow the steps below to create one.
     export GCP_CLUSTER_NAME=<my cluster name>
     ```
 
-    Export the cluster zone as an environment variable. Replace `<my cluster zone>`
-    with your own zone (ex: `europe-west6-a` for Switzerland Zurich).
-
-    You should ideally select a location close to where most of the expected traffic
-    will come from. You can view the available zones at
+    Export the cluster zone as an environment variable. You can view the available
+    zones at
     [Regions and zones](https://cloud.google.com/compute/docs/regions-zones#available).
-    You can view the available types of machine with the
+    You should ideally select a location close to where most of the expected traffic
+    will come from. Replace `<my cluster zone>` with your own zone (ex:
+    `europe-west6-a` for Switzerland Zurich).
+
+    You can also view the available types of machine with the
     `gcloud compute machine-types list` command.
 
     ```sh title="Execute the following command(s) in a terminal"

@@ -220,7 +220,7 @@ Create the Storage Bucket to store the data with the cloud provider CLI.
     regions at [Cloud locations](https://cloud.google.com/about/locations). You
     should ideally select a location close to where most of the expected traffic
     will come from. Replace `<my bucket region>` with your own zone. For example,
-    use `EUROPE-WEST6` for Switzerland.
+    use `europe-west6` for Switzerland.
 
     ```sh title="Execute the following command(s) in a terminal"
     export GCP_BUCKET_REGION=<my bucket region>
