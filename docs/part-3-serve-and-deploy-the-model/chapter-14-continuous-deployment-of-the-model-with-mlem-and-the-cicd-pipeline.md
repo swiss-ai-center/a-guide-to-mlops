@@ -53,8 +53,8 @@ flowchart TB
             service_mlem_cluster --> k8s_fastapi[FastAPI]
         end
         s3_storage --> service_mlem_cluster_state[service_classifier.mlem.state]
-        service_mlem_cluster_state --> clusterGraph
-        registry --> clusterGraph
+        service_mlem_cluster_state --> service_mlem_cluster
+        registry --> service_mlem_cluster
     end
     subgraph cacheGraph[CACHE]
         dot_dvc

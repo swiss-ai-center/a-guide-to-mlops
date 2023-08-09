@@ -43,7 +43,7 @@ flowchart TB
         subgraph gitGraph[Git Remote]
             repository[(Repository)] --> action[Action]
             action --> action_runner[Runner Call]
-            action_runner --> action_out[metrics & plots]
+            action_runner -.-> action_out[metrics & plots]
             action_out[metrics & plots] -->|cml publish| pr[Pull Request]
             pr --> repository
             repository --> action_deploy
@@ -53,8 +53,8 @@ flowchart TB
            service_mlem_cluster[service_classifier]
            service_mlem_cluster --> k8s_fastapi[FastAPI]
            action_data[data/raw] -->|dvc repro| action_train[Train]
-           action_train -.- k8s_gpu1[GPU 1]
-           action_train -.- k8s_gpu2[GPU 2]
+           action_train -.-> k8s_gpu1[GPU 1]
+           action_train -.-> k8s_gpu2[GPU 2]
         end
         action_runner -->|dvc pull| action_data
         action_train -->|dvc push| action_out
