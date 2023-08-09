@@ -5,59 +5,9 @@
     !!! warning
 
         It might be easier to start from the previous chapter(s). Only follow this
-        section if you are confortable with the content of the previous chapter(s).
+        section if you are comfortable with the content of the previous chapter(s).
 
-    Set up the project directory
-
-    ```sh title="Execute the following command(s) in a terminal"
-    # Create the working directory
-    mkdir a-guide-to-mlops-jupyter-notebook
-
-    # Switch to the working directory
-    cd a-guide-to-mlops-jupyter-notebook
-    ```
-
-    Get the required files for this chapter.
-
-    ```sh title="Execute the following command(s) in a terminal"
-    # Clone the repository
-    git clone \
-        --no-checkout \
-        --depth=1 \
-        --filter=tree:0 \
-        https://github.com/csia-pme/a-guide-to-mlops.git
-
-    # Move to the cloned repository
-    cd a-guide-to-mlops
-
-    # Get the files for this chapter
-    git sparse-checkout set --no-cone docs/part-1-local-training-and-model-evaluation/chapter-1-run-a-simple-ml-experiment-with-jupyter-notebook
-
-    # Clone the files locally
-    git checkout
-
-    # Move back to the root directory
-    cd ..
-
-    # Copy the chapter files to the working directory
-    cp -r a-guide-to-mlops/docs/part-1-local-training-and-model-evaluation/chapter-1-run-a-simple-ml-experiment-with-jupyter-notebook/* .
-
-    # Delete the cloned repository
-    rm -rf a-guide-to-mlops
-    ```
-
-    Set up the environment.
-
-    ```sh title="Execute the following command(s) in a terminal"
-    # Create the virtual environment
-    python3 -m venv .venv
-
-    # Activate the virtual environment
-    source .venv/bin/activate
-
-    # Install the requirements
-    pip install --requirement requirements.txt
-    ```
+    Work in progress.
 
 ## Introduction
 
@@ -72,12 +22,12 @@ Notebooks into Python scripts suitable for running ML experiments in a more
 modular and reproducible manner can help address these shortcomings and enhance
 the overall ML development process.
 
-[pip](../tools.md) is the standard package manager for Python. It is used to
-install and manage dependencies in a Python environment.
+[:simple-python: pip](../tools.md) is the standard package manager for Python.
+It is used to install and manage dependencies in a Python environment.
 
 In this chapter, you will learn how to:
 
-1. Set up a Python environment using [pip](../tools.md)
+1. Set up a Python environment using pip
 2. Adapt the content of the Jupyter Notebook into Python scripts
 3. Launch the experiment locally
 
@@ -199,7 +149,8 @@ Install the dependencies.
 pip install --requirement requirements.txt
 ```
 
-Create a freeze file to list the dependencies with their versions.
+Create a freeze file to list the dependencies with their versions to ensure that
+transitive dependencies are also listed. This will help with reproducibility.
 
 ??? tip "Not familiar with freezing dependencies? Read this!"
 
@@ -261,11 +212,9 @@ Create a freeze file to list the dependencies with their versions.
     of your Python projects.
 
 ```sh title="Execute the following command(s) in a terminal"
+# Freeze the dependencies
 pip freeze --local --all > requirements-freeze.txt
 ```
-
-We freeze the dependencies to ensure that transitive dependencies are also
-listed. This will help with reproducibility.
 
 - The `--local` flag ensures that if a virtualenv has global access, it will not
   output globally-installed packages.
@@ -310,7 +259,8 @@ train:
 
 #### Move the preparation step to its own file
 
-The `src/prepare.py` script will prepare the dataset.
+The `src/prepare.py` script will prepare the dataset. We take this opportunity
+to refactor the code to make it more modular and explicit using functions.
 
 ```py title="src/prepare.py"
 import json
@@ -401,7 +351,8 @@ if __name__ == "__main__":
 
 #### Move the train step to its own file
 
-The `src/train.py` script will train the ML model.
+The `src/train.py` script will train the ML model. We take this opportunity to
+refactor the code to make it more modular and explicit using functions.
 
 ```py title="src/train.py"
 import sys
@@ -498,7 +449,9 @@ if __name__ == "__main__":
 
 #### Move the evaluate step to its own file
 
-The `src/evaluate.py` script will evaluate the ML model using DVC.
+The `src/evaluate.py` script will evaluate the ML model using DVC. We take this
+opportunity to refactor the code to make it more modular and explicit using
+functions.
 
 ```py title="src/evaluate.py"
 import json
@@ -699,7 +652,7 @@ def set_seed(seed: int) -> None:
     tf.config.threading.set_intra_op_parallelism_threads(1)
 ```
 
-### Create `README.md`
+### Create a `README.md` file
 
 Finally, create a `README.md` file at the root of the project to describe the
 repository. Feel free to use the following template. As you progress though this
@@ -709,11 +662,12 @@ guide, you can add your notes in the `## Notes` section.
 # MLOps - Celestial Body Classification
 
 This repository contains the code from
-[A Guide to MLOps](https://csia-pme.github.io/a-guide-to-mlops/).
+[A guide to MLOps](https://csia-pme.github.io/a-guide-to-mlops/).
 
 ## Usage
 
 The code is divided in various scripts:
+
 - `python3 src/prepare.py <raw-dataset-folder> <prepared-dataset-folder>`: prepare the dataset for training
 - `python3 src/train.py <prepared-dataset-folder> <model-folder>`: train the model
 - `python3 src/evaluate.py <model-folder> <prepared-dataset-folder>`: evaluate the model

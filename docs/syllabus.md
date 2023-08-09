@@ -2,8 +2,8 @@
 
 What you will learn from this guide.
 
-- Introduction - Learn [about MLOps](./concept.md) and [the tools](./tools.md)
-  used in this guide.
+- Introduction - Learn about the [concept](./concept.md) behind MLOps and
+  [the tools](./tools.md) used in this guide.
 - [Part 1 - Local training and model evaluation](./part-1-local-training-and-model-evaluation/introduction.md) -
   Learn how to train a model locally and evaluate it using DVC.
     - [Chapter 1 - Run a simple ML experiment with Jupyter Notebook](./part-1-local-training-and-model-evaluation/chapter-1-run-a-simple-ml-experiment-with-jupyter-notebook.md)

@@ -2,28 +2,32 @@
 
 ??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
 
-    _Work in progress._
+    !!! warning
 
-    [//]: # "TODO"
+        It might be easier to start from the previous chapter(s). Only follow this
+        section if you are comfortable with the content of the previous chapter(s).
+
+    Work in progress.
 
 ## Introduction
 
 Now that you have a good understanding of the experiment, it's time to
 streamline the code and data sharing process. To enable efficient tracking of
-code changes and ensure reproducibility, we will create a Git repository.
+code changes and ensure reproducibility, you will create a
+[:simple-git: Git](../tools.md) repository.
 
 However, when it comes to managing large files, Git has some limitations.
 Although Git LFS is an option for handling large files in Git repositories, it
 may not be the most efficient solution.
 
-This is the reason we will use [DVC](../tools.md), a version control system
-specifically designed for efficient data management that seamlessly integrates
-with Git. DVC utilizes chunking to efficiently store large files and track their
-changes.
+This is the reason you will use [:simple-dvc: DVC](../tools.md), a version
+control system specifically designed for efficient data management that
+seamlessly integrates with Git. DVC utilizes chunking to efficiently store large
+files and track their changes.
 
 In this chapter, you will learn how to:
 
-1. Set up a new [Git](../tools.md) repository
+1. Set up a new Git repository
 2. Initialize Git in your project directory
 3. Verify Git tracking for your files
 4. Exclude experiment results, data, models and Python environment files from
@@ -67,7 +71,7 @@ flowchart LR
     linkStyle 6 opacity:0.4,color:#7f7f7f80
 ```
 
-Later, we will streamline the code sharing process by setting up remote Git and
+Later, you will streamline the code sharing process by setting up remote Git and
 DVC repositories to enable easy collaboration with the rest of the team.
 
 ## Steps
@@ -229,7 +233,7 @@ Install the dependencies and update the freeze file.
 
 !!! warning
 
-    Prior to running any `pip` commands, it is crucial to ensure the virtual
+    Prior to running any pip commands, it is crucial to ensure the virtual
     environment is activated to avoid potential conflicts with system-wide Python
     packages.
 
@@ -449,7 +453,5 @@ collaboration. Continue the guide to learn how.
 
 Highly inspired by:
 
-- [_Creating a new repository_ - docs.github.com](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository)
-- [_Create a project_ - docs.gitlab.com](https://docs.gitlab.com/ee/user/project/working_with_projects.html#create-a-project)
 - [_Get Started_ - dvc.org](https://dvc.org/doc/start)
-- [_Get Started: Data Versioning_ -dvc.org](https://dvc.org/doc/start/data-management)
+- [_Get Started: Data Versioning_ - dvc.org](https://dvc.org/doc/start/data-management)

@@ -2,9 +2,12 @@
 
 ??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
 
-    _Work in progress._
+    !!! warning
 
-    [//]: # "TODO"
+        It might be easier to start from the previous chapter(s). Only follow this
+        section if you are comfortable with the content of the previous chapter(s).
+
+    Work in progress.
 
 ## Introduction
 
@@ -109,7 +112,7 @@ This is the same process as in
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
-    This guide has been written with Google Cloud Platform in mind. We are open to
+    This guide has been written with Google Cloud in mind. We are open to
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
@@ -192,7 +195,7 @@ Depending on the CI/CD platform you are using, the process will be different.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
-    This guide has been written with Google Cloud Platform in mind. We are open to
+    This guide has been written with Google Cloud in mind. We are open to
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
@@ -673,7 +676,7 @@ The pod should be created on the Kubernetes Cluster.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
-    This guide has been written with Google Cloud Platform in mind. We are open to
+    This guide has been written with Google Cloud in mind. We are open to
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),

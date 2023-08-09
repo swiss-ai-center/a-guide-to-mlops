@@ -11,7 +11,7 @@ Learn how to serve and deploy the model using MLEM and CML.
 This guide has been written with macOS and Linux operating systems in mind. If
 you use Windows, you might encounter issues. Please use the
 [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/)
-(WSL2) for optimal results.
+(WSL 2) for optimal results.
 
 For this part, you also need to have [Docker Desktop](https://www.docker.com/)
 installed. Docker will be utilized for setting up and managing the container
@@ -25,13 +25,12 @@ those described in the
 
 - A [:simple-github: GitHub](https://github.com) or a
   [:simple-gitlab: GitLab](https://gitlab.com) account
-- A cloud provider account:
-    - [:simple-googlecloud: Google Cloud Platform](https://cloud.google.com)
+- A [:simple-googlecloud: Google Cloud](https://cloud.google.com) account
 - [:simple-docker: Docker](https://www.docker.com/)
 
 ??? info "Using another cloud provider? Read this!"
 
-    This guide has been written with Google Cloud Platform in mind. We are open to
+    This guide has been written with Google Cloud in mind. We are open to
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),

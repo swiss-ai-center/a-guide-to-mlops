@@ -2,9 +2,12 @@
 
 ??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
 
-    _Work in progress._
+    !!! warning
 
-    [//]: # "TODO"
+        It might be easier to start from the previous chapter(s). Only follow this
+        section if you are comfortable with the content of the previous chapter(s).
+
+    Work in progress.
 
 ## Introduction
 
@@ -121,7 +124,7 @@ Create a project on a cloud provider to host the data.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
-    This guide has been written with Google Cloud Platform in mind. We are open to
+    This guide has been written with Google Cloud in mind. We are open to
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
@@ -178,7 +181,7 @@ Install and configure the cloud provider CLI tool to manage the cloud resources.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
-    This guide has been written with Google Cloud Platform in mind. We are open to
+    This guide has been written with Google Cloud in mind. We are open to
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
@@ -251,7 +254,7 @@ Create the Storage Bucket to store the data with the cloud provider CLI.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
-    This guide has been written with Google Cloud Platform in mind. We are open to
+    This guide has been written with Google Cloud in mind. We are open to
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
@@ -305,7 +308,7 @@ Install the DVC Storage plugin for the chosen cloud provider.
 
     !!! warning
 
-        Prior to running any `pip` commands, it is crucial to ensure the virtual
+        Prior to running any pip commands, it is crucial to ensure the virtual
         environment is activated to avoid potential conflicts with system-wide Python
         packages.
 
@@ -323,7 +326,7 @@ Install the DVC Storage plugin for the chosen cloud provider.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
-    This guide has been written with Google Cloud Platform in mind. We are open to
+    This guide has been written with Google Cloud in mind. We are open to
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
@@ -351,7 +354,7 @@ Configure DVC to use the Storage Bucket on the chosen cloud provider.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
-    This guide has been written with Google Cloud Platform in mind. We are open to
+    This guide has been written with Google Cloud in mind. We are open to
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
