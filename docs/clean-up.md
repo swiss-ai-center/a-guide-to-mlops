@@ -6,7 +6,7 @@ avoid unnecessary incurring costs and potential security concerns.
 
 Here's a step-by-step guide to help you do that.
 
-- Clean up your cloud provider resources
+- Clean up the cloud provider resources
 - Clean up your local environment
 - Clean up your repository
 
@@ -18,7 +18,7 @@ Here's a step-by-step guide to help you do that.
 
 ### Clean up cloud provider resources
 
-In this section, you will delete the resources you created on your cloud
+In this section, you will delete the resources you created on the cloud
 provider.
 
 === ":simple-googlecloud: Google Cloud"

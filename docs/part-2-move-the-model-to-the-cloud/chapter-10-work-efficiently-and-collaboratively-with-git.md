@@ -12,8 +12,8 @@
 ## Introduction
 
 The objective of this chapter is to work effectively and collaboratively on the
-model with the help of [Git](../tools.md), [CML](../tools.md) and the CI/CD
-pipeline.
+model with the help of [:simple-git: Git](../tools.md), [CML](../tools.md) and
+the CI/CD pipeline.
 
 This capability empowers collaborators to engage in online discussions, enabling
 them to thoroughly review and deliberate on proposed changes before merging them
@@ -113,7 +113,7 @@ flowchart LR
     Create a new issue by going to the **Issues** section from the top header of
     your GitHub repository. Select **New issue** and describe the
     work/improvements/ideas that you want to integrate to the codebase. In this
-    guide, we will name the issue _Demonstrate model evolution tracking_. Create the
+    guide, you can name the issue _Demonstrate model evolution tracking_. Create the
     issue by selecting **Submit new issue**.
 
 === ":simple-gitlab: GitLab"
@@ -121,7 +121,7 @@ flowchart LR
     Create a new issue by going to the **Issues** section from the left sidebar of
     your GitLab project. Select **New issue** and describe the
     work/improvements/ideas that you want to integrate to the codebase. In this
-    guide, we will name the issue _Demonstrate model evolution tracking_. Create the
+    guide, you can name the issue _Demonstrate model evolution tracking_. Create the
     issue by selecting **Submit new issue**.
 
 ### Create a branch for the issue
@@ -155,9 +155,9 @@ git checkout <the name of the new branch>
 
 ### Update the parameters of the experiment
 
-Similarly to what we have done in
+Similarly to what you have done in
 [Chapter 5: Track model evolutions with DVC](../part-1-local-training-and-model-evaluation/chapter-5-track-model-evolution-with-dvc.md),
-we will update the experiment to see the evolution being tracked remotely by
+you will update the experiment to see the evolution being tracked remotely by
 CML.
 
 Update your experiment with the following parameters by editing the
@@ -207,7 +207,7 @@ index 6a6ff45..4572100 100644
    output_classes: 11
 ```
 
-Here, we simply changed the `lr` (learning rate), `conv_size` and `dense_size`
+Here, you simply changed the `lr` (learning rate), `conv_size` and `dense_size`
 parameters of the `train` stage, which should slightly affect the model's
 performance.
 
@@ -222,8 +222,8 @@ dvc repro
 
     The `dvc repro` command is important to execute after each change to the
     experiment locally. It ensures that the experiment can be reproduced from the
-    CI/CD pipeline. Later in part 3, we will see what to do if the experiment is too
-    long to be reproduced locally and how to do it from the CI/CD pipeline.
+    CI/CD pipeline. Later in part 3, you will see what to do if the experiment is
+    too long to be reproduced locally and how to do it from the CI/CD pipeline.
 
 ### Commit and push the experiment changes
 

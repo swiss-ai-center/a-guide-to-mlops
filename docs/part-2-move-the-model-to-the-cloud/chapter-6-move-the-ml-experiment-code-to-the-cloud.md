@@ -11,11 +11,13 @@
 
 ## Introduction
 
-Now that we have configured DVC and can reproduce the experiment, let's set up a
-remote repository for sharing the code with the team.
+Now that you have configured [:simple-dvc: DVC](../tools.md) and can reproduce
+the experiment, let's set up a remote repository for sharing the code with the
+team.
 
-By linking your local project to a remote repository on platforms like GitHub or
-GitLab, you can seamlessly push, pull, and synchronize changes, facilitating
+By linking your local project to a remote repository on platforms like
+[:simple-github: GitHub](../tools.md) or [:simple-gitlab: GitLab](../tools.md),
+you can seamlessly push, pull, and synchronize changes, facilitating
 collaboration and ensuring smooth workflow.
 
 The following diagram illustrates control flow of the experiment at the end of

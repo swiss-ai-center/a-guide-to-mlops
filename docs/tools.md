@@ -4,7 +4,8 @@ Introduction to the tools used in this guide.
 
 ## What are the tools used in this guide?
 
-In this guide, we will use the following tools to demonstrate the MLOps process:
+In this guide, you will use the following tools to demonstrate the MLOps
+process:
 
 - Code management: [:simple-git: Git](https://git-scm.com/)
 - Package management: [:simple-python: pip](https://pip.pypa.io/)

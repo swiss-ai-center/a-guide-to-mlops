@@ -74,7 +74,7 @@ kubectl label nodes $K8S_NODE_2_NAME gpu=false
 You can check the labels with the `kubectl get nodes --show-labels` command. You
 should see the node with the `gpu=true`/ `gpu=false` labels.
 
-### Set up access to the Kubernetes Cluster of your cloud provider
+### Set up access to the Kubernetes Cluster of the cloud provider
 
 CML will need to access the Kubernetes Cluster inside the CI/CD pipeline to
 create the runner.

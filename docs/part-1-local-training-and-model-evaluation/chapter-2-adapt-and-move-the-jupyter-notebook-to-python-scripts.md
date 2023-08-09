@@ -18,9 +18,9 @@ document a ML experiment.
 
 However, they have severe limitations, such as challenges with reproducibility,
 scalability, experiment tracking, and standardization. Integrating Jupyter
-Notebooks into Python scripts suitable for running ML experiments in a more
-modular and reproducible manner can help address these shortcomings and enhance
-the overall ML development process.
+Notebooks into [:simple-python: Python](../tools.md) scripts suitable for
+running ML experiments in a more modular and reproducible manner can help
+address these shortcomings and enhance the overall ML development process.
 
 [:simple-python: pip](../tools.md) is the standard package manager for Python.
 It is used to install and manage dependencies in a Python environment.
