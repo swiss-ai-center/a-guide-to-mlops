@@ -32,19 +32,19 @@ this chapter:
 
 ```mermaid
 flowchart TB
-        dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]
-        s3_storage -->|dvc pull| dot_dvc
-        dot_git[(.git)] -->|git push| gitGraph[Git Remote]
-        gitGraph -->|git pull| dot_git
-        workspaceGraph <-....-> dot_git
-        data[data/raw] <-.-> dot_dvc
-        subgraph remoteGraph[REMOTE]
+    dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]
+    s3_storage -->|dvc pull| dot_dvc
+    dot_git[(.git)] -->|git push| gitGraph[Git Remote]
+    gitGraph -->|git pull| dot_git
+    workspaceGraph <-....-> dot_git
+    data[data/raw] <-.-> dot_dvc
+    subgraph remoteGraph[REMOTE]
         s3_storage
         subgraph gitGraph[Git Remote]
             repository[(Repository)] --> action[Action]
-            action -->|dvc pull| action_data[data/raw]
-            action_data -->|dvc repro| action_out[metrics & plots]
-            action_out -->|cml publish| pr[Pull Request]
+            action --> action_runner[Runner Call]
+            action_runner --> action_out[metrics & plots]
+            action_out[metrics & plots] -->|cml publish| pr[Pull Request]
             pr --> repository
             repository --> action_deploy
         end
@@ -52,10 +52,15 @@ flowchart TB
         subgraph clusterGraph[Kubernetes]
            service_mlem_cluster[service_classifier]
            service_mlem_cluster --> k8s_fastapi[FastAPI]
+           action_data[data/raw] -->|dvc repro| action_train[Train]
+           action_train -.- k8s_gpu1[GPU 1]
+           action_train -.- k8s_gpu2[GPU 2]
         end
-       s3_storage --> service_mlem_cluster_state[service_classifier.mlem.state]
-       service_mlem_cluster_state --> clusterGraph
-       registry --> clusterGraph
+        action_runner -->|dvc pull| action_data
+        action_train -->|dvc push| action_out
+        s3_storage --> service_mlem_cluster_state[service_classifier.mlem.state]
+        service_mlem_cluster_state <--> service_mlem_cluster
+        registry --> service_mlem_cluster
     end
     subgraph cacheGraph[CACHE]
         dot_dvc
@@ -99,8 +104,8 @@ flowchart TB
     style s3_storage opacity:0.4,color:#7f7f7f80
     style repository opacity:0.4,color:#7f7f7f80
     style action opacity:0.4,color:#7f7f7f80
-    style action_data opacity:0.4,color:#7f7f7f80
     style action_out opacity:0.4,color:#7f7f7f80
+    style action_deploy opacity:0.4,color:#7f7f7f80
     style remoteGraph opacity:0.4,color:#7f7f7f80
     style gitGraph opacity:0.4,color:#7f7f7f80
     style mlem opacity:0.4,color:#7f7f7f80
@@ -113,6 +118,7 @@ flowchart TB
     style k8s_fastapi opacity:0.4,color:#7f7f7f80
     style browserGraph opacity:0.4,color:#7f7f7f80
     style publicURL opacity:0.4,color:#7f7f7f80
+    style registry opacity:0.4,color:#7f7f7f80
     linkStyle 0 opacity:0.4,color:#7f7f7f80
     linkStyle 1 opacity:0.4,color:#7f7f7f80
     linkStyle 2 opacity:0.4,color:#7f7f7f80
@@ -124,11 +130,9 @@ flowchart TB
     linkStyle 8 opacity:0.4,color:#7f7f7f80
     linkStyle 9 opacity:0.4,color:#7f7f7f80
     linkStyle 10 opacity:0.4,color:#7f7f7f80
+    linkStyle 11 opacity:0.4,color:#7f7f7f80
+    linkStyle 12 opacity:0.4,color:#7f7f7f80
     linkStyle 13 opacity:0.4,color:#7f7f7f80
-    linkStyle 14 opacity:0.4,color:#7f7f7f80
-    linkStyle 15 opacity:0.4,color:#7f7f7f80
-    linkStyle 17 opacity:0.4,color:#7f7f7f80
-    linkStyle 18 opacity:0.4,color:#7f7f7f80
     linkStyle 19 opacity:0.4,color:#7f7f7f80
     linkStyle 20 opacity:0.4,color:#7f7f7f80
     linkStyle 21 opacity:0.4,color:#7f7f7f80
@@ -141,6 +145,11 @@ flowchart TB
     linkStyle 28 opacity:0.4,color:#7f7f7f80
     linkStyle 29 opacity:0.4,color:#7f7f7f80
     linkStyle 30 opacity:0.4,color:#7f7f7f80
+    linkStyle 31 opacity:0.4,color:#7f7f7f80
+    linkStyle 32 opacity:0.4,color:#7f7f7f80
+    linkStyle 33 opacity:0.4,color:#7f7f7f80
+    linkStyle 34 opacity:0.4,color:#7f7f7f80
+    linkStyle 35 opacity:0.4,color:#7f7f7f80
 ```
 
 ## Steps
