@@ -11,8 +11,8 @@
 
 ## Introduction
 
-Now that the model is using MLEM, enabling the extraction of metadata upon
-saving, you will serve the model and leverage the capabilities of
+Now that the model is using [MLEM](../tools.md), enabling the extraction of
+metadata upon saving, you will serve the model and leverage the capabilities of
 [FastAPI](https://fastapi.tiangolo.com/) to create local endpoints for
 interacting with the model.
 
@@ -170,10 +170,10 @@ Install the dependencies and update the freeze file.
     it is not, you can activate it with `source .venv/bin/activate`.
 
 ```sh title="Execute the following command(s) in a terminal"
-# Install the requirements
+# Install the dependencies
 pip install --requirement requirements.txt
 
-# Freeze the requirements
+# Freeze the dependencies
 pip freeze --local --all > requirements-freeze.txt
 ```
 

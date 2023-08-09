@@ -110,7 +110,7 @@ data inside the CI/CD pipeline.
     Create the Google Service Account and its associated Google Service Account Key
     to access Google Cloud without your own credentials.
 
-    The key will be stored in your **~/.config/gcloud** directory under the name
+    The key will be stored in your **`~/.config/gcloud`** directory under the name
     `dvc-google-service-account-key.json`.
 
     !!! danger

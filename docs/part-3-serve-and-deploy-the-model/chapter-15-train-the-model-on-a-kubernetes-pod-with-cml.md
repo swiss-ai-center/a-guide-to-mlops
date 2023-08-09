@@ -19,7 +19,7 @@ required hardware, or you may not want to use your local machine for training.
 In this case, you can use a specialized Kubernetes pod to train your model.
 
 In this chapter, you will learn how to train the model on a Kubernetes pod with
-CML.
+[CML](../tools.md).
 
 In this chapter, you will learn how to:
 
@@ -34,6 +34,7 @@ In this chapter, you will learn how to:
 Display the nodes with the following command.
 
 ```sh title="Execute the following command(s) in a terminal"
+# Display the nodes
 kubectl get nodes --show-labels
 ```
 
@@ -67,6 +68,7 @@ expiriment, there is no need to have a GPU to train the model but it's for
 demonstration purposes.
 
 ```sh title="Execute the following command(s) in a terminal"
+# Labelize the nodes
 kubectl label nodes $K8S_NODE_1_NAME gpu=true
 kubectl label nodes $K8S_NODE_2_NAME gpu=false
 ```
@@ -87,7 +89,7 @@ This is the same process as in
     Create a new Google Service Account and its associated Google Service Account
     Key to access Google Cloud without your own credentials.
 
-    As a reminder, the key will be stored in your **~/.config/gcloud** directory
+    As a reminder, the key will be stored in your **`~/.config/gcloud`** directory
     under the name `cml-google-service-account-key.json`.
 
     !!! danger
@@ -177,6 +179,8 @@ Depending on the CI/CD platform you are using, the process will be different.
         of the Google Service Account key file as its value. Save the variable by
         selecting **Add secret**.
 
+        TODO: Create new GitHub PAT for CML.
+
     === ":simple-gitlab: GitLab"
 
         Store the output as a CI/CD Variable by going to **Settings > CI/CD** from the
@@ -206,8 +210,6 @@ Depending on the CI/CD platform you are using, the process will be different.
     If you want to contribute, please open an issue or a pull request on the
     [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
     appreciated!
-
-TODO: Create new GitHub PAT for CML.
 
 ### Update the CI/CD configuration file
 
@@ -394,7 +396,7 @@ you'll be able to start the training of the model on the node with the GPU.
         if: github.ref == 'refs/heads/main'
         needs: train
         name: Call Deploy
-        uses: ./.github/workflows/deploy.yml
+        uses: ./.github/workflows/mlops-deploy.yml
     ```
 
     Check the differences with Git to validate the changes.
@@ -709,6 +711,7 @@ For more information, you can check the following resources:
 When you are done with the chapter, you can destroy the Kubernetes cluster.
 
 ```sh title="Execute the following command(s) in a terminal"
+# Destroy the Kubernetes cluster
 gcloud container clusters delete --zone europe-west6-a mlops-kubernetes
 ```
 

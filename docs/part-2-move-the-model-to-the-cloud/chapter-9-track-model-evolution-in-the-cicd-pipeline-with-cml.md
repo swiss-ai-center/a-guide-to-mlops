@@ -118,7 +118,7 @@ incorporate the work performed into the `main` branch.
 
 ### Update the CI/CD pipeline configuration file
 
-We will enhance the CI/CD pipeline by adding an automated report comparing new
+You will enhance the CI/CD pipeline by adding an automated report comparing new
 parameters and new metrics to the main branch, and published as a comment.
 
 These additions will enable a comprehensive analysis of branches and facilitate

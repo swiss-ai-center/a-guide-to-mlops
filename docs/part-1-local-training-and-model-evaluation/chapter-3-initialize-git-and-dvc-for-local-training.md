@@ -242,10 +242,10 @@ Install the dependencies and update the freeze file.
     it is not, you can activate it with `source .venv/bin/activate`.
 
 ```sh title="Execute the following command(s) in a terminal"
-# Install the requirements
+# Install the dependencies
 pip install --requirement requirements.txt
 
-# Freeze the requirements
+# Freeze the dependencies
 pip freeze --local --all > requirements-freeze.txt
 ```
 
