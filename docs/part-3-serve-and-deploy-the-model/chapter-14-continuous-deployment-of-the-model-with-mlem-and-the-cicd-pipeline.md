@@ -11,7 +11,7 @@
 
 ## Introduction
 
-In this chapter, we will deploy the model to the Kubernetes cluster with the
+In this chapter, you will deploy the model to the Kubernetes cluster with the
 help of the CI/CD pipeline. We will use the MLEM tool to deploy the model to the
 cluster and the pipeline to trigger the deployment.
 
@@ -20,7 +20,7 @@ automate the process.
 
 In this chapter, you will learn how to:
 
-1. Grant access to the container registry on your cloud provider
+1. Grant access to the container registry on the cloud provider
 2. Store the cloud provider credentials in the CI/CD configuration
 3. Create the CI/CD pipeline for deploying the model to the Kubernetes cluster
 4. Push the CI/CD pipeline configuration file to Git
@@ -144,7 +144,7 @@ flowchart TB
 
 ## Steps
 
-### Set up access to the container registry of your cloud provider
+### Set up access to the container registry of the cloud provider
 
 MLEM will need to access the container registry inside the CI/CD pipeline to
 push the Docker image.
@@ -294,7 +294,7 @@ You will the pipeline to deploy the model to the Kubernetes cluster. The
 following steps will be performed:
 
 1. Detect a new commit on the `main` branch
-2. Authenticate to your cloud provider
+2. Authenticate to the cloud provider
 3. Deploy the model with MLEM if `model.mlem` has changed
 
 === ":simple-github: GitHub"

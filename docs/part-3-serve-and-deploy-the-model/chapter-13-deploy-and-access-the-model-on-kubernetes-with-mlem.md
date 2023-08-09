@@ -30,10 +30,10 @@ In this chapter, you will learn how to:
 
 !!! danger
 
-    The following steps will create resources on your cloud provider. These
-    resources will be deleted at the end of the guide, but you might be charged for
-    them. Kubernetes clusters are not free on most cloud providers and can be
-    expensive. Make sure to delete the resources at the end of the guide.
+    The following steps will create resources on the cloud provider. These resources
+    will be deleted at the end of the guide, but you might be charged for them.
+    Kubernetes clusters are not free on most cloud providers and can be expensive.
+    Make sure to delete the resources at the end of the guide.
 
 The following diagram illustrates control flow of the experiment at the end of
 this chapter:
@@ -339,7 +339,7 @@ for an efficient models management.
 
 === ":simple-googlecloud: Google Cloud"
 
-    To streamline the deployment process on the Kubernetes server, we will utilize
+    To streamline the deployment process on the Kubernetes server, you will utilize
     Google Artifact Registry for the ML model registry, capitalizing on Google
     Kubernetes Engine's ability to directly pull images from Docker repositories.
 
@@ -597,8 +597,8 @@ mlem deploy remove service_classifier
 rm service_classifier.mlem.state
 ```
 
-Instead of relaying on that state file locally, we will configure MLEM to create
-it remotely directly.
+Instead of relaying on that state file locally, you will configure MLEM to
+create it remotely directly.
 
 Setting up remote state manager is a lot like setting DVC remote. All you need
 to do is provide a URI where you want to store state files.
@@ -672,7 +672,7 @@ mlem declare deployment kubernetes service_classifier \
     --service_type loadbalancer
 ```
 
-In addition to the previously mentioned arguments, we also make use of
+In addition to the previously mentioned arguments, you also make use of
 additional arguments to adjust the namespace and the image name.
 
 The corresponding arguments are:

@@ -12,7 +12,7 @@
 ## Introduction
 
 Now that the model is using MLEM, enabling the extraction of metadata upon
-saving, we will serve the model and leverage the capabilities of
+saving, you will serve the model and leverage the capabilities of
 [FastAPI](https://fastapi.tiangolo.com/) to create local endpoints for
 interacting with the model.
 
@@ -179,7 +179,7 @@ pip freeze --local --all > requirements-freeze.txt
 
 ### Serve the model with FastAPI
 
-Serve the model with FastAPI. FastAPI will generate a REST API that we can use
+Serve the model with FastAPI. FastAPI will generate a REST API that you can use
 to get predictions from our model.
 
 ```sh title="Execute the following command(s) in a terminal"

@@ -11,8 +11,8 @@
 
 ## Introduction
 
-In the previous chapter, you did set up a DVC pipeline to reproduce your
-experiment.
+In the previous chapter, you did set up a [:simple-dvc: DVC](../tools.md)
+pipeline to reproduce your experiment.
 
 Once this stage is created, you will be able to change our model's
 configuration, evaluate the new configuration and compare its performance with

@@ -11,20 +11,21 @@
 
 ## Introduction
 
-At this point, the codebase is made available to team members using git, but the
-experiment data itself is not.
+At this point, the codebase is made available to team members using
+[:simple-git: Git](../tools.md), but the experiment data itself is not.
 
-Similarly to other version control system, DVC allows for storing the dataset in
-a remote storage, typically a cloud storage provider, ensuring effective
-tracking of modifications and smooth maintenance workflow.
+Similarly to other version control system, [:simple-dvc: DVC](../tools.md)
+allows for storing the dataset in a remote storage, typically a cloud storage
+provider, ensuring effective tracking of modifications and smooth maintenance
+workflow.
 
 This guide will demonstrate the use of a remote Storage Bucket for storing the
 dataset.
 
 In this chapter, you will learn how to:
 
-1. Create a project on the chosen cloud provider
-2. Create a storage bucket on the chosen cloud provider
+1. Create a project on the cloud provider
+2. Create a storage bucket on the cloud provider
 3. Configure DVC for remote storage
 4. Push the data files to DVC
 5. Commit the metadata files to Git
@@ -200,8 +201,8 @@ Create the Storage Bucket to store the data with the cloud provider CLI.
 !!! info
 
     On most cloud providers, the project must be linked to an active billing account
-    to be able to create the bucket. You must set up a valid billing account for
-    your cloud provider.
+    to be able to create the bucket. You must set up a valid billing account for the
+    cloud provider.
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -238,10 +239,10 @@ Create the Storage Bucket to store the data with the cloud provider CLI.
         --public-access-prevention
     ```
 
-    ??? info "Getting an 'ERROR: (gcloud.storage.buckets.create) HTTPError 403' message? Read this!"
+    ??? info "Getting an `ERROR: (gcloud.storage.buckets.create) HTTPError 403` message? Read this!"
 
         In case you get a
-        **HTTPError 403: The billing account for the owning project is disabled in state absent**
+        `**HTTPError 403: The billing account for the owning project is disabled in state absent**`
         error, ensure the
         [billing account](https://console.cloud.google.com/billing/linkedaccount) is
         correctly linked to the project.
@@ -268,7 +269,7 @@ Create the Storage Bucket to store the data with the cloud provider CLI.
 
 ### Install the DVC Storage plugin
 
-Install the DVC Storage plugin for the chosen cloud provider.
+Install the DVC Storage plugin for the cloud provider.
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -340,7 +341,7 @@ Install the DVC Storage plugin for the chosen cloud provider.
 
 ### Configure DVC to use the Storage Bucket
 
-Configure DVC to use the Storage Bucket on the chosen cloud provider.
+Configure DVC to use the Storage Bucket on the cloud provider.
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -414,8 +415,8 @@ git push
 
 ### Check the results
 
-Open the Bucket Storage on the cloud provider and check that the data files have
-been uploaded.
+Open the Bucket Storage on the cloud provider and check that the files were
+hashed and have been uploaded.
 
 [//]: # "TODO: Add explanation on how to check the files on the cloud provider, the difference between the data and the cache, and how to download the data from the cloud provider."
 
@@ -425,7 +426,7 @@ Congrats! You now have a dataset that can be used and shared among the team.
 
 In this chapter, you have successfully:
 
-1. Created a new project on a chosen cloud provider
+1. Created a new project on a cloud provider
 2. Installed and configured the cloud provider CLI
 3. Created the Storage Bucket on the cloud provider
 4. Installed the DVC Storage plugin

@@ -112,7 +112,7 @@ Alternatively, it can be a branch, enabling a comparison between the current run
 and the run linked to the target branch.
 
 Numerous workflows facilitate discussions and the integration of work into a
-target reference. In this guide, we will focus on two methods that are commonly
+target reference. In this guide, you will focus on two methods that are commonly
 used on GitHub - pull requests (PRs) - and GitLab - merge requests (MRs) - to
 incorporate the work performed into the `main` branch.
 
@@ -332,7 +332,7 @@ collaboration and decision-making within the team.
     Select **Create personal access token** to create the token. Copy it. It will be
     displayed only once.
 
-    Store the PAT as a CI/CD Variable by going to **Settings > CI/CD** from the left
+    Store the PAT as a CI/CD variable by going to **Settings > CI/CD** from the left
     sidebar of your GitLab project.
 
     Select **Variables** and select **Add variable**.
@@ -423,7 +423,6 @@ collaboration and decision-making within the team.
           # Create plots
           echo "## Plots" >> report.md
 
-
           # Create training history plot
           echo "### Training History" >> report.md
           echo "#### main" >> report.md
@@ -457,7 +456,7 @@ collaboration and decision-making within the team.
     !!! note
 
         You may notice that the `report` stage doesn't use the project dependencies. As
-        we do not need to reproduce the experiment, we can use DVC from the
+        you do not need to reproduce the experiment, you can use DVC from the
         `iterativeai/cml:0-dvc3-base1` Docker image without the project dependencies.
         DVC will then retrieve the data stored on the bucket on its own.
 
@@ -598,8 +597,9 @@ Take some time to understand the changes made to the file.
     You can see the pipeline running on the **CI/CD > Pipelines** page.
 
 You should see a pipeline running on the `main` branch. The pipeline should run
-the same way as in the previous chapter. Note that CML will not publish a report
-as the pipeline is not triggered by a pull request.
+the same way as in the previous chapter. In the next chapter, you will see how
+the CML report is generated and published as a comment on a pull request/merge
+request.
 
 This chapter is done, you can check the summary.
 

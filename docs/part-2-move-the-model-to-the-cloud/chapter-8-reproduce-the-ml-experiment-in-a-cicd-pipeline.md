@@ -12,7 +12,7 @@
 ## Introduction
 
 At this point, your code, your data and your execution process should be shared
-with Git and DVC.
+with [:simple-git: Git](../tools.md) and [:simple-dvc: DVC](../tools.md).
 
 Now, it's time to enhance your workflow further by incorporating a CI/CD
 (Continuous Integration/Continuous Deployment) pipeline. This addition will
@@ -23,7 +23,7 @@ differently across different environments.
 
 In this chapter, you will learn how to:
 
-1. Grant access to the S3 bucket on your cloud provider
+1. Grant access to the S3 bucket on the cloud provider
 2. Store the cloud provider credentials in the CI/CD configuration
 3. Create the CI/CD pipeline configuration file
 4. Push the CI/CD pipeline configuration file to Git
@@ -96,9 +96,9 @@ flowchart LR
 
 ## Steps
 
-### Set up access to the S3 bucket of your cloud provider
+### Set up access to the S3 bucket of the cloud provider
 
-DVC will need to log in to the S3 bucket of your cloud provider to download the
+DVC will need to log in to the S3 bucket of the cloud provider to download the
 data inside the CI/CD pipeline.
 
 === ":simple-googlecloud: Google Cloud"
@@ -280,15 +280,6 @@ Depending on the CI/CD platform you are using, the process will be different.
             run: dvc repro --pull --allow-missing
     ```
 
-    A few notes:
-
-    * Instead of running `dvc pull` and `dvc repro` separately, we can run them
-      together with `dvc repro --pull`.
-    * The `--allow-missing` flag allows DVC to skip downloading unnecessary files
-      that are not used in the repro step. For example, if the prepare step is already
-      cached, DVC will skip downloading the data again and will only download the
-      cached prepare step.
-
 === ":simple-gitlab: GitLab"
 
     At the root level of your Git repository, create a GitLab CI configuration file
@@ -330,14 +321,17 @@ Depending on the CI/CD platform you are using, the process will be different.
         - pip install --requirement requirements.txt
       script:
         # Run the experiment
-        - dvc repro --pull --allow-missing # (1)!
+        - dvc repro --pull --allow-missing
     ```
 
-    1. Instead of running `dvc pull` and `dvc repro` separately, we can run them
-       together with `dvc repro --pull`. The `--allow-missing` flag allows DVC to skip
-       downloading unnecessary files that are not used in the repro step. For example,
-       if the prepare step is already cached, DVC will skip downloading the data again
-       and will only download the cached prepare step.
+A few notes:
+
+- Instead of running `dvc pull` and `dvc repro` separately, you can run them
+  together with `dvc repro --pull`.
+- The `--allow-missing` flag allows DVC to skip downloading unnecessary files
+  that are not used in the repro step. For example, if the prepare step is already
+  cached, DVC will skip downloading the data again and will only download the
+  cached prepare step.
 
 ### Push the CI/CD pipeline configuration file to Git
 
@@ -399,7 +393,7 @@ commit.
 
 In this chapter, you have successfully:
 
-1. Granted access to the S3 bucket on your cloud provider
+1. Granted access to the S3 bucket on the cloud provider
 2. Stored the cloud provider credentials in the CI/CD configuration
 3. Created the CI/CD pipeline configuration file
 4. Pushed the CI/CD pipeline configuration file to Git

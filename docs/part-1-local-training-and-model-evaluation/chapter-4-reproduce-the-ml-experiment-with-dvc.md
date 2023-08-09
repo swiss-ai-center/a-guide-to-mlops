@@ -11,11 +11,11 @@
 
 ## Introduction
 
-A key component of DVC is the concept of "stages". Stages are essentially
-commands that produce a result, whether that be a file or directory. The beauty
-of DVC is that these stages are executed only when the dependencies they rely on
-have changed. This way, you don't have to waste time re-running unnecessary
-steps.
+A key component of [:simple-dvc: DVC](../tools.md) is the concept of "stages".
+Stages are essentially commands that produce a result, whether that be a file or
+directory. The beauty of DVC is that these stages are executed only when the
+dependencies they rely on have changed. This way, you don't have to waste time
+re-running unnecessary steps.
 
 By using DVC stages to create a pipeline, you can execute all of your
 experiment's steps in a streamlined manner by simply running the `dvc repro`
