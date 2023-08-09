@@ -14,13 +14,13 @@
 A key component of DVC is the concept of "stages". Stages are essentially
 commands that produce a result, whether that be a file or directory. The beauty
 of DVC is that these stages are executed only when the dependencies they rely on
-have changed. This way, we don't have to waste time re-running unnecessary
+have changed. This way, you don't have to waste time re-running unnecessary
 steps.
 
-By using DVC stages to create a pipeline, we can execute all of our experiment's
-steps in a streamlined manner by simply running the `dvc repro` command. As a
-result, DVC makes it easy to reproduce the experiment and track the effects of
-changes.
+By using DVC stages to create a pipeline, you can execute all of your
+experiment's steps in a streamlined manner by simply running the `dvc repro`
+command. As a result, DVC makes it easy to reproduce the experiment and track
+the effects of changes.
 
 In this chapter, you will learn how to:
 

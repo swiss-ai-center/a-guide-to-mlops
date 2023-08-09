@@ -16,7 +16,7 @@ experiment.
 
 Once this stage is created, you will be able to change our model's
 configuration, evaluate the new configuration and compare its performance with
-the last commited ones.
+the last committed ones.
 
 In this chapter, you will learn how to:
 
@@ -74,7 +74,7 @@ index 5bb698e..6a6ff45 100644
    output_classes: 11
 ```
 
-Here, we simply changed the `epochs` parameter of the `train` stage, which
+Here, you simply changed the `epochs` parameter of the `train` stage, which
 should slightly affect the model's performance.
 
 ### Reproduce the experiment
@@ -89,14 +89,14 @@ dvc repro
 
 ### Compare the two iterations
 
-We will now use DVC to compare your changes with the last commited ones. For
+You will now use DVC to compare your changes with the last committed ones. For
 DVC, `HEAD` refers to the last commit on the branch you are working on (at this
 moment, the branch `main`), and `workspace` refers to the current state of your
 working directory.
 
 !!! note
 
-    Remember? We did set the parameters, metrics and plots in the previous chapter:
+    Remember? You did set the parameters, metrics and plots in the previous chapter:
     [Chapter 4: Reproduce the ML experiment with DVC](./chapter-4-reproduce-the-ml-experiment-with-dvc.md).
 
 #### Compare the parameters difference
