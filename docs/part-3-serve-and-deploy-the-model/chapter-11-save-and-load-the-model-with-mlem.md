@@ -2,9 +2,12 @@
 
 ??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
 
-    _Work in progress._
+    !!! warning
 
-    [//]: # "TODO"
+        It might be easier to start from the previous chapter(s). Only follow this
+        section if you are comfortable with the content of the previous chapter(s).
+
+    Work in progress.
 
 ## Introduction
 
@@ -145,7 +148,7 @@ Install the package and update the freeze file.
 
 !!! warning
 
-    Prior to running any `pip` commands, it is crucial to ensure the virtual
+    Prior to running any pip commands, it is crucial to ensure the virtual
     environment is activated to avoid potential conflicts with system-wide Python
     packages.
 

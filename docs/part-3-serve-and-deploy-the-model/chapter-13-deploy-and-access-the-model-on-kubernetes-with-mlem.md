@@ -2,71 +2,12 @@
 
 ??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
 
-    _Work in progress._
+    !!! warning
 
-    [//]: # "TODO"
+        It might be easier to start from the previous chapter(s). Only follow this
+        section if you are comfortable with the content of the previous chapter(s).
 
-    === ":simple-googlecloud: Google Cloud"
-
-        **Create a Google Cloud Project**
-
-        Create a Google Cloud Project by going to the
-        [Google Cloud console](https://console.cloud.google.com/), select
-        **Select a project** in the upper left corner of the screen and select
-        **New project**.
-
-        Name your project and select **Create** to create the project.
-
-        A new page opens. Note the ID of your project, it will be used later.
-
-        !!! warning
-
-            Always make sure you're in the right project by selecting your project with
-            **Select a project** in the upper left corner of the screen.
-
-        **Export the Google Cloud Project ID**
-
-        Export the Google Cloud Project ID as an environment variable. Replace
-        `<id of your gcp project>` with your own project ID.
-
-        ```sh title="Execute the following command(s) in a terminal"
-        export GCP_PROJECT_ID=<id of your gcp project>
-        ```
-
-        **Install the Google Cloud CLI**
-
-        To install `gcloud`, follow the official documentation:
-        [_Install the Google Cloud CLI_ - cloud.google.com](https://cloud.google.com/sdk/docs/install-sdk)
-
-        **Initialize and configure the Google Cloud CLI**
-
-        The following process will authenticate to Google Cloud using the Google Cloud
-        CLI. It will open a browser window to log you in and create a credentials file
-        in `~/.config/gcloud/application_default_credentials.json`. This file must not
-        be shared.
-
-        ```sh title="Execute the following command(s) in a terminal"
-        # Initialize and login to Google Cloud
-        gcloud init
-
-        # List all available projects
-        gcloud projects list
-
-        # Select your Google Cloud project
-        gcloud config set project $GCP_PROJECT_ID
-        ```
-
-    === ":material-cloud: Using another cloud provider? Read this!"
-
-        This guide has been written with Google Cloud Platform in mind. We are open to
-        contributions to add support for other cloud providers such as
-        :simple-amazonaws: Amazon Web Services, :simple-exoscale: Exoscale,
-        :simple-microsoftazure: Microsoft Azure or :simple-kubernetes: Self-hosted
-        Kubernetes but we might not officially support them.
-
-        If you want to contribute, please open an issue or a pull request on the
-        [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
-        appreciated!
+    Work in progress.
 
 ## Introduction
 
@@ -263,7 +204,7 @@ Follow the steps below to create one.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
-    This guide has been written with Google Cloud Platform in mind. We are open to
+    This guide has been written with Google Cloud in mind. We are open to
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
@@ -288,7 +229,7 @@ Install the Kubernetes CLI (kubectl) on your machine.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
-    This guide has been written with Google Cloud Platform in mind. We are open to
+    This guide has been written with Google Cloud in mind. We are open to
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
@@ -363,7 +304,7 @@ Install the dependencies and update the freeze file.
 
 !!! warning
 
-    Prior to running any `pip` commands, it is crucial to ensure the virtual
+    Prior to running any pip commands, it is crucial to ensure the virtual
     environment is activated to avoid potential conflicts with system-wide Python
     packages.
 
@@ -446,7 +387,7 @@ for an efficient models management.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
-    This guide has been written with Google Cloud Platform in mind. We are open to
+    This guide has been written with Google Cloud in mind. We are open to
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
@@ -480,7 +421,7 @@ for an efficient models management.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
-    This guide has been written with Google Cloud Platform in mind. We are open to
+    This guide has been written with Google Cloud in mind. We are open to
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
@@ -697,7 +638,7 @@ to do is provide a URI where you want to store state files.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
-    This guide has been written with Google Cloud Platform in mind. We are open to
+    This guide has been written with Google Cloud in mind. We are open to
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),

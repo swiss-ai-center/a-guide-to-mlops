@@ -125,7 +125,7 @@ provider.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
-    This guide has been written with Google Cloud Platform in mind. We are open to
+    This guide has been written with Google Cloud in mind. We are open to
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),

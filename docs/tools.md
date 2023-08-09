@@ -14,15 +14,14 @@ In this guide, we will use the following tools to demonstrate the MLOps process:
 - Model orchestration:
   [:simple-github: GitHub Actions](https://github.com/features/actions) or
   [:simple-gitlab: GitLab CI](https://about.gitlab.com/topics/ci-cd/)
-- A cloud provider account:
-    - [:simple-googlecloud: Google Cloud Platform](https://cloud.google.com)
+- A [:simple-googlecloud: Google Cloud](https://cloud.google.com) account
 - Model serving, distributing and deploying: [MLEM](https://mlem.ai/) &
   [:simple-docker: Docker](https://docker.com/)
 - Data annotation: [Label Studio](https://labelstud.io/)
 
 ??? info "Using another cloud provider? Read this!"
 
-    This guide has been written with Google Cloud Platform in mind. We are open to
+    This guide has been written with Google Cloud in mind. We are open to
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),

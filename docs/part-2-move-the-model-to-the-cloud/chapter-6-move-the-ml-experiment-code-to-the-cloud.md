@@ -2,9 +2,12 @@
 
 ??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
 
-    _Work in progress._
+    !!! warning
 
-    [//]: # "TODO"
+        It might be easier to start from the previous chapter(s). Only follow this
+        section if you are comfortable with the content of the previous chapter(s).
+
+    Work in progress.
 
 ## Introduction
 
@@ -175,5 +178,7 @@ collaboration. Continue the guide to learn how.
 
 Highly inspired by:
 
+- [_Creating a new repository_ - docs.github.com](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository)
+- [_Create a project_ - docs.gitlab.com](https://docs.gitlab.com/ee/user/project/working_with_projects.html#create-a-project)
 * [_Managing remote repositories_ - github.com](https://docs.github.com/en/get-started/getting-started-with-git/managing-remote-repositories)
 * [_git-remote_ - git-scm.com](https://git-scm.com/docs/git-remote)

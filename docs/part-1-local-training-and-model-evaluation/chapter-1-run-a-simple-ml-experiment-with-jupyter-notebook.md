@@ -29,7 +29,8 @@ In this chapter, you will learn how to:
 1. Set up the project directory
 2. Acquire the notebook
 3. Obtain the dataset
-4. Create a Python environment to run the experiment
+4. Create a [:simple-python: Python](../tools.md) environment to run the
+   experiment
 5. Launch the experiment locally for the first time
 
 The following diagram illustrates control flow of the experiment at the end of
@@ -163,9 +164,9 @@ You may notice all the previous outputs from the notebook are still present.
 This is because the notebook was not cleared before being shared with you. This
 can be useful to see the results of previous runs.
 
-In most cases however, it can also be a source of confusion and clutter. This is
-one of the limitations of the Jupyter Notebook, which make them not always easy
-to share with others.
+In most cases, however, it can also be a source of confusion and clutter. This
+is one of the limitations of the Jupyter Notebook, which make them not always
+easy to share with others.
 
 For the time being, execute each step of the notebook to train the model and
 evaluate its performance. Previous outputs will be overwritten.
@@ -188,7 +189,7 @@ challenging to share with others due to a lack of versioning capabilities,
 difficulty in reproducing the experiment, and the potential for clutter and data
 leaks from previous outputs.
 
-In the next chapter we will see how to address these shortcomings.
+In the next chapter you will see how to address these shortcomings.
 
 ## Summary
 
