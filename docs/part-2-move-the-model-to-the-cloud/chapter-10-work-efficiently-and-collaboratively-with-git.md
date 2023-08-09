@@ -1,4 +1,4 @@
-# Chapter 10: Track model evolution in the CI/CD pipeline with CML
+# Chapter 10: Work efficiently and collaboratively with Git
 
 ??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
 
@@ -8,8 +8,10 @@
 
 ## Introduction
 
-The objective of this chapter is to effectively track the evolution of the model
-and generate reports directly from the CI/CD pipeline, using [CML](../tools.md).
+The objective of this chapter is to work effectively and collaboratively on the
+model with the help of [Git](../tools.md), [CML](../tools.md) and the CI/CD
+pipeline.
+
 This capability empowers collaborators to engage in online discussions, enabling
 them to thoroughly review and deliberate on proposed changes before merging them
 into the codebase.
@@ -40,7 +42,7 @@ flowchart LR
     subgraph remoteGraph[REMOTE]
         s3_storage
         subgraph gitGraph[Git Remote]
-            repository[Repository] --> action[Action]
+            repository[(Repository)] --> action[Action]
             action -->|dvc pull| action_data[data/raw]
             action_data -->|dvc repro| action_out[metrics & plots]
             action_out -->|cml publish| pr[Pull Request]
@@ -316,20 +318,15 @@ git push
 
 <!-- Note: Do not indent this code, this is the only way it displays the images
      properly -->
-<div style="display: flex" markdown>
-<figure markdown>
+<div style="display: flex" markdown> <figure markdown>
 ![Plots Diff 1 Light](../assets/images/cml_report1_light.png#only-light){ loading=lazy }
-</figure>
-<figure markdown>
+</figure> <figure markdown>
 ![Plots Diff 1 Dark](../assets/images/cml_report1_dark.png#only-dark){ loading=lazy }
-</figure>
-<figure markdown>
+</figure> <figure markdown>
 ![Plots Diff 2 Light](../assets/images/cml_report2_light.png#only-light){ loading=lazy }
-</figure>
-<figure markdown>
+</figure> <figure markdown>
 ![Plots Diff 2 Dark](../assets/images/cml_report2_dark.png#only-dark){ loading=lazy }
-</figure>
-</div>
+</figure> </div>
 
 ### Merge the pull request/merge request
 
@@ -412,9 +409,9 @@ You can now safely continue to the next chapter.
 - [x] Steps used to create the model are documented and can be re-executed
 - [x] Changes done to a model can be visualized with parameters, metrics and
       plots to identify differences between iterations
+- [x] Codebase can be shared and improved by multiple developers
 - [x] Dataset can be shared among the developers and is placed in the right
       directory in order to run the experiment
-- [x] Codebase can be shared and improved by multiple developers
 - [x] Experiment can be executed on a clean machine with the help of a CI/CD
       pipeline
 - [x] CI/CD pipeline is triggered on pull requests and reports the results of

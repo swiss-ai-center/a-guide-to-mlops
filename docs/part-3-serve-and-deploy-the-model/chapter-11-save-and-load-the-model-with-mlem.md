@@ -1,4 +1,4 @@
-# Chapter 10: Save and load the model with MLEM
+# Chapter 11: Save and load the model with MLEM
 
 ??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
 
@@ -9,9 +9,13 @@
 ## Introduction
 
 The purpose of this chapter is to serve and use the model for usage outside of
-the experiment context with the help of [MLEM](../../tools.md). MLEM allows to
-do this by saving the model with metadata information that can be used to load
-the model for future usage.
+the experiment context with the help of [MLEM](../tools.md), a powerful tool
+designed for easy packaging, deployment, and serving of Machine Learning models.
+
+By transforming your model into a specialized MLEM model, it is possible to
+capture the essential metadata information that can then be used to load the
+model for future usage, unlocking true potential in facilitating seamless and
+efficient model deployment.
 
 In this chapter, you will learn how to:
 
@@ -19,28 +23,101 @@ In this chapter, you will learn how to:
 2. Initialize and configure MLEM
 3. Update and run the experiment to use MLEM to save and load the model
 
+The following diagram illustrates control flow of the experiment at the end of
+this chapter:
+
+```mermaid
+flowchart TB
+    dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]
+    s3_storage -->|dvc pull| dot_dvc
+    dot_git[(.git)] -->|git push| gitGraph[Git Remote]
+    gitGraph -->|git pull| dot_git
+    workspaceGraph <-....-> dot_git
+    data[data/raw] <-.-> dot_dvc
+    subgraph remoteGraph[REMOTE]
+        s3_storage
+        subgraph gitGraph[Git Remote]
+            repository[(Repository)] --> action[Action]
+            action -->|dvc pull| action_data[data/raw]
+            action_data -->|dvc repro| action_out[metrics & plots]
+            action_out -->|cml publish| pr[Pull Request]
+            pr --> repository
+        end
+    end
+    subgraph cacheGraph[CACHE]
+        dot_dvc
+        dot_git
+    end
+    subgraph workspaceGraph[WORKSPACE]
+        prepare[prepare.py] <-.-> dot_dvc
+        train[train.py] <-.-> dot_dvc
+        evaluate[evaluate.py] <-.-> dot_dvc
+        data --> prepare
+        subgraph dvcGraph["dvc.yaml (dvc repro)"]
+            prepare --> train
+            train --> evaluate
+        end
+        params[params.yaml] -.- prepare
+        params -.- train
+        params <-.-> dot_dvc
+        subgraph mlemGraph[.mlem.yaml]
+            mlem[model.mlem]
+        end
+        mlem <-.-> dot_git
+        dvcGraph --> mlem
+    end
+    style pr opacity:0.4,color:#7f7f7f80
+    style workspaceGraph opacity:0.4,color:#7f7f7f80
+    style dvcGraph opacity:0.4,color:#7f7f7f80
+    style cacheGraph opacity:0.4,color:#7f7f7f80
+    style data opacity:0.4,color:#7f7f7f80
+    style dot_git opacity:0.4,color:#7f7f7f80
+    style dot_dvc opacity:0.4,color:#7f7f7f80
+    style prepare opacity:0.4,color:#7f7f7f80
+    style train opacity:0.4,color:#7f7f7f80
+    style evaluate opacity:0.4,color:#7f7f7f80
+    style params opacity:0.4,color:#7f7f7f80
+    style s3_storage opacity:0.4,color:#7f7f7f80
+    style repository opacity:0.4,color:#7f7f7f80
+    style action opacity:0.4,color:#7f7f7f80
+    style action_data opacity:0.4,color:#7f7f7f80
+    style action_out opacity:0.4,color:#7f7f7f80
+    style remoteGraph opacity:0.4,color:#7f7f7f80
+    style gitGraph opacity:0.4,color:#7f7f7f80
+    linkStyle 0 opacity:0.4,color:#7f7f7f80
+    linkStyle 1 opacity:0.4,color:#7f7f7f80
+    linkStyle 2 opacity:0.4,color:#7f7f7f80
+    linkStyle 3 opacity:0.4,color:#7f7f7f80
+    linkStyle 4 opacity:0.4,color:#7f7f7f80
+    linkStyle 5 opacity:0.4,color:#7f7f7f80
+    linkStyle 6 opacity:0.4,color:#7f7f7f80
+    linkStyle 7 opacity:0.4,color:#7f7f7f80
+    linkStyle 8 opacity:0.4,color:#7f7f7f80
+    linkStyle 9 opacity:0.4,color:#7f7f7f80
+    linkStyle 10 opacity:0.4,color:#7f7f7f80
+    linkStyle 11 opacity:0.4,color:#7f7f7f80
+    linkStyle 12 opacity:0.4,color:#7f7f7f80
+    linkStyle 13 opacity:0.4,color:#7f7f7f80
+    linkStyle 14 opacity:0.4,color:#7f7f7f80
+    linkStyle 15 opacity:0.4,color:#7f7f7f80
+    linkStyle 16 opacity:0.4,color:#7f7f7f80
+    linkStyle 17 opacity:0.4,color:#7f7f7f80
+    linkStyle 18 opacity:0.4,color:#7f7f7f80
+    linkStyle 19 opacity:0.4,color:#7f7f7f80
+```
+
 ## Steps
 
 ### Install MLEM
 
-Add the `mlem[fastapi]` package to install MLEM with FastAPI support.
+Add the `mlem` package to install MLEM support.
 
 ```txt title="requirements.txt" hl_lines="5"
 tensorflow==2.12.0
 matplotlib==3.7.1
 pyyaml==6.0
 dvc[gs]==3.2.2
-mlem[fastapi]==0.4.13
-```
-
-Install the package and update the freeze file.
-
-```sh title="Execute the following command(s) in a terminal"
-# Install the requirements
-pip install --requirement requirements.txt
-
-# Freeze the requirements
-pip freeze --local --all > requirements-freeze.txt
+mlem==0.4.13
 ```
 
 Check the differences with Git to validate the changes.
@@ -61,7 +138,27 @@ index 8ccc2df..fcdd460 100644
  matplotlib==3.7.1
  pyyaml==6.0
  dvc[gs]==3.2.2
-+mlem[fastapi]==0.4.13
++mlem==0.4.13
+```
+
+Install the package and update the freeze file.
+
+!!! warning
+
+    Prior to running any `pip` commands, it is crucial to ensure the virtual
+    environment is activated to avoid potential conflicts with system-wide Python
+    packages.
+
+    To check its status, simply run `pip -V`. If the virtual environment is active,
+    the output will show the path to the virtual environment's Python executable. If
+    it is not, you can activate it with `source .venv/bin/activate`.
+
+```sh title="Execute the following command(s) in a terminal"
+# Install the requirements
+pip install --requirement requirements.txt
+
+# Freeze the requirements
+pip freeze --local --all > requirements-freeze.txt
 ```
 
 ### Initialize and configure MLEM.
@@ -82,11 +179,27 @@ working directory. This file contains the configuration of MLEM.
 
 ### Update the experiment
 
+To make the most of MLEM's capabilities, you must start by converting your model
+into the specialized MLEM format, which allows for the capture of essential
+model metadata beyond traditional model-saving practices. This pivotal step is
+crucial for harnessing the comprehensive features and advantages offered by
+MLEM.
+
 #### Update `src/train.py`
 
-Update the `src/train.py` file to save the model with its artifacts with MLEM.
+Update the `src/train.py` file to save the model with MLEM.
 
-```py title="src/train.py" hl_lines="9 66-68 89-125"
+!!! info
+
+    MLEM can save model artifacts as well such as TFIDF vectorizer, etc.
+
+    When loading a model using MLEM, it will automatically load the artifacts if
+    they are present, so you don't have to worry about it.
+
+    This is not covered in this guide as the model does not use any artifacts but
+    can be really useful in some cases.
+
+```py title="src/train.py" hl_lines="1 9 66-68 89-125"
 import json
 import sys
 from pathlib import Path
@@ -223,7 +336,20 @@ if __name__ == "__main__":
     main()
 ```
 
-TODO: explain the changes and why we save the model with MLEM.
+MLEM can save the model with a `preprocessing`, `postprocessing` and
+`sample_data` functions.
+
+These functions are used to save the model with the necessary information to
+load it later.
+
+- `preprocess` is used to preprocess the input data before feeding it to the
+  model.
+- `postprocess` is used to postprocess the output of the model.
+- `sample_data` is used to save a sample of data that can be used to test the
+  model after loading it.
+
+These functions will be used later to generate the API documentation and to test
+the model through the REST API.
 
 Check the differences with Git to better understand the changes.
 
@@ -514,8 +640,8 @@ index aa36089..cc9b5a5 100644
 
 !!! info
 
-    When a MLEM model is loaded with `mlem.api.load`, loads the model as it was
-    saved without the preprocessing and postprocessing functions.
+    The code `mlem.api.load` loads a MLEM model in its original state, excluding any
+    preprocessing and postprocessing functions applied during saving.
 
 ### Run the experiment
 
@@ -564,7 +690,7 @@ Commit the changes to DVC and Git.
 dvc push
 
 # Commit the changes
-git commit -m "MLEM can save, load and serve the model"
+git commit -m "MLEM can save and load the model"
 
 # Push the changes
 git push
@@ -591,16 +717,19 @@ You can now safely continue to the next chapter.
 - [x] Steps used to create the model are documented and can be re-executed
 - [x] Changes done to a model can be visualized with parameters, metrics and
       plots to identify differences between iterations
+- [x] Codebase can be shared and improved by multiple developers
 - [x] Dataset can be shared among the developers and is placed in the right
       directory in order to run the experiment
-- [x] Codebase can be shared and improved by multiple developers
 - [x] Experiment can be executed on a clean machine with the help of a CI/CD
       pipeline
+- [x] CI/CD pipeline is triggered on pull requests and reports the results of
+      the experiment
 - [x] Changes to model can be thoroughly reviewed and discussed before
       integrating them into the codebase
 - [x] Model can be saved and loaded with all required artifacts for future usage
 - [ ] Model cannot be easily used from outside of the experiment context
-- [ ] Model cannot be deployed on and accessed from a Kubernetes cluster
+- [ ] Model is not accessible on the Internet and cannot be used anywhere
+- [ ] Model requires manual deployment on the cluster
 - [ ] Model cannot be trained on hardware other than the local machine
 
 You will address these issues in the next chapters for improved efficiency and

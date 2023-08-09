@@ -1,4 +1,4 @@
-# Chapter 15: Import existing data to Label Studio
+# Chapter 19: Retrain the model from new data with DVC Sync
 
 ??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
 

@@ -429,8 +429,8 @@ You can now safely continue to the next chapter.
 - [x] Codebase and dataset are versioned
 - [ ] Model steps rely on verbal communication and may be undocumented
 - [ ] Changes to model are not easily visualized
-- [ ] Dataset requires manual download and placement
 - [ ] Codebase requires manual download and setup
+- [ ] Dataset requires manual download and placement
 - [ ] Experiment may not be reproducible on other machines
 - [ ] CI/CD pipeline does not report the results of the experiment
 - [ ] Changes to model are not thoroughly reviewed and discussed before
@@ -438,7 +438,8 @@ You can now safely continue to the next chapter.
 - [ ] Model may have required artifacts that are forgotten or omitted in
       saved/loaded state
 - [ ] Model cannot be easily used from outside of the experiment context
-- [ ] Model cannot be deployed on and accessed from a Kubernetes cluster
+- [ ] Model is not accessible on the Internet and cannot be used anywhere
+- [ ] Model requires manual deployment on the cluster
 - [ ] Model cannot be trained on hardware other than the local machine
 
 You will address these issues in the next chapters for improved efficiency and

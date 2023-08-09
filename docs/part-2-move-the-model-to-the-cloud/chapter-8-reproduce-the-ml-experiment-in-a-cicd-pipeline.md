@@ -40,7 +40,7 @@ flowchart LR
     subgraph remoteGraph[REMOTE]
         s3_storage
         subgraph gitGraph[Git Remote]
-            repository[Repository] --> action[Action]
+            repository[(Repository)] --> action[Action]
             action -->|dvc pull| action_data[data/raw]
             action_data -->|dvc repro| action_out[metrics & plots]
         end
@@ -98,14 +98,6 @@ flowchart LR
 DVC will need to log in to the S3 bucket of your cloud provider to download the
 data inside the CI/CD pipeline.
 
-=== ":simple-amazonaws: Amazon Web Services"
-
-    _This is a work in progress._
-
-=== ":simple-exoscale: Exoscale"
-
-    _This is a work in progress._
-
 === ":simple-googlecloud: Google Cloud"
 
     Google Cloud allows the creation of a "Service Account", so you don't have to
@@ -143,13 +135,19 @@ data inside the CI/CD pipeline.
         The path `~/.config/gcloud` should be created when installing `gcloud`. If it
         does not exist, you can create it by running `mkdir -p ~/.config/gcloud`
 
-=== ":simple-microsoftazure: Microsoft Azure"
+=== ":material-cloud: Using another cloud provider? Read this!"
 
-    _This is a work in progress._
+    This guide has been written with Google Cloud Platform in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
 
-=== ":simple-kubernetes: Self-hosted Kubernetes"
-
-    _This is a work in progress._
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
+    appreciated!
 
 ### Store the cloud provider credentials in the CI/CD configuration
 
@@ -157,14 +155,6 @@ Now that the credentials are created, you need to store them in the CI/CD
 configuration.
 
 Depending on the CI/CD platform you are using, the process will be different.
-
-=== ":simple-amazonaws: Amazon Web Services"
-
-    _This is a work in progress._
-
-=== ":simple-exoscale: Exoscale"
-
-    _This is a work in progress._
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -192,7 +182,7 @@ Depending on the CI/CD platform you are using, the process will be different.
         !!! tip
 
             If on Linux, you can use the command
-            `base64 -w 0 -i ~/.config/gcloud/  dvc-google-service-account-key.json`.
+            `base64 -w 0 -i ~/.config/gcloud/ dvc-google-service-account-key.json`.
 
         ```sh title="Execute the following command(s) in a terminal"
         # Encode the Google Service Account key to base64
@@ -228,13 +218,19 @@ Depending on the CI/CD platform you are using, the process will be different.
 
         Save the variable by clicking **Add variable**.
 
-=== ":simple-microsoftazure: Microsoft Azure"
+=== ":material-cloud: Using another cloud provider? Read this!"
 
-    _This is a work in progress._
+    This guide has been written with Google Cloud Platform in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
 
-=== ":simple-kubernetes: Self-hosted Kubernetes"
-
-    _This is a work in progress._
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
+    appreciated!
 
 ### Create the CI/CD pipeline configuration file
 
@@ -281,14 +277,14 @@ Depending on the CI/CD platform you are using, the process will be different.
             run: dvc repro --pull --allow-missing
     ```
 
-A few notes:
+    A few notes:
 
-* Instead of running `dvc pull` and `dvc repro` separately, we can run
-        them together with `dvc repro --pull`.
-* The `--allow-missing` flag allows
-        DVC to skip downloading unnecessary files that are not used in the repro step.
-        For example, if the prepare step is already cached, DVC will skip downloading
-        the data again and will only download the cached prepare step.
+    * Instead of running `dvc pull` and `dvc repro` separately, we can run them
+      together with `dvc repro --pull`.
+    * The `--allow-missing` flag allows DVC to skip downloading unnecessary files
+      that are not used in the repro step. For example, if the prepare step is already
+      cached, DVC will skip downloading the data again and will only download the
+      cached prepare step.
 
 === ":simple-gitlab: GitLab"
 
@@ -423,9 +419,9 @@ You can now safely continue to the next chapter.
 - [x] Steps used to create the model are documented and can be re-executed
 - [x] Changes done to a model can be visualized with parameters, metrics and
       plots to identify differences between iterations
+- [x] Codebase can be shared and improved by multiple developers
 - [x] Dataset can be shared among the developers and is placed in the right
       directory in order to run the experiment
-- [x] Codebase can be shared and improved by multiple developers
 - [x] Experiment can be executed on a clean machine with the help of a CI/CD
       pipeline
 - [ ] CI/CD pipeline does not report the results of the experiment
@@ -434,7 +430,8 @@ You can now safely continue to the next chapter.
 - [ ] Model may have required artifacts that are forgotten or omitted in
       saved/loaded state
 - [ ] Model cannot be easily used from outside of the experiment context
-- [ ] Model cannot be deployed on and accessed from a Kubernetes cluster
+- [ ] Model is not accessible on the Internet and cannot be used anywhere
+- [ ] Model requires manual deployment on the cluster
 - [ ] Model cannot be trained on hardware other than the local machine
 
 You will address these issues in the next chapters for improved efficiency and

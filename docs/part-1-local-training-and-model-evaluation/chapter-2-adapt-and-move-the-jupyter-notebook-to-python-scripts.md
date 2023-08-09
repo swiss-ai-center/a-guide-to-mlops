@@ -72,12 +72,12 @@ Notebooks into Python scripts suitable for running ML experiments in a more
 modular and reproducible manner can help address these shortcomings and enhance
 the overall ML development process.
 
-[pip](https://pip.pypa.io/) is the standard package manager for Python. It is
-used to install and manage dependencies in a Python environment.
+[pip](../tools.md) is the standard package manager for Python. It is used to
+install and manage dependencies in a Python environment.
 
 In this chapter, you will learn how to:
 
-1. Set up a Python environment using [pip](https://pip.pypa.io/)
+1. Set up a Python environment using [pip](../tools.md)
 2. Adapt the content of the Jupyter Notebook into Python scripts
 3. Launch the experiment locally
 
@@ -722,12 +722,6 @@ The code is divided in various scripts:
 <!-- Enter your notes below -->
 ```
 
-### Make usage of the scripts in the Jupyter Notebook
-
-_Work in progress._
-
-[//]: # "TODO: Update the notebook to use the scripts and the parameters file as well in a hybrid approach: Notebook to visualize the data and results and scripts to run the experiment."
-
 ### Check the results
 
 Your working directory should now look like this:
@@ -859,8 +853,8 @@ You can now safely continue to the next chapter.
 - [ ] Codebase and dataset are not versioned
 - [ ] Model steps rely on verbal communication and may be undocumented
 - [ ] Changes to model are not easily visualized
-- [ ] Dataset requires manual download and placement
 - [ ] Codebase requires manual download and setup
+- [ ] Dataset requires manual download and placement
 - [ ] Experiment may not be reproducible on other machines
 - [ ] CI/CD pipeline does not report the results of the experiment
 - [ ] Changes to model are not thoroughly reviewed and discussed before
@@ -868,7 +862,8 @@ You can now safely continue to the next chapter.
 - [ ] Model may have required artifacts that are forgotten or omitted in
       saved/loaded state
 - [ ] Model cannot be easily used from outside of the experiment context
-- [ ] Model cannot be deployed on and accessed from a Kubernetes cluster
+- [ ] Model is not accessible on the Internet and cannot be used anywhere
+- [ ] Model requires manual deployment on the cluster
 - [ ] Model cannot be trained on hardware other than the local machine
 
 You will address these issues in the next chapters for improved efficiency and

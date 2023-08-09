@@ -1,4 +1,4 @@
-# Chapter 17: Retrain the model from new data with DVC Sync
+# Chapter 18: Label new data with Label Studio
 
 ??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
 

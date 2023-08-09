@@ -1,6 +1,6 @@
 ---
 template: overrides/home.html
-title: A Guide to MLOps
+title: A guide to MLOps
 hide:
   - navigation
   - toc

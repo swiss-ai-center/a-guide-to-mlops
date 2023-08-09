@@ -21,28 +21,31 @@ Here's a step-by-step guide to help you do that.
 In this section, you will delete the resources you created on your cloud
 provider.
 
-=== ":simple-amazonaws: Amazon Web Services"
-
-    _This is a work in progress._
-
-=== ":simple-exoscale: Exoscale"
-
-    _This is a work in progress._
-
 === ":simple-googlecloud: Google Cloud"
+
+    **Delete the Kubernetes cluster**
+
+    To delete the Kubernetes cluster you created you can execute the following
+    command:
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Delete the Kubernetes cluster
+    gcloud container clusters delete --zone $GCP_CLUSTER_ZONE $GCP_CLUSTER_NAME
+    ```
 
     **Delete the Google Storage bucket**
 
     !!! warning
 
-        If you intend to keep the git repository but proceed with deleting the Google
+        If you intend to keep the Git repository but proceed with deleting the Google
         Storage bucket, the DVC remote will be disrupted. To continue using DVC with the
         Git repository, you will need to reconfigure it with a new remote.
 
     To delete the Google Storage bucket you created you can execute the following
-    command :
+    command:
 
     ```sh title="Execute the following command(s) in a terminal"
+    # Delete the Google Storage bucket
     gcloud storage rm --recursive gs://$GCP_BUCKET_NAME
     ```
 
@@ -57,10 +60,10 @@ provider.
 
     **Delete the Service Account**
 
-    To delete the service account you created you can execute the following command
-    :
+    To delete the service account you created you can execute the following command:
 
     ```sh title="Execute the following command(s) in a terminal"
+    # Delete the Service Account key
     gcloud iam service-accounts delete dvc-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com
     ```
 
@@ -79,6 +82,7 @@ provider.
     locally:
 
     ```sh title="Execute the following command(s) in a terminal"
+    # Delete the local Service Account key
     rm ~/.config/gcloud/dvc-google-service-account-key.json
     ```
 
@@ -119,13 +123,19 @@ provider.
     2. Select the card you added and select **Remove**.
     3. Follow the instructions to remove the payment method.
 
-=== ":simple-microsoftazure: Microsoft Azure"
+=== ":material-cloud: Using another cloud provider? Read this!"
 
-    _This is a work in progress._
+    This guide has been written with Google Cloud Platform in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
 
-=== ":simple-kubernetes: Self-hosted Kubernetes"
-
-    _This is a work in progress._
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
+    appreciated!
 
 ### Clean up your repository
 
@@ -140,6 +150,16 @@ In this section, you will delete the repository you created on GitHub or GitLab.
     3. Scroll down to the "Danger Zone" section at the bottom of the page.
     4. Click on **Delete this repository**.
     5. Follow the instructions to delete the repository.
+
+    To delete the GitHub Personal Access Token you created:
+
+    1. Go to your GitHub **Settings** at the top right of the page.
+    2. Click on **Developers settings** in the left sidebar.
+    3. Click on **Personal access tokens** in the left sidebar and then on **Tokens
+       (classic)**.
+    4. Find the Personal Access Token you created for this guide.
+    5. Click on the **Delete** button next to it.
+    6. Follow the instructions to delete the token.
 
 === ":simple-gitlab: GitLab"
 
@@ -199,11 +219,12 @@ Here is a checklist of all the resources and environments you created.
 
     You can click on the list items to mark them as completed if needed.
 
+- [ ] The cloud provider Kubernetes cluster
 - [ ] The cloud provider S3 bucket
 - [ ] The cloud provider credentials
 - [ ] The cloud provider project
+- [ ] The GitHub or GitLab Personal Access Token
 - [ ] The GitHub or GitLab repository
-    - [ ] If you used GitLab, the Personal Access Token
 - [ ] The projects directories
     - [ ] The `a-guide-to-mlops-jupyter-notebook` directory
     - [ ] The `a-guide-to-mlops` directory

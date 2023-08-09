@@ -1,4 +1,4 @@
-# Chapter 9: Update the CI/CD pipeline with CML
+# Chapter 9: Track model evolution in the CI/CD pipeline with CML
 
 ??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
 
@@ -33,7 +33,7 @@ flowchart LR
     subgraph remoteGraph[REMOTE]
         s3_storage
         subgraph gitGraph[Git Remote]
-            repository[Repository] --> action[Action]
+            repository[(Repository)] --> action[Action]
             action -->|dvc pull| action_data[data/raw]
             action_data -->|dvc repro| action_out[metrics & plots]
             action_out -->|cml publish| pr[Pull Request]
@@ -95,7 +95,7 @@ flowchart LR
 !!! info
 
     CML can do much more than just generating reports. Have a look at the chapter
-    [Train the model on a Kubernetes cluster with CML](../part-3-serve-and-deploy-the-model/chapter-13-train-the-model-on-a-kubernetes-pod-with-cml/index.md)
+    [Train the model on a Kubernetes cluster with CML](../part-3-serve-and-deploy-the-model/chapter-15-train-the-model-on-a-kubernetes-pod-with-cml.md)
     for more details.
 
 ## Steps
@@ -127,7 +127,7 @@ collaboration and decision-making within the team.
 
     Explore this file to understand the `train-and-report` stage and its steps.
 
-    ```yaml title=".github/workflows/mlops.yml" hl_lines="16-17 34-100"
+    ```yaml title=".github/workflows/mlops.yml" hl_lines="16-17 35-100"
     name: MLOps
 
     on:
@@ -628,9 +628,9 @@ You can now safely continue to the next chapter.
 - [x] Steps used to create the model are documented and can be re-executed
 - [x] Changes done to a model can be visualized with parameters, metrics and
       plots to identify differences between iterations
+- [x] Codebase can be shared and improved by multiple developers
 - [x] Dataset can be shared among the developers and is placed in the right
       directory in order to run the experiment
-- [x] Codebase can be shared and improved by multiple developers
 - [x] Experiment can be executed on a clean machine with the help of a CI/CD
       pipeline
 - [x] CI/CD pipeline is triggered on pull requests and reports the results of

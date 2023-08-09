@@ -1,4 +1,4 @@
-# Chapter 6: Move the ML experiment data to the cloud
+# Chapter 7: Move the ML experiment data to the cloud
 
 ??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
 
@@ -8,8 +8,8 @@
 
 ## Introduction
 
-Now that we have configured DVC and can reproduce the experiment, let's set up a
-remote repository for sharing the data with the team.
+At this point, the codebase is made available to team members using git, but the
+experiment data itself is not.
 
 Similarly to other version control system, DVC allows for storing the dataset in
 a remote storage, typically a cloud storage provider, ensuring effective
@@ -33,38 +33,46 @@ this chapter:
 flowchart LR
     dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]
     s3_storage -->|dvc pull| dot_dvc
-    dot_git[(.git)]
+    dot_git[(.git)] -->|git push| gitGraph[Git Remote]
+    gitGraph -->|git pull| dot_git
     workspaceGraph <-....-> dot_git
     data[data/raw] <-.-> dot_dvc
     subgraph remoteGraph[REMOTE]
-        s3_storage
+    s3_storage
+        subgraph gitGraph[Git Remote]
+            repository[(Repository)]
+        end
     end
     subgraph cacheGraph[CACHE]
         dot_dvc
         dot_git
     end
     subgraph workspaceGraph[WORKSPACE]
-        prepare[prepare.py] <-.-> dot_dvc
-        train[train.py] <-.-> dot_dvc
-        evaluate[evaluate.py] <-.-> dot_dvc
-        data --> prepare
-        subgraph dvcGraph["dvc.yaml (dvc repro)"]
-            prepare --> train
-            train --> evaluate
-        end
-        params[params.yaml] -.- prepare
-        params -.- train
-        params <-.-> dot_dvc
+    prepare[prepare.py] <-.-> dot_dvc
+    train[train.py] <-.-> dot_dvc
+    evaluate[evaluate.py] <-.-> dot_dvc
+    data --> prepare
+    subgraph dvcGraph["dvc.yaml (dvc repro)"]
+    prepare --> train
+    train --> evaluate
     end
+    params[params.yaml] -.- prepare
+    params -.- train
+    params <-.-> dot_dvc
+    end
+    style gitGraph opacity:0.4,color:#7f7f7f80
+    style repository opacity:0.4,color:#7f7f7f80
     style workspaceGraph opacity:0.4,color:#7f7f7f80
     style dvcGraph opacity:0.4,color:#7f7f7f80
     style cacheGraph opacity:0.4,color:#7f7f7f80
     style dot_git opacity:0.4,color:#7f7f7f80
+    style data opacity:0.4,color:#7f7f7f80
     style prepare opacity:0.4,color:#7f7f7f80
     style train opacity:0.4,color:#7f7f7f80
     style evaluate opacity:0.4,color:#7f7f7f80
     style params opacity:0.4,color:#7f7f7f80
     linkStyle 2 opacity:0.4,color:#7f7f7f80
+    linkStyle 3 opacity:0.4,color:#7f7f7f80
     linkStyle 4 opacity:0.4,color:#7f7f7f80
     linkStyle 5 opacity:0.4,color:#7f7f7f80
     linkStyle 6 opacity:0.4,color:#7f7f7f80
@@ -74,6 +82,8 @@ flowchart LR
     linkStyle 10 opacity:0.4,color:#7f7f7f80
     linkStyle 11 opacity:0.4,color:#7f7f7f80
     linkStyle 12 opacity:0.4,color:#7f7f7f80
+    linkStyle 13 opacity:0.4,color:#7f7f7f80
+    linkStyle 14 opacity:0.4,color:#7f7f7f80
 ```
 
 Let's get started!
@@ -83,14 +93,6 @@ Let's get started!
 ### Create a project on a cloud provider
 
 Create a project on a cloud provider to host the data.
-
-=== ":simple-amazonaws: Amazon Web Services"
-
-    _This is a work in progress._
-
-=== ":simple-exoscale: Exoscale"
-
-    _This is a work in progress._
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -117,25 +119,23 @@ Create a project on a cloud provider to host the data.
     export GCP_PROJECT_ID=<id of your gcp project>
     ```
 
-=== ":simple-microsoftazure: Microsoft Azure"
+=== ":material-cloud: Using another cloud provider? Read this!"
 
-    _This is a work in progress._
+    This guide has been written with Google Cloud Platform in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
 
-=== ":simple-kubernetes: Self-hosted Kubernetes"
-
-    _This is a work in progress._
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
+    appreciated!
 
 ### Install and configure the cloud provider CLI
 
 Install and configure the cloud provider CLI tool to manage the cloud resources.
-
-=== ":simple-amazonaws: Amazon Web Services"
-
-    _This is a work in progress._
-
-=== ":simple-exoscale: Exoscale"
-
-    _This is a work in progress._
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -176,13 +176,19 @@ Install and configure the cloud provider CLI tool to manage the cloud resources.
     gcloud auth application-default login
     ```
 
-=== ":simple-microsoftazure: Microsoft Azure"
+=== ":material-cloud: Using another cloud provider? Read this!"
 
-    _This is a work in progress._
+    This guide has been written with Google Cloud Platform in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
 
-=== ":simple-kubernetes: Self-hosted Kubernetes"
-
-    _This is a work in progress._
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
+    appreciated!
 
 ### Create the Storage Bucket on the cloud provider
 
@@ -194,20 +200,9 @@ Create the Storage Bucket to store the data with the cloud provider CLI.
     to be able to create the bucket. You must set up a valid billing account for
     your cloud provider.
 
-=== ":simple-amazonaws: Amazon Web Services"
-
-    _This is a work in progress._
-
-=== ":simple-exoscale: Exoscale"
-
-    _This is a work in progress._
-
 === ":simple-googlecloud: Google Cloud"
 
     Create the Google Storage Bucket to store the data with the Google Cloud CLI.
-    You should ideally select a location close to where most of the expected traffic
-    will come from. You can view the available regions at
-    [Cloud locations](https://cloud.google.com/about/locations).
 
     Export the bucket name as an environment variable. Replace `<my bucket name>`
     with your own bucket name (ex: `mlopsdemo`).
@@ -221,9 +216,11 @@ Create the Storage Bucket to store the data with the cloud provider CLI.
     export GCP_BUCKET_NAME=<my bucket name>
     ```
 
-    Export the bucket region as an environment variable. Replace
-    `<my bucket region>` with your own zone. For example, use `EUROPE-WEST6` for
-    Switzerland.
+    Export the bucket region as an environment variable. You can view the available
+    regions at [Cloud locations](https://cloud.google.com/about/locations). You
+    should ideally select a location close to where most of the expected traffic
+    will come from. Replace `<my bucket region>` with your own zone. For example,
+    use `europe-west6` for Switzerland.
 
     ```sh title="Execute the following command(s) in a terminal"
     export GCP_BUCKET_REGION=<my bucket region>
@@ -238,7 +235,7 @@ Create the Storage Bucket to store the data with the cloud provider CLI.
         --public-access-prevention
     ```
 
-    ??? info "Getting an 'The billing account for the owning project is disabled in state absent' error? Read this!"
+    ??? info "Getting an 'ERROR: (gcloud.storage.buckets.create) HTTPError 403' message? Read this!"
 
         In case you get a
         **HTTPError 403: The billing account for the owning project is disabled in state absent**
@@ -248,30 +245,27 @@ Create the Storage Bucket to store the data with the cloud provider CLI.
 
         In the Google Cloud Interface, go to **Billing** in the main hamburger menu,
         then choose the **My Projects** tab. If billing is *disabled*, then select
-        *Change billing* * in the **Actions** menu, and click the **Set Account**
-        button.
+        *Change billing* in the **Actions** menu, and click the **Set Account** button.
 
     You now have everything you need for DVC.
 
-=== ":simple-microsoftazure: Microsoft Azure"
+=== ":material-cloud: Using another cloud provider? Read this!"
 
-    _This is a work in progress._
+    This guide has been written with Google Cloud Platform in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
 
-=== ":simple-kubernetes: Self-hosted Kubernetes"
-
-    _This is a work in progress._
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
+    appreciated!
 
 ### Install the DVC Storage plugin
 
 Install the DVC Storage plugin for the chosen cloud provider.
-
-=== ":simple-amazonaws: Amazon Web Services"
-
-    _This is a work in progress._
-
-=== ":simple-exoscale: Exoscale"
-
-    _This is a work in progress._
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -327,25 +321,23 @@ Install the DVC Storage plugin for the chosen cloud provider.
     pip freeze --local --all > requirements-freeze.txt
     ```
 
-=== ":simple-microsoftazure: Microsoft Azure"
+=== ":material-cloud: Using another cloud provider? Read this!"
 
-    _This is a work in progress._
+    This guide has been written with Google Cloud Platform in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
 
-=== ":simple-kubernetes: Self-hosted Kubernetes"
-
-    _This is a work in progress._
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
+    appreciated!
 
 ### Configure DVC to use the Storage Bucket
 
 Configure DVC to use the Storage Bucket on the chosen cloud provider.
-
-=== ":simple-amazonaws: Amazon Web Services"
-
-    _This is a work in progress._
-
-=== ":simple-exoscale: Exoscale"
-
-    _This is a work in progress._
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -357,13 +349,19 @@ Configure DVC to use the Storage Bucket on the chosen cloud provider.
     dvc remote add -d data gs://$GCP_BUCKET_NAME/dvcstore
     ```
 
-=== ":simple-microsoftazure: Microsoft Azure"
+=== ":material-cloud: Using another cloud provider? Read this!"
 
-    _This is a work in progress._
+    This guide has been written with Google Cloud Platform in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
 
-=== ":simple-kubernetes: Self-hosted Kubernetes"
-
-    _This is a work in progress._
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
+    appreciated!
 
 ### Check the changes
 
@@ -406,6 +404,9 @@ DVC as well.
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
 git commit -m "My ML experiment data is shared with DVC"
+
+# Push the changes
+git push
 ```
 
 ### Check the results
@@ -459,9 +460,9 @@ You can now safely continue to the next chapter.
 - [x] Steps used to create the model are documented and can be re-executed
 - [x] Changes done to a model can be visualized with parameters, metrics and
       plots to identify differences between iterations
+- [x] Codebase can be shared and improved by multiple developers
 - [x] Dataset can be shared among the developers and is placed in the right
       directory in order to run the experiment
-- [ ] Codebase requires manual download and setup
 - [ ] Experiment may not be reproducible on other machines
 - [ ] CI/CD pipeline does not report the results of the experiment
 - [ ] Changes to model are not thoroughly reviewed and discussed before
@@ -469,7 +470,8 @@ You can now safely continue to the next chapter.
 - [ ] Model may have required artifacts that are forgotten or omitted in
       saved/loaded state
 - [ ] Model cannot be easily used from outside of the experiment context
-- [ ] Model cannot be deployed on and accessed from a Kubernetes cluster
+- [ ] Model is not accessible on the Internet and cannot be used anywhere
+- [ ] Model requires manual deployment on the cluster
 - [ ] Model cannot be trained on hardware other than the local machine
 
 You will address these issues in the next chapters for improved efficiency and

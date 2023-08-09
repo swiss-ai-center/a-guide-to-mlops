@@ -1,4 +1,4 @@
-# Chapter 16: Label new data with Label Studio
+# Chapter 20: Link the model to Label Studio and get predictions
 
 ??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
 

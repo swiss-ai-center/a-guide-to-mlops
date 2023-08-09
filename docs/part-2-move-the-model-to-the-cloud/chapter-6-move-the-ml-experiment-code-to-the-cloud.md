@@ -1,4 +1,4 @@
-# Chapter 7: Move the ML experiment code to the cloud
+# Chapter 6: Move the ML experiment code to the cloud
 
 ??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
 
@@ -8,8 +8,8 @@
 
 ## Introduction
 
-At this point, the data is made available to team members using DVC, but the
-experiment codebase itself is not.
+Now that we have configured DVC and can reproduce the experiment, let's set up a
+remote repository for sharing the code with the team.
 
 By linking your local project to a remote repository on platforms like GitHub or
 GitLab, you can seamlessly push, pull, and synchronize changes, facilitating
@@ -20,16 +20,14 @@ this chapter:
 
 ```mermaid
 flowchart LR
-    dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]
-    s3_storage -->|dvc pull| dot_dvc
+    dot_dvc[(.dvc)]
     dot_git[(.git)] -->|git push| gitGraph[Git Remote]
     gitGraph -->|git pull| dot_git
     workspaceGraph <-....-> dot_git
     data[data/raw] <-.-> dot_dvc
     subgraph remoteGraph[REMOTE]
-        s3_storage
         subgraph gitGraph[Git Remote]
-            repository[Repository]
+            repository[(Repository)]
         end
     end
     subgraph cacheGraph[CACHE]
@@ -58,9 +56,8 @@ flowchart LR
     style train opacity:0.4,color:#7f7f7f80
     style evaluate opacity:0.4,color:#7f7f7f80
     style params opacity:0.4,color:#7f7f7f80
-    style s3_storage opacity:0.4,color:#7f7f7f80
-    linkStyle 0 opacity:0.4,color:#7f7f7f80
-    linkStyle 1 opacity:0.4,color:#7f7f7f80
+    linkStyle 2 opacity:0.4,color:#7f7f7f80
+    linkStyle 3 opacity:0.4,color:#7f7f7f80
     linkStyle 4 opacity:0.4,color:#7f7f7f80
     linkStyle 5 opacity:0.4,color:#7f7f7f80
     linkStyle 6 opacity:0.4,color:#7f7f7f80
@@ -70,8 +67,6 @@ flowchart LR
     linkStyle 10 opacity:0.4,color:#7f7f7f80
     linkStyle 11 opacity:0.4,color:#7f7f7f80
     linkStyle 12 opacity:0.4,color:#7f7f7f80
-    linkStyle 13 opacity:0.4,color:#7f7f7f80
-    linkStyle 14 opacity:0.4,color:#7f7f7f80
 ```
 
 ## Create a remote Git repository
@@ -160,9 +155,8 @@ You can now safely continue to the next chapter.
 - [x] Steps used to create the model are documented and can be re-executed
 - [x] Changes done to a model can be visualized with parameters, metrics and
       plots to identify differences between iterations
-- [x] Dataset can be shared among the developers and is placed in the right
-      directory in order to run the experiment
 - [x] Codebase can be shared and improved by multiple developers
+- [ ] Dataset requires manual download and placement
 - [ ] Experiment may not be reproducible on other machines
 - [ ] CI/CD pipeline does not report the results of the experiment
 - [ ] Changes to model are not thoroughly reviewed and discussed before
@@ -170,7 +164,8 @@ You can now safely continue to the next chapter.
 - [ ] Model may have required artifacts that are forgotten or omitted in
       saved/loaded state
 - [ ] Model cannot be easily used from outside of the experiment context
-- [ ] Model cannot be deployed on and accessed from a Kubernetes cluster
+- [ ] Model is not accessible on the Internet and cannot be used anywhere
+- [ ] Model requires manual deployment on the cluster
 - [ ] Model cannot be trained on hardware other than the local machine
 
 You will address these issues in the next chapters for improved efficiency and
