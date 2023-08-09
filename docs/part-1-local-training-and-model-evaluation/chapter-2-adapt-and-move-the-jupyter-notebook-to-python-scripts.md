@@ -145,7 +145,7 @@ pyyaml==6.0
 Install the dependencies.
 
 ```sh title="Execute the following command(s) in a terminal"
-# Install the requirements
+# Install the dependencies
 pip install --requirement requirements.txt
 ```
 
@@ -259,8 +259,9 @@ train:
 
 #### Move the preparation step to its own file
 
-The `src/prepare.py` script will prepare the dataset. We take this opportunity
-to refactor the code to make it more modular and explicit using functions.
+The `src/prepare.py` script will prepare the dataset. Let's take this
+opportunity to refactor the code to make it more modular and explicit using
+functions.
 
 ```py title="src/prepare.py"
 import json
@@ -351,8 +352,8 @@ if __name__ == "__main__":
 
 #### Move the train step to its own file
 
-The `src/train.py` script will train the ML model. We take this opportunity to
-refactor the code to make it more modular and explicit using functions.
+The `src/train.py` script will train the ML model. Let's take this opportunity
+to refactor the code to make it more modular and explicit using functions.
 
 ```py title="src/train.py"
 import sys
@@ -449,8 +450,8 @@ if __name__ == "__main__":
 
 #### Move the evaluate step to its own file
 
-The `src/evaluate.py` script will evaluate the ML model using DVC. We take this
-opportunity to refactor the code to make it more modular and explicit using
+The `src/evaluate.py` script will evaluate the ML model using DVC. Let's take
+this opportunity to refactor the code to make it more modular and explicit using
 functions.
 
 ```py title="src/evaluate.py"

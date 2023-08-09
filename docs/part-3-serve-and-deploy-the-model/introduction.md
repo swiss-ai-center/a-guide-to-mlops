@@ -4,7 +4,8 @@ title: "Part 3 - Introduction"
 
 # Introduction
 
-Learn how to serve and deploy the model using MLEM and CML.
+Learn how to serve and deploy the model using [MLEM](../tools.md) and
+[CML](../tools.md).
 
 ## Environment
 
@@ -13,9 +14,9 @@ you use Windows, you might encounter issues. Please use the
 [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/)
 (WSL 2) for optimal results.
 
-For this part, you also need to have [Docker Desktop](https://www.docker.com/)
-installed. Docker will be utilized for setting up and managing the container
-registry.
+For this part, you also need to have
+[:simple-docker: Docker](https://www.docker.com/) installed. Docker will be
+utilized for setting up and managing the container registry.
 
 ## Requirements
 
@@ -26,7 +27,8 @@ those described in the
 - A [:simple-github: GitHub](https://github.com) or a
   [:simple-gitlab: GitLab](https://gitlab.com) account
 - A [:simple-googlecloud: Google Cloud](https://cloud.google.com) account
-- [:simple-docker: Docker](https://www.docker.com/)
+- [:simple-docker: Docker](https://www.docker.com/) to set up and manage the
+  container registry
 
 ??? info "Using another cloud provider? Read this!"
 

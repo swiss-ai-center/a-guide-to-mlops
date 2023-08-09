@@ -13,7 +13,8 @@
 
 Serving the model locally is great for testing purposes, but it is not
 sufficient for production. In this chapter, you will learn how to deploy the
-model on Kubernetes with MLEM and access it from a Kubernetes pod.
+model on Kubernetes with [MLEM](../tools.md) and access it from a Kubernetes
+pod.
 
 This will allow the model to be used by other applications and services on a
 public endpoint accessible from anywhere.
@@ -168,7 +169,7 @@ Follow the steps below to create one.
     [Regions and zones](https://cloud.google.com/compute/docs/regions-zones#available).
     You should ideally select a location close to where most of the expected traffic
     will come from. Replace `<my cluster zone>` with your own zone (ex:
-    `europe-west6-a` for Switzerland Zurich).
+    `europe-west6-a` for Switzerland (Zurich)).
 
     You can also view the available types of machine with the
     `gcloud compute machine-types list` command.
@@ -180,6 +181,7 @@ Follow the steps below to create one.
     Create the Kubernetes cluster. This can take a few minutes.
 
     ```sh title="Execute the following command(s) in a terminal"
+    # Create the Kubernetes cluster
     gcloud container clusters create \
     	--machine-type=e2-standard-2 \
     	--num-nodes=2 \
@@ -246,6 +248,7 @@ Install the Kubernetes CLI (kubectl) on your machine.
 Validate kubectl can access the Kubernetes cluster.
 
 ```sh title="Execute the following command(s) in a terminal"
+# Get namespaces
 kubectl get namespaces
 ```
 
@@ -313,14 +316,14 @@ Install the dependencies and update the freeze file.
     it is not, you can activate it with `source .venv/bin/activate`.
 
 ```sh title="Execute the following command(s) in a terminal"
-# Install the requirements
+# Install the dependencies
 pip install --requirement requirements.txt
 
-# Freeze the requirements
+# Freeze the dependencies
 pip freeze --local --all > requirements-freeze.txt
 ```
 
-### Create a Model Registry
+### Create a model registry
 
 A model registry is a crucial component that provides a centralized system to
 manage ML models throughout their lifecycle. It serves as a repository for
@@ -371,6 +374,7 @@ for an efficient models management.
     as `docker`.
 
     ```sh title="Execute the following command(s) in a terminal"
+    # Create the Google Container Registry
     gcloud artifacts repositories create $GCP_REPOSITORY_NAME \
         --repository-format=docker \
         --location=$GCP_REPOSITORY_LOCATION
@@ -406,6 +410,7 @@ for an efficient models management.
     **Authenticate with the Google Container Registry**
 
     ```sh title="Execute the following command(s) in a terminal"
+    # Authenticate with the Google Container Registry
     gcloud auth configure-docker ${GCP_REPOSITORY_LOCATION}-docker.pkg.dev
     ```
 
@@ -519,7 +524,7 @@ the chosen deployment name.
    parameters needed for state management, which is stored separately from the
    declaration.
 
-We will soon see how to use them to redeploy the model on Kubernetes.
+You will soon see how to use them to redeploy the model on Kubernetes.
 
 ### Access the model
 
@@ -569,7 +574,7 @@ service. You should be able to access the FastAPI documentation page at
 `http://<load balancer ingress ip>:8080/docs`. In this case, it is
 `http://34.65.72.237:8080/docs`.
 
-### Setup the MLEM Remote State Manager
+### Setup the MLEM remote state manager
 
 After the model is deployed on Kubernetes, MLEM will save the deployment state
 as local files. This is fine if you are working alone, however, if you are
@@ -605,11 +610,12 @@ to do is provide a URI where you want to store state files.
 
 !!! warning
 
-    Make sure to use the same bucket name as the one you created in chapter 6.
+    Make sure to use the same bucket name as the one you created in
+    [Chapter 7: Move the ML experiment data to the cloud](../part-2-move-the-model-to-the-cloud/chapter-7-move-the-ml-experiment-data-to-the-cloud.md).
 
 === ":simple-googlecloud: Google Cloud"
     ```sh title="Execute the following command(s) in a terminal"
-    # Setup the MLEM Remote State Manager
+    # Setup the MLEM remote state manager
     mlem config set core.state.uri gs://$GCP_BUCKET_NAME
     ```
 
@@ -618,6 +624,7 @@ to do is provide a URI where you want to store state files.
         To get the URI of your bucket, you can use the Google Cloud CLI.
 
         ```sh title="Execute the following command(s) in a terminal"
+        # List the buckets
         gcloud storage ls
         ```
 
@@ -654,16 +661,16 @@ to do is provide a URI where you want to store state files.
 
 It would also be useful to be able to create deployments configuration
 **without** actually running them, as to later trigger already configured
-deployments. This for example would allow you to track deployment parameters in
+deployments. For example, this would allow you to track deployment parameters in
 Git and use it in CI/CD pipelines more easily.
 
-Let's create such deployment file, without actually deploying it. We will also
+Let's create such deployment file, without actually deploying it. You will also
 take the opportunity to improve and customize the deployment parameters further.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Create the deployment configuration for MLEM
 mlem declare deployment kubernetes service_classifier \
-    --namespace mlem \
+    --namespace live \
     --image_name mlops-classifier \
     --image_uri mlops-classifier:latest \
     --registry remote \
@@ -685,7 +692,7 @@ The corresponding arguments are:
 This will create a new `service_classifier.mlem` file at the root of your
 project, containing the configuration of the deployment.
 
-### Deploy the model again on Kubernete with MLEM
+### Deploy the model again on Kubernetes with MLEM
 
 Next, to deploy the model on Kubernetes, run the following command:
 
@@ -728,20 +735,20 @@ deployment created. status='{'available_replicas': None,
  'unavailable_replicas': None,
  'updated_replicas': None}'
 service created. status='{'conditions': None, 'load_balancer': {'ingress': None}}'
-✅  Deployment mlops-classifier is up in mlem namespace
+✅  Deployment mlops-classifier is up in live namespace
 ```
 
 ### Access the model
 
 This time, MLEM deploys the model as a service named `service_classifier` in the
-defined `mlem` namespace.
+defined `live` namespace.
 
 To access the model, you will need to find the external IP address of the
 service. You can do so with the following command.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Get the description of the service
-kubectl describe services mlops-classifier --namespace mlem
+kubectl describe services mlops-classifier --namespace live
 ```
 
 Again, use the the `LoadBalancer Ingress` field of the output as it contains the
@@ -783,7 +790,7 @@ Commit the changes to Git.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
-git commit -m "MLEM provides k8s deployment files"
+git commit -m "MLEM can deploy the model with FastAPI on Kubernetes"
 
 # Push the changes
 git push
@@ -792,8 +799,8 @@ git push
 ## Summary
 
 Congratulations! You have successfully deployed the model on Kubernetes with
-MLEM, accessed it from an external IP address, and properly versionned and
-shared the deployment declaration and state.
+MLEM, accessed it from an external IP address, and properly versioned and shared
+the deployment declaration and state.
 
 You can now use the model from anywhere.
 
@@ -840,3 +847,4 @@ Highly inspired by:
 - [_Get Started_ - mlem.ai](https://mlem.ai/doc/get-started?tab=Kubernetes)
 - [_Kubernetes_ - mlem.ai](https://mlem.ai/doc/user-guide/deploying/kubernetes)
 - [_Working with the Container registry_ - docs.github.com](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry)
+- [_Deploying models_ - mlem.ai](https://mlem.ai/doc/user-guide/deploying)

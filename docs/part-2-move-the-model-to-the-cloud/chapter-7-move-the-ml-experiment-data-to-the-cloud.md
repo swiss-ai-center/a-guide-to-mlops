@@ -224,7 +224,7 @@ Create the Storage Bucket to store the data with the cloud provider CLI.
     regions at [Cloud locations](https://cloud.google.com/about/locations). You
     should ideally select a location close to where most of the expected traffic
     will come from. Replace `<my bucket region>` with your own zone. For example,
-    use `europe-west6` for Switzerland.
+    use `europe-west6` for Switzerland (Zurich).
 
     ```sh title="Execute the following command(s) in a terminal"
     export GCP_BUCKET_REGION=<my bucket region>
@@ -318,10 +318,10 @@ Install the DVC Storage plugin for the cloud provider.
         it is not, you can activate it with `source .venv/bin/activate`.
 
     ```sh title="Execute the following command(s) in a terminal"
-    # Install the requirements
+    # Install the dependencies
     pip install --requirement requirements.txt
 
-    # Freeze the requirements
+    # Freeze the dependencies
     pip freeze --local --all > requirements-freeze.txt
     ```
 

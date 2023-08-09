@@ -12,8 +12,8 @@
 ## Introduction
 
 In this chapter, you will deploy the model to the Kubernetes cluster with the
-help of the CI/CD pipeline. We will use the MLEM tool to deploy the model to the
-cluster and the pipeline to trigger the deployment.
+help of the CI/CD pipeline. You will use the [MLEM](../tools.md) tool to deploy
+the model to the cluster and the pipeline to trigger the deployment.
 
 The steps will be similar to the last chapter, but we will use the pipeline to
 automate the process.
@@ -23,7 +23,7 @@ In this chapter, you will learn how to:
 1. Grant access to the container registry on the cloud provider
 2. Store the cloud provider credentials in the CI/CD configuration
 3. Create the CI/CD pipeline for deploying the model to the Kubernetes cluster
-4. Push the CI/CD pipeline configuration file to Git
+4. Push the CI/CD pipeline configuration file to [Git](../tools.md)
 5. Visualize the execution of the CI/CD pipeline
 
 The following diagram illustrates control flow of the experiment at the end of
@@ -149,15 +149,16 @@ flowchart TB
 MLEM will need to access the container registry inside the CI/CD pipeline to
 push the Docker image.
 
-This is the same process as in
-[Chapter 8 - Reproduce the ML experiment in a CI/CD pipeline](../part-2-move-the-model-to-the-cloud/chapter-8-reproduce-the-ml-experiment-in-a-cicd-pipeline.md).
+This is the same process you did for DVC as described in
+[Chapter 8 - Reproduce the ML experiment in a CI/CD pipeline](../part-2-move-the-model-to-the-cloud/chapter-8-reproduce-the-ml-experiment-in-a-cicd-pipeline.md)
+but this time for MLEM.
 
 === ":simple-googlecloud: Google Cloud"
 
     Create the Google Service Account and its associated Google Service Account Key
-    to access Google Cloud without your own credentials.
+    to access Google Cloud for MLEM without your own credentials.
 
-    As a reminder, the key will be stored in your **~/.config/gcloud** directory
+    As a reminder, the key will be stored in your **`~/.config/gcloud`** directory
     under the name `mlem-google-service-account-key.json`.
 
     !!! danger
@@ -300,11 +301,11 @@ following steps will be performed:
 === ":simple-github: GitHub"
 
     At the root level of your Git repository, create a new GitHub Workflow
-    configuration file `.github/workflows/deploy.yml`.
+    configuration file `.github/workflows/mlops-deploy.yml`.
 
     Take some time to understand the deploy job and its steps.
 
-    ```yaml title=".github/workflows/deploy.yml"
+    ```yaml title=".github/workflows/mlops-deploy.yml"
     name: Deploy
 
     on:
@@ -444,7 +445,20 @@ following steps will be performed:
         if: github.ref == 'refs/heads/main'
         needs: train-and-report
         name: Call Deploy
-        uses: ./.github/workflows/deploy.yml
+        uses: ./.github/workflows/mlops-deploy.yml
+    ```
+
+    Check the differences with Git to validate the changes.
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Show the differences with Git
+    git diff .github/workflows/mlops.yml
+    ```
+
+    The output should be similar to this:
+
+    ```diff
+    TODO
     ```
 
 === ":simple-gitlab: GitLab"
@@ -471,8 +485,8 @@ Your branch is up to date with 'origin/main'.
 
 Changes to be committed:
 (use "git restore --staged <file>..." to unstage)
-    new file:   .github/workflows/deploy.yml
     modified:   .github/workflows/mlops.yml
+    new file:   .github/workflows/mlops-deploy.yml
 ```
 
 ### Commit the changes to Git
@@ -499,7 +513,7 @@ latest version is consistently available on the Kubernetes server for use.
     In the **Actions** tab, if you click on the **Call Deploy** > **deploy**
     pipeline, you should see the following output for the `Deploy the model` step:
 
-    ```sh
+    ```
     > mlem deployment run --load service_classifier --model model
 
     ⏳️ Loading model from model.mlem
@@ -537,5 +551,3 @@ latest version is consistently available on the Kubernetes server for use.
 
 You can now safely continue to the next chapter of this guide concluding your
 journey and the next things you could do with your model.
-
-## Sources
