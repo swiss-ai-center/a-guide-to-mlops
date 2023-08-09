@@ -4,7 +4,8 @@ title: "Part 1 - Introduction"
 
 # Introduction
 
-Learn how to train a model locally and evaluate it using [:simple-dvc: DVC](../tools.md).
+Learn how to train a model locally and evaluate it using
+[:simple-dvc: DVC](../tools.md).
 
 ## Environment
 

@@ -5,7 +5,8 @@ title: "Part 2 - Introduction"
 # Introduction
 
 Learn how to collaborate online using [:simple-git: Git](../tools.md), enable
-seamless integration with a CI/CD pipeline and visualize reports with [CML](../tools.md).
+seamless integration with a CI/CD pipeline and visualize reports with
+[CML](../tools.md).
 
 ## Environment
 
