@@ -52,7 +52,7 @@ flowchart TB
             action_runner[Runner] -->|dvc pull| action_data
             action_data[data/raw] -->|dvc repro| action_train[Train stage]
             action_train -->|dvc push| action_result[Result]
-            k8s_gpu[GPU] -.-> action_train
+            k8s_gpu[GPUs] -.-> action_train
             service_mlem_cluster[service_classifier]
             service_mlem_cluster --> k8s_fastapi[FastAPI]
         end
