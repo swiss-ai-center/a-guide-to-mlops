@@ -42,22 +42,21 @@ flowchart TB
         s3_storage
         subgraph gitGraph[Git Remote]
             repository[(Repository)] --> action[Action]
-            action --> action_runner[Runner Call]
-            action_runner -.-> action_out[metrics & plots]
             action_out[metrics & plots] -->|cml publish| pr[Pull Request]
             pr --> repository
             repository --> action_deploy
         end
         action_deploy[Action] -->|mlem deployment| registry[(Registry)]
         subgraph clusterGraph[Kubernetes]
-           service_mlem_cluster[service_classifier]
-           service_mlem_cluster --> k8s_fastapi[FastAPI]
-           action_data[data/raw] -->|dvc repro| action_train[Train]
-           action_train -.-> k8s_gpu1[GPU 1]
-           action_train -.-> k8s_gpu2[GPU 2]
+            action_runner[Runner] -->|dvc pull| action_data
+            action_data[data/raw] -->|dvc repro| action_train[Train stage]
+            action_train -->|dvc push| action_result[Result]
+            k8s_gpu[GPU] -.-> action_train
+            service_mlem_cluster[service_classifier]
+            service_mlem_cluster --> k8s_fastapi[FastAPI]
         end
-        action_runner -->|dvc pull| action_data
-        action_train -->|dvc push| action_out
+        action -->|cml run| action_runner
+        action_result --> action_out
         s3_storage --> service_mlem_cluster_state[service_classifier.mlem.state]
         service_mlem_cluster_state <--> service_mlem_cluster
         registry --> service_mlem_cluster
@@ -114,6 +113,7 @@ flowchart TB
     style mlemGraph opacity:0.4,color:#7f7f7f80
     style service_mlem opacity:0.4,color:#7f7f7f80
     style clusterGraph opacity:0.4,color:#7f7f7f80
+    style podPublishGraph opacity:0.4,color:#7f7f7f80
     style service_mlem_cluster opacity:0.4,color:#7f7f7f80
     style k8s_fastapi opacity:0.4,color:#7f7f7f80
     style browserGraph opacity:0.4,color:#7f7f7f80
@@ -130,9 +130,8 @@ flowchart TB
     linkStyle 8 opacity:0.4,color:#7f7f7f80
     linkStyle 9 opacity:0.4,color:#7f7f7f80
     linkStyle 10 opacity:0.4,color:#7f7f7f80
-    linkStyle 11 opacity:0.4,color:#7f7f7f80
-    linkStyle 12 opacity:0.4,color:#7f7f7f80
-    linkStyle 13 opacity:0.4,color:#7f7f7f80
+    linkStyle 15 opacity:0.4,color:#7f7f7f80
+    linkStyle 18 opacity:0.4,color:#7f7f7f80
     linkStyle 19 opacity:0.4,color:#7f7f7f80
     linkStyle 20 opacity:0.4,color:#7f7f7f80
     linkStyle 21 opacity:0.4,color:#7f7f7f80
@@ -149,7 +148,6 @@ flowchart TB
     linkStyle 32 opacity:0.4,color:#7f7f7f80
     linkStyle 33 opacity:0.4,color:#7f7f7f80
     linkStyle 34 opacity:0.4,color:#7f7f7f80
-    linkStyle 35 opacity:0.4,color:#7f7f7f80
 ```
 
 ## Steps
