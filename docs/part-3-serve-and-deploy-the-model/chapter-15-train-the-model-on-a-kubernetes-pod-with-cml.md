@@ -27,6 +27,129 @@ In this chapter, you will learn how to:
 2. Start the training of the model from your CI/CD pipeline on the Kubernetes
    cluster
 
+The following diagram illustrates control flow of the experiment at the end of
+this chapter:
+
+```mermaid
+flowchart TB
+    dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]
+    s3_storage -->|dvc pull| dot_dvc
+    dot_git[(.git)] -->|git push| gitGraph[Git Remote]
+    gitGraph -->|git pull| dot_git
+    workspaceGraph <-....-> dot_git
+    data[data/raw] <-.-> dot_dvc
+    subgraph remoteGraph[REMOTE]
+        s3_storage
+        subgraph gitGraph[Git Remote]
+            repository[(Repository)] --> action[Action]
+            action_result_cicd[Result] -->|dvc pull| action_out[metrics & plots]
+            action_out -->|cml publish| pr[Pull Request]
+            pr --> repository
+            repository --> action_deploy
+        end
+        action_deploy[Action] -->|mlem deployment| registry[(Registry)]
+        subgraph clusterGraph[Kubernetes]
+            action_runner[Runner] -->|dvc pull| action_data
+            action_data[data/raw] -->|dvc repro| action_train[Train stage]
+            action_train -->|dvc push| action_result[Result]
+            k8s_gpu[GPUs] -.-> action_train
+            service_mlem_cluster[service_classifier]
+            service_mlem_cluster --> k8s_fastapi[FastAPI]
+        end
+        action -->|cml runner| action_runner
+        action_result --> action_result_cicd
+        s3_storage --> service_mlem_cluster_state[service_classifier.mlem.state]
+        service_mlem_cluster_state <--> service_mlem_cluster
+        registry --> service_mlem_cluster
+    end
+    subgraph cacheGraph[CACHE]
+        dot_dvc
+        dot_git
+    end
+    subgraph workspaceGraph[WORKSPACE]
+        prepare[prepare.py] <-.-> dot_dvc
+        train[train.py] <-.-> dot_dvc
+        evaluate[evaluate.py] <-.-> dot_dvc
+        data --> prepare
+        subgraph dvcGraph["dvc.yaml (dvc repro)"]
+            prepare --> train
+            train --> evaluate
+        end
+        params[params.yaml] -.- prepare
+        params -.- train
+        params <-.-> dot_dvc
+        subgraph mlemGraph[.mlem.yaml]
+            mlem[model.mlem]
+            fastapi[FastAPI] <--> mlem
+            service_mlem[service_classifier.mlem]
+        end
+        mlem <-.-> dot_git
+        dvcGraph --> mlem
+        service_mlem <-.-> dot_git
+    end
+    subgraph browserGraph[BROWSER]
+        k8s_fastapi <--> publicURL["public URL"]
+    end
+    style pr opacity:0.4,color:#7f7f7f80
+    style workspaceGraph opacity:0.4,color:#7f7f7f80
+    style dvcGraph opacity:0.4,color:#7f7f7f80
+    style cacheGraph opacity:0.4,color:#7f7f7f80
+    style data opacity:0.4,color:#7f7f7f80
+    style dot_git opacity:0.4,color:#7f7f7f80
+    style dot_dvc opacity:0.4,color:#7f7f7f80
+    style prepare opacity:0.4,color:#7f7f7f80
+    style train opacity:0.4,color:#7f7f7f80
+    style evaluate opacity:0.4,color:#7f7f7f80
+    style params opacity:0.4,color:#7f7f7f80
+    style s3_storage opacity:0.4,color:#7f7f7f80
+    style repository opacity:0.4,color:#7f7f7f80
+    style action opacity:0.4,color:#7f7f7f80
+    style action_out opacity:0.4,color:#7f7f7f80
+    style action_deploy opacity:0.4,color:#7f7f7f80
+    style remoteGraph opacity:0.4,color:#7f7f7f80
+    style gitGraph opacity:0.4,color:#7f7f7f80
+    style mlem opacity:0.4,color:#7f7f7f80
+    style fastapi opacity:0.4,color:#7f7f7f80
+    style service_mlem_cluster_state opacity:0.4,color:#7f7f7f80
+    style mlemGraph opacity:0.4,color:#7f7f7f80
+    style service_mlem opacity:0.4,color:#7f7f7f80
+    style clusterGraph opacity:0.4,color:#7f7f7f80
+    style service_mlem_cluster opacity:0.4,color:#7f7f7f80
+    style k8s_fastapi opacity:0.4,color:#7f7f7f80
+    style browserGraph opacity:0.4,color:#7f7f7f80
+    style publicURL opacity:0.4,color:#7f7f7f80
+    style registry opacity:0.4,color:#7f7f7f80
+    linkStyle 0 opacity:0.4,color:#7f7f7f80
+    linkStyle 1 opacity:0.4,color:#7f7f7f80
+    linkStyle 2 opacity:0.4,color:#7f7f7f80
+    linkStyle 3 opacity:0.4,color:#7f7f7f80
+    linkStyle 4 opacity:0.4,color:#7f7f7f80
+    linkStyle 5 opacity:0.4,color:#7f7f7f80
+    linkStyle 6 opacity:0.4,color:#7f7f7f80
+    linkStyle 8 opacity:0.4,color:#7f7f7f80
+    linkStyle 9 opacity:0.4,color:#7f7f7f80
+    linkStyle 10 opacity:0.4,color:#7f7f7f80
+    linkStyle 11 opacity:0.4,color:#7f7f7f80
+    linkStyle 16 opacity:0.4,color:#7f7f7f80
+    linkStyle 19 opacity:0.4,color:#7f7f7f80
+    linkStyle 20 opacity:0.4,color:#7f7f7f80
+    linkStyle 21 opacity:0.4,color:#7f7f7f80
+    linkStyle 22 opacity:0.4,color:#7f7f7f80
+    linkStyle 23 opacity:0.4,color:#7f7f7f80
+    linkStyle 24 opacity:0.4,color:#7f7f7f80
+    linkStyle 25 opacity:0.4,color:#7f7f7f80
+    linkStyle 26 opacity:0.4,color:#7f7f7f80
+    linkStyle 27 opacity:0.4,color:#7f7f7f80
+    linkStyle 28 opacity:0.4,color:#7f7f7f80
+    linkStyle 29 opacity:0.4,color:#7f7f7f80
+    linkStyle 30 opacity:0.4,color:#7f7f7f80
+    linkStyle 31 opacity:0.4,color:#7f7f7f80
+    linkStyle 32 opacity:0.4,color:#7f7f7f80
+    linkStyle 33 opacity:0.4,color:#7f7f7f80
+    linkStyle 34 opacity:0.4,color:#7f7f7f80
+    linkStyle 35 opacity:0.4,color:#7f7f7f80
+```
+
 ## Steps
 
 ### Display the nodes names and labels
