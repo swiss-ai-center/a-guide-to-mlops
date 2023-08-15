@@ -23,7 +23,7 @@ In this chapter, you will learn how to:
 1. Grant access to the container registry on the cloud provider
 2. Store the cloud provider credentials in the CI/CD configuration
 3. Create the CI/CD pipeline for deploying the model to the Kubernetes cluster
-4. Push the CI/CD pipeline configuration file to [Git](../tools.md)
+4. Push the CI/CD pipeline configuration file to [:simple-git: Git](../tools.md)
 5. Visualize the execution of the CI/CD pipeline
 
 The following diagram illustrates control flow of the experiment at the end of
@@ -236,15 +236,19 @@ Depending on the CI/CD platform you are using, the process will be different.
         Google Cloud as `base64`. It allows to hide the secret in GitLab CI logs as a
         security measure.
 
-        !!! tip
+        === ":simple-linux: Linux & :simple-windows: Windows"
 
-            If on Linux, you can use the command
-            `base64 -w 0 -i ~/.config/gcloud/mlem-google-service-account-key.json`.
+            ```sh title="Execute the following command(s) in a terminal"
+            # Encode the Google Service Account key to base64
+            base64 -w 0 -i ~/.config/gcloud/mlem-google-service-account-key.json
+            ```
 
-        ```sh title="Execute the following command(s) in a terminal"
-        # Encode the Google Service Account key to base64
-        base64 -i ~/.config/gcloud/mlem-google-service-account-key.json
-        ```
+        === ":simple-apple: macOS"
+
+            ```sh title="Execute the following command(s) in a terminal"
+            # Encode the Google Service Account key to base64
+            base64 -i ~/.config/gcloud/mlem-google-service-account-key.json
+            ```
 
     **Store the Google Service Account key as a CI/CD variable**
 
@@ -463,7 +467,80 @@ following steps will be performed:
 
 === ":simple-gitlab: GitLab"
 
-    _Work in progress._
+    In order to execute commands on the Kubernetes cluster, an agent must be
+    set up on the cluster.
+
+    **Create the agent configuration file**
+
+    Create a new empty file named `.gitlab/agents/k8s-agent/config.yaml` at the root of the repository.
+
+    This file is empty and only serves to enable Kubernetes integration with GitLab.
+
+    Commit the changes to Git.
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Add the file
+    git add .gitlab/agents/k8s-agent/config.yaml
+
+    # Commit the changes
+    git commit -m "Enable Kubernetes integration with GitLab"
+
+    # Push the changes
+    git push
+    ```
+
+    **Register the agent with GitLab**
+
+    On GitLab, in the left sidebar, go to **Operate > Kubernetes clusters**. Click on **Connect a cluster**. Select the **k8s-agent** configuration file in the list. Click **Register**. A modal opens.
+
+    In the modal, a command to register the GitLab Kubernetes agent is displayed.
+
+    The command should look like this:
+
+    ```sh
+    helm repo add gitlab https://charts.gitlab.io
+    helm repo update
+    helm upgrade --install XXX gitlab/gitlab-agent \
+        --namespace XXX \
+        --create-namespace \
+        --set image.tag=XXX \
+        --set config.token=XXX \
+        --set config.kasAddress=XXX
+    ```
+
+    This command must be executed on the Google Cloud Kubernetes cluster.
+
+    **Install the agent on the Kubernetes cluster**
+
+    Copy and paste the command GitLab displays in your terminal. This should install the GitLab agent on the Kubernetes cluster.
+
+    The output should look like this:
+
+    ```
+    "gitlab" has been added to your repositories
+    Hang tight while we grab the latest from your chart repositories...
+    ...Successfully got an update from the "gitlab" chart repository
+    Update Complete. ⎈Happy Helming!⎈
+    Release "k8s-agent" does not exist. Installing it now.
+    NAME: k8s-agent
+    LAST DEPLOYED: Tue Aug 15 13:59:01 2023
+    NAMESPACE: gitlab-agent-k8s-agent
+    STATUS: deployed
+    REVISION: 1
+    TEST SUITE: None
+    NOTES:
+    Thank you for installing gitlab-agent.
+
+    Your release is named k8s-agent.
+    ```
+
+    Once the command was executed on the Kubernetes cluster, you can close the model.
+
+    Refresh the page and you should see the agent has successfully connected to GitLab.
+
+    **Update the CI/CD pipeline configuration file**
+
+    _Work in progress_
 
 ### Check the changes
 
@@ -479,15 +556,28 @@ git status
 
 The output should look like this.
 
-```
-On branch main
-Your branch is up to date with 'origin/main'.
+=== ":simple-github: GitHub"
 
-Changes to be committed:
-(use "git restore --staged <file>..." to unstage)
-    modified:   .github/workflows/mlops.yml
-    new file:   .github/workflows/mlops-deploy.yml
-```
+    ```
+    On branch main
+    Your branch is up to date with 'origin/main'.
+
+    Changes to be committed:
+    (use "git restore --staged <file>..." to unstage)
+        modified:   .github/workflows/mlops.yml
+        new file:   .github/workflows/mlops-deploy.yml
+    ```
+
+=== ":simple-gitlab: GitLab"
+
+    ```
+    On branch main
+    Your branch is up to date with 'origin/main'.
+
+    Changes to be committed:
+    (use "git restore --staged <file>..." to unstage)
+        modified:   .gitlab-ci.yml
+    ```
 
 ### Commit the changes to Git
 
@@ -551,3 +641,9 @@ latest version is consistently available on the Kubernetes server for use.
 
 You can now safely continue to the next chapter of this guide concluding your
 journey and the next things you could do with your model.
+
+## Sources
+
+Highly inspired by:
+
+- [_Installing the agent for Kubernetes_ - gitlab.com](https://docs.gitlab.com/ee/user/clusters/agent/install/)

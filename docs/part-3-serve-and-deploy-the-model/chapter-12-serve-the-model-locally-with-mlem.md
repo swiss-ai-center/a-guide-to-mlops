@@ -350,7 +350,7 @@ git push
 
 ### Check the results
 
-Congrats! You now have a model served over a REST API!
+Congratulations! You now have a model served over a REST API!
 
 This chapter is done, you can check the summary.
 

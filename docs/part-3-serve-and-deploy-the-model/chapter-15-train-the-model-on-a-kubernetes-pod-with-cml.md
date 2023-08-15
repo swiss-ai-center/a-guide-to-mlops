@@ -817,7 +817,7 @@ This chapter is done, you can check the summary.
 
 ## Summary
 
-Congrats! You now can train your model on on a custom infrastructure with custom
+Congratulations! You now can train your model on on a custom infrastructure with custom
 hardware for specific use-cases.
 
 In this chapter, you have successfully:

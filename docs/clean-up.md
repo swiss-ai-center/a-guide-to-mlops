@@ -33,6 +33,20 @@ provider.
     gcloud container clusters delete --zone $GCP_CLUSTER_ZONE $GCP_CLUSTER_NAME
     ```
 
+    Press ++Y++ to confirm the deletion.
+
+    **Delete the Google Artifact Registry**
+
+    To delete the Google Artifact Registry used to store the Docker images you created you can execute the following
+    command:
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Delete the Kubernetes cluster
+    gcloud artifacts repositories delete --location $GCP_REPOSITORY_LOCATION $GCP_REPOSITORY_NAME
+    ```
+
+    Press ++Y++ to confirm the deletion.
+
     **Delete the Google Storage bucket**
 
     !!! warning
@@ -49,14 +63,7 @@ provider.
     gcloud storage rm --recursive gs://$GCP_BUCKET_NAME
     ```
 
-    Alternatively, you can delete the bucket from the Google Cloud Console:
-
-    1. Go to the
-       [Google Cloud Storage Console](https://console.cloud.google.com/storage){:target="\_blank"}.
-    2. Make sure you selected the correct project.
-    3. Select the bucket you want to delete from the bucket list.
-    4. Click on **Delete** at the top of the page.
-    5. Follow the instructions to delete the bucket.
+    Press ++Y++ to confirm the deletion.
 
     **Delete the Service Account**
 
@@ -67,23 +74,17 @@ provider.
     gcloud iam service-accounts delete dvc-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com
     ```
 
-    Alternatively, you can delete the service account from the Google Cloud Console:
+    Press ++Y++ to confirm the deletion.
 
-    1. Go to the
-       [Google Cloud IAM Console](https://console.cloud.google.com/iam-admin/serviceaccounts){:target="\_blank"}.
-    2. Make sure you selected the correct project.
-    3. Select the service account you want to delete from the service account list.
-    4. Click on **Delete** at the top of the page.
-    5. Follow the instructions to delete the service account.
+    **Delete the local Service Account keys**
 
-    **Delete the local Service Account key**
-
-    You can run the following command to delete the service account key you created
+    You can run the following command to delete the service account keys you created
     locally:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Delete the local Service Account key
     rm ~/.config/gcloud/dvc-google-service-account-key.json
+    rm ~/.config/gcloud/mlem-google-service-account-key.json
     ```
 
     **Delete the Google Cloud project**
@@ -98,7 +99,7 @@ provider.
 
     **Close the Billing Account**
 
-    To remove the project from the Billing Acocunt:
+    To remove the project from the Billing Account:
 
     1. Go to the
        [Google Cloud Billing Console](https://console.cloud.google.com/billing){:target="\_blank"}.
@@ -220,10 +221,11 @@ Here is a checklist of all the resources and environments you created.
     You can click on the list items to mark them as completed if needed.
 
 - [ ] The cloud provider Kubernetes cluster
+- [ ] The cloud provider container registry
 - [ ] The cloud provider S3 bucket
 - [ ] The cloud provider credentials
 - [ ] The cloud provider project
-- [ ] The GitHub or GitLab Personal Access Token
+- [ ] The GitHub or GitLab Personal Access Tokens
 - [ ] The GitHub or GitLab repository
 - [ ] The projects directories
     - [ ] The `a-guide-to-mlops-jupyter-notebook` directory

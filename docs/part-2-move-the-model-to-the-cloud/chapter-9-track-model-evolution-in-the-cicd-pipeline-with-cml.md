@@ -326,7 +326,6 @@ collaboration and decision-making within the team.
 
     - **Token name**: _gitlab-ci[bot]_
     - **Expiration date**: _None_
-    - **Select a role**: _Developer_
     - **Select scopes**: `api`, `read_repository` and `write_repository`
 
     Select **Create personal access token** to create the token. Copy it. It will be
@@ -349,7 +348,7 @@ collaboration and decision-making within the team.
 
     Explore this file to understand the `report` stage and its steps.
 
-    ```yaml title=".gitlab-ci.yml" hl_lines="3 13-14 39-104"
+    ```yaml title=".gitlab-ci.yml" hl_lines="3 13-14 40-97"
     stages:
       - train
       - report
@@ -380,10 +379,11 @@ collaboration and decision-making within the team.
       before_script:
         # Set the Google Service Account key
         - echo "${DVC_GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
-        # Install dependencies
+        # Create the virtual environment for caching
         - python3 -m venv .venv
         - source .venv/bin/activate
-        - pip install --requirement requirements.txt
+        # Install dependencies
+        - pip install --requirement requirements-freeze.txt
       script:
         # Run the experiment
         - dvc repro --pull --allow-missing
@@ -471,7 +471,7 @@ collaboration and decision-making within the team.
 
     ```diff
     diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-    index 726b176..3280ad9 100644
+    index 4bf0954..722c708 100644
     --- a/.gitlab-ci.yml
     +++ b/.gitlab-ci.yml
     @@ -1,5 +1,6 @@
@@ -490,7 +490,10 @@ collaboration and decision-making within the team.
 
      train:
        stage: train
-    @@ -31,4 +34,71 @@ train:
+    @@ -33,3 +36,62 @@ train:
+       script:
+         # Run the experiment
+         - dvc repro --pull --allow-missing
     +
     +report:
     +  stage: report
@@ -580,7 +583,7 @@ Take some time to understand the changes made to the file.
     git add .gitlab-ci.yml
 
     # Commit the changes
-    git commit -m "Add cml reporting to CI/CD pipeline"
+    git commit -m "Add CML reporting to CI/CD pipeline"
 
     # Push the changes
     git push
@@ -605,7 +608,7 @@ This chapter is done, you can check the summary.
 
 ## Summary
 
-Congrats! You now have a CI/CD pipeline that will run and update the experiment
+Congratulations! You now have a CI/CD pipeline that will run and update the experiment
 results as well as create a report comparing the results with the main branch on
 a pull request.
 

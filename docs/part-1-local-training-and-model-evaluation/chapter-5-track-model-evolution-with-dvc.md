@@ -74,7 +74,7 @@ index 5bb698e..6a6ff45 100644
    output_classes: 11
 ```
 
-Here, you simply changed the `epochs` parameter of the `train` stage, which
+Here, you simply changed the `epochs` parameter of the Train stage, which
 should slightly affect the model's performance.
 
 ### Reproduce the experiment
@@ -256,7 +256,7 @@ This chapter is done, you can check the summary.
 
 ## Summary
 
-Congrats! You now have a simple way to compare the two iterations of your
+Congratulations! You now have a simple way to compare the two iterations of your
 experiment.
 
 In this chapter, you have successfully:

@@ -26,9 +26,9 @@ In this chapter, you will learn how to:
 
 1. Remove custom rules from the `.gitignore` file
 2. Set up DVC pipeline stages:
-    - `prepare`
-    - `train`
-    - `evaluate`
+    - Prepare
+    - Train
+    - Evaluate
 3. Visualize the pipeline
 4. Execute the pipeline
 5. Push the changes to DVC and Git
@@ -379,15 +379,15 @@ This chapter is done, you can check the summary.
 
 ## Summary
 
-Congrats! You have defined a pipeline and know how to reproduce your experiment.
+Congratulations! You have defined a pipeline and know how to reproduce your experiment.
 
 In this chapter, you have successfully:
 
 1. Removed custom rules from the `.gitignore` file
 2. Set up three DVC pipeline stages
-    - `prepare`
-    - `train`
-    - `evaluate`
+    - Prepare
+    - Train
+    - Evaluate
 3. Visualized the pipeline
 4. Executed the pipeline
 5. Committed the changes

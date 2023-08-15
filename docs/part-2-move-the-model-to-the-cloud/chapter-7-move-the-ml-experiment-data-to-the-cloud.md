@@ -107,7 +107,7 @@ Create a project on a cloud provider to host the data.
 
     Name your project and select **Create** to create the project.
 
-    A new page opens. Note the ID of your project, it will be used later.
+    A new page opens. Note the ID of your project (not the project number nor name!), it will be used later.
 
     !!! warning
 
@@ -422,7 +422,7 @@ hashed and have been uploaded.
 
 ## Summary
 
-Congrats! You now have a dataset that can be used and shared among the team.
+Congratulations! You now have a dataset that can be used and shared among the team.
 
 In this chapter, you have successfully:
 

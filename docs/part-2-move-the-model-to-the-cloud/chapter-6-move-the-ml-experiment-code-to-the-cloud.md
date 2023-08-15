@@ -80,23 +80,23 @@ Create a Git repository on your preferred service to collaborate with peers.
 
 === ":simple-github: GitHub"
 
-    Create a new GitHub repository for this chapter by accessing
-    <https://github.com/new>.
-
-    !!! warning
+    !!! danger "Important"
 
         Configure the repository as you wish but **do not** check the boxex
         _"Add a README file"_, _"Add .gitignore"_ nor _"Choose a license"_.
 
+    Create a new GitHub repository for this chapter by accessing
+    <https://github.com/new>.
+
 === ":simple-gitlab: GitLab"
 
-    Create a new GitLab blank project for this chapter by accessing
-    <https://gitlab.com/projects/new>.
-
-    !!! warning
+    !!! danger "Important"
 
         Configure the repository as you wish but **do not** check the box
         _"Initialize repository with a README"_.
+
+    Create a new GitLab blank project for this chapter by accessing
+    <https://gitlab.com/projects/new>.
 
 ## Configure Git for the remote branch
 
@@ -131,7 +131,7 @@ points.
 
 ## Summary
 
-Congrats! You now have a codebase that can be used and shared among the team.
+Congratulations! You now have a codebase that can be used and shared among the team.
 
 In this chapter, you have successfully:
 

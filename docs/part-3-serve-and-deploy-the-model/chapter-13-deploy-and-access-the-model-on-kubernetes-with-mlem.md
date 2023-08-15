@@ -169,7 +169,7 @@ Follow the steps below to create one.
     [Regions and zones](https://cloud.google.com/compute/docs/regions-zones#available).
     You should ideally select a location close to where most of the expected traffic
     will come from. Replace `<my cluster zone>` with your own zone (ex:
-    `europe-west6-a` for Switzerland (Zurich)).
+    `europe-west6-a` for Zurich, Switzerland).
 
     You can also view the available types of machine with the
     `gcloud compute machine-types list` command.
@@ -364,7 +364,7 @@ for an efficient models management.
 
     Export the repository location as an environment variable. Replace
     `<my repository location>` with your own location (ex: `europe-west6` for
-    Switzerland Zurich).
+    Switzerland).
 
     ```sh title="Execute the following command(s) in a terminal"
     export GCP_REPOSITORY_LOCATION=<my repository location>
@@ -409,20 +409,44 @@ for an efficient models management.
 
     **Authenticate with the Google Container Registry**
 
+    Configure gcloud to use the Google Container Registry as a Docker credential
+    helper.
+
     ```sh title="Execute the following command(s) in a terminal"
     # Authenticate with the Google Container Registry
     gcloud auth configure-docker ${GCP_REPOSITORY_LOCATION}-docker.pkg.dev
     ```
 
-    ```sh title="Execute the following command(s) in a terminal"
-    export GCP_PROJECT_ID=$(gcloud config get-value project)
-    ```
+    Press ++y++ to validate the changes.
 
     Export the container registry host:
 
     ```sh title="Execute the following command(s) in a terminal"
     export CONTAINER_REGISTRY_HOST=${GCP_REPOSITORY_LOCATION}-docker.pkg.dev/$GCP_PROJECT_ID/$GCP_REPOSITORY_NAME
     ```
+
+    !!! tip
+
+        To get the ID of your project, you can use the Google Cloud CLI.
+
+        ```sh title="Execute the following command(s) in a terminal"
+        # List the projects
+        gcloud projects list
+        ```
+
+        The output should be similar to this.
+
+        ```
+        PROJECT_ID             NAME            PROJECT_NUMBER
+        mlops-workshop-396007  mlops-workshop  475307267926
+        ```
+
+        Copy the PROJECT_ID and export it as an environment variable. Replace
+        `<id of your gcp project>` with your own project ID.
+
+        ```sh title="Execute the following command(s) in a terminal"
+        export GCP_PROJECT_ID=<id of your gcp project>
+        ```
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
@@ -452,11 +476,11 @@ operation can takes a few minutes.
 ```sh title="Execute the following command(s) in a terminal"
 # Deploy the model on Kubernetes with MLEM
 mlem deployment run kubernetes service_classifier \
---model model \
---registry remote \
---registry.host=$CONTAINER_REGISTRY_HOST \
---server fastapi \
---service_type loadbalancer
+    --model model \
+    --registry remote \
+    --registry.host=$CONTAINER_REGISTRY_HOST \
+    --server fastapi \
+    --service_type loadbalancer
 ```
 
 The name `service_classifier` is the name of the deployment. It can be changed
@@ -470,24 +494,29 @@ The arguments are:
 - `--server fastapi`: Use FastAPI as the server.
 - `--service_type loadbalancer`: Use a load balancer to expose the service.
 
-The output should be similar to this.
+The output should be similar to this. This might take a few minutes.
 
 ```
-💾 Saving deployment to service_classifier.mlem
+ Loading deployment from service_classifier.mlem
 ⏳️ Loading model from model.mlem
 🛠 Creating docker image ml
   💼 Adding model files...
   🛠 Generating dockerfile...
   💼 Adding sources...
   💼 Generating requirements file...
-  🛠 Building docker image europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry/ml:dbdf5b923413970ed7cd31cc5da22455...
-2023-08-02 10:58:29,915 [WARNING] mlem.contrib.docker.base: Skipped logging in to remote registry at host europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry because no credentials given. You could specify credentials as EUROPE-WEST6-DOCKER_PKG_DEV/MLOPS-TEST-391911/MLOPS-REGISTRY_USERNAME and EUROPE-WEST6-DOCKER_PKG_DEV/MLOPS-TEST-391911/MLOPS-REGISTRY_PASSWORD environment variables.
-✅  Built docker image europe-west6-docker.pkg.dev/mlops-registry/mlops-registry/ml:dbdf5b923413970ed7cd31cc5da22455
-  🔼 Pushing image europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry/ml:dbdf5b923413970ed7cd31cc5da22455 to
-europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry
+  🛠 Building docker image
+europe-west6-docker.pkg.dev/mlops-workshop-396007/mlops-registry/ml:8909b3c8feeeef6ff
+4e4cdbf3a2fa251...
+2023-08-15 11:25:43,391 [WARNING] mlem.contrib.docker.base: Skipped logging in to remote registry at host europe-west6-docker.pkg.dev/mlops-workshop-396007/mlops-registry because no credentials given. You could specify credentials as EUROPE-WEST6-DOCKER_PKG_DEV/MLOPS-WORKSHOP-396007/MLOPS-REGISTRY_USERNAME and EUROPE-WEST6-DOCKER_PKG_DEV/MLOPS-WORKSHOP-396007/MLOPS-REGISTRY_PASSWORD environment variables.
+  ✅  Built docker image
+europe-west6-docker.pkg.dev/mlops-workshop-396007/mlops-registry/ml:8909b3c8feeeef6ff
+4e4cdbf3a2fa251
+  🔼 Pushing image
+europe-west6-docker.pkg.dev/mlops-workshop-396007/mlops-registry/ml:8909b3c8feeeef6ff
+4e4cdbf3a2fa251 to europe-west6-docker.pkg.dev/mlops-workshop-396007/mlops-registry
   ✅  Pushed image
-europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry/ml:dbdf5b923413970ed7cd31cc5da22455 to
-europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry
+europe-west6-docker.pkg.dev/mlops-workshop-396007/mlops-registry/ml:8909b3c8feeeef6ff
+4e4cdbf3a2fa251 to europe-west6-docker.pkg.dev/mlops-workshop-396007/mlops-registry
 namespace created. status='{'conditions': None, 'phase': 'Active'}'
 deployment created. status='{'available_replicas': None,
  'collision_count': None,
@@ -709,22 +738,28 @@ The arguments are:
 The output should be similar to this.
 
 ```
-💾 Saving deployment to service_classifier.mlem
-⏳️ Loading model from model.mlem
+ Loading model from model.mlem
+⏳️ Loading deployment from service_classifier.mlem
 🛠 Creating docker image mlops-classifier
   💼 Adding model files...
   🛠 Generating dockerfile...
   💼 Adding sources...
   💼 Generating requirements file...
-  🛠 Building docker image europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry/mlops-classifier:dbdf5b923413970ed7cd31cc5da22455...
-2023-08-02 10:58:29,915 [WARNING] mlem.contrib.docker.base: Skipped logging in to remote registry at host europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry because no credentials given. You could specify credentials as EUROPE-WEST6-DOCKER_PKG_DEV/MLOPS-TEST-391911/MLOPS-REGISTRY_USERNAME and EUROPE-WEST6-DOCKER_PKG_DEV/MLOPS-TEST-391911/MLOPS-REGISTRY_PASSWORD environment variables.
-  ✅  Built docker image europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry/mlops-classifier:dbdf5b923413970ed7cd31cc5da22455
-  🔼 Pushing image europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry/mlops-classifier:dbdf5b923413970ed7cd31cc5da22455 to
-europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry
+  🛠 Building docker image
+europe-west6-docker.pkg.dev/mlops-workshop-396007/mlops-registry/mlops-classifier:890
+9b3c8feeeef6ff4e4cdbf3a2fa251...
+2023-08-15 11:58:06,396 [WARNING] mlem.contrib.docker.base: Skipped logging in to remote registry at host europe-west6-docker.pkg.dev/mlops-workshop-396007/mlops-registry because no credentials given. You could specify credentials as EUROPE-WEST6-DOCKER_PKG_DEV/MLOPS-WORKSHOP-396007/MLOPS-REGISTRY_USERNAME and EUROPE-WEST6-DOCKER_PKG_DEV/MLOPS-WORKSHOP-396007/MLOPS-REGISTRY_PASSWORD environment variables.
+  ✅  Built docker image
+europe-west6-docker.pkg.dev/mlops-workshop-396007/mlops-registry/mlops-classifier:890
+9b3c8feeeef6ff4e4cdbf3a2fa251
+  🔼 Pushing image
+europe-west6-docker.pkg.dev/mlops-workshop-396007/mlops-registry/mlops-classifier:890
+9b3c8feeeef6ff4e4cdbf3a2fa251 to
+europe-west6-docker.pkg.dev/mlops-workshop-396007/mlops-registry
   ✅  Pushed image
-europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry/mlops-classifier:dbdf
-5b923413970ed7cd31cc5da22455 to
-europe-west6-docker.pkg.dev/mlops-test-391911/mlops-registry
+europe-west6-docker.pkg.dev/mlops-workshop-396007/mlops-registry/mlops-classifier:890
+9b3c8feeeef6ff4e4cdbf3a2fa251 to
+europe-west6-docker.pkg.dev/mlops-workshop-396007/mlops-registry
 namespace created. status='{'conditions': None, 'phase': 'Active'}'
 deployment created. status='{'available_replicas': None,
  'collision_count': None,
@@ -784,11 +819,14 @@ Changes to be committed:
     new file:   service_classifier.mlem
 ```
 
-### Commit the changes to Git
+### Commit the changes to DVC and Git
 
-Commit the changes to Git.
+Commit the changes to DVC and Git.
 
 ```sh title="Execute the following command(s) in a terminal"
+# Push the model to DVC
+dvc push
+
 # Commit the changes
 git commit -m "MLEM can deploy the model with FastAPI on Kubernetes"
 
