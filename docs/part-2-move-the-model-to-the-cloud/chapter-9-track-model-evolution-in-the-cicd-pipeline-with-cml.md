@@ -608,9 +608,9 @@ This chapter is done, you can check the summary.
 
 ## Summary
 
-Congratulations! You now have a CI/CD pipeline that will run and update the experiment
-results as well as create a report comparing the results with the main branch on
-a pull request.
+Congratulations! You now have a CI/CD pipeline that will run and update the
+experiment results as well as create a report comparing the results with the
+main branch on a pull request.
 
 In this chapter, you have successfully:
 

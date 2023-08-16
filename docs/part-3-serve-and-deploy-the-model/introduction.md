@@ -27,8 +27,8 @@ those described in the
 - A [:simple-github: GitHub](https://github.com) or a
   [:simple-gitlab: GitLab](https://gitlab.com) account
 - A [:simple-googlecloud: Google Cloud](https://cloud.google.com) account
-- [:simple-docker: Docker](https://www.docker.com/) must be installed to set up and manage the
-  container registry
+- [:simple-docker: Docker](https://www.docker.com/) must be installed to set up
+  and manage the container registry
 - [:simple-helm: Helm](https://helm.sh/) must be installed if using GitLab
 
 ??? info "Using another cloud provider? Read this!"

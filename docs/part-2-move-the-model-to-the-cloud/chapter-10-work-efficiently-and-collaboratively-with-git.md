@@ -318,14 +318,11 @@ git push
     <div style="display: flex" markdown>
         <figure markdown>
             ![Plots Diff 1 Light](../assets/images/github_cml_report_1_light.png#only-light){ loading=lazy }
-        </figure>
-        <figure markdown>
+        </figure> <figure markdown>
             ![Plots Diff 1 Dark](../assets/images/github_cml_report_1_dark.png#only-dark){ loading=lazy }
-        </figure>
-        <figure markdown>
+        </figure> <figure markdown>
             ![Plots Diff 2 Light](../assets/images/github_cml_report_2_light.png#only-light){ loading=lazy }
-        </figure>
-        <figure markdown>
+        </figure> <figure markdown>
             ![Plots Diff 2 Dark](../assets/images/github_cml_report_2_dark.png#only-dark){ loading=lazy }
         </figure>
     </div>
@@ -339,14 +336,11 @@ git push
     <div style="display: flex" markdown>
         <figure markdown>
             ![Plots Diff 1 Light](../assets/images/gitlab_cml_report_1_light.png#only-light){ loading=lazy }
-        </figure>
-        <figure markdown>
+        </figure> <figure markdown>
             ![Plots Diff 1 Dark](../assets/images/gitlab_cml_report_1_dark.png#only-dark){ loading=lazy }
-        </figure>
-        <figure markdown>
+        </figure> <figure markdown>
             ![Plots Diff 2 Light](../assets/images/gitlab_cml_report_2_light.png#only-light){ loading=lazy }
-        </figure>
-        <figure markdown>
+        </figure> <figure markdown>
             ![Plots Diff 2 Dark](../assets/images/gitlab_cml_report_2_dark.png#only-dark){ loading=lazy }
         </figure>
     </div>

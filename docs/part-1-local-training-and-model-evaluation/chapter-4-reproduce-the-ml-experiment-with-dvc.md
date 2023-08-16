@@ -379,7 +379,8 @@ This chapter is done, you can check the summary.
 
 ## Summary
 
-Congratulations! You have defined a pipeline and know how to reproduce your experiment.
+Congratulations! You have defined a pipeline and know how to reproduce your
+experiment.
 
 In this chapter, you have successfully:
 

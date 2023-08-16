@@ -393,8 +393,8 @@ This chapter is done, you can check the summary.
 
 ## Summary
 
-Congratulations! You now have a CI/CD pipeline that will run the experiment on each
-commit.
+Congratulations! You now have a CI/CD pipeline that will run the experiment on
+each commit.
 
 In this chapter, you have successfully:
 

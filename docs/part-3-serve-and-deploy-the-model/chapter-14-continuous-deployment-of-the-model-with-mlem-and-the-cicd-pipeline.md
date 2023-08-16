@@ -179,7 +179,7 @@ but this time for MLEM.
     # Set the Artifact Registry permissions for the Google Service Account
     gcloud projects add-iam-policy-binding $GCP_PROJECT_ID \
         --member="serviceAccount:mlem-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com" \
-        --role="roles/storage.objectAdmin"
+        --role="roles/storage.objectAdmin" \
         --role="roles/artifactregistry.createOnPushWriter"
 
     # Set the Kubernetes Cluster permissions for the Google Service Account
@@ -305,7 +305,10 @@ following steps will be performed:
 === ":simple-github: GitHub"
 
     At the root level of your Git repository, create a new GitHub Workflow
-    configuration file `.github/workflows/mlops-deploy.yml`.
+    configuration file `.github/workflows/mlops-deploy.yml`. Replace
+    `<my cluster name>` with your own name (ex: `mlops-kubernetes`). Replace
+    `<my cluster zone>` with your own zone (ex: `europe-west6-a` for Zurich,
+    Switzerland).
 
     Take some time to understand the deploy job and its steps.
 
@@ -331,7 +334,7 @@ following steps will be performed:
               python-version: '3.10'
               cache: 'pip'
           - name: Install dependencies
-            run: pip install -r requirements-freeze.txt
+            run: pip install --requirement requirements-freeze.txt
           - name: Login to Google Cloud
             uses: 'google-github-actions/auth@v1'
             with:
@@ -339,8 +342,8 @@ following steps will be performed:
           - name: Get Google Cloud's Kubernetes credentials
             uses: 'google-github-actions/get-gke-credentials@v1'
             with:
-              cluster_name: 'mlops-kubernetes'
-              location: 'europe-west6-a'
+              cluster_name: '<my cluster name>'
+              location: '<my cluster zone>'
           - name: Deploy the model
             run: mlem deployment run --load service_classifier --model model
     ```
@@ -358,11 +361,11 @@ following steps will be performed:
         branches:
           - main
 
-        # Runs on pull requests
-        pull_request:
+      # Runs on pull requests
+      pull_request:
 
-        # Allows you to run this workflow manually from the Actions tab
-        workflow_dispatch:
+      # Allows you to run this workflow manually from the Actions tab
+      workflow_dispatch:
 
     jobs:
       train-and-report:
@@ -450,6 +453,7 @@ following steps will be performed:
         needs: train-and-report
         name: Call Deploy
         uses: ./.github/workflows/mlops-deploy.yml
+        secrets: inherit
     ```
 
     Check the differences with Git to validate the changes.
@@ -462,17 +466,33 @@ following steps will be performed:
     The output should be similar to this:
 
     ```diff
-    TODO
+    diff --git a/.github/workflows/mlops.yml b/.github/workflows/mlops.yml
+    index f40cb93..26e25f9 100644
+    --- a/.github/workflows/mlops.yml
+    +++ b/.github/workflows/mlops.yml
+    @@ -91,3 +91,10 @@ jobs:
+
+               # Publish the CML report
+               cml comment update --target=pr --publish report.md
+    +
+    +  deploy:
+    +    # Runs on main branch only
+    +    if: github.ref == 'refs/heads/main'
+    +    needs: train-and-report
+    +    name: Call Deploy
+    +    uses: ./.github/workflows/mlops-deploy.yml
+    +    secrets: inherit
     ```
 
 === ":simple-gitlab: GitLab"
 
-    In order to execute commands on the Kubernetes cluster, an agent must be
-    set up on the cluster.
+    In order to execute commands on the Kubernetes cluster, an agent must be set up
+    on the cluster.
 
     **Create the agent configuration file**
 
-    Create a new empty file named `.gitlab/agents/k8s-agent/config.yaml` at the root of the repository.
+    Create a new empty file named `.gitlab/agents/k8s-agent/config.yaml` at the root
+    of the repository.
 
     This file is empty and only serves to enable Kubernetes integration with GitLab.
 
@@ -491,7 +511,9 @@ following steps will be performed:
 
     **Register the agent with GitLab**
 
-    On GitLab, in the left sidebar, go to **Operate > Kubernetes clusters**. Click on **Connect a cluster**. Select the **k8s-agent** configuration file in the list. Click **Register**. A modal opens.
+    On GitLab, in the left sidebar, go to **Operate > Kubernetes clusters**. Click
+    on **Connect a cluster**. Select the **k8s-agent** configuration file in the
+    list. Click **Register**. A modal opens.
 
     In the modal, a command to register the GitLab Kubernetes agent is displayed.
 
@@ -512,7 +534,8 @@ following steps will be performed:
 
     **Install the agent on the Kubernetes cluster**
 
-    Copy and paste the command GitLab displays in your terminal. This should install the GitLab agent on the Kubernetes cluster.
+    Copy and paste the command GitLab displays in your terminal. This should install
+    the GitLab agent on the Kubernetes cluster.
 
     The output should look like this:
 
@@ -534,9 +557,11 @@ following steps will be performed:
     Your release is named k8s-agent.
     ```
 
-    Once the command was executed on the Kubernetes cluster, you can close the model.
+    Once the command was executed on the Kubernetes cluster, you can close the
+    model.
 
-    Refresh the page and you should see the agent has successfully connected to GitLab.
+    Refresh the page and you should see the agent has successfully connected to
+    GitLab.
 
     **Update the CI/CD pipeline configuration file**
 

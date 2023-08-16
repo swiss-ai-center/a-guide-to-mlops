@@ -37,8 +37,8 @@ provider.
 
     **Delete the Google Artifact Registry**
 
-    To delete the Google Artifact Registry used to store the Docker images you created you can execute the following
-    command:
+    To delete the Google Artifact Registry used to store the Docker images you
+    created you can execute the following command:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Delete the Kubernetes cluster

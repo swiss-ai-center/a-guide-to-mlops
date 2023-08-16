@@ -302,8 +302,6 @@ Depending on the CI/CD platform you are using, the process will be different.
         of the Google Service Account key file as its value. Save the variable by
         selecting **Add secret**.
 
-        TODO: Create new GitHub PAT for CML.
-
     === ":simple-gitlab: GitLab"
 
         Store the output as a CI/CD Variable by going to **Settings > CI/CD** from the
@@ -357,7 +355,9 @@ you'll be able to start the training of the model on the node with the GPU.
     Create a new variable named `CML_PAT` with the value of the Personal Access
     Token as its value. Save the variable by selecting **Add secret**.
 
-    Update the `.github/workflows/mlops.yml` file.
+    Update the `.github/workflows/mlops.yml` file. Replace `<my cluster name>` with
+    your own name (ex: `mlops-kubernetes`). Replace `<my cluster zone>` with your
+    own zone (ex: `europe-west6-a` for Zurich, Switzerland).
 
     ```yaml title=".github/workflows/mlops.yml" hl_lines="15-18 21-51 54-56"
     name: MLOps
@@ -392,11 +392,11 @@ you'll be able to start the training of the model on the node with the GPU.
           - name: Get Google Cloud's Kubernetes credentials
             uses: 'google-github-actions/get-gke-credentials@v1'
             with:
-              cluster_name: 'mlops-kubernetes'
-              location: 'europe-west6-a'
+              cluster_name: '<my cluster name>'
+              location: '<my cluster zone>'
           - uses: iterative/setup-cml@v1
             with:
-              version: '0.19.0'
+              version: '0.19.1'
           - name: Initialize runner on Kubernetes
             env:
               REPO_TOKEN: ${{ secrets.CML_PAT }}
@@ -412,11 +412,10 @@ you'll be able to start the training of the model on the node with the GPU.
                 --cloud-kubernetes-node-selector="gpu=true" \
                 --single
 
-      train:
+      train-and-report:
         permissions: write-all
         needs: setup-runner
         runs-on: [self-hosted, cml-runner]
-        timeout-minutes: 50400 # 35 days
         steps:
           - name: Checkout repository
             uses: actions/checkout@v3
@@ -424,7 +423,7 @@ you'll be able to start the training of the model on the node with the GPU.
             uses: actions/setup-python@v4
             with:
               python-version: '3.10'
-              cache: 'pip'
+              cache: pip
           - name: Install dependencies
             run: pip install --requirement requirements-freeze.txt
           - name: Login to Google Cloud
@@ -433,41 +432,19 @@ you'll be able to start the training of the model on the node with the GPU.
               credentials_json: '${{ secrets.DVC_GCP_SERVICE_ACCOUNT_KEY }}'
           - name: Train model
             run: dvc repro --pull --allow-missing
-            # After the experiment is done we update the dvc.lock and push the
-            # changes with dvc. This allows dvc to cache the experiment results
-            # and use them locally and remotely on pipelines without running the
-            # experiment again.
-          - name: Commit changes in dvc.lock
-            uses: stefanzweifel/git-auto-commit-action@v4
+            # Node is required to run CML
+          - name: Setup Node
+            if: github.event_name == 'pull_request'
+            uses: actions/setup-node@v3
             with:
-              commit_message: Commit changes in dvc.lock
-              file_pattern: dvc.lock
-          - name: Push experiment results to DVC remote storage
-            run: dvc push
-
-      report:
-        permissions: write-all
-        needs: train
-        if: github.event_name == 'pull_request'
-        runs-on: ubuntu-latest
-        steps:
-          - name: Checkout repository
-            uses: actions/checkout@v3
-            with:
-              ref: ${{ github.event.pull_request.head.sha }}
-          - name: Login to Google Cloud
-            uses: 'google-github-actions/auth@v1'
-            with:
-              credentials_json: '${{ secrets.DVC_GCP_SERVICE_ACCOUNT_KEY }}'
-          - name: Setup DVC
-            uses: iterative/setup-dvc@v1
-            with:
-              version: '3.2.2'
+              node-version: '16'
           - name: Setup CML
+            if: github.event_name == 'pull_request'
             uses: iterative/setup-cml@v1
             with:
               version: '0.19.1'
           - name: Create CML report
+            if: github.event_name == 'pull_request'
             env:
               REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             run: |
@@ -516,10 +493,12 @@ you'll be able to start the training of the model on the node with the GPU.
               cml comment update --target=pr --publish report.md
 
       deploy:
+        # Runs on main branch only
         if: github.ref == 'refs/heads/main'
-        needs: train
+        needs: train-and-report
         name: Call Deploy
         uses: ./.github/workflows/mlops-deploy.yml
+        secrets: inherit
     ```
 
     Check the differences with Git to validate the changes.
@@ -532,7 +511,60 @@ you'll be able to start the training of the model on the node with the GPU.
     The output should be similar to this:
 
     ```diff
-    + TODO
+    diff --git a/.github/workflows/mlops.yml b/.github/workflows/mlops.yml
+    index 30bbce8..5d4a6dd 100644
+    --- a/.github/workflows/mlops.yml
+    +++ b/.github/workflows/mlops.yml
+    @@ -12,10 +12,48 @@ on:
+       # Allows you to run this workflow manually from the Actions tab
+       workflow_dispatch:
+
+    +# Allow the creation and usage of self-hosted runners
+    +permissions:
+    +  contents: read
+    +  id-token: write
+    +
+     jobs:
+    +  setup-runner:
+    +    runs-on: ubuntu-latest
+    +    steps:
+    +      - name: Checkout repository
+    +        uses: actions/checkout@v3
+    +      - name: Login to Google Cloud
+    +        uses: 'google-github-actions/auth@v1'
+    +        with:
+    +          credentials_json: '${{ secrets.CML_GCP_SERVICE_ACCOUNT_KEY }}'
+    +      - name: Get Google Cloud's Kubernetes credentials
+    +        uses: 'google-github-actions/get-gke-credentials@v1'
+    +        with:
+    +          cluster_name: '<my cluster name>'
+    +          location: '<my cluster zone>'
+    +      - uses: iterative/setup-cml@v1
+    +        with:
+    +          version: '0.19.1'
+    +      - name: Initialize runner on Kubernetes
+    +        env:
+    +          REPO_TOKEN: ${{ secrets.CML_PAT }}
+    +        run: |
+    +          export KUBERNETES_CONFIGURATION=$(cat $KUBECONFIG)
+    +          # https://cml.dev/doc/ref/runner
+    +          # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#machine-type
+    +          # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#{cpu}-{memory}
+    +          cml runner \
+    +            --labels="cml-runner" \
+    +            --cloud="kubernetes" \
+    +            --cloud-type="1-2000" \
+    +            --cloud-kubernetes-node-selector="gpu=true" \
+    +            --single
+    +
+       train-and-report:
+         permissions: write-all
+    -    runs-on: ubuntu-latest
+    +    needs: setup-runner
+    +    runs-on: [self-hosted, cml-runner]
+         steps:
+           - name: Checkout repository
+             uses: actions/checkout@v3
     ```
 
     Take some time to understand the changes made to the file.
@@ -785,9 +817,9 @@ you'll be able to start the training of the model on the node with the GPU.
 
 ### Check the results
 
-On GitLab, you can see the pipeline running on the **CI/CD > Pipelines** page.
-
 On GitHub, you can see the pipeline running on the **Actions** page.
+
+On GitLab, you can see the pipeline running on the **CI/CD > Pipelines** page.
 
 The pod should be created on the Kubernetes Cluster.
 
@@ -817,8 +849,8 @@ This chapter is done, you can check the summary.
 
 ## Summary
 
-Congratulations! You now can train your model on on a custom infrastructure with custom
-hardware for specific use-cases.
+Congratulations! You now can train your model on on a custom infrastructure with
+custom hardware for specific use-cases.
 
 In this chapter, you have successfully:
 

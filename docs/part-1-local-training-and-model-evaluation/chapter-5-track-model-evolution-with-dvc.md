@@ -74,8 +74,8 @@ index 5bb698e..6a6ff45 100644
    output_classes: 11
 ```
 
-Here, you simply changed the `epochs` parameter of the Train stage, which
-should slightly affect the model's performance.
+Here, you simply changed the `epochs` parameter of the Train stage, which should
+slightly affect the model's performance.
 
 ### Reproduce the experiment
 

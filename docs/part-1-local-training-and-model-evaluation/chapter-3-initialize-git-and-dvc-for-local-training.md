@@ -404,7 +404,8 @@ This chapter is done, you can check the summary.
 
 ## Summary
 
-Congratulations! You now have a dataset that can be used and shared among the team.
+Congratulations! You now have a dataset that can be used and shared among the
+team.
 
 In this chapter, you have successfully:
 
