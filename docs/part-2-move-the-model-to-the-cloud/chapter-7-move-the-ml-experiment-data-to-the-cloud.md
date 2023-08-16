@@ -1,14 +1,5 @@
 # Chapter 7: Move the ML experiment data to the cloud
 
-??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
-
-    !!! warning
-
-        It might be easier to start from the previous chapter(s). Only follow this
-        section if you are comfortable with the content of the previous chapter(s).
-
-    Work in progress.
-
 ## Introduction
 
 At this point, the codebase is made available to team members using

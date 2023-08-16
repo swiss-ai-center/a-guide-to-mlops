@@ -1,14 +1,5 @@
 # Chapter 9: Track model evolution in the CI/CD pipeline with CML
 
-??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
-
-    !!! warning
-
-        It might be easier to start from the previous chapter(s). Only follow this
-        section if you are comfortable with the content of the previous chapter(s).
-
-    Work in progress.
-
 ## Introduction
 
 At this point, you have a CI/CD pipeline that will run the experiment on each

@@ -1,14 +1,5 @@
 # Chapter 4: Reproduce the ML experiment with DVC
 
-??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
-
-    !!! warning
-
-        It might be easier to start from the previous chapter(s). Only follow this
-        section if you are comfortable with the content of the previous chapter(s).
-
-    Work in progress.
-
 ## Introduction
 
 A key component of [:simple-dvc: DVC](../tools.md) is the concept of "stages".

@@ -1,14 +1,5 @@
 # Chapter 8: Reproduce the ML experiment in a CI/CD pipeline
 
-??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
-
-    !!! warning
-
-        It might be easier to start from the previous chapter(s). Only follow this
-        section if you are comfortable with the content of the previous chapter(s).
-
-    Work in progress.
-
 ## Introduction
 
 At this point, your code, your data and your execution process should be shared
