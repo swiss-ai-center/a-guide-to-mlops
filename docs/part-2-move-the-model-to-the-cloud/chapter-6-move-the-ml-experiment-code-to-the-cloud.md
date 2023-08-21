@@ -1,14 +1,5 @@
 # Chapter 6: Move the ML experiment code to the cloud
 
-??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
-
-    !!! warning
-
-        It might be easier to start from the previous chapter(s). Only follow this
-        section if you are comfortable with the content of the previous chapter(s).
-
-    Work in progress.
-
 ## Introduction
 
 Now that you have configured [:simple-dvc: DVC](../tools.md) and can reproduce
@@ -80,23 +71,23 @@ Create a Git repository on your preferred service to collaborate with peers.
 
 === ":simple-github: GitHub"
 
-    Create a new GitHub repository for this chapter by accessing
-    <https://github.com/new>.
-
-    !!! warning
+    !!! danger "Important"
 
         Configure the repository as you wish but **do not** check the boxex
         _"Add a README file"_, _"Add .gitignore"_ nor _"Choose a license"_.
 
+    Create a new GitHub repository for this chapter by accessing
+    <https://github.com/new>.
+
 === ":simple-gitlab: GitLab"
 
-    Create a new GitLab blank project for this chapter by accessing
-    <https://gitlab.com/projects/new>.
-
-    !!! warning
+    !!! danger "Important"
 
         Configure the repository as you wish but **do not** check the box
         _"Initialize repository with a README"_.
+
+    Create a new GitLab blank project for this chapter by accessing
+    <https://gitlab.com/projects/new>.
 
 ## Configure Git for the remote branch
 
@@ -131,7 +122,8 @@ points.
 
 ## Summary
 
-Congrats! You now have a codebase that can be used and shared among the team.
+Congratulations! You now have a codebase that can be used and shared among the
+team.
 
 In this chapter, you have successfully:
 

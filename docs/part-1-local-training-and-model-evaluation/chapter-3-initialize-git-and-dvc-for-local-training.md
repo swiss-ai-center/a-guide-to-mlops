@@ -1,14 +1,5 @@
 # Chapter 3: Initialize Git and DVC for local training
 
-??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
-
-    !!! warning
-
-        It might be easier to start from the previous chapter(s). Only follow this
-        section if you are comfortable with the content of the previous chapter(s).
-
-    Work in progress.
-
 ## Introduction
 
 Now that you have a good understanding of the experiment, it's time to
@@ -404,7 +395,8 @@ This chapter is done, you can check the summary.
 
 ## Summary
 
-Congrats! You now have a dataset that can be used and shared among the team.
+Congratulations! You now have a dataset that can be used and shared among the
+team.
 
 In this chapter, you have successfully:
 

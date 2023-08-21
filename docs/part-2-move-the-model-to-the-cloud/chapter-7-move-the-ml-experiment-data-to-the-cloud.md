@@ -1,14 +1,5 @@
 # Chapter 7: Move the ML experiment data to the cloud
 
-??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
-
-    !!! warning
-
-        It might be easier to start from the previous chapter(s). Only follow this
-        section if you are comfortable with the content of the previous chapter(s).
-
-    Work in progress.
-
 ## Introduction
 
 At this point, the codebase is made available to team members using
@@ -107,7 +98,8 @@ Create a project on a cloud provider to host the data.
 
     Name your project and select **Create** to create the project.
 
-    A new page opens. Note the ID of your project, it will be used later.
+    A new page opens. Note the ID of your project (not the project number nor
+    name!), it will be used later.
 
     !!! warning
 
@@ -422,7 +414,8 @@ hashed and have been uploaded.
 
 ## Summary
 
-Congrats! You now have a dataset that can be used and shared among the team.
+Congratulations! You now have a dataset that can be used and shared among the
+team.
 
 In this chapter, you have successfully:
 

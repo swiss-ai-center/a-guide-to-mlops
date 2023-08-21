@@ -1,14 +1,5 @@
 # Chapter 8: Reproduce the ML experiment in a CI/CD pipeline
 
-??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
-
-    !!! warning
-
-        It might be easier to start from the previous chapter(s). Only follow this
-        section if you are comfortable with the content of the previous chapter(s).
-
-    Work in progress.
-
 ## Introduction
 
 At this point, your code, your data and your execution process should be shared
@@ -182,15 +173,19 @@ Depending on the CI/CD platform you are using, the process will be different.
         Google Cloud as `base64`. It allows to hide the secret in GitLab CI logs as a
         security measure.
 
-        !!! tip
+        === ":simple-linux: Linux & :simple-windows: Windows"
 
-            If on Linux, you can use the command
-            `base64 -w 0 -i ~/.config/gcloud/ dvc-google-service-account-key.json`.
+            ```sh title="Execute the following command(s) in a terminal"
+            # Encode the Google Service Account key to base64
+            base64 -w 0 -i ~/.config/gcloud/dvc-google-service-account-key.json
+            ```
 
-        ```sh title="Execute the following command(s) in a terminal"
-        # Encode the Google Service Account key to base64
-        base64 -i ~/.config/gcloud/dvc-google-service-account-key.json
-        ```
+        === ":simple-apple: macOS"
+
+            ```sh title="Execute the following command(s) in a terminal"
+            # Encode the Google Service Account key to base64
+            base64 -i ~/.config/gcloud/dvc-google-service-account-key.json
+            ```
 
     **Store the Google Service Account key as a CI/CD variable**
 
@@ -315,10 +310,11 @@ Depending on the CI/CD platform you are using, the process will be different.
       before_script:
         # Set the Google Service Account key
         - echo "${DVC_GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
-        # Install dependencies
+        # Create the virtual environment for caching
         - python3 -m venv .venv
         - source .venv/bin/activate
-        - pip install --requirement requirements.txt
+        # Install dependencies
+        - pip install --requirement requirements-freeze.txt
       script:
         # Run the experiment
         - dvc repro --pull --allow-missing
@@ -388,8 +384,8 @@ This chapter is done, you can check the summary.
 
 ## Summary
 
-Congrats! You now have a CI/CD pipeline that will run the experiment on each
-commit.
+Congratulations! You now have a CI/CD pipeline that will run the experiment on
+each commit.
 
 In this chapter, you have successfully:
 

@@ -158,11 +158,12 @@ Launch the notebook.
 jupyter-lab notebook.ipynb
 ```
 
-A browser window should open with the Jupyter Notebook.
+A browser window should open with the Jupyter Notebook at
+<http://localhost:8888/lab/tree/notebook.ipynb>.
 
-You may notice all the previous outputs from the notebook are still present.
-This is because the notebook was not cleared before being shared with you. This
-can be useful to see the results of previous runs.
+You may notice all the previous outputs from the notebook might still be
+present. This is because the notebook was not cleared before being shared with
+you. This can be useful to see the results of previous runs.
 
 In most cases, however, it can also be a source of confusion and clutter. This
 is one of the limitations of the Jupyter Notebook, which make them not always

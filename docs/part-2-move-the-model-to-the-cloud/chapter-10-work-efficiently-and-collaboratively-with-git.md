@@ -1,14 +1,5 @@
 # Chapter 10: Work efficiently and collaboratively with Git
 
-??? info "You want to take over from this chapter? Collapse this section and follow the instructions below."
-
-    !!! warning
-
-        It might be easier to start from the previous chapter(s). Only follow this
-        section if you are comfortable with the content of the previous chapter(s).
-
-    Work in progress.
-
 ## Introduction
 
 The objective of this chapter is to work effectively and collaboratively on the
@@ -233,9 +224,6 @@ repository.
 Check the changes with Git to ensure all wanted files are here.
 
 ```sh title="Execute the following command(s) in a terminal"
-# Upload the experiment data and cache to the remote bucket
-dvc push
-
 # Add all the files
 git add .
 
@@ -255,7 +243,12 @@ Changes to be committed:
         modified:   params.yaml
 ```
 
+Push the changes to the remote repository.
+
 ```sh title="Execute the following command(s) in a terminal"
+# Upload the experiment data and cache to the remote bucket
+dvc push
+
 # Commit the changes
 git commit -m "I made some changes to the model"
 
@@ -313,23 +306,35 @@ git push
     evaluation data that was pulled from DVC, it can uses it to display all the
     plots.
 
+    <div style="display: flex" markdown>
+        <figure markdown>
+            ![Plots Diff 1 Light](../assets/images/github_cml_report_1_light.png#only-light){ loading=lazy }
+        </figure> <figure markdown>
+            ![Plots Diff 1 Dark](../assets/images/github_cml_report_1_dark.png#only-dark){ loading=lazy }
+        </figure> <figure markdown>
+            ![Plots Diff 2 Light](../assets/images/github_cml_report_2_light.png#only-light){ loading=lazy }
+        </figure> <figure markdown>
+            ![Plots Diff 2 Dark](../assets/images/github_cml_report_2_dark.png#only-dark){ loading=lazy }
+        </figure>
+    </div>
+
 === ":simple-gitlab: GitLab"
 
     When the CI/CD pipeline completes, a new comment is added to your merge request.
     Check the merge request and examine the report made by CML. As it uses the
     evaluation data that was pulled DVC, it can uses it to display all the plots.
 
-<!-- Note: Do not indent this code, this is the only way it displays the images
-     properly -->
-<div style="display: flex" markdown> <figure markdown>
-![Plots Diff 1 Light](../assets/images/cml_report1_light.png#only-light){ loading=lazy }
-</figure> <figure markdown>
-![Plots Diff 1 Dark](../assets/images/cml_report1_dark.png#only-dark){ loading=lazy }
-</figure> <figure markdown>
-![Plots Diff 2 Light](../assets/images/cml_report2_light.png#only-light){ loading=lazy }
-</figure> <figure markdown>
-![Plots Diff 2 Dark](../assets/images/cml_report2_dark.png#only-dark){ loading=lazy }
-</figure> </div>
+    <div style="display: flex" markdown>
+        <figure markdown>
+            ![Plots Diff 1 Light](../assets/images/gitlab_cml_report_1_light.png#only-light){ loading=lazy }
+        </figure> <figure markdown>
+            ![Plots Diff 1 Dark](../assets/images/gitlab_cml_report_1_dark.png#only-dark){ loading=lazy }
+        </figure> <figure markdown>
+            ![Plots Diff 2 Light](../assets/images/gitlab_cml_report_2_light.png#only-light){ loading=lazy }
+        </figure> <figure markdown>
+            ![Plots Diff 2 Dark](../assets/images/gitlab_cml_report_2_dark.png#only-dark){ loading=lazy }
+        </figure>
+    </div>
 
 ### Merge the pull request/merge request
 
@@ -346,7 +351,7 @@ git push
     repository. If you ever need to go back to this branch, you can always restore
     the branch from this menu.
 
-    Congrats! You can now iterate on your model while keeping a trace of the
+    Congratulations! You can now iterate on your model while keeping a trace of the
     improvements made to it. You can visualize and discuss the changes made to a
     model before merging them into the codebase.
 
@@ -360,7 +365,7 @@ git push
 
     The associated issue will be automatically closed as well.
 
-    Congrats! You can now iterate on your model while keeping a trace of the
+    Congratulations! You can now iterate on your model while keeping a trace of the
     improvements made to it. You can visualize and discuss the changes made to a
     model before merging them into the codebase.
 
