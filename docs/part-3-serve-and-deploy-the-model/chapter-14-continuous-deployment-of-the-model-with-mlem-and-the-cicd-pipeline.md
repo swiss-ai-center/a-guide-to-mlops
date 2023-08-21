@@ -1,10 +1,5 @@
 # Chapter 14: Continuous deployment of the model with MLEM and the CI/CD pipeline
 
-!!! warning "This is a work in progress"
-
-    This chapter is a work in progress. Please check back later for updates. Thank
-    you!
-
 ## Introduction
 
 In this chapter, you will deploy the model to the Kubernetes cluster with the
@@ -300,7 +295,7 @@ following steps will be performed:
 
 === ":simple-github: GitHub"
 
-    At the root level of your Git repository, create a new GitHub Workflow
+    At the root level of your Git repository, create a new GitHub workflow
     configuration file `.github/workflows/mlops-deploy.yml`. Replace
     `<my cluster name>` with your own name (ex: `mlops-kubernetes`). Replace
     `<my cluster zone>` with your own zone (ex: `europe-west6-a` for Zurich,
@@ -561,7 +556,203 @@ following steps will be performed:
 
     **Update the CI/CD pipeline configuration file**
 
-    _Work in progress_
+    Update the `.gitlab-ci.yml` file to add a new stage to deploy the model on the
+    Kubernetes cluster.
+
+    Take some time to understand the deploy job and its steps.
+
+    ```yaml title=".gitlab-ci.yml" hl_lines="4 100-130"
+    stages:
+      - train
+      - report
+      - deploy
+
+    variables:
+      # Change pip's cache directory to be inside the project directory since we can
+      # only cache local items.
+      PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+      # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
+      GIT_DEPTH: "0"
+      # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
+      GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
+      # Environment variable for CML
+      REPO_TOKEN: $GITLAB_PAT
+
+    train:
+      stage: train
+      image: python:3.10
+      rules:
+        - if: $CI_COMMIT_BRANCH == "main"
+        - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      cache:
+        paths:
+          # Pip's cache doesn't store the Python packages
+          # https://pip.pypa.io/en/stable/reference/pip_install/#caching
+          - .cache/pip
+          - .venv/
+      before_script:
+        # Set the Google Service Account key
+        - echo "${DVC_GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+        # Create the virtual environment for caching
+        - python3 -m venv .venv
+        - source .venv/bin/activate
+        # Install dependencies
+        - pip install --requirement requirements-freeze.txt
+      script:
+        # Run the experiment
+        - dvc repro --pull --allow-missing
+
+    report:
+      stage: report
+      image: iterativeai/cml:0-dvc3-base1
+      needs:
+        - train
+      rules:
+        - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      before_script:
+        # Set the Google Service Account key
+        - echo "${DVC_GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+      script:
+        - |
+          # Fetch the experiment changes
+          dvc pull
+
+          # Fetch all other Git branches
+          git fetch --depth=1 origin main:main
+
+          # Add title to the report
+          echo "# Experiment Report (${CI_COMMIT_SHA})" >> report.md
+
+          # Compare parameters to main branch
+          echo "## Params workflow vs. main" >> report.md
+          dvc params diff main --md >> report.md
+
+          # Compare metrics to main branch
+          echo "## Metrics workflow vs. main" >> report.md
+          dvc metrics diff main --md >> report.md
+
+          # Compare plots (images) to main branch
+          dvc plots diff main
+
+          # Create plots
+          echo "## Plots" >> report.md
+
+          # Create training history plot
+          echo "### Training History" >> report.md
+          echo "#### main" >> report.md
+          echo '![](./dvc_plots/static/main_evaluation_plots_training_history.png "Training History")' >> report.md
+          echo "#### workspace" >> report.md
+          echo '![](./dvc_plots/static/workspace_evaluation_plots_training_history.png "Training History")' >> report.md
+
+          # Create predictions preview
+          echo "### Predictions Preview" >> report.md
+          echo "#### main" >> report.md
+          echo '![](./dvc_plots/static/main_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
+          echo "#### workspace" >> report.md
+          echo '![](./dvc_plots/static/workspace_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
+
+          # Create confusion matrix
+          echo "### Confusion Matrix" >> report.md
+          echo "#### main" >> report.md
+          echo '![](./dvc_plots/static/main_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
+          echo "#### workspace" >> report.md
+          echo '![](./dvc_plots/static/workspace_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
+
+          # Publish the CML report
+          cml comment update --target=pr --publish report.md
+
+    deploy:
+      stage: deploy
+      image: python:3.10
+      rules:
+        - if: $CI_COMMIT_BRANCH == "main"
+      cache:
+        paths:
+          # Pip's cache doesn't store the Python packages
+          # https://pip.pypa.io/en/stable/reference/pip_install/#caching
+          - .cache/pip
+          - .venv/
+      before_script:
+        # Install Kubernetes
+        - export KUBERNETES_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt)
+        - curl -LO -s "https://dl.k8s.io/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl"
+        - curl -LO -s "https://dl.k8s.io/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl.sha256"
+        - echo "$(cat kubectl.sha256) kubectl" | sha256sum --check
+        - install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+        # Switch to the right Kubernetes context
+        - kubectl config use-context ${CI_PROJECT_PATH}:k8s-agent
+        - export KUBERNETES_CONFIGURATION=$(cat $KUBECONFIG)
+        # Set the Google Service Account key
+        - echo "${MLEM_GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+        # Create the virtual environment for caching
+        - python3 -m venv .venv
+        - source .venv/bin/activate
+        # Install dependencies
+        - pip install --requirement requirements-freeze.txt
+      script:
+        # Deploy the model
+        - mlem deployment run --load service_classifier --model model
+    ```
+
+    Check the differences with Git to validate the changes.
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Show the differences with Git
+    git diff .gitlab-ci.yml
+    ```
+
+    The output should be similar to this:
+
+    ```diff
+    diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+    index 722c708..ed9e228 100644
+    --- a/.gitlab-ci.yml
+    +++ b/.gitlab-ci.yml
+    @@ -1,6 +1,7 @@
+     stages:
+       - train
+       - report
+    +  - deploy
+
+     variables:
+       # Change pip's cache directory to be inside the project directory since we can
+    @@ -95,3 +96,35 @@ report:
+
+           # Publish the CML report
+           cml comment update --target=pr --publish report.md
+    +
+    +deploy:
+    +  stage: deploy
+    +  image: python:3.10
+    +  rules:
+    +    - if: $CI_COMMIT_BRANCH == "main"
+    +  cache:
+    +    paths:
+    +      # Pip's cache doesn't store the Python packages
+    +      # https://pip.pypa.io/en/stable/reference/pip_install/#caching
+    +      - .cache/pip
+    +      - .venv/
+    +  before_script:
+    +    # Install Kubernetes
+    +    - export KUBERNETES_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt)
+    +    - curl -LO -s "https://dl.k8s.io/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl"
+    +    - curl -LO -s "https://dl.k8s.io/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl.sha256"
+    +    - echo "$(cat kubectl.sha256) kubectl" | sha256sum --check
+    +    - install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+    +    # Switch to the right Kubernetes context
+    +    - kubectl config use-context ${CI_PROJECT_PATH}:k8s-agent
+    +    - export KUBERNETES_CONFIGURATION=$(cat $KUBECONFIG)
+    +    # Set the Google Service Account key
+    +    - echo "${MLEM_GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+    +    # Create the virtual environment for caching
+    +    - python3 -m venv .venv
+    +    - source .venv/bin/activate
+    +    # Install dependencies
+    +    - pip install --requirement requirements-freeze.txt
+    +  script:
+    +    # Deploy the model
+    +    - mlem deployment run --load service_classifier --model model
+    ```
 
 ### Check the changes
 
@@ -621,21 +812,37 @@ latest version is consistently available on the Kubernetes server for use.
 
 === ":simple-github: GitHub"
 
-    In the **Actions** tab, if you click on the **Call Deploy** > **deploy**
-    pipeline, you should see the following output for the `Deploy the model` step:
-
-    ```
-    > mlem deployment run --load service_classifier --model model
-
-    ⏳️ Loading model from model.mlem
-    ⏳️ Loading deployment from service_classifier.mlem
-    ```
-
-    Note that since the model has not changed, MLEM has not re-deployed the model.
+    In the **Actions** tab, click on the **Call Deploy** > **deploy**.
 
 === ":simple-gitlab: GitLab"
 
-    _Work in progress._
+    You can see the pipeline running on the **CI/CD > Pipelines** page. Check the
+    `deploy` job:
+
+The output should look like this.
+
+```
+> mlem deployment run --load service_classifier --model model
+
+⏳️ Loading model from model.mlem
+⏳️ Loading deployment from service_classifier.mlem
+```
+
+Note that since the model has not changed, MLEM has not re-deployed the model.
+
+??? bug "Having a `NameError: name 'UUID' is not defined` error? Read this!"
+
+    The `NameError: name 'UUID' is not defined` error is a known issue with MLEM:
+    <https://github.com/iterative/mlem/issues/700>. You can disable MLEM telemetry
+    with the following command:
+
+    ```sh
+    # Disable telemetry
+    mlem config set core.no_analytics True
+    ```
+
+    This will update the `mlem.yaml` file to disable telemetry, solving the
+    mentioned issue.
 
 ## State of the MLOps process
 
