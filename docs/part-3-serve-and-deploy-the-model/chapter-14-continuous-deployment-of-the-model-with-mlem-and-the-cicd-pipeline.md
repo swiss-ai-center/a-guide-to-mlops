@@ -194,8 +194,8 @@ but this time for MLEM.
     not officially support them.
 
     If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
-    appreciated!
+    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
+    help is greatly appreciated!
 
 ### Store the cloud provider credentials in the CI/CD configuration
 
@@ -281,8 +281,8 @@ Depending on the CI/CD platform you are using, the process will be different.
     not officially support them.
 
     If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
-    appreciated!
+    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
+    help is greatly appreciated!
 
 ### Update the CI/CD pipeline configuration file
 

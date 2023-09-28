@@ -654,7 +654,7 @@ guide, you can add your notes in the `## Notes` section.
 # MLOps - Celestial Body Classification
 
 This repository contains the code from
-[A guide to MLOps](https://csia-pme.github.io/a-guide-to-mlops/).
+[A guide to MLOps](https://swiss-ai-center.github.io/a-guide-to-mlops/).
 
 ## Usage
 

@@ -55,4 +55,5 @@ concepts and labelization topics, which we believe might pique your interest.
 Feel free to explore the left sidebar for more MLOps-related resources.
 
 If you encounter any difficulties, please don't hesitate to reach out to us on
-[GitHub](https://github.com/csia-pme/a-guide-to-mlops). Happy learning! :)
+[GitHub](https://github.com/swiss-ai-center/a-guide-to-mlops). Happy learning!
+:)

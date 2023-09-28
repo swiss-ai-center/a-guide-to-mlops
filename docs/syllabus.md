@@ -36,6 +36,6 @@ What you will learn from this guide.
   to be done.
 
 You can find this guide on
-[GitHub](https://github.com/csia-pme/a-guide-to-mlops). Don't hesitate to show
-your support by giving us a star or opening an issue if you encounter any
+[GitHub](https://github.com/swiss-ai-center/a-guide-to-mlops). Don't hesitate to
+show your support by giving us a star or opening an issue if you encounter any
 difficulties. :)

@@ -9,12 +9,12 @@ saves:
     save_git: false
     actions:
       # Download the notebook
-      - run: wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/jupyter-notebook.zip -O jupyter-notebook.zip
+      - run: wget https://github.com/swiss-ai-center/a-guide-to-mlops/archive/refs/heads/jupyter-notebook.zip -O jupyter-notebook.zip
       - run: unzip jupyter-notebook.zip
       - run: mv a-guide-to-mlops-jupyter-notebook/* .
       - run: rm -r jupyter-notebook.zip a-guide-to-mlops-jupyter-notebook
       # Download and set up the dataset
-      - run: wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/59-data.zip -O data.zip
+      - run: wget https://github.com/swiss-ai-center/a-guide-to-mlops/archive/refs/heads/59-data.zip -O data.zip
       - run: unzip data.zip
       - run: mv a-guide-to-mlops-data/ data/
       - run: rm data.zip
@@ -31,7 +31,7 @@ saves:
       # Clean the directory including hidden files
       - run: rm -rf .[!.]* *
       # Download and set up the dataset
-      - run: wget https://github.com/csia-pme/a-guide-to-mlops/archive/refs/heads/59-data.zip -O data.zip
+      - run: wget https://github.com/swiss-ai-center/a-guide-to-mlops/archive/refs/heads/59-data.zip -O data.zip
       - run: unzip data.zip
       - run: mv a-guide-to-mlops-data/ data/
       - run: rm data.zip
