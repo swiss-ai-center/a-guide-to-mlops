@@ -206,8 +206,8 @@ Follow the steps below to create one.
     not officially support them.
 
     If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
-    appreciated!
+    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
+    help is greatly appreciated!
 
 Install the Kubernetes CLI (kubectl) on your machine.
 
@@ -231,8 +231,8 @@ Install the Kubernetes CLI (kubectl) on your machine.
     not officially support them.
 
     If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
-    appreciated!
+    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
+    help is greatly appreciated!
 
 ### Validate kubectl can access the Kubernetes cluster
 
@@ -391,8 +391,8 @@ for an efficient models management.
     not officially support them.
 
     If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
-    appreciated!
+    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
+    help is greatly appreciated!
 
 ### Login to the remote Container Registry
 
@@ -450,8 +450,8 @@ for an efficient models management.
     not officially support them.
 
     If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
-    appreciated!
+    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
+    help is greatly appreciated!
 
 ### Deploy the model on Kubernetes with MLEM
 
@@ -674,8 +674,8 @@ to do is provide a URI where you want to store state files.
     not officially support them.
 
     If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
-    appreciated!
+    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
+    help is greatly appreciated!
 
 ### Create and version deployment declaration
 

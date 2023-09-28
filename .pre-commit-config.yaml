@@ -9,7 +9,7 @@ repos:
         exclude: ^mkdocs.yml$
       - id: end-of-file-fixer
       - id: trailing-whitespace
-  - repo: https://github.com/csia-pme/mdwrap
+  - repo: https://github.com/swiss-ai-center/mdwrap
     rev: 0.2.1
     hooks:
       - id: mdwrap

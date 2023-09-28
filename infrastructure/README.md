@@ -83,7 +83,7 @@ sudo reboot now
 
 ```sh
 # Clone the infrastructure repository
-git clone https://github.com/csia-pme/a-guide-to-mlops.git
+git clone https://github.com/swiss-ai-center/a-guide-to-mlops.git
 ```
 
 ## Configure and start the applications

@@ -9,8 +9,7 @@ hide:
 Welcome to our comprehensive guide to MLOps!
 
 We are a passionate team of software engineers and data scientists from the
-[Swiss AI Center](https://www.hes-so.ch/swiss-ai-center){:target="\_blank"}
-(*CSIA-PME - Centre Suisse d'Intelligence Artificiel à destination des PMEs*).
+[Swiss AI Center](https://www.hes-so.ch/swiss-ai-center){:target="\_blank"}.
 With expertise in both Machine Learning (ML) and DevOps, we have embarked on a
 mission to provide you with a valuable resource for seamlessly transitioning
 your ML projects from experimentation to production.

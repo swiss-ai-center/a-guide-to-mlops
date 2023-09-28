@@ -199,7 +199,7 @@ REST API!
 
 The following images are available in the `extra-data` repository that you will
 use in a future chapter:
-<https://github.com/csia-pme/a-guide-to-mlops/tree/extra-data/extra_data>.
+<https://github.com/swiss-ai-center/a-guide-to-mlops/tree/extra-data/extra_data>.
 
 Here are some example you can use.
 
@@ -213,7 +213,7 @@ Here are some example you can use.
 Download the following image of the moon on your computer.
 
 <figure markdown>
-  ![Moon](https://raw.githubusercontent.com/csia-pme/a-guide-to-mlops/extra-data/extra_data/Moon/Moon_145.jpg)
+  ![Moon](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/extra-data/extra_data/Moon/Moon_145.jpg)
 </figure>
 
 Upload it to the `/predict` endpoint and check the prediction.
@@ -244,7 +244,7 @@ The output should be similar to this.
 Download the following image of Makemake on your computer.
 
 <figure markdown>
-  ![Makemake](https://raw.githubusercontent.com/csia-pme/a-guide-to-mlops/extra-data/extra_data/MakeMake/Makemake_146.jpg)
+  ![Makemake](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/extra-data/extra_data/MakeMake/Makemake_146.jpg)
 </figure>
 
 Upload it to the `/predict` endpoint and check the prediction.
@@ -275,7 +275,7 @@ The output should be similar to this.
 Download the following image of Neptune on your computer.
 
 <figure markdown>
-  ![Neptune](https://raw.githubusercontent.com/csia-pme/a-guide-to-mlops/extra-data/extra_data/Neptune/Neptune_146.jpg)
+  ![Neptune](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/extra-data/extra_data/Neptune/Neptune_146.jpg)
 </figure>
 
 Upload it to the `/predict` endpoint and check the prediction.

@@ -135,8 +135,8 @@ provider.
     not officially support them.
 
     If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
-    appreciated!
+    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
+    help is greatly appreciated!
 
 ### Clean up your repository
 

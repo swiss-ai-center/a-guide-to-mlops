@@ -1,11 +1,11 @@
-repo_url: https://github.com/csia-pme/a-guide-to-mlops
-repo_name: csia-pme/a-guide-to-mlops
+repo_url: https://github.com/swiss-ai-center/a-guide-to-mlops
+repo_name: swiss-ai-center/a-guide-to-mlops
 site_name: A guide to MLOps
-site_author: CSIA-PME contributors
-site_url: https://csia-pme.github.io/a-guide-to-mlops/
+site_author: Swiss AI Center contributors
+site_url: https://swiss-ai-center.github.io/a-guide-to-mlops/
 site_description: >-
   A simple yet complete guide to MLOps tools and practices - from a conventional way to a modern approach of working with ML projects.
-copyright: Copyright &copy; 2022 - 2023 CSIA-PME
+copyright: Copyright &copy; 2022 - 2023 Swiss AI Center
 nav:
   - 🏁 Introduction:
       - "Syllabus": syllabus.md
@@ -107,8 +107,8 @@ extra:
       link: https://swiss-ai-center.ch
       name: Swiss AI Center
     - icon: material/github
-      link: https://github.com/csia-pme/csia-pme
-      name: CSIA-PME on GitHub
+      link: https://github.com/swiss-ai-center
+      name: Swiss AI Center on GitHub
 markdown_extensions:
   - abbr
   - admonition

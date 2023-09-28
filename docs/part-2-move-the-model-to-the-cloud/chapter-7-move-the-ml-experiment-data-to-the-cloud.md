@@ -126,8 +126,8 @@ Create a project on a cloud provider to host the data.
     not officially support them.
 
     If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
-    appreciated!
+    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
+    help is greatly appreciated!
 
 ### Install and configure the cloud provider CLI
 
@@ -183,8 +183,8 @@ Install and configure the cloud provider CLI tool to manage the cloud resources.
     not officially support them.
 
     If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
-    appreciated!
+    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
+    help is greatly appreciated!
 
 ### Create the Storage Bucket on the cloud provider
 
@@ -256,8 +256,8 @@ Create the Storage Bucket to store the data with the cloud provider CLI.
     not officially support them.
 
     If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
-    appreciated!
+    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
+    help is greatly appreciated!
 
 ### Install the DVC Storage plugin
 
@@ -328,8 +328,8 @@ Install the DVC Storage plugin for the cloud provider.
     not officially support them.
 
     If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
-    appreciated!
+    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
+    help is greatly appreciated!
 
 ### Configure DVC to use the Storage Bucket
 
@@ -356,8 +356,8 @@ Configure DVC to use the Storage Bucket on the cloud provider.
     not officially support them.
 
     If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
-    appreciated!
+    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
+    help is greatly appreciated!
 
 ### Check the changes
 
