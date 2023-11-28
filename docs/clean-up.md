@@ -33,7 +33,7 @@ provider.
     gcloud container clusters delete --zone $GCP_CLUSTER_ZONE $GCP_CLUSTER_NAME
     ```
 
-    Press ++Y++ to confirm the deletion.
+    Press ++y++ to confirm the deletion.
 
     **Delete the Google Artifact Registry**
 
@@ -45,7 +45,7 @@ provider.
     gcloud artifacts repositories delete --location $GCP_REPOSITORY_LOCATION $GCP_REPOSITORY_NAME
     ```
 
-    Press ++Y++ to confirm the deletion.
+    Press ++y++ to confirm the deletion.
 
     **Delete the Google Storage bucket**
 
@@ -63,7 +63,7 @@ provider.
     gcloud storage rm --recursive gs://$GCP_BUCKET_NAME
     ```
 
-    Press ++Y++ to confirm the deletion.
+    Press ++y++ to confirm the deletion.
 
     **Delete the Service Account**
 
@@ -74,7 +74,7 @@ provider.
     gcloud iam service-accounts delete dvc-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com
     ```
 
-    Press ++Y++ to confirm the deletion.
+    Press ++y++ to confirm the deletion.
 
     **Delete the local Service Account keys**
 
