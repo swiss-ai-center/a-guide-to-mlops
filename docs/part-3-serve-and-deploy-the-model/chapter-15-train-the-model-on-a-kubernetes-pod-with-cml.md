@@ -183,7 +183,7 @@ export K8S_NODE_2_NAME=<your node 2 name>
 
 Let's imagine one node has a GPU and the other one doesn't. You can labelize the
 nodes to be able to use the GPU node for the training of the model. For our
-expiriment, there is no need to have a GPU to train the model but it's for
+experiment, there is no need to have a GPU to train the model but it's for
 demonstration purposes.
 
 ```sh title="Execute the following command(s) in a terminal"
