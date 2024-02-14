@@ -19,11 +19,11 @@ What you will learn from this guide.
     - [Chapter 9 - Track model evolution in the CI/CD pipeline with CML](./part-2-move-the-model-to-the-cloud/chapter-9-track-model-evolution-in-the-cicd-pipeline-with-cml.md)
     - [Chapter 10 - Work efficiently and collaboratively with Git](./part-2-move-the-model-to-the-cloud/chapter-10-work-efficiently-and-collaboratively-with-git.md)
 - [Part 3 - Serve and deploy the model](./part-3-serve-and-deploy-the-model/introduction.md) -
-  Learn how to serve and deploy the model using MLEM and CML.
-    - [Chapter 11 - Save and load the model with MLEM](./part-3-serve-and-deploy-the-model/chapter-11-save-and-load-the-model-with-mlem.md)
-    - [Chapter 12 - Serve the model locally with MLEM](./part-3-serve-and-deploy-the-model/chapter-12-serve-the-model-locally-with-mlem.md)
-    - [Chapter 13 - Deploy and access the model on Kubernetes with MLEM](./part-3-serve-and-deploy-the-model/chapter-13-deploy-and-access-the-model-on-kubernetes-with-mlem.md)
-    - [Chapter 14 - Continuous deployment of the model with MLEM and the CI/CD pipeline](./part-3-serve-and-deploy-the-model/chapter-14-continuous-deployment-of-the-model-with-mlem-and-the-cicd-pipeline.md)
+  Learn how to serve and deploy the model using BentoML and CML.
+    - [Chapter 11 - Save and load the model with BentoML](./part-3-serve-and-deploy-the-model/chapter-11-save-and-load-the-model-with-bentoml.md)
+    - [Chapter 12 - Serve the model locally with BentoML](./part-3-serve-and-deploy-the-model/chapter-12-serve-the-model-locally-with-bentoml.md)
+    - [Chapter 13 - Deploy and access the model on Kubernetes with BentoML](./part-3-serve-and-deploy-the-model/chapter-13-deploy-and-access-the-model-on-kubernetes-with-bentoml.md)
+    - [Chapter 14 - Continuous deployment of the model with BentoML and the CI/CD pipeline](./part-3-serve-and-deploy-the-model/chapter-14-continuous-deployment-of-the-model-with-bentoml-and-the-cicd-pipeline.md)
     - [Chapter 15 - Train the model on a Kubernetes pod with CML](./part-3-serve-and-deploy-the-model/chapter-15-train-the-model-on-a-kubernetes-pod-with-cml.md)
 - [Part 4 - Labeling the data and retrain the model](./part-4-labeling-the-data-and-retrain/introduction.md) -
   Learn how to label new data and retrain the model using Label Studio.

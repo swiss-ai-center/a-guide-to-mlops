@@ -1,10 +1,10 @@
-# Chapter 13: Deploy and access the model on Kubernetes with MLEM
+# Chapter 13: Deploy and access the model on Kubernetes with BentoML
 
 ## Introduction
 
 Serving the model locally is great for testing purposes, but it is not
 sufficient for production. In this chapter, you will learn how to deploy the
-model on Kubernetes with [MLEM](../tools.md) and access it from a Kubernetes
+model on Kubernetes with [BentoML](../tools.md) and access it from a Kubernetes
 pod.
 
 This will allow the model to be used by other applications and services on a
@@ -12,13 +12,15 @@ public endpoint accessible from anywhere.
 
 In this chapter, you will learn how to:
 
-1. Create the Kubernetes cluster
-2. Validate kubectl can access the Kubernetes cluster
-3. Install MLEM with Kubernetes support
-4. Create a Model Registry
-5. Manage deployment declaration and state
-6. Deploy the model on Kubernetes with MLEM
-7. Access the model
+1. Create a BentoML "Bento"
+2. Containerize the Bento with Docker
+3. Create a container registry that will serve as your model registry
+4. Publish the Bento Docker image to the container registry
+5. Create the Kubernetes cluster
+6. Validate kubectl can access the Kubernetes cluster
+7. Create the Kubernetes configuration files
+8. Deploy the Bento on Kubernetes
+9. Access the model
 
 !!! danger
 
@@ -29,6 +31,8 @@ In this chapter, you will learn how to:
 
 The following diagram illustrates control flow of the experiment at the end of
 this chapter:
+
+TODO: Update this chart
 
 ```mermaid
 flowchart TB

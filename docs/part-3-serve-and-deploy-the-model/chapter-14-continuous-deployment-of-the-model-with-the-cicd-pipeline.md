@@ -1,4 +1,4 @@
-# Chapter 14: Continuous deployment of the model with MLEM and the CI/CD pipeline
+# Chapter 14: Continuous deployment of the model with the CI/CD pipeline
 
 ## Introduction
 

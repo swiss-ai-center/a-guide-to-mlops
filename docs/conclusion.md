@@ -34,12 +34,12 @@ visualized before merging them.
 
 - [x] The model can be used outside of the experiment context
 
-Thanks to MLEM, the model can be served and be used outside of the experiment
+Thanks to BentoML, the model can be served and be used outside of the experiment
 context.
 
 - [x] The model can be deployed and accessed on Kubernetes
 
-Thanks to MLEM, the model can be deployed and be accessed on a Kubernetes
+Thanks to BentoML, the model can be deployed and be accessed on a Kubernetes
 server.
 
 - [x] The model can be trained on a Kubernetes pod

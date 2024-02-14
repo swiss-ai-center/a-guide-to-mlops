@@ -1,20 +1,21 @@
-# Chapter 12: Serve the model locally with MLEM
+# Chapter 12: Serve the model locally with BentoML
 
 ## Introduction
 
-Now that the model is using [MLEM](../tools.md), enabling the extraction of
+Now that the model is using [BentoML](../tools.md), enabling the extraction of
 metadata upon saving, you will serve the model and leverage the capabilities of
 [FastAPI](https://fastapi.tiangolo.com/) to create local endpoints for
 interacting with the model.
 
 In this chapter, you will learn how to:
 
-1. Install MLEM with FastAPI support
-2. Serve the model with FastAPI
-3. Push the changes to DVC and Git
+1. Serve the model with BentoML and FastAPI
+2. Push the changes to DVC and Git
 
 The following diagram illustrates control flow of the experiment at the end of
 this chapter:
+
+TODO: Update this chart
 
 ```mermaid
 flowchart TB
@@ -106,93 +107,76 @@ flowchart TB
 
 ## Steps
 
-### Install MLEM with FastAPI support
+### Create the BentoML service
 
-Update the `requirements.txt` file to add `fastapi` support to the `mlem`
-package.
+BentoML services allow to define the serving logic of machine learning models.
 
-!!! info
+A BentoML service is a class that defines all the endpoints and the logic to
+serve the model using FastAPI.
 
-    FastAPI is only one of the available backends that MLEM can use to serve the
-    model. Check out their
-    [official documentation](https://mlem.ai/doc/user-guide/serving) for more
-    options.
+Create a new file `src/serve.py` and add the following code:
 
-```txt title="requirements.txt" hl_lines="5"
-tensorflow==2.12.0
-matplotlib==3.7.1
-pyyaml==6.0
-dvc[gs]==3.2.2
-mlem[fastapi]==0.4.13
+```py title="src/serve.py" hl_lines="12 15 16 17 20 22 23 28"
+from __future__ import annotations
+from bentoml.validators import ContentType
+from typing import Annotated
+from PIL.Image import Image
+from pydantic import Field
+import bentoml
+import json
+
+
+@bentoml.service(name="celestial_bodies_classifier")
+class CelestialBodiesClassifierService:
+    bento_model = bentoml.keras.get("celestial_bodies_classifier_model")
+
+    def __init__(self) -> None:
+        self.preprocess = self.bento_model.custom_objects["preprocess"]
+        self.postprocess = self.bento_model.custom_objects["postprocess"]
+        self.model = self.bento_model.load_model()
+
+    @bentoml.api()
+    def predict(
+            self,
+            image: Annotated[Image, ContentType("image/jpeg")] = Field(description="Planet image to analyze"),
+    ) -> Annotated[str, ContentType("application/json")]:
+        image = self.preprocess(image)
+
+        predictions = self.model.predict(image)
+
+        return json.dumps(self.postprocess(predictions))
 ```
 
-Check the differences with Git to validate the changes.
+This service will be used to serve the model with FastAPI and will do the following:
+
+1. The model is loaded from the BentoML model store
+2. The `preprocess` function is loaded from the model's custom objects
+3. The `postprocess` function is loaded from the model's custom objects
+4. The `predict` method is decorated with `@bentoml.api()` to create an endpoint
+5. The endpoint accepts an image as input
+6. The endpoint returns a JSON response
+7. The image is pre-processed
+8. The predictions are made from the model
+9. The predictions are post-processed and returned as a JSON string
+
+### Serve the model
+
+Serve the model with the following command:
 
 ```sh title="Execute the following command(s) in a terminal"
-# Show the differences with Git
-git diff requirements.txt
+# Serve the model
+bentoml serve --working-dir ./src serve:CelestialBodiesClassifierService
 ```
 
-The output should be similar to this.
-
-```diff
-diff --git a/requirements.txt b/requirements.txt
-index 7542f6a..fcdd460 100644
---- a/requirements.txt
-+++ b/requirements.txt
-@@ -2,4 +2,4 @@ tensorflow==2.12.0
- matplotlib==3.7.1
- pyyaml==6.0
- dvc[gs]==3.2.2
--mlem==0.4.13
-+mlem[fastapi]==0.4.13
-```
-
-Install the dependencies and update the freeze file.
-
-!!! warning
-
-    Prior to running any pip commands, it is crucial to ensure the virtual
-    environment is activated to avoid potential conflicts with system-wide Python
-    packages.
-
-    To check its status, simply run `pip -V`. If the virtual environment is active,
-    the output will show the path to the virtual environment's Python executable. If
-    it is not, you can activate it with `source .venv/bin/activate`.
-
-```sh title="Execute the following command(s) in a terminal"
-# Install the dependencies
-pip install --requirement requirements.txt
-
-# Freeze the dependencies
-pip freeze --local --all > requirements-freeze.txt
-```
-
-### Serve the model with FastAPI
-
-Serve the model with FastAPI. FastAPI will generate a REST API that you can use
-to get predictions from our model.
-
-```sh title="Execute the following command(s) in a terminal"
-# Serve the model with FastAPI
-mlem serve fastapi --model model
-```
-
-MLEM will load the model, create the FastAPI app and start it. You can then
+BentoML will load the model, create the FastAPI app and start it. You can then
 access the auto-generated model documentation on
-<http://localhost:8080/docs>{:target="\_blank"}.
-
-!!! info
-
-    Remember the `sample_data` variable discussed in the previous chapter? This will
-    be used by MLEM to generate the FastAPI endpoints with the right OpenAPI/Swagger
-    specifications.
+<http://localhost:3000>{:target="\_blank"}.
 
 The following endpoint has been created:
 
 - `/predict`: Upload a `png` or `jpg` image and get a prediction from the model.
 
-You can try out predictions by inputing some sentences to the model through the
+You can try out predictions by inputing some images to the model through the
 REST API!
 
 ### Try out the prediction endpoint
@@ -320,20 +304,16 @@ The output should look like this.
 On branch main
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
-    modified:   requirements-freeze.txt
-    modified:   requirements.txt
+    new file:   src/serve.py
 ```
 
-### Commit the changes to DVC and Git
+### Commit the changes to Git
 
-Commit the changes to DVC and Git.
+Commit the changes to Git.
 
 ```sh title="Execute the following command(s) in a terminal"
-# Upload the experiment data and cache to the remote bucket
-dvc push
-
 # Commit the changes
-git commit -m "MLEM can serve the model with FastAPI"
+git commit -m "BentoML can serve the model with FastAPI"
 
 # Push the changes
 git push
@@ -349,9 +329,8 @@ This chapter is done, you can check the summary.
 
 In this chapter, you have successfully:
 
-1. Installed MLEM with FastAPI support
-2. Served the model with FastAPI
-3. Pushed the changes to DVC and Git
+1. Served the model with BentoML and FastAPI
+2. Pushed the changes to Git
 
 You did fix some of the previous issues:
 
@@ -392,4 +371,7 @@ collaboration. Continue the guide to learn how.
 
 Highly inspired by:
 
-* [_Serving models_ - mlem.ai](https://mlem.ai/doc/user-guide/serving)
+* [_Services_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/guides/services.html)
+* [_Input and output types_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/guides/iotypes.html)
+* [_Containerization_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/guides/containerization.html)
+* [_Build options_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/guides/build-options.html)

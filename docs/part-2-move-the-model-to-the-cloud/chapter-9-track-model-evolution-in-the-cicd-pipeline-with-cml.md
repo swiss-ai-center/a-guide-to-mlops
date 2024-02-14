@@ -218,7 +218,7 @@ collaboration and decision-making within the team.
     ```
 
     The updated `train-and-report` job is responsible for reporting the results of
-    the model evaluation and comparing it with the main branch. This job is
+    the model evaluation and comparing it with the main branch. Some steps in this job are
     triggered only on pull requests. The job checks out the repository, sets up DVC
     and CML, creates and publishes the report as a pull request comment.
 

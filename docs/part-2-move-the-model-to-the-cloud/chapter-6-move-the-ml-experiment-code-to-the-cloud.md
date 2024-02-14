@@ -73,7 +73,7 @@ Create a Git repository on your preferred service to collaborate with peers.
 
     !!! danger "Important"
 
-        Configure the repository as you wish but **do not** check the boxex
+        Configure the repository as you wish but **do not** check the box
         _"Add a README file"_, _"Add .gitignore"_ nor _"Choose a license"_.
 
     Create a new GitHub repository for this chapter by accessing
