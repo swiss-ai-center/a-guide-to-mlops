@@ -89,7 +89,7 @@ with these commands.
 git status
 ```
 
-The output should be similar to this.
+The output should be similar to this:
 
 ```
 On branch main
@@ -206,7 +206,7 @@ Check the differences with Git to validate the changes.
 git diff requirements.txt
 ```
 
-The output should be similar to this.
+The output should be similar to this:
 
 ```diff
 diff --git a/requirements.txt b/requirements.txt
@@ -306,7 +306,7 @@ Check the differences with Git to validate the changes.
 git diff .gitignore
 ```
 
-The output should be similar to this.
+The output should be similar to this:
 
 ```diff
 diff --git a/.gitignore b/.gitignore
@@ -330,7 +330,7 @@ You can now add the experiment data to DVC without complain!
 dvc add data/raw/
 ```
 
-The output should be similar to this. You can safely ignore the message.
+The output should be similar to this: You can safely ignore the message.
 
 ```
 To track the changes with git, run:

@@ -177,7 +177,7 @@ Check the differences with Git to validate the changes.
 git diff params.yaml
 ```
 
-The output should be similar to this.
+The output should be similar to this:
 
 ```diff
 diff --git a/params.yaml b/params.yaml
@@ -431,5 +431,5 @@ collaboration. Continue the guide to learn how.
 
 Highly inspired by:
 
-* [_Creating an issue_ - docs.github.com](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue)
-* [_Creating a branch to work on an issue_ - docs.github.com](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-a-branch-for-an-issue)
+- [_Creating an issue_ - docs.github.com](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue)
+- [_Creating a branch to work on an issue_ - docs.github.com](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-a-branch-for-an-issue)

@@ -134,6 +134,317 @@ flowchart TB
 
 ## Steps
 
+### Create a BentoML "Bento"
+
+A "Bento" is a BentoML artifact that packages your model, code, and environment
+dependencies into a single file. It is the standard format for saving and
+sharing ML models.
+
+A Bento is described in a `bentofile.yaml` file. It contains the following
+information:
+
+- The service filename and class name
+- The Python packages required to run the service
+- The Docker configuration, such as the Python version to use
+
+Create a new `bentofile.yaml` file in the `src` directory with the
+following content:
+
+```yaml title="src/bentofile.yaml"
+service: 'serve:CelestialBodiesClassifierService'
+include:
+  - serve.py
+python:
+  packages:
+    - "tensorflow==2.12.0"
+    - "matplotlib==3.7.1"
+    - "pillow==10.2.0"
+docker:
+    python_version: "3.11"
+```
+
+You might notice the `serve.py` file is included in the Bento. This file contains
+the code to serve the model with FastAPI as you have seen in the previous
+chapter.
+
+The `python` section contains the Python packages required to run the service. It
+does not contain DVC and other packages to build the model, as they are not
+required to run the service.
+
+The `docker` section contains the Python version to use. It is important to
+specify the Python version to ensure the service runs correctly.
+
+Now that the `bentofile.yaml` file is created, you can serve the model with
+the following command:
+
+```sh title="Execute the following command(s) in a terminal"
+# Serve the model
+bentoml serve --working-dir src
+```
+
+### Containerize the Bento with Docker
+
+To containerize the Bento, you will need to build a Docker image. This is done
+in the following steps:
+
+1. Build the Bento
+2. Containerize the Bento with Docker
+
+#### Build the Bento
+
+A Bento can be built with the following command:
+
+```sh title="Execute the following command(s) in a terminal"
+# Build the Bento
+bentoml build src
+```
+
+The output should be similar to this:
+
+```text
+2024-02-15 14:21:52.512530: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Adding current BentoML version to requirements.txt: 1.2.2
+Locking PyPI package versions.
+WARNING: --strip-extras is becoming the default in version 8.0.0. To silence this warning, either use --strip-extras to opt into the new default or use --no-strip-extras to retain the existing behavior.
+
+██████╗ ███████╗███╗   ██╗████████╗ ██████╗ ███╗   ███╗██╗
+██╔══██╗██╔════╝████╗  ██║╚══██╔══╝██╔═══██╗████╗ ████║██║
+██████╔╝█████╗  ██╔██╗ ██║   ██║   ██║   ██║██╔████╔██║██║
+██╔══██╗██╔══╝  ██║╚██╗██║   ██║   ██║   ██║██║╚██╔╝██║██║
+██████╔╝███████╗██║ ╚████║   ██║   ╚██████╔╝██║ ╚═╝ ██║███████╗
+╚═════╝ ╚══════╝╚═╝  ╚═══╝   ╚═╝    ╚═════╝ ╚═╝     ╚═╝╚══════╝
+
+Successfully built Bento(tag="celestial_bodies_classifier:f7hnaegmawocrlg6").
+
+Possible next steps:
+
+ * Containerize your Bento with `bentoml containerize`:
+    $ bentoml containerize celestial_bodies_classifier:f7hnaegmawocrlg6  [or bentoml build --containerize]
+
+ * Push to BentoCloud with `bentoml push`:
+    $ bentoml push celestial_bodies_classifier:f7hnaegmawocrlg6 [or bentoml build --push]
+```
+
+All Bentos can be listed with the following command:
+
+```sh title="Execute the following command(s) in a terminal"
+# List all Bentos
+bentoml list
+```
+
+The output should be similar to this:
+
+```text
+bentoml list
+ Tag                                                   Size       Model Size  Creation Time
+ celestial_bodies_classifier:f7hnaegmawocrlg6          17.25 KiB  9.53 MiB    2024-02-15 14:22:21
+ celestial_bodies_classifier:d5r7ihgkqssyjlg6          17.19 KiB  9.53 MiB    2024-02-13 16:25:57
+ celestial_bodies_classifier:l32tz2wkqopfhlg6          16.24 KiB  9.53 MiB    2024-02-13 16:20:35
+```
+
+#### Containerize the Bento with Docker
+
+Now that the Bento is built, you can containerize it with the following command:
+
+```sh title="Execute the following command(s) in a terminal"
+# Containerize the Bento with Docker
+bentoml containerize celestial_bodies_classifier:latest --image-tag celestial-bodies-classifier:latest
+```
+
+The first `:latest` is the tag of the Bento. It is a symlink to the latest version of the Bento.
+
+The output should be similar to this:
+
+```text
+Building OCI-compliant image for celestial_bodies_classifier:f7hnaegmawocrlg6 with docker
+
+[+] Building 95.6s (16/16) FINISHED                                                                                                                                             docker:desktop-linux
+ => [internal] load build definition from Dockerfile                                                                                                                                            0.1s
+ => => transferring dockerfile: 1.71kB                                                                                                                                                          0.0s
+ => [internal] load metadata for docker.io/library/python:3.11-slim                                                                                                                             1.4s
+ => [internal] load .dockerignore                                                                                                                                                               0.0s
+ => => transferring context: 2B                                                                                                                                                                 0.0s
+ => [base-container  1/11] FROM docker.io/library/python:3.11-slim@sha256:ce81dc539f0aedc9114cae640f8352fad83d37461c24a3615b01f081d0c0583a                                                      0.0s
+ => => resolve docker.io/library/python:3.11-slim@sha256:ce81dc539f0aedc9114cae640f8352fad83d37461c24a3615b01f081d0c0583a                                                                       0.0s
+ => [internal] load build context                                                                                                                                                               0.4s
+ => => transferring context: 10.02MB                                                                                                                                                            0.4s
+ => CACHED [base-container  2/11] RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache                        0.0s
+ => CACHED [base-container  3/11] RUN --mount=type=cache,target=/var/lib/apt --mount=type=cache,target=/var/cache/apt set -eux &&     apt-get update -y &&     apt-get install -q -y --no-inst  0.0s
+ => CACHED [base-container  4/11] RUN groupadd -g 1034 -o bentoml && useradd -m -u 1034 -g 1034 -o -r bentoml                                                                                   0.0s
+ => CACHED [base-container  5/11] RUN mkdir /home/bentoml/bento && chown bentoml:bentoml /home/bentoml/bento -R                                                                                 0.0s
+ => CACHED [base-container  6/11] WORKDIR /home/bentoml/bento                                                                                                                                   0.0s
+ => [base-container  7/11] COPY --chown=bentoml:bentoml ./env/python ./env/python/                                                                                                              0.1s
+ => [base-container  8/11] RUN --mount=type=cache,target=/root/.cache/pip bash -euxo pipefail /home/bentoml/bento/env/python/install.sh                                                        83.2s
+ => [base-container  9/11] COPY --chown=bentoml:bentoml . ./                                                                                                                                    0.0s
+ => [base-container 10/11] RUN rm -rf /var/lib/{apt,cache,log}                                                                                                                                  0.2s
+ => [base-container 11/11] RUN chmod +x /home/bentoml/bento/env/docker/entrypoint.sh                                                                                                            0.3s
+ => exporting to image                                                                                                                                                                          9.7s
+ => => exporting layers                                                                                                                                                                         9.7s
+ => => writing image sha256:db1517bb791c68dc70853bfe844a94264440f66e5dd021da9296a2e3ee2ccb3e                                                                                                    0.0s
+ => => naming to docker.io/library/celestial-bodies-classifier:latest                                                                                                                           0.0s
+
+What's Next?
+  View a summary of image vulnerabilities and recommendations → docker scout quickview
+Successfully built Bento container for "celestial_bodies_classifier:latest" with tag(s) "celestial-bodies-classifier:latest"
+To run your newly built Bento container, run:
+    docker run --rm -p 3000:3000 celestial-bodies-classifier:latest
+```
+
+The Bento is now containerized with Docker. You can run the Docker image with the
+following command:
+
+```sh title="Execute the following command(s) in a terminal"
+# Run the Docker image
+docker run --rm -p 3000:3000 celestial-bodies-classifier:latest
+```
+
+Congrats! You have successfully containerized the Bento with Docker. The model is
+now ready to be deployed on Kubernetes.
+
+### Create a contrainer registry
+
+A container registry is a crucial component that provides a centralized system to
+manage Docker images. It serves as a repository for
+storing, versioning, and tracking Docker models built with BentoML, as each version comes with essential
+metadata, including training data, hyperparameters, and performance metrics.
+
+This comprehensive information ensures reproducibility by preserving historical
+model versions, which aids in debugging and auditing. Additionally, it fosters
+transparency and simplifies model comparison and selection for deployment,
+allowing for seamless integration into production environments.
+
+The model registry also facilitates collaboration among team members, enabling
+standardized model formats and easy sharing of access. Its support for automated
+deployment pipelines ensures consistent and reliable model deployment, allowing
+for an efficient models management.
+
+=== ":simple-googlecloud: Google Cloud"
+
+    To streamline the deployment process on the Kubernetes server, you will utilize
+    Google Artifact Registry for the ML model registry, capitalizing on Google
+    Kubernetes Engine's ability to directly pull images from Docker repositories.
+
+    **Enable the Google Artifact Registry API**
+
+    You must enable the Google Artifact Registry API to create a container registry
+    on Google Cloud.
+
+    [Enable Google Artifact Registry API :octicons-arrow-up-right-16:](https://console.cloud.google.com/flows/enableapi?apiid=artifactregistry.googleapis.com){ .md-button .md-button--primary }
+
+    **Create the Google Container Registry**
+
+    Export the repository name as an environment variable. Replace
+    `<my repository name>` with your own name (ex: `mlops-registry`).
+
+    ```sh title="Execute the following command(s) in a terminal"
+    export GCP_REPOSITORY_NAME=<my repository name>
+    ```
+
+    Export the repository location as an environment variable. Replace
+    `<my repository location>` with your own location (ex: `europe-west6` for
+    Switzerland).
+
+    ```sh title="Execute the following command(s) in a terminal"
+    export GCP_REPOSITORY_LOCATION=<my repository location>
+    ```
+
+    Lastly, when creating the repository, remember to specify the repository format
+    as `docker`.
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Create the Google Container Registry
+    gcloud artifacts repositories create $GCP_REPOSITORY_NAME \
+        --repository-format=docker \
+        --location=$GCP_REPOSITORY_LOCATION
+    ```
+
+    The output should be similar to this:
+
+    ```
+    Create request issued for: [mlops-registry]
+    Waiting for operation [projects/mlops-code-395207/locations/europe-west6/operations/be8b09fa-279c-468
+    5-b451-1f3c900d4a36] to complete...done.
+    Created repository [mlops-registry].
+    ```
+
+=== ":material-cloud: Using another cloud provider? Read this!"
+
+    This guide has been written with Google Cloud in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
+
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
+    appreciated!
+
+### Login to the remote Container Registry
+
+=== ":simple-googlecloud: Google Cloud"
+
+    **Authenticate with the Google Container Registry**
+
+    Configure gcloud to use the Google Container Registry as a Docker credential
+    helper.
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Authenticate with the Google Container Registry
+    gcloud auth configure-docker ${GCP_REPOSITORY_LOCATION}-docker.pkg.dev
+    ```
+
+    Press ++y++ to validate the changes.
+
+    Export the container registry host:
+
+    ```sh title="Execute the following command(s) in a terminal"
+    export CONTAINER_REGISTRY_HOST=${GCP_REPOSITORY_LOCATION}-docker.pkg.dev/$GCP_PROJECT_ID/$GCP_REPOSITORY_NAME
+    ```
+
+    !!! tip
+
+        To get the ID of your project, you can use the Google Cloud CLI.
+
+        ```sh title="Execute the following command(s) in a terminal"
+        # List the projects
+        gcloud projects list
+        ```
+
+        The output should be similar to this:
+
+        ```
+        PROJECT_ID             NAME            PROJECT_NUMBER
+        mlops-workshop-396007  mlops-workshop  475307267926
+        ```
+
+        Copy the PROJECT_ID and export it as an environment variable. Replace
+        `<id of your gcp project>` with your own project ID.
+
+        ```sh title="Execute the following command(s) in a terminal"
+        export GCP_PROJECT_ID=<id of your gcp project>
+        ```
+
+=== ":material-cloud: Using another cloud provider? Read this!"
+
+    This guide has been written with Google Cloud in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
+
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
+    appreciated!
+
+### Publish the Bento Docker image to the container registry
+
+TODO
+
 ### Create the Kubernetes cluster
 
 In order to deploy the model on Kubernetes, you will need a Kubernetes cluster.
@@ -184,7 +495,7 @@ Follow the steps below to create one.
     	$GCP_CLUSTER_NAME
     ```
 
-    The output should be similar to this.
+    The output should be similar to this:
 
     ```
     Default change: VPC-native is the default mode during cluster creation for versions greater than 1.21.0-gke.1500. To create advanced routes based clusters, please pass the `--no-enable-ip-alias` flag
@@ -247,7 +558,7 @@ Validate kubectl can access the Kubernetes cluster.
 kubectl get namespaces
 ```
 
-The output should be similar to this.
+The output should be similar to this:
 
 ```
 NAME              STATUS   AGE
@@ -257,303 +568,15 @@ kube-public       Active   25m
 kube-system       Active   25m
 ```
 
-### Add Kubernetes support to MLEM
+### Create the Kubernetes configuration files
 
-Update the `requirements.txt` file to add `kubernetes` support in addtion to
-`fastapi` to the `mlem` package.
+TODO
 
-!!! info
+### Deploy the Bento on Kubernetes
 
-    Kubernetes is only one of the available backend that MLEM can deploy to. Check
-    out their [official documentation](https://mlem.ai/doc/user-guide/deploying) for
-    more options.
-
-```txt title="requirements.txt" hl_lines="5"
-tensorflow==2.12.0
-matplotlib==3.7.1
-pyyaml==6.0
-dvc[gs]==3.2.2
-mlem[fastapi,kubernetes]==0.4.13
-```
-
-Check the differences with Git to validate the changes.
-
-```sh title="Execute the following command(s) in a terminal"
-# Show the differences with Git
-git diff requirements.txt
-```
-
-The output should be similar to this.
-
-```diff
-diff --git a/requirements.txt b/requirements.txt
-index fcdd460..b89d189 100644
---- a/requirements.txt
-+++ b/requirements.txt
-@@ -2,4 +2,4 @@ tensorflow==2.12.0
- matplotlib==3.7.1
- pyyaml==6.0
- dvc[gs]==3.2.2
--mlem[fastapi]==0.4.13
-+mlem[fastapi,kubernetes]==0.4.13
-```
-
-Install the dependencies and update the freeze file.
-
-!!! warning
-
-    Prior to running any pip commands, it is crucial to ensure the virtual
-    environment is activated to avoid potential conflicts with system-wide Python
-    packages.
-
-    To check its status, simply run `pip -V`. If the virtual environment is active,
-    the output will show the path to the virtual environment's Python executable. If
-    it is not, you can activate it with `source .venv/bin/activate`.
-
-```sh title="Execute the following command(s) in a terminal"
-# Install the dependencies
-pip install --requirement requirements.txt
-
-# Freeze the dependencies
-pip freeze --local --all > requirements-freeze.txt
-```
-
-### Create a model registry
-
-A model registry is a crucial component that provides a centralized system to
-manage ML models throughout their lifecycle. It serves as a repository for
-storing, versioning, and tracking models, as each version comes with essential
-metadata, including training data, hyperparameters, and performance metrics.
-
-This comprehensive information ensures reproducibility by preserving historical
-model versions, which aids in debugging and auditing. Additionally, it fosters
-transparency and simplifies model comparison and selection for deployment,
-allowing for seamless integration into production environments.
-
-The model registry also facilitates collaboration among team members, enabling
-standardized model formats and easy sharing of access. Its support for automated
-deployment pipelines ensures consistent and reliable model deployment, allowing
-for an efficient models management.
-
-=== ":simple-googlecloud: Google Cloud"
-
-    To streamline the deployment process on the Kubernetes server, you will utilize
-    Google Artifact Registry for the ML model registry, capitalizing on Google
-    Kubernetes Engine's ability to directly pull images from Docker repositories.
-
-    **Enable the Google Artifact Registry API**
-
-    You must enable the Google Artifact Registry API to create a container registry
-    on Google Cloud.
-
-    [Enable Google Artifact Registry API :octicons-arrow-up-right-16:](https://console.cloud.google.com/flows/enableapi?apiid=artifactregistry.googleapis.com){ .md-button .md-button--primary }
-
-    **Create the Google Container Registry**
-
-    Export the repository name as an environment variable. Replace
-    `<my repository name>` with your own name (ex: `mlops-registry`).
-
-    ```sh title="Execute the following command(s) in a terminal"
-    export GCP_REPOSITORY_NAME=<my repository name>
-    ```
-
-    Export the repository location as an environment variable. Replace
-    `<my repository location>` with your own location (ex: `europe-west6` for
-    Switzerland).
-
-    ```sh title="Execute the following command(s) in a terminal"
-    export GCP_REPOSITORY_LOCATION=<my repository location>
-    ```
-
-    Lastly, when creating the repository, remember to specify the repository format
-    as `docker`.
-
-    ```sh title="Execute the following command(s) in a terminal"
-    # Create the Google Container Registry
-    gcloud artifacts repositories create $GCP_REPOSITORY_NAME \
-        --repository-format=docker \
-        --location=$GCP_REPOSITORY_LOCATION
-    ```
-
-    The output should be similar to this.
-
-    ```
-    Create request issued for: [mlops-registry]
-    Waiting for operation [projects/mlops-code-395207/locations/europe-west6/operations/be8b09fa-279c-468
-    5-b451-1f3c900d4a36] to complete...done.
-    Created repository [mlops-registry].
-    ```
-
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
-
-### Login to the remote Container Registry
-
-=== ":simple-googlecloud: Google Cloud"
-
-    **Authenticate with the Google Container Registry**
-
-    Configure gcloud to use the Google Container Registry as a Docker credential
-    helper.
-
-    ```sh title="Execute the following command(s) in a terminal"
-    # Authenticate with the Google Container Registry
-    gcloud auth configure-docker ${GCP_REPOSITORY_LOCATION}-docker.pkg.dev
-    ```
-
-    Press ++y++ to validate the changes.
-
-    Export the container registry host:
-
-    ```sh title="Execute the following command(s) in a terminal"
-    export CONTAINER_REGISTRY_HOST=${GCP_REPOSITORY_LOCATION}-docker.pkg.dev/$GCP_PROJECT_ID/$GCP_REPOSITORY_NAME
-    ```
-
-    !!! tip
-
-        To get the ID of your project, you can use the Google Cloud CLI.
-
-        ```sh title="Execute the following command(s) in a terminal"
-        # List the projects
-        gcloud projects list
-        ```
-
-        The output should be similar to this.
-
-        ```
-        PROJECT_ID             NAME            PROJECT_NUMBER
-        mlops-workshop-396007  mlops-workshop  475307267926
-        ```
-
-        Copy the PROJECT_ID and export it as an environment variable. Replace
-        `<id of your gcp project>` with your own project ID.
-
-        ```sh title="Execute the following command(s) in a terminal"
-        export GCP_PROJECT_ID=<id of your gcp project>
-        ```
-
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
-
-### Deploy the model on Kubernetes with MLEM
-
-Deploy the model on Kubernetes with MLEM. This will create a Docker image, push
-it to the remote Container Registry and deploy the model on Kubernetes. The
-operation can takes a few minutes.
-
-??? question "Having issues to deploy the model on Kubernetes?"
-
-    If you have issues to deploy the model on Kubernetes, ensure the Kubernetes
-    cluster is actually ready. Wait a few minutes and try again.
-
-```sh title="Execute the following command(s) in a terminal"
-# Deploy the model on Kubernetes with MLEM
-mlem deployment run kubernetes service_classifier \
-    --model model \
-    --registry remote \
-    --registry.host=$CONTAINER_REGISTRY_HOST \
-    --server fastapi \
-    --service_type loadbalancer
-```
-
-The name `service_classifier` is the name of the deployment. It can be changed
-to anything you want.
-
-The arguments are:
-
-- `--model`: The path to the MLEM model.
-- `--registry remote`: Use a remote Container Registry.
-- `--registry.host <host>`: The host of the remote Container Registry.
-- `--server fastapi`: Use FastAPI as the server.
-- `--service_type loadbalancer`: Use a load balancer to expose the service.
-
-The output should be similar to this. This might take a few minutes.
-
-```
- Loading deployment from service_classifier.mlem
-⏳️ Loading model from model.mlem
-🛠 Creating docker image ml
-  💼 Adding model files...
-  🛠 Generating dockerfile...
-  💼 Adding sources...
-  💼 Generating requirements file...
-  🛠 Building docker image
-europe-west6-docker.pkg.dev/mlops-workshop-396007/mlops-registry/ml:8909b3c8feeeef6ff
-4e4cdbf3a2fa251...
-2023-08-15 11:25:43,391 [WARNING] mlem.contrib.docker.base: Skipped logging in to remote registry at host europe-west6-docker.pkg.dev/mlops-workshop-396007/mlops-registry because no credentials given. You could specify credentials as EUROPE-WEST6-DOCKER_PKG_DEV/MLOPS-WORKSHOP-396007/MLOPS-REGISTRY_USERNAME and EUROPE-WEST6-DOCKER_PKG_DEV/MLOPS-WORKSHOP-396007/MLOPS-REGISTRY_PASSWORD environment variables.
-  ✅  Built docker image
-europe-west6-docker.pkg.dev/mlops-workshop-396007/mlops-registry/ml:8909b3c8feeeef6ff
-4e4cdbf3a2fa251
-  🔼 Pushing image
-europe-west6-docker.pkg.dev/mlops-workshop-396007/mlops-registry/ml:8909b3c8feeeef6ff
-4e4cdbf3a2fa251 to europe-west6-docker.pkg.dev/mlops-workshop-396007/mlops-registry
-  ✅  Pushed image
-europe-west6-docker.pkg.dev/mlops-workshop-396007/mlops-registry/ml:8909b3c8feeeef6ff
-4e4cdbf3a2fa251 to europe-west6-docker.pkg.dev/mlops-workshop-396007/mlops-registry
-namespace created. status='{'conditions': None, 'phase': 'Active'}'
-deployment created. status='{'available_replicas': None,
- 'collision_count': None,
- 'conditions': None,
- 'observed_generation': None,
- 'ready_replicas': None,
- 'replicas': None,
- 'unavailable_replicas': None,
- 'updated_replicas': None}'
-service created. status='{'conditions': None, 'load_balancer': {'ingress': None}}'
-✅  Deployment ml is up in mlem namespace
-```
-
-!!! tip "Tips"
-
-    The status of a MLEM deployment can be checked with the command
-    `mlem deployment status <deployment name>`.
-
-    A MLEM Kubernetes deployment can be deleted with the command
-    `mlem deploy remove <deployment name>`.
-
-Running the deployment command not only deploys the model on the Kubernetes
-server, but it should also create two files in your repository, corresponding to
-the chosen deployment name.
-
-- `service_classifier.mlem`: This file contains the declaration of the
-  deployment, holding the main information such as where your model
-   is deployed as well as other additional parameters needed for the specificties
-   of the deployment. It is deployed to the Kubernetes target environment.
-
-- `service_classifier.mlem.state`: This file is a snapshot of the actual state
-  of your deployment.
-   It is created and updated by MLEM during the deployment process to keep track of
-   parameters needed for state management, which is stored separately from the
-   declaration.
-
-You will soon see how to use them to redeploy the model on Kubernetes.
+TODO
 
 ### Access the model
-
-By default, MLEM deploys the model as a service named `ml` in the `mlem`
-namespace.
 
 To access the model, you will need to find the external IP address of the
 service. You can do so with the following command.
@@ -563,7 +586,7 @@ service. You can do so with the following command.
 kubectl describe services ml --namespace mlem
 ```
 
-The output should be similar to this.
+The output should be similar to this:
 
 ```text hl_lines="11"
 Name:                     mlops-classifier
@@ -593,200 +616,10 @@ Events:
 The `LoadBalancer Ingress` field contains the external IP address of the
 service. In this case, it is `34.65.72.237`.
 
-Try to access the model at the port `8080` using the external IP address of the
+Try to access the model at the port `3000` using the external IP address of the
 service. You should be able to access the FastAPI documentation page at
-`http://<load balancer ingress ip>:8080/docs`. In this case, it is
-`http://34.65.72.237:8080/docs`.
-
-### Setup the MLEM remote state manager
-
-After the model is deployed on Kubernetes, MLEM will save the deployment state
-as local files. This is fine if you are working alone, however, if you are
-working with a team, your local files will not be available to your colleagues.
-
-While the parameters of the deployment's declaration file can be shared via Git,
-the state file, which represents the current snapshot of the state of the
-Kubernetes server, should be stored separately as the state is independent of
-the actual codebase.
-
-This file should however still be accessible remotely to permit each team
-members to change the state of the Kubernetes server when required.
-
-To solve this issue, MLEM can use a remote state manager to store the state of
-the infrastructure.
-
-Let's start by deleting the current deployment on the server and by removing the
-existing `service_classifier.mlem.state` file.
-
-```sh title="Execute the following command(s) in a terminal"
-# Delete the deployment on Kubernetes
-mlem deploy remove service_classifier
-
-# Remove the state file
-rm service_classifier.mlem.state
-```
-
-Instead of relaying on that state file locally, you will configure MLEM to
-create it remotely directly.
-
-Setting up remote state manager is a lot like setting DVC remote. All you need
-to do is provide a URI where you want to store state files.
-
-!!! warning
-
-    Make sure to use the same bucket name as the one you created in
-    [Chapter 7: Move the ML experiment data to the cloud](../part-2-move-the-model-to-the-cloud/chapter-7-move-the-ml-experiment-data-to-the-cloud.md).
-
-=== ":simple-googlecloud: Google Cloud"
-    ```sh title="Execute the following command(s) in a terminal"
-    # Setup the MLEM remote state manager
-    mlem config set core.state.uri gs://$GCP_BUCKET_NAME
-    ```
-
-    !!! tip
-
-        To get the URI of your bucket, you can use the Google Cloud CLI.
-
-        ```sh title="Execute the following command(s) in a terminal"
-        # List the buckets
-        gcloud storage ls
-        ```
-
-        The output should be similar to this.
-
-        ```
-        gs://<my bucket name>/
-        ```
-
-        Copy the URI and export it as an environment variable. Replace
-        `<my bucket name>` with your own bucket name.
-
-        ```sh title="Execute the following command(s) in a terminal"
-        export GCP_BUCKET_NAME=<my bucket name>
-        ```
-
-    This will update your `.mlem.yaml` configuration file.
-
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
-
-### Create and version deployment declaration
-
-It would also be useful to be able to create deployments configuration
-**without** actually running them, as to later trigger already configured
-deployments. For example, this would allow you to track deployment parameters in
-Git and use it in CI/CD pipelines more easily.
-
-Let's create such deployment file, without actually deploying it. You will also
-take the opportunity to improve and customize the deployment parameters further.
-
-```sh title="Execute the following command(s) in a terminal"
-# Create the deployment configuration for MLEM
-mlem declare deployment kubernetes service_classifier \
-    --namespace live \
-    --image_name mlops-classifier \
-    --image_uri mlops-classifier:latest \
-    --registry remote \
-    --registry.host=$CONTAINER_REGISTRY_HOST \
-    --server fastapi \
-    --service_type loadbalancer
-```
-
-In addition to the previously mentioned arguments, you also make use of
-additional arguments to adjust the namespace and the image name.
-
-The corresponding arguments are:
-
-- `--namespace <namespace>`: The namespace name where the model will be deployed
-  in Kubernetes.
-- `--image_name <image name>`: The name of the Docker image.
-- `--image_uri <image uri>`: The URI of the Docker image.
-
-This will create a new `service_classifier.mlem` file at the root of your
-project, containing the configuration of the deployment.
-
-### Deploy the model again on Kubernetes with MLEM
-
-Next, to deploy the model on Kubernetes, run the following command:
-
-```sh title="Execute the following command(s) in a terminal"
-# Deploy the model on Kubernetes with MLEM
-mlem deployment run --load service_classifier --model model
-```
-
-The arguments are:
-
-- `--load <deployment name>`: The name of the deployment configuration to load.
-- `--model <model name>`: The name of the model to deploy.
-
-The output should be similar to this.
-
-```
- Loading model from model.mlem
-⏳️ Loading deployment from service_classifier.mlem
-🛠 Creating docker image mlops-classifier
-  💼 Adding model files...
-  🛠 Generating dockerfile...
-  💼 Adding sources...
-  💼 Generating requirements file...
-  🛠 Building docker image
-europe-west6-docker.pkg.dev/mlops-workshop-396007/mlops-registry/mlops-classifier:890
-9b3c8feeeef6ff4e4cdbf3a2fa251...
-2023-08-15 11:58:06,396 [WARNING] mlem.contrib.docker.base: Skipped logging in to remote registry at host europe-west6-docker.pkg.dev/mlops-workshop-396007/mlops-registry because no credentials given. You could specify credentials as EUROPE-WEST6-DOCKER_PKG_DEV/MLOPS-WORKSHOP-396007/MLOPS-REGISTRY_USERNAME and EUROPE-WEST6-DOCKER_PKG_DEV/MLOPS-WORKSHOP-396007/MLOPS-REGISTRY_PASSWORD environment variables.
-  ✅  Built docker image
-europe-west6-docker.pkg.dev/mlops-workshop-396007/mlops-registry/mlops-classifier:890
-9b3c8feeeef6ff4e4cdbf3a2fa251
-  🔼 Pushing image
-europe-west6-docker.pkg.dev/mlops-workshop-396007/mlops-registry/mlops-classifier:890
-9b3c8feeeef6ff4e4cdbf3a2fa251 to
-europe-west6-docker.pkg.dev/mlops-workshop-396007/mlops-registry
-  ✅  Pushed image
-europe-west6-docker.pkg.dev/mlops-workshop-396007/mlops-registry/mlops-classifier:890
-9b3c8feeeef6ff4e4cdbf3a2fa251 to
-europe-west6-docker.pkg.dev/mlops-workshop-396007/mlops-registry
-namespace created. status='{'conditions': None, 'phase': 'Active'}'
-deployment created. status='{'available_replicas': None,
- 'collision_count': None,
- 'conditions': None,
- 'observed_generation': None,
- 'ready_replicas': None,
- 'replicas': None,
- 'unavailable_replicas': None,
- 'updated_replicas': None}'
-service created. status='{'conditions': None, 'load_balancer': {'ingress': None}}'
-✅  Deployment mlops-classifier is up in live namespace
-```
-
-### Access the model
-
-This time, MLEM deploys the model as a service named `service_classifier` in the
-defined `live` namespace.
-
-To access the model, you will need to find the external IP address of the
-service. You can do so with the following command.
-
-```sh title="Execute the following command(s) in a terminal"
-# Get the description of the service
-kubectl describe services mlops-classifier --namespace live
-```
-
-Again, use the the `LoadBalancer Ingress` field of the output as it contains the
-external IP address of the service.
-
-Try to access the model at the port `8080` using the external IP address of the
-service. You should be able to access the FastAPI documentation page at
-`http://<load balancer ingress ip>:8080/docs` as earlier in the guide!
+`http://<load balancer ingress ip>:3000`. In this case, it is
+`http://34.65.72.237:3000`.
 
 ### Check the changes
 
@@ -802,7 +635,7 @@ git status
 
 The output should look like this.
 
-```
+```text
 On branch main
 Your branch is up to date with 'origin/main'.
 
@@ -832,8 +665,7 @@ git push
 ## Summary
 
 Congratulations! You have successfully deployed the model on Kubernetes with
-MLEM, accessed it from an external IP address, and properly versioned and shared
-the deployment declaration and state.
+BentoML and Docker, accessed it from an external IP address.
 
 You can now use the model from anywhere.
 
@@ -877,7 +709,6 @@ collaboration. Continue the guide to learn how.
 Highly inspired by:
 
 - [_Connecting a repository to a package_ - docs.github.com](https://docs.github.com/en/packages/learn-github-packages/connecting-a-repository-to-a-package)
-- [_Get Started_ - mlem.ai](https://mlem.ai/doc/get-started?tab=Kubernetes)
-- [_Kubernetes_ - mlem.ai](https://mlem.ai/doc/user-guide/deploying/kubernetes)
 - [_Working with the Container registry_ - docs.github.com](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry)
-- [_Deploying models_ - mlem.ai](https://mlem.ai/doc/user-guide/deploying)
+- [_Containerization_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/guides/containerization.html)
+- [_Build options_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/guides/build-options.html)

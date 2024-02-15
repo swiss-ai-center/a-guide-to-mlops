@@ -423,5 +423,5 @@ collaboration. Continue the guide to learn how.
 
 Highly inspired by:
 
-* [_Get Started: Data Pipelines_ - dvc.org](https://dvc.org/doc/start/data-management/data-pipelines)
-* [_plots_ - dvc.org](https://dvc.org/doc/command-reference/plots)
+- [_Get Started: Data Pipelines_ - dvc.org](https://dvc.org/doc/start/data-management/data-pipelines)
+- [_plots_ - dvc.org](https://dvc.org/doc/command-reference/plots)

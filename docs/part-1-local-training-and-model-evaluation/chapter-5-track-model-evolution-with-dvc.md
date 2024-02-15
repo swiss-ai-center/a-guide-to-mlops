@@ -47,7 +47,7 @@ Check the differences with Git to validate the changes.
 git diff params.yaml
 ```
 
-The output should be similar to this.
+The output should be similar to this:
 
 ```diff
 diff --git a/params.yaml b/params.yaml
@@ -193,7 +193,7 @@ Check the differences with Git to validate the changes.
 git diff .gitignore
 ```
 
-The output should be similar to this.
+The output should be similar to this:
 
 ```diff
 diff --git a/.gitignore b/.gitignore

@@ -647,13 +647,13 @@ collaboration. Continue the guide to learn how.
 
 Highly inspired by:
 
-* [_Get Started with CML on GitHub_ - cml.dev](https://cml.dev/doc/start/github)
-* [_Get Started with CML on GitLab_ - cml.dev](https://cml.dev/doc/start/gitlab)
-* [_Personal access tokens_ - docs.gitlab.com](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html)
+- [_Get Started with CML on GitHub_ - cml.dev](https://cml.dev/doc/start/github)
+- [_Get Started with CML on GitLab_ - cml.dev](https://cml.dev/doc/start/gitlab)
+- [_Personal access tokens_ - docs.gitlab.com](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html)
 
 And the following Git repositories:
 
-* [`example_cml` - github.com](https://github.com/iterative/example_cml)
-* [`cml_dvc_case` - github.com](https://github.com/iterative/cml_dvc_case)
-* [`example_cml` - gitlab.com](https://gitlab.com/iterative.ai/example_cml)
-* [`cml-dvc-case` - gitlab.com](https://gitlab.com/iterative.ai/cml-dvc-case)
+- [`example_cml` - github.com](https://github.com/iterative/example_cml)
+- [`cml_dvc_case` - github.com](https://github.com/iterative/cml_dvc_case)
+- [`example_cml` - gitlab.com](https://gitlab.com/iterative.ai/example_cml)
+- [`cml-dvc-case` - gitlab.com](https://gitlab.com/iterative.ai/cml-dvc-case)

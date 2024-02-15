@@ -126,7 +126,7 @@ Check the differences with Git to validate the changes.
 git diff requirements.txt
 ```
 
-The output should be similar to this.
+The output should be similar to this:
 
 ```diff
 diff --git a/requirements.txt b/requirements.txt
@@ -336,7 +336,7 @@ Check the differences with Git to better understand the changes.
 git diff src/train.py
 ```
 
-The output should be similar to this.
+The output should be similar to this:
 
 ```diff
 diff --git a/src/train.py b/src/train.py
@@ -595,7 +595,7 @@ Check the differences with Git to better understand the changes.
 git diff src/evaluate.py
 ```
 
-The output should be similar to this.
+The output should be similar to this:
 
 ```diff
 diff --git a/src/evaluate.py b/src/evaluate.py
@@ -640,6 +640,22 @@ dvc repro
 The experiment now uses BentoML to save and load the model. The resulting model
 is saved in the `model` folder and is automatically tracked by DVC. The model is
 then uploaded to the remote storage bucket.
+
+You can check the models stored in the model store with the following command:
+
+```sh title="Execute the following command(s) in a terminal"
+# List the models in the model store
+bentoml models list
+```
+
+The output should look like this:
+
+```text
+ Tag                                                 Module                   Size      Creation Time
+ celestial_bodies_classifier_model:pdpajhwlcojiflg6  bentoml.keras            9.53 MiB  2024-02-14 09:31:38
+ celestial_bodies_classifier_model:kbw6izwlcoqehlg6  bentoml.keras            9.53 MiB  2024-02-14 09:30:30
+ celestial_bodies_classifier_model:tykzxhglckjfrlg6  bentoml.keras            9.53 MiB  2024-02-14 09:25:31
+```
 
 ### Check the changes
 
@@ -725,7 +741,9 @@ collaboration. Continue the guide to learn how.
 
 Highly inspired by:
 
-* [_Quickstart_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/get-started/quickstart.html)
-* [_Keras_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/reference/frameworks/keras.html)
-* [_Model Store_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/guides/model-store.html)
-* [_Bento and model APIs_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/reference/stores.html)
+- [_Quickstart_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/get-started/quickstart.html)
+- [_Keras_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/reference/frameworks/keras.html)
+- [_Model Store_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/guides/model-store.html)
+- [_Bento and model APIs_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/reference/stores.html)
+- [_BentoML SDK_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/reference/sdk.html)
+- [_BentoML CLI_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/reference/cli.html)

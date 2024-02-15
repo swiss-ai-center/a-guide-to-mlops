@@ -202,7 +202,7 @@ Download the following image of the moon on your computer.
 
 Upload it to the `/predict` endpoint and check the prediction.
 
-The output should be similar to this.
+The output should be similar to this:
 
 ```json
 {
@@ -233,7 +233,7 @@ Download the following image of Makemake on your computer.
 
 Upload it to the `/predict` endpoint and check the prediction.
 
-The output should be similar to this.
+The output should be similar to this:
 
 ```json
 {
@@ -264,7 +264,7 @@ Download the following image of Neptune on your computer.
 
 Upload it to the `/predict` endpoint and check the prediction.
 
-The output should be similar to this. You may notice the model got it wrong and
+The output should be similar to this: You may notice the model got it wrong and
 prediced Uranus instead!
 
 ```json
@@ -371,7 +371,7 @@ collaboration. Continue the guide to learn how.
 
 Highly inspired by:
 
-* [_Services_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/guides/services.html)
-* [_Input and output types_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/guides/iotypes.html)
-* [_Containerization_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/guides/containerization.html)
-* [_Build options_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/guides/build-options.html)
+- [_Services_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/guides/services.html)
+- [_Input and output types_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/guides/iotypes.html)
+- [_Containerization_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/guides/containerization.html)
+- [_Build options_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/guides/build-options.html)

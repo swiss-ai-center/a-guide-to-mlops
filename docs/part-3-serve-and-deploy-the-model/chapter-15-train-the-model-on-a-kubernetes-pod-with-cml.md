@@ -157,7 +157,7 @@ Display the nodes with the following command.
 kubectl get nodes --show-labels
 ```
 
-The output should be similar to this. As noticed, you have two nodes in your
+The output should be similar to this: As noticed, you have two nodes in your
 cluster with their labels.
 
 ```
@@ -896,9 +896,9 @@ journey and the next things you could do with your model.
 
 Highly inspired by:
 
-* [_Self-hosted (On-premise or Cloud) Runners_ - cml.dev](https://cml.dev/doc/self-hosted-runners)
-* [_Install kubectl and configure cluster access_ - cloud.google.com](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl)
-* [_gcloud container clusters create_ - cloud.google.com](https://cloud.google.com/sdk/gcloud/reference/container/clusters/create)
-* [_Install Tools_ - kubernetes.io](https://kubernetes.io/docs/tasks/tools/)
-* [_Assigning Pods to Nodes_ - kubernetes.io](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
-* [_Assign Pods to Nodes_ - kubernetes.io](https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/)
+- [_Self-hosted (On-premise or Cloud) Runners_ - cml.dev](https://cml.dev/doc/self-hosted-runners)
+- [_Install kubectl and configure cluster access_ - cloud.google.com](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl)
+- [_gcloud container clusters create_ - cloud.google.com](https://cloud.google.com/sdk/gcloud/reference/container/clusters/create)
+- [_Install Tools_ - kubernetes.io](https://kubernetes.io/docs/tasks/tools/)
+- [_Assigning Pods to Nodes_ - kubernetes.io](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+- [_Assign Pods to Nodes_ - kubernetes.io](https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/)

@@ -282,7 +282,7 @@ Install the DVC Storage plugin for the cloud provider.
     git diff requirements.txt
     ```
 
-    The output should be similar to this.
+    The output should be similar to this:
 
     ```diff
     diff --git a/requirements.txt b/requirements.txt
@@ -478,7 +478,7 @@ collaboration. Continue the guide to learn how.
 
 Highly inspired by:
 
-* [_Supported storage types_ - dvc.org](https://dvc.org/doc/command-reference/remote/add#supported-storage-types)
-* [_Install the Google Cloud CLI_ - cloud.google.com](https://cloud.google.com/sdk/docs/install-sdk)
-* [_Create storage buckets_ - cloud.google.com](https://cloud.google.com/storage/docs/creating-buckets)
-* [_gcloud storage buckets create_ - cloud.google.com](https://cloud.google.com/sdk/gcloud/reference/storage/buckets/create)
+- [_Supported storage types_ - dvc.org](https://dvc.org/doc/command-reference/remote/add#supported-storage-types)
+- [_Install the Google Cloud CLI_ - cloud.google.com](https://cloud.google.com/sdk/docs/install-sdk)
+- [_Create storage buckets_ - cloud.google.com](https://cloud.google.com/storage/docs/creating-buckets)
+- [_gcloud storage buckets create_ - cloud.google.com](https://cloud.google.com/sdk/gcloud/reference/storage/buckets/create)
