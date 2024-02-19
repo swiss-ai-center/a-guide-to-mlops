@@ -86,8 +86,10 @@ These are alternatives to BentoML.
 - [Kubeflow](https://www.kubeflow.org/) - The Kubeflow project is dedicated to
   making deployments of machine learning (ML) workflows on Kubernetes simple,
   portable and scalable
-- [MLEM](https://mlem.ai/) - The open-source tool to simplify your ML model deployments
-- [Cog](https://github.com/replicate/cog) - An open-source tool that lets you package machine learning models in a standard, production-ready container
+- [MLEM](https://mlem.ai/) - The open-source tool to simplify your ML model
+  deployments
+- [Cog](https://github.com/replicate/cog) - An open-source tool that lets you
+  package machine learning models in a standard, production-ready container
 
 ### End-to-end
 

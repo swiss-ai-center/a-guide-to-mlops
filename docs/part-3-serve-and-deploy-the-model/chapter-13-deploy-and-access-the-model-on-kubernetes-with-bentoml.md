@@ -147,8 +147,8 @@ information:
 - The Python packages required to run the service
 - The Docker configuration, such as the Python version to use
 
-Create a new `bentofile.yaml` file in the `src` directory with the
-following content:
+Create a new `bentofile.yaml` file in the `src` directory with the following
+content:
 
 ```yaml title="src/bentofile.yaml"
 service: 'serve:CelestialBodiesClassifierService'
@@ -163,19 +163,19 @@ docker:
     python_version: "3.11"
 ```
 
-You might notice the `serve.py` file is included in the Bento. This file contains
-the code to serve the model with FastAPI as you have seen in the previous
-chapter.
+You might notice the `serve.py` file is included in the Bento. This file
+contains the code to serve the model with FastAPI as you have seen in the
+previous chapter.
 
-The `python` section contains the Python packages required to run the service. It
-does not contain DVC and other packages to build the model, as they are not
+The `python` section contains the Python packages required to run the service.
+It does not contain DVC and other packages to build the model, as they are not
 required to run the service.
 
 The `docker` section contains the Python version to use. It is important to
 specify the Python version to ensure the service runs correctly.
 
-Now that the `bentofile.yaml` file is created, you can serve the model with
-the following command:
+Now that the `bentofile.yaml` file is created, you can serve the model with the
+following command:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Serve the model
@@ -252,7 +252,8 @@ Now that the Bento is built, you can containerize it with the following command:
 bentoml containerize celestial_bodies_classifier:latest --image-tag celestial-bodies-classifier:latest
 ```
 
-The first `:latest` is the tag of the Bento. It is a symlink to the latest version of the Bento.
+The first `:latest` is the tag of the Bento. It is a symlink to the latest
+version of the Bento.
 
 The output should be similar to this:
 
@@ -291,22 +292,22 @@ To run your newly built Bento container, run:
     docker run --rm -p 3000:3000 celestial-bodies-classifier:latest
 ```
 
-The Bento is now containerized with Docker. You can run the Docker image with the
-following command:
+The Bento is now containerized with Docker. You can run the Docker image with
+the following command:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Run the Docker image
 docker run --rm -p 3000:3000 celestial-bodies-classifier:latest
 ```
 
-Congrats! You have successfully containerized the Bento with Docker. The model is
-now ready to be deployed on Kubernetes.
+Congrats! You have successfully containerized the Bento with Docker. The model
+is now ready to be deployed on Kubernetes.
 
-### Create a contrainer registry
+### Create a container registry
 
-A container registry is a crucial component that provides a centralized system to
-manage Docker images. It serves as a repository for
-storing, versioning, and tracking Docker models built with BentoML, as each version comes with essential
+A container registry is a crucial component that provides a centralized system
+to manage Docker images. It serves as a repository for storing, versioning, and
+tracking Docker models built with BentoML, as each version comes with essential
 metadata, including training data, hyperparameters, and performance metrics.
 
 This comprehensive information ensures reproducibility by preserving historical
@@ -443,7 +444,16 @@ for an efficient models management.
 
 ### Publish the Bento Docker image to the container registry
 
-TODO
+The Bento Docker image can be published to the container registry with the
+following commands:
+
+```sh title="Execute the following command(s) in a terminal"
+# Tag the local Bento Docker image with the remote container registry host
+docker tag celestial-bodies-classifier:latest $CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest
+
+# Push the Bento Docker image to the container registry
+docker push $CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest
+```
 
 ### Create the Kubernetes cluster
 
@@ -560,7 +570,7 @@ kubectl get namespaces
 
 The output should be similar to this:
 
-```
+```text
 NAME              STATUS   AGE
 default           Active   25m
 kube-node-lease   Active   25m
@@ -570,11 +580,93 @@ kube-system       Active   25m
 
 ### Create the Kubernetes configuration files
 
-TODO
+In order to deploy the model on Kubernetes, you will need to create the
+Kubernetes configuration files. These files describe the deployment and service
+of the model.
+
+Create a new directory called `kubernetes` in the root of the project.
+
+Create a new file called `deployment.yaml` in the `kubernetes` directory with
+the following content. Replace `<docker image>` with the Docker image you have
+created in the previous steps:
+
+!!! tip
+
+    You can find the Docker image with the following command:
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Get the Docker image
+    echo $CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest
+    ```
+
+```yaml title="kubernetes/deployment.yaml"
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: celestial-bodies-classifier-deployment
+  labels:
+    app: celestial-bodies-classifier
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: celestial-bodies-classifier
+  template:
+    metadata:
+      labels:
+        app: celestial-bodies-classifier
+    spec:
+      containers:
+      - name: celestial-bodies-classifier
+        image: <docker image>
+```
+
+Create a new file called `service.yaml` in the `kubernetes` directory with the
+following content:
+
+```yaml title="kubernetes/service.yaml"
+apiVersion: v1
+kind: Service
+metadata:
+  name: celestial-bodies-classifier-service
+spec:
+  type: LoadBalancer
+  ports:
+    - name: http
+      port: 80
+      targetPort: 3000
+      protocol: TCP
+  selector:
+    app: celestial-bodies-classifier
+```
+
+The `deployment.yaml` file describes the deployment of the model. It contains
+the number of replicas, the image to use, and the labels to use.
+
+The `service.yaml` file describes the service of the model. It contains the type
+of service, the ports to use, and the labels to use.
 
 ### Deploy the Bento on Kubernetes
 
-TODO
+To deploy the Bento on Kubernetes, you will need to apply the Kubernetes
+configuration files.
+
+Apply the Kubernetes configuration files with the following commands:
+
+```sh title="Execute the following command(s) in a terminal"
+# Apply the deployment
+kubectl apply -f kubernetes/deployment.yaml
+
+# Apply the service
+kubectl apply -f kubernetes/service.yaml
+```
+
+The output should be similar to this:
+
+```text
+deployment.apps/celestial-bodies-classifier-deployment created
+service/celestial-bodies-classifier-service created
+```
 
 ### Access the model
 
@@ -583,43 +675,42 @@ service. You can do so with the following command.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Get the description of the service
-kubectl describe services ml --namespace mlem
+kubectl describe services celestial-bodies-classifier
 ```
 
 The output should be similar to this:
 
 ```text hl_lines="11"
-Name:                     mlops-classifier
-Namespace:                mlem
-Labels:                   run=mlops-classifier
+Name:                     celestial-bodies-classifier-service
+Namespace:                default
+Labels:                   <none>
 Annotations:              cloud.google.com/neg: {"ingress":true}
-Selector:                 app=mlops-classifier
+Selector:                 app=celestial-bodies-classifier
 Type:                     LoadBalancer
 IP Family Policy:         SingleStack
 IP Families:              IPv4
-IP:                       10.44.6.134
-IPs:                      10.44.6.134
-LoadBalancer Ingress:     34.65.72.237
-Port:                     <unset>  8080/TCP
-TargetPort:               8080/TCP
-NodePort:                 <unset>  32723/TCP
-Endpoints:                10.40.0.12:8080
+IP:                       10.24.1.34
+IPs:                      10.24.1.34
+LoadBalancer Ingress:     34.65.255.92
+Port:                     http  80/TCP
+TargetPort:               3000/TCP
+NodePort:                 http  30882/TCP
+Endpoints:                10.20.0.9:3000
 Session Affinity:         None
 External Traffic Policy:  Cluster
 Events:
-  Type    Reason                Age   From                Message
-  ----    ------                ----  ----                -------
-  Normal  EnsuringLoadBalancer  99s   service-controller  Ensuring load balancer
-  Normal  EnsuredLoadBalancer   59s   service-controller  Ensured load balancer
+  Type    Reason                Age                  From                Message
+  ----    ------                ----                 ----                -------
+  Normal  Type                  36m                  service-controller  ClusterIP -> LoadBalancer
 ```
 
 The `LoadBalancer Ingress` field contains the external IP address of the
-service. In this case, it is `34.65.72.237`.
+service. In this case, it is `34.65.255.92`.
 
-Try to access the model at the port `3000` using the external IP address of the
+Try to access the model at the port `80` using the external IP address of the
 service. You should be able to access the FastAPI documentation page at
-`http://<load balancer ingress ip>:3000`. In this case, it is
-`http://34.65.72.237:3000`.
+`http://<load balancer ingress ip>:80`. In this case, it is
+`http://34.65.255.92:80`.
 
 ### Check the changes
 
@@ -641,22 +732,17 @@ Your branch is up to date with 'origin/main'.
 
 Changes to be committed:
 (use "git restore --staged <file>..." to unstage)
-    modified:   .mlem.yaml
-    modified:   requirements-freeze.txt
-    modified:   requirements.txt
-    new file:   service_classifier.mlem
+    new file:   kubernetes/deployment.yaml
+    new file:   kubernetes/service.yaml
 ```
 
-### Commit the changes to DVC and Git
+### Commit the changes to Git
 
-Commit the changes to DVC and Git.
+Commit the changes to Git.
 
 ```sh title="Execute the following command(s) in a terminal"
-# Push the model to DVC
-dvc push
-
 # Commit the changes
-git commit -m "MLEM can deploy the model with FastAPI on Kubernetes"
+git commit -m "Kubernetes can be used to deploy the model"
 
 # Push the changes
 git push
@@ -671,13 +757,11 @@ You can now use the model from anywhere.
 
 In this chapter, you have successfully:
 
-1. Created a Kubernetes cluster
-2. Managed the Kubernetes cluster with kubectl
-3. Installed MLEM with Kubernetes support
-4. Create a Model Registry
-5. Manage deployment declaration and state
-6. Deploy the model on Kubernetes with MLEM
-7. Access the model
+1. Created and containerized a BentoML "Bento"
+2. Published the Bento Docker image to the container registry
+3. Created the Kubernetes configuration files and deployed the Bento on
+   Kubernetes
+4. Access the model
 
 ## State of the MLOps process
 

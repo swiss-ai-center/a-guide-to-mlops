@@ -107,8 +107,8 @@ flowchart TB
 
 ### Install BentoML and dependencies
 
-Add the `bentoml` package to install BentoML support. `pillow` is also added
-to the requirements to support image processing.
+Add the `bentoml` package to install BentoML support. `pillow` is also added to
+the requirements to support image processing.
 
 ```txt title="requirements.txt" hl_lines="5-6"
 tensorflow==2.12.0
@@ -163,17 +163,19 @@ pip freeze --local --all > requirements-freeze.txt
 
 ### Update the experiment
 
-To make the most of BentoML's capabilities, you must start by converting your model
-into the specialized BentoML format, which allows for the capture of essential
-model metadata beyond traditional model-saving practices. This pivotal step is
-crucial for harnessing the comprehensive features and advantages offered by
-BentoML.
+To make the most of BentoML's capabilities, you must start by converting your
+model into the specialized BentoML format, which allows for the capture of
+essential model metadata beyond traditional model-saving practices. This pivotal
+step is crucial for harnessing the comprehensive features and advantages offered
+by BentoML.
 
-BentoML offers a model store, which is a centralized repository
-for all your models. This store is stored in a directory on your local machine
-at `/home/user/bentoml/`.
+BentoML offers a model store, which is a centralized repository for all your
+models. This store is stored in a directory on your local machine at
+`/home/user/bentoml/`.
 
-In order to share the model with others, the model must be exported in the current working directory. It will then be uploaded to DVC and shared with others.
+In order to share the model with others, the model must be exported in the
+current working directory. It will then be uploaded to DVC and shared with
+others.
 
 #### Update `src/train.py`
 

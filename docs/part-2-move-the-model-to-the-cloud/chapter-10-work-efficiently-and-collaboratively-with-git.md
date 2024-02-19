@@ -274,8 +274,9 @@ git push
 === ":simple-github: GitHub"
 
     The pull request opens and automatically starts the workflow
-    `MLOps / train_and_report (pull_request)` under the **Some checks haven’t completed yet**
-    section. You can click on **Details** to see the execution details.
+    `MLOps / train_and_report (pull_request)` under the
+    **Some checks haven’t completed yet** section. You can click on **Details** to
+    see the execution details.
 
     Explore the output and try to identify the steps that are executed.
 

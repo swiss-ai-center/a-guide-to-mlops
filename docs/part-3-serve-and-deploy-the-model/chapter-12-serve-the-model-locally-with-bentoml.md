@@ -147,7 +147,8 @@ class CelestialBodiesClassifierService:
         return json.dumps(self.postprocess(predictions))
 ```
 
-This service will be used to serve the model with FastAPI and will do the following:
+This service will be used to serve the model with FastAPI and will do the
+following:
 
 1. The model is loaded from the BentoML model store
 2. The `preprocess` function is loaded from the model's custom objects
