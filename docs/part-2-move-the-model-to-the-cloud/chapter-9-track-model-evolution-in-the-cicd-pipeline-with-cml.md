@@ -117,9 +117,8 @@ collaboration and decision-making within the team.
 
 === ":simple-github: GitHub"
 
-    Update the `.github/workflows/mlops.yml` file.
-
-    Explore this file to understand the `train-and-report` stage and its steps.
+    Update the `.github/workflows/mlops.yml` file with the following content.
+    Explore this file to understand the `train-and-report` stage and its steps:
 
     ```yaml title=".github/workflows/mlops.yml" hl_lines="16-17 35-100"
     name: MLOps
@@ -146,16 +145,16 @@ collaboration and decision-making within the team.
           - name: Setup Python
             uses: actions/setup-python@v4
             with:
-              python-version: '3.10'
+              python-version: '3.11'
               cache: pip
           - name: Install dependencies
             run: pip install --requirement requirements-freeze.txt
           - name: Login to Google Cloud
             uses: 'google-github-actions/auth@v1'
             with:
-              credentials_json: '${{ secrets.DVC_GCP_SERVICE_ACCOUNT_KEY }}'
+              credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
           - name: Train model
-            run: dvc repro --pull --allow-missing
+            run: dvc repro --pull
           # Node is required to run CML
           - name: Setup Node
             if: github.event_name == 'pull_request'
@@ -335,9 +334,8 @@ collaboration and decision-making within the team.
 
     Save the variable by clicking **Add variable**.
 
-    Update the `.gitlab-ci.yml` file.
-
-    Explore this file to understand the `report` stage and its steps.
+    Update the `.gitlab-ci.yml` file with the following content. Explore this file
+    to understand the `report` stage and its steps:
 
     ```yaml title=".gitlab-ci.yml" hl_lines="3 13-14 40-97"
     stages:
@@ -357,7 +355,7 @@ collaboration and decision-making within the team.
 
     train:
       stage: train
-      image: python:3.10
+      image: python:3.11
       rules:
         - if: $CI_COMMIT_BRANCH == "main"
         - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -369,7 +367,7 @@ collaboration and decision-making within the team.
           - .venv/
       before_script:
         # Set the Google Service Account key
-        - echo "${DVC_GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+        - echo "${GOOGLE_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
         # Create the virtual environment for caching
         - python3 -m venv .venv
         - source .venv/bin/activate
@@ -377,7 +375,7 @@ collaboration and decision-making within the team.
         - pip install --requirement requirements-freeze.txt
       script:
         # Run the experiment
-        - dvc repro --pull --allow-missing
+        - dvc repro --pull
 
     report:
       stage: report
@@ -388,7 +386,7 @@ collaboration and decision-making within the team.
         - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       before_script:
         # Set the Google Service Account key
-        - echo "${DVC_GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+        - echo "${GOOGLE_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
       script:
         - |
           # Fetch the experiment changes
@@ -484,7 +482,7 @@ collaboration and decision-making within the team.
     @@ -33,3 +36,62 @@ train:
        script:
          # Run the experiment
-         - dvc repro --pull --allow-missing
+         - dvc repro --pull
     +
     +report:
     +  stage: report
@@ -495,7 +493,7 @@ collaboration and decision-making within the team.
     +    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     +  before_script:
     +    # Set the Google Service Account key
-    +    - echo "${DVC_GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+    +    - echo "${GOOGLE_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
     +  script:
     +    - |
     +      # Fetch the experiment changes

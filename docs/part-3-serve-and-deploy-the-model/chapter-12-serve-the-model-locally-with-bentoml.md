@@ -301,7 +301,7 @@ git status
 
 The output should look like this.
 
-```
+```text
 On branch main
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)

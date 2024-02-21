@@ -30,7 +30,7 @@ provider.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Delete the Kubernetes cluster
-    gcloud container clusters delete --zone $GCP_CLUSTER_ZONE $GCP_CLUSTER_NAME
+    gcloud container clusters delete --zone $GCP_K8S_CLUSTER_ZONE $GCP_K8S_CLUSTER_NAME
     ```
 
     Press ++y++ to confirm the deletion.
@@ -42,7 +42,7 @@ provider.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Delete the Kubernetes cluster
-    gcloud artifacts repositories delete --location $GCP_REPOSITORY_LOCATION $GCP_REPOSITORY_NAME
+    gcloud artifacts repositories delete --location $GCP_CONTAINER_REGISTRY_LOCATION $GCP_CONTAINER_REGISTRY_NAME
     ```
 
     Press ++y++ to confirm the deletion.
@@ -71,7 +71,7 @@ provider.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Delete the Service Account key
-    gcloud iam service-accounts delete dvc-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com
+    gcloud iam service-accounts delete service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com
     ```
 
     Press ++y++ to confirm the deletion.
@@ -83,8 +83,7 @@ provider.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Delete the local Service Account key
-    rm ~/.config/gcloud/dvc-google-service-account-key.json
-    rm ~/.config/gcloud/mlem-google-service-account-key.json
+    rm ~/.config/gcloud/google-service-account-key.json
     ```
 
     **Delete the Google Cloud project**
@@ -101,28 +100,28 @@ provider.
 
     To remove the project from the Billing Account:
 
-    1. Go to the
+    5. Go to the
        [Google Cloud Billing Console](https://console.cloud.google.com/billing){:target="\_blank"}.
-    2. Select **MY Projects**
-    3. Select **Actions** from the project list and select **Disable billing**.
+    6. Select **MY Projects**
+    7. Select **Actions** from the project list and select **Disable billing**.
 
     To close the Billing Account you created:
 
-    1. Go to the
+    8. Go to the
        [Google Cloud Billing Console](https://console.cloud.google.com/billing){:target="\_blank"}.
-    2. Select the Billing Account you created.
-    3. Click on **Account management** in the menu.
-    4. Select **Actions** from the project list and select **Disable billing**.
-    5. Select *Close Billing Account* at the top of the page.
-    6. Follow the instructions to close the account.
+    9. Select the Billing Account you created.
+    10. Click on **Account management** in the menu.
+    11. Select **Actions** from the project list and select **Disable billing**.
+    12. Select *Close Billing Account* at the top of the page.
+    13. Follow the instructions to close the account.
 
     **Remove the Payment method**
 
     To remove the payment method you added:
 
-    1. Go to the **Payment method** in the 3-dots top right menu.
-    2. Select the card you added and select **Remove**.
-    3. Follow the instructions to remove the payment method.
+    14. Go to the **Payment method** in the 3-dots top right menu.
+    15. Select the card you added and select **Remove**.
+    16. Follow the instructions to remove the payment method.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 

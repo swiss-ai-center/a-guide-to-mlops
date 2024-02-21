@@ -233,7 +233,7 @@ git status
 
 The output of the `git status` command should be similar to this.
 
-```
+```text
 On branch cml-report
 Your branch is up to date with 'cml-report'.
 

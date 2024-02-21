@@ -102,7 +102,7 @@ data inside the CI/CD pipeline.
     to access Google Cloud without your own credentials.
 
     The key will be stored in your **`~/.config/gcloud`** directory under the name
-    `dvc-google-service-account-key.json`.
+    `google-service-account-key.json`.
 
     !!! danger
 
@@ -111,17 +111,17 @@ data inside the CI/CD pipeline.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Create the Google Service Account
-    gcloud iam service-accounts create dvc-service-account \
-        --display-name="DVC Service Account"
+    gcloud iam service-accounts create google-service-account \
+        --display-name="Google Service Account"
 
     # Set the permissions for the Google Service Account
     gcloud projects add-iam-policy-binding $GCP_PROJECT_ID \
-        --member="serviceAccount:dvc-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com" \
+        --member="serviceAccount:google-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com" \
         --role="roles/storage.objectViewer"
 
     # Create the Google Service Account Key
-    gcloud iam service-accounts keys create ~/.config/gcloud/dvc-google-service-account-key.json \
-        --iam-account=dvc-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com
+    gcloud iam service-accounts keys create ~/.config/gcloud/google-service-account-key.json \
+        --iam-account=google-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com
     ```
 
     !!! info
@@ -164,7 +164,7 @@ Depending on the CI/CD platform you are using, the process will be different.
 
         ```sh title="Execute the following command(s) in a terminal"
         # Display the Google Service Account key
-        cat ~/.config/gcloud/dvc-google-service-account-key.json
+        cat ~/.config/gcloud/google-service-account-key.json
         ```
 
     === ":simple-gitlab: GitLab"
@@ -177,14 +177,14 @@ Depending on the CI/CD platform you are using, the process will be different.
 
             ```sh title="Execute the following command(s) in a terminal"
             # Encode the Google Service Account key to base64
-            base64 -w 0 -i ~/.config/gcloud/dvc-google-service-account-key.json
+            base64 -w 0 -i ~/.config/gcloud/google-service-account-key.json
             ```
 
         === ":simple-apple: macOS"
 
             ```sh title="Execute the following command(s) in a terminal"
             # Encode the Google Service Account key to base64
-            base64 -i ~/.config/gcloud/dvc-google-service-account-key.json
+            base64 -i ~/.config/gcloud/google-service-account-key.json
             ```
 
     **Store the Google Service Account key as a CI/CD variable**
@@ -196,7 +196,7 @@ Depending on the CI/CD platform you are using, the process will be different.
 
         Select **Secrets and variables > Actions** and select **New repository secret**.
 
-        Create a new variable named `DVC_GCP_SERVICE_ACCOUNT_KEY` with the output value
+        Create a new variable named `GOOGLE_SERVICE_ACCOUNT_KEY` with the output value
         of the Google Service Account key file as its value. Save the variable by
         selecting **Add secret**.
 
@@ -207,8 +207,8 @@ Depending on the CI/CD platform you are using, the process will be different.
 
         Select **Variables** and select **Add variable**.
 
-        Create a new variable named `DVC_GCP_SERVICE_ACCOUNT_KEY` with the Google
-        Service Account key file encoded in `base64` as its value.
+        Create a new variable named `GOOGLE_SERVICE_ACCOUNT_KEY` with the Google Service
+        Account key file encoded in `base64` as its value.
 
         - **Protect variable**: _Unchecked_
         - **Mask variable**: _Checked_
@@ -263,16 +263,16 @@ Depending on the CI/CD platform you are using, the process will be different.
           - name: Setup Python
             uses: actions/setup-python@v4
             with:
-              python-version: '3.10'
+              python-version: '3.11'
               cache: pip
           - name: Install dependencies
             run: pip install --requirement requirements-freeze.txt
           - name: Login to Google Cloud
             uses: 'google-github-actions/auth@v1'
             with:
-              credentials_json: '${{ secrets.DVC_GCP_SERVICE_ACCOUNT_KEY }}'
+              credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
           - name: Train model
-            run: dvc repro --pull --allow-missing
+            run: dvc repro --pull
     ```
 
 === ":simple-gitlab: GitLab"
@@ -297,7 +297,7 @@ Depending on the CI/CD platform you are using, the process will be different.
 
     train:
       stage: train
-      image: python:3.10
+      image: python:3.11
       rules:
         - if: $CI_COMMIT_BRANCH == "main"
         - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -309,7 +309,7 @@ Depending on the CI/CD platform you are using, the process will be different.
           - .venv/
       before_script:
         # Set the Google Service Account key
-        - echo "${DVC_GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+        - echo "${GOOGLE_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
         # Create the virtual environment for caching
         - python3 -m venv .venv
         - source .venv/bin/activate
@@ -317,17 +317,13 @@ Depending on the CI/CD platform you are using, the process will be different.
         - pip install --requirement requirements-freeze.txt
       script:
         # Run the experiment
-        - dvc repro --pull --allow-missing
+        - dvc repro --pull
     ```
 
-A few notes:
+!!! tip
 
-- Instead of running `dvc pull` and `dvc repro` separately, you can run them
-  together with `dvc repro --pull`.
-- The `--allow-missing` flag allows DVC to skip downloading unnecessary files
-  that are not used in the repro step. For example, if the prepare step is already
-  cached, DVC will skip downloading the data again and will only download the
-  cached prepare step.
+    Instead of running `dvc pull` and `dvc repro` separately, you can run them
+    together with `dvc repro --pull`.
 
 ### Push the CI/CD pipeline configuration file to Git
 

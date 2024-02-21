@@ -301,7 +301,7 @@ docker run --rm -p 3000:3000 celestial-bodies-classifier:latest
 ```
 
 Congrats! You have successfully containerized the Bento with Docker. The model
-is now ready to be deployed on Kubernetes.
+is now ready to be shared on a container registry.
 
 ### Create a container registry
 
@@ -339,7 +339,7 @@ for an efficient models management.
     `<my repository name>` with your own name (ex: `mlops-registry`).
 
     ```sh title="Execute the following command(s) in a terminal"
-    export GCP_REPOSITORY_NAME=<my repository name>
+    export GCP_CONTAINER_REGISTRY_NAME=<my repository name>
     ```
 
     Export the repository location as an environment variable. Replace
@@ -347,7 +347,7 @@ for an efficient models management.
     Switzerland).
 
     ```sh title="Execute the following command(s) in a terminal"
-    export GCP_REPOSITORY_LOCATION=<my repository location>
+    export GCP_CONTAINER_REGISTRY_LOCATION=<my repository location>
     ```
 
     Lastly, when creating the repository, remember to specify the repository format
@@ -355,14 +355,14 @@ for an efficient models management.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Create the Google Container Registry
-    gcloud artifacts repositories create $GCP_REPOSITORY_NAME \
+    gcloud artifacts repositories create $GCP_CONTAINER_REGISTRY_NAME \
         --repository-format=docker \
-        --location=$GCP_REPOSITORY_LOCATION
+        --location=$GCP_CONTAINER_REGISTRY_LOCATION
     ```
 
     The output should be similar to this:
 
-    ```
+    ```text
     Create request issued for: [mlops-registry]
     Waiting for operation [projects/mlops-code-395207/locations/europe-west6/operations/be8b09fa-279c-468
     5-b451-1f3c900d4a36] to complete...done.
@@ -394,7 +394,7 @@ for an efficient models management.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Authenticate with the Google Container Registry
-    gcloud auth configure-docker ${GCP_REPOSITORY_LOCATION}-docker.pkg.dev
+    gcloud auth configure-docker ${GCP_CONTAINER_REGISTRY_LOCATION}-docker.pkg.dev
     ```
 
     Press ++y++ to validate the changes.
@@ -402,7 +402,7 @@ for an efficient models management.
     Export the container registry host:
 
     ```sh title="Execute the following command(s) in a terminal"
-    export CONTAINER_REGISTRY_HOST=${GCP_REPOSITORY_LOCATION}-docker.pkg.dev/$GCP_PROJECT_ID/$GCP_REPOSITORY_NAME
+    export GCP_CONTAINER_REGISTRY_HOST=${GCP_CONTAINER_REGISTRY_LOCATION}-docker.pkg.dev/$GCP_PROJECT_ID/$GCP_CONTAINER_REGISTRY_NAME
     ```
 
     !!! tip
@@ -416,7 +416,7 @@ for an efficient models management.
 
         The output should be similar to this:
 
-        ```
+        ```text
         PROJECT_ID             NAME            PROJECT_NUMBER
         mlops-workshop-396007  mlops-workshop  475307267926
         ```
@@ -449,10 +449,10 @@ following commands:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Tag the local Bento Docker image with the remote container registry host
-docker tag celestial-bodies-classifier:latest $CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest
+docker tag celestial-bodies-classifier:latest $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest
 
 # Push the Bento Docker image to the container registry
-docker push $CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest
+docker push $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest
 ```
 
 ### Create the Kubernetes cluster
@@ -477,7 +477,7 @@ Follow the steps below to create one.
     with your own name (ex: `mlops-kubernetes`).
 
     ```sh title="Execute the following command(s) in a terminal"
-    export GCP_CLUSTER_NAME=<my cluster name>
+    export GCP_K8S_CLUSTER_NAME=<my cluster name>
     ```
 
     Export the cluster zone as an environment variable. You can view the available
@@ -491,7 +491,7 @@ Follow the steps below to create one.
     `gcloud compute machine-types list` command.
 
     ```sh title="Execute the following command(s) in a terminal"
-    export GCP_CLUSTER_ZONE=<my cluster zone>
+    export GCP_K8S_CLUSTER_ZONE=<my cluster zone>
     ```
 
     Create the Kubernetes cluster. This can take a few minutes.
@@ -501,13 +501,13 @@ Follow the steps below to create one.
     gcloud container clusters create \
     	--machine-type=e2-standard-2 \
     	--num-nodes=2 \
-    	--zone=$GCP_CLUSTER_ZONE \
-    	$GCP_CLUSTER_NAME
+    	--zone=$GCP_K8S_CLUSTER_ZONE \
+    	$GCP_K8S_CLUSTER_NAME
     ```
 
     The output should be similar to this:
 
-    ```
+    ```text
     Default change: VPC-native is the default mode during cluster creation for versions greater than 1.21.0-gke.1500. To create advanced routes based clusters, please pass the `--no-enable-ip-alias` flag
     Default change: During creation of nodepools or autoscaling configuration changes for cluster versions greater than 1.24.1-gke.800 a default location policy is applied. For Spot and PVM it defaults to ANY, and for all other VM kinds a BALANCED policy is used. To change the default values use the `--location-policy` flag.
     Note: Your Pod address range (`--cluster-ipv4-cidr`) can accommodate at most 1008 node(s).
@@ -596,7 +596,7 @@ created in the previous steps:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Get the Docker image
-    echo $CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest
+    echo $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest
     ```
 
 ```yaml title="kubernetes/deployment.yaml"

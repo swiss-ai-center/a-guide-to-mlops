@@ -91,7 +91,7 @@ git status
 
 The output should be similar to this:
 
-```
+```text
 On branch main
 
 No commits yet
@@ -158,7 +158,7 @@ git status
 
 The output of the `git status` command should be similar to this.
 
-```
+```text
 On branch main
 
 No commits yet
@@ -265,7 +265,7 @@ dvc add data/raw/
 
 When executing this command, the following output occurs.
 
-```sh
+```text
 ERROR: bad DVC file name 'data/data.raw.dvc' is git-ignored.
 ```
 
@@ -332,7 +332,7 @@ dvc add data/raw/
 
 The output should be similar to this: You can safely ignore the message.
 
-```
+```text
 To track the changes with git, run:
 
     git add data/raw.dvc data/.gitignore
@@ -366,7 +366,7 @@ git status
 
 The output of the `git status` command should be similar to this.
 
-```
+```text
 On branch main
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)

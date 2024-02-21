@@ -16,8 +16,9 @@ process:
   [:simple-github: GitHub Actions](https://github.com/features/actions) or
   [:simple-gitlab: GitLab CI](https://about.gitlab.com/topics/ci-cd/)
 - A [:simple-googlecloud: Google Cloud](https://cloud.google.com) account
-- Model serving, distributing and deploying: [BentoML](https://bentoml.com/) &
-  [:simple-docker: Docker](https://docker.com/)
+- Model serving, distributing and deploying: [BentoML](https://bentoml.com/),
+  [:simple-docker: Docker](https://docker.com/) and
+  [:simple-kubernetes: Kubernetes](https://kubernetes.io/)
 - Data annotation: [Label Studio](https://labelstud.io/)
 
 ??? info "Using another cloud provider? Read this!"

@@ -277,7 +277,7 @@ You can visualize the pipeline to check the stages that will be performed.
 dvc dag
 ```
 
-```
+```text
 +--------------+
 | data/raw.dvc |
 +--------------+
@@ -323,7 +323,7 @@ information about the pipeline and the outputs of the stages.
 
 Try to run the command again and notice that DVC will not re-execute the stages.
 
-```
+```text
 'data/raw.dvc' didn't change, skipping
 Stage 'prepare' didn't change, skipping
 Stage 'train' didn't change, skipping
@@ -345,7 +345,7 @@ git status
 
 The output of the `git status` command should be similar to this.
 
-```
+```text
 On branch main
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)

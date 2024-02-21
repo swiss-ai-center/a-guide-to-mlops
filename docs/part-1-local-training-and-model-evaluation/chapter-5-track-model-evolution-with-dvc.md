@@ -103,7 +103,7 @@ dvc params diff
 
 The output should look like this.
 
-```
+```text
 Path         Param         HEAD    workspace
 params.yaml  train.epochs  5       10
 ```
@@ -124,7 +124,7 @@ dvc metrics diff
 
 The output should look like this.
 
-```
+```text
 Path                     Metric    HEAD     workspace    Change
 evaluation/metrics.json  val_acc   0.58879  0.74143      0.15265
 evaluation/metrics.json  val_loss  1.89269  1.34434      -0.54835
@@ -225,7 +225,7 @@ git status
 
 The output should look like this.
 
-```
+```text
 On branch main
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)

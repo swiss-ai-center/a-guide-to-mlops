@@ -418,16 +418,16 @@ you'll be able to start the training of the model on the node with the GPU.
           - name: Setup Python
             uses: actions/setup-python@v4
             with:
-              python-version: '3.10'
+              python-version: '3.11'
               cache: pip
           - name: Install dependencies
             run: pip install --requirement requirements-freeze.txt
           - name: Login to Google Cloud
             uses: 'google-github-actions/auth@v1'
             with:
-              credentials_json: '${{ secrets.DVC_GCP_SERVICE_ACCOUNT_KEY }}'
+              credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
           - name: Train model
-            run: dvc repro --pull --allow-missing
+            run: dvc repro --pull
             # Node is required to run CML
           - name: Setup Node
             if: github.event_name == 'pull_request'
