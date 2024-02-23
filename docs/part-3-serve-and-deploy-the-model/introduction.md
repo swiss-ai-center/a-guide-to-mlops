@@ -4,7 +4,7 @@ title: "Part 3 - Introduction"
 
 # Introduction
 
-Learn how to serve and deploy the model using [MLEM](../tools.md) and
+Learn how to serve and deploy the model using [BentoML](../tools.md) and
 [CML](../tools.md).
 
 ## Environment
