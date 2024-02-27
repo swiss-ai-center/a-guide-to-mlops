@@ -194,12 +194,12 @@ saves:
     save_git: true
     actions:
       - replace_from_md:
-        file: .github/workflows/mlops.yml
+        file: .github/workflows/mlops.yaml
         occurance_index: 0
       - replace_from_md:
         file: .gitlab-ci.yml
         occurance_index: 0
-      - run: git add .github/workflows/mlops.yml
+      - run: git add .github/workflows/mlops.yaml
       - run: git add .gitlab-ci.yml
       - run: git commit -m "A pipeline will run my experiment on each push"
 
@@ -207,16 +207,16 @@ saves:
     save_git: true
     actions:
       - replace_from_md:
-        file: .github/workflows/mlops.yml
+        file: .github/workflows/mlops.yaml
         occurance_index: 0
       - replace_from_md:
         file: .gitlab-ci.yml
         occurance_index: 0
-      - run: git diff .github/workflows/mlops.yml
+      - run: git diff .github/workflows/mlops.yaml
         log: true
       - run: git diff .gitlab-ci.yml
         log: true
-      - run: git add .github/workflows/mlops.yml
+      - run: git add .github/workflows/mlops.yaml
       - run: git add .gitlab-ci.yml
       - run: git commit -m "Add cml reporting to CI/CD pipeline"
 

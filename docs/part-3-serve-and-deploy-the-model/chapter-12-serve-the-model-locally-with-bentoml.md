@@ -116,7 +116,7 @@ serve the model using FastAPI.
 
 Create a new file `src/serve.py` and add the following code:
 
-```py title="src/serve.py" hl_lines="12 15 16 17 20 22 23 28"
+```py title="src/serve.py"
 from __future__ import annotations
 from bentoml.validators import ContentType
 from typing import Annotated
@@ -266,7 +266,7 @@ Download the following image of Neptune on your computer.
 Upload it to the `/predict` endpoint and check the prediction.
 
 The output should be similar to this: You may notice the model got it wrong and
-prediced Uranus instead!
+predicted Uranus instead!
 
 ```json
 {

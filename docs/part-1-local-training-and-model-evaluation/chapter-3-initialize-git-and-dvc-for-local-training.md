@@ -71,8 +71,8 @@ DVC repositories to enable easy collaboration with the rest of the team.
 
 #### Initialize Git in your working directory
 
-Use the following commands to set up a local Git repository in your working
-directory.
+Use the following command to set up a local Git repository in your working
+directory:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Initialize Git in your working directory with `main` as the initial branch
@@ -82,7 +82,7 @@ git init --initial-branch=main
 #### Check if Git tracks your files
 
 Initialize Git in your working directory. Verify available files for committing
-with these commands.
+with this command:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Check the changes
@@ -120,7 +120,7 @@ improve repository size and clone time. The data and models will be managed by
 DVC in the next chapters. Keep the model's evaluation as it doesn't take much
 space and you can have a history of the improvements made to your model.
 Additionally, this will help to ensure that the repository size and clone time
-remain optimized.
+remain optimized:
 
 ```sh title=".gitignore"
 # Data used to train the models
@@ -146,7 +146,8 @@ __pycache__/
 
 #### Check the changes
 
-Check the changes with Git to ensure all wanted files are here.
+Check the changes with Git to ensure all wanted files are here with the
+following commands:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Add all the available files
@@ -156,7 +157,7 @@ git add .
 git status
 ```
 
-The output of the `git status` command should be similar to this.
+The output of the `git status` command should be similar to this:
 
 ```text
 On branch main
@@ -179,7 +180,7 @@ Changes to be committed:
 
 #### Commit the changes
 
-Commit the changes to Git.
+Commit the changes to Git:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
@@ -190,16 +191,16 @@ git commit -m "My first ML experiment versioned with Git"
 
 #### Install DVC
 
-Add the main `dvc` dependency to the `requirements.txt` file.
+Add the main `dvc` dependency to the `requirements.txt` file:
 
 ```txt title="requirements.txt" hl_lines="4"
 tensorflow==2.12.0
 matplotlib==3.7.1
 pyyaml==6.0
-dvc==3.2.2
+dvc==3.47.0
 ```
 
-Check the differences with Git to validate the changes.
+Check the differences with Git to validate the changes:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Show the differences with Git
@@ -210,17 +211,17 @@ The output should be similar to this:
 
 ```diff
 diff --git a/requirements.txt b/requirements.txt
-index 250f32c..193ebac 100644
+index 250f32c..152b868 100644
 --- a/requirements.txt
 +++ b/requirements.txt
 @@ -1,3 +1,4 @@
  tensorflow==2.12.0
  matplotlib==3.7.1
  pyyaml==6.0
-+dvc==3.2.2
++dvc==3.47.0
 ```
 
-Install the dependencies and update the freeze file.
+Install the dependencies and update the freeze file:
 
 !!! warning
 
@@ -256,14 +257,14 @@ which serves as the configuration directory for DVC.
 
 With DVC now set up, you can begin adding files to it.
 
-Try to add the experiment data. Spoiler: it will fail.
+Try to add the experiment data. Spoiler, it will fail:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Try to add the experiment data to DVC
 dvc add data/raw/
 ```
 
-When executing this command, the following output occurs.
+When executing this command, the following output occurs:
 
 ```text
 ERROR: bad DVC file name 'data/data.raw.dvc' is git-ignored.
@@ -274,7 +275,7 @@ the `data` directory. However, you still don't want the directories `data/raw`
 and `data/prepared` to be added to Git.
 
 Update the `.gitignore` file by changing `data/` to `data/raw/` and
-`data/prepared/`.
+`data/prepared/`:
 
 ```sh title=".gitignore" hl_lines="2-3"
 # Data used to train the models
@@ -299,7 +300,7 @@ __pycache__/
     If using macOS, you might want to ignore `.DS_Store` files as well to avoid
     pushing Apple's metadata files to your repository.
 
-Check the differences with Git to validate the changes.
+Check the differences with Git to validate the changes:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Show the differences with Git
@@ -323,14 +324,14 @@ index dc17ed7..1c13140 100644
  evaluation/
 ```
 
-You can now add the experiment data to DVC without complain!
+You can now add the experiment data to DVC without complain:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Add the experiment data to DVC
 dvc add data/raw/
 ```
 
-The output should be similar to this: You can safely ignore the message.
+The output should be similar to this. You can safely ignore the message:
 
 ```text
 To track the changes with git, run:

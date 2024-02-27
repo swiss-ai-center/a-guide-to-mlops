@@ -152,14 +152,6 @@ but this time for the Kubernetes cluster.
     Update the Google Service Account and its associated Google Service Account Key
     to access Google Cloud from the CI/CD pipeline without your own credentials.
 
-    As a reminder, the key will be stored in your **`~/.config/gcloud`** directory
-    under the name `google-service-account-key.json`.
-
-    !!! danger
-
-        You must **never** add and commit this file to your working directory. It is a
-        sensitive data that you must keep safe.
-
     ```sh title="Execute the following command(s) in a terminal"
     # Set the Cloud Storage permissions for the Google Service Account
     gcloud projects add-iam-policy-binding $GCP_PROJECT_ID \
@@ -174,146 +166,18 @@ but this time for the Kubernetes cluster.
     # Set the Kubernetes Cluster permissions for the Google Service Account
     gcloud projects add-iam-policy-binding $GCP_PROJECT_ID \
         --member="serviceAccount:google-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com" \
-        --role="roles/container.clusterAdmin"
+        --role="roles/container.developer"
 
     # Create the Google Service Account Key
     gcloud iam service-accounts keys create ~/.config/gcloud/google-service-account-key.json \
         --iam-account=google-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com
     ```
 
-=== ":material-cloud: Using another cloud provider? Read this!"
+    !!! tip
 
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
+        There is no need ti update the value in the CI/CD pipeline configuration.
 
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
-
-### Update the CI/CD secrets
-
-Now that the credentials are created, you need to update them in the CI/CD
-configuration and add a few secrets to the CI/CD platform.
-
-Depending on the CI/CD platform you are using, the process will be different.
-
-=== ":simple-googlecloud: Google Cloud"
-
-    **Display the Google Service Account key**
-
-    The service account key is stored on your computer as a JSON file. You need to
-    display it and store it as a CI/CD variable in a text format.
-
-    === ":simple-github: GitHub"
-
-        Display the Google Service Account key that you have downloaded from Google
-        Cloud.
-
-        ```sh title="Execute the following command(s) in a terminal"
-        # Display the Google Service Account key
-        cat ~/.config/gcloud/google-service-account-key.json
-        ```
-
-    === ":simple-gitlab: GitLab"
-
-        Encode and display the Google Service Account key that you have downloaded from
-        Google Cloud as `base64`. It allows to hide the secret in GitLab CI logs as a
-        security measure.
-
-        === ":simple-linux: Linux & :simple-windows: Windows"
-
-            ```sh title="Execute the following command(s) in a terminal"
-            # Encode the Google Service Account key to base64
-            base64 -w 0 -i ~/.config/gcloud/google-service-account-key.json
-            ```
-
-        === ":simple-apple: macOS"
-
-            ```sh title="Execute the following command(s) in a terminal"
-            # Encode the Google Service Account key to base64
-            base64 -i ~/.config/gcloud/google-service-account-key.json
-            ```
-
-    **Update the Google Service Account key CI/CD variable**
-
-    === ":simple-github: GitHub"
-
-        Store the output as a CI/CD variable by going to the **Settings** section from
-        the top header of your GitHub repository.
-
-        Select **Secrets and variables > Actions** and edit the value for the secret
-        named `GOOGLE_SERVICE_ACCOUNT_KEY`.
-
-        Update its value with the output value of the Google Service Account key file.
-        Save the variable by selecting **Update secret**.
-
-    === ":simple-gitlab: GitLab"
-
-        Store the output as a CI/CD Variable by going to **Settings > CI/CD** from the
-        left sidebar of your GitLab project.
-
-        Select **Variables** and edit the value for the secret named
-        `GOOGLE_SERVICE_ACCOUNT_KEY`.
-
-        Update its value with the output value of the Google Service Account key file
-        encoded in `base64`. Save the variable by selecting **Update secret**.
-
-        Create a new variable named `GOOGLE_SERVICE_ACCOUNT_KEY` with the Google Service
-        Account key file encoded in `base64` as its value.
-
-        Save the variable by clicking **Update variable**.
-
-    **Add remaining CI/CD variables**
-
-    === ":simple-github: GitHub"
-
-        Create the following new variables by going to the **Settings** section from the
-        top header of your GitHub repository. Select **Secrets and variables > Actions**
-        and select **New repository secret**:
-
-        - `GCP_K8S_CLUSTER_NAME`: The name of the Kubernetes cluster (ex:
-          `mlops-kubernetes`, from the variable `GCP_K8S_CLUSTER_NAME` in the previous
-          chapter)
-        - `GCP_K8S_CLUSTER_ZONE`: The zone of the Kubernetes cluster (ex:
-          `europe-west6-a` for Zurich, Switzerland, from the variable
-          `GCP_K8S_CLUSTER_ZONE` in the previous chapter)
-        - `GCP_CONTAINER_REGISTRY_HOST`: The host of the container registry (ex:
-          `europe-west6-docker.pkg.dev/mlops-workshop-github-406009/mlops-registry`, from
-          the variable `GCP_CONTAINER_REGISTRY_HOST` in the previous chapter)
-
-        Save the variables by selecting **Add secret**.
-
-    === ":simple-gitlab: GitLab"
-
-        Create the following new variables by going to **Settings > CI/CD** from the
-        left sidebar of your GitLab project. Select **Variables** and select
-        **Add variable**:
-
-        - `GCP_K8S_CLUSTER_NAME`: The name of the Kubernetes cluster (ex:
-          `mlops-kubernetes`, from the variable `GCP_K8S_CLUSTER_NAME` in the previous
-          chapter)
-            - **Protect variable**: _Unchecked_
-            - **Mask variable**: _Checked_
-            - **Expand variable reference**: _Unchecked_
-        - `GCP_K8S_CLUSTER_ZONE`: The zone of the Kubernetes cluster (ex:
-          `europe-west6-a` for Zurich, Switzerland, from the variable
-          `GCP_K8S_CLUSTER_ZONE` in the previous chapter)
-            - **Protect variable**: _Unchecked_
-            - **Mask variable**: _Checked_
-            - **Expand variable reference**: _Unchecked_
-        - `GCP_CONTAINER_REGISTRY_HOST`: The host of the container registry (ex:
-          `europe-west6-docker.pkg.dev/mlops-workshop-github-406009/mlops-registry`, from
-          the variable `GCP_CONTAINER_REGISTRY_HOST` in the previous chapter)
-            - **Protect variable**: _Unchecked_
-            - **Mask variable**: _Checked_
-            - **Expand variable reference**: _Unchecked_
-
-        Save the variables by selecting **Add secret**.
+        All changes are made at the Google Cloud level and the key file is not not changed.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
@@ -342,11 +206,11 @@ following steps will be performed:
 
 === ":simple-github: GitHub"
 
-    Update the `.github/workflows/mlops.yml` file with the following content.
+    Update the `.github/workflows/mlops.yaml` file with the following content.
 
     Take some time to understand the deploy job and its steps:
 
-    ```yaml title=".github/workflows/mlops.yml" hl_lines="16 94-133"
+    ```yaml title=".github/workflows/mlops.yaml" hl_lines="16 94-133"
     name: MLOps
 
     on:
@@ -367,31 +231,25 @@ following steps will be performed:
         runs-on: ubuntu-latest
         steps:
           - name: Checkout repository
-            uses: actions/checkout@v3
+            uses: actions/checkout@v4
           - name: Setup Python
-            uses: actions/setup-python@v4
+            uses: actions/setup-python@v5
             with:
               python-version: '3.11'
               cache: pip
           - name: Install dependencies
             run: pip install --requirement requirements-freeze.txt
           - name: Login to Google Cloud
-            uses: 'google-github-actions/auth@v2'
+            uses: google-github-actions/auth@v2
             with:
               credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
           - name: Train model
             run: dvc repro --pull
-          # Node is required to run CML
-          - name: Setup Node
-            if: github.event_name == 'pull_request'
-            uses: actions/setup-node@v3
-            with:
-              node-version: '16'
           - name: Setup CML
             if: github.event_name == 'pull_request'
-            uses: iterative/setup-cml@v1
+            uses: iterative/setup-cml@v2
             with:
-              version: '0.19.1'
+              version: '0.20.0'
           - name: Create CML report
             if: github.event_name == 'pull_request'
             env:
@@ -441,7 +299,7 @@ following steps will be performed:
               # Publish the CML report
               cml comment update --target=pr --publish report.md
           - name: Log in to the Container registry
-            uses: docker/login-action@v2
+            uses: docker/login-action@v3
             with:
               registry: ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}
               username: _json_key
@@ -449,10 +307,10 @@ following steps will be performed:
           - name: Import the BentoML model
             if: github.ref == 'refs/heads/main'
             run: bentoml models import model/celestial_bodies_classifier_model.bentomodel
-          - name: Build the BentoML 'Bento'
+          - name: Build the BentoML model artifact
             if: github.ref == 'refs/heads/main'
             run: bentoml build src
-          - name: Containerize and publish the Bento
+          - name: Containerize and publish the BentoML model artifact Docker image
             if: github.ref == 'refs/heads/main'
             run: |
               # Containerize the Bento
@@ -463,13 +321,10 @@ following steps will be performed:
               docker push --all-tags ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier
           - name: Get Google Cloud's Kubernetes credentials
             if: github.ref == 'refs/heads/main'
-            uses: 'google-github-actions/get-gke-credentials@v2'
+            uses: google-github-actions/get-gke-credentials@v2
             with:
               cluster_name: ${{ secrets.GCP_K8S_CLUSTER_NAME }}
               location: ${{ secrets.GCP_K8S_CLUSTER_ZONE }}
-          - name: Install kubectl
-            if: github.ref == 'refs/heads/main'
-            uses: azure/setup-kubectl@v3
           - name: Update the Kubernetes deployment
             if: github.ref == 'refs/heads/main'
             run: |
@@ -486,31 +341,31 @@ following steps will be performed:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Show the differences with Git
-    git diff .github/workflows/mlops.yml
+    git diff .github/workflows/mlops.yaml
     ```
 
     The output should be similar to this:
 
     ```diff
-    diff --git a/.github/workflows/mlops.yml b/.github/workflows/mlops.yml
-    index c9f1824..13a1ad0 100644
-    --- a/.github/workflows/mlops.yml
-    +++ b/.github/workflows/mlops.yml
+    diff --git a/.github/workflows/mlops.yaml b/.github/workflows/mlops.yaml
+    index 1fa989b..6d479ef 100644
+    --- a/.github/workflows/mlops.yaml
+    +++ b/.github/workflows/mlops.yaml
     @@ -13,7 +13,7 @@ on:
        workflow_dispatch:
-
+     
      jobs:
     -  train-and-report:
     +  train-report-publish-and-deploy:
          permissions: write-all
          runs-on: ubuntu-latest
          steps:
-    @@ -91,3 +91,43 @@ jobs:
-
+    @@ -85,3 +85,43 @@ jobs:
+     
                # Publish the CML report
                cml comment update --target=pr --publish report.md
     +      - name: Log in to the Container registry
-    +        uses: docker/login-action@v2
+    +        uses: docker/login-action@v3
     +        with:
     +          registry: ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}
     +          username: _json_key
@@ -518,35 +373,28 @@ following steps will be performed:
     +      - name: Import the BentoML model
     +        if: github.ref == 'refs/heads/main'
     +        run: bentoml models import model/celestial_bodies_classifier_model.bentomodel
-    +      - name: Build the BentoML 'Bento'
+    +      - name: Build the BentoML model artifact
     +        if: github.ref == 'refs/heads/main'
     +        run: bentoml build src
-    +      - name: Containerize and publish the Bento
+    +      - name: Containerize and publish the BentoML model artifact Docker image
     +        if: github.ref == 'refs/heads/main'
     +        run: |
     +          # Containerize the Bento
     +          bentoml containerize celestial_bodies_classifier:latest \
-    +            --image-tag ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/    celestial-bodies-classifier:
-    latest \
-    +            --image-tag ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/    celestial-bodies-classifier:
-    ${{ github.sha }}
+    +            --image-tag ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:latest \
+    +            --image-tag ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:${{ github.sha }}
     +          # Push the container to the Container Registry
-    +          docker push --all-tags ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/    celestial-bodies-cl
-    assifier
+    +          docker push --all-tags ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier
     +      - name: Get Google Cloud's Kubernetes credentials
     +        if: github.ref == 'refs/heads/main'
-    +        uses: 'google-github-actions/get-gke-credentials@v2'
+    +        uses: google-github-actions/get-gke-credentials@v2
     +        with:
     +          cluster_name: ${{ secrets.GCP_K8S_CLUSTER_NAME }}
     +          location: ${{ secrets.GCP_K8S_CLUSTER_ZONE }}
-    +      - name: Install kubectl
-    +        if: github.ref == 'refs/heads/main'
-    +        uses: azure/setup-kubectl@v3
     +      - name: Update the Kubernetes deployment
     +        if: github.ref == 'refs/heads/main'
     +        run: |
-    +          yq -i '.spec.template.spec.containers[0].image = "${{ secrets.    GCP_CONTAINER_REGISTRY_
-    HOST }}/celestial-bodies-classifier:${{ github.sha }}"' kubernetes/deployment.yaml
+    +          yq -i '.spec.template.spec.containers[0].image = "${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:${{ github.sha }}"' kubernetes/deployment.yaml
     +      - name: Deploy the model on Kubernetes
     +        if: github.ref == 'refs/heads/main'
     +        run: |
@@ -836,6 +684,71 @@ following steps will be performed:
     +    - mlem deployment run --load service_classifier --model model
     ```
 
+### Add Kubernetes CI/CD secrets
+
+Add the Kubernetes secrets to access the Kubernetes cluster from the CI/CD pipeline. Depending on the CI/CD platform you are using, the process will be different:
+
+=== ":simple-googlecloud: Google Cloud"
+
+    === ":simple-github: GitHub"
+
+        Create the following new variables by going to the **Settings** section from the
+        top header of your GitHub repository. Select **Secrets and variables > Actions**
+        and select **New repository secret**:
+
+        - `GCP_K8S_CLUSTER_NAME`: The name of the Kubernetes cluster (ex:
+          `mlops-kubernetes`, from the variable `GCP_K8S_CLUSTER_NAME` in the previous
+          chapter)
+        - `GCP_K8S_CLUSTER_ZONE`: The zone of the Kubernetes cluster (ex:
+          `europe-west6-a` for Zurich, Switzerland, from the variable
+          `GCP_K8S_CLUSTER_ZONE` in the previous chapter)
+        - `GCP_CONTAINER_REGISTRY_HOST`: The host of the container registry (ex:
+          `europe-west6-docker.pkg.dev/mlops-workshop-github-406009/mlops-registry`, from
+          the variable `GCP_CONTAINER_REGISTRY_HOST` in the previous chapter)
+
+        Save the variables by selecting **Add secret**.
+
+    === ":simple-gitlab: GitLab"
+
+        Create the following new variables by going to **Settings > CI/CD** from the
+        left sidebar of your GitLab project. Select **Variables** and select
+        **Add variable**:
+
+        - `GCP_K8S_CLUSTER_NAME`: The name of the Kubernetes cluster (ex:
+          `mlops-kubernetes`, from the variable `GCP_K8S_CLUSTER_NAME` in the previous
+          chapter)
+            - **Protect variable**: _Unchecked_
+            - **Mask variable**: _Checked_
+            - **Expand variable reference**: _Unchecked_
+        - `GCP_K8S_CLUSTER_ZONE`: The zone of the Kubernetes cluster (ex:
+          `europe-west6-a` for Zurich, Switzerland, from the variable
+          `GCP_K8S_CLUSTER_ZONE` in the previous chapter)
+            - **Protect variable**: _Unchecked_
+            - **Mask variable**: _Checked_
+            - **Expand variable reference**: _Unchecked_
+        - `GCP_CONTAINER_REGISTRY_HOST`: The host of the container registry (ex:
+          `europe-west6-docker.pkg.dev/mlops-workshop-github-406009/mlops-registry`, from
+          the variable `GCP_CONTAINER_REGISTRY_HOST` in the previous chapter)
+            - **Protect variable**: _Unchecked_
+            - **Mask variable**: _Checked_
+            - **Expand variable reference**: _Unchecked_
+
+        Save the variables by selecting **Add secret**.
+
+=== ":material-cloud: Using another cloud provider? Read this!"
+
+    This guide has been written with Google Cloud in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
+
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
+    help is greatly appreciated!
+
 ### Check the changes
 
 Check the changes with Git to ensure that all the necessary files are tracked.
@@ -858,7 +771,7 @@ The output should look like this.
 
     Changes to be committed:
     (use "git restore --staged <file>..." to unstage)
-        modified:   .github/workflows/mlops.yml
+        modified:   .github/workflows/mlops.yaml
     ```
 
 === ":simple-gitlab: GitLab"

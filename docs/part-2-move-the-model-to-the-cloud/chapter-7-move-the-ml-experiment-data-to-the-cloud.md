@@ -87,7 +87,7 @@ Let's get started!
 
 ### Create a project on a cloud provider
 
-Create a project on a cloud provider to host the data.
+Create a project on a cloud provider to host the data:
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -109,7 +109,7 @@ Create a project on a cloud provider to host the data.
     **Export the Google Cloud Project ID**
 
     Export the Google Cloud Project ID as an environment variable. Replace
-    `<id of your gcp project>` with your own project ID.
+    `<id of your gcp project>` with your own project ID:
 
     ```sh title="Execute the following command(s) in a terminal"
     export GCP_PROJECT_ID=<id of your gcp project>
@@ -131,7 +131,7 @@ Create a project on a cloud provider to host the data.
 
 ### Install and configure the cloud provider CLI
 
-Install and configure the cloud provider CLI tool to manage the cloud resources.
+Install and configure the cloud provider CLI tool to manage the cloud resources:
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -149,7 +149,7 @@ Install and configure the cloud provider CLI tool to manage the cloud resources.
     storage provider.
 
     Alternatively, you can set the `GOOGLE_APPLICATION_CREDENTIALS` environment
-    variable to the path of the credentials file.
+    variable to the path of the credentials file:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Initialize and login to Google Cloud
@@ -163,7 +163,7 @@ Install and configure the cloud provider CLI tool to manage the cloud resources.
     ```
 
     Then run the following command to authenticate to Google Cloud with the
-    Application Default.
+    Application Default:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Set authentication for our ML experiment
@@ -188,7 +188,7 @@ Install and configure the cloud provider CLI tool to manage the cloud resources.
 
 ### Create the Storage Bucket on the cloud provider
 
-Create the Storage Bucket to store the data with the cloud provider CLI.
+Create the Storage Bucket to store the data with the cloud provider CLI:
 
 !!! info
 
@@ -201,7 +201,7 @@ Create the Storage Bucket to store the data with the cloud provider CLI.
     Create the Google Storage Bucket to store the data with the Google Cloud CLI.
 
     Export the bucket name as an environment variable. Replace `<my bucket name>`
-    with your own bucket name (ex: `mlopsdemo`).
+    with your own bucket name (ex: `mlopsdemo`):
 
     !!! warning
 
@@ -212,21 +212,21 @@ Create the Storage Bucket to store the data with the cloud provider CLI.
     export GCP_BUCKET_NAME=<my bucket name>
     ```
 
-    Export the bucket region as an environment variable. You can view the available
-    regions at [Cloud locations](https://cloud.google.com/about/locations). You
+    Export the bucket location as an environment variable. You can view the available
+    locations at [Cloud locations](https://cloud.google.com/about/locations). You
     should ideally select a location close to where most of the expected traffic
-    will come from. Replace `<my bucket region>` with your own zone. For example,
-    use `europe-west6` for Switzerland (Zurich).
+    will come from. Replace `<my bucket location>` with your own zone. For example,
+    use `europe-west6` for Switzerland (Zurich):
 
     ```sh title="Execute the following command(s) in a terminal"
-    export GCP_BUCKET_REGION=<my bucket region>
+    export GCP_BUCKET_LOCATION=<my bucket location>
     ```
 
-    Create the bucket.
+    Create the bucket:
 
     ```sh title="Execute the following command(s) in a terminal"
     gcloud storage buckets create gs://$GCP_BUCKET_NAME \
-        --location=$GCP_BUCKET_REGION \
+        --location=$GCP_BUCKET_LOCATION \
         --uniform-bucket-level-access \
         --public-access-prevention
     ```
@@ -261,21 +261,21 @@ Create the Storage Bucket to store the data with the cloud provider CLI.
 
 ### Install the DVC Storage plugin
 
-Install the DVC Storage plugin for the cloud provider.
+Install the DVC Storage plugin for the cloud provider:
 
 === ":simple-googlecloud: Google Cloud"
 
     Here, the `dvc[gs]` package enables support for Google Cloud Storage. Update the
-    `requirements.txt` file.
+    `requirements.txt` file:
 
     ```txt title="requirements.txt" hl_lines="4"
     tensorflow==2.12.0
     matplotlib==3.7.1
     pyyaml==6.0
-    dvc[gs]==3.2.2
+    dvc[gs]==3.47.0
     ```
 
-    Check the differences with Git to validate the changes.
+    Check the differences with Git to validate the changes:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Show the differences with Git
@@ -293,11 +293,11 @@ Install the DVC Storage plugin for the cloud provider.
     tensorflow==2.12.0
     matplotlib==3.7.1
     pyyaml==6.0
-    -dvc==3.2.2
-    +dvc[gs]==3.2.2
+    -dvc==3.47.0
+    +dvc[gs]==3.47.0
     ```
 
-    Install the dependencies and update the freeze file.
+    Install the dependencies and update the freeze file:
 
     !!! warning
 
@@ -333,12 +333,12 @@ Install the DVC Storage plugin for the cloud provider.
 
 ### Configure DVC to use the Storage Bucket
 
-Configure DVC to use the Storage Bucket on the cloud provider.
+Configure DVC to use the Storage Bucket on the cloud provider:
 
 === ":simple-googlecloud: Google Cloud"
 
     Configure DVC to use a Google Storage remote bucket. The `dvcstore` is a
-    user-defined path on the bucket. You can change it if needed.
+    user-defined path on the bucket. You can change it if needed:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Add the Google Storage remote bucket
@@ -361,7 +361,7 @@ Configure DVC to use the Storage Bucket on the cloud provider.
 
 ### Check the changes
 
-Check the changes with Git to ensure all wanted files are here.
+Check the changes with Git to ensure all wanted files are here:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Add all the available files
@@ -371,7 +371,7 @@ git add .
 git status
 ```
 
-The output of the `git status` command should be similar to this.
+The output of the `git status` command should be similar to this:
 
 ```text
 On branch main
@@ -385,7 +385,7 @@ Changes to be committed:
 ### Push the data files to DVC
 
 DVC works as Git. Once you want to share the data, you can use `dvc push` to
-upload the data and its cache to the storage provider.
+upload the data and its cache to the storage provider:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Upload the experiment data and cache to the remote bucket
@@ -433,7 +433,7 @@ You fixed some of the previous issues:
 - [x] Data no longer needs manual download and is placed in the right directory.
 
 When used by another member of the team, they can easily get a copy of the
-experiment data from DVC with the following command.
+experiment data from DVC with the following command:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Download experiment data from DVC
@@ -441,7 +441,7 @@ dvc pull
 ```
 
 With the help of DVC, they can also easily reproduce your experiment and, thanks
-to caching, only the required steps will be executed.
+to caching, only the required steps will be executed:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Execute the pipeline

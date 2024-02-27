@@ -90,7 +90,7 @@ flowchart LR
 ### Set up access to the S3 bucket of the cloud provider
 
 DVC will need to log in to the S3 bucket of the cloud provider to download the
-data inside the CI/CD pipeline.
+data inside the CI/CD pipeline:
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -102,7 +102,7 @@ data inside the CI/CD pipeline.
     to access Google Cloud without your own credentials.
 
     The key will be stored in your **`~/.config/gcloud`** directory under the name
-    `google-service-account-key.json`.
+    `google-service-account-key.json`:
 
     !!! danger
 
@@ -146,9 +146,7 @@ data inside the CI/CD pipeline.
 ### Store the cloud provider credentials in the CI/CD configuration
 
 Now that the credentials are created, you need to store them in the CI/CD
-configuration.
-
-Depending on the CI/CD platform you are using, the process will be different.
+configuration. Depending on the CI/CD platform you are using, the process will be different:
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -160,7 +158,7 @@ Depending on the CI/CD platform you are using, the process will be different.
     === ":simple-github: GitHub"
 
         Display the Google Service Account key that you have downloaded from Google
-        Cloud.
+        Cloud:
 
         ```sh title="Execute the following command(s) in a terminal"
         # Display the Google Service Account key
@@ -235,11 +233,9 @@ Depending on the CI/CD platform you are using, the process will be different.
 === ":simple-github: GitHub"
 
     At the root level of your Git repository, create a GitHub Workflow configuration
-    file `.github/workflows/mlops.yml`.
+    file `.github/workflows/mlops.yaml`. Take some time to understand the train job and its steps:
 
-    Take some time to understand the train job and its steps.
-
-    ```yaml title=".github/workflows/mlops.yml"
+    ```yaml title=".github/workflows/mlops.yaml"
     name: MLOps
 
     on:
@@ -259,16 +255,16 @@ Depending on the CI/CD platform you are using, the process will be different.
         runs-on: ubuntu-latest
         steps:
           - name: Checkout repository
-            uses: actions/checkout@v3
+            uses: actions/checkout@v4
           - name: Setup Python
-            uses: actions/setup-python@v4
+            uses: actions/setup-python@v5
             with:
               python-version: '3.11'
               cache: pip
           - name: Install dependencies
             run: pip install --requirement requirements-freeze.txt
           - name: Login to Google Cloud
-            uses: 'google-github-actions/auth@v1'
+            uses: google-github-actions/auth@v2
             with:
               credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
           - name: Train model
@@ -329,11 +325,11 @@ Depending on the CI/CD platform you are using, the process will be different.
 
 === ":simple-github: GitHub"
 
-    Push the CI/CD pipeline configuration file to Git.
+    Push the CI/CD pipeline configuration file to Git:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Add the configuration file
-    git add .github/workflows/mlops.yml
+    git add .github/workflows/mlops.yaml
 
     # Commit the changes
     git commit -m "A pipeline will run my experiment on each push"

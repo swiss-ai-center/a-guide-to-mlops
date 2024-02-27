@@ -117,10 +117,10 @@ collaboration and decision-making within the team.
 
 === ":simple-github: GitHub"
 
-    Update the `.github/workflows/mlops.yml` file with the following content.
+    Update the `.github/workflows/mlops.yaml` file with the following content.
     Explore this file to understand the `train-and-report` stage and its steps:
 
-    ```yaml title=".github/workflows/mlops.yml" hl_lines="16-17 35-100"
+    ```yaml title=".github/workflows/mlops.yaml" hl_lines="16-17 35-87"
     name: MLOps
 
     on:
@@ -131,7 +131,7 @@ collaboration and decision-making within the team.
 
       # Runs on pull requests
       pull_request:
-
+    
       # Allows you to run this workflow manually from the Actions tab
       workflow_dispatch:
 
@@ -141,31 +141,25 @@ collaboration and decision-making within the team.
         runs-on: ubuntu-latest
         steps:
           - name: Checkout repository
-            uses: actions/checkout@v3
+            uses: actions/checkout@v4
           - name: Setup Python
-            uses: actions/setup-python@v4
+            uses: actions/setup-python@v5
             with:
               python-version: '3.11'
               cache: pip
           - name: Install dependencies
             run: pip install --requirement requirements-freeze.txt
           - name: Login to Google Cloud
-            uses: 'google-github-actions/auth@v1'
+            uses: google-github-actions/auth@v2
             with:
               credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
           - name: Train model
             run: dvc repro --pull
-          # Node is required to run CML
-          - name: Setup Node
-            if: github.event_name == 'pull_request'
-            uses: actions/setup-node@v3
-            with:
-              node-version: '16'
           - name: Setup CML
             if: github.event_name == 'pull_request'
-            uses: iterative/setup-cml@v1
+            uses: iterative/setup-cml@v2
             with:
-              version: '0.19.1'
+              version: '0.20.0'
           - name: Create CML report
             if: github.event_name == 'pull_request'
             env:
@@ -221,39 +215,39 @@ collaboration and decision-making within the team.
     job are triggered only on pull requests. The job checks out the repository, sets
     up DVC and CML, creates and publishes the report as a pull request comment.
 
-    Check the differences with Git to validate the changes.
+    Check the differences with Git to validate the changes:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Show the differences with Git
-    git diff .github/workflows/mlops.yml
+    git diff .github/workflows/mlops.yaml
     ```
 
     The output should be similar to this:
 
     ```diff
-    diff --git a/.github/workflows/mlops.yml b/.github/workflows/mlops.yml
-    index 493691a..0498e99 100644
-    --- a/.github/workflows/mlops.yml
-    +++ b/.github/workflows/mlops.yml
-        jobs:
+    diff --git a/.github/workflows/mlops.yaml b/.github/workflows/mlops.yaml
+    index 5aae2a1..1fa989b 100644
+    --- a/.github/workflows/mlops.yaml
+    +++ b/.github/workflows/mlops.yaml
+    @@ -13,7 +13,8 @@ on:
+       workflow_dispatch:
+     
+     jobs:
     -  train:
     +  train-and-report:
     +    permissions: write-all
-            runs-on: ubuntu-latest
-            steps:
-            - name: Checkout repository
-    @@ -29,4 +30,71 @@ jobs:
-    +      # Node is required to run CML
-    +      - name: Setup Node
-    +        if: github.event_name == 'pull_request'
-    +        uses: actions/setup-node@v3
-    +        with:
-    +          node-version: '16'
+         runs-on: ubuntu-latest
+         steps:
+           - name: Checkout repository
+    @@ -31,3 +32,56 @@ jobs:
+               credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
+           - name: Train model
+             run: dvc repro --pull
     +      - name: Setup CML
     +        if: github.event_name == 'pull_request'
-    +        uses: iterative/setup-cml@v1
+    +        uses: iterative/setup-cml@v2
     +        with:
-    +          version: '0.19.1'
+    +          version: '0.20.0'
     +      - name: Create CML report
     +        if: github.event_name == 'pull_request'
     +        env:
@@ -282,23 +276,29 @@ collaboration and decision-making within the team.
     +          # Create training history plot
     +          echo "### Training History" >> report.md
     +          echo "#### main" >> report.md
-    +          echo '![](./dvc_plots/static/main_evaluation_plots_training_history.png "Training History")' >> report.md
+    +          echo '![](./dvc_plots/static/main_evaluation_plots_training_history.pn
+    g "Training History")' >> report.md
     +          echo "#### workspace" >> report.md
-    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_training_history.png "Training History")' >> report.md
+    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_training_histo
+    ry.png "Training History")' >> report.md
     +
     +          # Create predictions preview
     +          echo "### Predictions Preview" >> report.md
     +          echo "#### main" >> report.md
-    +          echo '![](./dvc_plots/static/main_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
+    +          echo '![](./dvc_plots/static/main_evaluation_plots_pred_preview.png "P
+    redictions Preview")' >> report.md
     +          echo "#### workspace" >> report.md
-    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
+    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_pred_preview.p
+    ng "Predictions Preview")' >> report.md
     +
     +          # Create confusion matrix
     +          echo "### Confusion Matrix" >> report.md
     +          echo "#### main" >> report.md
-    +          echo '![](./dvc_plots/static/main_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
+    +          echo '![](./dvc_plots/static/main_evaluation_plots_confusion_matrix.pn
+    g "Confusion Matrix")' >> report.md
     +          echo "#### workspace" >> report.md
-    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
+    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_confusion_matr
+    ix.png "Confusion Matrix")' >> report.md
     +
     +          # Publish the CML report
     +          cml comment update --target=pr --publish report.md
@@ -550,14 +550,14 @@ Take some time to understand the changes made to the file.
 
 === ":simple-github: GitHub"
 
-    Push the CI/CD pipeline configuration file to Git.
+    Push the CI/CD pipeline configuration file to Git:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Add the configuration file
-    git add .github/workflows/mlops.yml
+    git add .github/workflows/mlops.yaml
 
     # Commit the changes
-    git commit -m "Add cml reporting to CI/CD pipeline"
+    git commit -m "Add CML reporting to CI/CD pipeline"
 
     # Push the changes
     git push
@@ -565,7 +565,7 @@ Take some time to understand the changes made to the file.
 
 === ":simple-gitlab: GitLab"
 
-    Push the CI/CD pipeline configuration file to Git.
+    Push the CI/CD pipeline configuration file to Git:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Add the configuration file

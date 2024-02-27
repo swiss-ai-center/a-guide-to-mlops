@@ -108,18 +108,18 @@ flowchart TB
 ### Install BentoML and dependencies
 
 Add the `bentoml` package to install BentoML support. `pillow` is also added to
-the requirements to support image processing.
+the requirements to support image processing:
 
 ```txt title="requirements.txt" hl_lines="5-6"
 tensorflow==2.12.0
 matplotlib==3.7.1
 pyyaml==6.0
-dvc[gs]==3.2.2
+dvc[gs]==3.47.0
 bentoml==1.2.2
 pillow==10.2.0
 ```
 
-Check the differences with Git to validate the changes.
+Check the differences with Git to validate the changes:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Show the differences with Git
@@ -136,7 +136,7 @@ index 8ccc2df..fcdd460 100644
 @@ -2,3 +2,4 @@ tensorflow==2.12.0
  matplotlib==3.7.1
  pyyaml==6.0
- dvc[gs]==3.2.2
+ dvc[gs]==3.47.0
 +bentoml==1.2.2
 +pillow==10.2.0
 ```
@@ -179,7 +179,7 @@ others.
 
 #### Update `src/train.py`
 
-Update the `src/train.py` file to save the model with BentoML.
+Update the `src/train.py` file to save the model with BentoML:
 
 ```py title="src/train.py" hl_lines="1 9-10 67-69 90-125"
 import json
@@ -331,7 +331,7 @@ objects are saved with the model:
 These functions will be used later to transform the input and output data when
 using the model through the REST API.
 
-Check the differences with Git to better understand the changes.
+Check the differences with Git to better understand the changes:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Show the differences with Git
@@ -418,7 +418,7 @@ index ab7724a..082e5e0 100644
 
 #### Update `src/evaluate.py`
 
-Update the `src/evaluate.py` file to load the model from BentoML.
+Update the `src/evaluate.py` file to load the model from BentoML:
 
 ```py title="src/evaluate.py" hl_lines="9 132-139"
 import json
@@ -590,7 +590,7 @@ if __name__ == "__main__":
     main()
 ```
 
-Check the differences with Git to better understand the changes.
+Check the differences with Git to better understand the changes:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Show the differences with Git
@@ -641,7 +641,8 @@ dvc repro
 
 The experiment now uses BentoML to save and load the model. The resulting model
 is saved in the `model` folder and is automatically tracked by DVC. The model is
-then uploaded to the remote storage bucket.
+then uploaded to the remote storage bucket when pushing the changes to DVC as
+well.
 
 You can check the models stored in the model store with the following command:
 
@@ -655,13 +656,11 @@ The output should look like this:
 ```text
  Tag                                                 Module                   Size      Creation Time
  celestial_bodies_classifier_model:pdpajhwlcojiflg6  bentoml.keras            9.53 MiB  2024-02-14 09:31:38
- celestial_bodies_classifier_model:kbw6izwlcoqehlg6  bentoml.keras            9.53 MiB  2024-02-14 09:30:30
- celestial_bodies_classifier_model:tykzxhglckjfrlg6  bentoml.keras            9.53 MiB  2024-02-14 09:25:31
 ```
 
 ### Check the changes
 
-Check the changes with Git to ensure that all the necessary files are tracked.
+Check the changes with Git to ensure that all the necessary files are tracked:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Add all the files
@@ -686,10 +685,10 @@ Changes to be committed:
 
 ### Commit the changes to DVC and Git
 
-Commit the changes to DVC and Git.
+Commit the changes to DVC and Git:
 
 ```sh title="Execute the following command(s) in a terminal"
-# Upload the experiment data and cache to the remote bucket
+# Upload the experiment data, model and cache to the remote bucket
 dvc push
 
 # Commit the changes

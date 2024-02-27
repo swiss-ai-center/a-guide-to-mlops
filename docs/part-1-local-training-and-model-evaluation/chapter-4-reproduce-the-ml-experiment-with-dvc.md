@@ -60,13 +60,13 @@ As a reminder, the current steps to run the experiment are as follow:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Prepare the dataset
-python3 src/prepare.py data/raw data/prepared
+python3.11 src/prepare.py data/raw data/prepared
 
 # Train the model with the train dataset and save it
-python3 src/train.py data/prepared model
+python3.11 src/train.py data/prepared model
 
 # Evaluate the model performances
-python3 src/evaluate.py model data/prepared
+python3.11 src/evaluate.py model data/prepared
 ```
 
 Let's get started!
@@ -83,7 +83,7 @@ them for you. At the end of this chapter, DVC should have updated all the
 `.gitignore` files.
 
 Update the `.gitignore` file to remove your experiment data. The required files
-to be ignored will then be added by DVC.
+to be ignored will then be added by DVC:
 
 ```sh title=".gitignore" hl_lines="7-9"
 ## Python
@@ -102,7 +102,7 @@ __pycache__/
     If using macOS, you might want to ignore `.DS_Store` files as well to avoid
     pushing Apple's metadata files to your repository.
 
-Check the differences with Git to validate the changes.
+Check the differences with Git to validate the changes:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Show the differences with Git
@@ -170,7 +170,7 @@ stage when using `dvc repro`.
 #### Prepare stage
 
 Run the following command to add a new stage called _prepare_ that prepares the
-dataset.
+dataset:
 
 ```sh title="Execute the following command(s) in a terminal"
 dvc stage add -n prepare \
@@ -195,7 +195,7 @@ is updated.
 #### Train stage
 
 Run the following command to create a new stage called _train_ that trains the
-model.
+model:
 
 ```sh title="Execute the following command(s) in a terminal"
 dvc stage add -n train \
@@ -219,7 +219,7 @@ Explore the `dvc.yaml` file to understand how the pipeline is updated.
 #### Evaluate stage
 
 Run the following command to create a new stage called _evaluate_ that evaluates
-the model.
+the model:
 
 ```sh title="Execute the following command(s) in a terminal"
 dvc stage add -n evaluate \
@@ -248,7 +248,7 @@ The pipeline is now entirely defined. You can explore the `dvc.yaml` file to see
 all the stages and their dependencies.
 
 Notice that DVC also updated the main `.gitignore` file with the model, as it is
-an output of the `train` stage.
+an output of the `train` stage:
 
 ```sh title=".gitignore" hl_lines="10"
 ## Python
@@ -270,7 +270,7 @@ __pycache__/
 
 ### Visualize the pipeline
 
-You can visualize the pipeline to check the stages that will be performed.
+You can visualize the pipeline to check the stages that will be performed:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Display the Directed Acyclic Graph of the pipeline
@@ -306,7 +306,7 @@ If any dependencies/outputs change, the affected stages will be re-executed.
 ### Execute the pipeline
 
 Now that the pipeline has been defined, you can execute it and reproduce the
-experiment.
+experiment:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Execute only the required pipeline stages
@@ -321,7 +321,7 @@ dvc repro
 The first execution will generate a `dvc.lock` file that contains the
 information about the pipeline and the outputs of the stages.
 
-Try to run the command again and notice that DVC will not re-execute the stages.
+Try to run the command again and notice that DVC will not re-execute the stages:
 
 ```text
 'data/raw.dvc' didn't change, skipping
@@ -333,7 +333,7 @@ Data and pipelines are up to date.
 
 ### Check the changes
 
-Check the changes with Git to ensure all wanted files are here.
+Check the changes with Git to ensure all wanted files are here:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Add all the files
@@ -359,7 +359,7 @@ Changes to be committed:
 
 ### Commit the changes
 
-Commit the changes to the local Git repository.
+Commit the changes to the local Git repository:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes

@@ -134,7 +134,7 @@ flowchart LR
 ### Checkout the new branch
 
 On your machine, check out the new branch. Replace
-`<the name of the new branch>` with the name of the branch to checkout to.
+`<the name of the new branch>` with the name of the branch to checkout to:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Get the latest updates from the remote origin
@@ -152,7 +152,7 @@ you will update the experiment to see the evolution being tracked remotely by
 CML.
 
 Update your experiment with the following parameters by editing the
-`params.yaml` file.
+`params.yaml` file:
 
 ```yaml title="params.yaml" hl_lines="9 11-12"
 prepare:
@@ -170,7 +170,7 @@ train:
   output_classes: 11
 ```
 
-Check the differences with Git to validate the changes.
+Check the differences with Git to validate the changes:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Show the differences with Git
@@ -202,7 +202,7 @@ Here, you simply changed the `lr` (learning rate), `conv_size` and `dense_size`
 parameters of the `train` stage, which should slightly affect the model's
 performance.
 
-Reproduce the experiment with DVC.
+Reproduce the experiment with DVC:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Reproduce the experiment
@@ -221,7 +221,7 @@ dvc repro
 You can now commit and push the above changes to trigger a change on the remote
 repository.
 
-Check the changes with Git to ensure all wanted files are here.
+Check the changes with Git to ensure all wanted files are here:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Add all the files
@@ -250,7 +250,7 @@ Push the changes to the remote repository.
 dvc push
 
 # Commit the changes
-git commit -m "I made some changes to the model"
+git commit -m "Made some changes to the model"
 
 # Push the changes
 git push

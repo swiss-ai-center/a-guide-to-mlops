@@ -351,11 +351,11 @@ you'll be able to start the training of the model on the node with the GPU.
     Create a new variable named `CML_PAT` with the value of the Personal Access
     Token as its value. Save the variable by selecting **Add secret**.
 
-    Update the `.github/workflows/mlops.yml` file. Replace `<my cluster name>` with
+    Update the `.github/workflows/mlops.yaml` file. Replace `<my cluster name>` with
     your own name (ex: `mlops-kubernetes`). Replace `<my cluster zone>` with your
     own zone (ex: `europe-west6-a` for Zurich, Switzerland).
 
-    ```yaml title=".github/workflows/mlops.yml" hl_lines="15-18 21-51 54-56"
+    ```yaml title=".github/workflows/mlops.yaml" hl_lines="15-18 21-51 54-56"
     name: MLOps
 
     on:
@@ -501,16 +501,16 @@ you'll be able to start the training of the model on the node with the GPU.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Show the differences with Git
-    git diff .github/workflows/mlops.yml
+    git diff .github/workflows/mlops.yaml
     ```
 
     The output should be similar to this:
 
     ```diff
-    diff --git a/.github/workflows/mlops.yml b/.github/workflows/mlops.yml
+    diff --git a/.github/workflows/mlops.yaml b/.github/workflows/mlops.yaml
     index 30bbce8..5d4a6dd 100644
-    --- a/.github/workflows/mlops.yml
-    +++ b/.github/workflows/mlops.yml
+    --- a/.github/workflows/mlops.yaml
+    +++ b/.github/workflows/mlops.yaml
     @@ -12,10 +12,48 @@ on:
        # Allows you to run this workflow manually from the Actions tab
        workflow_dispatch:
@@ -787,7 +787,7 @@ you'll be able to start the training of the model on the node with the GPU.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Add the configuration file
-    git add .github/workflows/mlops.yml
+    git add .github/workflows/mlops.yaml
 
     # Commit the changes
     git commit -m "A pipeline will run my experiment on Kubernetes on each push"
