@@ -177,7 +177,8 @@ but this time for the Kubernetes cluster.
 
         There is no need ti update the value in the CI/CD pipeline configuration.
 
-        All changes are made at the Google Cloud level and the key file is not not changed.
+        All changes are made at the Google Cloud level and the key file is not not
+        changed.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
@@ -353,7 +354,7 @@ following steps will be performed:
     +++ b/.github/workflows/mlops.yaml
     @@ -13,7 +13,7 @@ on:
        workflow_dispatch:
-     
+
      jobs:
     -  train-and-report:
     +  train-report-publish-and-deploy:
@@ -361,7 +362,7 @@ following steps will be performed:
          runs-on: ubuntu-latest
          steps:
     @@ -85,3 +85,43 @@ jobs:
-     
+
                # Publish the CML report
                cml comment update --target=pr --publish report.md
     +      - name: Log in to the Container registry
@@ -686,7 +687,9 @@ following steps will be performed:
 
 ### Add Kubernetes CI/CD secrets
 
-Add the Kubernetes secrets to access the Kubernetes cluster from the CI/CD pipeline. Depending on the CI/CD platform you are using, the process will be different:
+Add the Kubernetes secrets to access the Kubernetes cluster from the CI/CD
+pipeline. Depending on the CI/CD platform you are using, the process will be
+different:
 
 === ":simple-googlecloud: Google Cloud"
 

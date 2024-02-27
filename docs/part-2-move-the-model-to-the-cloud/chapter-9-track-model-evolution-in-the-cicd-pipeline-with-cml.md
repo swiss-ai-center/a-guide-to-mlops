@@ -131,7 +131,7 @@ collaboration and decision-making within the team.
 
       # Runs on pull requests
       pull_request:
-    
+
       # Allows you to run this workflow manually from the Actions tab
       workflow_dispatch:
 
@@ -231,7 +231,7 @@ collaboration and decision-making within the team.
     +++ b/.github/workflows/mlops.yaml
     @@ -13,7 +13,8 @@ on:
        workflow_dispatch:
-     
+
      jobs:
     -  train:
     +  train-and-report:

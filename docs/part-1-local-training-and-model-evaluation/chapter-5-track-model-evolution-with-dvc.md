@@ -136,7 +136,8 @@ iterations. Here, you can see that the metrics have slightly improved.
 #### Compare the plots difference
 
 Finally, you can use the `dvc plots diff` command to compare the plots that were
-generated on `HEAD` and the ones that were generated in your current `workspace`:
+generated on `HEAD` and the ones that were generated in your current
+`workspace`:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Create the report to display the plots

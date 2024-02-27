@@ -100,28 +100,28 @@ provider.
 
     To remove the project from the Billing Account:
 
-    5. Go to the
+    1. Go to the
        [Google Cloud Billing Console](https://console.cloud.google.com/billing){:target="\_blank"}.
-    6. Select **MY Projects**
-    7. Select **Actions** from the project list and select **Disable billing**.
+    2. Select **MY Projects**
+    3. Select **Actions** from the project list and select **Disable billing**.
 
     To close the Billing Account you created:
 
-    8. Go to the
+    1. Go to the
        [Google Cloud Billing Console](https://console.cloud.google.com/billing){:target="\_blank"}.
-    9. Select the Billing Account you created.
-    10. Click on **Account management** in the menu.
-    11. Select **Actions** from the project list and select **Disable billing**.
-    12. Select *Close Billing Account* at the top of the page.
-    13. Follow the instructions to close the account.
+    2. Select the Billing Account you created.
+    3. Click on **Account management** in the menu.
+    4. Select **Actions** from the project list and select **Disable billing**.
+    5. Select *Close Billing Account* at the top of the page.
+    6. Follow the instructions to close the account.
 
     **Remove the Payment method**
 
     To remove the payment method you added:
 
-    14. Go to the **Payment method** in the 3-dots top right menu.
-    15. Select the card you added and select **Remove**.
-    16. Follow the instructions to remove the payment method.
+    1. Go to the **Payment method** in the 3-dots top right menu.
+    2. Select the card you added and select **Remove**.
+    3. Follow the instructions to remove the payment method.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 

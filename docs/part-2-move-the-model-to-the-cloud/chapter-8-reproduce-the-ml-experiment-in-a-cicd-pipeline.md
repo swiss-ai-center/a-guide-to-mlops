@@ -146,7 +146,8 @@ data inside the CI/CD pipeline:
 ### Store the cloud provider credentials in the CI/CD configuration
 
 Now that the credentials are created, you need to store them in the CI/CD
-configuration. Depending on the CI/CD platform you are using, the process will be different:
+configuration. Depending on the CI/CD platform you are using, the process will
+be different:
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -233,7 +234,8 @@ configuration. Depending on the CI/CD platform you are using, the process will b
 === ":simple-github: GitHub"
 
     At the root level of your Git repository, create a GitHub Workflow configuration
-    file `.github/workflows/mlops.yaml`. Take some time to understand the train job and its steps:
+    file `.github/workflows/mlops.yaml`. Take some time to understand the train job
+    and its steps:
 
     ```yaml title=".github/workflows/mlops.yaml"
     name: MLOps

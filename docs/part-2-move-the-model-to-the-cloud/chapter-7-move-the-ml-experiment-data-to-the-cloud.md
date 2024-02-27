@@ -212,11 +212,12 @@ Create the Storage Bucket to store the data with the cloud provider CLI:
     export GCP_BUCKET_NAME=<my bucket name>
     ```
 
-    Export the bucket location as an environment variable. You can view the available
-    locations at [Cloud locations](https://cloud.google.com/about/locations). You
-    should ideally select a location close to where most of the expected traffic
-    will come from. Replace `<my bucket location>` with your own zone. For example,
-    use `europe-west6` for Switzerland (Zurich):
+    Export the bucket location as an environment variable. You can view the
+    available locations at
+    [Cloud locations](https://cloud.google.com/about/locations). You should ideally
+    select a location close to where most of the expected traffic will come from.
+    Replace `<my bucket location>` with your own zone. For example, use
+    `europe-west6` for Switzerland (Zurich):
 
     ```sh title="Execute the following command(s) in a terminal"
     export GCP_BUCKET_LOCATION=<my bucket location>

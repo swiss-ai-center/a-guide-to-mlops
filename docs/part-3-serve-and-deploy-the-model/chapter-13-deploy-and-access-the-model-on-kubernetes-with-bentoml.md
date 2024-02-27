@@ -15,7 +15,8 @@ In this chapter, you will learn how to:
 1. Create a BentoML model artifact
 2. Containerize the model artifact with BentoML and Docker
 3. Create a container registry that will serve as your model registry
-4. Publish the containerized model artifact Docker image to the container registry
+4. Publish the containerized model artifact Docker image to the container
+   registry
 5. Create the Kubernetes cluster
 6. Validate kubectl can access the Kubernetes cluster
 7. Create the Kubernetes configuration files
@@ -136,12 +137,12 @@ flowchart TB
 
 ### Create a BentoML model artifact
 
-A BentoML model artifact (called "Bento" in the documentation) packages your model, code, and environment
-dependencies into a single file. It is the standard format for saving and
-sharing ML models.
+A BentoML model artifact (called "Bento" in the documentation) packages your
+model, code, and environment dependencies into a single file. It is the standard
+format for saving and sharing ML models.
 
-The BentoML model artifact is described in a `bentofile.yaml` file. It contains the following
-information:
+The BentoML model artifact is described in a `bentofile.yaml` file. It contains
+the following information:
 
 - The service filename and class name
 - The Python packages required to run the service
@@ -163,8 +164,8 @@ docker:
     python_version: "3.11"
 ```
 
-Do not forget to include the `serve.py` file in the Bento model artifact. This file
-contains the code to serve the model with FastAPI as you have seen in the
+Do not forget to include the `serve.py` file in the Bento model artifact. This
+file contains the code to serve the model with FastAPI as you have seen in the
 previous chapter.
 
 The `python` section contains the Python packages required to run the service.
@@ -184,8 +185,8 @@ bentoml serve --working-dir src
 
 ### Containerize the BentoML model artifact with Docker
 
-To containerize the BentoML model artifact, you will need to build a Docker image. This is done
-in the following steps:
+To containerize the BentoML model artifact, you will need to build a Docker
+image. This is done in the following steps:
 
 1. Build the BentoML model artifact
 2. Containerize the BentoML model artifact with Docker
@@ -243,15 +244,16 @@ bentoml list
 
 #### Containerize the BentoML model artifact with Docker
 
-Now that the BentoML model artifact is built, you can containerize it with the following command:
+Now that the BentoML model artifact is built, you can containerize it with the
+following command:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Containerize the BentoML model artifact with Docker
 bentoml containerize celestial_bodies_classifier:latest --image-tag celestial-bodies-classifier:latest
 ```
 
-The first `:latest` is the tag of the BentoML model artifact. It is a symlink to the latest
-version of the BentoML model artifact.
+The first `:latest` is the tag of the BentoML model artifact. It is a symlink to
+the latest version of the BentoML model artifact.
 
 The output should be similar to this:
 
@@ -290,16 +292,16 @@ To run your newly built Bento container, run:
     docker run --rm -p 3000:3000 celestial-bodies-classifier:latest
 ```
 
-The BentoML model artifact is now containerized with Docker. You can run the Docker image with
-the following command:
+The BentoML model artifact is now containerized with Docker. You can run the
+Docker image with the following command:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Run the Docker image
 docker run --rm -p 3000:3000 celestial-bodies-classifier:latest
 ```
 
-Congrats! You have successfully containerized the BentoML model artifact with Docker. The model
-is now ready to be shared on a container registry.
+Congrats! You have successfully containerized the BentoML model artifact with
+Docker. The model is now ready to be shared on a container registry.
 
 ### Create a container registry
 
@@ -340,11 +342,12 @@ for an efficient models management.
     export GCP_CONTAINER_REGISTRY_NAME=<my repository name>
     ```
 
-    Export the repository location as an environment variable. You can view the available
-    locations at [Cloud locations](https://cloud.google.com/about/locations). You
-    should ideally select a location close to where most of the expected traffic
-    will come from. Replace `<my repository location>` with your own zone. For example,
-    use `europe-west6` for Switzerland (Zurich):
+    Export the repository location as an environment variable. You can view the
+    available locations at
+    [Cloud locations](https://cloud.google.com/about/locations). You should ideally
+    select a location close to where most of the expected traffic will come from.
+    Replace `<my repository location>` with your own zone. For example, use
+    `europe-west6` for Switzerland (Zurich):
 
     ```sh title="Execute the following command(s) in a terminal"
     export GCP_CONTAINER_REGISTRY_LOCATION=<my repository location>
@@ -444,8 +447,8 @@ for an efficient models management.
 
 ### Publish the BentoML model artifact Docker image to the container registry
 
-The BentoML model artifact Docker image can be published to the container registry with the
-following commands:
+The BentoML model artifact Docker image can be published to the container
+registry with the following commands:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Tag the local BentoML model artifact Docker image with the remote container registry host
@@ -491,8 +494,9 @@ Follow the steps below to create one.
     export GCP_K8S_CLUSTER_ZONE=<my cluster zone>
     ```
 
-    Create the Kubernetes cluster. This can take a few minutes. You can also view the available types of machine with the
-    `gcloud compute machine-types list` command:
+    Create the Kubernetes cluster. This can take a few minutes. You can also view
+    the available types of machine with the `gcloud compute machine-types list`
+    command:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Create the Kubernetes cluster
@@ -673,8 +677,7 @@ service. You can do so with the following command:
 
 !!! info
 
-    The external IP address of the service can take a few minutes to be
-    available.
+    The external IP address of the service can take a few minutes to be available.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Get the description of the service
@@ -763,8 +766,8 @@ In this chapter, you have successfully:
 
 1. Created and containerized a BentoML model artifact
 2. Published the BentoML model artifact Docker image to the container registry
-3. Created the Kubernetes configuration files and deployed the BentoML model artifact on
-   Kubernetes
+3. Created the Kubernetes configuration files and deployed the BentoML model
+   artifact on Kubernetes
 4. Access the model
 
 ## State of the MLOps process
