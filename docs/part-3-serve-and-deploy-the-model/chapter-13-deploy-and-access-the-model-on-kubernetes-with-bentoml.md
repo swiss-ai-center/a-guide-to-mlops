@@ -137,7 +137,7 @@ docker:
     python_version: "3.11"
 ```
 
-Do not forget to include the `serve.py` file in the Bento model artifact. This
+Do not forget to include the `serve.py` file in the BentoML model artifact. This
 file contains the code to serve the model with FastAPI as you have seen in the
 previous chapter.
 
@@ -169,7 +169,7 @@ image. This is done in the following steps:
 A BentoML model artifact can be built with the following command:
 
 ```sh title="Execute the following command(s) in a terminal"
-# Build the Bento
+# Build the BentoML model artifact
 bentoml build src
 ```
 
@@ -203,7 +203,7 @@ Possible next steps:
 All Bentos can be listed with the following command:
 
 ```sh title="Execute the following command(s) in a terminal"
-# List all Bentos
+# List all BentoML model artifacts
 bentoml list
 ```
 
@@ -547,10 +547,12 @@ The output should be similar to this:
 
 ```text
 NAME              STATUS   AGE
-default           Active   25m
-kube-node-lease   Active   25m
-kube-public       Active   25m
-kube-system       Active   25m
+default           Active   2m
+gmp-public        Active   2m
+gmp-system        Active   2m
+kube-node-lease   Active   2m
+kube-public       Active   2m
+kube-system       Active   2m
 ```
 
 ### Create the Kubernetes configuration files
@@ -623,8 +625,8 @@ of service, the ports to use, and the labels to use.
 
 ### Deploy the Bento on Kubernetes
 
-To deploy the Bento on Kubernetes, you will need to apply the Kubernetes
-configuration files.
+To deploy the containerised Bento model artifact on Kubernetes, you will need to apply
+the Kubernetes configuration files.
 
 Apply the Kubernetes configuration files with the following commands:
 

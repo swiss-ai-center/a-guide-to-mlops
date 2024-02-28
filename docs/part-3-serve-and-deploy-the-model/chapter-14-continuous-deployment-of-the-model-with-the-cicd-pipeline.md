@@ -132,9 +132,9 @@ but this time for the Kubernetes cluster.
 
     !!! tip
 
-        There is no need ti update the value in the CI/CD pipeline configuration.
+        There is no need to update the value in the CI/CD pipeline configuration.
 
-        All changes are made at the Google Cloud level and the key file is not not
+        All changes are made at the Google Cloud level and the key file is not
         changed.
 
 === ":material-cloud: Using another cloud provider? Read this!"

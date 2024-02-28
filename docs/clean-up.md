@@ -102,7 +102,7 @@ provider.
 
     1. Go to the
        [Google Cloud Billing Console](https://console.cloud.google.com/billing){:target="\_blank"}.
-    2. Select **MY Projects**
+    2. Select **My Projects**
     3. Select **Actions** from the project list and select **Disable billing**.
 
     To close the Billing Account you created:
