@@ -625,8 +625,8 @@ of service, the ports to use, and the labels to use.
 
 ### Deploy the Bento on Kubernetes
 
-To deploy the containerised Bento model artifact on Kubernetes, you will need to apply
-the Kubernetes configuration files.
+To deploy the containerised Bento model artifact on Kubernetes, you will need to
+apply the Kubernetes configuration files.
 
 Apply the Kubernetes configuration files with the following commands:
 
