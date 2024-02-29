@@ -30,7 +30,7 @@ provider.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Delete the Kubernetes cluster
-    gcloud container clusters delete --zone $GCP_CLUSTER_ZONE $GCP_CLUSTER_NAME
+    gcloud container clusters delete --zone $GCP_K8S_CLUSTER_ZONE $GCP_K8S_CLUSTER_NAME
     ```
 
     Press ++y++ to confirm the deletion.
@@ -42,7 +42,7 @@ provider.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Delete the Kubernetes cluster
-    gcloud artifacts repositories delete --location $GCP_REPOSITORY_LOCATION $GCP_REPOSITORY_NAME
+    gcloud artifacts repositories delete --location $GCP_CONTAINER_REGISTRY_LOCATION $GCP_CONTAINER_REGISTRY_NAME
     ```
 
     Press ++y++ to confirm the deletion.
@@ -71,7 +71,7 @@ provider.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Delete the Service Account key
-    gcloud iam service-accounts delete dvc-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com
+    gcloud iam service-accounts delete service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com
     ```
 
     Press ++y++ to confirm the deletion.
@@ -83,8 +83,7 @@ provider.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Delete the local Service Account key
-    rm ~/.config/gcloud/dvc-google-service-account-key.json
-    rm ~/.config/gcloud/mlem-google-service-account-key.json
+    rm ~/.config/gcloud/google-service-account-key.json
     ```
 
     **Delete the Google Cloud project**
@@ -103,7 +102,7 @@ provider.
 
     1. Go to the
        [Google Cloud Billing Console](https://console.cloud.google.com/billing){:target="\_blank"}.
-    2. Select **MY Projects**
+    2. Select **My Projects**
     3. Select **Actions** from the project list and select **Disable billing**.
 
     To close the Billing Account you created:

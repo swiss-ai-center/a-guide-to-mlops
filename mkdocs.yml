@@ -31,10 +31,10 @@ nav:
       - "Clean up": part-2-move-the-model-to-the-cloud/clean-up.md
   - 🚚 Serve and deploy the model:
       - "Introduction": part-3-serve-and-deploy-the-model/introduction.md
-      - "Chapter 11 - Save and load the model with MLEM": part-3-serve-and-deploy-the-model/chapter-11-save-and-load-the-model-with-mlem.md
-      - "Chapter 12 - Serve the model locally with MLEM": part-3-serve-and-deploy-the-model/chapter-12-serve-the-model-locally-with-mlem.md
-      - "Chapter 13 - Deploy and access the model on Kubernetes with MLEM": part-3-serve-and-deploy-the-model/chapter-13-deploy-and-access-the-model-on-kubernetes-with-mlem.md
-      - "Chapter 14 - Continuous deployment of the model with MLEM and the CI/CD pipeline": part-3-serve-and-deploy-the-model/chapter-14-continuous-deployment-of-the-model-with-mlem-and-the-cicd-pipeline.md
+      - "Chapter 11 - Save and load the model with BentoML": part-3-serve-and-deploy-the-model/chapter-11-save-and-load-the-model-with-bentoml.md
+      - "Chapter 12 - Serve the model locally with BentoML": part-3-serve-and-deploy-the-model/chapter-12-serve-the-model-locally-with-bentoml.md
+      - "Chapter 13 - Deploy and access the model on Kubernetes with BentoML": part-3-serve-and-deploy-the-model/chapter-13-deploy-and-access-the-model-on-kubernetes-with-bentoml.md
+      - "Chapter 14 - Continuous deployment of the model with the CI/CD pipeline": part-3-serve-and-deploy-the-model/chapter-14-continuous-deployment-of-the-model-with-the-cicd-pipeline.md
       - "Chapter 15 - Train the model on a Kubernetes pod with CML": part-3-serve-and-deploy-the-model/chapter-15-train-the-model-on-a-kubernetes-pod-with-cml.md
       - "Conclusion": part-3-serve-and-deploy-the-model/conclusion.md
       - "Clean up": part-3-serve-and-deploy-the-model/clean-up.md
@@ -82,7 +82,7 @@ theme:
     - content.action.edit
     - content.action.view
     - content.tabs.link
-    # - navigation.indexes
+    - navigation.indexes
     - navigation.instant
     - navigation.tabs
     - navigation.tabs.sticky
@@ -96,6 +96,7 @@ plugins:
   - social
   - tags
   - git-revision-date-localized:
+      enabled: !ENV [CI, false]
       type: datetime
       fallback_to_build_date: true
   - glightbox
@@ -123,8 +124,8 @@ markdown_extensions:
   - pymdownx.caret
   - pymdownx.details
   - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - pymdownx.highlight:
       anchor_linenums: true
       linenums: true

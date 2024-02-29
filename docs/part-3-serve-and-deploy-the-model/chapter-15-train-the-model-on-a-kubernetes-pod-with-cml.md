@@ -157,7 +157,7 @@ Display the nodes with the following command.
 kubectl get nodes --show-labels
 ```
 
-The output should be similar to this. As noticed, you have two nodes in your
+The output should be similar to this: As noticed, you have two nodes in your
 cluster with their labels.
 
 ```
@@ -351,11 +351,11 @@ you'll be able to start the training of the model on the node with the GPU.
     Create a new variable named `CML_PAT` with the value of the Personal Access
     Token as its value. Save the variable by selecting **Add secret**.
 
-    Update the `.github/workflows/mlops.yml` file. Replace `<my cluster name>` with
+    Update the `.github/workflows/mlops.yaml` file. Replace `<my cluster name>` with
     your own name (ex: `mlops-kubernetes`). Replace `<my cluster zone>` with your
     own zone (ex: `europe-west6-a` for Zurich, Switzerland).
 
-    ```yaml title=".github/workflows/mlops.yml" hl_lines="15-18 21-51 54-56"
+    ```yaml title=".github/workflows/mlops.yaml" hl_lines="15-18 21-51 54-56"
     name: MLOps
 
     on:
@@ -418,16 +418,16 @@ you'll be able to start the training of the model on the node with the GPU.
           - name: Setup Python
             uses: actions/setup-python@v4
             with:
-              python-version: '3.10'
+              python-version: '3.11'
               cache: pip
           - name: Install dependencies
             run: pip install --requirement requirements-freeze.txt
           - name: Login to Google Cloud
             uses: 'google-github-actions/auth@v1'
             with:
-              credentials_json: '${{ secrets.DVC_GCP_SERVICE_ACCOUNT_KEY }}'
+              credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
           - name: Train model
-            run: dvc repro --pull --allow-missing
+            run: dvc repro --pull
             # Node is required to run CML
           - name: Setup Node
             if: github.event_name == 'pull_request'
@@ -501,16 +501,16 @@ you'll be able to start the training of the model on the node with the GPU.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Show the differences with Git
-    git diff .github/workflows/mlops.yml
+    git diff .github/workflows/mlops.yaml
     ```
 
     The output should be similar to this:
 
     ```diff
-    diff --git a/.github/workflows/mlops.yml b/.github/workflows/mlops.yml
+    diff --git a/.github/workflows/mlops.yaml b/.github/workflows/mlops.yaml
     index 30bbce8..5d4a6dd 100644
-    --- a/.github/workflows/mlops.yml
-    +++ b/.github/workflows/mlops.yml
+    --- a/.github/workflows/mlops.yaml
+    +++ b/.github/workflows/mlops.yaml
     @@ -12,10 +12,48 @@ on:
        # Allows you to run this workflow manually from the Actions tab
        workflow_dispatch:
@@ -787,7 +787,7 @@ you'll be able to start the training of the model on the node with the GPU.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Add the configuration file
-    git add .github/workflows/mlops.yml
+    git add .github/workflows/mlops.yaml
 
     # Commit the changes
     git commit -m "A pipeline will run my experiment on Kubernetes on each push"
@@ -896,9 +896,9 @@ journey and the next things you could do with your model.
 
 Highly inspired by:
 
-* [_Self-hosted (On-premise or Cloud) Runners_ - cml.dev](https://cml.dev/doc/self-hosted-runners)
-* [_Install kubectl and configure cluster access_ - cloud.google.com](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl)
-* [_gcloud container clusters create_ - cloud.google.com](https://cloud.google.com/sdk/gcloud/reference/container/clusters/create)
-* [_Install Tools_ - kubernetes.io](https://kubernetes.io/docs/tasks/tools/)
-* [_Assigning Pods to Nodes_ - kubernetes.io](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
-* [_Assign Pods to Nodes_ - kubernetes.io](https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/)
+- [_Self-hosted (On-premise or Cloud) Runners_ - cml.dev](https://cml.dev/doc/self-hosted-runners)
+- [_Install kubectl and configure cluster access_ - cloud.google.com](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl)
+- [_gcloud container clusters create_ - cloud.google.com](https://cloud.google.com/sdk/gcloud/reference/container/clusters/create)
+- [_Install Tools_ - kubernetes.io](https://kubernetes.io/docs/tasks/tools/)
+- [_Assigning Pods to Nodes_ - kubernetes.io](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+- [_Assign Pods to Nodes_ - kubernetes.io](https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/)

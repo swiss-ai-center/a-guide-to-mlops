@@ -90,7 +90,7 @@ flowchart LR
 ### Set up access to the S3 bucket of the cloud provider
 
 DVC will need to log in to the S3 bucket of the cloud provider to download the
-data inside the CI/CD pipeline.
+data inside the CI/CD pipeline:
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -102,7 +102,7 @@ data inside the CI/CD pipeline.
     to access Google Cloud without your own credentials.
 
     The key will be stored in your **`~/.config/gcloud`** directory under the name
-    `dvc-google-service-account-key.json`.
+    `google-service-account-key.json`:
 
     !!! danger
 
@@ -111,17 +111,17 @@ data inside the CI/CD pipeline.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Create the Google Service Account
-    gcloud iam service-accounts create dvc-service-account \
-        --display-name="DVC Service Account"
+    gcloud iam service-accounts create google-service-account \
+        --display-name="Google Service Account"
 
     # Set the permissions for the Google Service Account
     gcloud projects add-iam-policy-binding $GCP_PROJECT_ID \
-        --member="serviceAccount:dvc-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com" \
+        --member="serviceAccount:google-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com" \
         --role="roles/storage.objectViewer"
 
     # Create the Google Service Account Key
-    gcloud iam service-accounts keys create ~/.config/gcloud/dvc-google-service-account-key.json \
-        --iam-account=dvc-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com
+    gcloud iam service-accounts keys create ~/.config/gcloud/google-service-account-key.json \
+        --iam-account=google-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com
     ```
 
     !!! info
@@ -146,9 +146,8 @@ data inside the CI/CD pipeline.
 ### Store the cloud provider credentials in the CI/CD configuration
 
 Now that the credentials are created, you need to store them in the CI/CD
-configuration.
-
-Depending on the CI/CD platform you are using, the process will be different.
+configuration. Depending on the CI/CD platform you are using, the process will
+be different:
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -160,11 +159,11 @@ Depending on the CI/CD platform you are using, the process will be different.
     === ":simple-github: GitHub"
 
         Display the Google Service Account key that you have downloaded from Google
-        Cloud.
+        Cloud:
 
         ```sh title="Execute the following command(s) in a terminal"
         # Display the Google Service Account key
-        cat ~/.config/gcloud/dvc-google-service-account-key.json
+        cat ~/.config/gcloud/google-service-account-key.json
         ```
 
     === ":simple-gitlab: GitLab"
@@ -177,14 +176,14 @@ Depending on the CI/CD platform you are using, the process will be different.
 
             ```sh title="Execute the following command(s) in a terminal"
             # Encode the Google Service Account key to base64
-            base64 -w 0 -i ~/.config/gcloud/dvc-google-service-account-key.json
+            base64 -w 0 -i ~/.config/gcloud/google-service-account-key.json
             ```
 
         === ":simple-apple: macOS"
 
             ```sh title="Execute the following command(s) in a terminal"
             # Encode the Google Service Account key to base64
-            base64 -i ~/.config/gcloud/dvc-google-service-account-key.json
+            base64 -i ~/.config/gcloud/google-service-account-key.json
             ```
 
     **Store the Google Service Account key as a CI/CD variable**
@@ -196,7 +195,7 @@ Depending on the CI/CD platform you are using, the process will be different.
 
         Select **Secrets and variables > Actions** and select **New repository secret**.
 
-        Create a new variable named `DVC_GCP_SERVICE_ACCOUNT_KEY` with the output value
+        Create a new variable named `GOOGLE_SERVICE_ACCOUNT_KEY` with the output value
         of the Google Service Account key file as its value. Save the variable by
         selecting **Add secret**.
 
@@ -207,8 +206,8 @@ Depending on the CI/CD platform you are using, the process will be different.
 
         Select **Variables** and select **Add variable**.
 
-        Create a new variable named `DVC_GCP_SERVICE_ACCOUNT_KEY` with the Google
-        Service Account key file encoded in `base64` as its value.
+        Create a new variable named `GOOGLE_SERVICE_ACCOUNT_KEY` with the Google Service
+        Account key file encoded in `base64` as its value.
 
         - **Protect variable**: _Unchecked_
         - **Mask variable**: _Checked_
@@ -235,11 +234,10 @@ Depending on the CI/CD platform you are using, the process will be different.
 === ":simple-github: GitHub"
 
     At the root level of your Git repository, create a GitHub Workflow configuration
-    file `.github/workflows/mlops.yml`.
+    file `.github/workflows/mlops.yaml`. Take some time to understand the train job
+    and its steps:
 
-    Take some time to understand the train job and its steps.
-
-    ```yaml title=".github/workflows/mlops.yml"
+    ```yaml title=".github/workflows/mlops.yaml"
     name: MLOps
 
     on:
@@ -259,20 +257,20 @@ Depending on the CI/CD platform you are using, the process will be different.
         runs-on: ubuntu-latest
         steps:
           - name: Checkout repository
-            uses: actions/checkout@v3
+            uses: actions/checkout@v4
           - name: Setup Python
-            uses: actions/setup-python@v4
+            uses: actions/setup-python@v5
             with:
-              python-version: '3.10'
+              python-version: '3.11'
               cache: pip
           - name: Install dependencies
             run: pip install --requirement requirements-freeze.txt
           - name: Login to Google Cloud
-            uses: 'google-github-actions/auth@v1'
+            uses: google-github-actions/auth@v2
             with:
-              credentials_json: '${{ secrets.DVC_GCP_SERVICE_ACCOUNT_KEY }}'
+              credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
           - name: Train model
-            run: dvc repro --pull --allow-missing
+            run: dvc repro --pull
     ```
 
 === ":simple-gitlab: GitLab"
@@ -297,7 +295,7 @@ Depending on the CI/CD platform you are using, the process will be different.
 
     train:
       stage: train
-      image: python:3.10
+      image: python:3.11
       rules:
         - if: $CI_COMMIT_BRANCH == "main"
         - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -309,7 +307,7 @@ Depending on the CI/CD platform you are using, the process will be different.
           - .venv/
       before_script:
         # Set the Google Service Account key
-        - echo "${DVC_GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+        - echo "${GOOGLE_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
         # Create the virtual environment for caching
         - python3 -m venv .venv
         - source .venv/bin/activate
@@ -317,27 +315,23 @@ Depending on the CI/CD platform you are using, the process will be different.
         - pip install --requirement requirements-freeze.txt
       script:
         # Run the experiment
-        - dvc repro --pull --allow-missing
+        - dvc repro --pull
     ```
 
-A few notes:
+!!! tip
 
-- Instead of running `dvc pull` and `dvc repro` separately, you can run them
-  together with `dvc repro --pull`.
-- The `--allow-missing` flag allows DVC to skip downloading unnecessary files
-  that are not used in the repro step. For example, if the prepare step is already
-  cached, DVC will skip downloading the data again and will only download the
-  cached prepare step.
+    Instead of running `dvc pull` and `dvc repro` separately, you can run them
+    together with `dvc repro --pull`.
 
 ### Push the CI/CD pipeline configuration file to Git
 
 === ":simple-github: GitHub"
 
-    Push the CI/CD pipeline configuration file to Git.
+    Push the CI/CD pipeline configuration file to Git:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Add the configuration file
-    git add .github/workflows/mlops.yml
+    git add .github/workflows/mlops.yaml
 
     # Commit the changes
     git commit -m "A pipeline will run my experiment on each push"
@@ -434,10 +428,10 @@ collaboration. Continue the guide to learn how.
 
 Highly inspired by:
 
-* [_Creating and managing service accounts_ - cloud.google.com](https://cloud.google.com/iam/docs/creating-managing-service-accounts)
-* [_Create and manage service account keys_ - cloud.google.com](https://cloud.google.com/iam/docs/creating-managing-service-account-keys)
-* [_IAM basic and predefined roles reference_ - cloud.google.com](https://cloud.google.com/iam/docs/understanding-roles)
-* [_Using service accounts_ - dvc.org](https://dvc.org/doc/user-guide/setup-google-drive-remote#using-service-accounts)
-* [_Creating encrypted secrets for a repository_ - docs.github.com](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
-* [_Add a CI/CD variable to a project_ - docs.gitlab.com](https://docs.gitlab.com/ee/ci/variables/#add-a-cicd-variable-to-a-project)
-* [_Triggering a workflow_ - docs.github.com](https://docs.github.com/en/actions/using-workflows/triggering-a-workflow)
+- [_Creating and managing service accounts_ - cloud.google.com](https://cloud.google.com/iam/docs/creating-managing-service-accounts)
+- [_Create and manage service account keys_ - cloud.google.com](https://cloud.google.com/iam/docs/creating-managing-service-account-keys)
+- [_IAM basic and predefined roles reference_ - cloud.google.com](https://cloud.google.com/iam/docs/understanding-roles)
+- [_Using service accounts_ - dvc.org](https://dvc.org/doc/user-guide/setup-google-drive-remote#using-service-accounts)
+- [_Creating encrypted secrets for a repository_ - docs.github.com](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+- [_Add a CI/CD variable to a project_ - docs.gitlab.com](https://docs.gitlab.com/ee/ci/variables/#add-a-cicd-variable-to-a-project)
+- [_Triggering a workflow_ - docs.github.com](https://docs.github.com/en/actions/using-workflows/triggering-a-workflow)

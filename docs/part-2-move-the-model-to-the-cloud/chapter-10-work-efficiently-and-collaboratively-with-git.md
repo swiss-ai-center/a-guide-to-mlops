@@ -134,7 +134,7 @@ flowchart LR
 ### Checkout the new branch
 
 On your machine, check out the new branch. Replace
-`<the name of the new branch>` with the name of the branch to checkout to.
+`<the name of the new branch>` with the name of the branch to checkout to:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Get the latest updates from the remote origin
@@ -152,7 +152,7 @@ you will update the experiment to see the evolution being tracked remotely by
 CML.
 
 Update your experiment with the following parameters by editing the
-`params.yaml` file.
+`params.yaml` file:
 
 ```yaml title="params.yaml" hl_lines="9 11-12"
 prepare:
@@ -170,14 +170,14 @@ train:
   output_classes: 11
 ```
 
-Check the differences with Git to validate the changes.
+Check the differences with Git to validate the changes:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Show the differences with Git
 git diff params.yaml
 ```
 
-The output should be similar to this.
+The output should be similar to this:
 
 ```diff
 diff --git a/params.yaml b/params.yaml
@@ -202,7 +202,7 @@ Here, you simply changed the `lr` (learning rate), `conv_size` and `dense_size`
 parameters of the `train` stage, which should slightly affect the model's
 performance.
 
-Reproduce the experiment with DVC.
+Reproduce the experiment with DVC:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Reproduce the experiment
@@ -221,7 +221,7 @@ dvc repro
 You can now commit and push the above changes to trigger a change on the remote
 repository.
 
-Check the changes with Git to ensure all wanted files are here.
+Check the changes with Git to ensure all wanted files are here:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Add all the files
@@ -233,7 +233,7 @@ git status
 
 The output of the `git status` command should be similar to this.
 
-```
+```text
 On branch cml-report
 Your branch is up to date with 'cml-report'.
 
@@ -250,7 +250,7 @@ Push the changes to the remote repository.
 dvc push
 
 # Commit the changes
-git commit -m "I made some changes to the model"
+git commit -m "Made some changes to the model"
 
 # Push the changes
 git push
@@ -274,18 +274,13 @@ git push
 === ":simple-github: GitHub"
 
     The pull request opens and automatically starts the workflow
-    `MLOps / train (pull_request)` under the **Some checks haven’t completed yet**
-    section. You can click on **Details** to see the execution details.
+    `MLOps / train_and_report (pull_request)` under the
+    **Some checks haven’t completed yet** section. You can click on **Details** to
+    see the execution details.
 
     Explore the output and try to identify the steps that are executed.
 
-    Once the workflow is done, a new workflow `MLOps / report (pull_request)` is
-    started under the **Some checks haven’t completed yet** section. You can click
-    on **Details** to see the details.
-
-    Explore the output and try to see how the configuration file shows up in GitHub.
-
-    Once all workflows have successfully been executed, the
+    Once the workflow has successfully been executed, the
     **Some checks haven't completed yet** section should become
     **All checks have passed**.
 
@@ -437,5 +432,5 @@ collaboration. Continue the guide to learn how.
 
 Highly inspired by:
 
-* [_Creating an issue_ - docs.github.com](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue)
-* [_Creating a branch to work on an issue_ - docs.github.com](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-a-branch-for-an-issue)
+- [_Creating an issue_ - docs.github.com](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue)
+- [_Creating a branch to work on an issue_ - docs.github.com](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-a-branch-for-an-issue)

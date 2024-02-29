@@ -22,7 +22,7 @@ Let's get started!
 ### Update the parameters of the experiment
 
 Update your experiment with the following parameters by editing the
-`params.yaml` file.
+`params.yaml` file:
 
 ```yaml title="params.yaml" hl_lines="10"
 prepare:
@@ -40,14 +40,14 @@ train:
   output_classes: 11
 ```
 
-Check the differences with Git to validate the changes.
+Check the differences with Git to validate the changes:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Show the differences with Git
 git diff params.yaml
 ```
 
-The output should be similar to this.
+The output should be similar to this:
 
 ```diff
 diff --git a/params.yaml b/params.yaml
@@ -71,7 +71,7 @@ slightly affect the model's performance.
 ### Reproduce the experiment
 
 Let's discover if these changes are positive or not! To do so, you will need to
-reproduce the experiment.
+reproduce the experiment:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Run the experiment. DVC will automatically run all required stages
@@ -94,16 +94,16 @@ working directory.
 
 In order to compare the parameters, you will need to use the `dvc params diff`.
 This command will compare the parameters that were set on `HEAD` and the ones in
-your current `workspace`.
+your current `workspace`:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Compare the parameters' difference
 dvc params diff
 ```
 
-The output should look like this.
+The output should look like this:
 
-```
+```text
 Path         Param         HEAD    workspace
 params.yaml  train.epochs  5       10
 ```
@@ -115,16 +115,16 @@ compare the two iterations.
 
 Similarly, you can use the `dvc metrics diff` command to compare the metrics
 that were computed on `HEAD` and the ones that were computed in your current
-`workspace`.
+`workspace`:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Compare the metrics' difference
 dvc metrics diff
 ```
 
-The output should look like this.
+The output should look like this:
 
-```
+```text
 Path                     Metric    HEAD     workspace    Change
 evaluation/metrics.json  val_acc   0.58879  0.74143      0.15265
 evaluation/metrics.json  val_loss  1.89269  1.34434      -0.54835
@@ -134,6 +134,10 @@ Again, DVC shows you the differences, so you can easily compare the two
 iterations. Here, you can see that the metrics have slightly improved.
 
 #### Compare the plots difference
+
+Finally, you can use the `dvc plots diff` command to compare the plots that were
+generated on `HEAD` and the ones that were generated in your current
+`workspace`:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Create the report to display the plots
@@ -163,7 +167,7 @@ model's performance changes.
 The `dvc plots diff` creates a `dvc_plots` directory in the working directory.
 This directory should be ignored by Git.
 
-Add the `dvc_plots` directory to the `.gitignore` file.
+Add the `dvc_plots` directory to the `.gitignore` file:
 
 ```sh title=".gitignore" hl_lines="9-10"
 ## Python
@@ -186,14 +190,14 @@ dvc_plots
     If using macOS, you might want to ignore `.DS_Store` files as well to avoid
     pushing Apple's metadata files to your repository.
 
-Check the differences with Git to validate the changes.
+Check the differences with Git to validate the changes:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Show the differences with Git
 git diff .gitignore
 ```
 
-The output should be similar to this.
+The output should be similar to this:
 
 ```diff
 diff --git a/.gitignore b/.gitignore
@@ -213,7 +217,7 @@ index 8a2668e..cbfa93b 100644
 
 ### Check the changes
 
-Check the changes with Git to ensure that all the necessary files are tracked.
+Check the changes with Git to ensure that all the necessary files are tracked:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Add all the files
@@ -225,7 +229,7 @@ git status
 
 The output should look like this.
 
-```
+```text
 On branch main
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
@@ -236,7 +240,7 @@ Changes to be committed:
 
 ### Commit the changes
 
-Commit the changes to the local Git repository.
+Commit the changes to the local Git repository:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes

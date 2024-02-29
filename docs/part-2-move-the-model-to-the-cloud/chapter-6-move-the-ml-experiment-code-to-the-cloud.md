@@ -73,7 +73,7 @@ Create a Git repository on your preferred service to collaborate with peers.
 
     !!! danger "Important"
 
-        Configure the repository as you wish but **do not** check the boxex
+        Configure the repository as you wish but **do not** check the box
         _"Add a README file"_, _"Add .gitignore"_ nor _"Choose a license"_.
 
     Create a new GitHub repository for this chapter by accessing
@@ -93,7 +93,7 @@ Create a Git repository on your preferred service to collaborate with peers.
 
 Add the remote origin to your repository. Replace `<your git repository url>`
 with the URL of your Git repository. Your Git service should provide these
-instructions as well.
+instructions as well:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Add the remote origin
@@ -102,7 +102,7 @@ git remote add origin <your git repository url>
 
 ## Push the changes to Git
 
-Set the remote as the upstream branch and push the changes to Git.
+Set the remote as the upstream branch and push the changes to Git:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Set remote origin and push the changes
@@ -136,7 +136,7 @@ You fixed some of the previous issues:
 - [x] Codebase no longer needs manual download and is versioned
 
 Another member of your team can easily clone the experiment with the following
-commands.
+command:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Clone the Git repository
@@ -174,5 +174,5 @@ Highly inspired by:
 
 - [_Creating a new repository_ - docs.github.com](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository)
 - [_Create a project_ - docs.gitlab.com](https://docs.gitlab.com/ee/user/project/working_with_projects.html#create-a-project)
-* [_Managing remote repositories_ - github.com](https://docs.github.com/en/get-started/getting-started-with-git/managing-remote-repositories)
-* [_git-remote_ - git-scm.com](https://git-scm.com/docs/git-remote)
+- [_Managing remote repositories_ - github.com](https://docs.github.com/en/get-started/getting-started-with-git/managing-remote-repositories)
+- [_git-remote_ - git-scm.com](https://git-scm.com/docs/git-remote)

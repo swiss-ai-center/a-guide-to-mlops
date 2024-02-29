@@ -1,41 +1,38 @@
-# Chapter 11: Save and load the model with MLEM
+# Chapter 11: Save and load the model with BentoML
 
 ## Introduction
 
 The purpose of this chapter is to serve and use the model for usage outside of
-the experiment context with the help of [MLEM](../tools.md), a powerful tool
+the experiment context with the help of [BentoML](../tools.md), a powerful tool
 designed for easy packaging, deployment, and serving of Machine Learning models.
 
-By transforming your model into a specialized MLEM model, it is possible to
+By transforming your model into a specialized BentoML model, it is possible to
 capture the essential metadata information that can then be used to load the
 model for future usage, unlocking true potential in facilitating seamless and
 efficient model deployment.
 
 In this chapter, you will learn how to:
 
-1. Install MLEM
-2. Initialize and configure MLEM
-3. Update and run the experiment to use MLEM to save and load the model
+1. Install BentoML
+2. Learn about BentoML's model store
+3. Update and run the experiment to use BentoML to save and load the model to
+   and from the model's store
 
 The following diagram illustrates control flow of the experiment at the end of
 this chapter:
 
 ```mermaid
 flowchart TB
-    dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]
-    s3_storage -->|dvc pull| dot_dvc
-    dot_git[(.git)] -->|git push| gitGraph[Git Remote]
-    gitGraph -->|git pull| dot_git
+    dot_dvc[(.dvc)] <-->|dvc pull\ndvc push| s3_storage[(S3 Storage)]
+    dot_git[(.git)] <-->|git pull\ngit push| gitGraph[Git Remote]
     workspaceGraph <-....-> dot_git
-    data[data/raw] <-.-> dot_dvc
+    data[data/raw]
     subgraph remoteGraph[REMOTE]
         s3_storage
         subgraph gitGraph[Git Remote]
             repository[(Repository)] --> action[Action]
-            action -->|dvc pull| action_data[data/raw]
-            action_data -->|dvc repro| action_out[metrics & plots]
-            action_out -->|cml publish| pr[Pull Request]
-            pr --> repository
+            action[Action] --> |...|request[PR]
+            request --> repository[(Repository)]
         end
     end
     subgraph cacheGraph[CACHE]
@@ -43,39 +40,28 @@ flowchart TB
         dot_git
     end
     subgraph workspaceGraph[WORKSPACE]
-        prepare[prepare.py] <-.-> dot_dvc
-        train[train.py] <-.-> dot_dvc
-        evaluate[evaluate.py] <-.-> dot_dvc
-        data --> prepare
-        subgraph dvcGraph["dvc.yaml (dvc repro)"]
-            prepare --> train
-            train --> evaluate
+        data --> code[*.py]
+        subgraph dvcGraph["dvc.yaml"]
+            code
         end
-        params[params.yaml] -.- prepare
-        params -.- train
-        params <-.-> dot_dvc
-        subgraph mlemGraph[.mlem.yaml]
-            mlem[model.mlem]
-        end
-        mlem <-.-> dot_git
-        dvcGraph --> mlem
+        params[params.yaml] -.- code
+        bento_model[model/classifier.bentomodel]
+        bento_model <-.-> dot_dvc
+        code --> |save_model\nexport_model|bento_model
+        bento_model --> |import_model\nload_model|code
     end
-    style pr opacity:0.4,color:#7f7f7f80
     style workspaceGraph opacity:0.4,color:#7f7f7f80
     style dvcGraph opacity:0.4,color:#7f7f7f80
     style cacheGraph opacity:0.4,color:#7f7f7f80
     style data opacity:0.4,color:#7f7f7f80
     style dot_git opacity:0.4,color:#7f7f7f80
     style dot_dvc opacity:0.4,color:#7f7f7f80
-    style prepare opacity:0.4,color:#7f7f7f80
-    style train opacity:0.4,color:#7f7f7f80
-    style evaluate opacity:0.4,color:#7f7f7f80
+    style code opacity:0.4,color:#7f7f7f80
     style params opacity:0.4,color:#7f7f7f80
     style s3_storage opacity:0.4,color:#7f7f7f80
     style repository opacity:0.4,color:#7f7f7f80
     style action opacity:0.4,color:#7f7f7f80
-    style action_data opacity:0.4,color:#7f7f7f80
-    style action_out opacity:0.4,color:#7f7f7f80
+    style request opacity:0.4,color:#7f7f7f80
     style remoteGraph opacity:0.4,color:#7f7f7f80
     style gitGraph opacity:0.4,color:#7f7f7f80
     linkStyle 0 opacity:0.4,color:#7f7f7f80
@@ -86,42 +72,32 @@ flowchart TB
     linkStyle 5 opacity:0.4,color:#7f7f7f80
     linkStyle 6 opacity:0.4,color:#7f7f7f80
     linkStyle 7 opacity:0.4,color:#7f7f7f80
-    linkStyle 8 opacity:0.4,color:#7f7f7f80
-    linkStyle 9 opacity:0.4,color:#7f7f7f80
-    linkStyle 10 opacity:0.4,color:#7f7f7f80
-    linkStyle 11 opacity:0.4,color:#7f7f7f80
-    linkStyle 12 opacity:0.4,color:#7f7f7f80
-    linkStyle 13 opacity:0.4,color:#7f7f7f80
-    linkStyle 14 opacity:0.4,color:#7f7f7f80
-    linkStyle 15 opacity:0.4,color:#7f7f7f80
-    linkStyle 16 opacity:0.4,color:#7f7f7f80
-    linkStyle 17 opacity:0.4,color:#7f7f7f80
-    linkStyle 18 opacity:0.4,color:#7f7f7f80
-    linkStyle 19 opacity:0.4,color:#7f7f7f80
 ```
 
 ## Steps
 
-### Install MLEM
+### Install BentoML and dependencies
 
-Add the `mlem` package to install MLEM support.
+Add the `bentoml` package to install BentoML support. `pillow` is also added to
+the requirements to support image processing:
 
-```txt title="requirements.txt" hl_lines="5"
+```txt title="requirements.txt" hl_lines="5-6"
 tensorflow==2.12.0
 matplotlib==3.7.1
 pyyaml==6.0
-dvc[gs]==3.2.2
-mlem==0.4.13
+dvc[gs]==3.47.0
+bentoml==1.2.2
+pillow==10.2.0
 ```
 
-Check the differences with Git to validate the changes.
+Check the differences with Git to validate the changes:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Show the differences with Git
 git diff requirements.txt
 ```
 
-The output should be similar to this.
+The output should be similar to this:
 
 ```diff
 diff --git a/requirements.txt b/requirements.txt
@@ -131,8 +107,9 @@ index 8ccc2df..fcdd460 100644
 @@ -2,3 +2,4 @@ tensorflow==2.12.0
  matplotlib==3.7.1
  pyyaml==6.0
- dvc[gs]==3.2.2
-+mlem==0.4.13
+ dvc[gs]==3.47.0
++bentoml==1.2.2
++pillow==10.2.0
 ```
 
 Install the package and update the freeze file.
@@ -155,45 +132,27 @@ pip install --requirement requirements.txt
 pip freeze --local --all > requirements-freeze.txt
 ```
 
-### Initialize and configure MLEM.
-
-```sh title="Execute the following command(s) in a terminal"
-# Initialize MLEM
-mlem init
-
-# Set MLEM to use DVC
-mlem config set core.storage.type dvc
-
-# Add MLEM metafiles to dvcignore
-echo "/**/?*.mlem" >> .dvcignore
-```
-
-The effect of the `mlem init` command is to create a `.mlem.yaml` file in the
-working directory. This file contains the configuration of MLEM.
-
 ### Update the experiment
 
-To make the most of MLEM's capabilities, you must start by converting your model
-into the specialized MLEM format, which allows for the capture of essential
-model metadata beyond traditional model-saving practices. This pivotal step is
-crucial for harnessing the comprehensive features and advantages offered by
-MLEM.
+To make the most of BentoML's capabilities, you must start by converting your
+model into the specialized BentoML format, which allows for the capture of
+essential model metadata beyond traditional model-saving practices. This pivotal
+step is crucial for harnessing the comprehensive features and advantages offered
+by BentoML.
+
+BentoML offers a model store, which is a centralized repository for all your
+models. This store is stored in a directory on your local machine at
+`/home/user/bentoml/`.
+
+In order to share the model with others, the model must be exported in the
+current working directory. It will then be uploaded to DVC and shared with
+others.
 
 #### Update `src/train.py`
 
-Update the `src/train.py` file to save the model with MLEM.
+Update the `src/train.py` file to save the model with BentoML:
 
-!!! info
-
-    MLEM can save model artifacts as well such as TFIDF vectorizer, etc.
-
-    When loading a model using MLEM, it will automatically load the artifacts if
-    they are present, so you don't have to worry about it.
-
-    This is not covered in this guide as the model does not use any artifacts but
-    can be really useful in some cases.
-
-```py title="src/train.py" hl_lines="1 9 66-68 89-125"
+```py title="src/train.py" hl_lines="1 9-10 67-69 90-125"
 import json
 import sys
 from pathlib import Path
@@ -202,7 +161,8 @@ from typing import Tuple
 import numpy as np
 import tensorflow as tf
 import yaml
-from mlem.api import save
+import bentoml
+from PIL.Image import Image
 
 from utils.seed import set_seed
 
@@ -282,42 +242,41 @@ def main() -> None:
     # Save the model
     model_folder.mkdir(parents=True, exist_ok=True)
 
-    def preprocess(x):
-        # convert bytes to tensor
-        x = tf.io.decode_image(x, channels=1 if grayscale else 3)
-        x = tf.image.resize(x, image_size)
-        x = tf.cast(x, tf.float32)
+    def preprocess(x: Image):
+        # convert PIL image to tensor
+        x = x.convert('L' if grayscale else 'RGB')
+        x = x.resize(image_size)
+        x = np.array(x)
         x = x / 255.0
         # add batch dimension
-        x = tf.expand_dims(x, axis=0)
+        x = np.expand_dims(x, axis=0)
         return x
 
-    def postprocess(x):
+    def postprocess(x: Image):
         return {
+            "prediction": labels[tf.argmax(x, axis=-1).numpy()[0]],
             "probabilities": {
                 labels[i]: prob
                 for i, prob in enumerate(tf.nn.softmax(x).numpy()[0].tolist())
             },
-            "prediction": labels[tf.argmax(x, axis=-1).numpy()[0]],
         }
 
-    def get_sample_data():
-        x = np.ones((128, 128, 3), dtype=np.uint8)
-        x *= 255
-        # convert array to png bytes
-        x = tf.io.encode_png(x)
-        # tensor to bytes
-        x = x.numpy()
-        return x
-
-    save(
+    # Save the model using BentoML to its model store
+    # https://docs.bentoml.com/en/latest/reference/frameworks/keras.html#bentoml.keras.save_model
+    bentoml.keras.save_model(
+        "celestial_bodies_classifier_model",
         model,
-        str(model_folder),
-        preprocess=preprocess,
-        # Convert output to probabilities
-        postprocess=postprocess,
-        # encode array to png bytes
-        sample_data=get_sample_data(),
+        include_optimizer=True,
+        custom_objects={
+            "preprocess": preprocess,
+            "postprocess": postprocess,
+        }
+    )
+
+    # Export the model from the model store to the local model folder
+    bentoml.models.export_model(
+        "celestial_bodies_classifier_model:latest",
+        f"{model_folder}/celestial_bodies_classifier_model.bentomodel",
     )
 
     # Save the model history
@@ -330,33 +289,31 @@ if __name__ == "__main__":
     main()
 ```
 
-MLEM can save the model with a `preprocessing`, `postprocessing` and
-`sample_data` functions.
+BentoML can save the model with custom objects.
 
-These functions are used to save the model with the necessary information to
-load it later.
+These custom objects can be used to save the model with arbitrary data that can
+be used afterword when loading back the model. In this case, the following
+objects are saved with the model:
 
 - `preprocess` is used to preprocess the input data before feeding it to the
   model.
 - `postprocess` is used to postprocess the output of the model.
-- `sample_data` is used to save a sample of data that can be used to test the
-  model after loading it.
 
-These functions will be used later to generate the API documentation and to test
-the model through the REST API.
+These functions will be used later to transform the input and output data when
+using the model through the REST API.
 
-Check the differences with Git to better understand the changes.
+Check the differences with Git to better understand the changes:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Show the differences with Git
 git diff src/train.py
 ```
 
-The output should be similar to this.
+The output should be similar to this:
 
 ```diff
 diff --git a/src/train.py b/src/train.py
-index ab7724a..fe35a9b 100644
+index ab7724a..082e5e0 100644
 --- a/src/train.py
 +++ b/src/train.py
 @@ -1,3 +1,4 @@
@@ -364,15 +321,16 @@ index ab7724a..fe35a9b 100644
  import sys
  from pathlib import Path
  from typing import Tuple
-@@ -5,6 +6,7 @@ from typing import Tuple
+@@ -5,6 +6,8 @@ from typing import Tuple
  import numpy as np
  import tensorflow as tf
  import yaml
-+from mlem.api import save
++import bentoml
++from PIL.Image import Image
 
  from utils.seed import set_seed
 
-@@ -61,6 +63,10 @@ def main() -> None:
+@@ -61,6 +64,10 @@ def main() -> None:
      ds_train = tf.data.Dataset.load(str(prepared_dataset_folder / "train"))
      ds_test = tf.data.Dataset.load(str(prepared_dataset_folder / "test"))
 
@@ -383,59 +341,57 @@ index ab7724a..fe35a9b 100644
      # Define the model
      model = get_model(image_shape, conv_size, dense_size, output_classes)
      model.compile(
-@@ -79,7 +85,45 @@ def main() -> None:
+@@ -79,7 +86,37 @@ def main() -> None:
 
      # Save the model
      model_folder.mkdir(parents=True, exist_ok=True)
 -    model.save(str(model_folder))
 +
-+    def preprocess(x):
-+        # convert bytes to tensor
-+        x = tf.io.decode_image(x, channels=1 if grayscale else 3)
-+        x = tf.image.resize(x, image_size)
-+        x = tf.cast(x, tf.float32)
++    def preprocess(x: Image):
++        # convert PIL image to tensor
++        x = x.convert('L' if grayscale else 'RGB')
++        x = x.resize(image_size)
++        x = np.array(x)
 +        x = x / 255.0
 +        # add batch dimension
-+        x = tf.expand_dims(x, axis=0)
++        x = np.expand_dims(x, axis=0)
 +        return x
 +
-+    def postprocess(x):
++    def postprocess(x: Image):
 +        return {
++            "prediction": labels[tf.argmax(x, axis=-1).numpy()[0]],
 +            "probabilities": {
 +                labels[i]: prob
 +                for i, prob in enumerate(tf.nn.softmax(x).numpy()[0].tolist())
 +            },
-+            "prediction": labels[tf.argmax(x, axis=-1).numpy()[0]],
 +        }
 +
-+    def get_sample_data():
-+        x = np.ones((128, 128, 3), dtype=np.uint8)
-+        x *= 255
-+        # convert array to png bytes
-+        x = tf.io.encode_png(x)
-+        # tensor to bytes
-+        x = x.numpy()
-+        return x
-+
-+    save(
++    # Save the model using BentoML to its model store
++    # https://docs.bentoml.com/en/latest/reference/frameworks/keras.html#bentoml.keras.save_model
++    bentoml.keras.save_model(
++        "celestial_bodies_classifier_model",
 +        model,
-+        str(model_folder),
-+        preprocess=preprocess,
-+        # Convert output to probabilities
-+        postprocess=postprocess,
-+        # encode array to png bytes
-+        sample_data=get_sample_data(),
++        include_optimizer=True,
++        custom_objects={
++            "preprocess": preprocess,
++            "postprocess": postprocess,
++        }
 +    )
 +
++    # Export the model from the model store to the local model folder
++    bentoml.models.export_model(
++        "celestial_bodies_classifier_model:latest",
++        f"{model_folder}/celestial_bodies_classifier_model.bentomodel",
++    )
+
      # Save the model history
-     np.save(model_folder / "history.npy", model.history.history)
 ```
 
 #### Update `src/evaluate.py`
 
-Update the `src/evaluate.py` file to load the model from MLEM.
+Update the `src/evaluate.py` file to load the model from BentoML:
 
-```py title="src/evaluate.py" hl_lines="9 133"
+```py title="src/evaluate.py" hl_lines="9 132-139"
 import json
 import sys
 from pathlib import Path
@@ -444,7 +400,7 @@ from typing import List
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
-from mlem.api import load
+import bentoml
 
 
 def get_training_plot(model_history: dict) -> plt.Figure:
@@ -567,8 +523,14 @@ def main() -> None:
     with open(prepared_dataset_folder / "labels.json") as f:
         labels = json.load(f)
 
+    # Import the model to the model store from a local model folder
+    try:
+        bentoml.models.import_model(f"{model_folder}/celestial_bodies_classifier_model.bentomodel")
+    except bentoml.exceptions.BentoMLException:
+        print("Model already exists in the model store - skipping import.")
+
     # Load model
-    model = load(model_folder)
+    model = bentoml.keras.load_model("celestial_bodies_classifier_model")
     model_history = np.load(model_folder / "history.npy", allow_pickle=True).item()
 
     # Log metrics
@@ -599,43 +561,47 @@ if __name__ == "__main__":
     main()
 ```
 
-Check the differences with Git to better understand the changes.
+Check the differences with Git to better understand the changes:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Show the differences with Git
 git diff src/evaluate.py
 ```
 
-The output should be similar to this.
+The output should be similar to this:
 
 ```diff
 diff --git a/src/evaluate.py b/src/evaluate.py
-index aa36089..cc9b5a5 100644
+index 15bc2b8..330048f 100644
 --- a/src/evaluate.py
 +++ b/src/evaluate.py
 @@ -6,6 +6,7 @@ from typing import List
  import matplotlib.pyplot as plt
  import numpy as np
  import tensorflow as tf
-+from mlem.api import load
++import bentoml
 
 
  def get_training_plot(model_history: dict) -> plt.Figure:
-@@ -107,7 +108,7 @@ def main() -> None:
+@@ -129,8 +129,16 @@ def main() -> None:
+     with open(prepared_dataset_folder / "labels.json") as f:
          labels = json.load(f)
 
++    # Import the model to the model store from a local model folder
++    try:
++        bentoml.models.import_model(
++            f"{model_folder}/celestial_bodies_classifier_model.bentomodel"
++        )
++    except bentoml.exceptions.BentoMLException:
++        print("Model already exists in the model store - skipping import.")
++
      # Load model
 -    model = tf.keras.models.load_model(model_folder)
-+    model = load(model_folder)
++    model = bentoml.keras.load_model("celestial_bodies_classifier_model")
      model_history = np.load(model_folder / "history.npy", allow_pickle=True).item()
 
      # Log metrics
 ```
-
-!!! info
-
-    The code `mlem.api.load` loads a MLEM model in its original state, excluding any
-    preprocessing and postprocessing functions applied during saving.
 
 ### Run the experiment
 
@@ -644,12 +610,28 @@ index aa36089..cc9b5a5 100644
 dvc repro
 ```
 
-The experiment now uses MLEM to save and load the model. DVC stores the model
-and its metadata.
+The experiment now uses BentoML to save and load the model. The resulting model
+is saved in the `model` folder and is automatically tracked by DVC. The model is
+then uploaded to the remote storage bucket when pushing the changes to DVC as
+well.
+
+You can check the models stored in the model store with the following command:
+
+```sh title="Execute the following command(s) in a terminal"
+# List the models in the model store
+bentoml models list
+```
+
+The output should look like this:
+
+```text
+ Tag                                                 Module                   Size      Creation Time
+ celestial_bodies_classifier_model:pdpajhwlcojiflg6  bentoml.keras            9.53 MiB  2024-02-14 09:31:38
+```
 
 ### Check the changes
 
-Check the changes with Git to ensure that all the necessary files are tracked.
+Check the changes with Git to ensure that all the necessary files are tracked:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Add all the files
@@ -661,14 +643,11 @@ git status
 
 The output should look like this.
 
-```
+```text
 On branch main
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
-    modified:   .dvcignore
-    new file:   .mlem.yaml
     modified:   dvc.lock
-    new file:   model.mlem
     modified:   requirements-freeze.txt
     modified:   requirements.txt
     modified:   src/evaluate.py
@@ -677,14 +656,14 @@ Changes to be committed:
 
 ### Commit the changes to DVC and Git
 
-Commit the changes to DVC and Git.
+Commit the changes to DVC and Git:
 
 ```sh title="Execute the following command(s) in a terminal"
-# Upload the experiment data and cache to the remote bucket
+# Upload the experiment data, model and cache to the remote bucket
 dvc push
 
 # Commit the changes
-git commit -m "MLEM can save and load the model"
+git commit -m "BentoML can save and load the model"
 
 # Push the changes
 git push
@@ -694,9 +673,10 @@ git push
 
 In this chapter, you have successfully:
 
-1. Installed MLEM
-2. Initialized and configuring MLEM
-3. Updated and ran the experiment to use MLEM to save and load the model
+1. Installed BentoML
+2. Learned about BentoML's model store
+3. Updated and ran the experiment to use BentoML to save and load the model to
+   and from the model's store
 
 You did fix some of the previous issues:
 
@@ -733,8 +713,9 @@ collaboration. Continue the guide to learn how.
 
 Highly inspired by:
 
-* [_Get Started_ - mlem.ai](https://mlem.ai/doc/get-started)
-* [_Saving models_ - mlem.ai](https://mlem.ai/doc/get-started/saving)
-* [_Working with Data_ - mlem.ai](https://mlem.ai/doc/user-guide/data)
-* [_`mlem.api.save()`_ - mlem.ai](https://mlem.ai/doc/api-reference/save)
-* [_`mlem.api.load()`_ - mlem.ai](https://mlem.ai/doc/api-reference/load)
+- [_Quickstart_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/get-started/quickstart.html)
+- [_Keras_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/reference/frameworks/keras.html)
+- [_Model Store_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/guides/model-store.html)
+- [_Bento and model APIs_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/reference/stores.html)
+- [_BentoML SDK_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/reference/sdk.html)
+- [_BentoML CLI_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/reference/cli.html)

@@ -51,7 +51,7 @@ Let's get started!
 
 As a new team member, set up a project directory on your computer for this
 ground breaking ML experiment. This directory will serve as your working
-directory for this first chapter.
+directory for this first chapter:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Create the working directory
@@ -64,14 +64,14 @@ cd a-guide-to-mlops-jupyter-notebook
 ### Download the notebook
 
 Your colleague provided you the following URL to download an archive containing
-the Jupyter Notebook for this machine learning experiment.
+the Jupyter Notebook for this machine learning experiment:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Download the archive containing the Jupyter Notebook
 wget https://github.com/swiss-ai-center/a-guide-to-mlops/archive/refs/heads/jupyter-notebook.zip -O jupyter-notebook.zip
 ```
 
-Unzip the Jupyter Notebook into your working directory.
+Unzip the Jupyter Notebook into your working directory:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Extract the Jupyter Notebook
@@ -87,7 +87,7 @@ rm -r jupyter-notebook.zip a-guide-to-mlops-jupyter-notebook
 ### Download and set up the dataset
 
 Your colleague provided you the following URL to download an archive containing
-the dataset for this machine learning experiment.
+the dataset for this machine learning experiment:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Download the archive containing the dataset
@@ -95,7 +95,7 @@ wget https://github.com/swiss-ai-center/a-guide-to-mlops/archive/refs/heads/data
 ```
 
 This archive must be decompressed and its contents be moved in the `data`
-directory in the working directory of the experiment.
+directory in the working directory of the experiment:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Extract the dataset
@@ -132,11 +132,11 @@ Your working directory should now look like this:
 ### Create the virtual environment
 
 Create the virtual environment and install necessary dependencies in your
-working directory.
+working directory:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Create the virtual environment
-python3 -m venv .venv
+python3.11 -m venv .venv
 
 # Activate the virtual environment
 source .venv/bin/activate
@@ -151,7 +151,7 @@ Awesome! You now have everything you need to run the experiment: the notebook
 and the dataset are in place, the virtual environment is ready; and you're ready
 to run the experiment for the first time.
 
-Launch the notebook.
+Launch the notebook:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Launch the experiment
@@ -176,7 +176,7 @@ Ensure the experiment runs without errors. Once done, you can close the browser
 window. Shut down the Jupyter server by pressing ++ctrl+c++ in the terminal,
 followed with ++y++ and ++enter++.
 
-Exit the virtual environment with the following command.
+Exit the virtual environment with the following command:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Exit the virtual environment

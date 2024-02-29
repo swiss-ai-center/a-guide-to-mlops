@@ -117,11 +117,10 @@ collaboration and decision-making within the team.
 
 === ":simple-github: GitHub"
 
-    Update the `.github/workflows/mlops.yml` file.
+    Update the `.github/workflows/mlops.yaml` file with the following content.
+    Explore this file to understand the `train-and-report` stage and its steps:
 
-    Explore this file to understand the `train-and-report` stage and its steps.
-
-    ```yaml title=".github/workflows/mlops.yml" hl_lines="16-17 35-100"
+    ```yaml title=".github/workflows/mlops.yaml" hl_lines="16-17 35-87"
     name: MLOps
 
     on:
@@ -142,31 +141,25 @@ collaboration and decision-making within the team.
         runs-on: ubuntu-latest
         steps:
           - name: Checkout repository
-            uses: actions/checkout@v3
+            uses: actions/checkout@v4
           - name: Setup Python
-            uses: actions/setup-python@v4
+            uses: actions/setup-python@v5
             with:
-              python-version: '3.10'
+              python-version: '3.11'
               cache: pip
           - name: Install dependencies
             run: pip install --requirement requirements-freeze.txt
           - name: Login to Google Cloud
-            uses: 'google-github-actions/auth@v1'
+            uses: google-github-actions/auth@v2
             with:
-              credentials_json: '${{ secrets.DVC_GCP_SERVICE_ACCOUNT_KEY }}'
+              credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
           - name: Train model
-            run: dvc repro --pull --allow-missing
-          # Node is required to run CML
-          - name: Setup Node
-            if: github.event_name == 'pull_request'
-            uses: actions/setup-node@v3
-            with:
-              node-version: '16'
+            run: dvc repro --pull
           - name: Setup CML
             if: github.event_name == 'pull_request'
-            uses: iterative/setup-cml@v1
+            uses: iterative/setup-cml@v2
             with:
-              version: '0.19.1'
+              version: '0.20.0'
           - name: Create CML report
             if: github.event_name == 'pull_request'
             env:
@@ -218,43 +211,43 @@ collaboration and decision-making within the team.
     ```
 
     The updated `train-and-report` job is responsible for reporting the results of
-    the model evaluation and comparing it with the main branch. This job is
-    triggered only on pull requests. The job checks out the repository, sets up DVC
-    and CML, creates and publishes the report as a pull request comment.
+    the model evaluation and comparing it with the main branch. Some steps in this
+    job are triggered only on pull requests. The job checks out the repository, sets
+    up DVC and CML, creates and publishes the report as a pull request comment.
 
-    Check the differences with Git to validate the changes.
+    Check the differences with Git to validate the changes:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Show the differences with Git
-    git diff .github/workflows/mlops.yml
+    git diff .github/workflows/mlops.yaml
     ```
 
     The output should be similar to this:
 
     ```diff
-    diff --git a/.github/workflows/mlops.yml b/.github/workflows/mlops.yml
-    index 493691a..0498e99 100644
-    --- a/.github/workflows/mlops.yml
-    +++ b/.github/workflows/mlops.yml
-        jobs:
+    diff --git a/.github/workflows/mlops.yaml b/.github/workflows/mlops.yaml
+    index 5aae2a1..1fa989b 100644
+    --- a/.github/workflows/mlops.yaml
+    +++ b/.github/workflows/mlops.yaml
+    @@ -13,7 +13,8 @@ on:
+       workflow_dispatch:
+
+     jobs:
     -  train:
     +  train-and-report:
     +    permissions: write-all
-            runs-on: ubuntu-latest
-            steps:
-            - name: Checkout repository
-    @@ -29,4 +30,71 @@ jobs:
-    +      # Node is required to run CML
-    +      - name: Setup Node
-    +        if: github.event_name == 'pull_request'
-    +        uses: actions/setup-node@v3
-    +        with:
-    +          node-version: '16'
+         runs-on: ubuntu-latest
+         steps:
+           - name: Checkout repository
+    @@ -31,3 +32,56 @@ jobs:
+               credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
+           - name: Train model
+             run: dvc repro --pull
     +      - name: Setup CML
     +        if: github.event_name == 'pull_request'
-    +        uses: iterative/setup-cml@v1
+    +        uses: iterative/setup-cml@v2
     +        with:
-    +          version: '0.19.1'
+    +          version: '0.20.0'
     +      - name: Create CML report
     +        if: github.event_name == 'pull_request'
     +        env:
@@ -283,23 +276,29 @@ collaboration and decision-making within the team.
     +          # Create training history plot
     +          echo "### Training History" >> report.md
     +          echo "#### main" >> report.md
-    +          echo '![](./dvc_plots/static/main_evaluation_plots_training_history.png "Training History")' >> report.md
+    +          echo '![](./dvc_plots/static/main_evaluation_plots_training_history.pn
+    g "Training History")' >> report.md
     +          echo "#### workspace" >> report.md
-    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_training_history.png "Training History")' >> report.md
+    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_training_histo
+    ry.png "Training History")' >> report.md
     +
     +          # Create predictions preview
     +          echo "### Predictions Preview" >> report.md
     +          echo "#### main" >> report.md
-    +          echo '![](./dvc_plots/static/main_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
+    +          echo '![](./dvc_plots/static/main_evaluation_plots_pred_preview.png "P
+    redictions Preview")' >> report.md
     +          echo "#### workspace" >> report.md
-    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
+    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_pred_preview.p
+    ng "Predictions Preview")' >> report.md
     +
     +          # Create confusion matrix
     +          echo "### Confusion Matrix" >> report.md
     +          echo "#### main" >> report.md
-    +          echo '![](./dvc_plots/static/main_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
+    +          echo '![](./dvc_plots/static/main_evaluation_plots_confusion_matrix.pn
+    g "Confusion Matrix")' >> report.md
     +          echo "#### workspace" >> report.md
-    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
+    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_confusion_matr
+    ix.png "Confusion Matrix")' >> report.md
     +
     +          # Publish the CML report
     +          cml comment update --target=pr --publish report.md
@@ -335,9 +334,8 @@ collaboration and decision-making within the team.
 
     Save the variable by clicking **Add variable**.
 
-    Update the `.gitlab-ci.yml` file.
-
-    Explore this file to understand the `report` stage and its steps.
+    Update the `.gitlab-ci.yml` file with the following content. Explore this file
+    to understand the `report` stage and its steps:
 
     ```yaml title=".gitlab-ci.yml" hl_lines="3 13-14 40-97"
     stages:
@@ -357,7 +355,7 @@ collaboration and decision-making within the team.
 
     train:
       stage: train
-      image: python:3.10
+      image: python:3.11
       rules:
         - if: $CI_COMMIT_BRANCH == "main"
         - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -369,7 +367,7 @@ collaboration and decision-making within the team.
           - .venv/
       before_script:
         # Set the Google Service Account key
-        - echo "${DVC_GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+        - echo "${GOOGLE_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
         # Create the virtual environment for caching
         - python3 -m venv .venv
         - source .venv/bin/activate
@@ -377,7 +375,7 @@ collaboration and decision-making within the team.
         - pip install --requirement requirements-freeze.txt
       script:
         # Run the experiment
-        - dvc repro --pull --allow-missing
+        - dvc repro --pull
 
     report:
       stage: report
@@ -388,7 +386,7 @@ collaboration and decision-making within the team.
         - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       before_script:
         # Set the Google Service Account key
-        - echo "${DVC_GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+        - echo "${GOOGLE_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
       script:
         - |
           # Fetch the experiment changes
@@ -484,7 +482,7 @@ collaboration and decision-making within the team.
     @@ -33,3 +36,62 @@ train:
        script:
          # Run the experiment
-         - dvc repro --pull --allow-missing
+         - dvc repro --pull
     +
     +report:
     +  stage: report
@@ -495,7 +493,7 @@ collaboration and decision-making within the team.
     +    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     +  before_script:
     +    # Set the Google Service Account key
-    +    - echo "${DVC_GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+    +    - echo "${GOOGLE_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
     +  script:
     +    - |
     +      # Fetch the experiment changes
@@ -552,14 +550,14 @@ Take some time to understand the changes made to the file.
 
 === ":simple-github: GitHub"
 
-    Push the CI/CD pipeline configuration file to Git.
+    Push the CI/CD pipeline configuration file to Git:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Add the configuration file
-    git add .github/workflows/mlops.yml
+    git add .github/workflows/mlops.yaml
 
     # Commit the changes
-    git commit -m "Add cml reporting to CI/CD pipeline"
+    git commit -m "Add CML reporting to CI/CD pipeline"
 
     # Push the changes
     git push
@@ -567,7 +565,7 @@ Take some time to understand the changes made to the file.
 
 === ":simple-gitlab: GitLab"
 
-    Push the CI/CD pipeline configuration file to Git.
+    Push the CI/CD pipeline configuration file to Git:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Add the configuration file
@@ -647,13 +645,13 @@ collaboration. Continue the guide to learn how.
 
 Highly inspired by:
 
-* [_Get Started with CML on GitHub_ - cml.dev](https://cml.dev/doc/start/github)
-* [_Get Started with CML on GitLab_ - cml.dev](https://cml.dev/doc/start/gitlab)
-* [_Personal access tokens_ - docs.gitlab.com](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html)
+- [_Get Started with CML on GitHub_ - cml.dev](https://cml.dev/doc/start/github)
+- [_Get Started with CML on GitLab_ - cml.dev](https://cml.dev/doc/start/gitlab)
+- [_Personal access tokens_ - docs.gitlab.com](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html)
 
 And the following Git repositories:
 
-* [`example_cml` - github.com](https://github.com/iterative/example_cml)
-* [`cml_dvc_case` - github.com](https://github.com/iterative/cml_dvc_case)
-* [`example_cml` - gitlab.com](https://gitlab.com/iterative.ai/example_cml)
-* [`cml-dvc-case` - gitlab.com](https://gitlab.com/iterative.ai/cml-dvc-case)
+- [`example_cml` - github.com](https://github.com/iterative/example_cml)
+- [`cml_dvc_case` - github.com](https://github.com/iterative/cml_dvc_case)
+- [`example_cml` - gitlab.com](https://gitlab.com/iterative.ai/example_cml)
+- [`cml-dvc-case` - gitlab.com](https://gitlab.com/iterative.ai/cml-dvc-case)

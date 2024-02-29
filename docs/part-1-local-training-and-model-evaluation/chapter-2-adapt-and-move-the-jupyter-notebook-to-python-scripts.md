@@ -47,14 +47,14 @@ For the rest of the guide, you will work in a new directory. This will allow you
 to use the Jupyter Notebook directory as a reference.
 
 Start by ensuring you have left the virtual environment created in the previous
-chapter.
+chapter:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Deactivate the virtual environment
 deactivate
 ```
 
-Next, exit from the current directory and create a new one.
+Next, exit from the current directory and create a new one:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Move back to the root directory
@@ -70,7 +70,7 @@ cd a-guide-to-mlops
 ### Set up the dataset
 
 You will use the same dataset as in the previous chapter. Copy the `data` folder
-from the previous chapter to your new directory.
+from the previous chapter to your new directory:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Copy the data folder from the previous chapter
@@ -79,7 +79,7 @@ cp -r ../a-guide-to-mlops-jupyter-notebook/data .
 
 ### Set up a Python environment
 
-Firstly, create the virtual environment.
+Firstly, create the virtual environment:
 
 ??? tip "Not familiar with virtual environments? Read this!"
 
@@ -119,13 +119,13 @@ Firstly, create the virtual environment.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Create the environment
-python3 -m venv .venv
+python3.11 -m venv .venv
 
 # Activate the environment
 source .venv/bin/activate
 ```
 
-Create a `requirements.txt` file to list the dependencies.
+Create a `requirements.txt` file to list the dependencies:
 
 ```txt title="requirements.txt"
 tensorflow==2.12.0
@@ -133,7 +133,7 @@ matplotlib==3.7.1
 pyyaml==6.0
 ```
 
-Install the dependencies.
+Install the dependencies:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Install the dependencies
@@ -141,7 +141,7 @@ pip install --requirement requirements.txt
 ```
 
 Create a freeze file to list the dependencies with their versions to ensure that
-transitive dependencies are also listed. This will help with reproducibility.
+transitive dependencies are also listed. This will help with reproducibility:
 
 ??? tip "Not familiar with freezing dependencies? Read this!"
 
@@ -218,7 +218,7 @@ You will split the Jupyter Notebook in a codebase made of separate Python
 scripts with well defined role. These scripts will be able to be called on the
 command line, making it ideal for automation tasks.
 
-The following table describes the files that you will create in this codebase.
+The following table describes the files that you will create in this codebase:
 
 | **File**                | **Description**                                   | **Input**                                       | **Output**                                                      |
 | ----------------------- | ------------------------------------------------- | ----------------------------------------------- | --------------------------------------------------------------- |
@@ -230,7 +230,7 @@ The following table describes the files that you will create in this codebase.
 
 #### Move the parameters to its own file
 
-Let's split the parameters to run the ML experiment with in a distinct file.
+Let's split the parameters to run the ML experiment with in a distinct file:
 
 ```yaml title="params.yaml"
 prepare:
@@ -252,7 +252,7 @@ train:
 
 The `src/prepare.py` script will prepare the dataset. Let's take this
 opportunity to refactor the code to make it more modular and explicit using
-functions.
+functions:
 
 ```py title="src/prepare.py"
 import json
@@ -344,7 +344,7 @@ if __name__ == "__main__":
 #### Move the train step to its own file
 
 The `src/train.py` script will train the ML model. Let's take this opportunity
-to refactor the code to make it more modular and explicit using functions.
+to refactor the code to make it more modular and explicit using functions:
 
 ```py title="src/train.py"
 import sys
@@ -443,7 +443,7 @@ if __name__ == "__main__":
 
 The `src/evaluate.py` script will evaluate the ML model using DVC. Let's take
 this opportunity to refactor the code to make it more modular and explicit using
-functions.
+functions:
 
 ```py title="src/evaluate.py"
 import json
@@ -610,7 +610,7 @@ if __name__ == "__main__":
 
 #### Create the seed helper function
 
-Finally, add a module for utils.
+Finally, add a module for utils:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Create the utils module
@@ -621,7 +621,7 @@ touch src/utils/__init__.py
 ```
 
 In this module, include `src/utils/seed.py` to handle the fixing of the seed
-parameters. This ensure the results are reproducible.
+parameters. This ensure the results are reproducible:
 
 ```py title="src/utils/seed.py"
 import os
@@ -648,7 +648,7 @@ def set_seed(seed: int) -> None:
 
 Finally, create a `README.md` file at the root of the project to describe the
 repository. Feel free to use the following template. As you progress though this
-guide, you can add your notes in the `## Notes` section.
+guide, you can add your notes in the `## Notes` section:
 
 ```md title="README.md"
 # MLOps - Celestial Body Classification
@@ -703,7 +703,7 @@ Awesome! You now have everything you need to run the experiment: the codebase
 and the dataset are in place, the new virtual environment is set up, and you are
 ready to run the experiment using scripts for the first time.
 
-You can now follow these steps to reproduce the experiment.
+You can now follow these steps to reproduce the experiment:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Prepare the dataset
@@ -715,6 +715,9 @@ python3 src/train.py data/prepared model
 # Evaluate the model performance
 python3 src/evaluate.py model data/prepared
 ```
+
+The experiment will take some time to run. Once it is done, you will find the
+results in the `data/prepared`, `model`, and `evaluation` directories.
 
 ### Check the results
 

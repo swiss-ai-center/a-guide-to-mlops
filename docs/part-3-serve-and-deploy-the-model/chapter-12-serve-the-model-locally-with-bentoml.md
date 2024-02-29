@@ -1,37 +1,32 @@
-# Chapter 12: Serve the model locally with MLEM
+# Chapter 12: Serve the model locally with BentoML
 
 ## Introduction
 
-Now that the model is using [MLEM](../tools.md), enabling the extraction of
+Now that the model is using [BentoML](../tools.md), enabling the extraction of
 metadata upon saving, you will serve the model and leverage the capabilities of
 [FastAPI](https://fastapi.tiangolo.com/) to create local endpoints for
 interacting with the model.
 
 In this chapter, you will learn how to:
 
-1. Install MLEM with FastAPI support
-2. Serve the model with FastAPI
-3. Push the changes to DVC and Git
+1. Serve the model with BentoML and FastAPI
+2. Push the changes to DVC and Git
 
 The following diagram illustrates control flow of the experiment at the end of
 this chapter:
 
 ```mermaid
 flowchart TB
-    dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]
-    s3_storage -->|dvc pull| dot_dvc
-    dot_git[(.git)] -->|git push| gitGraph[Git Remote]
-    gitGraph -->|git pull| dot_git
+    dot_dvc[(.dvc)] <-->|dvc pull\ndvc push| s3_storage[(S3 Storage)]
+    dot_git[(.git)] <-->|git pull\ngit push| gitGraph[Git Remote]
     workspaceGraph <-....-> dot_git
-    data[data/raw] <-.-> dot_dvc
+    data[data/raw]
     subgraph remoteGraph[REMOTE]
         s3_storage
         subgraph gitGraph[Git Remote]
             repository[(Repository)] --> action[Action]
-            action -->|dvc pull| action_data[data/raw]
-            action_data -->|dvc repro| action_out[metrics & plots]
-            action_out -->|cml publish| pr[Pull Request]
-            pr --> repository
+            action[Action] --> |...|request[PR]
+            request --> repository[(Repository)]
         end
     end
     subgraph cacheGraph[CACHE]
@@ -39,46 +34,37 @@ flowchart TB
         dot_git
     end
     subgraph workspaceGraph[WORKSPACE]
-        prepare[prepare.py] <-.-> dot_dvc
-        train[train.py] <-.-> dot_dvc
-        evaluate[evaluate.py] <-.-> dot_dvc
-        data --> prepare
-        subgraph dvcGraph["dvc.yaml (dvc repro)"]
-            prepare --> train
-            train --> evaluate
+        data --> code[*.py]
+        subgraph dvcGraph["dvc.yaml"]
+            code
         end
-        params[params.yaml] -.- prepare
-        params -.- train
-        params <-.-> dot_dvc
-        subgraph mlemGraph[.mlem.yaml]
-            mlem[model.mlem]
-            fastapi[FastAPI] <--> mlem
+        params[params.yaml] -.- code
+        subgraph bentoGraph[" "]
+            bento_model[classifier.bentomodel]
+            serve[serve.py] <--> bento_model
+            fastapi[FastAPI] <--> |bentoml serve\nserve:classifierService| serve
         end
-        mlem <-.-> dot_git
-        dvcGraph --> mlem
+        bento_model <-.-> dot_dvc
+        code <--> bento_model
     end
     subgraph browserGraph[BROWSER]
         localhost <--> fastapi
     end
-    style pr opacity:0.4,color:#7f7f7f80
     style workspaceGraph opacity:0.4,color:#7f7f7f80
     style dvcGraph opacity:0.4,color:#7f7f7f80
     style cacheGraph opacity:0.4,color:#7f7f7f80
     style data opacity:0.4,color:#7f7f7f80
     style dot_git opacity:0.4,color:#7f7f7f80
     style dot_dvc opacity:0.4,color:#7f7f7f80
-    style prepare opacity:0.4,color:#7f7f7f80
-    style train opacity:0.4,color:#7f7f7f80
-    style evaluate opacity:0.4,color:#7f7f7f80
+    style code opacity:0.4,color:#7f7f7f80
+    style bento_store opacity:0.4,color:#7f7f7f80
     style params opacity:0.4,color:#7f7f7f80
     style s3_storage opacity:0.4,color:#7f7f7f80
     style repository opacity:0.4,color:#7f7f7f80
     style action opacity:0.4,color:#7f7f7f80
-    style action_data opacity:0.4,color:#7f7f7f80
-    style action_out opacity:0.4,color:#7f7f7f80
+    style request opacity:0.4,color:#7f7f7f80
     style remoteGraph opacity:0.4,color:#7f7f7f80
     style gitGraph opacity:0.4,color:#7f7f7f80
-    style mlem opacity:0.4,color:#7f7f7f80
     linkStyle 0 opacity:0.4,color:#7f7f7f80
     linkStyle 1 opacity:0.4,color:#7f7f7f80
     linkStyle 2 opacity:0.4,color:#7f7f7f80
@@ -87,112 +73,84 @@ flowchart TB
     linkStyle 5 opacity:0.4,color:#7f7f7f80
     linkStyle 6 opacity:0.4,color:#7f7f7f80
     linkStyle 7 opacity:0.4,color:#7f7f7f80
-    linkStyle 8 opacity:0.4,color:#7f7f7f80
-    linkStyle 9 opacity:0.4,color:#7f7f7f80
     linkStyle 10 opacity:0.4,color:#7f7f7f80
     linkStyle 11 opacity:0.4,color:#7f7f7f80
     linkStyle 12 opacity:0.4,color:#7f7f7f80
-    linkStyle 13 opacity:0.4,color:#7f7f7f80
-    linkStyle 14 opacity:0.4,color:#7f7f7f80
-    linkStyle 15 opacity:0.4,color:#7f7f7f80
-    linkStyle 16 opacity:0.4,color:#7f7f7f80
-    linkStyle 17 opacity:0.4,color:#7f7f7f80
-    linkStyle 18 opacity:0.4,color:#7f7f7f80
-    linkStyle 19 opacity:0.4,color:#7f7f7f80
-    linkStyle 20 opacity:0.4,color:#7f7f7f80
-    linkStyle 21 opacity:0.4,color:#7f7f7f80
-    linkStyle 22 opacity:0.4,color:#7f7f7f80
 ```
 
 ## Steps
 
-### Install MLEM with FastAPI support
+### Create the BentoML service
 
-Update the `requirements.txt` file to add `fastapi` support to the `mlem`
-package.
+BentoML services allow to define the serving logic of machine learning models.
 
-!!! info
+A BentoML service is a class that defines all the endpoints and the logic to
+serve the model using FastAPI.
 
-    FastAPI is only one of the available backends that MLEM can use to serve the
-    model. Check out their
-    [official documentation](https://mlem.ai/doc/user-guide/serving) for more
-    options.
+Create a new file `src/serve.py` and add the following code:
 
-```txt title="requirements.txt" hl_lines="5"
-tensorflow==2.12.0
-matplotlib==3.7.1
-pyyaml==6.0
-dvc[gs]==3.2.2
-mlem[fastapi]==0.4.13
+```py title="src/serve.py"
+from __future__ import annotations
+from bentoml.validators import ContentType
+from typing import Annotated
+from PIL.Image import Image
+from pydantic import Field
+import bentoml
+import json
+
+
+@bentoml.service(name="celestial_bodies_classifier")
+class CelestialBodiesClassifierService:
+    bento_model = bentoml.keras.get("celestial_bodies_classifier_model")
+
+    def __init__(self) -> None:
+        self.preprocess = self.bento_model.custom_objects["preprocess"]
+        self.postprocess = self.bento_model.custom_objects["postprocess"]
+        self.model = self.bento_model.load_model()
+
+    @bentoml.api()
+    def predict(
+            self,
+            image: Annotated[Image, ContentType("image/jpeg")] = Field(description="Planet image to analyze"),
+    ) -> Annotated[str, ContentType("application/json")]:
+        image = self.preprocess(image)
+
+        predictions = self.model.predict(image)
+
+        return json.dumps(self.postprocess(predictions))
 ```
 
-Check the differences with Git to validate the changes.
+This service will be used to serve the model with FastAPI and will do the
+following:
+
+1. The model is loaded from the BentoML model store
+2. The `preprocess` function is loaded from the model's custom objects
+3. The `postprocess` function is loaded from the model's custom objects
+4. The `predict` method is decorated with `@bentoml.api()` to create an endpoint
+5. The endpoint accepts an image as input
+6. The endpoint returns a JSON response
+7. The image is pre-processed
+8. The predictions are made from the model
+9. The predictions are post-processed and returned as a JSON string
+
+### Serve the model
+
+Serve the model with the following command:
 
 ```sh title="Execute the following command(s) in a terminal"
-# Show the differences with Git
-git diff requirements.txt
+# Serve the model
+bentoml serve --working-dir ./src serve:CelestialBodiesClassifierService
 ```
 
-The output should be similar to this.
-
-```diff
-diff --git a/requirements.txt b/requirements.txt
-index 7542f6a..fcdd460 100644
---- a/requirements.txt
-+++ b/requirements.txt
-@@ -2,4 +2,4 @@ tensorflow==2.12.0
- matplotlib==3.7.1
- pyyaml==6.0
- dvc[gs]==3.2.2
--mlem==0.4.13
-+mlem[fastapi]==0.4.13
-```
-
-Install the dependencies and update the freeze file.
-
-!!! warning
-
-    Prior to running any pip commands, it is crucial to ensure the virtual
-    environment is activated to avoid potential conflicts with system-wide Python
-    packages.
-
-    To check its status, simply run `pip -V`. If the virtual environment is active,
-    the output will show the path to the virtual environment's Python executable. If
-    it is not, you can activate it with `source .venv/bin/activate`.
-
-```sh title="Execute the following command(s) in a terminal"
-# Install the dependencies
-pip install --requirement requirements.txt
-
-# Freeze the dependencies
-pip freeze --local --all > requirements-freeze.txt
-```
-
-### Serve the model with FastAPI
-
-Serve the model with FastAPI. FastAPI will generate a REST API that you can use
-to get predictions from our model.
-
-```sh title="Execute the following command(s) in a terminal"
-# Serve the model with FastAPI
-mlem serve fastapi --model model
-```
-
-MLEM will load the model, create the FastAPI app and start it. You can then
+BentoML will load the model, create the FastAPI app and start it. You can then
 access the auto-generated model documentation on
-<http://localhost:8080/docs>{:target="\_blank"}.
-
-!!! info
-
-    Remember the `sample_data` variable discussed in the previous chapter? This will
-    be used by MLEM to generate the FastAPI endpoints with the right OpenAPI/Swagger
-    specifications.
+<http://localhost:3000>{:target="\_blank"}.
 
 The following endpoint has been created:
 
 - `/predict`: Upload a `png` or `jpg` image and get a prediction from the model.
 
-You can try out predictions by inputing some sentences to the model through the
+You can try out predictions by inputing some images to the model through the
 REST API!
 
 ### Try out the prediction endpoint
@@ -218,7 +176,7 @@ Download the following image of the moon on your computer.
 
 Upload it to the `/predict` endpoint and check the prediction.
 
-The output should be similar to this.
+The output should be similar to this:
 
 ```json
 {
@@ -249,7 +207,7 @@ Download the following image of Makemake on your computer.
 
 Upload it to the `/predict` endpoint and check the prediction.
 
-The output should be similar to this.
+The output should be similar to this:
 
 ```json
 {
@@ -280,8 +238,8 @@ Download the following image of Neptune on your computer.
 
 Upload it to the `/predict` endpoint and check the prediction.
 
-The output should be similar to this. You may notice the model got it wrong and
-prediced Uranus instead!
+The output should be similar to this: You may notice the model got it wrong and
+predicted Uranus instead!
 
 ```json
 {
@@ -316,24 +274,20 @@ git status
 
 The output should look like this.
 
-```
+```text
 On branch main
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
-    modified:   requirements-freeze.txt
-    modified:   requirements.txt
+    new file:   src/serve.py
 ```
 
-### Commit the changes to DVC and Git
+### Commit the changes to Git
 
-Commit the changes to DVC and Git.
+Commit the changes to Git.
 
 ```sh title="Execute the following command(s) in a terminal"
-# Upload the experiment data and cache to the remote bucket
-dvc push
-
 # Commit the changes
-git commit -m "MLEM can serve the model with FastAPI"
+git commit -m "BentoML can serve the model with FastAPI"
 
 # Push the changes
 git push
@@ -349,9 +303,8 @@ This chapter is done, you can check the summary.
 
 In this chapter, you have successfully:
 
-1. Installed MLEM with FastAPI support
-2. Served the model with FastAPI
-3. Pushed the changes to DVC and Git
+1. Served the model with BentoML and FastAPI
+2. Pushed the changes to Git
 
 You did fix some of the previous issues:
 
@@ -392,4 +345,7 @@ collaboration. Continue the guide to learn how.
 
 Highly inspired by:
 
-* [_Serving models_ - mlem.ai](https://mlem.ai/doc/user-guide/serving)
+- [_Services_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/guides/services.html)
+- [_Input and output types_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/guides/iotypes.html)
+- [_Containerization_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/guides/containerization.html)
+- [_Build options_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/guides/build-options.html)

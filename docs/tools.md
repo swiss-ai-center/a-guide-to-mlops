@@ -16,8 +16,9 @@ process:
   [:simple-github: GitHub Actions](https://github.com/features/actions) or
   [:simple-gitlab: GitLab CI](https://about.gitlab.com/topics/ci-cd/)
 - A [:simple-googlecloud: Google Cloud](https://cloud.google.com) account
-- Model serving, distributing and deploying: [MLEM](https://mlem.ai/) &
-  [:simple-docker: Docker](https://docker.com/)
+- Model serving, distributing and deploying: [BentoML](https://bentoml.com/),
+  [:simple-docker: Docker](https://docker.com/) and
+  [:simple-kubernetes: Kubernetes](https://kubernetes.io/)
 - Data annotation: [Label Studio](https://labelstud.io/)
 
 ??? info "Using another cloud provider? Read this!"
@@ -81,14 +82,15 @@ Git repository for specific alternatives.
 
 ### Model management/deployment
 
-These are alternatives to MLEM.
+These are alternatives to BentoML.
 
 - [Kubeflow](https://www.kubeflow.org/) - The Kubeflow project is dedicated to
   making deployments of machine learning (ML) workflows on Kubernetes simple,
   portable and scalable
-- [BentoML](https://www.bentoml.com/) - An open platform that simplifies ML
-  model deployment and enables you to serve your models at production scale in
-  minutes
+- [MLEM](https://mlem.ai/) - The open-source tool to simplify your ML model
+  deployments
+- [Cog](https://github.com/replicate/cog) - An open-source tool that lets you
+  package machine learning models in a standard, production-ready container
 
 ### End-to-end
 
