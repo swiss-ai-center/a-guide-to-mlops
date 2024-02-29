@@ -1,0 +1,7 @@
+CairoSVG==2.7.1
+mdwrap @ git+https://github.com/csia-pme/mdwrap.git@e741268c9c3c3e1ba8cebc15af58cd8592821327
+mkdocs-git-revision-date-localized-plugin==1.2.1
+mkdocs-glightbox==0.3.5
+mkdocs-material==9.5.2
+mkdocs-minify-plugin==0.7.1
+Pillow==10.1.0

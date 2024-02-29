@@ -136,16 +136,16 @@ if __name__ == "__main__":
 
 ```sh title="Execute the following command(s) in a terminal"
 # Prepare the dataset
-python3 src/prepare.py data/raw data/prepared
+python3.11 src/prepare.py data/raw data/prepared
 
 # Train the model with the train dataset and save it
-python3 src/train.py data/prepared model
+python3.11 src/train.py data/prepared model
 
 # Evaluate the model performances
-python3 src/evaluate.py model data/prepared
+python3.11 src/evaluate.py model data/prepared
 
 # Explain the model
-python3 src/explain.py model data/raw
+python3.11 src/explain.py model data/raw
 ```
 
 Here, the following should be noted:
@@ -164,12 +164,12 @@ dvc stage add -n explain \
 -d src/explain.py -d model -d data/raw \
 -o explanation/plots/metrics \
 --plots explanation/plots/grad_cam.png \
-python3 src/explain.py model data/raw
+python3.11 src/explain.py model data/raw
 ```
 
 This stage has the `src/explain.py` file, `model` and `data/raw` directory as
 dependencies. If any of these files change, DVC will run the command
-`python3 src/explain.py model data/raw` when using `dvc repro`.
+`python3.11 src/explain.py model data/raw` when using `dvc repro`.
 
 The outputs of this command are stored in the
 `evaluation/plots/metrics/plots/grad_cam.png` file.

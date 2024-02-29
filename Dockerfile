@@ -1,37 +1,23 @@
+# Base image
 FROM python:3.11
 
+# Working directory
+WORKDIR /workspaces/a-guide-to-mlops
+
 # Add mkdocs dependencies
-RUN apt-get update && apt-get install -y \
-    git \
-    wget \
-    gcc \
-    g++ \
-    libcairo2 \
-    libfreetype6 \
+RUN apt update && apt install --yes \
+    libcairo2-dev \
+    libfreetype6-dev \
     libffi-dev \
-    libjpeg-tools \
+    libjpeg-dev \
     libpng-dev \
-    zlib1g
+    libz-dev
 
-# Configure Poetry (see https://stackoverflow.com/questions/72465421/how-to-use-poetry-with-docker)
-ENV POETRY_VERSION=1.4.1
-ENV POETRY_HOME=/opt/poetry
-ENV POETRY_VENV=/opt/poetry-venv
-ENV POETRY_CACHE_DIR=/opt/.cache
-
-# Install poetry separated from system interpreter
-ENV PYTHONUNBUFFERED=1
-RUN python3 -m ensurepip
-RUN python3 -m venv $POETRY_VENV \
-    && $POETRY_VENV/bin/pip install -U pip setuptools \
-    && $POETRY_VENV/bin/pip install poetry==${POETRY_VERSION}
-
-# Add `poetry` to PATH
-ENV PATH="${PATH}:${POETRY_VENV}/bin"
+# Copy the dependencies
+COPY requirements.txt .
+COPY requirements-freeze.txt .
 
 # Install Python dependencies
-WORKDIR /workspaces/a-guide-to-mlops
-COPY poetry.lock .
-COPY pyproject.toml .
-
-RUN poetry install
+RUN pip install \
+    --requirement requirements.txt \
+    --requirement requirements-freeze.txt

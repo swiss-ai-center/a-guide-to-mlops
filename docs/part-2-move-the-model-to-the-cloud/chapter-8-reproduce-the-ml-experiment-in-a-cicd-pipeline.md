@@ -309,7 +309,7 @@ be different:
         # Set the Google Service Account key
         - echo "${GOOGLE_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
         # Create the virtual environment for caching
-        - python3 -m venv .venv
+        - python3.11 -m venv .venv
         - source .venv/bin/activate
         # Install dependencies
         - pip install --requirement requirements-freeze.txt
