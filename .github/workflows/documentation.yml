@@ -31,12 +31,12 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install poetry
         run: pipx install poetry
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: 3.11
           cache: 'poetry'
       - name: Install dependencies
         run: poetry install --only dev
@@ -47,21 +47,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
-          python-version: 3.x
+          python-version: 3.11
           cache: pip
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           key: ${{ github.ref }}
           path: .cache
 
       - name: Setup Pages
         id: pages
-        uses: actions/configure-pages@v2
+        uses: actions/configure-pages@v4
 
       - name: Install Material for MkDocs dependencies
         run: |
@@ -86,7 +86,7 @@ jobs:
 
       - name: Upload artifact
         if: github.ref == 'refs/heads/main'
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: ./public
 
@@ -102,4 +102,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
