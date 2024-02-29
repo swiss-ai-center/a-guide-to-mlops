@@ -32,16 +32,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install poetry
-        run: pipx install poetry
       - uses: actions/setup-python@v5
         with:
           python-version: 3.11
-          cache: 'poetry'
+          cache: 'pip'
       - name: Install dependencies
-        run: poetry install --only dev
+        run: pip install --requirement requirements.txt --requirement requirements-freeze.txt
       - name: Lint
-        run: poetry run pre-commit run --all-files
+        run: mdwrap --check .
   # Build job
   build:
     runs-on: ubuntu-latest

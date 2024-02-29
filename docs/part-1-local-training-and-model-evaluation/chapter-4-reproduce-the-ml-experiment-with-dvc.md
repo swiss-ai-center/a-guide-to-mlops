@@ -177,7 +177,7 @@ dvc stage add -n prepare \
     -p prepare \
     -d src/prepare.py -d src/utils/seed.py -d data/raw \
     -o data/prepared \
-    python3 src/prepare.py data/raw data/prepared
+    python3.11 src/prepare.py data/raw data/prepared
 ```
 
 The values of the parameters is `prepare` which includes all the `prepare`
@@ -185,7 +185,7 @@ parameters referenced in the `params.yaml` file.
 
 This stage has the `src/prepare.py`, the `src/utils/seed.py` and `data/raw`
 files as dependencies. If any of these files change, DVC will run the command
-`python3 src/prepare.py data/raw data/prepared` when using `dvc repro`.
+`python3.11 src/prepare.py data/raw data/prepared` when using `dvc repro`.
 
 The output of this command is stored in the `data/prepared` directory.
 
@@ -202,7 +202,7 @@ dvc stage add -n train \
     -p train \
     -d src/train.py -d src/utils/seed.py -d data/prepared \
     -o model \
-    python3 src/train.py data/prepared model
+    python3.11 src/train.py data/prepared model
 ```
 
 The values of the parameters is `train` which includes all the `train`
@@ -210,7 +210,7 @@ parameters referenced in the `params.yaml` file.
 
 This stage has the `src/train.py`, the `src/utils/seed.py` and `data/prepared`
 files as dependencies. If any of these files change, DVC will run the command
-`python3 src/evaluate.py data/prepared model` when using `dvc repro`.
+`python3.11 src/evaluate.py data/prepared model` when using `dvc repro`.
 
 The output of this command is stored in the `model` directory.
 
@@ -228,12 +228,12 @@ dvc stage add -n evaluate \
     --plots evaluation/plots/confusion_matrix.png \
     --plots evaluation/plots/pred_preview.png \
     --plots evaluation/plots/training_history.png \
-    python3 src/evaluate.py model data/prepared
+    python3.11 src/evaluate.py model data/prepared
 ```
 
 This stage has the `src/evaluate.py` file and then `model` folder as
 dependencies. If any of these files change, DVC will run the command
-`python3 src/evaluate.py model data/prepared` when using `dvc repro`.
+`python3.11 src/evaluate.py model data/prepared` when using `dvc repro`.
 
 The script writes the model's metrics to `evaluation/metrics.json`, the
 `confusion_matrix` to `evaluation/plots/confusion_matrix.png`, the

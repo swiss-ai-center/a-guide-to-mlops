@@ -660,9 +660,9 @@ This repository contains the code from
 
 The code is divided in various scripts:
 
-- `python3 src/prepare.py <raw-dataset-folder> <prepared-dataset-folder>`: prepare the dataset for training
-- `python3 src/train.py <prepared-dataset-folder> <model-folder>`: train the model
-- `python3 src/evaluate.py <model-folder> <prepared-dataset-folder>`: evaluate the model
+- `python3.11 src/prepare.py <raw-dataset-folder> <prepared-dataset-folder>`: prepare the dataset for training
+- `python3.11 src/train.py <prepared-dataset-folder> <model-folder>`: train the model
+- `python3.11 src/evaluate.py <model-folder> <prepared-dataset-folder>`: evaluate the model
 
 ## Notes
 <!-- Enter your notes below -->
@@ -707,13 +707,13 @@ You can now follow these steps to reproduce the experiment:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Prepare the dataset
-python3 src/prepare.py data/raw data/prepared
+python3.11 src/prepare.py data/raw data/prepared
 
 # Train the model with the train dataset and save it
-python3 src/train.py data/prepared model
+python3.11 src/train.py data/prepared model
 
 # Evaluate the model performance
-python3 src/evaluate.py model data/prepared
+python3.11 src/evaluate.py model data/prepared
 ```
 
 The experiment will take some time to run. Once it is done, you will find the
