@@ -81,13 +81,11 @@ jobs:
           mkdocs build --site-dir public
 
       - name: Upload files
-        # Only run on main
-        if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v4
         with:
           name: material-for-mkdocs-files
           path: |
-            "public"
+            public
           if-no-files-found: error
           retention-days: 1
 
@@ -103,49 +101,53 @@ jobs:
         uses: docker://marpteam/marp-cli:v3.0.2
         with:
           args: --config .github/workflows/marp.config.js --html --output "presentation/index.html" "presentation/README.md"
+        env:
+          MARP_USER: root:root
 
       - name: Build presentation content with Marp (PDF)
         uses: docker://marpteam/marp-cli:v3.0.2
         with:
           args: --config .github/workflows/marp.config.js --html --allow-local-files --jpeg-quality 100 --pdf --output "presentation/a-guide-to-mlops-presentation.pdf" "presentation/README.md"
+        env:
+          MARP_USER: root:root
 
       - name: Upload files
-        # Only run on main
-        if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v4
         with:
           name: marp-files
           path: |
-            "presentation/images"
-            "presentation/a-guide-to-mlops-presentation.pdf"
-            "presentation/index.html"
+            presentation/images
+            presentation/a-guide-to-mlops-presentation.pdf
+            presentation/index.html
           if-no-files-found: error
           retention-days: 1
 
-  prepare-files-for-github-pages:
+  merge-files-for-github-pages:
     runs-on: ubuntu-latest
     needs: [build-material-for-mkdocs, build-marp]
-    # Only run on main
-    if: github.ref == 'refs/heads/main'
     steps:
       - name: Download files
         uses: actions/download-artifact@v4
         with:
           pattern: "*-files"
-          merge-multiple: true
 
-      - name: Move files
+      - name: Merge files
         run: |
+          # Copy Material for MkDocs files to the `public` directory
+          mv material-for-mkdocs-files public
+          
           # Check if the `presentation` directory exists in the `public` directory
-          if [ -d "public/presentation" ]; then
-            echo "The 'presentation' directory already exists in the 'public' directory."
+          if [ -d "presentation" ]; then
+            echo "The 'presentation' directory already exists in the `public` directory"
             exit 1
           fi
 
-          # Move the `presentation` directory to the `public` directory
-          mv "presentation" "public/presentation"
+          # Move the Marp files to the `presentation` directory
+          mv marp-files public/presentation
 
       - name: Upload files to GitHub Pages
+        # Only run on main
+        if: github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./public
@@ -153,7 +155,7 @@ jobs:
   # Deployment job
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    needs: merge-files-for-github-pages
     # Only run on main
     if: github.ref == 'refs/heads/main'
     environment:
