@@ -5,7 +5,7 @@ site_author: Swiss AI Center contributors
 site_url: https://swiss-ai-center.github.io/a-guide-to-mlops/
 site_description: >-
   A simple yet complete guide to MLOps tools and practices - from a conventional way to a modern approach of working with ML projects.
-copyright: Copyright &copy; 2022 - 2023 Swiss AI Center
+copyright: Copyright &copy; 2022 - 2024 Swiss AI Center
 nav:
   - 🏁 Introduction:
       - "Syllabus": syllabus.md

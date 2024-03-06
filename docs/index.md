@@ -8,6 +8,11 @@ hide:
 
 Welcome to our comprehensive guide to MLOps!
 
+You can find a presentation for this guide at the following links:
+
+- [A guide to MLOps - Presentation](https://mlops.swiss-ai-center.ch/presentation/){:target="\_blank"}
+- [A guide to MLOps - Presentation (PDF)](https://mlops.swiss-ai-center.ch/presentation/a-guide-to-mlops-presentation.pdf){:target="\_blank"}
+
 We are a passionate team of software engineers and data scientists from the
 [Swiss AI Center](https://www.hes-so.ch/swiss-ai-center){:target="\_blank"}.
 With expertise in both Machine Learning (ML) and DevOps, we have embarked on a
