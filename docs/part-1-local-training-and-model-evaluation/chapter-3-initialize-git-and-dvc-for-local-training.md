@@ -25,7 +25,7 @@ In this chapter, you will learn how to:
 5. Commit your changes to the Git repository
 6. Install DVC
 7. Initialize and configure DVC
-8. Update the `.gitignore` file and add the experiment data to DVC
+8. Update the gitignore file and add the experiment data to DVC
 9. Push the data files to DVC
 10. Commit the metadata files to Git
 
@@ -270,11 +270,11 @@ When executing this command, the following output occurs:
 ERROR: bad DVC file name 'data/data.raw.dvc' is git-ignored.
 ```
 
-You will have to update the `.gitignore` file so that DVC can create files in
+You will have to update the gitignore file so that DVC can create files in
 the `data` directory. However, you still don't want the directories `data/raw`
 and `data/prepared` to be added to Git.
 
-Update the `.gitignore` file by changing `data/` to `data/raw/` and
+Update the gitignore file by changing `data/` to `data/raw/` and
 `data/prepared/`:
 
 ```sh title=".gitignore" hl_lines="2-3"
@@ -345,12 +345,12 @@ To enable auto staging, run:
 
 The effect of the `dvc add` command is to create a `data/data.raw.dvc` file and
 a `data/.gitignore`. The `.dvc` file contains the metadata of the file that is
-used by DVC to download and check the integrity of the files. The `.gitignore`
+used by DVC to download and check the integrity of the files. The gitignore
 file is created to add the files in `data/raw` to be ignored by Git. The `.dvc`
 files must be added to Git.
 
-Various DVC commands will automatically try to update the `.gitignore` files. If
-a `.gitignore` file is already present, it will be updated to include the newly
+Various DVC commands will automatically try to update the gitignore files. If
+a gitignore file is already present, it will be updated to include the newly
 ignored files. You might need to update existing `.gitignore` files accordingly.
 
 #### Check the changes
@@ -411,7 +411,7 @@ In this chapter, you have successfully:
 4. Commited your changes to the Git repository
 5. Installed DVC
 6. Initialized DVC
-7. Updated the `.gitignore` file and adding the experiment data to DVC
+7. Updated the gitignore file and adding the experiment data to DVC
 8. Commited the data files to DVC
 9. Commited your changes to the Git repository
 
