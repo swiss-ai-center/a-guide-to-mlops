@@ -1,4 +1,4 @@
-# Chapter 19: Retrain the model from new data with DVC Sync
+# Chapter 21: Link the model to Label Studio and get predictions
 
 !!! warning "This is a work in progress"
 

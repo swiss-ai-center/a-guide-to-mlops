@@ -96,7 +96,7 @@ We work with four others HES: **HEIA-FR**, **HE-Arc**, **HEVS** and **HEPIA**.
 
 **Make sure you can build the model at all times**
 
-> I tried to run your code on my machine but it doesn’t work… Are you sure it runs on yours?
+> I tried to build the model on my machine but it doesn’t work... Are you sure it builds on yours?
 
 ---
 
@@ -217,12 +217,15 @@ We work with four others HES: **HEIA-FR**, **HE-Arc**, **HEVS** and **HEPIA**.
 
 ## Access the guide
 
-<!-- _class: lead -->
+👉 Access the guide at  
+[mlops.swiss-ai-center.ch][website].
 
-Access the guide at  
-[mlops.swiss-ai-center.ch][website]
+💪 Feel free to open an issue on [GitHub][github] if you encounter any difficulties or want to contribute.
+
+🙏 Leave us a star if you like the guide!
 
 ![bg right:40% w:60%][website-qrcode]
+
 
 ## Sources
 
