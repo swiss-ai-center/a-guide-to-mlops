@@ -20,8 +20,6 @@ In this chapter, you will learn how to:
 The following diagram illustrates control flow of the experiment at the end of
 this chapter:
 
-TODO: Update the diagram
-
 ```mermaid
 flowchart TB
     dot_dvc[(.dvc)] <-->|dvc pull\ndvc push| s3_storage[(S3 Storage)]
@@ -40,10 +38,7 @@ flowchart TB
             action[Action] --> |...|request[PR]
             request --> repository[(Repository)]
         end
-        subgraph clusterGraph[Kubernetes]
-            bento_service_cluster[classifier.bentomodel] --> k8s_fastapi[FastAPI]
-        end
-        registry[(Container\nregistry)] --> bento_service_cluster
+        registry[(Container\nregistry)]
     end
     subgraph workspaceGraph[WORKSPACE]
         data --> code[*.py]
@@ -63,9 +58,6 @@ flowchart TB
         bento_artifact -->|docker push| registry
     end
 
-    subgraph browserGraph[BROWSER]
-        k8s_fastapi <--> publicURL["public URL"]
-    end
     style workspaceGraph opacity:0.4,color:#7f7f7f80
     style dvcGraph opacity:0.4,color:#7f7f7f80
     style cacheGraph opacity:0.4,color:#7f7f7f80
@@ -88,11 +80,12 @@ flowchart TB
     linkStyle 3 opacity:0.4,color:#7f7f7f80
     linkStyle 4 opacity:0.4,color:#7f7f7f80
     linkStyle 5 opacity:0.4,color:#7f7f7f80
+    linkStyle 6 opacity:0.4,color:#7f7f7f80
+    linkStyle 7 opacity:0.4,color:#7f7f7f80
     linkStyle 8 opacity:0.4,color:#7f7f7f80
     linkStyle 9 opacity:0.4,color:#7f7f7f80
     linkStyle 10 opacity:0.4,color:#7f7f7f80
-    linkStyle 11 opacity:0.4,color:#7f7f7f80
-    linkStyle 14 opacity:0.4,color:#7f7f7f80
+    linkStyle 12 opacity:0.4,color:#7f7f7f80
 ```
 
 ## Steps

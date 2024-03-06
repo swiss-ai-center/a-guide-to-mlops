@@ -57,7 +57,6 @@ flowchart TB
     style dot_git opacity:0.4,color:#7f7f7f80
     style dot_dvc opacity:0.4,color:#7f7f7f80
     style code opacity:0.4,color:#7f7f7f80
-    style bento_store opacity:0.4,color:#7f7f7f80
     style params opacity:0.4,color:#7f7f7f80
     style s3_storage opacity:0.4,color:#7f7f7f80
     style repository opacity:0.4,color:#7f7f7f80
