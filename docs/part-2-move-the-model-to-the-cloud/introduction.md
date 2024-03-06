@@ -10,8 +10,9 @@ seamless integration with a CI/CD pipeline and visualize reports with
 
 ## Environment
 
-This guide has been written with macOS and Linux operating systems in mind. If
-you use Windows, you might encounter issues. Please use the
+This guide has been written with :simple-apple: macOS and :simple-linux: Linux
+operating systems in mind. If you use :simple-windows: Windows, you might
+encounter issues. Please use the
 [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/)
 (WSL 2) for optimal results.
 

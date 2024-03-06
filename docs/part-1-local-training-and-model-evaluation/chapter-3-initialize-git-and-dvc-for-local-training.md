@@ -1,10 +1,9 @@
-# Chapter 3: Initialize Git and DVC for local training
+# Chapter 3 - Initialize Git and DVC for local training
 
 ## Introduction
 
-Now that you have a good understanding of the experiment, it's time to
-streamline the code and data sharing process. To enable efficient tracking of
-code changes and ensure reproducibility, you will create a
+Now that you have a good understanding of the experiment, it's time to improve
+the code and data sharing process. To share the codebase, you will create a
 [:simple-git: Git](../tools.md) repository.
 
 However, when it comes to managing large files, Git has some limitations.
@@ -12,9 +11,9 @@ Although Git LFS is an option for handling large files in Git repositories, it
 may not be the most efficient solution.
 
 This is the reason you will use [:simple-dvc: DVC](../tools.md), a version
-control system specifically designed for efficient data management that
-seamlessly integrates with Git. DVC utilizes chunking to efficiently store large
-files and track their changes.
+control system specifically designed to share the data and integrates well with
+Git. DVC utilizes chunking to efficiently store large files and track their
+changes.
 
 In this chapter, you will learn how to:
 
@@ -62,8 +61,9 @@ flowchart LR
     linkStyle 6 opacity:0.4,color:#7f7f7f80
 ```
 
-Later, you will streamline the code sharing process by setting up remote Git and
-DVC repositories to enable easy collaboration with the rest of the team.
+In future chapters, you will streamline the code sharing process by setting up
+remote Git and DVC repositories to enable easy collaboration with the rest of
+the team.
 
 ## Steps
 
@@ -396,8 +396,10 @@ This chapter is done, you can check the summary.
 
 ## Summary
 
-Congratulations! You now have a dataset that can be used and shared among the
-team.
+Congratulations! You now have a codebase and a dataset that is versioned with
+Git and DVC. At the moment, these tools are only used locally. In the next
+chapters, you will learn how to share the codebase and the dataset with the rest
+of the team.
 
 In this chapter, you have successfully:
 

@@ -1,4 +1,4 @@
-# Chapter 5: Track model evolution with DVC
+# Chapter 5 - Track model evolution with DVC
 
 ## Introduction
 

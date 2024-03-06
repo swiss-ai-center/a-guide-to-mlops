@@ -13,9 +13,12 @@ pod with CML.
 
 The model is now ready to be used in production.
 
-The following diagram illustrates the bricks you set up at the end of this part.
+The following diagram illustrates the bricks you set up at the end of this part:
 
-TODO
+!!! warning "This is a work in progress"
+
+    This section is a work in progress. Please check back later for updates. Thank
+    you!
 
 The main goal of the MLOps process is to ensure that the model is reproducible,
 reliable and can be used in production. This goal is now achieved.

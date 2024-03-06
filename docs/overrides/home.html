@@ -292,6 +292,25 @@
         <img src="assets/images/planets/neptune.png" alt="planet" class="planet parallax" data-speed="1" data-name="neptune">
     </div>
 </section>
+<div class="scroll-fade-out" id="planetsAttribution" data-offset="100"><a href="https://solarsystem.nasa.gov" target="_blank">© NASA Solar System</a></div>
+
+{% endblock %}
+
+<!-- Content -->
+{% block content %}
+
+<section class="navigation-section">
+    <div>
+        <h3>Welcome to our comprehensive guide to MLOps!</h3>
+
+        <p>You can find a presentation for this guide at the following links:</p>
+        <p><a href="https://mlops.swiss-ai-center.ch/presentation/" target="_blank">A guide to MLOps - Presentation</a></p>
+        <p><a href="https://mlops.swiss-ai-center.ch/presentation/a-guide-to-mlops-presentation.pdf" target="_blank">A guide to MLOps - Presentation (PDF)</a></p>
+    </div>
+</section>
+
+{{ super() }}
+
 <section class="navigation-section">
     <div>
         <p>
@@ -314,13 +333,11 @@
         </p>
     </div>
 </section>
-<div class="scroll-fade-out" id="planetsAttribution" data-offset="100"><a href="https://solarsystem.nasa.gov" target="_blank">© NASA Solar System</a></div>
-
-{% endblock %}
-
-<!-- Content -->
-{% block content %}
-{{ super() }}
+<figure>
+    <p>
+        <a href="https://www.hes-so.ch/swiss-ai-center" target="_blank"><img alt="Image title" src="assets/images/hes-so-logo.png" width="300"></a>
+    </p>
+</figure>
 {% endblock %}
 
 <!-- Application footer -->

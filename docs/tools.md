@@ -16,9 +16,9 @@ process:
   [:simple-github: GitHub Actions](https://github.com/features/actions) or
   [:simple-gitlab: GitLab CI](https://about.gitlab.com/topics/ci-cd/)
 - A [:simple-googlecloud: Google Cloud](https://cloud.google.com) account
-- Model serving, distributing and deploying: [BentoML](https://bentoml.com/),
-  [:simple-docker: Docker](https://docker.com/) and
-  [:simple-kubernetes: Kubernetes](https://kubernetes.io/)
+- Model serving and distributing: [BentoML](https://bentoml.com/) and
+  [:simple-docker: Docker](https://docker.com/)
+- Model deploying: [:simple-kubernetes: Kubernetes](https://kubernetes.io/)
 - Data annotation: [Label Studio](https://labelstud.io/)
 
 ??? info "Using another cloud provider? Read this!"
@@ -37,7 +37,7 @@ process:
 
 You will go into details about each tool in the following parts of this guide.
 
-[//]: # "TODO: Add an illustration to display the different tools and their purposes?"
+<!-- TODO: Add an illustration to display the different tools and their purposes? -->
 
 ## Related tools
 

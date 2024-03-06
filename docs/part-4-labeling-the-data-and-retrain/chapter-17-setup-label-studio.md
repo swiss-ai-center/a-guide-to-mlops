@@ -1,4 +1,4 @@
-# Chapter 17: Setup Label Studio
+# Chapter 17 - Setup Label Studio
 
 !!! warning "This is a work in progress"
 

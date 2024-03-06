@@ -50,7 +50,7 @@ Let's get started!
 ### Set up the project directory
 
 As a new team member, set up a project directory on your computer for this
-ground breaking ML experiment. This directory will serve as your working
+_ground breaking_ ML experiment. This directory will serve as your working
 directory for this first chapter:
 
 ```sh title="Execute the following command(s) in a terminal"
@@ -165,9 +165,9 @@ You may notice all the previous outputs from the notebook might still be
 present. This is because the notebook was not cleared before being shared with
 you. This can be useful to see the results of previous runs.
 
-In most cases, however, it can also be a source of confusion and clutter. This
-is one of the limitations of the Jupyter Notebook, which make them not always
-easy to share with others.
+In most cases, however, it can also be a source of confusion. This is one of the
+limitations of the Jupyter Notebook, which make them not always easy to share
+with others.
 
 For the time being, execute each step of the notebook to train the model and
 evaluate its performance. Previous outputs will be overwritten.
@@ -187,10 +187,10 @@ The Jupyter notebook serves as a valuable tool for consolidating an entire
 experiment into a single file, facilitating data visualization, and enabling the
 presentation of results. However, it does have severe limitations such as being
 challenging to share with others due to a lack of versioning capabilities,
-difficulty in reproducing the experiment, and the potential for clutter and data
-leaks from previous outputs.
+difficulty in reproducing the experiment, and the potential for data leaks and
+confusion from previous outputs.
 
-In the next chapter you will see how to address these shortcomings.
+In the next chapter you will see how to address these issues.
 
 ## Summary
 

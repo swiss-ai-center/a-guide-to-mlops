@@ -1,4 +1,4 @@
-# Chapter 16: Train the model on a Kubernetes pod with CML
+# Chapter 16 - Train the model on a Kubernetes pod with CML
 
 !!! warning "This is a work in progress"
 

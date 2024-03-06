@@ -1,4 +1,4 @@
-# Chapter 2: Adapt and move the Jupyter Notebook to Python scripts
+# Chapter 2 - Adapt and move the Jupyter Notebook to Python scripts
 
 ## Introduction
 
@@ -11,7 +11,7 @@ However, they have severe limitations, such as challenges with reproducibility,
 scalability, experiment tracking, and standardization. Integrating Jupyter
 Notebooks into [:simple-python: Python](../tools.md) scripts suitable for
 running ML experiments in a more modular and reproducible manner can help
-address these shortcomings and enhance the overall ML development process.
+address these issues and enhance the overall ML development process.
 
 [:simple-python: pip](../tools.md) is the standard package manager for Python.
 It is used to install and manage dependencies in a Python environment.
@@ -106,7 +106,7 @@ Firstly, create the virtual environment:
 
     **How to manage virtual environments?**
 
-    - Create a virtual environment: `#!sh python3 -m venv .venv`
+    - Create a virtual environment: `#!sh python3.11 -m venv .venv`
     - Activate the virtual environment: `#!sh source .venv/bin/activate`
     - Deactivate the virtual environment: `#!sh deactivate`
 
@@ -146,7 +146,7 @@ transitive dependencies are also listed. This will help with reproducibility:
 ??? tip "Not familiar with freezing dependencies? Read this!"
 
     When working on Python projects, managing dependencies is crucial for
-    maintaining a **stable and reproducible** development environment.
+    maintaining a stable and reproducible development environment.
 
     **Understanding requirements.txt**
 
