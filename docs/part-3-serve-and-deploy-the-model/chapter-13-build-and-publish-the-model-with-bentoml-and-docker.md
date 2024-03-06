@@ -138,15 +138,10 @@ following command:
 bentoml serve --working-dir src
 ```
 
-### Containerize the BentoML model artifact with Docker
+### Build the BentoML model artifact
 
-To containerize the BentoML model artifact, you will need to build a Docker
-image. This is done in the following steps:
-
-1. Build the BentoML model artifact
-2. Containerize the BentoML model artifact with Docker
-
-#### Build the BentoML model artifact
+Before containerizing the BentoML model artifact with Docker, you need to build
+it.
 
 A BentoML model artifact can be built with the following command:
 
@@ -197,7 +192,7 @@ bentoml list
  celestial_bodies_classifier:f7hnaegmawocrlg6          17.25 KiB  9.53 MiB    2024-02-15 14:22:21
 ```
 
-#### Containerize the BentoML model artifact with Docker
+### Containerize the BentoML model artifact with Docker
 
 Now that the BentoML model artifact is built, you can containerize it with the
 following command:
@@ -284,9 +279,22 @@ for an efficient models management.
     **Enable the Google Artifact Registry API**
 
     You must enable the Google Artifact Registry API to create a container registry
-    on Google Cloud.
+    on Google Cloud with the following command:
 
-    [Enable Google Artifact Registry API :octicons-arrow-up-right-16:](https://console.cloud.google.com/flows/enableapi?apiid=artifactregistry.googleapis.com){ .md-button .md-button--primary }
+    !!! tip
+
+        You can display the available services in your project with the following
+        command:
+
+        ```sh title="Execute the following command(s) in a terminal"
+        # List the services
+        gcloud services list
+        ```
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Enable the Google Artifact Registry API
+    gcloud services enable artifactregistry.googleapis.com
+    ```
 
     **Create the Google Container Registry**
 
