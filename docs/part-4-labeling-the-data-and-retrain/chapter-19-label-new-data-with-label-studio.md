@@ -1,4 +1,4 @@
-# Chapter 18: Label new data with Label Studio
+# Chapter 19: Label new data with Label Studio
 
 !!! warning "This is a work in progress"
 
