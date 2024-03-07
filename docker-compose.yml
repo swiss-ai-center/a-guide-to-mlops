@@ -20,6 +20,6 @@ services:
     command:
       - mdwrap
       - --fmt
-      - .
+      - docs
     volumes:
       - .:/workspaces/a-guide-to-mlops
