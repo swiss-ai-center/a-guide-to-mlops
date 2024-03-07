@@ -43,6 +43,14 @@ style: |
         margin-top: 50px;
         margin-bottom: 50px
     }
+    .four-columns {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1rem;
+    }
+    .center {
+        text-align: center;
+    }
 headingDivider: 4
 -->
 
@@ -76,15 +84,68 @@ _paginate: false
 
 <!-- _class: lead -->
 
-## Context
+## Swiss AI Center
 
-Our team works on a project called **Centre Suisse d’Intelligence Artificiel à destination des PMEs (CSIA-PME)**.
+Five HES (HEIG-VD, HEIA-FR, HE-Arc, HEVS and HEPIA) work on a project called **Centre Suisse d’Intelligence Artificiel à destination des PMEs (CSIA-PME)**.
 
 The Swiss AI Center’s mission is to **accelerate the adoption of artificial intelligence in the digital transition of Swiss SMEs**.
 
-We work with four others HES: **HEIA-FR**, **HE-Arc**, **HEVS** and **HEPIA**.
-
 **HEIG-VD** is responsible for **setting up tools to manage ML experiments from code to production**.
+
+## Our team
+
+<!--
+_paginate: false
+-->
+
+<div class="four-columns">
+
+<div class="center">
+
+**Bertil  
+Chapuis**  
+<small>Professor</small>
+
+![w:200](./images/bertil-chapuis.png)
+
+[Mail](mailto:bertil.chapuis@heig-vd.ch) · [LinkedIn](https://www.linkedin.com/in/bertilchapuis/)
+
+</div>
+<div class="center">
+
+**Ludovic  
+Delafontaine**  
+<small>aR&D Associate</small>
+
+![w:200](./images/ludovic-delafontaine.png)
+
+[Mail](mailto:ludovic.delafontaine@heig-vd.ch) · [LinkedIn](https://www.linkedin.com/in/ludelafo/)
+
+</div>
+<div class="center">
+
+**Rémy  
+Marquis**  
+<small>aR&D Associate</small>
+
+![w:200](./images/remy-marquis.png)
+
+[Mail](mailto:remy.marquis@heig-vd.ch) · [LinkedIn](https://www.linkedin.com/in/remymarquis/)
+
+</div>
+<div class="center">
+
+**Leonard  
+Cseres**  
+<small>Assistant</small>
+
+![w:200](./images/leonard-cseres.png)
+
+[Mail](mailto:leonard.cseres@heig-vd.ch) · [LinkedIn](https://www.linkedin.com/in/leonardcsrs/)
+
+</div>
+
+<div>
 
 ## Difficulties with ML projects
 
@@ -138,9 +199,21 @@ We work with four others HES: **HEIA-FR**, **HE-Arc**, **HEVS** and **HEPIA**.
 
 ![bg right:40% 90%](./images/a-guide-to-mlops.png)
 
-## Presentation of the guide
+## A guide to MLOps
 
 <!-- _class: lead -->
+
+A quick presentation of the guide
+
+## _"Welcome to the team!"_
+
+You just have joined a team of data scientists and machine learning (ML) engineers (_welcome!_).
+
+The team is working on a model capable of visually identifying planets or moons within our solar system from images in a Jupyter Notebook.
+
+The team is facing difficulties to move the model to production.
+
+Your mission is to help the team to improve the model and deploy it to the cloud using MLOps best practices.
 
 ---
 
@@ -226,9 +299,102 @@ We work with four others HES: **HEIA-FR**, **HE-Arc**, **HEVS** and **HEPIA**.
 
 ![bg right:40% w:60%][website-qrcode]
 
-
 ## Sources
 
 - MLOps Venn diagram by Cmbreuel on [Wikipedia](https://commons.wikimedia.org/wiki/File:ML_Ops_Venn_Diagram.svg)
 - Robot illustation by [OpenClipart-Vectors](https://pixabay.com/users/openclipart-vectors-30363/) on [Pixabay](https://pixabay.com/vectors/cartoon-comic-dance-happy-joy-1295224/)
 - Python logo by [Python Software Foundation](https://www.python.org/community/logos/) on [Wikipedia](https://commons.wikimedia.org/wiki/File:Python-logo-notext.svg)
+
+## Bonus slides
+
+<!-- _class: lead -->
+
+### Usual ML workflow
+
+Each member of the team manages their own codebase, their own dataset and their own models.
+
+The reproducibility of the model creation is difficult and cannot be guaranteed over time.
+
+Improvements made to the model are hard to track.
+
+Models are hard to share and deploy in production.
+
+### High flexibility for the team...
+
+<!-- _class: lead -->
+
+...but hard to maintain.
+
+...hard to reproduce in the future.
+
+...time consuming.
+
+**We can do better.**
+
+### Codebase
+
+**Current situation**
+
+- Each developer has its own codebase
+- Sharing the code with peers is difficult
+
+![bg right:40%](.)
+
+---
+
+**What are we trying to improve**
+
+- Allow each developer to improve a common codebase
+- Quickly benefit of the work from others
+
+![bg right:40%](.)
+
+### Data
+
+**Current situation**
+
+- The dataset must be manually downloaded and put in the right place
+- Different datasets are in used at the same time
+- Datasets are hard to improve
+
+![bg right:40%](.)
+
+---
+
+**What are we trying to improve**
+
+- Allow the usage of a common and up-to-date dataset
+- Efficiently share new revisions to train the model
+- Datasets can be stored anywhere
+
+![bg right:40%](.)
+
+### Reproduce
+
+**Current situation**
+
+- Steps to create the model can be complex
+- Intermediate commands should not be skipped
+- Hyperparameters are hard to track from one run to another
+
+![bg right:40%](.)
+
+---
+
+**What are we trying to improve**
+
+- Document the  steps to reproduce the experiment
+- Ensure it can be ran anytime in the future
+- DVC can improve time efficiency
+
+![bg right:40%](.)
+
+### Tracking
+
+### Serving and publishing
+
+### Deployment
+
+### Storage
+
+### Orchestration
