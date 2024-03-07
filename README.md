@@ -88,5 +88,5 @@ pip install \
     --requirement requirements-all.txt
 
 # Run mdwrap
-mdwrap --fmt .
+mdwrap --fmt docs
 ```
