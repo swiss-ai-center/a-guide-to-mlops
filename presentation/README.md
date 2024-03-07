@@ -86,7 +86,7 @@ _paginate: false
 
 ## Swiss AI Center
 
-Five HES (HEIG-VD, HEIA-FR, HE-Arc, HEVS and HEPIA) work on a project called **Centre Suisse d’Intelligence Artificiel à destination des PMEs (CSIA-PME)**.
+**Five HES from the HES-SO** (HEIG-VD, HEIA-FR, HE-Arc, HEVS and HEPIA) work on a project called **Centre Suisse d’Intelligence Artificiel à destination des PMEs (CSIA-PME)**, also known as the **Swiss AI Center**.
 
 The Swiss AI Center’s mission is to **accelerate the adoption of artificial intelligence in the digital transition of Swiss SMEs**.
 
