@@ -1,4 +1,4 @@
-# Chapter 10: Work efficiently and collaboratively with Git
+# Chapter 10 - Work efficiently and collaboratively with Git
 
 ## Introduction
 
@@ -6,7 +6,7 @@ The objective of this chapter is to work effectively and collaboratively on the
 model with the help of [:simple-git: Git](../tools.md), [CML](../tools.md) and
 the CI/CD pipeline.
 
-This capability empowers collaborators to engage in online discussions, enabling
+This workflow allows collaborators to engage in online discussions, enabling
 them to thoroughly review and deliberate on proposed changes before merging them
 into the codebase.
 

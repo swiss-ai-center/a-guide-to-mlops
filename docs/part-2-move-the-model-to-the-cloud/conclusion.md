@@ -14,7 +14,7 @@ reproduced, the results are published and shared with the team. You can also
 compare the results with the previous ones and decide if you want to merge the
 new model or not.
 
-The following diagram illustrates the bricks you set up at the end of this part.
+The following diagram illustrates the bricks you set up at the end of this part:
 
 ```mermaid
 flowchart LR

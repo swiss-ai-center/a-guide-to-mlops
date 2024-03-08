@@ -4,28 +4,28 @@ Introduction to MLOps.
 
 ## What is MLOps?
 
-MLOps, short for Machine Learning Operations, is a discipline that focuses on
-optimizing and streamlining the deployment, management, and monitoring of
-machine learning models in production environments.
+MLOps (short for _"Machine Learning Operations"_), is a discipline that focuses
+on improving the deployment, management, and monitoring of machine learning
+models in production environments.
 
 By merging the principles of software development and operations with data
 science and machine learning, MLOps aims to automate the entire machine learning
 lifecycle. This includes tasks such as data preparation, model training,
-deployment, and ongoing maintenance. The overarching objective is to ensure that
-the deployed models are accurate, scalable, and secure.
+deployment, and ongoing maintenance. The final objective is to ensure that the
+deployed models are accurate, scalable, and secure.
 
-Implementing MLOps involves leveraging various tools and practices, including
-version control, continuous integration and deployment (CI/CD), infrastructure
-management, containerization, and monitoring and logging frameworks. Through
-these mechanisms, MLOps enables efficient management of machine learning
-workflows, reducing errors and minimizing downtime.
+Implementing MLOps involves various tools and practices, including version
+control, continuous integration and deployment (CI/CD), infrastructure
+management, containerization, monitoring and logging frameworks. Through these
+mechanisms, MLOps enables efficient management of machine learning workflows,
+reducing errors and minimizing downtime.
 
 The ultimate goal of MLOps is to expedite the development and deployment of
 high-quality machine learning models, enabling organizations to reap the
 benefits of machine learning at scale, while maintaining reliability and
 stability in production environments.
 
-[//]: # "TODO: Add the illustration of the "MLOPs loop" here?"
+<!-- TODO: Add the illustration of the "MLOPs loop" here? -->
 
 ## What problems does MLOps aim to solve?
 
@@ -49,15 +49,15 @@ address:
   protecting them is paramount. MLOps incorporates security measures to safeguard
   models from malicious actors and ensure data privacy and integrity.
 
-[//]: # "TODO: We don't speak much about security in the current guide, is that right? It is covered in the PR reviews and such I guess?"
+<!-- TODO: We don't speak much about security in the current guide, is that right? It is covered in the PR reviews and such I guess? -->
 
-[//]: # "TODO: Should we add the challenge "Monitoring in production" here?"
+<!-- TODO: Should we add the challenge "Monitoring in production" here? -->
 
 By addressing these challenges, MLOps accelerates the development and deployment
 of machine learning models while enhancing their overall quality and performance
 in production environments.
 
-[//]: # "TODO: Add an illustration to display the different challenges by bricks?"
+<!-- TODO: Add an illustration to display the different challenges by bricks? -->
 
 ## Why would MLOps be useful for you?
 
@@ -72,7 +72,7 @@ advantages you can expect:
   on high-quality data and optimized for production environments, resulting in
   improved accuracy and performance of the models.
 - **Better scalability**: MLOps helps scale machine learning models to handle
-  large datasets and meet growing demands, enabling seamless expansion and
+  large datasets and meet growing demands, enabling expansion and
   accommodating increased workload.
 - **Faster time to market**: With MLOps, the development and deployment of
   machine learning models can be accelerated, reducing the time it takes to
@@ -87,4 +87,4 @@ learning models, resulting in increased efficiency, accuracy, scalability,
 faster time to market, and improved collaboration. These advantages contribute
 to better outcomes and more successful machine learning projects.
 
-[//]: # "TODO: Add an illustration to display the different advantages by bricks?"
+<!-- TODO: Add an illustration to display the different advantages by bricks? -->

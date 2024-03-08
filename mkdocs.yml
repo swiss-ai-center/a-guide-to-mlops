@@ -12,7 +12,7 @@ nav:
       - "Concept": concept.md
       - "Tools": tools.md
   - 🏠 Local training and model evaluation:
-      - part-1-local-training-and-model-evaluation/introduction.md
+      - "Introduction": part-1-local-training-and-model-evaluation/introduction.md
       - "Chapter 1 - Run a simple ML experiment with Jupyter Notebook": part-1-local-training-and-model-evaluation/chapter-1-run-a-simple-ml-experiment-with-jupyter-notebook.md
       - "Chapter 2 - Adapt and move the Jupyter Notebook to Python scripts": part-1-local-training-and-model-evaluation/chapter-2-adapt-and-move-the-jupyter-notebook-to-python-scripts.md
       - "Chapter 3 - Initialize Git and DVC for local training": part-1-local-training-and-model-evaluation/chapter-3-initialize-git-and-dvc-for-local-training.md

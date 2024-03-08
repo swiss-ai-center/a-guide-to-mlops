@@ -1,4 +1,4 @@
-# Chapter 7: Move the ML experiment data to the cloud
+# Chapter 7 - Move the ML experiment data to the cloud
 
 ## Introduction
 
@@ -85,50 +85,6 @@ Let's get started!
 
 ## Steps
 
-### Create a project on a cloud provider
-
-Create a project on a cloud provider to host the data:
-
-=== ":simple-googlecloud: Google Cloud"
-
-    Create a Google Cloud Project by going to the
-    [Google Cloud console](https://console.cloud.google.com/), select
-    **Select a project** in the upper left corner of the screen and select
-    **New project**.
-
-    Name your project and select **Create** to create the project.
-
-    A new page opens. Note the ID of your project (not the project number nor
-    name!), it will be used later.
-
-    !!! warning
-
-        Always make sure you're in the right project by selecting your project with
-        **Select a project** in the upper left corner of the screen.
-
-    **Export the Google Cloud Project ID**
-
-    Export the Google Cloud Project ID as an environment variable. Replace
-    `<id of your gcp project>` with your own project ID:
-
-    ```sh title="Execute the following command(s) in a terminal"
-    export GCP_PROJECT_ID=<id of your gcp project>
-    ```
-
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
-
 ### Install and configure the cloud provider CLI
 
 Install and configure the cloud provider CLI tool to manage the cloud resources:
@@ -154,12 +110,6 @@ Install and configure the cloud provider CLI tool to manage the cloud resources:
     ```sh title="Execute the following command(s) in a terminal"
     # Initialize and login to Google Cloud
     gcloud init
-
-    # List all available projects
-    gcloud projects list
-
-    # Select your Google Cloud project
-    gcloud config set project $GCP_PROJECT_ID
     ```
 
     Then run the following command to authenticate to Google Cloud with the
@@ -170,6 +120,89 @@ Install and configure the cloud provider CLI tool to manage the cloud resources:
     # https://dvc.org/doc/user-guide/data-management/remote-storage/google-cloud-storage
     # https://cloud.google.com/sdk/gcloud/reference/auth/application-default/login
     gcloud auth application-default login
+    ```
+
+=== ":material-cloud: Using another cloud provider? Read this!"
+
+    This guide has been written with Google Cloud in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
+
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
+    help is greatly appreciated!
+
+### Create a project on a cloud provider
+
+Create a project on a cloud provider to host the data:
+
+=== ":simple-googlecloud: Google Cloud"
+
+    Create a Google Cloud Project with the following commands. Replace
+    `<my project name>` with your own project ID (ex: `mlops-project`):
+
+    !!! warning
+
+        The project name must be unique across all Google Cloud projects and users.
+        Change the `<my project name>` to your own bucket name.
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Export the project ID
+    export GCP_PROJECT_ID=<my project name>
+
+    # Create a new project
+    gcloud projects create $GCP_PROJECT_ID
+
+    # Select your Google Cloud project
+    gcloud config set project $GCP_PROJECT_ID
+    ```
+
+=== ":material-cloud: Using another cloud provider? Read this!"
+
+    This guide has been written with Google Cloud in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
+
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
+    help is greatly appreciated!
+
+### Link a billing account to the project
+
+Link a billing account to the project to be able to create to create cloud
+resources:
+
+=== ":simple-googlecloud: Google Cloud"
+
+    Link a billing account to the project with the following commands:
+
+    !!! tip
+        You can list the billing accounts with the following command:
+
+        ```sh title="Execute the following command(s) in a terminal"
+        # List the billing accounts
+        gcloud billing accounts list
+        ```
+
+        If no billing account is available, you can add a new one from the
+        [Google Cloud Console](https://console.cloud.google.com/billing) and then link
+        it to the project.
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Export the billing account ID
+    export GCP_BILLING_ACCOUNT_ID=YOUR_BILLING_ACCOUNT_ID
+
+    # Link the billing account to the project
+    gcloud billing projects link $GCP_PROJECT_ID \
+        --billing-account $GCP_BILLING_ACCOUNT_ID
     ```
 
 === ":material-cloud: Using another cloud provider? Read this!"
@@ -201,7 +234,7 @@ Create the Storage Bucket to store the data with the cloud provider CLI:
     Create the Google Storage Bucket to store the data with the Google Cloud CLI.
 
     Export the bucket name as an environment variable. Replace `<my bucket name>`
-    with your own bucket name (ex: `mlopsdemo`):
+    with your own bucket name (ex: `mlops-bucket`):
 
     !!! warning
 
@@ -231,18 +264,6 @@ Create the Storage Bucket to store the data with the cloud provider CLI:
         --uniform-bucket-level-access \
         --public-access-prevention
     ```
-
-    ??? info "Getting an `ERROR: (gcloud.storage.buckets.create) HTTPError 403` message? Read this!"
-
-        In case you get a
-        `**HTTPError 403: The billing account for the owning project is disabled in state absent**`
-        error, ensure the
-        [billing account](https://console.cloud.google.com/billing/linkedaccount) is
-        correctly linked to the project.
-
-        In the Google Cloud Interface, go to **Billing** in the main hamburger menu,
-        then choose the **My Projects** tab. If billing is *disabled*, then select
-        *Change billing* in the **Actions** menu, and click the **Set Account** button.
 
     You now have everything you need for DVC.
 
@@ -411,7 +432,7 @@ git push
 Open the Bucket Storage on the cloud provider and check that the files were
 hashed and have been uploaded.
 
-[//]: # "TODO: Add explanation on how to check the files on the cloud provider, the difference between the data and the cache, and how to download the data from the cloud provider."
+<!-- TODO: Add explanation on how to check the files on the cloud provider, the difference between the data and the cache, and how to download the data from the cloud provider. -->
 
 ## Summary
 
@@ -425,7 +446,7 @@ In this chapter, you have successfully:
 3. Created the Storage Bucket on the cloud provider
 4. Installed the DVC Storage plugin
 5. Configured DVC to use the Storage Bucket
-6. Updated the `.gitignore` file and adding the experiment data to DVC
+6. Updated the gitignore file and adding the experiment data to DVC
 7. Pushed the data files to DVC
 8. Commit the changes to Git
 

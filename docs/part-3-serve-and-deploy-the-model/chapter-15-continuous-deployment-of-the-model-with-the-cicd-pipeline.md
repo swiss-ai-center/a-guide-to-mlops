@@ -1,4 +1,4 @@
-# Chapter 15: Continuous deployment of the model with the CI/CD pipeline
+# Chapter 15 - Continuous deployment of the model with the CI/CD pipeline
 
 ## Introduction
 

@@ -1,4 +1,4 @@
-# Chapter 4: Reproduce the ML experiment with DVC
+# Chapter 4 - Reproduce the ML experiment with DVC
 
 ## Introduction
 
@@ -9,13 +9,13 @@ dependencies they rely on have changed. This way, you don't have to waste time
 re-running unnecessary steps.
 
 By using DVC stages to create a pipeline, you can execute all of your
-experiment's steps in a streamlined manner by simply running the `dvc repro`
-command. As a result, DVC makes it easy to reproduce the experiment and track
-the effects of changes.
+experiment's steps by simply running the `dvc repro` command. As a result, DVC
+will only execute stages that must be ran, making it easy to reproduce the
+experiment and track the effects of changes.
 
 In this chapter, you will learn how to:
 
-1. Remove custom rules from the `.gitignore` file
+1. Remove custom rules from the gitignore file
 2. Set up DVC pipeline stages:
     - Prepare
     - Train
@@ -73,17 +73,17 @@ Let's get started!
 
 ## Steps
 
-### Remove custom rules from the .gitignore file
+### Remove custom rules from the gitignore file
 
-As seen in the previous chapter, DVC can update `.gitignore` files.
+As seen in the previous chapter, DVC can update gitignore files.
 
 As you will define the entire experiment pipeline with DVC, you can safely
-remove all the custom rules from the main `.gitignore` file so DVC can manage
-them for you. At the end of this chapter, DVC should have updated all the
-`.gitignore` files.
+remove all the custom rules from the main gitignore file so DVC can manage them
+for you. At the end of this chapter, DVC should have updated all the gitignore
+files.
 
-Update the `.gitignore` file to remove your experiment data. The required files
-to be ignored will then be added by DVC:
+Update the gitignore file to remove your experiment data. The required files to
+be ignored will then be added by DVC:
 
 ```sh title=".gitignore" hl_lines="7-9"
 ## Python
@@ -247,8 +247,8 @@ Explore the `dvc.yaml` file to understand how the pipeline is updated.
 The pipeline is now entirely defined. You can explore the `dvc.yaml` file to see
 all the stages and their dependencies.
 
-Notice that DVC also updated the main `.gitignore` file with the model, as it is
-an output of the `train` stage:
+Notice that DVC also updated the main gitignore file with the model, as it is an
+output of the `train` stage:
 
 ```sh title=".gitignore" hl_lines="10"
 ## Python
@@ -375,7 +375,7 @@ experiment.
 
 In this chapter, you have successfully:
 
-1. Removed custom rules from the `.gitignore` file
+1. Removed custom rules from the main gitignore file
 2. Set up three DVC pipeline stages
     - Prepare
     - Train

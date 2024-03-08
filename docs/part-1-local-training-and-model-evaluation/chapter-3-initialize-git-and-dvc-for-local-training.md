@@ -1,10 +1,9 @@
-# Chapter 3: Initialize Git and DVC for local training
+# Chapter 3 - Initialize Git and DVC for local training
 
 ## Introduction
 
-Now that you have a good understanding of the experiment, it's time to
-streamline the code and data sharing process. To enable efficient tracking of
-code changes and ensure reproducibility, you will create a
+Now that you have a good understanding of the experiment, it's time to improve
+the code and data sharing process. To share the codebase, you will create a
 [:simple-git: Git](../tools.md) repository.
 
 However, when it comes to managing large files, Git has some limitations.
@@ -12,9 +11,9 @@ Although Git LFS is an option for handling large files in Git repositories, it
 may not be the most efficient solution.
 
 This is the reason you will use [:simple-dvc: DVC](../tools.md), a version
-control system specifically designed for efficient data management that
-seamlessly integrates with Git. DVC utilizes chunking to efficiently store large
-files and track their changes.
+control system specifically designed to share the data and integrates well with
+Git. DVC utilizes chunking to efficiently store large files and track their
+changes.
 
 In this chapter, you will learn how to:
 
@@ -26,7 +25,7 @@ In this chapter, you will learn how to:
 5. Commit your changes to the Git repository
 6. Install DVC
 7. Initialize and configure DVC
-8. Update the `.gitignore` file and add the experiment data to DVC
+8. Update the gitignore file and add the experiment data to DVC
 9. Push the data files to DVC
 10. Commit the metadata files to Git
 
@@ -62,8 +61,9 @@ flowchart LR
     linkStyle 6 opacity:0.4,color:#7f7f7f80
 ```
 
-Later, you will streamline the code sharing process by setting up remote Git and
-DVC repositories to enable easy collaboration with the rest of the team.
+In future chapters, you will streamline the code sharing process by setting up
+remote Git and DVC repositories to enable easy collaboration with the rest of
+the team.
 
 ## Steps
 
@@ -270,11 +270,11 @@ When executing this command, the following output occurs:
 ERROR: bad DVC file name 'data/data.raw.dvc' is git-ignored.
 ```
 
-You will have to update the `.gitignore` file so that DVC can create files in
-the `data` directory. However, you still don't want the directories `data/raw`
-and `data/prepared` to be added to Git.
+You will have to update the gitignore file so that DVC can create files in the
+`data` directory. However, you still don't want the directories `data/raw` and
+`data/prepared` to be added to Git.
 
-Update the `.gitignore` file by changing `data/` to `data/raw/` and
+Update the gitignore file by changing `data/` to `data/raw/` and
 `data/prepared/`:
 
 ```sh title=".gitignore" hl_lines="2-3"
@@ -345,12 +345,12 @@ To enable auto staging, run:
 
 The effect of the `dvc add` command is to create a `data/data.raw.dvc` file and
 a `data/.gitignore`. The `.dvc` file contains the metadata of the file that is
-used by DVC to download and check the integrity of the files. The `.gitignore`
-file is created to add the files in `data/raw` to be ignored by Git. The `.dvc`
-files must be added to Git.
+used by DVC to download and check the integrity of the files. The gitignore file
+is created to add the files in `data/raw` to be ignored by Git. The `.dvc` files
+must be added to Git.
 
-Various DVC commands will automatically try to update the `.gitignore` files. If
-a `.gitignore` file is already present, it will be updated to include the newly
+Various DVC commands will automatically try to update the gitignore files. If a
+gitignore file is already present, it will be updated to include the newly
 ignored files. You might need to update existing `.gitignore` files accordingly.
 
 #### Check the changes
@@ -396,8 +396,10 @@ This chapter is done, you can check the summary.
 
 ## Summary
 
-Congratulations! You now have a dataset that can be used and shared among the
-team.
+Congratulations! You now have a codebase and a dataset that is versioned with
+Git and DVC. At the moment, these tools are only used locally. In the next
+chapters, you will learn how to share the codebase and the dataset with the rest
+of the team.
 
 In this chapter, you have successfully:
 
@@ -409,7 +411,7 @@ In this chapter, you have successfully:
 4. Commited your changes to the Git repository
 5. Installed DVC
 6. Initialized DVC
-7. Updated the `.gitignore` file and adding the experiment data to DVC
+7. Updated the gitignore file and adding the experiment data to DVC
 8. Commited the data files to DVC
 9. Commited your changes to the Git repository
 

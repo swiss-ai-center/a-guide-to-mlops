@@ -1,4 +1,4 @@
-# Chapter 5: Track model evolution with DVC
+# Chapter 5 - Track model evolution with DVC
 
 ## Introduction
 
@@ -167,7 +167,7 @@ model's performance changes.
 The `dvc plots diff` creates a `dvc_plots` directory in the working directory.
 This directory should be ignored by Git.
 
-Add the `dvc_plots` directory to the `.gitignore` file:
+Add the `dvc_plots` directory to the gitignore file:
 
 ```sh title=".gitignore" hl_lines="9-10"
 ## Python

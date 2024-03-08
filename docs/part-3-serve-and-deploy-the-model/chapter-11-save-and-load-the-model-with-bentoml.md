@@ -1,15 +1,15 @@
-# Chapter 11: Save and load the model with BentoML
+# Chapter 11 - Save and load the model with BentoML
 
 ## Introduction
 
 The purpose of this chapter is to serve and use the model for usage outside of
-the experiment context with the help of [BentoML](../tools.md), a powerful tool
-designed for easy packaging, deployment, and serving of Machine Learning models.
+the experiment context with the help of [BentoML](../tools.md), a tool designed
+for easy packaging, deployment, and serving of Machine Learning models.
 
-By transforming your model into a specialized BentoML model, it is possible to
-capture the essential metadata information that can then be used to load the
-model for future usage, unlocking true potential in facilitating seamless and
-efficient model deployment.
+By transforming your model into a BentoML model artifact, it is possible to load
+the model for future usage with all its dependencies. This will allow you to use
+the model in a production environment, share it with others, and deploy it to a
+cluster.
 
 In this chapter, you will learn how to:
 
@@ -31,7 +31,7 @@ flowchart TB
         s3_storage
         subgraph gitGraph[Git Remote]
             repository[(Repository)] --> action[Action]
-            action[Action] --> |...|request[PR]
+            action[Action] --> request[PR]
             request --> repository[(Repository)]
         end
     end
@@ -79,7 +79,7 @@ flowchart TB
 ### Install BentoML and dependencies
 
 Add the `bentoml` package to install BentoML support. `pillow` is also added to
-the requirements to support image processing:
+support image processing:
 
 ```txt title="requirements.txt" hl_lines="5-6"
 tensorflow==2.12.0
@@ -135,14 +135,12 @@ pip freeze --local --all > requirements-freeze.txt
 ### Update the experiment
 
 To make the most of BentoML's capabilities, you must start by converting your
-model into the specialized BentoML format, which allows for the capture of
-essential model metadata beyond traditional model-saving practices. This pivotal
-step is crucial for harnessing the comprehensive features and advantages offered
-by BentoML.
+model into the specialized BentoML model artifact format with all its
+dependencies.
 
 BentoML offers a model store, which is a centralized repository for all your
 models. This store is stored in a directory on your local machine at
-`/home/user/bentoml/`.
+`~/bentoml/`.
 
 In order to share the model with others, the model must be exported in the
 current working directory. It will then be uploaded to DVC and shared with
@@ -300,7 +298,7 @@ objects are saved with the model:
 - `postprocess` is used to postprocess the output of the model.
 
 These functions will be used later to transform the input and output data when
-using the model through the REST API.
+using the model through a HTTP REST API.
 
 Check the differences with Git to better understand the changes:
 
