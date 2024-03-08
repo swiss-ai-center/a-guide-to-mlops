@@ -217,7 +217,7 @@ We work with four others HES: **HEIA-FR**, **HE-Arc**, **HEVS** and **HEPIA**.
 
 ## Access the guide
 
-👉 Access the guide at  
+👉 Access the guide at
 [mlops.swiss-ai-center.ch][website].
 
 💪 Feel free to open an issue on [GitHub][github] if you encounter any difficulties or want to contribute.
