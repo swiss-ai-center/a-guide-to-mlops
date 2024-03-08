@@ -16,7 +16,7 @@ deployed models are accurate, scalable, and secure.
 
 Implementing MLOps involves various tools and practices, including version
 control, continuous integration and deployment (CI/CD), infrastructure
-management, containerization, and monitoring and logging frameworks. Through
+management, containerization, monitoring and logging frameworks. Through
 these mechanisms, MLOps enables efficient management of machine learning
 workflows, reducing errors and minimizing downtime.
 

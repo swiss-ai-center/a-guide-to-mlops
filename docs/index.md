@@ -8,12 +8,12 @@ hide:
 
 We are a team of passionate software engineers and data scientists from the
 [Swiss AI Center](https://www.hes-so.ch/swiss-ai-center){:target="\_blank"}.
-With expertise in both Machine Learning (ML) and DevOps, we have embarked on a
-mission to provide a guide to transition
- ML projects from experimentation to production using MLOps practices.
+With expertise in both Machine Learning (ML) and DevOps, we have taken on the
+challenge of providing a guide to transition ML projects from experimentation
+to production using MLOps practices.
 
 Throughout this guide, we have tried to find the best tools and best practices
-that minimize friction within established workflows and teams to acheive this
+that minimize friction within established workflows and teams to achieve this
 goal.
 
 Designed to be highly practical, this guide takes you through a step-by-step
