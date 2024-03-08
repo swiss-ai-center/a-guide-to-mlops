@@ -102,8 +102,8 @@ _paginate: false
 
 <div class="center">
 
-**Bertil  
-Chapuis**  
+**Bertil
+Chapuis**
 <small>Professor</small>
 
 ![w:200](./images/bertil-chapuis.png)
@@ -113,8 +113,8 @@ Chapuis**
 </div>
 <div class="center">
 
-**Ludovic  
-Delafontaine**  
+**Ludovic
+Delafontaine**
 <small>aR&D Associate</small>
 
 ![w:200](./images/ludovic-delafontaine.png)
@@ -124,8 +124,8 @@ Delafontaine**
 </div>
 <div class="center">
 
-**Rémy  
-Marquis**  
+**Rémy
+Marquis**
 <small>aR&D Associate</small>
 
 ![w:200](./images/remy-marquis.png)
@@ -135,8 +135,8 @@ Marquis**
 </div>
 <div class="center">
 
-**Leonard  
-Cseres**  
+**Leonard
+Cseres**
 <small>Assistant</small>
 
 ![w:200](./images/leonard-cseres.png)
@@ -342,7 +342,7 @@ Models are hard to share and deploy in production.
 
 ---
 
-**What are we trying to improve**
+**What we are trying to improve**
 
 - Allow each developer to improve a common codebase
 - Quickly benefit of the work from others
@@ -354,14 +354,14 @@ Models are hard to share and deploy in production.
 **Current situation**
 
 - The dataset must be manually downloaded and put in the right place
-- Different datasets are in used at the same time
+- Different datasets are being used at the same time
 - Datasets are hard to improve
 
 ![bg right:40%](.)
 
 ---
 
-**What are we trying to improve**
+**What we are trying to improve**
 
 - Allow the usage of a common and up-to-date dataset
 - Efficiently share new revisions to train the model
@@ -381,10 +381,10 @@ Models are hard to share and deploy in production.
 
 ---
 
-**What are we trying to improve**
+**What we are trying to improve**
 
 - Document the  steps to reproduce the experiment
-- Ensure it can be ran anytime in the future
+- Ensure it can be run anytime in the future
 - DVC can improve time efficiency
 
 ![bg right:40%](.)
