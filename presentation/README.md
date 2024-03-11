@@ -55,15 +55,11 @@ headingDivider: 4
 -->
 
 [illustration]: ./images/cover.png
-[license]:
-  https://github.com/swiss-ai-center/a-guide-to-mlops/blob/main/LICENSE
-[website]:
-  https://mlops.swiss-ai-center.ch
+[license]: https://github.com/swiss-ai-center/a-guide-to-mlops/blob/main/LICENSE
+[website]: https://mlops.swiss-ai-center.ch
 [website-qrcode]:
-  https://quickchart.io/qr?format=png&ecLevel=Q&size=400&margin=1&text=https://mlops.swiss-ai-center.ch
-
-[github]:
-  https://github.com/swiss-ai-center/a-guide-to-mlops
+    https://quickchart.io/qr?format=png&ecLevel=Q&size=400&margin=1&text=https://mlops.swiss-ai-center.ch
+[github]: https://github.com/swiss-ai-center/a-guide-to-mlops
 
 # A guide to MLOps
 
@@ -86,11 +82,15 @@ _paginate: false
 
 ## Swiss AI Center
 
-**Five HES from the HES-SO** (HEIG-VD, HEIA-FR, HE-Arc, HEVS and HEPIA) work on a project called **Centre Suisse d’Intelligence Artificiel à destination des PMEs (CSIA-PME)**, also known as the **Swiss AI Center**.
+**Five HES from the HES-SO** (HEIG-VD, HEIA-FR, HE-Arc, HEVS and HEPIA) work on
+a project called **Centre Suisse d’Intelligence Artificiel à destination des
+PMEs (CSIA-PME)**, also known as the **Swiss AI Center**.
 
-The Swiss AI Center’s mission is to **accelerate the adoption of artificial intelligence in the digital transition of Swiss SMEs**.
+The Swiss AI Center’s mission is to **accelerate the adoption of artificial
+intelligence in the digital transition of Swiss SMEs**.
 
-**HEIG-VD** is responsible for **setting up tools to manage ML experiments from code to production**.
+**HEIG-VD** is responsible for **setting up tools to manage ML experiments from
+code to production**.
 
 ## Our team
 
@@ -108,7 +108,8 @@ Chapuis**
 
 ![w:200](./images/bertil-chapuis.png)
 
-[Mail](mailto:bertil.chapuis@heig-vd.ch) · [LinkedIn](https://www.linkedin.com/in/bertilchapuis/)
+[Mail](mailto:bertil.chapuis@heig-vd.ch) ·
+[LinkedIn](https://www.linkedin.com/in/bertilchapuis/)
 
 </div>
 <div class="center">
@@ -119,7 +120,8 @@ Delafontaine**
 
 ![w:200](./images/ludovic-delafontaine.png)
 
-[Mail](mailto:ludovic.delafontaine@heig-vd.ch) · [LinkedIn](https://www.linkedin.com/in/ludelafo/)
+[Mail](mailto:ludovic.delafontaine@heig-vd.ch) ·
+[LinkedIn](https://www.linkedin.com/in/ludelafo/)
 
 </div>
 <div class="center">
@@ -130,7 +132,8 @@ Marquis**
 
 ![w:200](./images/remy-marquis.png)
 
-[Mail](mailto:remy.marquis@heig-vd.ch) · [LinkedIn](https://www.linkedin.com/in/remymarquis/)
+[Mail](mailto:remy.marquis@heig-vd.ch) ·
+[LinkedIn](https://www.linkedin.com/in/remymarquis/)
 
 </div>
 <div class="center">
@@ -141,7 +144,8 @@ Cseres**
 
 ![w:200](./images/leonard-cseres.png)
 
-[Mail](mailto:leonard.cseres@heig-vd.ch) · [LinkedIn](https://www.linkedin.com/in/leonardcsrs/)
+[Mail](mailto:leonard.cseres@heig-vd.ch) ·
+[LinkedIn](https://www.linkedin.com/in/leonardcsrs/)
 
 </div>
 
@@ -151,25 +155,29 @@ Cseres**
 
 **Get out of the context of the experience**
 
-> I ran the experiment but didn’t get the same results, can you check my way of running the experiment?
+> I ran the experiment but didn’t get the same results, can you check my way of
+> running the experiment?
 
 <hr>
 
 **Make sure you can build the model at all times**
 
-> I tried to build the model on my machine but it doesn’t work... Are you sure it builds on yours?
+> I tried to build the model on my machine but it doesn’t work... Are you sure
+> it builds on yours?
 
 ---
 
 **Monitor the evolution of the model over time**
 
-> I’m not sure my changes really help the model’s performances… I hope it still works in production.
+> I’m not sure my changes really help the model’s performances… I hope it still
+> works in production.
 
 <hr>
 
 **Move to production quickly, efficiently and in a semi-automated way**
 
-> Is your model available in production? Can I use it with my mobile app/website? How can I do so?
+> Is your model available in production? Can I use it with my mobile
+> app/website? How can I do so?
 
 ## Small and medium-sized enterprises (SMEs) face the same problems
 
@@ -191,7 +199,8 @@ Cseres**
 
 **A guide to MLOps**
 
-🛠️ Switch from a Jupyter Notebook to production using state-of-the-art MLOps tools
+🛠️ Switch from a Jupyter Notebook to production using state-of-the-art MLOps
+tools
 
 🚀 Go from experience to production on the Cloud
 
@@ -205,64 +214,58 @@ Cseres**
 
 A quick presentation of the guide
 
-## _"Welcome to the team!"_
+### _"Welcome to the team!"_
 
-You just have joined a team of data scientists and machine learning (ML) engineers (_welcome!_).
+You just have joined a team of data scientists and machine learning (ML)
+engineers (_welcome!_).
 
-The team is working on a model capable of visually identifying planets or moons within our solar system from images in a Jupyter Notebook.
+The team is working on a model capable of visually identifying planets or moons
+within our solar system from images in a Jupyter Notebook.
 
 The team is facing difficulties to move the model to production.
 
-Your mission is to help the team to improve the model and deploy it to the cloud using MLOps best practices.
-
----
-
-![bg w:90%](./images/guide-demo-01.png)
-![bg w:90%](./images/guide-demo-02.png)
-
----
-
-![bg w:90%](./images/guide-demo-03.png)
-![bg w:90%](./images/guide-demo-04.png)
-
----
-
-![bg w:90%](./images/guide-demo-05.png)
-![bg w:90%](./images/guide-demo-06.png)
-
----
-
-![bg w:90%](./images/guide-demo-07.png)
-![bg w:90%](./images/guide-demo-08.png)
-
----
-
-![bg w:90%](./images/guide-demo-09.png)
-![bg w:90%](./images/guide-demo-10.png)
-
----
-
-![bg w:90%](./images/guide-demo-11.png)
-![bg w:90%](./images/guide-demo-12.png)
-
----
-
-![bg w:90%](./images/guide-demo-13.png)
-![bg w:90%](./images/guide-demo-14.png)
-
----
-
-![bg w:90%](./images/guide-demo-15.png)
-![bg w:90%](./images/guide-demo-16.png)
-
----
-
-![bg w:90%](./images/guide-demo-17.png)
-![bg w:90%](./images/guide-demo-18.png)
+Your mission is to help the team to improve the model and deploy it to the cloud
+using MLOps best practices.
 
 ### The big picture
 
-![bg w:90%](./images/the-big-picture.png)
+![bg](./images/the-big-picture.svg)
+
+---
+
+![bg w:90%](./images/guide-demo-01.png) ![bg w:90%](./images/guide-demo-02.png)
+
+---
+
+![bg w:90%](./images/guide-demo-03.png) ![bg w:90%](./images/guide-demo-04.png)
+
+---
+
+![bg w:90%](./images/guide-demo-05.png) ![bg w:90%](./images/guide-demo-06.png)
+
+---
+
+![bg w:90%](./images/guide-demo-07.png) ![bg w:90%](./images/guide-demo-08.png)
+
+---
+
+![bg w:90%](./images/guide-demo-09.png) ![bg w:90%](./images/guide-demo-10.png)
+
+---
+
+![bg w:90%](./images/guide-demo-11.png) ![bg w:90%](./images/guide-demo-12.png)
+
+---
+
+![bg w:90%](./images/guide-demo-13.png) ![bg w:90%](./images/guide-demo-14.png)
+
+---
+
+![bg w:90%](./images/guide-demo-15.png) ![bg w:90%](./images/guide-demo-16.png)
+
+---
+
+![bg w:90%](./images/guide-demo-17.png) ![bg w:90%](./images/guide-demo-18.png)
 
 ## Target audience
 
@@ -290,20 +293,35 @@ Your mission is to help the team to improve the model and deploy it to the cloud
 
 ## Access the guide
 
-👉 Access the guide at
-[mlops.swiss-ai-center.ch][website].
+👉 Access the guide at [mlops.swiss-ai-center.ch][website].
 
-💪 Feel free to open an issue on [GitHub][github] if you encounter any difficulties or want to contribute.
+💪 Feel free to open an issue on [GitHub][github] if you encounter any
+difficulties or want to contribute.
 
 🙏 Leave us a star if you like the guide!
 
 ![bg right:40% w:60%][website-qrcode]
 
-## Sources
+## Now it's your turn!
 
-- MLOps Venn diagram by Cmbreuel on [Wikipedia](https://commons.wikimedia.org/wiki/File:ML_Ops_Venn_Diagram.svg)
-- Robot illustation by [OpenClipart-Vectors](https://pixabay.com/users/openclipart-vectors-30363/) on [Pixabay](https://pixabay.com/vectors/cartoon-comic-dance-happy-joy-1295224/)
-- Python logo by [Python Software Foundation](https://www.python.org/community/logos/) on [Wikipedia](https://commons.wikimedia.org/wiki/File:Python-logo-notext.svg)
+<!-- _class: lead -->
+
+Feel free to ask questions, share your feedback and contribute to the guide!
+
+We are here to help.
+
+## Conclusion
+
+Congratulations! You have completed the guide to MLOps!
+
+You have learned how to improve the management and quality of machine learning
+projects.
+
+You are now able to switch from a Jupyter Notebook to production using
+state-of-the-art MLOps tools.
+
+You can go from experiment to production on the Cloud, using the best practices
+for ML. 🚀
 
 ## Bonus slides
 
@@ -311,9 +329,11 @@ Your mission is to help the team to improve the model and deploy it to the cloud
 
 ### Usual ML workflow
 
-Each member of the team manages their own codebase, their own dataset and their own models.
+Each member of the team manages their own codebase, their own dataset and their
+own models.
 
-The reproducibility of the model creation is difficult and cannot be guaranteed over time.
+The reproducibility of the model creation is difficult and cannot be guaranteed
+over time.
 
 Improvements made to the model are hard to track.
 
@@ -331,70 +351,136 @@ Models are hard to share and deploy in production.
 
 **We can do better.**
 
-### Codebase
+### Codebase (1/2)
 
 **Current situation**
 
-- Each developer has its own codebase
-- Sharing the code with peers is difficult
+-   Each developer has its own codebase
+-   Sharing the code with peers is difficult
 
-![bg right:40%](.)
+### Codebase (2/2)
 
----
+**What we are trying to improve**
 
-**What are we trying to improve**
+-   Allow each developer to improve a common codebase
+-   Quickly benefit of the work from others
 
-- Allow each developer to improve a common codebase
-- Quickly benefit of the work from others
+![bg right:40% w:60%](./images/git-logo.svg)
 
-![bg right:40%](.)
-
-### Data
+### Data (1/2)
 
 **Current situation**
 
-- The dataset must be manually downloaded and put in the right place
-- Different datasets are in used at the same time
-- Datasets are hard to improve
+-   The dataset must be manually downloaded and put in the right place
+-   Different datasets are being used at the same time
+-   Datasets are hard to improve
 
-![bg right:40%](.)
+### Data (2/2)
 
----
+**What we are trying to improve**
 
-**What are we trying to improve**
+-   Allow the usage of a common and up-to-date dataset
+-   Efficiently share new revisions to train the model
+-   Datasets can be stored anywhere
 
-- Allow the usage of a common and up-to-date dataset
-- Efficiently share new revisions to train the model
-- Datasets can be stored anywhere
+![bg right:40% w:60%](./images/dvc-logo.svg)
 
-![bg right:40%](.)
-
-### Reproduce
+### Reproduce (1/2)
 
 **Current situation**
 
-- Steps to create the model can be complex
-- Intermediate commands should not be skipped
-- Hyperparameters are hard to track from one run to another
+-   Steps to create the model can be complex
+-   Intermediate commands should not be skipped
+-   Hyperparameters are hard to track from one run to another
 
-![bg right:40%](.)
+### Reproduce (2/2)
 
----
+**What we are trying to improve**
 
-**What are we trying to improve**
+-   Document the steps to reproduce the experiment
+-   Ensure it can be run anytime in the future
+-   DVC can improve time efficiency
 
-- Document the  steps to reproduce the experiment
-- Ensure it can be ran anytime in the future
-- DVC can improve time efficiency
+![bg right:40% w:60%](./images/dvc-logo.svg)
 
-![bg right:40%](.)
+### Tracking (1/2)
 
-### Tracking
+**Current situation**
 
-### Serving and publishing
+-   Changes to a model are difficult to track
+-   Visualize the differences are hard
+-   Cannot guarantee the changes are beneficial
 
-### Deployment
+### Tracking (2/2)
 
-### Storage
+**What we are trying to improve**
 
-### Orchestration
+-   Have a visual way to identify the consequences of the changes made to a
+    model
+-   Errors/anomalies are easily identified
+
+![bg right:40% w:40% vertical](./images/dvc-logo.svg)
+![bg right:40% w:40% vertical](./images/cml-logo.svg)
+
+### Serving and publishing (1/2)
+
+**Current situation**
+
+-   The model is hard to use outside the experiment context
+-   The model is hard to deploy in production
+-   The model is hard to share with others
+
+### Serving and publishing (2/2)
+
+**What we are trying to improve**
+
+-   The model can be used outside the experiment context
+-   The model can be deployed in production
+-   The model can be shared with others
+
+![bg right:40% w:40% vertical](./images/bentoml-logo.svg)
+![bg right:40% w:40% vertical](./images/docker-logo.svg)
+
+### Deployment (1/2)
+
+**Current situation**
+
+-   An experiment can run on one machine but can fail on another
+-   Models must be prepared to be run outside its experiment context
+-   Exposing the model to the outside world is hard
+
+### Deployment (2/2)
+
+**What we are trying to improve**
+
+-   Run the experiment in a clean state to ensure it works everywhere
+-   Package the model with all its dependencies
+-   The model can be used over the Internet by other applications
+-   Automate the process
+
+![bg right:40% w:60%](./images/kubernetes-logo.svg)
+
+### Labellisation (1/2)
+
+**Current situation**
+
+TODO
+
+![bg right:40%](#)
+
+### Labellisation (2/2)
+
+**What we are trying to improve**
+
+TODO
+
+![bg right:40% w:60%](./images/label-studio-logo.svg)
+
+## Sources
+
+-   MLOps Venn diagram by Cmbreuel on
+    [Wikipedia](https://commons.wikimedia.org/wiki/File:ML_Ops_Venn_Diagram.svg)
+-   Robot illustation by
+    [OpenClipart-Vectors](https://pixabay.com/users/openclipart-vectors-30363/)
+    on
+    [Pixabay](https://pixabay.com/vectors/cartoon-comic-dance-happy-joy-1295224/)
