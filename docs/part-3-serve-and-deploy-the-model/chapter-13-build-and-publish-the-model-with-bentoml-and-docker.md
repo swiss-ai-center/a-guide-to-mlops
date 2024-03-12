@@ -453,11 +453,11 @@ Commit the changes to Git.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
-git commit -m "BentoML can be used to containerize the model artifact and publish it to a container registry"
-```
+git commit -m "BentoML can be used to containerize the model artifact"
 
 # Push the changes
-git push ```
+git push
+```
 
 ## Summary
 

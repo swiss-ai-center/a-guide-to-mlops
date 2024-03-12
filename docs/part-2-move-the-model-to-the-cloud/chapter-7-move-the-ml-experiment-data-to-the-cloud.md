@@ -112,6 +112,49 @@ Install and configure the cloud provider CLI tool to manage the cloud resources:
     gcloud init
     ```
 
+=== ":material-cloud: Using another cloud provider? Read this!"
+
+    This guide has been written with Google Cloud in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
+
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
+    help is greatly appreciated!
+
+### Create a project on a cloud provider
+
+Create a project on a cloud provider to host the data:
+
+=== ":simple-googlecloud: Google Cloud"
+
+    Export a Google Cloud Project ID with the following command. Replace
+    `<my project id>` with your own project ID (ex: `mlops-project`):
+
+    !!! warning
+
+        The project ID must be unique across all Google Cloud projects and users.
+        Change the `<my project id>` to your own project ID.
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Export the project ID
+    export GCP_PROJECT_ID=<my project id>
+    ```
+
+    Create a Google Cloud Project with the following commands:
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Create a new project
+    gcloud projects create $GCP_PROJECT_ID
+
+    # Select your Google Cloud project
+    gcloud config set project $GCP_PROJECT_ID
+    ```
+
     Then run the following command to authenticate to Google Cloud with the
     Application Default:
 
@@ -136,45 +179,6 @@ Install and configure the cloud provider CLI tool to manage the cloud resources:
     [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
     help is greatly appreciated!
 
-### Create a project on a cloud provider
-
-Create a project on a cloud provider to host the data:
-
-=== ":simple-googlecloud: Google Cloud"
-
-    Create a Google Cloud Project with the following commands. Replace
-    `<my project name>` with your own project ID (ex: `mlops-project`):
-
-    !!! warning
-
-        The project name must be unique across all Google Cloud projects and users.
-        Change the `<my project name>` to your own bucket name.
-
-    ```sh title="Execute the following command(s) in a terminal"
-    # Export the project ID
-    export GCP_PROJECT_ID=<my project name>
-
-    # Create a new project
-    gcloud projects create $GCP_PROJECT_ID
-
-    # Select your Google Cloud project
-    gcloud config set project $GCP_PROJECT_ID
-    ```
-
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
-
 ### Link a billing account to the project
 
 Link a billing account to the project to be able to create to create cloud
@@ -182,24 +186,28 @@ resources:
 
 === ":simple-googlecloud: Google Cloud"
 
-    Link a billing account to the project with the following commands:
+    List the billing accounts with the following command:
 
-    !!! tip
-        You can list the billing accounts with the following command:
+    ```sh title="Execute the following command(s) in a terminal"
+    # List the billing accounts
+    gcloud billing accounts list
+    ```
 
-        ```sh title="Execute the following command(s) in a terminal"
-        # List the billing accounts
-        gcloud billing accounts list
-        ```
+    If no billing account is available, you can add a new one from the
+    [Google Cloud Console](https://console.cloud.google.com/billing) and then link
+    it to the project.
 
-        If no billing account is available, you can add a new one from the
-        [Google Cloud Console](https://console.cloud.google.com/billing) and then link
-        it to the project.
+    Export the billing account ID with the following command. Replace
+    `<my billing account id>` with your own billing account ID:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Export the billing account ID
-    export GCP_BILLING_ACCOUNT_ID=YOUR_BILLING_ACCOUNT_ID
+    export GCP_BILLING_ACCOUNT_ID=<my billing account id>
+    ```
 
+    Link a billing account to the project with the following command:
+
+    ```sh title="Execute the following command(s) in a terminal"
     # Link the billing account to the project
     gcloud billing projects link $GCP_PROJECT_ID \
         --billing-account $GCP_BILLING_ACCOUNT_ID
@@ -242,6 +250,7 @@ Create the Storage Bucket to store the data with the cloud provider CLI:
         Change the `<my bucket name>` to your own bucket name.
 
     ```sh title="Execute the following command(s) in a terminal"
+    # Export the bucket name
     export GCP_BUCKET_NAME=<my bucket name>
     ```
 
@@ -253,12 +262,14 @@ Create the Storage Bucket to store the data with the cloud provider CLI:
     `europe-west6` for Switzerland (Zurich):
 
     ```sh title="Execute the following command(s) in a terminal"
+    # Export the bucket location
     export GCP_BUCKET_LOCATION=<my bucket location>
     ```
 
     Create the bucket:
 
     ```sh title="Execute the following command(s) in a terminal"
+    # Create the Google Storage Bucket
     gcloud storage buckets create gs://$GCP_BUCKET_NAME \
         --location=$GCP_BUCKET_LOCATION \
         --uniform-bucket-level-access \

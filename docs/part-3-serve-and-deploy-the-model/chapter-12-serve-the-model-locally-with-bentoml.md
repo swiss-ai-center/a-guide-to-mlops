@@ -286,7 +286,7 @@ Commit the changes to Git.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
-git commit -m "BentoML can serve the model with FastAPI"
+git commit -m "BentoML can serve the model locally"
 
 # Push the changes
 git push

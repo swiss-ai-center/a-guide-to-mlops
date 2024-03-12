@@ -152,9 +152,13 @@ Follow the steps below to create one.
     export GCP_K8S_CLUSTER_ZONE=<my cluster zone>
     ```
 
-    Create the Kubernetes cluster. This can take a few minutes. You can also view
+    Create the Kubernetes cluster. You can also view
     the available types of machine with the `gcloud compute machine-types list`
     command:
+
+    !!! info
+
+         This can take several minutes. Please be patient.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Create the Kubernetes cluster

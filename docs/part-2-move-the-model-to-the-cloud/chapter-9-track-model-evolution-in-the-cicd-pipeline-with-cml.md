@@ -359,23 +359,23 @@ collaboration and decision-making within the team.
       rules:
         - if: $CI_COMMIT_BRANCH == "main"
         - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      cache:
-        paths:
-          # Pip's cache doesn't store the Python packages
-          # https://pip.pypa.io/en/stable/reference/pip_install/#caching
-          - .cache/pip
-          - .venv/
       before_script:
         # Set the Google Service Account key
         - echo "${GOOGLE_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
         # Create the virtual environment for caching
         - python3.11 -m venv .venv
         - source .venv/bin/activate
+      script:
         # Install dependencies
         - pip install --requirement requirements-freeze.txt
-      script:
         # Run the experiment
         - dvc repro --pull
+      cache:
+        paths:
+          # Pip's cache doesn't store the Python packages
+          # https://pip.pypa.io/en/stable/reference/pip_install/#caching
+          - .cache/pip
+          - .venv/
 
     report:
       stage: report
@@ -460,7 +460,7 @@ collaboration and decision-making within the team.
 
     ```diff
     diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-    index 4bf0954..722c708 100644
+    index d2445e9..dc7c69c 100644
     --- a/.gitlab-ci.yml
     +++ b/.gitlab-ci.yml
     @@ -1,5 +1,6 @@
@@ -480,9 +480,9 @@ collaboration and decision-making within the team.
      train:
        stage: train
     @@ -33,3 +36,62 @@ train:
-       script:
-         # Run the experiment
-         - dvc repro --pull
+           # https://pip.pypa.io/en/stable/reference/pip_install/#caching
+           - .cache/pip
+           - .venv/
     +
     +report:
     +  stage: report

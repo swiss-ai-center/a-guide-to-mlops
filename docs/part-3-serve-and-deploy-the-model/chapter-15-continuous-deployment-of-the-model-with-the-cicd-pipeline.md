@@ -124,10 +124,6 @@ but this time for the Kubernetes cluster.
     gcloud projects add-iam-policy-binding $GCP_PROJECT_ID \
         --member="serviceAccount:google-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com" \
         --role="roles/container.developer"
-
-    # Create the Google Service Account Key
-    gcloud iam service-accounts keys create ~/.config/gcloud/google-service-account-key.json \
-        --iam-account=google-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com
     ```
 
     !!! tip
@@ -362,7 +358,10 @@ following steps will be performed:
 
 === ":simple-gitlab: GitLab"
 
-    TODO: Redo this part with a Kubeconfig file.
+    !!! warning
+
+        You must have [:simple-helm: Helm](https://helm.sh/) installed on your local machine to execute the following
+        steps.
 
     In order to execute commands on the Kubernetes cluster, an agent must be set up
     on the cluster.
@@ -408,7 +407,7 @@ following steps will be performed:
         --set config.kasAddress=XXX
     ```
 
-    This command must be executed on the Google Cloud Kubernetes cluster.
+    This command must be executed to install the agent on the Google Cloud Kubernetes cluster.
 
     **Install the agent on the Kubernetes cluster**
 
@@ -452,6 +451,7 @@ following steps will be performed:
     stages:
       - train
       - report
+      - publish
       - deploy
 
     variables:
@@ -471,23 +471,23 @@ following steps will be performed:
       rules:
         - if: $CI_COMMIT_BRANCH == "main"
         - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      cache:
-        paths:
-          # Pip's cache doesn't store the Python packages
-          # https://pip.pypa.io/en/stable/reference/pip_install/#caching
-          - .cache/pip
-          - .venv/
       before_script:
         # Set the Google Service Account key
         - echo "${GOOGLE_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
         # Create the virtual environment for caching
         - python3.11 -m venv .venv
         - source .venv/bin/activate
+      script:
         # Install dependencies
         - pip install --requirement requirements-freeze.txt
-      script:
         # Run the experiment
         - dvc repro --pull
+      cache:
+        paths:
+          # Pip's cache doesn't store the Python packages
+          # https://pip.pypa.io/en/stable/reference/pip_install/#caching
+          - .cache/pip
+          - .venv/
 
     report:
       stage: report
@@ -548,37 +548,53 @@ following steps will be performed:
           # Publish the CML report
           cml comment update --target=pr --publish report.md
 
-    deploy:
-      stage: deploy
+    publish:
+      stage: publish
       image: python:3.11
       rules:
         - if: $CI_COMMIT_BRANCH == "main"
+      before_script:
+        # Set the Google Service Account key
+        - echo "${GOOGLE_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+        # Create the virtual environment for caching
+        - python3.11 -m venv .venv
+        - source .venv/bin/activate
+        # Login to the Google Container Registry
+        - cat "${GOOGLE_APPLICATION_CREDENTIALS}" | docker login -u _json_key --password-stdin "${GCP_CONTAINER_REGISTRY_HOST}"
+      script:
+        # Install dependencies
+        - pip install --requirement requirements-freeze.txt
+        # Import the BentoML model
+        - bentoml models import model/celestial_bodies_classifier_model.bentomodel
+        # Build the BentoML model artifact
+        - bentoml build src
+        # Containerize and publish the BentoML model artifact Docker image
+        - bentoml containerize celestial_bodies_classifier:latest \
+            --image-tag $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest \
+            --image-tag $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:${CI_COMMIT_SHA}
+        # Push the container to the Container Registry
+        - docker push --all-tags $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier
       cache:
         paths:
           # Pip's cache doesn't store the Python packages
           # https://pip.pypa.io/en/stable/reference/pip_install/#caching
           - .cache/pip
           - .venv/
+
+    deploy:
+      stage: deploy
+      image: rancher/kubectl:v1.26.13
+      rules:
+        - if: $CI_COMMIT_BRANCH == "main"
       before_script:
-        # Install Kubernetes
-        - export KUBERNETES_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt)
-        - curl -LO -s "https://dl.k8s.io/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl"
-        - curl -LO -s "https://dl.k8s.io/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl.sha256"
-        - echo "$(cat kubectl.sha256) kubectl" | sha256sum --check
-        - install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
         # Switch to the right Kubernetes context
         - kubectl config use-context ${CI_PROJECT_PATH}:k8s-agent
         - export KUBERNETES_CONFIGURATION=$(cat $KUBECONFIG)
-        # Set the Google Service Account key
-        - echo "${MLEM_GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
-        # Create the virtual environment for caching
-        - python3.11 -m venv .venv
-        - source .venv/bin/activate
-        # Install dependencies
-        - pip install --requirement requirements-freeze.txt
       script:
-        # Deploy the model
-        - mlem deployment run --load service_classifier --model model
+        # Update the Kubernetes deployment
+        - yq -i '.spec.template.spec.containers[0].image = "${GCP_CONTAINER_REGISTRY_HOST}/celestial-bodies-classifier:${CI_COMMIT_SHA}"' kubernetes/deployment.yaml
+        # Deploy the model on Kubernetes
+        - kubectl apply -f kubernetes/deployment.yaml -f kubernetes/service.yaml
     ```
 
     Check the differences with Git to validate the changes.
@@ -592,53 +608,70 @@ following steps will be performed:
 
     ```diff
     diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-    index 722c708..ed9e228 100644
+    index dbf3b25..e71fd37 100644
     --- a/.gitlab-ci.yml
     +++ b/.gitlab-ci.yml
-    @@ -1,6 +1,7 @@
+    @@ -1,6 +1,8 @@
      stages:
        - train
        - report
+    +  - publish
     +  - deploy
-
+     
      variables:
        # Change pip's cache directory to be inside the project directory since we can
-    @@ -95,3 +96,35 @@ report:
-
+    @@ -95,3 +97,51 @@ report:
+     
            # Publish the CML report
            cml comment update --target=pr --publish report.md
     +
-    +deploy:
-    +  stage: deploy
+    +publish:
+    +  stage: publish
     +  image: python:3.11
     +  rules:
     +    - if: $CI_COMMIT_BRANCH == "main"
+    +  before_script:
+    +    # Set the Google Service Account key
+    +    - echo "${GOOGLE_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+    +    # Create the virtual environment for caching
+    +    - python3.11 -m venv .venv
+    +    - source .venv/bin/activate
+    +    # Login to the Google Container Registry
+    +    - cat "${GOOGLE_APPLICATION_CREDENTIALS}" | docker login -u _json_key --password-stdin "${GCP_CONTAINER_REGISTRY_HOST}"
+    +  script:
+    +    # Install dependencies
+    +    - pip install --requirement requirements-freeze.txt
+    +    # Import the BentoML model
+    +    - bentoml models import model/celestial_bodies_classifier_model.bentomodel
+    +    # Build the BentoML model artifact
+    +    - bentoml build src
+    +    # Containerize and publish the BentoML model artifact Docker image
+    +    - bentoml containerize celestial_bodies_classifier:latest \
+    +        --image-tag $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest \
+    +        --image-tag $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:${CI_COMMIT_SHA}
+    +    # Push the container to the Container Registry
+    +    - docker push --all-tags $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier
     +  cache:
     +    paths:
     +      # Pip's cache doesn't store the Python packages
     +      # https://pip.pypa.io/en/stable/reference/pip_install/#caching
     +      - .cache/pip
     +      - .venv/
+    +
+    +deploy:
+    +  stage: deploy
+    +  image: rancher/kubectl:v1.26.13
+    +  rules:
+    +    - if: $CI_COMMIT_BRANCH == "main"
     +  before_script:
-    +    # Install Kubernetes
-    +    - export KUBERNETES_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt)
-    +    - curl -LO -s "https://dl.k8s.io/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl"
-    +    - curl -LO -s "https://dl.k8s.io/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl.sha256"
-    +    - echo "$(cat kubectl.sha256) kubectl" | sha256sum --check
-    +    - install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
     +    # Switch to the right Kubernetes context
     +    - kubectl config use-context ${CI_PROJECT_PATH}:k8s-agent
     +    - export KUBERNETES_CONFIGURATION=$(cat $KUBECONFIG)
-    +    # Set the Google Service Account key
-    +    - echo "${MLEM_GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
-    +    # Create the virtual environment for caching
-    +    - python3.11 -m venv .venv
-    +    - source .venv/bin/activate
-    +    # Install dependencies
-    +    - pip install --requirement requirements-freeze.txt
     +  script:
-    +    # Deploy the model
-    +    - mlem deployment run --load service_classifier --model model
+    +    # Update the Kubernetes deployment
+    +    - yq -i '.spec.template.spec.containers[0].image = "${GCP_CONTAINER_REGISTRY_HOST}/celestial-bodies-classifier:${CI_COMMIT_SHA}"' kubernetes/deployment.yaml
+    +    # Deploy the model on Kubernetes
+    +    - kubectl apply -f kubernetes/deployment.yaml -f kubernetes/service.yaml
     ```
 
 ### Add Kubernetes CI/CD secrets
@@ -673,20 +706,8 @@ different:
         left sidebar of your GitLab project. Select **Variables** and select
         **Add variable**:
 
-        - `GCP_K8S_CLUSTER_NAME`: The name of the Kubernetes cluster (ex:
-          `mlops-kubernetes`, from the variable `GCP_K8S_CLUSTER_NAME` in the previous
-          chapter)
-            - **Protect variable**: _Unchecked_
-            - **Mask variable**: _Checked_
-            - **Expand variable reference**: _Unchecked_
-        - `GCP_K8S_CLUSTER_ZONE`: The zone of the Kubernetes cluster (ex:
-          `europe-west6-a` for Zurich, Switzerland, from the variable
-          `GCP_K8S_CLUSTER_ZONE` in the previous chapter)
-            - **Protect variable**: _Unchecked_
-            - **Mask variable**: _Checked_
-            - **Expand variable reference**: _Unchecked_
         - `GCP_CONTAINER_REGISTRY_HOST`: The host of the container registry (ex:
-          `europe-west6-docker.pkg.dev/mlops-workshop-github-406009/mlops-registry`, from
+          `europe-west6-docker.pkg.dev/mlops-workshop-gitlab-406009//mlops-registry`, from
           the variable `GCP_CONTAINER_REGISTRY_HOST` in the previous chapter)
             - **Protect variable**: _Unchecked_
             - **Mask variable**: _Checked_
