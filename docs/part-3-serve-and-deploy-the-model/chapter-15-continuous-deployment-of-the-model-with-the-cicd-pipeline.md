@@ -360,8 +360,8 @@ following steps will be performed:
 
     !!! warning
 
-        You must have [:simple-helm: Helm](https://helm.sh/) installed on your local machine to execute the following
-        steps.
+        You must have [:simple-helm: Helm](https://helm.sh/) installed on your local
+        machine to execute the following steps.
 
     In order to execute commands on the Kubernetes cluster, an agent must be set up
     on the cluster.
@@ -407,7 +407,8 @@ following steps will be performed:
         --set config.kasAddress=XXX
     ```
 
-    This command must be executed to install the agent on the Google Cloud Kubernetes cluster.
+    This command must be executed to install the agent on the Google Cloud
+    Kubernetes cluster.
 
     **Install the agent on the Kubernetes cluster**
 
@@ -445,9 +446,9 @@ following steps will be performed:
     Update the `.gitlab-ci.yml` file to add a new stage to deploy the model on the
     Kubernetes cluster.
 
-    Take some time to understand the deploy job and its steps.
+    Take some time to understand the publish and deploy job and its steps.
 
-    ```yaml title=".gitlab-ci.yml" hl_lines="4 100-130"
+    ```yaml title=".gitlab-ci.yml" hl_lines="4-5 101-169"
     stages:
       - train
       - report
@@ -551,25 +552,43 @@ following steps will be performed:
     publish:
       stage: publish
       image: python:3.11
+      needs:
+        - train
       rules:
         - if: $CI_COMMIT_BRANCH == "main"
+      services:
+        - docker:25.0.3-dind
+      variables:
+        DOCKER_HOST: "tcp://docker:2375"
       before_script:
+        # Install Docker
+        - apt-get update
+        - apt-get install --yes ca-certificates curl
+        - install -m 0755 -d /etc/apt/keyrings
+        - curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
+        - chmod a+r /etc/apt/keyrings/docker.asc
+        - echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+        - apt-get update
+        - apt-get install --yes docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
         # Set the Google Service Account key
         - echo "${GOOGLE_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+        # Login to the Google Container Registry
+        - cat "${GOOGLE_APPLICATION_CREDENTIALS}" | docker login -u _json_key --password-stdin "${GCP_CONTAINER_REGISTRY_HOST}"
         # Create the virtual environment for caching
         - python3.11 -m venv .venv
         - source .venv/bin/activate
-        # Login to the Google Container Registry
-        - cat "${GOOGLE_APPLICATION_CREDENTIALS}" | docker login -u _json_key --password-stdin "${GCP_CONTAINER_REGISTRY_HOST}"
       script:
         # Install dependencies
         - pip install --requirement requirements-freeze.txt
+        # Pull the BentoML model artifact
+        - dvc pull model/celestial_bodies_classifier_model.bentomodel
         # Import the BentoML model
         - bentoml models import model/celestial_bodies_classifier_model.bentomodel
         # Build the BentoML model artifact
         - bentoml build src
         # Containerize and publish the BentoML model artifact Docker image
-        - bentoml containerize celestial_bodies_classifier:latest \
+        - |
+          bentoml containerize celestial_bodies_classifier:latest \
             --image-tag $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest \
             --image-tag $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:${CI_COMMIT_SHA}
         # Push the container to the Container Registry
@@ -583,13 +602,17 @@ following steps will be performed:
 
     deploy:
       stage: deploy
-      image: rancher/kubectl:v1.26.13
+      image: alpine
+      needs:
+        - publish
       rules:
         - if: $CI_COMMIT_BRANCH == "main"
       before_script:
+        # Install kubectl and yq
+        - apk add --no-cache kubectl yq
         # Switch to the right Kubernetes context
         - kubectl config use-context ${CI_PROJECT_PATH}:k8s-agent
-        - export KUBERNETES_CONFIGURATION=$(cat $KUBECONFIG)
+        - kubectl get nodes
       script:
         # Update the Kubernetes deployment
         - yq -i '.spec.template.spec.containers[0].image = "${GCP_CONTAINER_REGISTRY_HOST}/celestial-bodies-classifier:${CI_COMMIT_SHA}"' kubernetes/deployment.yaml
@@ -608,7 +631,7 @@ following steps will be performed:
 
     ```diff
     diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-    index dbf3b25..e71fd37 100644
+    index dbf3b25..7dcdfe7 100644
     --- a/.gitlab-ci.yml
     +++ b/.gitlab-ci.yml
     @@ -1,6 +1,8 @@
@@ -617,36 +640,54 @@ following steps will be performed:
        - report
     +  - publish
     +  - deploy
-     
+
      variables:
        # Change pip's cache directory to be inside the project directory since we can
-    @@ -95,3 +97,51 @@ report:
-     
+    @@ -95,3 +97,73 @@ report:
+
            # Publish the CML report
            cml comment update --target=pr --publish report.md
     +
     +publish:
     +  stage: publish
     +  image: python:3.11
+    +  needs:
+    +    - train
     +  rules:
     +    - if: $CI_COMMIT_BRANCH == "main"
+    +  services:
+    +    - docker:25.0.3-dind
+    +  variables:
+    +    DOCKER_HOST: "tcp://docker:2375"
     +  before_script:
+    +    # Install Docker
+    +    - apt-get update
+    +    - apt-get install --yes ca-certificates curl
+    +    - install -m 0755 -d /etc/apt/keyrings
+    +    - curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
+    +    - chmod a+r /etc/apt/keyrings/docker.asc
+    +    - echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+    +    - apt-get update
+    +    - apt-get install --yes docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     +    # Set the Google Service Account key
     +    - echo "${GOOGLE_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+    +    # Login to the Google Container Registry
+    +    - cat "${GOOGLE_APPLICATION_CREDENTIALS}" | docker login -u _json_key --password-stdin "${GCP_CONTAINER_REGISTRY_HOST}"
     +    # Create the virtual environment for caching
     +    - python3.11 -m venv .venv
     +    - source .venv/bin/activate
-    +    # Login to the Google Container Registry
-    +    - cat "${GOOGLE_APPLICATION_CREDENTIALS}" | docker login -u _json_key --password-stdin "${GCP_CONTAINER_REGISTRY_HOST}"
     +  script:
     +    # Install dependencies
     +    - pip install --requirement requirements-freeze.txt
+    +    # Pull the BentoML model artifact
+    +    - dvc pull model/celestial_bodies_classifier_model.bentomodel
     +    # Import the BentoML model
     +    - bentoml models import model/celestial_bodies_classifier_model.bentomodel
     +    # Build the BentoML model artifact
     +    - bentoml build src
     +    # Containerize and publish the BentoML model artifact Docker image
-    +    - bentoml containerize celestial_bodies_classifier:latest \
+    +    - |
+    +      bentoml containerize celestial_bodies_classifier:latest \
     +        --image-tag $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest \
     +        --image-tag $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:${CI_COMMIT_SHA}
     +    # Push the container to the Container Registry
@@ -660,13 +701,17 @@ following steps will be performed:
     +
     +deploy:
     +  stage: deploy
-    +  image: rancher/kubectl:v1.26.13
+    +  image: alpine
+    +  needs:
+    +    - publish
     +  rules:
     +    - if: $CI_COMMIT_BRANCH == "main"
     +  before_script:
+    +    # Install kubectl and yq
+    +    - apk add --no-cache kubectl yq
     +    # Switch to the right Kubernetes context
     +    - kubectl config use-context ${CI_PROJECT_PATH}:k8s-agent
-    +    - export KUBERNETES_CONFIGURATION=$(cat $KUBECONFIG)
+    +    - kubectl get nodes
     +  script:
     +    # Update the Kubernetes deployment
     +    - yq -i '.spec.template.spec.containers[0].image = "${GCP_CONTAINER_REGISTRY_HOST}/celestial-bodies-classifier:${CI_COMMIT_SHA}"' kubernetes/deployment.yaml
@@ -707,7 +752,7 @@ different:
         **Add variable**:
 
         - `GCP_CONTAINER_REGISTRY_HOST`: The host of the container registry (ex:
-          `europe-west6-docker.pkg.dev/mlops-workshop-gitlab-406009//mlops-registry`, from
+          `europe-west6-docker.pkg.dev/mlops-workshop-gitlab-406009/mlops-registry`, from
           the variable `GCP_CONTAINER_REGISTRY_HOST` in the previous chapter)
             - **Protect variable**: _Unchecked_
             - **Mask variable**: _Checked_

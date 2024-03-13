@@ -25,7 +25,7 @@ provider.
 
     **Delete the Kubernetes cluster**
 
-    To delete the Kubernetes cluster you created you can execute the following
+    To delete the Kubernetes cluster you created, you can execute the following
     command:
 
     ```sh title="Execute the following command(s) in a terminal"
@@ -38,7 +38,7 @@ provider.
     **Delete the Google Artifact Registry**
 
     To delete the Google Artifact Registry used to store the Docker images you
-    created you can execute the following command:
+    created, you can execute the following command:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Delete the Kubernetes cluster
@@ -55,7 +55,7 @@ provider.
         Storage bucket, the DVC remote will be disrupted. To continue using DVC with the
         Git repository, you will need to reconfigure it with a new remote.
 
-    To delete the Google Storage bucket you created you can execute the following
+    To delete the Google Storage bucket you created, you can execute the following
     command:
 
     ```sh title="Execute the following command(s) in a terminal"
@@ -65,45 +65,53 @@ provider.
 
     Press ++y++ to confirm the deletion.
 
-    **Delete the Service Account**
+    **Delete the Google Service Account**
 
-    To delete the service account you created you can execute the following command:
+    To delete the Google Service Account you created, you can execute the following
+    command:
 
     ```sh title="Execute the following command(s) in a terminal"
-    # Delete the Service Account key
+    # Delete the Google Service Account
     gcloud iam service-accounts delete service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com
     ```
 
     Press ++y++ to confirm the deletion.
 
-    **Delete the local Service Account keys**
+    **Delete the local Google Service Account**
 
-    You can run the following command to delete the service account keys you created
-    locally:
+    You can run the following command to delete the Google Service Account you
+    exported locally:
 
     ```sh title="Execute the following command(s) in a terminal"
-    # Delete the local Service Account key
+    # Delete the local Google Service Account
     rm ~/.config/gcloud/google-service-account-key.json
     ```
 
+    **Unlink the billing account**
+
+    You can run the following command to unlink the billing account from the
+    project:
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Unlink the billing account
+    gcloud billing projects unlink $GCP_PROJECT_ID
+    ```
+
+    Press ++y++ to confirm the unlinking.
+
     **Delete the Google Cloud project**
 
-    To delete the Google Cloud project you created:
+    To delete the Google Cloud project you created, you can execute the following
+    command:
 
-    1. Go to the
-       [Google Cloud Resource Manager Console](https://console.cloud.google.com/cloud-resource-manager){:target="\_blank"}.
-    2. Select the project you created.
-    3. Click on **Delete** at the top of the page.
-    4. Follow the instructions to shut down the project.
+    ```sh title="Execute the following command(s) in a terminal"
+    # Delete the Google Cloud project
+    gcloud projects delete $GCP_PROJECT_ID
+    ```
+
+    Press ++y++ to confirm the deletion.
 
     **Close the Billing Account**
-
-    To remove the project from the Billing Account:
-
-    1. Go to the
-       [Google Cloud Billing Console](https://console.cloud.google.com/billing){:target="\_blank"}.
-    2. Select **My Projects**
-    3. Select **Actions** from the project list and select **Disable billing**.
 
     To close the Billing Account you created:
 

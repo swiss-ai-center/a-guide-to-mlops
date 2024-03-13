@@ -137,8 +137,8 @@ Create a project on a cloud provider to host the data:
 
     !!! warning
 
-        The project ID must be unique across all Google Cloud projects and users.
-        Change the `<my project id>` to your own project ID.
+        The project ID must be unique across all Google Cloud projects and users. Change
+        the `<my project id>` to your own project ID.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Export the project ID
