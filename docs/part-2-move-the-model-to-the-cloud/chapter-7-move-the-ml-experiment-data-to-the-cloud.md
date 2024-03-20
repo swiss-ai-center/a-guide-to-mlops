@@ -140,12 +140,12 @@ This step will create a project on a cloud provider to host the data.
 === ":simple-googlecloud: Google Cloud"
 
     Export a Google Cloud Project ID with the following command. Replace
-    `<my project id>` with a project ID of your choice (ex: `mlops-project`):
+    `<my project id>` with a project ID of your choice. It has to be lowercase and
+    words separated by hyphens. For example, use `mlops-project` for the project ID:
 
     !!! warning
 
-        The project ID must be unique across all Google Cloud projects and users. Change
-        the `<my project id>` to a project ID of your choice.
+        The project ID must be unique across all Google Cloud projects and users.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Export the project ID
@@ -251,12 +251,12 @@ Create the Storage Bucket to store the data with the cloud provider CLI:
     Create the Google Storage Bucket to store the data with the Google Cloud CLI.
 
     Export the bucket name as an environment variable. Replace `<my bucket name>`
-    with a bucket name of your choice (ex: `mlops-bucket`):
+    with a bucket name of your choice. It has to be lowercase and words separated by
+    hyphens. For example, use `mlops-bucket` for the bucket name:
 
     !!! warning
 
         The bucket name must be unique across all Google Cloud projects and users.
-        Change the `<my bucket name>` to your own bucket name.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Export the bucket name
