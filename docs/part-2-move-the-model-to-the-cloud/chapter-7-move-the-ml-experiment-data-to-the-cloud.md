@@ -98,9 +98,8 @@ Install and configure the cloud provider CLI tool to manage the cloud resources:
 
     The following process will authenticate to Google Cloud using the Google Cloud
     CLI with the following command. It should open a browser window to authenticate
-    to Google
-        Cloud. If you are using a remote machine (such as WSL 2), you might need to
-        follow the instructions in the terminal to authenticate:
+    to Google Cloud. You might need to follow the instructions in the terminal to
+    authenticate:
 
     !!! warning
 
@@ -145,7 +144,8 @@ This step will create a project on a cloud provider to host the data.
 
     !!! warning
 
-        The project ID must be unique across all Google Cloud projects and users.
+        The project ID must be unique across all Google Cloud projects and users. Change
+        the project ID if the command fails.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Export the project ID
@@ -257,6 +257,7 @@ Create the Storage Bucket to store the data with the cloud provider CLI:
     !!! warning
 
         The bucket name must be unique across all Google Cloud projects and users.
+        Change the bucket name if the command fails.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Export the bucket name
