@@ -298,7 +298,7 @@ for an efficient models management.
     **Create the Google Container Registry**
 
     Export the repository name as an environment variable. Replace
-    `<my repository name>` with your own name (ex: `mlops-registry`):
+    `<my repository name>` with a registy name of your choice. For example, use `mlops-registry` for the registry name:
 
     ```sh title="Execute the following command(s) in a terminal"
     export GCP_CONTAINER_REGISTRY_NAME=<my repository name>

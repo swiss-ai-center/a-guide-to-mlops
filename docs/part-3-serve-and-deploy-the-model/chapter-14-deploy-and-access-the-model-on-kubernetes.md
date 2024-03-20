@@ -103,9 +103,37 @@ flowchart TB
 
 ## Steps
 
+### Install the Kubernetes CLI)
+
+Install the Kubernetes CLI (kubectl) on your machine.
+
+=== ":simple-googlecloud: Google Cloud"
+
+    Install kubectl with the Google Cloud CLI:
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Install kubectl with gcloud
+    gcloud components install kubectl
+    ```
+
+=== ":material-cloud: Using another cloud provider? Read this!"
+
+    This guide has been written with Google Cloud in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
+
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
+    help is greatly appreciated!
+
 ### Create the Kubernetes cluster
 
 In order to deploy the model on Kubernetes, you will need a Kubernetes cluster.
+
 Follow the steps below to create one.
 
 === ":simple-googlecloud: Google Cloud"
@@ -182,31 +210,6 @@ Follow the steps below to create one.
     kubeconfig entry generated for mlops-kubernetes.
     NAME              LOCATION        MASTER_VERSION   MASTER_IP    MACHINE_TYPE   NODE_VERSION     NUM_NODES  STATUS
     mlops-kubernetes  europe-west6-a  1.27.2-gke.1200  34.65.19.80  e2-standard-2  1.27.2-gke.1200  2          RUNNING
-    ```
-
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
-
-Install the Kubernetes CLI (kubectl) on your machine.
-
-=== ":simple-googlecloud: Google Cloud"
-
-	Install kubectl with the Google Cloud CLI:
-
-    ```sh title="Execute the following command(s) in a terminal"
-    # Install kubectl with gcloud
-    gcloud components install kubectl
     ```
 
 === ":material-cloud: Using another cloud provider? Read this!"
