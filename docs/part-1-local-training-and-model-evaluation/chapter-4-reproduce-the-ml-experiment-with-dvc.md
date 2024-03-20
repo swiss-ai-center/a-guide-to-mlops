@@ -82,10 +82,11 @@ remove all the custom rules from the main gitignore file so DVC can manage them
 for you. At the end of this chapter, DVC should have updated all the gitignore
 files.
 
-Update the gitignore file to remove your experiment data. The required files to
-be ignored will then be added by DVC:
+Replace all the actual content of the gitignore file with the following to
+remove your experiment data. The required files to be ignored will then be added
+by DVC:
 
-```sh title=".gitignore" hl_lines="7-9"
+```sh title=".gitignore"
 ## Python
 .venv/
 

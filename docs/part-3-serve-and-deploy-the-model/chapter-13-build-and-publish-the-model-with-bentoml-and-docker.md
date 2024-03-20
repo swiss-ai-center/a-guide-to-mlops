@@ -272,9 +272,8 @@ for an efficient models management.
 
 === ":simple-googlecloud: Google Cloud"
 
-    To streamline the deployment process on the Kubernetes server, you will utilize
-    Google Artifact Registry for the ML model registry, capitalizing on Google
-    Kubernetes Engine's ability to directly pull images from Docker repositories.
+    To improve the deployment process on the Kubernetes server, you will use Google
+    Artifact Registry as the ML model registry to publish and pull Docker images.
 
     **Enable the Google Artifact Registry API**
 

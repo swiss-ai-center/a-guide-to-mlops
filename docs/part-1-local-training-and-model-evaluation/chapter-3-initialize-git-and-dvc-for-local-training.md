@@ -61,7 +61,7 @@ flowchart LR
     linkStyle 6 opacity:0.4,color:#7f7f7f80
 ```
 
-In future chapters, you will streamline the code sharing process by setting up
+In future chapters, you will improve the code sharing process by setting up
 remote Git and DVC repositories to enable easy collaboration with the rest of
 the team.
 
