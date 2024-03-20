@@ -257,7 +257,10 @@ Create the Storage Bucket to store the data with the cloud provider CLI:
     !!! warning
 
         The bucket name must be unique across all Google Cloud projects and users.
+<<<<<<< HEAD
         Change the bucket name if the command fails.
+=======
+>>>>>>> 87ee261 (Add details on name conventions)
 
     ```sh title="Execute the following command(s) in a terminal"
     # Export the bucket name
