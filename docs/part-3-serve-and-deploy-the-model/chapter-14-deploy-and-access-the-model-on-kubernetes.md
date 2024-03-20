@@ -135,7 +135,7 @@ Follow the steps below to create one.
     Create the Google Kubernetes cluster with the Google Cloud CLI.
 
     Export the cluster name as an environment variable. Replace `<my cluster name>`
-    with your own name (ex: `mlops-kubernetes`).
+    with a cluster name of your choice (ex: `mlops-kubernetes`).
 
     ```sh title="Execute the following command(s) in a terminal"
     export GCP_K8S_CLUSTER_NAME=<my cluster name>

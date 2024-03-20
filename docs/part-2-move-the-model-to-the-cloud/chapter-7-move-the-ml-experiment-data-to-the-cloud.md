@@ -97,15 +97,16 @@ Install and configure the cloud provider CLI tool to manage the cloud resources:
     **Initialize and configure the Google Cloud CLI**
 
     The following process will authenticate to Google Cloud using the Google Cloud
-    CLI. It will open a browser window to log you in and create a credentials file
-    in `~/.config/gcloud/application_default_credentials.json`. This file must not
-    be shared.
+    CLI with the following command. It should open a browser window to authenticate
+    to Google
+        Cloud. If you are using a remote machine (such as WSL 2), you might need to
+        follow the instructions in the terminal to authenticate:
 
-    DVC will then automatically use these credentials to authenticate to the cloud
-    storage provider.
+    !!! warning
 
-    Alternatively, you can set the `GOOGLE_APPLICATION_CREDENTIALS` environment
-    variable to the path of the credentials file:
+        If gcloud asks you to pick a project or create a project, exit the process by
+        pressing ++ctrl+c++ in the terminal and follow the next steps to create a
+        project.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Initialize and login to Google Cloud
@@ -128,17 +129,23 @@ Install and configure the cloud provider CLI tool to manage the cloud resources:
 
 ### Create a project on a cloud provider
 
-Create a project on a cloud provider to host the data:
+This step will create a project on a cloud provider to host the data.
+
+!!! warning
+
+    Do not create a new project through the web interface. The following commands
+    will create a new project and link it to a billing account for you, without
+    navigating through the web interface.
 
 === ":simple-googlecloud: Google Cloud"
 
     Export a Google Cloud Project ID with the following command. Replace
-    `<my project id>` with your own project ID (ex: `mlops-project`):
+    `<my project id>` with a project ID of your choice (ex: `mlops-project`):
 
     !!! warning
 
         The project ID must be unique across all Google Cloud projects and users. Change
-        the `<my project id>` to your own project ID.
+        the `<my project id>` to a project ID of your choice.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Export the project ID
@@ -156,7 +163,9 @@ Create a project on a cloud provider to host the data:
     ```
 
     Then run the following command to authenticate to Google Cloud with the
-    Application Default:
+    Application Default. It will create a credentials file in
+    `~/.config/gcloud/application_default_credentials.json`. This file must not be
+    shared and will be used by DVC to authenticate to Google Cloud Storage.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Set authentication for our ML experiment
@@ -242,7 +251,7 @@ Create the Storage Bucket to store the data with the cloud provider CLI:
     Create the Google Storage Bucket to store the data with the Google Cloud CLI.
 
     Export the bucket name as an environment variable. Replace `<my bucket name>`
-    with your own bucket name (ex: `mlops-bucket`):
+    with a bucket name of your choice (ex: `mlops-bucket`):
 
     !!! warning
 
