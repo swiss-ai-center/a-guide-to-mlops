@@ -109,7 +109,8 @@ Install the Kubernetes CLI (kubectl) on your machine.
 
 === ":simple-googlecloud: Google Cloud"
 
-    Install kubectl with the Google Cloud CLI:
+    Install kubectl with the Google Cloud CLI. You might need to follow the
+    instructions in the terminal if you are using a different operating system.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Install kubectl with gcloud
