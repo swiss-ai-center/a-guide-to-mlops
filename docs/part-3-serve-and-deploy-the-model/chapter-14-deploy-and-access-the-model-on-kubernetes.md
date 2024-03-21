@@ -103,7 +103,7 @@ flowchart TB
 
 ## Steps
 
-### Install the Kubernetes CLI)
+### Install the Kubernetes CLI
 
 Install the Kubernetes CLI (kubectl) on your machine.
 
