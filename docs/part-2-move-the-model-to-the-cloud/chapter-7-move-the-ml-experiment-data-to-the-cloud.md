@@ -453,7 +453,9 @@ git push
 Open the Bucket Storage on the cloud provider and check that the files were
 hashed and have been uploaded.
 
-<!-- TODO: Add explanation on how to check the files on the cloud provider, the difference between the data and the cache, and how to download the data from the cloud provider. -->
+<!-- TODO: Add explanation on how to check the files on the cloud provider, the
+difference between the data and the cache, and how to download the data from the
+cloud provider. -->
 
 ## Summary
 

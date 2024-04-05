@@ -40,8 +40,8 @@ address:
   MLOps ensures models can be replicated in production by providing mechanisms to
   reproduce training data and maintain consistency across environments.
 - **Data management**: Effective data management is essential for successful
-  machine learning. MLOps offers solutions to improve data management
-  processes, ensuring data is clean, properly labeled, and of high quality.
+  machine learning. MLOps offers solutions to improve data management processes,
+  ensuring data is clean, properly labeled, and of high quality.
 - **Model drift**: Machine learning models can experience drift over time due to
   changing data or updates. MLOps aids in detecting and managing model drift,
   enabling timely adjustments to maintain model accuracy and effectiveness.
@@ -49,7 +49,8 @@ address:
   protecting them is paramount. MLOps incorporates security measures to safeguard
   models from malicious actors and ensure data privacy and integrity.
 
-<!-- TODO: We don't speak much about security in the current guide, is that right? It is covered in the PR reviews and such I guess? -->
+<!-- TODO: We don't speak much about security in the current guide, is that
+right? It is covered in the PR reviews and such I guess? -->
 
 <!-- TODO: Should we add the challenge "Monitoring in production" here? -->
 
@@ -57,7 +58,8 @@ By addressing these challenges, MLOps accelerates the development and deployment
 of machine learning models while enhancing their overall quality and performance
 in production environments.
 
-<!-- TODO: Add an illustration to display the different challenges by bricks? -->
+<!-- TODO: Add an illustration to display the different challenges by bricks?
+-->
 
 ## Why would MLOps be useful for you?
 
@@ -72,8 +74,8 @@ advantages you can expect:
   on high-quality data and optimized for production environments, resulting in
   improved accuracy and performance of the models.
 - **Better scalability**: MLOps helps scale machine learning models to handle
-  large datasets and meet growing demands, enabling expansion and
-  accommodating increased workload.
+  large datasets and meet growing demands, enabling expansion and accommodating
+  increased workload.
 - **Faster time to market**: With MLOps, the development and deployment of
   machine learning models can be accelerated, reducing the time it takes to
   introduce new models to the market, gaining a competitive edge.
@@ -87,4 +89,5 @@ learning models, resulting in increased efficiency, accuracy, scalability,
 faster time to market, and improved collaboration. These advantages contribute
 to better outcomes and more successful machine learning projects.
 
-<!-- TODO: Add an illustration to display the different advantages by bricks? -->
+<!-- TODO: Add an illustration to display the different advantages by bricks?
+-->
