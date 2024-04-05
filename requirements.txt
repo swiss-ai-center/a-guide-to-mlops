@@ -1,5 +1,5 @@
 CairoSVG==2.7.1
-mdwrap @ git+https://github.com/csia-pme/mdwrap.git@e741268c9c3c3e1ba8cebc15af58cd8592821327
+mdwrap @ git+https://github.com/csia-pme/mdwrap.git@35300ae05e4e387ace6cf1bf8a5c234a797709f9
 mkdocs-git-revision-date-localized-plugin==1.2.1
 mkdocs-glightbox==0.3.5
 mkdocs-material==9.5.2

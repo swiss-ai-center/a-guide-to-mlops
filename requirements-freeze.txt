@@ -11,14 +11,14 @@ cssselect2==0.7.0
 defusedxml==0.7.1
 ghp-import==2.1.0
 gitdb==4.0.11
-GitPython==3.1.42
+GitPython==3.1.43
 htmlmin2==0.1.13
 idna==3.6
 Jinja2==3.1.3
 jsmin==3.0.1
-Markdown==3.5.2
+Markdown==3.6
 MarkupSafe==2.1.5
-mdwrap @ git+https://github.com/csia-pme/mdwrap.git@e741268c9c3c3e1ba8cebc15af58cd8592821327
+mdwrap @ git+https://github.com/csia-pme/mdwrap.git@35300ae05e4e387ace6cf1bf8a5c234a797709f9
 mergedeep==1.3.4
 mkdocs==1.5.3
 mkdocs-git-revision-date-localized-plugin==1.2.1
@@ -26,22 +26,22 @@ mkdocs-glightbox==0.3.5
 mkdocs-material==9.5.2
 mkdocs-material-extensions==1.3.1
 mkdocs-minify-plugin==0.7.1
-packaging==23.2
+packaging==24.0
 paginate==0.5.6
 pathspec==0.12.1
 Pillow==10.1.0
-pip==23.2.1
+pip==24.0
 platformdirs==4.2.0
-pycparser==2.21
+pycparser==2.22
 Pygments==2.17.2
-pymdown-extensions==10.7
-python-dateutil==2.8.2
+pymdown-extensions==10.7.1
+python-dateutil==2.9.0.post0
 pytz==2024.1
 PyYAML==6.0.1
 pyyaml_env_tag==0.1
 regex==2023.12.25
 requests==2.31.0
-setuptools==67.7.2
+setuptools==65.5.0
 six==1.16.0
 smmap==5.0.1
 tinycss2==1.2.1
