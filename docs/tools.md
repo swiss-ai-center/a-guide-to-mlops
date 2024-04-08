@@ -37,7 +37,8 @@ process:
 
 You will go into details about each tool in the following parts of this guide.
 
-<!-- TODO: Add an illustration to display the different tools and their purposes? -->
+<!-- TODO: Add an illustration to display the different tools and their
+purposes? -->
 
 ## Related tools
 
