@@ -330,6 +330,16 @@ Feel free to ask questions, share your feedback and contribute to the guide!
 
 We are here to help.
 
+## Clean up
+
+Now that you have completed the guide, it is important to properly manage and
+remove the resources and environments you have created.
+
+This is necessary to avoid:
+
+* unnecessary incurring costs
+* potential security concerns
+
 ## Conclusion
 
 Congratulations! You have completed the guide to MLOps!
