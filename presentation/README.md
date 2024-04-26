@@ -299,6 +299,18 @@ using MLOps best practices.
 
 ![bg right:40% 70%](./images/python-logo.svg)
 
+## Technical checks
+
+Before we start:
+
+💻 macOS, Linux, Windows with WSL2
+
+📝 Editor and Terminal (VS Code recommended)
+
+🛠️ Python 3.11, pip, git, wget, unzip, docker
+
+☁️ GitHub account, Google Cloud account
+
 ## Access the guide
 
 👉 Access the guide at [mlops.swiss-ai-center.ch][website].
