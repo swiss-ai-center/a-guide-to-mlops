@@ -14,6 +14,14 @@ lifecycle. This includes tasks such as data preparation, model training,
 deployment, and ongoing maintenance. The final objective is to ensure that the
 deployed models are accurate, scalable, and secure.
 
+However, achieving these goals involves more than just perfecting the machine
+learning models themselves. In reality, only a small fraction of real-world ML
+systems is composed of the ML code and model itself. The required necessary
+surrounding infrastructure for effective deployment and operation is much more
+vast and complex.
+
+![ML system](assets/images/ml_system.svg){ align=center }
+
 Implementing MLOps involves various tools and practices, including version
 control, continuous integration and deployment (CI/CD), infrastructure
 management, containerization, monitoring and logging frameworks. Through these
