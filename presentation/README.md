@@ -151,6 +151,14 @@ Cseres**
 
 <div>
 
+## ML code vs ML system
+
+![bg right:39% 100%](./images/ml_system.svg)
+
+Only a small fraction of real-world ML systems is composed of the ML code.
+
+The required surrounding infrastructure is vast and complex.
+
 ## Difficulties with ML projects
 
 **Get out of the context of the experience**
@@ -480,6 +488,7 @@ TODO
 
 -   MLOps Venn diagram by Cmbreuel on
     [Wikipedia](https://commons.wikimedia.org/wiki/File:ML_Ops_Venn_Diagram.svg)
+-   ML system diagram by [D. Sculley et. al. NIPS 2015: Hidden technical debt in Machine learning systems](https://dl.acm.org/doi/10.5555/2969442.2969519)
 -   Robot illustation by
     [OpenClipart-Vectors](https://pixabay.com/users/openclipart-vectors-30363/)
     on
