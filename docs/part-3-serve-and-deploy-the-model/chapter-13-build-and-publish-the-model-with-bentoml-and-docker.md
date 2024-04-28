@@ -13,8 +13,9 @@ In this chapter, you will learn how to:
 
 1. Create a BentoML model artifact
 2. Containerize the model artifact with BentoML and Docker
-3. Create a container registry that will serve as your model registry
-4. Publish the containerized model artifact Docker image to the container
+3. Test the containerized model artifact by serving it locally with Docker
+4. Create a container registry that will serve as your model registry
+5. Publish the containerized model artifact Docker image to the container
    registry
 
 The following diagram illustrates control flow of the experiment at the end of
@@ -67,6 +68,7 @@ flowchart TB
     style code opacity:0.4,color:#7f7f7f80
     style serve opacity:0.4,color:#7f7f7f80
     style bento_model opacity:0.4,color:#7f7f7f80
+    style fastapi opacity:0.4,color:#7f7f7f80
     style params opacity:0.4,color:#7f7f7f80
     style s3_storage opacity:0.4,color:#7f7f7f80
     style repository opacity:0.4,color:#7f7f7f80
@@ -242,16 +244,19 @@ To run your newly built Bento container, run:
     docker run --rm -p 3000:3000 celestial-bodies-classifier:latest
 ```
 
-The BentoML model artifact is now containerized with Docker. You can run the
-Docker image with the following command:
+### Test the containerized BentoML model artifact locally
+
+The BentoML model artifact is now containerized. To verify its behavior, serve
+the model artifact locally by running the Docker image:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Run the Docker image
 docker run --rm -p 3000:3000 celestial-bodies-classifier:latest
 ```
 
-Congrats! You have successfully containerized the BentoML model artifact with
-Docker. The model is now ready to be shared on a container registry.
+Congrats! You have successfully containerized the BentoML model artifact using
+Docker. You have also tested the container by running it locally. The model is
+now ready to be shared on a container registry.
 
 ### Create a container registry
 
