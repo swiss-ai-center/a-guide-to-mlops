@@ -266,7 +266,7 @@ tracking Docker models built with BentoML, as each version comes with essential
 metadata, including training data, hyperparameters, and performance metrics.
 
 This comprehensive information ensures reproducibility by preserving historical
-model versions, which aids in debugging and auditing. Additionally, it fosters
+model versions, which aids in debugging and auditing. Additionally, it promotes
 transparency and simplifies model comparison and selection for deployment,
 allowing for seamless integration into production environments.
 
