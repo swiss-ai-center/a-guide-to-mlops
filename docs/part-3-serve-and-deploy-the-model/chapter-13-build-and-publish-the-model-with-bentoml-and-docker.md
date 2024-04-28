@@ -467,10 +467,8 @@ git push
 
 ## Summary
 
-Congratulations! You have successfully deployed the model on Kubernetes with
-BentoML and Docker, accessed it from an external IP address.
-
-You can now use the model from anywhere.
+Congratulations! You have successfully prepared the model for deployment in a
+production environment.
 
 In this chapter, you have successfully:
 
