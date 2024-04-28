@@ -163,7 +163,7 @@ following steps will be performed:
 
     Take some time to understand the deploy job and its steps:
 
-    ```yaml title=".github/workflows/mlops.yaml" hl_lines="16 94-133"
+    ```yaml title=".github/workflows/mlops.yaml" hl_lines="16 88-133"
     name: MLOps
 
     on:
