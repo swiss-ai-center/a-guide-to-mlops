@@ -1,7 +1,7 @@
 CairoSVG==2.7.1
 mdwrap @ git+https://github.com/csia-pme/mdwrap.git@35300ae05e4e387ace6cf1bf8a5c234a797709f9
-mkdocs-git-revision-date-localized-plugin==1.2.1
-mkdocs-glightbox==0.3.5
-mkdocs-material==9.5.2
-mkdocs-minify-plugin==0.7.1
-Pillow==10.1.0
+mkdocs-git-revision-date-localized-plugin==1.2.5
+mkdocs-glightbox==0.3.7
+mkdocs-material==9.5.20
+mkdocs-minify-plugin==0.8.0
+pillow==10.3.0
