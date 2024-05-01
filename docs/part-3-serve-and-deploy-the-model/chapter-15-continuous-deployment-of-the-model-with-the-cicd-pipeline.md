@@ -148,7 +148,7 @@ but this time for the Kubernetes cluster.
 
 ### Update the CI/CD pipeline configuration file
 
-You will the pipeline to deploy the model to the Kubernetes cluster. The
+You will adjust the pipeline to deploy the model to the Kubernetes cluster. The
 following steps will be performed:
 
 1. Detect a new commit on the `main` branch

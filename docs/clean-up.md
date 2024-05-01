@@ -72,7 +72,7 @@ provider.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Delete the Google Service Account
-    gcloud iam service-accounts delete gooogle-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com
+    gcloud iam service-accounts delete google-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com
     ```
 
     Press ++y++ to confirm the deletion.
