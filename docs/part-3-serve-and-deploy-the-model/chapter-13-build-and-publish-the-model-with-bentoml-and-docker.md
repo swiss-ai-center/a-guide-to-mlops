@@ -307,6 +307,11 @@ for an efficient models management.
     lowercase and words separated by hyphens. For example, use `mlops-registry` for
     the registry name:
 
+    !!! warning
+
+        The container registry name must be unique across all Google Cloud projects and
+        users. Change the container registry name if the command fails.
+
     ```sh title="Execute the following command(s) in a terminal"
     export GCP_CONTAINER_REGISTRY_NAME=<my repository name>
     ```
