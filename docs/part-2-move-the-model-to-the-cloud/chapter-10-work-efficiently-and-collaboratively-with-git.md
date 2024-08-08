@@ -134,14 +134,14 @@ flowchart LR
 ### Checkout the new branch
 
 On your machine, check out the new branch. Replace
-`<the name of the new branch>` with the name of the branch to checkout to:
+`<the_name_of_the_new_branch>` with the name of the branch to checkout to:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Get the latest updates from the remote origin
 git fetch origin
 
 # Check to the new branch
-git checkout <the name of the new branch>
+git checkout <the_name_of_the_new_branch>
 ```
 
 ### Update the parameters of the experiment

@@ -139,7 +139,7 @@ This step will create a project on a cloud provider to host the data.
 === ":simple-googlecloud: Google Cloud"
 
     Export a Google Cloud Project ID with the following command. Replace
-    `<my project id>` with a project ID of your choice. It has to be lowercase and
+    `<my_project_id>` with a project ID of your choice. It has to be lowercase and
     words separated by hyphens. For example, use `mlops-project` for the project ID:
 
     !!! warning
@@ -149,7 +149,7 @@ This step will create a project on a cloud provider to host the data.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Export the project ID
-    export GCP_PROJECT_ID=<my project id>
+    export GCP_PROJECT_ID=<my_project_id>
     ```
 
     Create a Google Cloud Project with the following commands:
@@ -207,11 +207,11 @@ resources:
     it to the project.
 
     Export the billing account ID with the following command. Replace
-    `<my billing account id>` with your own billing account ID:
+    `<my_billing_account_id>` with your own billing account ID:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Export the billing account ID
-    export GCP_BILLING_ACCOUNT_ID=<my billing account id>
+    export GCP_BILLING_ACCOUNT_ID=<my_billing_account_id>
     ```
 
     Link a billing account to the project with the following command:
@@ -250,7 +250,7 @@ Create the Storage Bucket to store the data with the cloud provider CLI:
 
     Create the Google Storage Bucket to store the data with the Google Cloud CLI.
 
-    Export the bucket name as an environment variable. Replace `<my bucket name>`
+    Export the bucket name as an environment variable. Replace `<my_bucket_name>`
     with a bucket name of your choice. It has to be lowercase and words separated by
     hyphens. For example, use `mlops-bucket` for the bucket name:
 
@@ -261,19 +261,19 @@ Create the Storage Bucket to store the data with the cloud provider CLI:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Export the bucket name
-    export GCP_BUCKET_NAME=<my bucket name>
+    export GCP_BUCKET_NAME=<my_bucket_name>
     ```
 
     Export the bucket location as an environment variable. You can view the
     available locations at
     [Cloud locations](https://cloud.google.com/about/locations). You should ideally
     select a location close to where most of the expected traffic will come from.
-    Replace `<my bucket location>` with your own zone. For example, use
+    Replace `<my_bucket_location>` with your own zone. For example, use
     `europe-west6` for Switzerland (Zurich):
 
     ```sh title="Execute the following command(s) in a terminal"
     # Export the bucket location
-    export GCP_BUCKET_LOCATION=<my bucket location>
+    export GCP_BUCKET_LOCATION=<my_bucket_location>
     ```
 
     Create the bucket:

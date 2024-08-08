@@ -18,12 +18,12 @@ The following diagram illustrates the bricks you set up at the end of this part:
 
 ```mermaid
 flowchart LR
-	dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]
-	s3_storage -->|dvc pull| dot_dvc
-	dot_git[(.git)] -->|git push| gitGraph[Git Remote]
-	gitGraph -->|git pull| dot_git
+    dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]
+    s3_storage -->|dvc pull| dot_dvc
+    dot_git[(.git)] -->|git push| gitGraph[Git Remote]
+    gitGraph -->|git pull| dot_git
     workspaceGraph <-....-> dot_git
-	data[data/raw] <-.-> dot_dvc
+    data[data/raw] <-.-> dot_dvc
     subgraph remoteGraph[REMOTE]
         s3_storage
         subgraph gitGraph[Git Remote]
@@ -33,24 +33,24 @@ flowchart LR
             action_out -->|cml publish| pr[Pull Request]
             pr --> repository
         end
-	end
-	subgraph cacheGraph[CACHE]
-		dot_dvc
-		dot_git
-	end
-	subgraph workspaceGraph[WORKSPACE]
-		prepare[prepare.py] <-.-> dot_dvc
-		train[train.py] <-.-> dot_dvc
-		evaluate[evaluate.py] <-.-> dot_dvc
-		data --> prepare
-		subgraph dvcGraph["dvc.yaml (dvc repro)"]
-			prepare --> train
-			train --> evaluate
-		end
+    end
+    subgraph cacheGraph[CACHE]
+        dot_dvc
+        dot_git
+    end
+    subgraph workspaceGraph[WORKSPACE]
+        prepare[prepare.py] <-.-> dot_dvc
+        train[train.py] <-.-> dot_dvc
+        evaluate[evaluate.py] <-.-> dot_dvc
+        data --> prepare
+        subgraph dvcGraph["dvc.yaml (dvc repro)"]
+            prepare --> train
+            train --> evaluate
+        end
         params[params.yaml] -.- prepare
         params -.- train
         params <-.-> dot_dvc
-	end
+    end
 ```
 
 Do not forget to [Clean up](./clean-up.md) if you want to stop here or continue
