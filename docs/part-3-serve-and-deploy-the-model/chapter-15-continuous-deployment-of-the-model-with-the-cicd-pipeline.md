@@ -97,6 +97,8 @@ flowchart TB
 
 ### Set up access to the container registry of the cloud provider
 
+!!! bug: TODO: rephrase
+
 The container registry will need to be accessed inside the CI/CD pipeline to
 push the Docker image.
 
@@ -110,16 +112,6 @@ but this time for the Kubernetes cluster.
     to access Google Cloud from the CI/CD pipeline without your own credentials.
 
     ```sh title="Execute the following command(s) in a terminal"
-    # Set the Cloud Storage permissions for the Google Service Account
-    gcloud projects add-iam-policy-binding $GCP_PROJECT_ID \
-        --member="serviceAccount:google-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com" \
-        --role="roles/storage.objectAdmin"
-
-    # Set the Artifact Registry permissions for the Google Service Account
-    gcloud projects add-iam-policy-binding $GCP_PROJECT_ID \
-        --member="serviceAccount:google-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com" \
-        --role="roles/artifactregistry.createOnPushWriter"
-
     # Set the Kubernetes Cluster permissions for the Google Service Account
     gcloud projects add-iam-policy-binding $GCP_PROJECT_ID \
         --member="serviceAccount:google-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com" \
@@ -308,36 +300,15 @@ following steps will be performed:
        workflow_dispatch:
 
      jobs:
-    -  train-and-report:
+    -  train-report-and-publish:
     +  train-report-publish-and-deploy:
          permissions: write-all
          runs-on: ubuntu-latest
          steps:
     @@ -85,3 +85,43 @@ jobs:
 
-               # Publish the CML report
-               cml comment update --target=pr --publish report.md
-    +      - name: Log in to the Container registry
-    +        uses: docker/login-action@v3
-    +        with:
-    +          registry: ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}
-    +          username: _json_key
-    +          password: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
-    +      - name: Import the BentoML model
-    +        if: github.ref == 'refs/heads/main'
-    +        run: bentoml models import model/celestial_bodies_classifier_model.bentomodel
-    +      - name: Build the BentoML model artifact
-    +        if: github.ref == 'refs/heads/main'
-    +        run: bentoml build src
-    +      - name: Containerize and publish the BentoML model artifact Docker image
-    +        if: github.ref == 'refs/heads/main'
-    +        run: |
-    +          # Containerize the Bento
-    +          bentoml containerize celestial_bodies_classifier:latest \
-    +            --image-tag ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:latest \
-    +            --image-tag ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:${{ github.sha }}
-    +          # Push the container to the Container Registry
-    +          docker push --all-tags ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier
+               # Push the container to the Container Registry
+               docker push --all-tags ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier
     +      - name: Get Google Cloud's Kubernetes credentials
     +        if: github.ref == 'refs/heads/main'
     +        uses: google-github-actions/get-gke-credentials@v2
@@ -629,6 +600,8 @@ following steps will be performed:
 
     The output should be similar to this:
 
+!!! bug: TODO: check
+
     ```diff
     diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
     index dbf3b25..7dcdfe7 100644
@@ -638,66 +611,15 @@ following steps will be performed:
      stages:
        - train
        - report
-    +  - publish
+       - publish
     +  - deploy
 
      variables:
        # Change pip's cache directory to be inside the project directory since we can
     @@ -95,3 +97,73 @@ report:
 
-           # Publish the CML report
-           cml comment update --target=pr --publish report.md
-    +
-    +publish:
-    +  stage: publish
-    +  image: python:3.11
-    +  needs:
-    +    - train
-    +  rules:
-    +    - if: $CI_COMMIT_BRANCH == "main"
-    +  services:
-    +    - docker:25.0.3-dind
-    +  variables:
-    +    DOCKER_HOST: "tcp://docker:2375"
-    +  before_script:
-    +    # Install Docker
-    +    - apt-get update
-    +    - apt-get install --yes ca-certificates curl
-    +    - install -m 0755 -d /etc/apt/keyrings
-    +    - curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
-    +    - chmod a+r /etc/apt/keyrings/docker.asc
-    +    - echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
-    +    - apt-get update
-    +    - apt-get install --yes docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-    +    # Set the Google Service Account key
-    +    - echo "${GOOGLE_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
-    +    # Login to the Google Container Registry
-    +    - cat "${GOOGLE_APPLICATION_CREDENTIALS}" | docker login -u _json_key --password-stdin "${GCP_CONTAINER_REGISTRY_HOST}"
-    +    # Create the virtual environment for caching
-    +    - python3.11 -m venv .venv
-    +    - source .venv/bin/activate
-    +  script:
-    +    # Install dependencies
-    +    - pip install --requirement requirements-freeze.txt
-    +    # Pull the BentoML model artifact
-    +    - dvc pull model/celestial_bodies_classifier_model.bentomodel
-    +    # Import the BentoML model
-    +    - bentoml models import model/celestial_bodies_classifier_model.bentomodel
-    +    # Build the BentoML model artifact
-    +    - bentoml build src
-    +    # Containerize and publish the BentoML model artifact Docker image
-    +    - |
-    +      bentoml containerize celestial_bodies_classifier:latest \
-    +        --image-tag $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest \
-    +        --image-tag $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:${CI_COMMIT_SHA}
-    +    # Push the container to the Container Registry
-    +    - docker push --all-tags $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier
-    +  cache:
-    +    paths:
-    +      # Pip's cache doesn't store the Python packages
-    +      # https://pip.pypa.io/en/stable/reference/pip_install/#caching
-    +      - .cache/pip
-    +      - .venv/
+           - .cache/pip
+           - .venv/
     +
     +deploy:
     +  stage: deploy
