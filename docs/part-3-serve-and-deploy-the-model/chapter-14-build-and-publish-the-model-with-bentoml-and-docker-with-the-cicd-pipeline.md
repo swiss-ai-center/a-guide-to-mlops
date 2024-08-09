@@ -1,4 +1,4 @@
-# Chapter 13 - Build and publish the model with BentoML and Docker
+# Chapter 14 - Build and publish the model with BentoML and Docker in the CI/CD pipeline
 
 ## Introduction
 
@@ -11,12 +11,10 @@ a later chapter.
 
 In this chapter, you will learn how to:
 
-1. Create a BentoML model artifact
-2. Containerize the model artifact with BentoML and Docker
-3. Test the containerized model artifact by serving it locally with Docker
-4. Create a container registry that will serve as your model registry
-5. Publish the containerized model artifact Docker image to the container
+1. Create a container registry that will serve as your model registry
+2. Publish the containerized model artifact Docker image to the container
    registry
+
 
 The following diagram illustrates control flow of the experiment at the end of
 this chapter:
@@ -90,173 +88,8 @@ flowchart TB
     linkStyle 12 opacity:0.4,color:#7f7f7f80
 ```
 
+
 ## Steps
-
-### Create a BentoML model artifact
-
-A BentoML model artifact (called "Bento" in the documentation) packages your
-model, code, and environment dependencies into a single file. It is the standard
-format for saving and sharing ML models.
-
-The BentoML model artifact is described in a `bentofile.yaml` file. It contains
-the following information:
-
-- The service filename and class name
-- The Python packages required to run the service
-- The Docker configuration, such as the Python version to use
-
-Create a new `bentofile.yaml` file in the `src` directory with the following
-content:
-
-```yaml title="src/bentofile.yaml"
-service: 'serve:CelestialBodiesClassifierService'
-include:
-  - serve.py
-python:
-  packages:
-    - "tensorflow==2.12.0"
-    - "matplotlib==3.7.1"
-    - "pillow==10.2.0"
-docker:
-    python_version: "3.11"
-```
-
-Do not forget to include the `serve.py` file in the BentoML model artifact. This
-file contains the code to serve the model with FastAPI as you have seen in the
-previous chapter.
-
-The `python` section contains the Python packages required to run the service.
-It does not contain DVC and other packages to build the model, as they are not
-required to run the service.
-
-The `docker` section contains the Python version to use. It is important to
-specify the Python version to ensure the service runs correctly.
-
-Now that the `bentofile.yaml` file is created, you can serve the model with the
-following command:
-
-```sh title="Execute the following command(s) in a terminal"
-# Serve the model
-bentoml serve --working-dir src
-```
-
-### Build the BentoML model artifact
-
-Before containerizing the BentoML model artifact with Docker, you need to build
-it.
-
-A BentoML model artifact can be built with the following command:
-
-```sh title="Execute the following command(s) in a terminal"
-# Build the BentoML model artifact
-bentoml build src
-```
-
-The output should be similar to this:
-
-```text
-2024-02-15 14:21:52.512530: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
-To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
-Adding current BentoML version to requirements.txt: 1.2.2
-Locking PyPI package versions.
-WARNING: --strip-extras is becoming the default in version 8.0.0. To silence this warning, either use --strip-extras to opt into the new default or use --no-strip-extras to retain the existing behavior.
-
-██████╗ ███████╗███╗   ██╗████████╗ ██████╗ ███╗   ███╗██╗
-██╔══██╗██╔════╝████╗  ██║╚══██╔══╝██╔═══██╗████╗ ████║██║
-██████╔╝█████╗  ██╔██╗ ██║   ██║   ██║   ██║██╔████╔██║██║
-██╔══██╗██╔══╝  ██║╚██╗██║   ██║   ██║   ██║██║╚██╔╝██║██║
-██████╔╝███████╗██║ ╚████║   ██║   ╚██████╔╝██║ ╚═╝ ██║███████╗
-╚═════╝ ╚══════╝╚═╝  ╚═══╝   ╚═╝    ╚═════╝ ╚═╝     ╚═╝╚══════╝
-
-Successfully built Bento(tag="celestial_bodies_classifier:f7hnaegmawocrlg6").
-
-Possible next steps:
-
- * Containerize your Bento with `bentoml containerize`:
-    $ bentoml containerize celestial_bodies_classifier:f7hnaegmawocrlg6  [or bentoml build --containerize]
-
- * Push to BentoCloud with `bentoml push`:
-    $ bentoml push celestial_bodies_classifier:f7hnaegmawocrlg6 [or bentoml build --push]
-```
-
-All Bentos can be listed with the following command:
-
-```sh title="Execute the following command(s) in a terminal"
-# List all BentoML model artifacts
-bentoml list
-```
-
-The output should be similar to this:
-
-```text
-bentoml list
- Tag                                                   Size       Model Size  Creation Time
- celestial_bodies_classifier:f7hnaegmawocrlg6          17.25 KiB  9.53 MiB    2024-02-15 14:22:21
-```
-
-### Containerize the BentoML model artifact with Docker
-
-Now that the BentoML model artifact is built, you can containerize it with the
-following command:
-
-```sh title="Execute the following command(s) in a terminal"
-# Containerize the BentoML model artifact with Docker
-bentoml containerize celestial_bodies_classifier:latest --image-tag celestial-bodies-classifier:latest
-```
-
-The first `:latest` is the tag of the BentoML model artifact. It is a symlink to
-the latest version of the BentoML model artifact.
-
-The output should be similar to this:
-
-```text
-Building OCI-compliant image for celestial_bodies_classifier:f7hnaegmawocrlg6 with docker
-
-[+] Building 95.6s (16/16) FINISHED                                                                                                                                             docker:desktop-linux
- => [internal] load build definition from Dockerfile                                                                                                                                            0.1s
- => => transferring dockerfile: 1.71kB                                                                                                                                                          0.0s
- => [internal] load metadata for docker.io/library/python:3.11-slim                                                                                                                             1.4s
- => [internal] load .dockerignore                                                                                                                                                               0.0s
- => => transferring context: 2B                                                                                                                                                                 0.0s
- => [base-container  1/11] FROM docker.io/library/python:3.11-slim@sha256:ce81dc539f0aedc9114cae640f8352fad83d37461c24a3615b01f081d0c0583a                                                      0.0s
- => => resolve docker.io/library/python:3.11-slim@sha256:ce81dc539f0aedc9114cae640f8352fad83d37461c24a3615b01f081d0c0583a                                                                       0.0s
- => [internal] load build context                                                                                                                                                               0.4s
- => => transferring context: 10.02MB                                                                                                                                                            0.4s
- => CACHED [base-container  2/11] RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache                        0.0s
- => CACHED [base-container  3/11] RUN --mount=type=cache,target=/var/lib/apt --mount=type=cache,target=/var/cache/apt set -eux &&     apt-get update -y &&     apt-get install -q -y --no-inst  0.0s
- => CACHED [base-container  4/11] RUN groupadd -g 1034 -o bentoml && useradd -m -u 1034 -g 1034 -o -r bentoml                                                                                   0.0s
- => CACHED [base-container  5/11] RUN mkdir /home/bentoml/bento && chown bentoml:bentoml /home/bentoml/bento -R                                                                                 0.0s
- => CACHED [base-container  6/11] WORKDIR /home/bentoml/bento                                                                                                                                   0.0s
- => [base-container  7/11] COPY --chown=bentoml:bentoml ./env/python ./env/python/                                                                                                              0.1s
- => [base-container  8/11] RUN --mount=type=cache,target=/root/.cache/pip bash -euxo pipefail /home/bentoml/bento/env/python/install.sh                                                        83.2s
- => [base-container  9/11] COPY --chown=bentoml:bentoml . ./                                                                                                                                    0.0s
- => [base-container 10/11] RUN rm -rf /var/lib/{apt,cache,log}                                                                                                                                  0.2s
- => [base-container 11/11] RUN chmod +x /home/bentoml/bento/env/docker/entrypoint.sh                                                                                                            0.3s
- => exporting to image                                                                                                                                                                          9.7s
- => => exporting layers                                                                                                                                                                         9.7s
- => => writing image sha256:db1517bb791c68dc70853bfe844a94264440f66e5dd021da9296a2e3ee2ccb3e                                                                                                    0.0s
- => => naming to docker.io/library/celestial-bodies-classifier:latest                                                                                                                           0.0s
-
-What's Next?
-  View a summary of image vulnerabilities and recommendations → docker scout quickview
-Successfully built Bento container for "celestial_bodies_classifier:latest" with tag(s) "celestial-bodies-classifier:latest"
-To run your newly built Bento container, run:
-    docker run --rm -p 3000:3000 celestial-bodies-classifier:latest
-```
-
-### Test the containerized BentoML model artifact locally
-
-The BentoML model artifact is now containerized. To verify its behavior, serve
-the model artifact locally by running the Docker image:
-
-```sh title="Execute the following command(s) in a terminal"
-# Run the Docker image
-docker run --rm -p 3000:3000 celestial-bodies-classifier:latest
-```
-
-Congrats! You have successfully containerized the BentoML model artifact using
-Docker. You have also tested the container by running it locally. The model is
-now ready to be shared on a container registry.
 
 ### Create a container registry
 
@@ -303,7 +136,7 @@ for an efficient models management.
     **Create the Google Container Registry**
 
     Export the repository name as an environment variable. Replace
-    `<my_repository_name>` with a registy name of your choice. It has to be
+    `<my repository name>` with a registy name of your choice. It has to be
     lowercase and words separated by hyphens. For example, use `mlops-registry` for
     the registry name:
 
@@ -313,18 +146,18 @@ for an efficient models management.
         users. Change the container registry name if the command fails.
 
     ```sh title="Execute the following command(s) in a terminal"
-    export GCP_CONTAINER_REGISTRY_NAME=<my_repository_name>
+    export GCP_CONTAINER_REGISTRY_NAME=<my repository name>
     ```
 
     Export the repository location as an environment variable. You can view the
     available locations at
     [Cloud locations](https://cloud.google.com/about/locations). You should ideally
     select a location close to where most of the expected traffic will come from.
-    Replace `<my_repository_location>` with your own zone. For example, use
+    Replace `<my repository location>` with your own zone. For example, use
     `europe-west6` for Switzerland (Zurich):
 
     ```sh title="Execute the following command(s) in a terminal"
-    export GCP_CONTAINER_REGISTRY_LOCATION=<my_repository_location>
+    export GCP_CONTAINER_REGISTRY_LOCATION=<my repository location>
     ```
 
     Lastly, when creating the repository, remember to specify the repository format
@@ -398,11 +231,11 @@ for an efficient models management.
         mlops-workshop-396007  mlops-workshop  475307267926
         ```
 
-        Export the PROJECT_ID as an environment variable. Replace `<my_project _id>`
-        with your own project ID:
+        Copy the PROJECT_ID and export it as an environment variable. Replace
+        `<id of your gcp project>` with your own project ID:
 
         ```sh title="Execute the following command(s) in a terminal"
-        export GCP_PROJECT_ID=<my_project_id>
+        export GCP_PROJECT_ID=<id of your gcp project>
         ```
 
 === ":material-cloud: Using another cloud provider? Read this!"
