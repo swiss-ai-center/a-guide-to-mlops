@@ -351,8 +351,8 @@ you'll be able to start the training of the model on the node with the GPU.
     Create a new variable named `CML_PAT` with the value of the Personal Access
     Token as its value. Save the variable by selecting **Add secret**.
 
-    Update the `.github/workflows/mlops.yaml` file. Replace `<my cluster name>` with
-    your own name (ex: `mlops-kubernetes`). Replace `<my cluster zone>` with your
+    Update the `.github/workflows/mlops.yaml` file. Replace `<my_cluster_name>` with
+    your own name (ex: `mlops-kubernetes`). Replace `<my_cluster_zone>` with your
     own zone (ex: `europe-west6-a` for Zurich, Switzerland).
 
     ```yaml title=".github/workflows/mlops.yaml" hl_lines="15-18 21-51 54-56"
@@ -388,8 +388,8 @@ you'll be able to start the training of the model on the node with the GPU.
           - name: Get Google Cloud's Kubernetes credentials
             uses: 'google-github-actions/get-gke-credentials@v1'
             with:
-              cluster_name: '<my cluster name>'
-              location: '<my cluster zone>'
+              cluster_name: '<my_cluster_name>'
+              location: '<my_cluster_zone>'
           - uses: iterative/setup-cml@v1
             with:
               version: '0.19.1'
@@ -533,8 +533,8 @@ you'll be able to start the training of the model on the node with the GPU.
     +      - name: Get Google Cloud's Kubernetes credentials
     +        uses: 'google-github-actions/get-gke-credentials@v1'
     +        with:
-    +          cluster_name: '<my cluster name>'
-    +          location: '<my cluster zone>'
+    +          cluster_name: '<my_cluster_name>'
+    +          location: '<my_cluster_zone>'
     +      - uses: iterative/setup-cml@v1
     +        with:
     +          version: '0.19.1'

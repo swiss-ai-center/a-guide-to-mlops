@@ -303,7 +303,7 @@ for an efficient models management.
     **Create the Google Container Registry**
 
     Export the repository name as an environment variable. Replace
-    `<my repository name>` with a registy name of your choice. It has to be
+    `<my_repository_name>` with a registy name of your choice. It has to be
     lowercase and words separated by hyphens. For example, use `mlops-registry` for
     the registry name:
 
@@ -313,18 +313,18 @@ for an efficient models management.
         users. Change the container registry name if the command fails.
 
     ```sh title="Execute the following command(s) in a terminal"
-    export GCP_CONTAINER_REGISTRY_NAME=<my repository name>
+    export GCP_CONTAINER_REGISTRY_NAME=<my_repository_name>
     ```
 
     Export the repository location as an environment variable. You can view the
     available locations at
     [Cloud locations](https://cloud.google.com/about/locations). You should ideally
     select a location close to where most of the expected traffic will come from.
-    Replace `<my repository location>` with your own zone. For example, use
+    Replace `<my_repository_location>` with your own zone. For example, use
     `europe-west6` for Switzerland (Zurich):
 
     ```sh title="Execute the following command(s) in a terminal"
-    export GCP_CONTAINER_REGISTRY_LOCATION=<my repository location>
+    export GCP_CONTAINER_REGISTRY_LOCATION=<my_repository_location>
     ```
 
     Lastly, when creating the repository, remember to specify the repository format
@@ -398,11 +398,11 @@ for an efficient models management.
         mlops-workshop-396007  mlops-workshop  475307267926
         ```
 
-        Copy the PROJECT_ID and export it as an environment variable. Replace
-        `<id of your gcp project>` with your own project ID:
+        Export the PROJECT_ID as an environment variable. Replace `<my_project _id>`
+        with your own project ID:
 
         ```sh title="Execute the following command(s) in a terminal"
-        export GCP_PROJECT_ID=<id of your gcp project>
+        export GCP_PROJECT_ID=<my_project_id>
         ```
 
 === ":material-cloud: Using another cloud provider? Read this!"

@@ -163,7 +163,7 @@ Follow the steps below to create one.
 
     Create the Google Kubernetes cluster with the Google Cloud CLI.
 
-    Export the cluster name as an environment variable. Replace `<my cluster name>`
+    Export the cluster name as an environment variable. Replace `<my_cluster_name>`
     with a cluster name of your choice. It has to be lowercase and words separated
     by hyphens. For example, use `mlops-kubernetes` for the cluster name.
     
@@ -173,18 +173,18 @@ Follow the steps below to create one.
         Change the cluster name if the command fails.
 
     ```sh title="Execute the following command(s) in a terminal"
-    export GCP_K8S_CLUSTER_NAME=<my cluster name>
+    export GCP_K8S_CLUSTER_NAME=<my_cluster_name>
     ```
 
     Export the cluster zone as an environment variable. You can view the available
     zones at
     [Regions and zones](https://cloud.google.com/compute/docs/regions-zones#available).
     You should ideally select a zone close to where most of the expected traffic
-    will come from. Replace `<my cluster zone>` with your own zone (ex:
+    will come from. Replace `<my_cluster_zone>` with your own zone (ex:
     `europe-west6-a` for Zurich, Switzerland).
 
     ```sh title="Execute the following command(s) in a terminal"
-    export GCP_K8S_CLUSTER_ZONE=<my cluster zone>
+    export GCP_K8S_CLUSTER_ZONE=<my_cluster_zone>
     ```
 
     Create the Kubernetes cluster. You can also view the available types of machine
@@ -197,10 +197,10 @@ Follow the steps below to create one.
     ```sh title="Execute the following command(s) in a terminal"
     # Create the Kubernetes cluster
     gcloud container clusters create \
-    	--machine-type=e2-standard-2 \
-    	--num-nodes=2 \
-    	--zone=$GCP_K8S_CLUSTER_ZONE \
-    	$GCP_K8S_CLUSTER_NAME
+        --machine-type=e2-standard-2 \
+        --num-nodes=2 \
+        --zone=$GCP_K8S_CLUSTER_ZONE \
+        $GCP_K8S_CLUSTER_NAME
     ```
 
     The output should be similar to this:
@@ -262,7 +262,7 @@ of the model.
 Create a new directory called `kubernetes` in the root of the project.
 
 Create a new file called `deployment.yaml` in the `kubernetes` directory with
-the following content. Replace `<docker image>` with the Docker image you have
+the following content. Replace `<docker_image>` with the Docker image you have
 created in the previous steps:
 
 !!! tip
@@ -293,7 +293,7 @@ spec:
     spec:
       containers:
       - name: celestial-bodies-classifier
-        image: <docker image>
+        image: <docker_image>
 ```
 
 Create a new file called `service.yaml` in the `kubernetes` directory with the
