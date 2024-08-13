@@ -1,4 +1,4 @@
-# Chapter 21 - Link the model to Label Studio and get predictions
+# Chapter 20 - Label new data with Label Studio
 
 !!! warning "This is a work in progress"
 

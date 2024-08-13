@@ -1,4 +1,4 @@
-# Chapter 17 - Setup Label Studio
+# Chapter 19 - Import existing data to Label Studio
 
 !!! warning "This is a work in progress"
 

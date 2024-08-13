@@ -1,4 +1,4 @@
-# Chapter 18 - Import existing data to Label Studio
+# Chapter 22 - Link the model to Label Studio and get predictions
 
 !!! warning "This is a work in progress"
 
