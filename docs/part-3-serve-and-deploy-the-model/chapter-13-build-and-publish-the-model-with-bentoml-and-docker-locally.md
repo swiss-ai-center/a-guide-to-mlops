@@ -501,6 +501,7 @@ In this chapter, you have successfully:
       integrating them into the codebase
 - [x] Model can be saved and loaded with all required artifacts for future usage
 - [x] Model can be easily used outside of the experiment context
+- [ ] Model requires manual publication to the artifact registry
 - [ ] Model is accessible from the Internet and can be used anywhere
 - [ ] Model requires manual deployment on the cluster
 - [ ] Model cannot be trained on hardware other than the local machine

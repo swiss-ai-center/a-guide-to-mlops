@@ -883,7 +883,8 @@ gcloud container clusters delete --zone europe-west6-a mlops-kubernetes
 - [x] Changes to model can be thoroughly reviewed and discussed before
       integrating them into the codebase
 - [x] Model can be saved and loaded with all required artifacts for future usage
-- [x] Model can be easily used outside of the experiment context.
+- [x] Model can be easily used outside of the experiment context
+- [x] Model publication to the artifact registry is automated
 - [x] Model can be accessed from a Kubernetes cluster
 - [x] Model is continuously deployed with the CI/CD
 - [x] Model can be trained on a custom infrastructure with custom hardware for
