@@ -2,9 +2,10 @@
 
 ## Introduction
 
-In this chapter, you will containerize and push the model to the container registry with the
-help of the CI/CD pipeline. You will use [BentoML](../tools.md)
-and [Docker](../tools.md) to containerize and publish the model and the pipeline to trigger the publishing.
+In this chapter, you will containerize and push the model to the container
+registry with the help of the CI/CD pipeline. You will use
+[BentoML](../tools.md) and [Docker](../tools.md) to containerize and publish the
+model and the pipeline to trigger the publishing.
 
 The steps will be similar to the last chapter, but we will use the pipeline to
 automate the process.
@@ -130,8 +131,8 @@ but this time for the container registry.
 
 ### Update the CI/CD pipeline configuration file
 
-You will adjust the pipeline to build and push the the docker image to the container registry. The
-following steps will be performed:
+You will adjust the pipeline to build and push the the docker image to the
+container registry. The following steps will be performed:
 
 1. Detect a new commit on the `main` branch
 2. Authenticate to the cloud provider
@@ -583,14 +584,16 @@ git push
 
 ## Summary
 
-Congratulations! You have successfully prepared the model for automated deployment in a
-production environment with the CI/CD pipeline!
+Congratulations! You have successfully prepared the model for automated
+deployment in a production environment with the CI/CD pipeline!
 
-New versions of the model will be published to the artifact registry automatically as soon as they are pushed to the main branch.
+New versions of the model will be published to the artifact registry
+automatically as soon as they are pushed to the main branch.
 
 In this chapter, you have successfully:
 
-1. Automated the containerization and publication of the BentoML model artifact to the container registry
+1. Automated the containerization and publication of the BentoML model artifact
+   to the container registry
 
 ## State of the MLOps process
 

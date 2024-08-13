@@ -401,8 +401,8 @@ for an efficient models management.
         mlops-workshop-396007  mlops-workshop  475307267926
         ```
 
-        Export the PROJECT_ID as an environment variable. Replace `<my_project_id>`
-        with your own project ID:
+        Copy the PROJECT_ID and export it as an environment variable. Replace
+       `<my_project_id>` with your own project ID:
 
         ```sh title="Execute the following command(s) in a terminal"
         export GCP_PROJECT_ID=<my_project_id>
