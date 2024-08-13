@@ -24,9 +24,9 @@ What you will learn from this guide.
     - [Chapter 12 - Serve the model locally with BentoML](./part-3-serve-and-deploy-the-model/chapter-12-serve-the-model-locally-with-bentoml.md)
     - [Chapter 13 - Build and publish the model with BentoML and Docker](./part-3-serve-and-deploy-the-model/chapter-13-build-and-publish-the-model-with-bentoml-and-docker-locally.md)
     - [Chapter 14 - Build and publish the model with BentoML and Docker](./part-3-serve-and-deploy-the-model/chapter-14-build-and-publish-the-model-with-bentoml-and-docker-with-the-cicd-pipeline.md)
-    - [Chapter 14 - Deploy and access the model on Kubernetes](./part-3-serve-and-deploy-the-model/chapter-14-deploy-and-access-the-model-on-kubernetes.md)
-    - [Chapter 15 - Continuous deployment of the model with the CI/CD pipeline](./part-3-serve-and-deploy-the-model/chapter-15-continuous-deployment-of-the-model-with-the-cicd-pipeline.md)
-    - [Chapter 16 - Train the model on a Kubernetes pod with CML](./part-3-serve-and-deploy-the-model/chapter-16-train-the-model-on-a-kubernetes-pod-with-cml.md)
+    - [Chapter 15 - Deploy and access the model on Kubernetes](./part-3-serve-and-deploy-the-model/chapter-15-deploy-and-access-the-model-on-kubernetes.md)
+    - [Chapter 16 - Continuous deployment of the model with the CI/CD pipeline](./part-3-serve-and-deploy-the-model/chapter-16-continuous-deployment-of-the-model-with-the-cicd-pipeline.md)
+    - [Chapter 17 - Train the model on a Kubernetes pod with CML](./part-3-serve-and-deploy-the-model/chapter-17-train-the-model-on-a-kubernetes-pod-with-cml.md)
 - [Part 4 - Labeling the data and retrain the model](./part-4-labeling-the-data-and-retrain/introduction.md) -
   Learn how to label new data and retrain the model using Label Studio.
     - [Chapter 17 - Setup Label Studio](./part-4-labeling-the-data-and-retrain/chapter-17-setup-label-studio.md)
