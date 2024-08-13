@@ -2,13 +2,12 @@
 
 ## Introduction
 
-# TODO: fixme
-Serving the model locally is great for testing purposes, but it is not
-sufficient for production. In this chapter, you will learn how to build and
-publish the model with [BentoML](../tools.md) and [Docker](../tools.md).
+In this chapter, you will containerize and push the model to the container registry with the
+help of the CI/CD pipeline. You will use [BentoML](../tools.md)
+and [Docker](../tools.md) to containerize and publish the model and the pipeline to trigger the publishing.
 
-This will allow to share the model with others and deploy it on a Kubernetes in
-a later chapter.
+The steps will be similar to the last chapter, but we will use the pipeline to
+automate the process.
 
 In this chapter, you will learn how to:
 
@@ -17,30 +16,21 @@ In this chapter, you will learn how to:
 2. Store the cloud provider credentials in the CI/CD configuration
 3. Create the CI/CD pipeline for publishing the model to the container registry
 
-
 The following diagram illustrates control flow of the experiment at the end of
 this chapter:
 
 ```mermaid
 flowchart TB
     dot_dvc[(.dvc)] <-->|dvc pull\ndvc push| s3_storage[(S3 Storage)]
-    dot_git[(.git)] <-->|git pull\ngit push| gitGraph[Git Remote]
+    dot_git[(.git)] <-->|git pull\ngit push| repository[(Repository)]
     workspaceGraph <-....-> dot_git
     data[data/raw]
+
     subgraph cacheGraph[CACHE]
         dot_dvc
         dot_git
-        bento_artifact[(Containerized\nartifact)]
     end
-    subgraph remoteGraph[REMOTE]
-        s3_storage
-        subgraph gitGraph[Git Remote]
-            repository[(Repository)] --> action[Action]
-            action[Action] --> |...|request[PR]
-            request --> repository[(Repository)]
-        end
-        registry[(Container\nregistry)]
-    end
+
     subgraph workspaceGraph[WORKSPACE]
         data --> code[*.py]
         subgraph dvcGraph["dvc.yaml"]
@@ -51,12 +41,17 @@ flowchart TB
         subgraph bentoGraph[bentofile.yaml]
             bento_model
             serve[serve.py] <--> bento_model
-            fastapi[FastAPI] <--> |bento serve|serve
         end
-
-        bentoGraph -->|bento build\nbento containerize| bento_artifact
         bento_model <-.-> dot_dvc
-        bento_artifact -->|docker push| registry
+    end
+
+    subgraph remoteGraph[REMOTE]
+        s3_storage
+        subgraph gitGraph[Git Remote]
+            repository <--> |...|action[Action]
+        end
+        registry[(Container\nregistry)]
+        action --> |bentoml build\nbentoml containerize\ndocker push|registry
     end
 
     style workspaceGraph opacity:0.4,color:#7f7f7f80
@@ -66,16 +61,14 @@ flowchart TB
     style dot_git opacity:0.4,color:#7f7f7f80
     style dot_dvc opacity:0.4,color:#7f7f7f80
     style code opacity:0.4,color:#7f7f7f80
+    style bentoGraph opacity:0.4,color:#7f7f7f80
     style serve opacity:0.4,color:#7f7f7f80
     style bento_model opacity:0.4,color:#7f7f7f80
-    style fastapi opacity:0.4,color:#7f7f7f80
     style params opacity:0.4,color:#7f7f7f80
     style s3_storage opacity:0.4,color:#7f7f7f80
-    style repository opacity:0.4,color:#7f7f7f80
-    style action opacity:0.4,color:#7f7f7f80
-    style request opacity:0.4,color:#7f7f7f80
     style remoteGraph opacity:0.4,color:#7f7f7f80
     style gitGraph opacity:0.4,color:#7f7f7f80
+    style repository opacity:0.4,color:#7f7f7f80
     linkStyle 0 opacity:0.4,color:#7f7f7f80
     linkStyle 1 opacity:0.4,color:#7f7f7f80
     linkStyle 2 opacity:0.4,color:#7f7f7f80
@@ -85,14 +78,9 @@ flowchart TB
     linkStyle 6 opacity:0.4,color:#7f7f7f80
     linkStyle 7 opacity:0.4,color:#7f7f7f80
     linkStyle 8 opacity:0.4,color:#7f7f7f80
-    linkStyle 9 opacity:0.4,color:#7f7f7f80
-    linkStyle 10 opacity:0.4,color:#7f7f7f80
-    linkStyle 12 opacity:0.4,color:#7f7f7f80
 ```
 
-
 ## Steps
-
 
 ### Set up access to the container registry of the cloud provider
 
@@ -595,13 +583,14 @@ git push
 
 ## Summary
 
-Congratulations! You have successfully prepared the model for deployment in a
-production environment.
+Congratulations! You have successfully prepared the model for automated deployment in a
+production environment with the CI/CD pipeline!
+
+New versions of the model will be published to the artifact registry automatically as soon as they are pushed to the main branch.
 
 In this chapter, you have successfully:
 
-1. Created and containerized a BentoML model artifact
-2. Published the BentoML model artifact Docker image to the container registry
+1. Automated the containerization and publication of the BentoML model artifact to the container registry
 
 ## State of the MLOps process
 
