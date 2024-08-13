@@ -320,14 +320,13 @@ but this time for the container registry.
 
 ### Update the CI/CD pipeline configuration file
 
-You will adjust the pipeline to deploy the model to the Kubernetes cluster. The
+You will adjust the pipeline to build and push the the docker image to the container registry. The
 following steps will be performed:
 
 1. Detect a new commit on the `main` branch
 2. Authenticate to the cloud provider
 3. Build the Docker image
 4. Push the Docker image to the container registry
-5. Deploy the model on the Kubernetes cluster
 
 === ":simple-github: GitHub"
 
@@ -757,7 +756,7 @@ Your branch is up to date with 'origin/main'.
 
 Changes to be committed:
 (use "git restore --staged <file>..." to unstage)
-    new file:   src/bentofile.yaml
+    modified:   .github/workflows/mlops.yaml
 ```
 
 ### Commit the changes to Git
@@ -766,7 +765,7 @@ Commit the changes to Git.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
-git commit -m "BentoML can be used to containerize the model artifact"
+git commit -m "A pipeline will containerize the model on the model artifact"
 
 # Push the changes
 git push
