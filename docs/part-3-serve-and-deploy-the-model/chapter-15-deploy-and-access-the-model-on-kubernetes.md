@@ -434,7 +434,7 @@ In this chapter, you have successfully:
 
 1. Created the Kubernetes configuration files and deployed the BentoML model
    artifact on Kubernetes
-2. Access the model
+2. Accessed the model
 
 ## State of the MLOps process
 
