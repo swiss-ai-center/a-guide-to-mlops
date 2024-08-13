@@ -29,26 +29,15 @@ this chapter:
 ```mermaid
 flowchart TB
     dot_dvc[(.dvc)] <-->|dvc pull\ndvc push| s3_storage[(S3 Storage)]
-    dot_git[(.git)] <-->|git pull\ngit push| gitGraph[Git Remote]
+    dot_git[(.git)] <-->|git pull\ngit push| repository[(Repository)]
     workspaceGraph <-....-> dot_git
     data[data/raw]
+
     subgraph cacheGraph[CACHE]
         dot_dvc
         dot_git
-        bento_artifact[(Containerized\nartifact)]
     end
-    subgraph remoteGraph[REMOTE]
-        s3_storage
-        subgraph gitGraph[Git Remote]
-            repository[(Repository)] --> action[Action]
-            action[Action] --> |...|request[PR]
-            request --> repository[(Repository)]
-        end
-        subgraph clusterGraph[Kubernetes]
-            bento_service_cluster[classifier.bentomodel] --> k8s_fastapi[FastAPI]
-        end
-        registry[(Container\nregistry)] --> |kubectl apply|bento_service_cluster
-    end
+
     subgraph workspaceGraph[WORKSPACE]
         data --> code[*.py]
         subgraph dvcGraph["dvc.yaml"]
@@ -57,17 +46,29 @@ flowchart TB
         params[params.yaml] -.- code
         code <--> bento_model[classifier.bentomodel]
         subgraph bentoGraph[bentofile.yaml]
-            bento_model <--> serve[serve.py]
+            bento_model
+            serve[serve.py] <--> bento_model
         end
-
-        bentoGraph -->|bento build\nbento containerize| bento_artifact
         bento_model <-.-> dot_dvc
-        bento_artifact -->|docker push| registry
+    end
+
+    subgraph remoteGraph[REMOTE]
+        s3_storage
+        subgraph gitGraph[Git Remote]
+            repository <--> |...|action[Action]
+        end
+        registry[(Container\nregistry)]
+        action --> |bentoml build\nbentoml containerize\ndocker push|registry
+        subgraph clusterGraph[Kubernetes]
+            bento_service_cluster[classifier.bentomodel] --> k8s_fastapi[FastAPI]
+        end
+        registry[(Container\nregistry)] --> |kubectl apply|bento_service_cluster
     end
 
     subgraph browserGraph[BROWSER]
         k8s_fastapi <--> publicURL["public URL"]
     end
+
     style workspaceGraph opacity:0.4,color:#7f7f7f80
     style dvcGraph opacity:0.4,color:#7f7f7f80
     style cacheGraph opacity:0.4,color:#7f7f7f80
@@ -75,30 +76,25 @@ flowchart TB
     style dot_git opacity:0.4,color:#7f7f7f80
     style dot_dvc opacity:0.4,color:#7f7f7f80
     style code opacity:0.4,color:#7f7f7f80
+    style bentoGraph opacity:0.4,color:#7f7f7f80
     style serve opacity:0.4,color:#7f7f7f80
     style bento_model opacity:0.4,color:#7f7f7f80
-    style bentoGraph opacity:0.4,color:#7f7f7f80
-    style bento_artifact opacity:0.4,color:#7f7f7f80
     style params opacity:0.4,color:#7f7f7f80
     style s3_storage opacity:0.4,color:#7f7f7f80
-    style repository opacity:0.4,color:#7f7f7f80
-    style action opacity:0.4,color:#7f7f7f80
-    style request opacity:0.4,color:#7f7f7f80
     style remoteGraph opacity:0.4,color:#7f7f7f80
     style gitGraph opacity:0.4,color:#7f7f7f80
+    style repository opacity:0.4,color:#7f7f7f80
+    style action opacity:0.4,color:#7f7f7f80
     linkStyle 0 opacity:0.4,color:#7f7f7f80
     linkStyle 1 opacity:0.4,color:#7f7f7f80
     linkStyle 2 opacity:0.4,color:#7f7f7f80
     linkStyle 3 opacity:0.4,color:#7f7f7f80
     linkStyle 4 opacity:0.4,color:#7f7f7f80
     linkStyle 5 opacity:0.4,color:#7f7f7f80
+    linkStyle 6 opacity:0.4,color:#7f7f7f80
+    linkStyle 7 opacity:0.4,color:#7f7f7f80
     linkStyle 8 opacity:0.4,color:#7f7f7f80
     linkStyle 9 opacity:0.4,color:#7f7f7f80
-    linkStyle 10 opacity:0.4,color:#7f7f7f80
-    linkStyle 11 opacity:0.4,color:#7f7f7f80
-    linkStyle 12 opacity:0.4,color:#7f7f7f80
-    linkStyle 13 opacity:0.4,color:#7f7f7f80
-    linkStyle 14 opacity:0.4,color:#7f7f7f80
 ```
 
 ## Steps
