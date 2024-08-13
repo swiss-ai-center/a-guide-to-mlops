@@ -2,6 +2,7 @@
 
 ## Introduction
 
+# TODO: fixme
 Serving the model locally is great for testing purposes, but it is not
 sufficient for production. In this chapter, you will learn how to build and
 publish the model with [BentoML](../tools.md) and [Docker](../tools.md).
@@ -11,13 +12,10 @@ a later chapter.
 
 In this chapter, you will learn how to:
 
-1. Create a container registry that will serve as your model registry
-2. Publish the containerized model artifact Docker image to the container
-   registry
-3. Grant access to the container registry on the cloud provider for the CI/CD
+1. Grant access to the container registry on the cloud provider for the CI/CD
    pipeline
-4. Store the cloud provider credentials in the CI/CD configuration
-5. Create the CI/CD pipeline for publishing the model to the container registry
+2. Store the cloud provider credentials in the CI/CD configuration
+3. Create the CI/CD pipeline for publishing the model to the container registry
 
 
 The following diagram illustrates control flow of the experiment at the end of
@@ -95,182 +93,6 @@ flowchart TB
 
 ## Steps
 
-### Create a container registry
-
-A container registry is a crucial component that provides a centralized system
-to manage Docker images. It serves as a repository for storing, versioning, and
-tracking Docker models built with BentoML, as each version comes with essential
-metadata, including training data, hyperparameters, and performance metrics.
-
-This comprehensive information ensures reproducibility by preserving historical
-model versions, which aids in debugging and auditing. Additionally, it promotes
-transparency and simplifies model comparison and selection for deployment,
-allowing for seamless integration into production environments.
-
-The model registry also facilitates collaboration among team members, enabling
-standardized model formats and easy sharing of access. Its support for automated
-deployment pipelines ensures consistent and reliable model deployment, allowing
-for an efficient models management.
-
-=== ":simple-googlecloud: Google Cloud"
-
-    To improve the deployment process on the Kubernetes server, you will use Google
-    Artifact Registry as the ML model registry to publish and pull Docker images.
-
-    **Enable the Google Artifact Registry API**
-
-    You must enable the Google Artifact Registry API to create a container registry
-    on Google Cloud with the following command:
-
-    !!! tip
-
-        You can display the available services in your project with the following
-        command:
-
-        ```sh title="Execute the following command(s) in a terminal"
-        # List the services
-        gcloud services list
-        ```
-
-    ```sh title="Execute the following command(s) in a terminal"
-    # Enable the Google Artifact Registry API
-    gcloud services enable artifactregistry.googleapis.com
-    ```
-
-    **Create the Google Container Registry**
-
-    Export the repository name as an environment variable. Replace
-    `<my_repository_name>` with a registy name of your choice. It has to be
-    lowercase and words separated by hyphens. For example, use `mlops-registry` for
-    the registry name:
-
-    !!! warning
-
-        The container registry name must be unique across all Google Cloud projects and
-        users. Change the container registry name if the command fails.
-
-    ```sh title="Execute the following command(s) in a terminal"
-    export GCP_CONTAINER_REGISTRY_NAME=<my_repository_name>
-    ```
-
-    Export the repository location as an environment variable. You can view the
-    available locations at
-    [Cloud locations](https://cloud.google.com/about/locations). You should ideally
-    select a location close to where most of the expected traffic will come from.
-    Replace `<my_repository_location>` with your own zone. For example, use
-    `europe-west6` for Switzerland (Zurich):
-
-    ```sh title="Execute the following command(s) in a terminal"
-    export GCP_CONTAINER_REGISTRY_LOCATION=<my_repository_location>
-    ```
-
-    Lastly, when creating the repository, remember to specify the repository format
-    as `docker`.
-
-    ```sh title="Execute the following command(s) in a terminal"
-    # Create the Google Container Registry
-    gcloud artifacts repositories create $GCP_CONTAINER_REGISTRY_NAME \
-        --repository-format=docker \
-        --location=$GCP_CONTAINER_REGISTRY_LOCATION
-    ```
-
-    The output should be similar to this:
-
-    ```text
-    Create request issued for: [mlops-registry]
-    Waiting for operation [projects/mlops-code-395207/locations/europe-west6/operations/be8b09fa-279c-468
-    5-b451-1f3c900d4a36] to complete...done.
-    Created repository [mlops-registry].
-    ```
-
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
-    appreciated!
-
-### Login to the remote Container Registry
-
-=== ":simple-googlecloud: Google Cloud"
-
-    **Authenticate with the Google Container Registry**
-
-    Configure gcloud to use the Google Container Registry as a Docker credential
-    helper.
-
-    ```sh title="Execute the following command(s) in a terminal"
-    # Authenticate with the Google Container Registry
-    gcloud auth configure-docker ${GCP_CONTAINER_REGISTRY_LOCATION}-docker.pkg.dev
-    ```
-
-    Press ++y++ to validate the changes.
-
-    Export the container registry host:
-
-    ```sh title="Execute the following command(s) in a terminal"
-    export GCP_CONTAINER_REGISTRY_HOST=${GCP_CONTAINER_REGISTRY_LOCATION}-docker.pkg.dev/${GCP_PROJECT_ID}/${GCP_CONTAINER_REGISTRY_NAME}
-    ```
-
-    !!! tip
-
-        To get the ID of your project, you can use the Google Cloud CLI.
-
-        ```sh title="Execute the following command(s) in a terminal"
-        # List the projects
-        gcloud projects list
-        ```
-
-        The output should be similar to this:
-
-        ```text
-        PROJECT_ID             NAME            PROJECT_NUMBER
-        mlops-workshop-396007  mlops-workshop  475307267926
-        ```
-
-        Export the PROJECT_ID as an environment variable. Replace `<my_project_id>`
-        with your own project ID:
-
-        ```sh title="Execute the following command(s) in a terminal"
-        export GCP_PROJECT_ID=<my_project_id>
-        ```
-
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
-    appreciated!
-
-### Publish the BentoML model artifact Docker image to the container registry
-
-The BentoML model artifact Docker image can be published to the container
-registry with the following commands:
-
-```sh title="Execute the following command(s) in a terminal"
-# Tag the local BentoML model artifact Docker image with the remote container registry host
-docker tag celestial-bodies-classifier:latest $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest
-
-# Push the BentoML model artifact Docker image to the container registry
-docker push $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest
-```
-
-The image is now available in the container registry. You can use it from
-anywhere using Docker or Kubernetes.
 
 ### Set up access to the container registry of the cloud provider
 
@@ -350,7 +172,7 @@ following steps will be performed:
       workflow_dispatch:
 
     jobs:
-      train-report-publish-and-deploy:
+      train-report-and-publish:
         permissions: write-all
         runs-on: ubuntu-latest
         steps:
