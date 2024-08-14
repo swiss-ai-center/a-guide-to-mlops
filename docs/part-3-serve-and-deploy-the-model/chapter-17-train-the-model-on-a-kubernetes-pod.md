@@ -1,4 +1,4 @@
-# Chapter 17 - Train the model on a Kubernetes pod with CML
+# Chapter 17 - Train the model on a Kubernetes pod
 
 !!! warning "This is a work in progress"
 
@@ -25,6 +25,7 @@ In this chapter, you will learn how to:
 
 The following diagram illustrates the control flow of the experiment at the end
 of this chapter:
+
 
 ```mermaid
 flowchart TB
