@@ -37,7 +37,7 @@ nav:
       - "Chapter 14 - Build and publish the model with BentoML and Docker with the CI/CD pipeline": part-3-serve-and-deploy-the-model/chapter-14-build-and-publish-the-model-with-bentoml-and-docker-with-the-cicd-pipeline.md
       - "Chapter 15 - Deploy and access the model on Kubernetes": part-3-serve-and-deploy-the-model/chapter-15-deploy-and-access-the-model-on-kubernetes.md
       - "Chapter 16 - Continuous deployment of the model with the CI/CD pipeline": part-3-serve-and-deploy-the-model/chapter-16-continuous-deployment-of-the-model-with-the-cicd-pipeline.md
-      - "Chapter 17 - Train the model on a Kubernetes pod with CML": part-3-serve-and-deploy-the-model/chapter-17-train-the-model-on-a-kubernetes-pod-with-cml.md
+      - "Chapter 17 - Train the model on a Kubernetes pod": part-3-serve-and-deploy-the-model/chapter-17-train-the-model-on-a-kubernetes-pod.md
       - "Conclusion": part-3-serve-and-deploy-the-model/conclusion.md
       - "Clean up": part-3-serve-and-deploy-the-model/clean-up.md
   - 🏷️ Labeling the data and retrain:
