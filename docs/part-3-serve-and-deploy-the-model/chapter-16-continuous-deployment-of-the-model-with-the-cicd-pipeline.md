@@ -780,8 +780,8 @@ As you can see, the deployment was successful and the service was unchanged.
 
 ### Access the model
 
-You can access the new model at the same URL as before. The model should be updated with
-the latest version.
+You can access the new model at the same URL as before. The model should be
+updated with the latest version.
 
 !!! tip
 
