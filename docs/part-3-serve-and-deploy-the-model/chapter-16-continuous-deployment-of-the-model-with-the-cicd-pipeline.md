@@ -11,7 +11,7 @@ automate the process.
 
 In this chapter, you will learn how to:
 
-1. Grant access to the container registry on the cloud provider for the CI/CD
+1. Grant access to the Kubernetes cluster on the cloud provider for the CI/CD
    pipeline
 2. Store the cloud provider credentials in the CI/CD configuration
 3. Create the CI/CD pipeline for deploying the model to the Kubernetes cluster
@@ -52,17 +52,19 @@ flowchart TB
         subgraph gitGraph[Git Remote]
             repository <--> |...|action[Action]
         end
+        registry[(Container\nregistry)]
+        action --> |bentoml build\nbentoml containerize\ndocker push|registry
         subgraph clusterGraph[Kubernetes]
             bento_service_cluster[classifier.bentomodel] --> k8s_fastapi[FastAPI]
         end
-
-        registry[(Container\nregistry)] --> |kubectl apply|bento_service_cluster
-        action --> |bentoml build\nbentoml containerize\ndocker push|registry
+        registry[(Container\nregistry)] --> bento_service_cluster
+        action --> |kubectl apply|bento_service_cluster
     end
 
     subgraph browserGraph[BROWSER]
         k8s_fastapi <--> publicURL["public URL"]
     end
+
     style workspaceGraph opacity:0.4,color:#7f7f7f80
     style dvcGraph opacity:0.4,color:#7f7f7f80
     style cacheGraph opacity:0.4,color:#7f7f7f80
@@ -77,8 +79,8 @@ flowchart TB
     style s3_storage opacity:0.4,color:#7f7f7f80
     style remoteGraph opacity:0.4,color:#7f7f7f80
     style gitGraph opacity:0.4,color:#7f7f7f80
-    style bento_service_cluster opacity:0.4,color:#7f7f7f80
-    style k8s_fastapi opacity:0.4,color:#7f7f7f80
+    style repository opacity:0.4,color:#7f7f7f80
+    style registry opacity:0.4,color:#7f7f7f80
     style browserGraph opacity:0.4,color:#7f7f7f80
     style publicURL opacity:0.4,color:#7f7f7f80
     linkStyle 0 opacity:0.4,color:#7f7f7f80
@@ -89,21 +91,21 @@ flowchart TB
     linkStyle 5 opacity:0.4,color:#7f7f7f80
     linkStyle 6 opacity:0.4,color:#7f7f7f80
     linkStyle 7 opacity:0.4,color:#7f7f7f80
+    linkStyle 8 opacity:0.4,color:#7f7f7f80
     linkStyle 9 opacity:0.4,color:#7f7f7f80
-    linkStyle 12 opacity:0.4,color:#7f7f7f80
+    linkStyle 11 opacity:0.4,color:#7f7f7f80
+    linkStyle 13 opacity:0.4,color:#7f7f7f80
 ```
 
 ## Steps
 
-### Set up access to the container registry of the cloud provider
+### Set up access to the Kubernetes cluster of the cloud provider
 
-!!! bug: TODO: rephrase
+The Kubernetes cluster will need to be accessed inside the CI/CD pipeline to
+deploy the Docker image.
 
-The container registry will need to be accessed inside the CI/CD pipeline to
-push the Docker image.
-
-This is the same process you did for DVC as described in
-[Chapter 8 - Reproduce the ML experiment in a CI/CD pipeline](../part-2-move-the-model-to-the-cloud/chapter-8-reproduce-the-ml-experiment-in-a-cicd-pipeline.md)
+This is the same process you did for the container registry as described in
+[Chapter 14 - Build and publish the model with BentoML and Docker in the CI/CD pipeline](../part-3-serve-and-deploy-the-model/chapter-14-build-and-publish-the-model-with-bentoml-and-docker-with-the-cicd-pipeline.md)
 but this time for the Kubernetes cluster.
 
 === ":simple-googlecloud: Google Cloud"
@@ -155,7 +157,7 @@ following steps will be performed:
 
     Take some time to understand the deploy job and its steps:
 
-    ```yaml title=".github/workflows/mlops.yaml" hl_lines="16 88-133"
+    ```yaml title=".github/workflows/mlops.yaml" hl_lines="16 109-133"
     name: MLOps
 
     on:
@@ -305,7 +307,7 @@ following steps will be performed:
          permissions: write-all
          runs-on: ubuntu-latest
          steps:
-    @@ -85,3 +85,43 @@ jobs:
+    @@ -106,3 +106,43 @@ jobs:
 
                # Push the container to the Container Registry
                docker push --all-tags ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier
@@ -600,8 +602,6 @@ following steps will be performed:
 
     The output should be similar to this:
 
-!!! bug: TODO: check
-
     ```diff
     diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
     index dbf3b25..7dcdfe7 100644
@@ -657,13 +657,13 @@ different:
 
         - `GCP_K8S_CLUSTER_NAME`: The name of the Kubernetes cluster (ex:
           `mlops-kubernetes`, from the variable `GCP_K8S_CLUSTER_NAME` in the previous
-          chapter)
+          chapters)
         - `GCP_K8S_CLUSTER_ZONE`: The zone of the Kubernetes cluster (ex:
           `europe-west6-a` for Zurich, Switzerland, from the variable
-          `GCP_K8S_CLUSTER_ZONE` in the previous chapter)
+          `GCP_K8S_CLUSTER_ZONE` in the previous chapters)
         - `GCP_CONTAINER_REGISTRY_HOST`: The host of the container registry (ex:
           `europe-west6-docker.pkg.dev/mlops-workshop-github-406009/mlops-registry`, from
-          the variable `GCP_CONTAINER_REGISTRY_HOST` in the previous chapter)
+          the variable `GCP_CONTAINER_REGISTRY_HOST` in the previous chapters)
 
         Save the variables by selecting **Add secret**.
 
@@ -675,7 +675,7 @@ different:
 
         - `GCP_CONTAINER_REGISTRY_HOST`: The host of the container registry (ex:
           `europe-west6-docker.pkg.dev/mlops-workshop-gitlab-406009/mlops-registry`, from
-          the variable `GCP_CONTAINER_REGISTRY_HOST` in the previous chapter)
+          the variable `GCP_CONTAINER_REGISTRY_HOST` in the previous chapters)
             - **Protect variable**: _Unchecked_
             - **Mask variable**: _Checked_
             - **Expand variable reference**: _Unchecked_
@@ -778,8 +778,21 @@ service/celestial-bodies-classifier-service unchanged
 
 As you can see, the deployment was successful and the service was unchanged.
 
-Access the new model at the same URL as before. The model should be updated with
+### Access the model
+
+You can access the new model at the same URL as before. The model should be updated with
 the latest version.
+
+!!! tip
+
+    To get the external IP of the service, you can use the Google Cloud CLI.
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Get the description of the service
+    kubectl describe services celestial-bodies-classifier
+    ```
+
+## Summary
 
 Congratulations! You have successfully deployed the model on the Kubernetes
 cluster automatically with the CI/CD pipeline!
