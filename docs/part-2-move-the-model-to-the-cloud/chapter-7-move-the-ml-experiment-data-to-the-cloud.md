@@ -312,10 +312,10 @@ Install the DVC Storage plugin for the cloud provider:
     `requirements.txt` file:
 
     ```txt title="requirements.txt" hl_lines="4"
-    tensorflow==2.12.0
-    matplotlib==3.7.1
-    pyyaml==6.0
-    dvc[gs]==3.47.0
+    tensorflow==2.17.0
+    matplotlib==3.9.2
+    pyyaml==6.0.2
+    dvc[gs]==3.53.2
     ```
 
     Check the differences with Git to validate the changes:
@@ -329,15 +329,15 @@ Install the DVC Storage plugin for the cloud provider:
 
     ```diff
     diff --git a/requirements.txt b/requirements.txt
-    index 193ebac..8ccc2df 100644
+    index 0b88f4a..4b8d3d9 100644
     --- a/requirements.txt
     +++ b/requirements.txt
     @@ -1,4 +1,4 @@
-    tensorflow==2.12.0
-    matplotlib==3.7.1
-    pyyaml==6.0
-    -dvc==3.47.0
-    +dvc[gs]==3.47.0
+     tensorflow==2.17.0
+     matplotlib==3.9.2
+     pyyaml==6.0.2
+    -dvc==3.53.2
+    +dvc[gs]==3.53.2
     ```
 
     Install the dependencies and update the freeze file:

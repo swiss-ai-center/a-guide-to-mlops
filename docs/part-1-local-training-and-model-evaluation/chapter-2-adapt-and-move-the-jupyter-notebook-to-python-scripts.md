@@ -128,9 +128,9 @@ source .venv/bin/activate
 Create a `requirements.txt` file to list the dependencies:
 
 ```txt title="requirements.txt"
-tensorflow==2.12.0
-matplotlib==3.7.1
-pyyaml==6.0
+tensorflow==2.17.0
+matplotlib==3.9.2
+pyyaml==6.0.2
 ```
 
 Install the dependencies:
@@ -322,7 +322,7 @@ def main() -> None:
     preview_plot.savefig(prepared_dataset_folder / "preview.png")
 
     # Normalize the data
-    normalization_layer = tf.keras.layers.experimental.preprocessing.Rescaling(
+    normalization_layer = tf.keras.layers.Rescaling(
         1.0 / 255
     )
     ds_train = ds_train.map(lambda x, y: (normalization_layer(x), y))
@@ -428,7 +428,8 @@ def main() -> None:
 
     # Save the model
     model_folder.mkdir(parents=True, exist_ok=True)
-    model.save(str(model_folder))
+    model_path = model_folder / "model.keras"
+    model.save(model_path)
     # Save the model history
     np.save(model_folder / "history.npy", model.history.history)
 
@@ -577,7 +578,8 @@ def main() -> None:
         labels = json.load(f)
 
     # Load model
-    model = tf.keras.models.load_model(model_folder)
+    model_path = model_folder / "model.keras"
+    model = tf.keras.models.load_model(model_path)
     model_history = np.load(model_folder / "history.npy", allow_pickle=True).item()
 
     # Log metrics
