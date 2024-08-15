@@ -9,12 +9,12 @@ Training these experiments locally can be challenging. You may not have the
 required hardware, or you may not want to use your local machine for training.
 In this case, you can use a specialized Kubernetes pod to train your model.
 
-In this chapter, you will learn how to train the model on a Kubernetes pod.
-
 In this chapter, you will learn how to:
 
-1. Configure the CI/CD to start a runner on Kubernetes
-2. Start the training of the model from your CI/CD pipeline on the Kubernetes
+1. Create a self-hosted runner Docker container image
+2. Publish the containerized runner image to the container registry
+3. Configure the CI/CD to start the containerized runner on Kubernetes
+4. Start the training of the model from your CI/CD pipeline on the Kubernetes
    cluster
 
 The following diagram illustrates the control flow of the experiment at the end
@@ -110,7 +110,7 @@ graph TB
 
 ## Steps
 
-### Display the nodes names and labels
+### Display the cluster nodes names and labels
 
 Display the nodes with the following command.
 
@@ -144,9 +144,15 @@ export K8S_NODE_2_NAME=<my_node_2_name>
 ### Labelize the nodes
 
 Let's imagine one node has a GPU and the other one doesn't. You can labelize the
-nodes to be able to use the GPU node for the training of the model. For our
-experiment, there is no need to have a GPU to train the model but it's for
-demonstration purposes.
+nodes to be able to use the GPU node for the training of the model.
+
+!!! note
+
+    For our small experiment, there is actually no need to have a GPU to train the
+    model. This is done solely for demonstration purposes. In a real-life production
+    setup with a larger machine learning experiment, however, training with a GPU is
+    likely to be a strong requirement due to the increased computational demands and
+    the need for faster processing times.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Labelize the nodes
@@ -155,169 +161,330 @@ kubectl label nodes $K8S_NODE_2_NAME gpu=false
 ```
 
 You can check the labels with the `kubectl get nodes --show-labels` command. You
-should see the node with the `gpu=true`/ `gpu=false` labels.
+should see the nodes with the respective `gpu=true` and `gpu=false` labels.
 
-### Set up access to the Kubernetes Cluster of the cloud provider
 
-CML will need to access the Kubernetes Cluster inside the CI/CD pipeline to
-create the runner.
 
-This is the same process as in
-[Chapter 8 - Reproduce the ML experiment in a CI/CD pipeline](../part-2-move-the-model-to-the-cloud/chapter-8-reproduce-the-ml-experiment-in-a-cicd-pipeline.md).
+### Create a self-hosted runner container image
 
-=== ":simple-googlecloud: Google Cloud"
+Jobs in a CI/CD workflow are executed on applications known as runners. These
+can be physical servers, virtual machines, or container images, and may operate
+on a public cloud, like the GitHub runner used for our workflow so far, or
+on-premises within your own infrastructure.
 
-    Create a new Google Service Account and its associated Google Service Account
-    Key to access Google Cloud without your own credentials.
+We will create a custom container image for a self-hosted runner and deploy it
+on our Kubernetes cluster on Google Cloud. The runner listens for jobs from
+GitHub Actions and creates specialized GPU runner pods on the Kubernetes cluster
+to execute the jobs. This specialized runner will then be destoyed. This
+approach can also be easily adapted to run on a on-premises Kubernetes cluster.
 
-    As a reminder, the key will be stored in your **`~/.config/gcloud`** directory
-    under the name `cml-google-service-account-key.json`.
+The runner uses a custom Docker image that includes the necessary dependencies
+to run the workflows.
+
+#### Configure hardened security
+
+Forks of your public repository can potentially run malicious code on your
+self-hosted runner machine by creating a pull request that executes the code in
+a workflow.
+
+While our self-hosted runner will be set up in a containerized isolated
+environment that limits the impact of any malicious code, unwanted pull requests
+in forks could still exhaust computational resources that you pay for.
+
+=== ":simple-github: GitHub"
 
     !!! danger
 
-        You must **never** add and commit this file to your working directory. It is a
-        sensitive data that you must keep safe.
+        Creating a self-hosted runner allows other users to execute code on your
+        infrastructure. Make sure to secure your runner and restrict access to the
+        repository. For more information, see
+        [Self-hosted runner security](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners#self-hosted-runner-security).
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Create the Google Service Account
-    gcloud iam service-accounts create cml-service-account \
-        --display-name="CML Service Account"
+    In the repository, go to **Settings > Actions > General**. In the
+    **Fork pull request workflows** section, disable
+    **Run workflows from fork pull requests** and click on **Save**.
 
-    # Set the Kubernetes Cluster permissions for the Google Service Account
-    gcloud projects add-iam-policy-binding $GCP_PROJECT_ID \
-        --member="serviceAccount:cml-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com" \
-        --role="roles/container.admin"
+    More generally, it is recommended that you only use self-hosted runners with
+    **private** repositories.
 
-    # Create the Google Service Account Key
-    gcloud iam service-accounts keys create ~/.config/gcloud/cml-google-service-account-key.json \
-        --iam-account=cml-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com
-    ```
+    If not already done, you can change the repository visibility in
+    **Settings > General**. In the **Danger Zone** section, choose
+    **Change visibility** and set the repository to **private**.
 
-=== ":material-cloud: Using another cloud provider? Read this!"
+=== ":simple-gitlab: GitLab"
 
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
+    !!! danger
 
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
+        Creating a self-hosted runner allows other users to execute code on your
+        infrastructure. Make sure to secure your runner and restrict access to the
+        repository. For more information, see
+        [Security for self-managed runners](https://docs.gitlab.com/runner/security/).
 
-### Store the cloud provider credentials in the CI/CD configuration
+    !!! warning "This is a work in progress"
 
-Now that the credentials are created, you need to store them in the CI/CD
-configuration.
+        This part is a work in progress. Please check back later for updates. Thank you!
 
-Depending on the CI/CD platform you are using, the process will be different.
+#### Create a Personal access token
 
-=== ":simple-googlecloud: Google Cloud"
-
-    **Display the Google Service Account key**
-
-    The service account key is stored on your computer as a JSON file. You need to
-    display it and store it as a CI/CD variable in a text format.
-
-    === ":simple-github: GitHub"
-
-        Display the Google Service Account key that you have downloaded from Google
-        Cloud.
-
-        ```sh title="Execute the following command(s) in a terminal"
-        # Display the Google Service Account key
-        cat ~/.config/gcloud/cml-google-service-account-key.json
-        ```
-
-    === ":simple-gitlab: GitLab"
-
-        Encode and display the Google Service Account key that you have downloaded from
-        Google Cloud as `base64`. It allows to hide the secret in GitLab CI logs as a
-        security measure.
-
-        !!! tip
-
-            If on Linux, you can use the command
-            `base64 -w 0 -i ~/.config/gcloud/cml-google-service-account-key.json`.
-
-        ```sh title="Execute the following command(s) in a terminal"
-        # Encode the Google Service Account key to base64
-        base64 -i ~/.config/gcloud/cml-google-service-account-key.json
-        ```
-
-    **Store the Google Service Account key as a CI/CD variable**
-
-    === ":simple-github: GitHub"
-
-        Store the output as a CI/CD variable by going to the **Settings** section from
-        the top header of your GitHub repository.
-
-        Select **Secrets and variables > Actions** and select **New repository secret**.
-
-        Create a new variable named `CML_GCP_SERVICE_ACCOUNT_KEY` with the output value
-        of the Google Service Account key file as its value. Save the variable by
-        selecting **Add secret**.
-
-    === ":simple-gitlab: GitLab"
-
-        Store the output as a CI/CD Variable by going to **Settings > CI/CD** from the
-        left sidebar of your GitLab project.
-
-        Select **Variables** and select **Add variable**.
-
-        Create a new variable named `CML_GCP_SERVICE_ACCOUNT_KEY` with the Google
-        Service Account key file encoded in `base64` as its value.
-
-        - **Protect variable**: _Unchecked_
-        - **Mask variable**: _Checked_
-        - **Expand variable reference**: _Unchecked_
-
-        Save the variable by clicking **Add variable**.
-
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
-
-### Update the CI/CD configuration file
-
-You'll now update the CI/CD configuration file to start a runner on the
-Kubernetes cluster with the help of CML. Using the labels defined previously,
-you'll be able to start the training of the model on the node with the GPU.
 
 === ":simple-github: GitHub"
+
+    Before beginning, you'll need to create a personal access token. Within your
+    Developer Settings, click "Personal access tokens". Then, click "Generate new
+    token".
+
+    Provide a descriptive note and select the repo, workflow, and admin:org scopes.
 
     In order to allow CML to create a self-hosted runner, a Personal Access Token
     (PAT) must be created.
 
     Follow the
     [_Personal Access Token_ - cml.dev](https://cml.dev/doc/self-hosted-runners?tab=GitHub#personal-access-token)
-    guide to create a personal access token named `CML_PAT` with the `repo` scope.
+    guide to create a personal access token named `GHCR_PAT` with the `repo` scope.
 
     Store the Personal Access Token as a CI/CD variable by going to the **Settings**
     section from the top header of your GitHub repository.
 
     Select **Secrets and variables > Actions** and select **New repository secret**.
 
-    Create a new variable named `CML_PAT` with the value of the Personal Access
+    Create a new variable named `GHCR_PAT` with the value of the Personal Access
     Token as its value. Save the variable by selecting **Add secret**.
+
+=== ":simple-gitlab: GitLab"
+
+    !!! warning "This is a work in progress"
+
+        This part is a work in progress. Please check back later for updates. Thank you!
+
+```
+GHCR_PAT=<my_github_token>
+```
+
+<insert stuff>
+
+The Docker image is built and pushed to the GitHub Container Registry.
+
+1. Authenticate to the GitHub Container Registry.
+
+```
+echo $GHCR_PAT | docker login -u <my_username> ghcr.io --password-stdin
+```
+2. Build the docker image
+
+```
+docker build -t ghcr.io/heigvd-software-engineering/swissimage-vision/github-runner:latest .
+```
+
+3. Push the docker image to the GitHub Container Registry
+4.
+```
+docker push ghcr.io/heigvd-software-engineering/swissimage-vision/github-runner:latest
+```
+
+Make sure to set the image visibility to `Public` in the GitHub Container Registry settings.
+
+### Create a self-hosted runner container image
+
+See: # https://dev.to/pwd9000/create-a-docker-based-self-hosted-github-runner-linux-container-48dh
+
+Create a root folder called `docker-github-runner-linux` and then another subfolder called `scripts`.
+Replace `<my_github_username>` with your own name. Replace `<my_github_repo>` with your
+    own repository.
+
+```
+#!/bin/bash
+
+set -e  # Exit on error
+
+GH_OWNER=<my_github_username>
+GH_REPOSITORY=<my_github_repo>
+
+# Set the runner token (expires after 1 hour)
+set_token() {
+    REG_TOKEN=$(curl -s -X POST -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${GITHUB_RUNNER_PAT}" https://api.github.com/repos/${GH_OWNER}/${GH_REPOSITORY}/actions/runners/registration-token | jq -r .token)
+}
+
+# Configure the runner
+set_token
+./config.sh --unattended \
+    --url https://github.com/${GH_OWNER}/${GH_REPOSITORY} \
+    --replace --labels ${GITHUB_RUNNER_LABELS} --token ${REG_TOKEN}
+
+# Cleanup the runner
+cleanup() {
+    echo "Removing runner..."
+    set_token
+    ./config.sh remove --unattended --token ${REG_TOKEN}
+}
+
+trap 'cleanup; exit 130' INT
+trap 'cleanup; exit 143' TERM
+
+# Start the runner
+./run.sh > run.log 2>&1 & wait $!
+```
+
+
+
+
+
+```
+
+```
+---
+
+
+To get started, first create a Dockerfile that installs the
+[GitHub Actions runner](https://github.com/actions/runner) into a Docker
+container:
+
+TODO: See
+* https://github.blog/news-insights/product-news/github-actions-self-hosted-runners-on-google-cloud/
+* https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners
+
+```yaml title="kubernetes/Dockerfile"
+FROM ubuntu:18.04
+
+ENV RUNNER_VERSION=2.319.1
+
+RUN useradd -m actions
+RUN apt-get -yqq update && apt-get install -yqq curl jq wget
+
+RUN \
+  LABEL="$(curl -s -X GET 'https://api.github.com/repos/actions/runner/releases/latest' | jq -r '.tag_name')" \
+  RUNNER_VERSION="$(echo ${latest_version_label:1})" \
+  cd /home/actions && mkdir actions-runner && cd actions-runner \
+    && wget https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz \
+    && tar xzf ./actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz
+
+WORKDIR /home/actions/actions-runner
+RUN chown -R actions ~actions && /home/actions/actions-runner/bin/installdependencies.sh
+
+USER actions
+COPY entrypoint.sh .
+ENTRYPOINT ["./entrypoint.sh"]
+```
+
+```yaml title="kubernetes/Dockerfile"
+FROM ubuntu:22.04
+LABEL org.opencontainers.image.source="https://github.com/heigvd-software-engineering/swissimage-vision"
+
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential lsb-release \
+    python3 python3-pip \
+    curl jq vim gpg wget \
+    git unzip tar gettext-base
+
+# Add a non-root user
+RUN useradd -m runner
+
+WORKDIR /home/actions-runner
+
+# Install GitHub Actions Runner
+RUN curl -o actions-runner-linux-x64-2.315.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.315.0/actions-runner-linux-x64-2.315.0.tar.gz
+RUN tar xzf ./actions-runner-linux-x64-2.315.0.tar.gz
+# Install extra dependencies for the runner
+RUN ./bin/installdependencies.sh
+
+COPY startup.sh .
+
+RUN chmod +x startup.sh
+
+USER runner
+
+ENTRYPOINT ["./startup.sh"]
+```
+
+
+### Update the CI/CD configuration file
+
+You'll now update the CI/CD configuration file to start a runner on the
+Kubernetes cluster. Using the labels defined previously, you'll be able to start
+the training of the model on the node with the GPU.
+
+=== ":simple-github: GitHub"
 
     Update the `.github/workflows/mlops.yaml` file. Replace `<my_cluster_name>` with
     your own name (ex: `mlops-kubernetes`). Replace `<my_cluster_zone>` with your
     own zone (ex: `europe-west6-a` for Zurich, Switzerland).
 
-    ```yaml title=".github/workflows/mlops.yaml" hl_lines="15-18 21-51 54-56"
+    ```yaml title="kubernetes/runner.yaml"
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: github-runner
+      labels:
+        app: github-runner
+    spec:
+      containers:
+        - name: github-runner
+          image: ghcr.io/heigvd-software-engineering/swissimage-vision/github-runner:latest
+          // FIXME: image: europe-west6-docker.pkg.dev/mlops-mc-31/mlops-registry/celestial-bodies-classifier:latest
+          env:
+            - name: GITHUB_RUNNER_LABELS
+              value: "base-runner"
+            - name: GITHUB_RUNNER_PAT
+              valueFrom:
+                secretKeyRef:
+                  name: github-runner-pat
+                  key: token
+          securityContext:
+            runAsUser: 1000
+          resources:
+            limits:
+              cpu: "4"
+              memory: "2Gi"
+            requests:
+              cpu: "4"
+              memory: "2Gi"
+    ```
+
+    ```yaml title="kubernetes/github-runner-gpu.yaml"
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: github-runner-gpu-${GITHUB_RUN_ID}
+      labels:
+        app: github-runner-gpu-${GITHUB_RUN_ID}
+    spec:
+      volumes:
+        - name: dshm
+          emptyDir:
+            medium: Memory
+            sizeLimit: 16Gi
+      containers:
+        - name: github-runner-gpu-${GITHUB_RUN_ID}
+          image: ghcr.io/heigvd-software-engineering/swissimage-vision/github-runner:latest
+          # We mount a shared memory volume for training with PyTorch
+          volumeMounts:
+            - name: dshm
+              mountPath: /dev/shm
+          env:
+            - name: GITHUB_RUNNER_LABELS
+              value: "gpu-runner"
+            - name: GITHUB_RUNNER_PAT
+              valueFrom:
+                secretKeyRef:
+                  name: github-runner-pat
+                  key: token
+          securityContext:
+            runAsUser: 1000
+          resources:
+            limits:
+              cpu: "16"
+              memory: "64Gi"
+              nvidia.com/gpu: "1"
+            requests:
+              cpu: "16"
+              memory: "64Gi"
+              nvidia.com/gpu: "1"
+    ```
+
+    @TODO: (repharse)  # The label `gpu-runner` corresponds to the self-hosted runner with this
+            # label in the runner-gpu.yaml file.
+
+    ```yaml title=".github/workflows/mlops.yaml" hl_lines="15-18 21-49 52-54 71-77 169-186"
     name: MLOps
 
     on:
@@ -342,65 +509,64 @@ you'll be able to start the training of the model on the node with the GPU.
         runs-on: ubuntu-latest
         steps:
           - name: Checkout repository
-            uses: actions/checkout@v3
+            uses: actions/checkout@v4
           - name: Login to Google Cloud
-            uses: 'google-github-actions/auth@v1'
+            uses: google-github-actions/auth@v2
             with:
-              credentials_json: '${{ secrets.CML_GCP_SERVICE_ACCOUNT_KEY }}'
+              credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
           - name: Get Google Cloud's Kubernetes credentials
-            uses: 'google-github-actions/get-gke-credentials@v1'
+            uses: 'google-github-actions/get-gke-credentials@v2'
             with:
-              cluster_name: '<my_cluster_name>'
-              location: '<my_cluster_zone>'
-          - uses: iterative/setup-cml@v1
-            with:
-              version: '0.19.1'
+              cluster_name: ${{ secrets.GCP_K8S_CLUSTER_NAME }}
+              location: ${{ secrets.GCP_K8S_CLUSTER_ZONE }}
+          - name: Setup kubectl
+            uses: azure/setup-kubectl@v3
           - name: Initialize runner on Kubernetes
             env:
-              REPO_TOKEN: ${{ secrets.CML_PAT }}
+              KUBECONFIG_DATA: ${{ secrets.KUBECONFIG }}
+            # We use envsubst to replace variables in runner-gpu.yaml
+            # in order to create a unique runner name with the
+            # GitHub run ID. This prevents conflicts when multiple
+            # runners are created at the same time.
             run: |
-              export KUBERNETES_CONFIGURATION=$(cat $KUBECONFIG)
-              # https://cml.dev/doc/ref/runner
-              # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#machine-type
-              # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#{cpu}-{memory}
-              cml runner \
-                --labels="cml-runner" \
-                --cloud="kubernetes" \
-                --cloud-type="1-2000" \
-                --cloud-kubernetes-node-selector="gpu=true" \
-                --single
+              echo "$KUBECONFIG_DATA" > kubeconfig
+              export KUBECONFIG=kubeconfig
+              # We use run_id to make the runner name unique
+              export GITHUB_RUN_ID="${{ github.run_id }}"
+              envsubst < kubernetes/github-runner-gpu.yaml | kubectl apply -f -
 
-      train-and-report:
+      train-report-publish-and-deploy:
         permissions: write-all
         needs: setup-runner
-        runs-on: [self-hosted, cml-runner]
+        runs-on: [self-hosted, gpu-runner]
         steps:
           - name: Checkout repository
-            uses: actions/checkout@v3
+            uses: actions/checkout@v4
           - name: Setup Python
-            uses: actions/setup-python@v4
+            uses: actions/setup-python@v5
             with:
               python-version: '3.11'
               cache: pip
           - name: Install dependencies
             run: pip install --requirement requirements-freeze.txt
           - name: Login to Google Cloud
-            uses: 'google-github-actions/auth@v1'
+            uses: google-github-actions/auth@v2
             with:
               credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
           - name: Train model
             run: dvc repro --pull
-            # Node is required to run CML
-          - name: Setup Node
-            if: github.event_name == 'pull_request'
-            uses: actions/setup-node@v3
+          - name: Push the outcomes to DVC remote storage
+            run: dvc push
+          - name: Commit changes in dvc.lock
+            uses: stefanzweifel/git-auto-commit-action@v5
             with:
-              node-version: '16'
+              commit_message: Commit changes in dvc.lock
+              file_pattern: dvc.lock
           - name: Setup CML
             if: github.event_name == 'pull_request'
-            uses: iterative/setup-cml@v1
+            uses: iterative/setup-cml@v2
             with:
-              version: '0.19.1'
+              version: '0.20.0'
           - name: Create CML report
             if: github.event_name == 'pull_request'
             env:
@@ -449,14 +615,62 @@ you'll be able to start the training of the model on the node with the GPU.
 
               # Publish the CML report
               cml comment update --target=pr --publish report.md
+          - name: Log in to the Container registry
+            uses: docker/login-action@v3
+            with:
+              registry: ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}
+              username: _json_key
+              password: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+          - name: Import the BentoML model
+            if: github.ref == 'refs/heads/main'
+            run: bentoml models import model/celestial_bodies_classifier_model.bentomodel
+          - name: Build the BentoML model artifact
+            if: github.ref == 'refs/heads/main'
+            run: bentoml build src
+          - name: Containerize and publish the BentoML model artifact Docker image
+            if: github.ref == 'refs/heads/main'
+            run: |
+              # Containerize the Bento
+              bentoml containerize celestial_bodies_classifier:latest \
+                --image-tag ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:latest \
+                --image-tag ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:${{ github.sha }}
+              # Push the container to the Container Registry
+              docker push --all-tags ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier
+          - name: Get Google Cloud's Kubernetes credentials
+            if: github.ref == 'refs/heads/main'
+            uses: google-github-actions/get-gke-credentials@v2
+            with:
+              cluster_name: ${{ secrets.GCP_K8S_CLUSTER_NAME }}
+              location: ${{ secrets.GCP_K8S_CLUSTER_ZONE }}
+          - name: Update the Kubernetes deployment
+            if: github.ref == 'refs/heads/main'
+            run: |
+              yq -i '.spec.template.spec.containers[0].image = "${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:${{ github.sha }}"' kubernetes/deployment.yaml
+          - name: Deploy the model on Kubernetes
+            if: github.ref == 'refs/heads/main'
+            run: |
+              kubectl apply \
+                -f kubernetes/deployment.yaml \
+                -f kubernetes/service.yaml
 
-      deploy:
-        # Runs on main branch only
-        if: github.ref == 'refs/heads/main'
-        needs: train-and-report
-        name: Call Deploy
-        uses: ./.github/workflows/mlops-deploy.yml
-        secrets: inherit
+    cleanup-runner:
+        needs: train-report-publish-and-deploy
+        runs-on: [self-hosted, base-runner]
+        # Always run this job even if the previous jobs fail
+        if: always()
+        steps:
+          - name: Checkout repository
+            uses: actions/checkout@v4
+          - name: Setup kubectl
+            uses: azure/setup-kubectl@v3
+          - name: Cleanup runner on Kubernetes
+            env:
+              KUBECONFIG_DATA: ${{ secrets.KUBECONFIG }}
+            run: |
+              echo "$KUBECONFIG_DATA" > kubeconfig
+              export KUBECONFIG=kubeconfig
+              export GITHUB_RUN_ID="${{ github.run_id }}"
+              envsubst < kubernetes/github-runner-gpu.yaml | kubectl delete --wait=false -f -
     ```
 
     Check the differences with Git to validate the changes.
@@ -529,215 +743,16 @@ you'll be able to start the training of the model on the node with the GPU.
 
 === ":simple-gitlab: GitLab"
 
-    TODO: This is not complete, only github is supported for now.
+    !!! warning "This is a work in progress"
+
+        This part is a work in progress. Please check back later for updates. Thank
+        you!
 
     Update the `.gitlab-ci.yml` file.
 
-    ```yaml title=".gitlab-ci.yml" hl_lines="2 22-43 48-52"
-    stages:
-      - setup runner
-      - train
-      - report
-
-    variables:
-      # Change pip's cache directory to be inside the project directory since we can
-      # only cache local items.
-      PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
-      # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
-      GIT_DEPTH: "0"
-      # https://python-poetry.org/docs/#ci-recommendations
-      POETRY_HOME: "$CI_PROJECT_DIR/.cache/poetry"
-
-    # Pip's cache doesn't store the Python packages
-    # https://pip.pypa.io/en/stable/reference/pip_install/#caching
-    cache:
-      paths:
-        - .cache/pip
-        - .cache/poetry
-
-    setup-runner:
-      stage: setup runner
-      image: iterativeai/cml:0-dvc2-base1
-      before_script:
-        # Install Kubernetes
-        - export KUBERNETES_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt)
-        - curl -LO -s "https://dl.k8s.io/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl"
-        - curl -LO -s "https://dl.k8s.io/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl.sha256"
-        - echo "$(cat kubectl.sha256) kubectl" | sha256sum --check
-        - sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-        # https://cml.dev/doc/self-hosted-runners?tab=Kubernetes#cloud-compute-resource-credentials
-        - export KUBERNETES_CONFIGURATION=$(cat $GCP_KUBECONFIG)
-      script:
-        # https://cml.dev/doc/ref/runner
-        # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#machine-type
-        # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#{cpu}-{memory}
-        - cml runner
-            --labels="cml-runner"
-            --cloud="kubernetes"
-            --cloud-type="1-2000"
-            --cloud-kubernetes-node-selector="gpu=true"
-            --single
-
-    train:
-      stage: train
-      image: iterativeai/cml:0-dvc2-base1
-      needs:
-        - setup-runner
-      tags:
-        # Uses the runner set up by CML
-        - cml-runner
-      rules:
-        - if: $CI_COMMIT_BRANCH == "main"
-        - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      variables:
-        # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/    add#google-cloud-storage
-        GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
-      before_script:
-        # Set the Google Service Account key
-        - echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
-        # Install Poetry
-        - pip install poetry==1.4.0
-        # Install dependencies
-        - poetry install
-        - source `poetry env info --path`/bin/activate
-      script:
-        # Pull data from DVC
-        - dvc pull
-        # Run the experiment
-        - dvc repro --force
-      artifacts:
-        expire_in: 1 week
-        paths:
-          - "evaluation"
-
-    report:
-      stage: report
-      image: iterativeai/cml:0-dvc2-base1
-      needs:
-        - job: train
-          artifacts: true
-      rules:
-        - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      variables:
-        REPO_TOKEN: $CML_PAT
-      script:
-        - |
-          # Compare parameters to main branch
-          echo "# Params workflow vs. main" >> report.md
-          echo >> report.md
-          dvc params diff main --show-md >> report.md
-          echo >> report.md
-
-          # Compare metrics to main branch
-          echo "# Metrics workflow vs. main" >> report.md
-          echo >> report.md
-          dvc metrics diff main --show-md >> report.md
-          echo >> report.md
-
-          # Create plots
-          echo "# Plots" >> report.md
-          echo >> report.md
-
-          echo "## Precision recall curve" >> report.md
-          echo >> report.md
-          dvc plots diff \
-            --target evaluation/plots/prc.json \
-            -x recall \
-            -y precision \
-            --show-vega main > vega.json
-          vl2png vega.json > prc.png
-          echo '![](./prc.png "Precision recall curve")' >> report.md
-          echo >> report.md
-
-          echo "## Roc curve" >> report.md
-          echo >> report.md
-          dvc plots diff \
-            --target evaluation/plots/sklearn/roc.json \
-            -x fpr \
-            -y tpr \
-            --show-vega main > vega.json
-          vl2png vega.json > roc.png
-          echo '![](./roc.png "Roc curve")' >> report.md
-          echo >> report.md
-
-          echo "## Confusion matrix" >> report.md
-          echo >> report.md
-          dvc plots diff \
-            --target evaluation/plots/sklearn/confusion_matrix.json \
-            --template confusion \
-            -x actual \
-            -y predicted \
-            --show-vega main > vega.json
-          vl2png vega.json > confusion_matrix.png
-          echo '![](./confusion_matrix.png "Confusion Matrix")' >> report.md
-          echo >> report.md
-
-          # Publish the CML report
-          cml comment update --target=pr --publish report.md
-    ```
-
     Check the differences with Git to validate the changes.
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Show the differences with Git
-    git diff .gitlab-ci.yml
-    ```
-
     The output should be similar to this:
-
-    ```diff
-    diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-    index 561d04f..fad1002 100644
-    --- a/.gitlab-ci.yml
-    +++ b/.gitlab-ci.yml
-    @@ -1,4 +1,5 @@
-     stages:
-    +  - setup runner
-       - train
-       - report
-
-    @@ -18,9 +19,37 @@ cache:
-         - .cache/pip
-         - .cache/poetry
-
-    +setup-runner:
-    +  stage: setup runner
-    +  image: iterativeai/cml:0-dvc2-base1
-    +  before_script:
-    +    # Install Kubernetes
-    +    - export KUBERNETES_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt)
-    +    - curl -LO -s "https://dl.k8s.io/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl"
-    +    - curl -LO -s "https://dl.k8s.io/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl.sha256"
-    +    - echo "$(cat kubectl.sha256) kubectl" | sha256sum --check
-    +    - sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-    +    # https://cml.dev/doc/self-hosted-runners?tab=Kubernetes#cloud-compute-resource-c
-    redentials
-    +    - export KUBERNETES_CONFIGURATION=$(cat $GCP_KUBECONFIG)
-    +  script:
-    +    # https://cml.dev/doc/ref/runner#--cloud-type
-    +    # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resourc
-    es/task#machine-type
-    +    # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resourc
-    es/task#{cpu}-{memory}
-    +    - cml runner
-    +        --labels="cml-runner"
-    +        --cloud="kubernetes"
-    +        --cloud-type="1-2000"
-    +        --cloud-kubernetes-node-selector="gpu=true"
-    +        --single
-    +
-     train:
-       stage: train
-       image: iterativeai/cml:0-dvc2-base1
-    +  needs:
-    +    - setup-runner
-    +  tags:
-    +    # Uses the runner set up by CML
-    +    - cml-runner
-       rules:
-         - if: $CI_COMMIT_BRANCH == "main"
-         - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    ```
 
     Take some time to understand the changes made to the file.
 
@@ -813,11 +828,8 @@ custom hardware for specific use-cases.
 In this chapter, you have successfully:
 
 1. Created a Kubernetes cluster on Google Cloud
-2. Configured CML to start a runner on Kubernetes
+2. Configured the CI/CD to start a runner on Kubernetes
 3. Trained the model on the Kubernetes cluster
-
-For more information, you can check the following resources:
-[CML Command Reference: `runner` #Using `--cloud-kubernetes-node-selector`](https://cml.dev/doc/ref/runner#using---cloud-kubernetes-node-selector).
 
 ### Destroy the Kubernetes cluster
 
@@ -859,7 +871,8 @@ journey and the next things you could do with your model.
 
 Highly inspired by:
 
-- [_Self-hosted (On-premise or Cloud) Runners_ - cml.dev](https://cml.dev/doc/self-hosted-runners)
+- [_About self-hosted runners_ - GitHub docs](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners)
+- [_GitHub Actions self-hosted runners on Google Cloud_ - github.blog](https://github.blog/news-insights/product-news/github-actions-self-hosted-runners-on-google-cloud/)
 - [_Install kubectl and configure cluster access_ - cloud.google.com](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl)
 - [_gcloud container clusters create_ - cloud.google.com](https://cloud.google.com/sdk/gcloud/reference/container/clusters/create)
 - [_Install Tools_ - kubernetes.io](https://kubernetes.io/docs/tasks/tools/)
