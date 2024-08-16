@@ -59,6 +59,7 @@ flowchart TB
         bento_artifact -->|docker push| registry
     end
     subgraph browserGraph[BROWSER]
+        localhost <--> |docker run|bento_artifact
         localhost <--> |bento serve| fastapi
     end
 
