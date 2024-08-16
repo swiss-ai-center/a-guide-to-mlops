@@ -82,12 +82,12 @@ Add the `bentoml` package to install BentoML support. `pillow` is also added to
 support image processing:
 
 ```txt title="requirements.txt" hl_lines="5-6"
-tensorflow==2.12.0
-matplotlib==3.7.1
-pyyaml==6.0
-dvc[gs]==3.47.0
-bentoml==1.2.2
-pillow==10.2.0
+tensorflow==2.17.0
+matplotlib==3.9.2
+pyyaml==6.0.2
+dvc[gs]==3.53.2
+bentoml==1.3.2
+pillow==10.4.0
 ```
 
 Check the differences with Git to validate the changes:
@@ -101,15 +101,15 @@ The output should be similar to this:
 
 ```diff
 diff --git a/requirements.txt b/requirements.txt
-index 8ccc2df..fcdd460 100644
+index 4b8d3d9..d584cca 100644
 --- a/requirements.txt
 +++ b/requirements.txt
-@@ -2,3 +2,4 @@ tensorflow==2.12.0
- matplotlib==3.7.1
- pyyaml==6.0
- dvc[gs]==3.47.0
-+bentoml==1.2.2
-+pillow==10.2.0
+@@ -2,3 +2,5 @@ tensorflow==2.17.0
+ matplotlib==3.9.2
+ pyyaml==6.0.2
+ dvc[gs]==3.53.2
++bentoml==1.3.2
++pillow==10.4.0
 ```
 
 Install the package and update the freeze file.
@@ -311,7 +311,7 @@ The output should be similar to this:
 
 ```diff
 diff --git a/src/train.py b/src/train.py
-index ab7724a..082e5e0 100644
+index 5c69e2f..b845eb3 100644
 --- a/src/train.py
 +++ b/src/train.py
 @@ -1,3 +1,4 @@
@@ -339,11 +339,12 @@ index ab7724a..082e5e0 100644
      # Define the model
      model = get_model(image_shape, conv_size, dense_size, output_classes)
      model.compile(
-@@ -79,7 +86,37 @@ def main() -> None:
+@@ -79,8 +86,44 @@ def main() -> None:
 
      # Save the model
      model_folder.mkdir(parents=True, exist_ok=True)
--    model.save(str(model_folder))
+-    model_path = model_folder / "model.keras"
+-    model.save(model_path)
 +
 +    def preprocess(x: Image):
 +        # convert PIL image to tensor
@@ -381,8 +382,9 @@ index ab7724a..082e5e0 100644
 +        "celestial_bodies_classifier_model:latest",
 +        f"{model_folder}/celestial_bodies_classifier_model.bentomodel",
 +    )
-
++
      # Save the model history
+     np.save(model_folder / "history.npy", model.history.history)
 ```
 
 #### Update `src/evaluate.py`
@@ -570,7 +572,7 @@ The output should be similar to this:
 
 ```diff
 diff --git a/src/evaluate.py b/src/evaluate.py
-index 15bc2b8..330048f 100644
+index 3bca979..11322bd 100644
 --- a/src/evaluate.py
 +++ b/src/evaluate.py
 @@ -6,6 +6,7 @@ from typing import List
@@ -581,20 +583,19 @@ index 15bc2b8..330048f 100644
 
 
  def get_training_plot(model_history: dict) -> plt.Figure:
-@@ -129,8 +129,16 @@ def main() -> None:
+@@ -128,9 +129,14 @@ def main() -> None:
      with open(prepared_dataset_folder / "labels.json") as f:
          labels = json.load(f)
 
 +    # Import the model to the model store from a local model folder
 +    try:
-+        bentoml.models.import_model(
-+            f"{model_folder}/celestial_bodies_classifier_model.bentomodel"
-+        )
++        bentoml.models.import_model(f"{model_folder}/celestial_bodies_classifier_model.bentomodel")
 +    except bentoml.exceptions.BentoMLException:
 +        print("Model already exists in the model store - skipping import.")
 +
      # Load model
--    model = tf.keras.models.load_model(model_folder)
+-    model_path = model_folder / "model.keras"
+-    model = tf.keras.models.load_model(model_path)
 +    model = bentoml.keras.load_model("celestial_bodies_classifier_model")
      model_history = np.load(model_folder / "history.npy", allow_pickle=True).item()
 
