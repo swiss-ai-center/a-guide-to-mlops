@@ -234,7 +234,7 @@ git status
 The output of the `git status` command should be similar to this.
 
 ```text
-On branch cml-report
+On branch 1-demonstrate-model-evolution-tracking
 Your branch is up to date with 'cml-report'.
 
 Changes to be committed:
