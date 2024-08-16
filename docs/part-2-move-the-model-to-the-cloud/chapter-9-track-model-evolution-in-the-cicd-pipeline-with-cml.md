@@ -270,29 +270,23 @@ collaboration and decision-making within the team.
     +          # Create training history plot
     +          echo "### Training History" >> report.md
     +          echo "#### main" >> report.md
-    +          echo '![](./dvc_plots/static/main_evaluation_plots_training_history.pn
-    g "Training History")' >> report.md
+    +          echo '![](./dvc_plots/static/main_evaluation_plots_training_history.png "Training History")' >> report.md
     +          echo "#### workspace" >> report.md
-    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_training_histo
-    ry.png "Training History")' >> report.md
+    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_training_history.png "Training History")' >> report.md
     +
     +          # Create predictions preview
     +          echo "### Predictions Preview" >> report.md
     +          echo "#### main" >> report.md
-    +          echo '![](./dvc_plots/static/main_evaluation_plots_pred_preview.png "P
-    redictions Preview")' >> report.md
+    +          echo '![](./dvc_plots/static/main_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
     +          echo "#### workspace" >> report.md
-    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_pred_preview.p
-    ng "Predictions Preview")' >> report.md
+    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
     +
     +          # Create confusion matrix
     +          echo "### Confusion Matrix" >> report.md
     +          echo "#### main" >> report.md
-    +          echo '![](./dvc_plots/static/main_evaluation_plots_confusion_matrix.pn
-    g "Confusion Matrix")' >> report.md
+    +          echo '![](./dvc_plots/static/main_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
     +          echo "#### workspace" >> report.md
-    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_confusion_matr
-    ix.png "Confusion Matrix")' >> report.md
+    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
     +
     +          # Publish the CML report
     +          cml comment update --target=pr --publish report.md
