@@ -117,9 +117,9 @@ include:
   - serve.py
 python:
   packages:
-    - "tensorflow==2.12.0"
-    - "matplotlib==3.7.1"
-    - "pillow==10.2.0"
+    - "tensorflow==2.17.0"
+    - "matplotlib==3.9.1"
+    - "pillow==10.4.0"
 docker:
     python_version: "3.11"
 ```
@@ -158,11 +158,9 @@ bentoml build src
 The output should be similar to this:
 
 ```text
-2024-02-15 14:21:52.512530: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
-To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
-Adding current BentoML version to requirements.txt: 1.2.2
-Locking PyPI package versions.
-WARNING: --strip-extras is becoming the default in version 8.0.0. To silence this warning, either use --strip-extras to opt into the new default or use --no-strip-extras to retain the existing behavior.
+2024-08-17 00:19:32.663753: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+INFO: Adding current BentoML version to requirements.txt: 1.3.2
+INFO: Locking PyPI package versions.
 
 ██████╗ ███████╗███╗   ██╗████████╗ ██████╗ ███╗   ███╗██╗
 ██╔══██╗██╔════╝████╗  ██║╚══██╔══╝██╔═══██╗████╗ ████║██║
@@ -171,15 +169,21 @@ WARNING: --strip-extras is becoming the default in version 8.0.0. To silence thi
 ██████╔╝███████╗██║ ╚████║   ██║   ╚██████╔╝██║ ╚═╝ ██║███████╗
 ╚═════╝ ╚══════╝╚═╝  ╚═══╝   ╚═╝    ╚═════╝ ╚═╝     ╚═╝╚══════╝
 
-Successfully built Bento(tag="celestial_bodies_classifier:f7hnaegmawocrlg6").
+Successfully built Bento(tag="celestial_bodies_classifier:tujp4zc4dw6dtrle").
 
-Possible next steps:
+Next steps:
 
- * Containerize your Bento with `bentoml containerize`:
-    $ bentoml containerize celestial_bodies_classifier:f7hnaegmawocrlg6  [or bentoml build --containerize]
+* Deploy to BentoCloud:
+    $ bentoml deploy celestial_bodies_classifier:tujp4zc4dw6dtrle -n ${DEPLOYMENT_NAME}
 
- * Push to BentoCloud with `bentoml push`:
-    $ bentoml push celestial_bodies_classifier:f7hnaegmawocrlg6 [or bentoml build --push]
+* Update an existing deployment on BentoCloud:
+    $ bentoml deployment update --bento celestial_bodies_classifier:tujp4zc4dw6dtrle ${DEPLOYMENT_NAME}
+
+* Containerize your Bento with `bentoml containerize`:
+    $ bentoml containerize celestial_bodies_classifier:tujp4zc4dw6dtrle
+
+* Push to BentoCloud with `bentoml push`:
+    $ bentoml push celestial_bodies_classifier:tujp4zc4dw6dtrle
 ```
 
 All Bentos can be listed with the following command:
@@ -193,8 +197,8 @@ The output should be similar to this:
 
 ```text
 bentoml list
- Tag                                                   Size       Model Size  Creation Time
- celestial_bodies_classifier:f7hnaegmawocrlg6          17.25 KiB  9.53 MiB    2024-02-15 14:22:21
+ Tag                                           Size       Model Size  Creation Time
+ celestial_bodies_classifier:tujp4zc4dw6dtrle  18.83 KiB  9.43 MiB    2024-08-17 00:19:34
 ```
 
 ### Containerize the BentoML model artifact with Docker
@@ -213,7 +217,7 @@ the latest version of the BentoML model artifact.
 The output should be similar to this:
 
 ```text
-Building OCI-compliant image for celestial_bodies_classifier:f7hnaegmawocrlg6 with docker
+Building OCI-compliant image for celestial_bodies_classifier:tujp4zc4dw6dtrle with docker
 
 [+] Building 95.6s (16/16) FINISHED                                                                                                                                             docker:desktop-linux
  => [internal] load build definition from Dockerfile                                                                                                                                            0.1s
