@@ -29,6 +29,21 @@ pip install -r requirements.txt
 jupyter-lab notebook.ipynb
 ```
 
+## Update dependencies
+
+In case the dependencies need to be updated:
+
+* create a new virtual environment
+* install the base dependencies
+* generate the versioned package list
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install jupyterlab tensorflow matplotlib pyyaml
+pip freeze --local --all > requirements.txt
+```
+
 ## References
 
 - Grad Cam with Keras: https://keras.io/examples/vision/grad_cam/
