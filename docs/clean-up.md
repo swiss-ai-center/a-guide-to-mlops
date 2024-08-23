@@ -35,6 +35,14 @@ provider.
 
     Press ++y++ to confirm the deletion.
 
+    To disable the Google Kubernetes Engine Registry API, you can execute the following
+    command:
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Disable the Google Kubernetes Engine API
+    gcloud services disable container.googleapis.com
+    ```
+
     **Delete the Google Artifact Registry**
 
     To delete the Google Artifact Registry used to store the Docker images you
@@ -46,6 +54,14 @@ provider.
     ```
 
     Press ++y++ to confirm the deletion.
+
+    To disable the Google Artifact Registry API, you can execute the following
+    command:
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Disable the Google Artifact Registry API
+    gcloud services disable artifactregistry.googleapis.com
+    ```
 
     **Delete the Google Storage bucket**
 
