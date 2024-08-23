@@ -3,8 +3,8 @@
 ## Introduction
 
 In this chapter, you will deploy the model to the Kubernetes cluster with the
-help of the CI/CD pipeline. You will use the [Kubernetes](../tools.md) tool to
-deploy the model to the cluster and the pipeline to trigger the deployment.
+help of the CI/CD pipeline. You will use [Kubernetes](../tools.md) to deploy
+the model to the cluster and the pipeline to trigger the deployment.
 
 The steps will be similar to the last chapter, but we will use the pipeline to
 automate the process.
@@ -166,13 +166,7 @@ different:
 
     === ":simple-gitlab: GitLab"
 
-        Create the following new variables by going to **Settings > CI/CD** from the
-        left sidebar of your GitLab project. Select **Variables** and select
-        **Add variable**:
-
-        TODO
-
-        Save the variables by selecting **Add secret**.
+        No additional secret variables are necessary for the GitLab CI/CD.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
