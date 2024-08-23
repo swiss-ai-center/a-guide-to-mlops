@@ -3,8 +3,8 @@
 ## Introduction
 
 In this chapter, you will deploy the model to the Kubernetes cluster with the
-help of the CI/CD pipeline. You will use [Kubernetes](../tools.md) to deploy
-the model to the cluster and the pipeline to trigger the deployment.
+help of the CI/CD pipeline. You will use [Kubernetes](../tools.md) to deploy the
+model to the cluster and the pipeline to trigger the deployment.
 
 The steps will be similar to the last chapter, but we will use the pipeline to
 automate the process.

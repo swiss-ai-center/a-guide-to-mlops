@@ -35,8 +35,8 @@ provider.
 
     Press ++y++ to confirm the deletion.
 
-    To disable the Google Kubernetes Engine Registry API, you can execute the following
-    command:
+    To disable the Google Kubernetes Engine Registry API, you can execute the
+    following command:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Disable the Google Kubernetes Engine API

@@ -131,9 +131,9 @@ but this time for the container registry.
 
 ### Add container registry CI/CD secrets
 
-Add the container registry secret to access the container registry from the CI/CD
-pipeline. Depending on the CI/CD platform you are using, the process will be
-different:
+Add the container registry secret to access the container registry from the
+CI/CD pipeline. Depending on the CI/CD platform you are using, the process will
+be different:
 
 === ":simple-googlecloud: Google Cloud"
 
