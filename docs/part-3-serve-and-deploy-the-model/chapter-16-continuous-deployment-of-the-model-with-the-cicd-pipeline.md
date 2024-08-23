@@ -140,6 +140,54 @@ but this time for the Kubernetes cluster.
     [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
     help is greatly appreciated!
 
+
+### Add Kubernetes CI/CD secrets
+
+Add the Kubernetes secrets to access the Kubernetes cluster from the CI/CD
+pipeline. Depending on the CI/CD platform you are using, the process will be
+different:
+
+=== ":simple-googlecloud: Google Cloud"
+
+    === ":simple-github: GitHub"
+
+        Create the following new variables by going to the **Settings** section from the
+        top header of your GitHub repository. Select **Secrets and variables > Actions**
+        and select **New repository secret**:
+
+        - `GCP_K8S_CLUSTER_NAME`: The name of the Kubernetes cluster (ex:
+          `mlops-kubernetes`, from the variable `GCP_K8S_CLUSTER_NAME` in the previous
+          chapters)
+        - `GCP_K8S_CLUSTER_ZONE`: The zone of the Kubernetes cluster (ex:
+          `europe-west6-a` for Zurich, Switzerland, from the variable
+          `GCP_K8S_CLUSTER_ZONE` in the previous chapters)
+
+        Save the variables by selecting **Add secret**.
+
+    === ":simple-gitlab: GitLab"
+
+        Create the following new variables by going to **Settings > CI/CD** from the
+        left sidebar of your GitLab project. Select **Variables** and select
+        **Add variable**:
+
+        TODO
+
+        Save the variables by selecting **Add secret**.
+
+=== ":material-cloud: Using another cloud provider? Read this!"
+
+    This guide has been written with Google Cloud in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
+
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
+    help is greatly appreciated!
+
 ### Update the CI/CD pipeline configuration file
 
 You will adjust the pipeline to deploy the model to the Kubernetes cluster. The
@@ -640,61 +688,6 @@ following steps will be performed:
     +    # Deploy the model on Kubernetes
     +    - kubectl apply -f kubernetes/deployment.yaml -f kubernetes/service.yaml
     ```
-
-### Add Kubernetes CI/CD secrets
-
-Add the Kubernetes secrets to access the Kubernetes cluster from the CI/CD
-pipeline. Depending on the CI/CD platform you are using, the process will be
-different:
-
-=== ":simple-googlecloud: Google Cloud"
-
-    === ":simple-github: GitHub"
-
-        Create the following new variables by going to the **Settings** section from the
-        top header of your GitHub repository. Select **Secrets and variables > Actions**
-        and select **New repository secret**:
-
-        - `GCP_K8S_CLUSTER_NAME`: The name of the Kubernetes cluster (ex:
-          `mlops-kubernetes`, from the variable `GCP_K8S_CLUSTER_NAME` in the previous
-          chapters)
-        - `GCP_K8S_CLUSTER_ZONE`: The zone of the Kubernetes cluster (ex:
-          `europe-west6-a` for Zurich, Switzerland, from the variable
-          `GCP_K8S_CLUSTER_ZONE` in the previous chapters)
-        - `GCP_CONTAINER_REGISTRY_HOST`: The host of the container registry (ex:
-          `europe-west6-docker.pkg.dev/mlops-workshop-github-406009/mlops-registry`, from
-          the variable `GCP_CONTAINER_REGISTRY_HOST` in the previous chapters)
-
-        Save the variables by selecting **Add secret**.
-
-    === ":simple-gitlab: GitLab"
-
-        Create the following new variables by going to **Settings > CI/CD** from the
-        left sidebar of your GitLab project. Select **Variables** and select
-        **Add variable**:
-
-        - `GCP_CONTAINER_REGISTRY_HOST`: The host of the container registry (ex:
-          `europe-west6-docker.pkg.dev/mlops-workshop-gitlab-406009/mlops-registry`, from
-          the variable `GCP_CONTAINER_REGISTRY_HOST` in the previous chapters)
-            - **Protect variable**: _Unchecked_
-            - **Mask variable**: _Checked_
-            - **Expand variable reference**: _Unchecked_
-
-        Save the variables by selecting **Add secret**.
-
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
 
 ### Check the changes
 

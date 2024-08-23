@@ -14,7 +14,7 @@ In this chapter, you will learn how to:
 
 1. Grant access to the container registry on the cloud provider for the CI/CD
    pipeline
-2. Store the cloud provider credentials in the CI/CD configuration
+2. Store the container registry credentials in the CI/CD configuration
 3. Create the CI/CD pipeline for publishing the model to the container registry
 
 The following diagram illustrates control flow of the experiment at the end of
@@ -114,6 +114,55 @@ but this time for the container registry.
         There is no need to update the value in the CI/CD pipeline configuration.
 
         All changes are made at the Google Cloud level and the key file is not changed.
+
+=== ":material-cloud: Using another cloud provider? Read this!"
+
+    This guide has been written with Google Cloud in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
+
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
+    help is greatly appreciated!
+
+### Add container registry CI/CD secrets
+
+Add the container registry secret to access the container registry from the CI/CD
+pipeline. Depending on the CI/CD platform you are using, the process will be
+different:
+
+=== ":simple-googlecloud: Google Cloud"
+
+    === ":simple-github: GitHub"
+
+        Create the following new variables by going to the **Settings** section from the
+        top header of your GitHub repository. Select **Secrets and variables > Actions**
+        and select **New repository secret**:
+
+        - `GCP_CONTAINER_REGISTRY_HOST`: The host of the container registry (ex:
+          `europe-west6-docker.pkg.dev/mlops-workshop-github-406009/mlops-registry`, from
+          the variable `GCP_CONTAINER_REGISTRY_HOST` in the previous chapter)
+
+        Save the variables by selecting **Add secret**.
+
+    === ":simple-gitlab: GitLab"
+
+        Create the following new variables by going to **Settings > CI/CD** from the
+        left sidebar of your GitLab project. Select **Variables** and select
+        **Add variable**:
+
+        - `GCP_CONTAINER_REGISTRY_HOST`: The host of the container registry (ex:
+          `europe-west6-docker.pkg.dev/mlops-workshop-gitlab-406009/mlops-registry`, from
+          the variable `GCP_CONTAINER_REGISTRY_HOST` in the previous chapter)
+            - **Protect variable**: _Unchecked_
+            - **Mask variable**: _Checked_
+            - **Expand variable reference**: _Unchecked_
+
+        Save the variables by selecting **Add secret**.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
