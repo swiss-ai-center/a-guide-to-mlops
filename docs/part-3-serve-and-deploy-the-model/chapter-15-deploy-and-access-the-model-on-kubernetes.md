@@ -241,12 +241,15 @@ The output should be similar to this:
 
 ```text
 NAME              STATUS   AGE
-default           Active   2m
-gmp-public        Active   2m
-gmp-system        Active   2m
-kube-node-lease   Active   2m
-kube-public       Active   2m
-kube-system       Active   2m
+NAME                 STATUS   AGE
+default              Active   2m45s
+gke-managed-cim      Active   2m15s
+gke-managed-system   Active   2m4s
+gmp-public           Active   109s
+gmp-system           Active   109s
+kube-node-lease      Active   2m45s
+kube-public          Active   2m45s
+kube-system          Active   2m45s
 ```
 
 ### Create the Kubernetes configuration files
@@ -317,7 +320,7 @@ the number of replicas, the image to use, and the labels to use.
 The `service.yaml` file describes the service of the model. It contains the type
 of service, the ports to use, and the labels to use.
 
-### Deploy the Bento on Kubernetes
+### Deploy the containerised model on Kubernetes
 
 To deploy the containerised Bento model artifact on Kubernetes, you will need to
 apply the Kubernetes configuration files.
