@@ -307,7 +307,7 @@ In this chapter, you have successfully:
 
 You did fix some of the previous issues:
 
-- [x] Model can be easily used outside of the experiment context.
+- [x] Model can be easily used outside of the experiment context
 
 You could serve this model from anywhere. Additional services could submit
 predictions to your model. The usage of FastAPI creates endpoints that are
@@ -333,6 +333,7 @@ You can now safely continue to the next chapter.
       integrating them into the codebase
 - [x] Model can be saved and loaded with all required artifacts for future usage
 - [x] Model can be easily used outside of the experiment context
+- [ ] Model requires manual publication to the artifact registry
 - [ ] Model is not accessible on the Internet and cannot be used anywhere
 - [ ] Model requires manual deployment on the cluster
 - [ ] Model cannot be trained on hardware other than the local machine

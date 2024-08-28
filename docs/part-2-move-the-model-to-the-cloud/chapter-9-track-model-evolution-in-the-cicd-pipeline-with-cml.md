@@ -86,12 +86,6 @@ flowchart LR
     linkStyle 19 opacity:0.4,color:#7f7f7f80
 ```
 
-!!! info
-
-    CML can do much more than just generating reports. Have a look at the chapter
-    [Train the model on a Kubernetes cluster with CML](../part-3-serve-and-deploy-the-model/chapter-16-train-the-model-on-a-kubernetes-pod-with-cml.md)
-    for more details.
-
 ## Steps
 
 The reports produced by CML compare the current run with a designated target
@@ -276,29 +270,23 @@ collaboration and decision-making within the team.
     +          # Create training history plot
     +          echo "### Training History" >> report.md
     +          echo "#### main" >> report.md
-    +          echo '![](./dvc_plots/static/main_evaluation_plots_training_history.pn
-    g "Training History")' >> report.md
+    +          echo '![](./dvc_plots/static/main_evaluation_plots_training_history.png "Training History")' >> report.md
     +          echo "#### workspace" >> report.md
-    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_training_histo
-    ry.png "Training History")' >> report.md
+    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_training_history.png "Training History")' >> report.md
     +
     +          # Create predictions preview
     +          echo "### Predictions Preview" >> report.md
     +          echo "#### main" >> report.md
-    +          echo '![](./dvc_plots/static/main_evaluation_plots_pred_preview.png "P
-    redictions Preview")' >> report.md
+    +          echo '![](./dvc_plots/static/main_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
     +          echo "#### workspace" >> report.md
-    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_pred_preview.p
-    ng "Predictions Preview")' >> report.md
+    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
     +
     +          # Create confusion matrix
     +          echo "### Confusion Matrix" >> report.md
     +          echo "#### main" >> report.md
-    +          echo '![](./dvc_plots/static/main_evaluation_plots_confusion_matrix.pn
-    g "Confusion Matrix")' >> report.md
+    +          echo '![](./dvc_plots/static/main_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
     +          echo "#### workspace" >> report.md
-    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_confusion_matr
-    ix.png "Confusion Matrix")' >> report.md
+    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
     +
     +          # Publish the CML report
     +          cml comment update --target=pr --publish report.md
@@ -635,7 +623,9 @@ You can now safely continue to the next chapter.
 - [ ] Model may have required artifacts that are forgotten or omitted in
       saved/loaded state
 - [ ] Model cannot be easily used from outside of the experiment context
-- [ ] Model cannot be deployed on and accessed from a Kubernetes cluster
+- [ ] Model requires manual publication to the artifact registry
+- [ ] Model is not accessible on the Internet and cannot be used anywhere
+- [ ] Model requires manual deployment on the cluster
 - [ ] Model cannot be trained on hardware other than the local machine
 
 You will address these issues in the next chapters for improved efficiency and

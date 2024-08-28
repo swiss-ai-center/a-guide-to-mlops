@@ -1,4 +1,4 @@
-# Chapter 14: Deploy and access the model on Kubernetes
+# Chapter 15: Deploy and access the model on Kubernetes
 
 ## Introduction
 
@@ -29,26 +29,15 @@ this chapter:
 ```mermaid
 flowchart TB
     dot_dvc[(.dvc)] <-->|dvc pull\ndvc push| s3_storage[(S3 Storage)]
-    dot_git[(.git)] <-->|git pull\ngit push| gitGraph[Git Remote]
+    dot_git[(.git)] <-->|git pull\ngit push| repository[(Repository)]
     workspaceGraph <-....-> dot_git
     data[data/raw]
+
     subgraph cacheGraph[CACHE]
         dot_dvc
         dot_git
-        bento_artifact[(Containerized\nartifact)]
     end
-    subgraph remoteGraph[REMOTE]
-        s3_storage
-        subgraph gitGraph[Git Remote]
-            repository[(Repository)] --> action[Action]
-            action[Action] --> |...|request[PR]
-            request --> repository[(Repository)]
-        end
-        subgraph clusterGraph[Kubernetes]
-            bento_service_cluster[classifier.bentomodel] --> k8s_fastapi[FastAPI]
-        end
-        registry[(Container\nregistry)] --> |kubectl apply|bento_service_cluster
-    end
+
     subgraph workspaceGraph[WORKSPACE]
         data --> code[*.py]
         subgraph dvcGraph["dvc.yaml"]
@@ -57,17 +46,29 @@ flowchart TB
         params[params.yaml] -.- code
         code <--> bento_model[classifier.bentomodel]
         subgraph bentoGraph[bentofile.yaml]
-            bento_model <--> serve[serve.py]
+            bento_model
+            serve[serve.py] <--> bento_model
         end
-
-        bentoGraph -->|bento build\nbento containerize| bento_artifact
         bento_model <-.-> dot_dvc
-        bento_artifact -->|docker push| registry
+    end
+
+    subgraph remoteGraph[REMOTE]
+        s3_storage
+        subgraph gitGraph[Git Remote]
+            repository <--> |...|action[Action]
+        end
+        registry[(Container\nregistry)]
+        action --> |bentoml build\nbentoml containerize\ndocker push|registry
+        subgraph clusterGraph[Kubernetes]
+            bento_service_cluster[classifier.bentomodel] --> k8s_fastapi[FastAPI]
+        end
+        registry[(Container\nregistry)] --> |kubectl apply|bento_service_cluster
     end
 
     subgraph browserGraph[BROWSER]
         k8s_fastapi <--> publicURL["public URL"]
     end
+
     style workspaceGraph opacity:0.4,color:#7f7f7f80
     style dvcGraph opacity:0.4,color:#7f7f7f80
     style cacheGraph opacity:0.4,color:#7f7f7f80
@@ -75,30 +76,25 @@ flowchart TB
     style dot_git opacity:0.4,color:#7f7f7f80
     style dot_dvc opacity:0.4,color:#7f7f7f80
     style code opacity:0.4,color:#7f7f7f80
+    style bentoGraph opacity:0.4,color:#7f7f7f80
     style serve opacity:0.4,color:#7f7f7f80
     style bento_model opacity:0.4,color:#7f7f7f80
-    style bentoGraph opacity:0.4,color:#7f7f7f80
-    style bento_artifact opacity:0.4,color:#7f7f7f80
     style params opacity:0.4,color:#7f7f7f80
     style s3_storage opacity:0.4,color:#7f7f7f80
-    style repository opacity:0.4,color:#7f7f7f80
-    style action opacity:0.4,color:#7f7f7f80
-    style request opacity:0.4,color:#7f7f7f80
     style remoteGraph opacity:0.4,color:#7f7f7f80
     style gitGraph opacity:0.4,color:#7f7f7f80
+    style repository opacity:0.4,color:#7f7f7f80
+    style action opacity:0.4,color:#7f7f7f80
     linkStyle 0 opacity:0.4,color:#7f7f7f80
     linkStyle 1 opacity:0.4,color:#7f7f7f80
     linkStyle 2 opacity:0.4,color:#7f7f7f80
     linkStyle 3 opacity:0.4,color:#7f7f7f80
     linkStyle 4 opacity:0.4,color:#7f7f7f80
     linkStyle 5 opacity:0.4,color:#7f7f7f80
+    linkStyle 6 opacity:0.4,color:#7f7f7f80
+    linkStyle 7 opacity:0.4,color:#7f7f7f80
     linkStyle 8 opacity:0.4,color:#7f7f7f80
     linkStyle 9 opacity:0.4,color:#7f7f7f80
-    linkStyle 10 opacity:0.4,color:#7f7f7f80
-    linkStyle 11 opacity:0.4,color:#7f7f7f80
-    linkStyle 12 opacity:0.4,color:#7f7f7f80
-    linkStyle 13 opacity:0.4,color:#7f7f7f80
-    linkStyle 14 opacity:0.4,color:#7f7f7f80
 ```
 
 ## Steps
@@ -245,12 +241,15 @@ The output should be similar to this:
 
 ```text
 NAME              STATUS   AGE
-default           Active   2m
-gmp-public        Active   2m
-gmp-system        Active   2m
-kube-node-lease   Active   2m
-kube-public       Active   2m
-kube-system       Active   2m
+NAME                 STATUS   AGE
+default              Active   2m45s
+gke-managed-cim      Active   2m15s
+gke-managed-system   Active   2m4s
+gmp-public           Active   109s
+gmp-system           Active   109s
+kube-node-lease      Active   2m45s
+kube-public          Active   2m45s
+kube-system          Active   2m45s
 ```
 
 ### Create the Kubernetes configuration files
@@ -321,7 +320,7 @@ the number of replicas, the image to use, and the labels to use.
 The `service.yaml` file describes the service of the model. It contains the type
 of service, the ports to use, and the labels to use.
 
-### Deploy the Bento on Kubernetes
+### Deploy the containerised model on Kubernetes
 
 To deploy the containerised Bento model artifact on Kubernetes, you will need to
 apply the Kubernetes configuration files.
@@ -438,7 +437,7 @@ In this chapter, you have successfully:
 
 1. Created the Kubernetes configuration files and deployed the BentoML model
    artifact on Kubernetes
-2. Access the model
+2. Accessed the model
 
 ## State of the MLOps process
 
@@ -458,6 +457,7 @@ In this chapter, you have successfully:
       integrating them into the codebase
 - [x] Model can be saved and loaded with all required artifacts for future usage
 - [x] Model can be easily used outside of the experiment context
+- [x] Model publication to the artifact registry is automated
 - [x] Model is accessible from the Internet and can be used anywhere
 - [ ] Model requires manual deployment on the cluster
 - [ ] Model cannot be trained on hardware other than the local machine

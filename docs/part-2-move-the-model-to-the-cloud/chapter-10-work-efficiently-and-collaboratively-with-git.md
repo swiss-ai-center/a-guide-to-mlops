@@ -234,7 +234,7 @@ git status
 The output of the `git status` command should be similar to this.
 
 ```text
-On branch cml-report
+On branch 1-demonstrate-model-evolution-tracking
 Your branch is up to date with 'cml-report'.
 
 Changes to be committed:
@@ -424,6 +424,10 @@ You can now safely continue to the next chapter.
 - [ ] Model may have required artifacts that are forgotten or omitted in
       saved/loaded state
 - [ ] Model cannot be easily used from outside of the experiment context
+- [ ] Model requires manual publication to the artifact registry
+- [ ] Model is not accessible on the Internet and cannot be used anywhere
+- [ ] Model requires manual deployment on the cluster
+- [ ] Model cannot be trained on hardware other than the local machine
 
 You will address these issues in the next chapters for improved efficiency and
 collaboration. Continue the guide to learn how.

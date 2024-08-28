@@ -1,4 +1,4 @@
-# Chapter 20 - Retrain the model from new data with DVC Sync
+# Chapter 18 - Setup Label Studio
 
 !!! warning "This is a work in progress"
 

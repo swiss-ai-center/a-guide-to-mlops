@@ -1,10 +1,11 @@
-# Chapter 15 - Continuous deployment of the model with the CI/CD pipeline
+# Chapter 14 - Build and publish the model with BentoML and Docker in the CI/CD pipeline
 
 ## Introduction
 
-In this chapter, you will deploy the model to the Kubernetes cluster with the
-help of the CI/CD pipeline. You will use the [Kubernetes](../tools.md) tool to
-deploy the model to the cluster and the pipeline to trigger the deployment.
+In this chapter, you will containerize and push the model to the container
+registry with the help of the CI/CD pipeline. You will use
+[BentoML](../tools.md) and [Docker](../tools.md) to containerize and publish the
+model and the pipeline to trigger the publishing.
 
 The steps will be similar to the last chapter, but we will use the pipeline to
 automate the process.
@@ -13,10 +14,8 @@ In this chapter, you will learn how to:
 
 1. Grant access to the container registry on the cloud provider for the CI/CD
    pipeline
-2. Store the cloud provider credentials in the CI/CD configuration
-3. Create the CI/CD pipeline for deploying the model to the Kubernetes cluster
-4. Push the CI/CD pipeline configuration file to [:simple-git: Git](../tools.md)
-5. Visualize the execution of the CI/CD pipeline
+2. Store the container registry credentials in the CI/CD configuration
+3. Create the CI/CD pipeline for publishing the model to the container registry
 
 The following diagram illustrates control flow of the experiment at the end of
 this chapter:
@@ -52,17 +51,10 @@ flowchart TB
         subgraph gitGraph[Git Remote]
             repository <--> |...|action[Action]
         end
-        subgraph clusterGraph[Kubernetes]
-            bento_service_cluster[classifier.bentomodel] --> k8s_fastapi[FastAPI]
-        end
-
-        registry[(Container\nregistry)] --> |kubectl apply|bento_service_cluster
+        registry[(Container\nregistry)]
         action --> |bentoml build\nbentoml containerize\ndocker push|registry
     end
 
-    subgraph browserGraph[BROWSER]
-        k8s_fastapi <--> publicURL["public URL"]
-    end
     style workspaceGraph opacity:0.4,color:#7f7f7f80
     style dvcGraph opacity:0.4,color:#7f7f7f80
     style cacheGraph opacity:0.4,color:#7f7f7f80
@@ -77,10 +69,7 @@ flowchart TB
     style s3_storage opacity:0.4,color:#7f7f7f80
     style remoteGraph opacity:0.4,color:#7f7f7f80
     style gitGraph opacity:0.4,color:#7f7f7f80
-    style bento_service_cluster opacity:0.4,color:#7f7f7f80
-    style k8s_fastapi opacity:0.4,color:#7f7f7f80
-    style browserGraph opacity:0.4,color:#7f7f7f80
-    style publicURL opacity:0.4,color:#7f7f7f80
+    style repository opacity:0.4,color:#7f7f7f80
     linkStyle 0 opacity:0.4,color:#7f7f7f80
     linkStyle 1 opacity:0.4,color:#7f7f7f80
     linkStyle 2 opacity:0.4,color:#7f7f7f80
@@ -89,8 +78,7 @@ flowchart TB
     linkStyle 5 opacity:0.4,color:#7f7f7f80
     linkStyle 6 opacity:0.4,color:#7f7f7f80
     linkStyle 7 opacity:0.4,color:#7f7f7f80
-    linkStyle 9 opacity:0.4,color:#7f7f7f80
-    linkStyle 12 opacity:0.4,color:#7f7f7f80
+    linkStyle 8 opacity:0.4,color:#7f7f7f80
 ```
 
 ## Steps
@@ -102,7 +90,7 @@ push the Docker image.
 
 This is the same process you did for DVC as described in
 [Chapter 8 - Reproduce the ML experiment in a CI/CD pipeline](../part-2-move-the-model-to-the-cloud/chapter-8-reproduce-the-ml-experiment-in-a-cicd-pipeline.md)
-but this time for the Kubernetes cluster.
+but this time for the container registry.
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -119,11 +107,6 @@ but this time for the Kubernetes cluster.
     gcloud projects add-iam-policy-binding $GCP_PROJECT_ID \
         --member="serviceAccount:google-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com" \
         --role="roles/artifactregistry.createOnPushWriter"
-
-    # Set the Kubernetes Cluster permissions for the Google Service Account
-    gcloud projects add-iam-policy-binding $GCP_PROJECT_ID \
-        --member="serviceAccount:google-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com" \
-        --role="roles/container.developer"
     ```
 
     !!! tip
@@ -146,16 +129,64 @@ but this time for the Kubernetes cluster.
     [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
     help is greatly appreciated!
 
+### Add container registry CI/CD secrets
+
+Add the container registry secret to access the container registry from the
+CI/CD pipeline. Depending on the CI/CD platform you are using, the process will
+be different:
+
+=== ":simple-googlecloud: Google Cloud"
+
+    === ":simple-github: GitHub"
+
+        Create the following new variables by going to the **Settings** section from the
+        top header of your GitHub repository. Select **Secrets and variables > Actions**
+        and select **New repository secret**:
+
+        - `GCP_CONTAINER_REGISTRY_HOST`: The host of the container registry (ex:
+          `europe-west6-docker.pkg.dev/mlops-workshop-github-406009/mlops-registry`, from
+          the variable `GCP_CONTAINER_REGISTRY_HOST` in the previous chapter)
+
+        Save the variables by selecting **Add secret**.
+
+    === ":simple-gitlab: GitLab"
+
+        Create the following new variables by going to **Settings > CI/CD** from the
+        left sidebar of your GitLab project. Select **Variables** and select
+        **Add variable**:
+
+        - `GCP_CONTAINER_REGISTRY_HOST`: The host of the container registry (ex:
+          `europe-west6-docker.pkg.dev/mlops-workshop-gitlab-406009/mlops-registry`, from
+          the variable `GCP_CONTAINER_REGISTRY_HOST` in the previous chapter)
+            - **Protect variable**: _Unchecked_
+            - **Mask variable**: _Checked_
+            - **Expand variable reference**: _Unchecked_
+
+        Save the variables by selecting **Add secret**.
+
+=== ":material-cloud: Using another cloud provider? Read this!"
+
+    This guide has been written with Google Cloud in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
+
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
+    help is greatly appreciated!
+
 ### Update the CI/CD pipeline configuration file
 
-You will adjust the pipeline to deploy the model to the Kubernetes cluster. The
-following steps will be performed:
+You will adjust the pipeline to build and push the the docker image to the
+container registry. The following steps will be performed:
 
 1. Detect a new commit on the `main` branch
 2. Authenticate to the cloud provider
 3. Build the Docker image
 4. Push the Docker image to the container registry
-5. Deploy the model on the Kubernetes cluster
 
 === ":simple-github: GitHub"
 
@@ -179,7 +210,7 @@ following steps will be performed:
       workflow_dispatch:
 
     jobs:
-      train-report-publish-and-deploy:
+      train-report-and-publish:
         permissions: write-all
         runs-on: ubuntu-latest
         steps:
@@ -272,22 +303,6 @@ following steps will be performed:
                 --image-tag ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:${{ github.sha }}
               # Push the container to the Container Registry
               docker push --all-tags ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier
-          - name: Get Google Cloud's Kubernetes credentials
-            if: github.ref == 'refs/heads/main'
-            uses: google-github-actions/get-gke-credentials@v2
-            with:
-              cluster_name: ${{ secrets.GCP_K8S_CLUSTER_NAME }}
-              location: ${{ secrets.GCP_K8S_CLUSTER_ZONE }}
-          - name: Update the Kubernetes deployment
-            if: github.ref == 'refs/heads/main'
-            run: |
-              yq -i '.spec.template.spec.containers[0].image = "${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:${{ github.sha }}"' kubernetes/deployment.yaml
-          - name: Deploy the model on Kubernetes
-            if: github.ref == 'refs/heads/main'
-            run: |
-              kubectl apply \
-                -f kubernetes/deployment.yaml \
-                -f kubernetes/service.yaml
     ```
 
     Check the differences with Git to validate the changes.
@@ -309,7 +324,7 @@ following steps will be performed:
 
      jobs:
     -  train-and-report:
-    +  train-report-publish-and-deploy:
+    +  train-report-and-publish:
          permissions: write-all
          runs-on: ubuntu-latest
          steps:
@@ -338,108 +353,9 @@ following steps will be performed:
     +            --image-tag ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:${{ github.sha }}
     +          # Push the container to the Container Registry
     +          docker push --all-tags ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier
-    +      - name: Get Google Cloud's Kubernetes credentials
-    +        if: github.ref == 'refs/heads/main'
-    +        uses: google-github-actions/get-gke-credentials@v2
-    +        with:
-    +          cluster_name: ${{ secrets.GCP_K8S_CLUSTER_NAME }}
-    +          location: ${{ secrets.GCP_K8S_CLUSTER_ZONE }}
-    +      - name: Update the Kubernetes deployment
-    +        if: github.ref == 'refs/heads/main'
-    +        run: |
-    +          yq -i '.spec.template.spec.containers[0].image = "${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:${{ github.sha }}"' kubernetes/deployment.yaml
-    +      - name: Deploy the model on Kubernetes
-    +        if: github.ref == 'refs/heads/main'
-    +        run: |
-    +          kubectl apply \
-    +            -f kubernetes/deployment.yaml \
-    +            -f kubernetes/service.yaml
     ```
 
 === ":simple-gitlab: GitLab"
-
-    !!! warning
-
-        You must have [:simple-helm: Helm](https://helm.sh/) installed on your local
-        machine to execute the following steps.
-
-    In order to execute commands on the Kubernetes cluster, an agent must be set up
-    on the cluster.
-
-    **Create the agent configuration file**
-
-    Create a new empty file named `.gitlab/agents/k8s-agent/config.yaml` at the root
-    of the repository.
-
-    This file is empty and only serves to enable Kubernetes integration with GitLab.
-
-    Commit the changes to Git.
-
-    ```sh title="Execute the following command(s) in a terminal"
-    # Add the file
-    git add .gitlab/agents/k8s-agent/config.yaml
-
-    # Commit the changes
-    git commit -m "Enable Kubernetes integration with GitLab"
-
-    # Push the changes
-    git push
-    ```
-
-    **Register the agent with GitLab**
-
-    On GitLab, in the left sidebar, go to **Operate > Kubernetes clusters**. Click
-    on **Connect a cluster**. Select the **k8s-agent** configuration file in the
-    list. Click **Register**. A modal opens.
-
-    In the modal, a command to register the GitLab Kubernetes agent is displayed.
-
-    The command should look like this:
-
-    ```sh
-    helm repo add gitlab https://charts.gitlab.io
-    helm repo update
-    helm upgrade --install XXX gitlab/gitlab-agent \
-        --namespace XXX \
-        --create-namespace \
-        --set image.tag=XXX \
-        --set config.token=XXX \
-        --set config.kasAddress=XXX
-    ```
-
-    This command must be executed to install the agent on the Google Cloud
-    Kubernetes cluster.
-
-    **Install the agent on the Kubernetes cluster**
-
-    Copy and paste the command GitLab displays in your terminal. This should install
-    the GitLab agent on the Kubernetes cluster.
-
-    The output should look like this:
-
-    ```text
-    "gitlab" has been added to your repositories
-    Hang tight while we grab the latest from your chart repositories...
-    ...Successfully got an update from the "gitlab" chart repository
-    Update Complete. ⎈Happy Helming!⎈
-    Release "k8s-agent" does not exist. Installing it now.
-    NAME: k8s-agent
-    LAST DEPLOYED: Tue Aug 15 13:59:01 2023
-    NAMESPACE: gitlab-agent-k8s-agent
-    STATUS: deployed
-    REVISION: 1
-    TEST SUITE: None
-    NOTES:
-    Thank you for installing gitlab-agent.
-
-    Your release is named k8s-agent.
-    ```
-
-    Once the command was executed on the Kubernetes cluster, you can close the
-    model.
-
-    Refresh the page and you should see the agent has successfully connected to
-    GitLab.
 
     **Update the CI/CD pipeline configuration file**
 
@@ -599,25 +515,6 @@ following steps will be performed:
           # https://pip.pypa.io/en/stable/reference/pip_install/#caching
           - .cache/pip
           - .venv/
-
-    deploy:
-      stage: deploy
-      image: alpine
-      needs:
-        - publish
-      rules:
-        - if: $CI_COMMIT_BRANCH == "main"
-      before_script:
-        # Install kubectl and yq
-        - apk add --no-cache kubectl yq
-        # Switch to the right Kubernetes context
-        - kubectl config use-context ${CI_PROJECT_PATH}:k8s-agent
-        - kubectl get nodes
-      script:
-        # Update the Kubernetes deployment
-        - yq -i '.spec.template.spec.containers[0].image = "${GCP_CONTAINER_REGISTRY_HOST}/celestial-bodies-classifier:${CI_COMMIT_SHA}"' kubernetes/deployment.yaml
-        # Deploy the model on Kubernetes
-        - kubectl apply -f kubernetes/deployment.yaml -f kubernetes/service.yaml
     ```
 
     Check the differences with Git to validate the changes.
@@ -639,7 +536,6 @@ following steps will be performed:
        - train
        - report
     +  - publish
-    +  - deploy
 
      variables:
        # Change pip's cache directory to be inside the project directory since we can
@@ -698,85 +594,11 @@ following steps will be performed:
     +      # https://pip.pypa.io/en/stable/reference/pip_install/#caching
     +      - .cache/pip
     +      - .venv/
-    +
-    +deploy:
-    +  stage: deploy
-    +  image: alpine
-    +  needs:
-    +    - publish
-    +  rules:
-    +    - if: $CI_COMMIT_BRANCH == "main"
-    +  before_script:
-    +    # Install kubectl and yq
-    +    - apk add --no-cache kubectl yq
-    +    # Switch to the right Kubernetes context
-    +    - kubectl config use-context ${CI_PROJECT_PATH}:k8s-agent
-    +    - kubectl get nodes
-    +  script:
-    +    # Update the Kubernetes deployment
-    +    - yq -i '.spec.template.spec.containers[0].image = "${GCP_CONTAINER_REGISTRY_HOST}/celestial-bodies-classifier:${CI_COMMIT_SHA}"' kubernetes/deployment.yaml
-    +    # Deploy the model on Kubernetes
-    +    - kubectl apply -f kubernetes/deployment.yaml -f kubernetes/service.yaml
     ```
-
-### Add Kubernetes CI/CD secrets
-
-Add the Kubernetes secrets to access the Kubernetes cluster from the CI/CD
-pipeline. Depending on the CI/CD platform you are using, the process will be
-different:
-
-=== ":simple-googlecloud: Google Cloud"
-
-    === ":simple-github: GitHub"
-
-        Create the following new variables by going to the **Settings** section from the
-        top header of your GitHub repository. Select **Secrets and variables > Actions**
-        and select **New repository secret**:
-
-        - `GCP_K8S_CLUSTER_NAME`: The name of the Kubernetes cluster (ex:
-          `mlops-kubernetes`, from the variable `GCP_K8S_CLUSTER_NAME` in the previous
-          chapter)
-        - `GCP_K8S_CLUSTER_ZONE`: The zone of the Kubernetes cluster (ex:
-          `europe-west6-a` for Zurich, Switzerland, from the variable
-          `GCP_K8S_CLUSTER_ZONE` in the previous chapter)
-        - `GCP_CONTAINER_REGISTRY_HOST`: The host of the container registry (ex:
-          `europe-west6-docker.pkg.dev/mlops-workshop-github-406009/mlops-registry`, from
-          the variable `GCP_CONTAINER_REGISTRY_HOST` in the previous chapter)
-
-        Save the variables by selecting **Add secret**.
-
-    === ":simple-gitlab: GitLab"
-
-        Create the following new variables by going to **Settings > CI/CD** from the
-        left sidebar of your GitLab project. Select **Variables** and select
-        **Add variable**:
-
-        - `GCP_CONTAINER_REGISTRY_HOST`: The host of the container registry (ex:
-          `europe-west6-docker.pkg.dev/mlops-workshop-gitlab-406009/mlops-registry`, from
-          the variable `GCP_CONTAINER_REGISTRY_HOST` in the previous chapter)
-            - **Protect variable**: _Unchecked_
-            - **Mask variable**: _Checked_
-            - **Expand variable reference**: _Unchecked_
-
-        Save the variables by selecting **Add secret**.
-
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
 
 ### Check the changes
 
-Check the changes with Git to ensure that all the necessary files are tracked.
+Check the changes with Git to ensure that all the necessary files are tracked:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Add all the files
@@ -786,84 +608,41 @@ git add .
 git status
 ```
 
-The output should look like this.
+The output should look similar to this:
 
-=== ":simple-github: GitHub"
+```text
+On branch main
+Your branch is up to date with 'origin/main'.
 
-    ```text
-    On branch main
-    Your branch is up to date with 'origin/main'.
-
-    Changes to be committed:
-    (use "git restore --staged <file>..." to unstage)
-        modified:   .github/workflows/mlops.yaml
-    ```
-
-=== ":simple-gitlab: GitLab"
-
-    ```text
-    On branch main
-    Your branch is up to date with 'origin/main'.
-
-    Changes to be committed:
-    (use "git restore --staged <file>..." to unstage)
-        modified:   .gitlab-ci.yml
-    ```
+Changes to be committed:
+(use "git restore --staged <file>..." to unstage)
+    modified:   .github/workflows/mlops.yaml
+```
 
 ### Commit the changes to Git
 
-Push the CI/CD pipeline configuration file to Git.
+Commit the changes to Git.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
-git commit -m "A pipeline will deploy the model on the Kubernetes cluster"
+git commit -m "A pipeline will containerize the model on the model artifact"
 
 # Push the changes
 git push
 ```
 
-### Check the results
+## Summary
 
-With the new configuration in place, each and every commit that makes its way to
-the main branch will serve as a trigger for the pipeline, which will
-automatically set in motion the deployment of the model, ensuring that the
-latest version is consistently available on the Kubernetes server for use.
+Congratulations! You have successfully prepared the model for automated
+deployment in a production environment with the CI/CD pipeline!
 
-=== ":simple-github: GitHub"
+New versions of the model will be published to the artifact registry
+automatically as soon as they are pushed to the main branch.
 
-    In the **Actions** tab, click on the **MLOps** workflow.
+In this chapter, you have successfully:
 
-=== ":simple-gitlab: GitLab"
-
-    You can see the pipeline running on the **CI/CD > Pipelines** page. Check the
-    `MLOps` pipeline.
-
-The output should look like this:
-
-```text
-Run kubectl apply \
-deployment.apps/celestial-bodies-classifier-deployment configured
-service/celestial-bodies-classifier-service configured
-```
-
-If you execute the pipeline a second time, you should see the following output:
-
-```text
-Run kubectl apply \
-deployment.apps/celestial-bodies-classifier-deployment configured
-service/celestial-bodies-classifier-service unchanged
-```
-
-As you can see, the deployment was successful and the service was unchanged.
-
-Access the new model at the same URL as before. The model should be updated with
-the latest version.
-
-Congratulations! You have successfully deployed the model on the Kubernetes
-cluster automatically with the CI/CD pipeline!
-
-New versions of the model will be deployed automatically as soon as they are
-pushed to the main branch.
+1. Automated the containerization and publication of the BentoML model artifact
+   to the container registry
 
 ## State of the MLOps process
 
@@ -882,17 +661,20 @@ pushed to the main branch.
 - [x] Changes to model can be thoroughly reviewed and discussed before
       integrating them into the codebase
 - [x] Model can be saved and loaded with all required artifacts for future usage
-- [x] Model can be easily used outside of the experiment context.
-- [x] Model can be accessed from a Kubernetes cluster
-- [x] Model is continuously deployed with the CI/CD
-- [ ] Model can be trained on a custom infrastructure with custom hardware for
-      specific use-cases
+- [x] Model can be easily used outside of the experiment context
+- [x] Model publication to the artifact registry is automated
+- [ ] Model is accessible from the Internet and can be used anywhere
+- [ ] Model requires manual deployment on the cluster
+- [ ] Model cannot be trained on hardware other than the local machine
 
-You can now safely continue to the next chapter of this guide concluding your
-journey and the next things you could do with your model.
+You will address these issues in the next chapters for improved efficiency and
+collaboration. Continue the guide to learn how.
 
 ## Sources
 
 Highly inspired by:
 
-- [_Installing the agent for Kubernetes_ - gitlab.com](https://docs.gitlab.com/ee/user/clusters/agent/install/)
+- [_Connecting a repository to a package_ - docs.github.com](https://docs.github.com/en/packages/learn-github-packages/connecting-a-repository-to-a-package)
+- [_Working with the Container registry_ - docs.github.com](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry)
+- [_Containerization_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/guides/containerization.html)
+- [_Build options_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/guides/build-options.html)

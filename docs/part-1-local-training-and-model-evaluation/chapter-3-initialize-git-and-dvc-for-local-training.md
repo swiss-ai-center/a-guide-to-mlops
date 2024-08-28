@@ -194,10 +194,10 @@ git commit -m "My first ML experiment versioned with Git"
 Add the main `dvc` dependency to the `requirements.txt` file:
 
 ```txt title="requirements.txt" hl_lines="4"
-tensorflow==2.12.0
-matplotlib==3.7.1
-pyyaml==6.0
-dvc==3.47.0
+tensorflow==2.17.0
+matplotlib==3.9.2
+pyyaml==6.0.2
+dvc==3.53.2
 ```
 
 Check the differences with Git to validate the changes:
@@ -215,10 +215,10 @@ index 250f32c..152b868 100644
 --- a/requirements.txt
 +++ b/requirements.txt
 @@ -1,3 +1,4 @@
- tensorflow==2.12.0
- matplotlib==3.7.1
- pyyaml==6.0
-+dvc==3.47.0
+ tensorflow==2.17.0
+ matplotlib==3.9.2
+ pyyaml==6.0.2
++dvc==3.53.2
 ```
 
 Install the dependencies and update the freeze file:
@@ -437,6 +437,7 @@ You can now safely continue to the next chapter.
 - [ ] Model may have required artifacts that are forgotten or omitted in
       saved/loaded state
 - [ ] Model cannot be easily used from outside of the experiment context
+- [ ] Model requires manual publication to the artifact registry
 - [ ] Model is not accessible on the Internet and cannot be used anywhere
 - [ ] Model requires manual deployment on the cluster
 - [ ] Model cannot be trained on hardware other than the local machine
