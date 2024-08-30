@@ -224,43 +224,6 @@ in forks could still exhaust computational resources that you pay for.
 
         This part is a work in progress. Please check back later for updates. Thank you!
 
-#### Create a Personal access token
-
-=== ":simple-github: GitHub"
-
-    Before continuing, you'll need to create a personal access token. Within your
-    Developer Settings, click "Personal access tokens". Then, click "Generate new
-    token".
-
-    Provide a descriptive note and select the repo, workflow, and admin:org scopes.
-
-    In order to allow CML to create a self-hosted runner, a Personal Access Token
-    (PAT) must be created.
-
-    Follow the
-    [_Managing Personal Access Token_ - GitHub docs](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
-    guide to create a personal access token (classic) named `GHCR_PAT` with the `repo` scope.
-
-    Store the Personal Access Token as a CI/CD variable by going to the **Settings**
-    section from the top header of your GitHub repository.
-
-    Select **Secrets and variables > Actions** and select **New repository secret**.
-
-    Create a new variable named `GHCR_PAT` with the value of the Personal Access
-    Token as its value. Save the variable by selecting **Add secret**.
-
-=== ":simple-gitlab: GitLab"
-
-    !!! warning "This is a work in progress"
-
-        This part is a work in progress. Please check back later for updates. Thank you!
-
-
-Additionally, export your token in as environment variable. Replace `<my_github_container_repository_token>` with your own token.
-
-```
-export GHCR_PAT=<my_github_container_repository_token>
-```
 
 ### Create a self-hosted runner container image
 
@@ -346,6 +309,44 @@ USER runner
 ENTRYPOINT ["./startup.sh"]
 ```
 
+#### Create a Personal access token
+
+=== ":simple-github: GitHub"
+
+    Before continuing, you'll need to create a personal access token. Within your
+    Developer Settings, click "Personal access tokens". Then, click "Generate new
+    token".
+
+    Provide a descriptive note and select the `repo` scope permission.
+
+    In order to allow CML to create a self-hosted runner, a Personal Access Token
+    (PAT) must be created.
+
+    Follow the
+    [_Managing Personal Access Token_ - GitHub docs](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
+    guide to create a personal access token (classic) named `GHCR_PAT` with the `repo` scope.
+
+    Store the Personal Access Token as a CI/CD variable by going to the **Settings**
+    section from the top header of your GitHub repository.
+
+    Select **Secrets and variables > Actions** and select **New repository secret**.
+
+    Create a new variable named `GHCR_PAT` with the value of the Personal Access
+    Token as its value. Save the variable by selecting **Add secret**.
+
+=== ":simple-gitlab: GitLab"
+
+    !!! warning "This is a work in progress"
+
+        This part is a work in progress. Please check back later for updates. Thank you!
+
+
+Additionally, export your token in as environment variable. Replace `<my_github_container_repository_token>` with your own token.
+
+```
+export GHCR_PAT=<my_github_container_repository_token>
+```
+
 #### Build and push the image to the container regsitry
 
 With the entrypoint script ready, we can now build the Docker image.
@@ -356,6 +357,18 @@ The Docker image is built and pushed to the GitHub Container Registry.
 ```
 echo $GHCR_PAT | docker login -u <my_username> ghcr.io --password-stdin
 ```
+
+The output should be similar to this:
+
+```
+WARNING! Your password will be stored unencrypted in /home/remy/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credential-stores
+
+Login Succeeded
+```
+You can safely ignore the warning message.
+
 2. Build the docker image
 
 ```
