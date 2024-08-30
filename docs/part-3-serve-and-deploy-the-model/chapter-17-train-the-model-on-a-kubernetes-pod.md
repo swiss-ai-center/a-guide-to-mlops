@@ -227,12 +227,18 @@ in forks could still exhaust computational resources that you pay for.
 
 ### Create a self-hosted runner container image
 
+At the root level of your Git repository, create a `docker` folder.
+
 #### Create the startup script
 
-This script will be used to initialize our Docker container when launched from the image we are creating.
-The primary purpose of this script is to register a new self-hosted GitHub runner instance for our repository, each time a new container is started from the image.
+This script will act as an entrypoint for the Docker image. It will be used to
+initialize our Docker container when launched from the image we are creating.
+The primary purpose of this script is to register a new self-hosted GitHub
+runner instance for our repository, each time a new container is started from
+the image.
 
-Replace `<my_username>` and `<my_repository_name>` with your own username and repository name.
+Replace `<my_username>` and `<my_repository_name>` with your own username and
+repository name.
 
 ```yaml title="docker/startup.sh"
 #!/bin/bash
@@ -269,7 +275,10 @@ trap 'cleanup; exit 143' TERM
 
 #### Create the Dockerfile
 
-The Dockerfile provides the instructions needed to create a custom Docker container image that incorporates the [GitHub Actions runner](https://github.com/actions/runner) along with all the necessary dependencies to run the workflow.
+The Dockerfile provides the instructions needed to create a custom Docker
+container image that incorporates the
+[GitHub Actions runner](https://github.com/actions/runner) along with all the
+necessary dependencies to run the workflow.
 
 Replace `<my_repository_url>` with your own repository name.
 
@@ -313,26 +322,10 @@ ENTRYPOINT ["./startup.sh"]
 
 === ":simple-github: GitHub"
 
-    Before continuing, you'll need to create a personal access token. Within your
-    Developer Settings, click "Personal access tokens". Then, click "Generate new
-    token".
-
-    Provide a descriptive note and select the `repo` scope permission.
-
-    In order to allow CML to create a self-hosted runner, a Personal Access Token
-    (PAT) must be created.
-
-    Follow the
+    Before continuing, you'll need to create a personal access token. Follow the
     [_Managing Personal Access Token_ - GitHub docs](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
-    guide to create a personal access token (classic) named `GHCR_PAT` with the `repo` scope.
-
-    Store the Personal Access Token as a CI/CD variable by going to the **Settings**
-    section from the top header of your GitHub repository.
-
-    Select **Secrets and variables > Actions** and select **New repository secret**.
-
-    Create a new variable named `GHCR_PAT` with the value of the Personal Access
-    Token as its value. Save the variable by selecting **Add secret**.
+    guide to create a personal access token (classic) named `GHCR_PAT` with the
+    `write:package` scope.
 
 === ":simple-gitlab: GitLab"
 
@@ -341,20 +334,21 @@ ENTRYPOINT ["./startup.sh"]
         This part is a work in progress. Please check back later for updates. Thank you!
 
 
-Additionally, export your token in as environment variable. Replace `<my_github_container_repository_token>` with your own token.
+Export your token in as environment variable. Replace
+`<my_github_container_repository_token>` with your own token.
 
-```
+```sh title="Execute the following command(s) in a terminal"
 export GHCR_PAT=<my_github_container_repository_token>
 ```
 
 #### Build and push the image to the container regsitry
 
-With the entrypoint script ready, we can now build the Docker image.
-The Docker image is built and pushed to the GitHub Container Registry.
+With the entrypoint script ready, we can now build the Docker image. The Docker
+image is built and pushed to the GitHub Container Registry.
 
-1. Authenticate to the GitHub Container Registry.
+First, authenticate to the GitHub Container Registry:
 
-```
+```sh title="Execute the following command(s) in a terminal"
 echo $GHCR_PAT | docker login -u <my_username> ghcr.io --password-stdin
 ```
 
@@ -366,22 +360,60 @@ Configure a credential helper to remove this warning. See
 https://docs.docker.com/engine/reference/commandline/login/#credential-stores
 
 Login Succeeded
-```
-You can safely ignore the warning message.
+``` You can safely ignore the warning message.
 
-2. Build the docker image
+Build the docker image. Make sure to update the tag of the Docker image to match
+your username and repository.
+
+```sh title="Execute the following command(s) in a terminal" docker build -t ghcr.io/<my_username>/<my_repository_name>/github-runner:latest .
+```
+
+The output should be similar to this:
 
 ```
-docker build -t ghcr.io/<my_username>/<my_repository_name>/github-runner:latest .
+[+] Building 57.3s (14/14) FINISHED                                                                      docker:default
+ => [internal] load build definition from Dockerfile                                                               0.1s
+ => => transferring dockerfile: 920B                                                                               0.0s
+ => [internal] load metadata for docker.io/library/ubuntu:24.04                                                    1.8s
+ => [internal] load .dockerignore                                                                                  0.0s
+ => => transferring context: 2B                                                                                    0.0s
+ => [1/9] FROM docker.io/library/ubuntu:24.04@sha256:8a37d68f4f73ebf3d4efafbcf66379bf3728902a8038616808f04e34a9ab  2.5s
+ => => resolve docker.io/library/ubuntu:24.04@sha256:8a37d68f4f73ebf3d4efafbcf66379bf3728902a8038616808f04e34a9ab  0.0s
+ => => sha256:8a37d68f4f73ebf3d4efafbcf66379bf3728902a8038616808f04e34a9ab63ee 1.34kB / 1.34kB                     0.0s
+ => => sha256:d35dfc2fe3ef66bcc085ca00d3152b482e6cafb23cdda1864154caf3b19094ba 424B / 424B                         0.0s
+ => => sha256:edbfe74c41f8a3501ce542e137cf28ea04dd03e6df8c9d66519b6ad761c2598a 2.30kB / 2.30kB                     0.0s
+ => => sha256:31e907dcc94a592a57796786399eb004dcbba714389fa615f5efa05a91316356 29.71MB / 29.71MB                   1.1s
+ => => extracting sha256:31e907dcc94a592a57796786399eb004dcbba714389fa615f5efa05a91316356                          1.2s
+ => [internal] load build context                                                                                  0.0s
+ => => transferring context: 862B                                                                                  0.0s
+ => [2/9] RUN apt-get update -y && apt-get install -y     build-essential lsb-release     python3 python3-pip     26.6s
+ => [3/9] RUN useradd -m runner                                                                                    0.3s
+ => [4/9] WORKDIR /home/actions-runner                                                                             0.1s
+ => [5/9] RUN curl -o actions-runner-linux-x64-2.319.1.tar.gz -L https://github.com/actions/runner/releases/downl  7.3s
+ => [6/9] RUN tar xzf ./actions-runner-linux-x64-2.319.1.tar.gz                                                    4.2s
+ => [7/9] RUN ./bin/installdependencies.sh                                                                        12.3s
+ => [8/9] COPY startup.sh .                                                                                        0.2s
+ => [9/9] RUN chmod +x startup.sh                                                                                  0.3s
+ => exporting to image                                                                                             1.5s
+ => => exporting layers                                                                                            1.4s
+ => => writing image sha256:91b6c9cbfd267d995f2701bcbc45181b78413b8b3d580f9ac6333f25ca2903c4                       0.0s
+ => => naming to ghcr.io/rmarquis/a-guide-to-mlops/github-runner:latest                                            0.0s
 ```
 
-3. Push the docker image to the GitHub Container Registry
-4.
-```
+Push the docker image to the GitHub Container Registry
+
+```sh title="Execute the following command(s) in a terminal"
 docker push ghcr.io/<my_username>/<my_repository_name>/github-runner:latest
 ```
 
-Make sure to set the image visibility to `Public` in the GitHub Container Registry settings.
+#### Adjust imegae visibility
+
+Make sure to set the image visibility to `Public` in the GitHub Container
+Registry settings.
+
+In your repository page, click on *Packages* * on the right hand side, then on
+your **github-runner** package. In **Package settings** in the **Danger Zone**
+section,choose **Change package visibility** and set the package to **public**.
 
 ### Update the CI/CD configuration file
 
@@ -467,7 +499,8 @@ the training of the model on the node with the GPU.
               nvidia.com/gpu: "1"
     ```
 
-    @TODO: (repharse)  # The label `gpu-runner` corresponds to the self-hosted runner with this
+    @TODO: (repharse) # The label `gpu-runner` corresponds to the self-hosted runner
+    with this
             # label in the runner-gpu.yaml file.
 
     ```yaml title=".github/workflows/mlops.yaml" hl_lines="15-18 21-49 52-54 71-77 169-186"
@@ -731,8 +764,7 @@ the training of the model on the node with the GPU.
 
     !!! warning "This is a work in progress"
 
-        This part is a work in progress. Please check back later for updates. Thank
-        you!
+        This part is a work in progress. Please check back later for updates. Thank you!
 
     Update the `.gitlab-ci.yml` file.
 
