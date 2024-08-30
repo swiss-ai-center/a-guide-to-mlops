@@ -226,10 +226,9 @@ in forks could still exhaust computational resources that you pay for.
 
 #### Create a Personal access token
 
-
 === ":simple-github: GitHub"
 
-    Before beginning, you'll need to create a personal access token. Within your
+    Before continuing, you'll need to create a personal access token. Within your
     Developer Settings, click "Personal access tokens". Then, click "Generate new
     token".
 
@@ -239,8 +238,8 @@ in forks could still exhaust computational resources that you pay for.
     (PAT) must be created.
 
     Follow the
-    [_Personal Access Token_ - cml.dev](https://cml.dev/doc/self-hosted-runners?tab=GitHub#personal-access-token)
-    guide to create a personal access token named `GHCR_PAT` with the `repo` scope.
+    [_Managing Personal Access Token_ - GitHub docs](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
+    guide to create a personal access token (classic) named `GHCR_PAT` with the `repo` scope.
 
     Store the Personal Access Token as a CI/CD variable by going to the **Settings**
     section from the top header of your GitHub repository.
@@ -256,48 +255,29 @@ in forks could still exhaust computational resources that you pay for.
 
         This part is a work in progress. Please check back later for updates. Thank you!
 
-```
-GHCR_PAT=<my_github_token>
-```
 
-<insert stuff>
-
-The Docker image is built and pushed to the GitHub Container Registry.
-
-1. Authenticate to the GitHub Container Registry.
+Additionally, export your token in as environment variable. Replace `<my_github_container_repository_token>` with your own token.
 
 ```
-echo $GHCR_PAT | docker login -u <my_username> ghcr.io --password-stdin
+export GHCR_PAT=<my_github_container_repository_token>
 ```
-2. Build the docker image
-
-```
-docker build -t ghcr.io/heigvd-software-engineering/swissimage-vision/github-runner:latest .
-```
-
-3. Push the docker image to the GitHub Container Registry
-4.
-```
-docker push ghcr.io/heigvd-software-engineering/swissimage-vision/github-runner:latest
-```
-
-Make sure to set the image visibility to `Public` in the GitHub Container Registry settings.
 
 ### Create a self-hosted runner container image
 
-See: # https://dev.to/pwd9000/create-a-docker-based-self-hosted-github-runner-linux-container-48dh
+#### Create the startup script
 
-Create a root folder called `docker-github-runner-linux` and then another subfolder called `scripts`.
-Replace `<my_github_username>` with your own name. Replace `<my_github_repo>` with your
-    own repository.
+This script will be used to initialize our Docker container when launched from the image we are creating.
+The primary purpose of this script is to register a new self-hosted GitHub runner instance for our repository, each time a new container is started from the image.
 
-```
+Replace `<my_username>` and `<my_repository_name>` with your own username and repository name.
+
+```yaml title="docker/startup.sh"
 #!/bin/bash
 
 set -e  # Exit on error
 
-GH_OWNER=<my_github_username>
-GH_REPOSITORY=<my_github_repo>
+GH_OWNER=<my_username>
+GH_REPOSITORY=<my_repository_name>
 
 # Set the runner token (expires after 1 hour)
 set_token() {
@@ -324,53 +304,22 @@ trap 'cleanup; exit 143' TERM
 ./run.sh > run.log 2>&1 & wait $!
 ```
 
+#### Create the Dockerfile
 
+The Dockerfile provides the instructions needed to create a custom Docker container image that incorporates the [GitHub Actions runner](https://github.com/actions/runner) along with all the necessary dependencies to run the workflow.
 
+Replace `<my_repository_url>` with your own repository name.
 
-
-```
-
-```
----
-
-
-To get started, first create a Dockerfile that installs the
-[GitHub Actions runner](https://github.com/actions/runner) into a Docker
-container:
-
-TODO: See
-* https://github.blog/news-insights/product-news/github-actions-self-hosted-runners-on-google-cloud/
-* https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners
-
-```yaml title="kubernetes/Dockerfile"
-FROM ubuntu:18.04
+```yaml title="docker/Dockerfile"
+FROM ubuntu:24.04
 
 ENV RUNNER_VERSION=2.319.1
 
-RUN useradd -m actions
-RUN apt-get -yqq update && apt-get install -yqq curl jq wget
-
-RUN \
-  LABEL="$(curl -s -X GET 'https://api.github.com/repos/actions/runner/releases/latest' | jq -r '.tag_name')" \
-  RUNNER_VERSION="$(echo ${latest_version_label:1})" \
-  cd /home/actions && mkdir actions-runner && cd actions-runner \
-    && wget https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz \
-    && tar xzf ./actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz
-
-WORKDIR /home/actions/actions-runner
-RUN chown -R actions ~actions && /home/actions/actions-runner/bin/installdependencies.sh
-
-USER actions
-COPY entrypoint.sh .
-ENTRYPOINT ["./entrypoint.sh"]
-```
-
-```yaml title="kubernetes/Dockerfile"
-FROM ubuntu:22.04
-LABEL org.opencontainers.image.source="https://github.com/heigvd-software-engineering/swissimage-vision"
+LABEL RunnerVersion=${RUNNER_VERSION}
+LABEL org.opencontainers.image.source="<my_repository_url>"
 
 # Install dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get update -y && apt-get install -y \
     build-essential lsb-release \
     python3 python3-pip \
     curl jq vim gpg wget \
@@ -382,8 +331,9 @@ RUN useradd -m runner
 WORKDIR /home/actions-runner
 
 # Install GitHub Actions Runner
-RUN curl -o actions-runner-linux-x64-2.315.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.315.0/actions-runner-linux-x64-2.315.0.tar.gz
-RUN tar xzf ./actions-runner-linux-x64-2.315.0.tar.gz
+RUN curl -o actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz -L https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz
+RUN tar xzf ./actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz
+
 # Install extra dependencies for the runner
 RUN ./bin/installdependencies.sh
 
@@ -396,6 +346,29 @@ USER runner
 ENTRYPOINT ["./startup.sh"]
 ```
 
+#### Build and push the image to the container regsitry
+
+With the entrypoint script ready, we can now build the Docker image.
+The Docker image is built and pushed to the GitHub Container Registry.
+
+1. Authenticate to the GitHub Container Registry.
+
+```
+echo $GHCR_PAT | docker login -u <my_username> ghcr.io --password-stdin
+```
+2. Build the docker image
+
+```
+docker build -t ghcr.io/<my_username>/<my_repository_name>/github-runner:latest .
+```
+
+3. Push the docker image to the GitHub Container Registry
+4.
+```
+docker push ghcr.io/<my_username>/<my_repository_name>/github-runner:latest
+```
+
+Make sure to set the image visibility to `Public` in the GitHub Container Registry settings.
 
 ### Update the CI/CD configuration file
 
@@ -873,6 +846,7 @@ Highly inspired by:
 
 - [_About self-hosted runners_ - GitHub docs](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners)
 - [_GitHub Actions self-hosted runners on Google Cloud_ - github.blog](https://github.blog/news-insights/product-news/github-actions-self-hosted-runners-on-google-cloud/)
+- [_Create a Docker based Self Hosted GitHub runner Linux container_ - dev.to](https://dev.to/pwd9000/create-a-docker-based-self-hosted-github-runner-linux-container-48dh)
 - [_Install kubectl and configure cluster access_ - cloud.google.com](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl)
 - [_gcloud container clusters create_ - cloud.google.com](https://cloud.google.com/sdk/gcloud/reference/container/clusters/create)
 - [_Install Tools_ - kubernetes.io](https://kubernetes.io/docs/tasks/tools/)
