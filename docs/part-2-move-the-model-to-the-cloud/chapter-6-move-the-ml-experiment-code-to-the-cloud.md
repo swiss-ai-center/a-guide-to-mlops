@@ -90,8 +90,8 @@ Create a Git repository on your preferred service to collaborate with peers.
 
 ## Configure Git for the remote branch
 
-Add the remote origin to your repository. Replace `<my_git_repository_url>`
-with the URL of your Git repository. Your Git service should provide these
+Add the remote origin to your repository. Replace `<my_git_repository_url>` with
+the URL of your Git repository. Your Git service should provide these
 instructions as well:
 
 ```sh title="Execute the following command(s) in a terminal"
