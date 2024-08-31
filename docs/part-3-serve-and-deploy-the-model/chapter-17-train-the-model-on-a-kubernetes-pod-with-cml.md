@@ -167,16 +167,16 @@ gke-mlops-kubernetes-default-pool-d4f966ea-p7qm   Ready    <none>   50s   v1.24.
 ```
 
 Export the name of the two nodes as environment variables. Replace the
-`<your node 1 name>` and `<your node 2 name>` placeholders with the names of
-your nodes (`gke-mlops-kubernetes-default-pool-d4f966ea-8rbn` and
+`<my_node_1_name>` and `<my_node_2_name>` placeholders with the names of your
+nodes (`gke-mlops-kubernetes-default-pool-d4f966ea-8rbn` and
 `gke-mlops-kubernetes-default-pool-d4f966ea-p7qm` in this example).
 
 ```sh title="Execute the following command(s) in a terminal"
-export K8S_NODE_1_NAME=<your node 1 name>
+export K8S_NODE_1_NAME=<my_node_1_name>
 ```
 
 ```sh title="Execute the following command(s) in a terminal"
-export K8S_NODE_2_NAME=<your node 2 name>
+export K8S_NODE_2_NAME=<my_node_2_name>
 ```
 
 ### Labelize the nodes
