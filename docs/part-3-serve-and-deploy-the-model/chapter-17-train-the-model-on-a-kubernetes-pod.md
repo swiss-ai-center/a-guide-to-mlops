@@ -169,8 +169,8 @@ should see the nodes with the respective `gpu=true` and `gpu=false` labels.
 
 Jobs in a CI/CD workflow are executed on applications known as runners. These
 can be physical servers, virtual machines, or container images, and may operate
-on a public cloud, like the GitHub runner used for our workflow so far, or
-on-premises within your own infrastructure.
+on a public cloud, like the runner used for our workflow so far, or on-premises
+within your own infrastructure.
 
 We will create a custom container image for a self-hosted runner and deploy it
 on our Kubernetes cluster on Google Cloud. The runner listens for jobs from
@@ -205,7 +205,7 @@ in forks could still exhaust computational resources that you pay for.
     **Run workflows from fork pull requests** and click on **Save**.
 
     More generally, it is recommended that you only use self-hosted runners with
-    **private** repositories.
+    private repositories.
 
     If not already done, you can change the repository visibility in
     **Settings > General**. In the **Danger Zone** section, choose
@@ -225,11 +225,9 @@ in forks could still exhaust computational resources that you pay for.
         This part is a work in progress. Please check back later for updates. Thank you!
 
 
-### Create a self-hosted runner container image
+#### Create the startup script
 
 At the root level of your Git repository, create a `docker` folder.
-
-#### Create the startup script
 
 This script will act as an entrypoint for the Docker image. It will be used to
 initialize our Docker container when launched from the image we are creating.
@@ -245,19 +243,19 @@ repository name.
 
 set -e  # Exit on error
 
-GH_OWNER=<my_username>
-GH_REPOSITORY=<my_repository_name>
+REPOSITORY_OWNER=<my_username>
+REPOSITORY_NAME=<my_repository_name>
 
 # Set the runner token (expires after 1 hour)
 set_token() {
-    REG_TOKEN=$(curl -s -X POST -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${GITHUB_RUNNER_PAT}" https://api.github.com/repos/${GH_OWNER}/${GH_REPOSITORY}/actions/runners/registration-token | jq -r .token)
+    REG_TOKEN=$(curl -s -X POST -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${RUNNER_PAT}" https://api.github.com/repos/${REPOSITORY_OWNER}/${REPOSITORY_NAME}/actions/runners/registration-token | jq -r .token)
 }
 
 # Configure the runner
 set_token
 ./config.sh --unattended \
-    --url https://github.com/${GH_OWNER}/${GH_REPOSITORY} \
-    --replace --labels ${GITHUB_RUNNER_LABELS} --token ${REG_TOKEN}
+    --url https://github.com/${REPOSITORY_OWNER}/${REPOSITORY_NAME} \
+    --replace --labels ${RUNNER_LABELS} --token ${REG_TOKEN}
 
 # Cleanup the runner
 cleanup() {
@@ -320,52 +318,46 @@ ENTRYPOINT ["./startup.sh"]
 
 #### Create a Personal access token
 
-=== ":simple-github: GitHub"
-
-    Before continuing, you'll need to create a personal access token. Follow the
-    [_Managing Personal Access Token_ - GitHub docs](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
-    guide to create a personal access token (classic) named `GHCR_PAT` with the
-    `write:package` scope.
-
-=== ":simple-gitlab: GitLab"
-
-    !!! warning "This is a work in progress"
-
-        This part is a work in progress. Please check back later for updates. Thank you!
-
+Before continuing, you'll need to create a personal access token. Follow the
+[_Managing Personal Access Token_ - GitHub docs](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
+guide to create a personal access token (classic) named `CR_PAT` with the
+`write:package` scope.
 
 Export your token in as environment variable. Replace
-`<my_github_container_repository_token>` with your own token.
+`<my_container_repository_token>` with your own token.
 
 ```sh title="Execute the following command(s) in a terminal"
-export GHCR_PAT=<my_github_container_repository_token>
+export CR_PAT=<my_container_repository_token>
 ```
 
 #### Build and push the image to the container regsitry
 
 With the entrypoint script ready, we can now build the Docker image. The Docker
-image is built and pushed to the GitHub Container Registry.
+image is built and pushed to the Container Registry.
 
-First, authenticate to the GitHub Container Registry:
+First, authenticate to the Container Registry:
 
 ```sh title="Execute the following command(s) in a terminal"
-echo $GHCR_PAT | docker login -u <my_username> ghcr.io --password-stdin
+echo $CR_PAT | docker login -u <my_username> ghcr.io --password-stdin
 ```
 
 The output should be similar to this:
 
 ```
-WARNING! Your password will be stored unencrypted in /home/remy/.docker/config.json.
+WARNING! Your password will be stored unencrypted in /home/username/.docker/config.json.
 Configure a credential helper to remove this warning. See
 https://docs.docker.com/engine/reference/commandline/login/#credential-stores
 
 Login Succeeded
-``` You can safely ignore the warning message.
+```
+
+You can safely ignore the warning message.
 
 Build the docker image. Make sure to update the tag of the Docker image to match
 your username and repository.
 
-```sh title="Execute the following command(s) in a terminal" docker build -t ghcr.io/<my_username>/<my_repository_name>/github-runner:latest .
+```sh title="Execute the following command(s) in a terminal"
+docker build -t ghcr.io/<my_username>/<my_repository_name>/github-runner:latest .
 ```
 
 The output should be similar to this:
@@ -397,7 +389,7 @@ The output should be similar to this:
  => exporting to image                                                                                             1.5s
  => => exporting layers                                                                                            1.4s
  => => writing image sha256:91b6c9cbfd267d995f2701bcbc45181b78413b8b3d580f9ac6333f25ca2903c4                       0.0s
- => => naming to ghcr.io/rmarquis/a-guide-to-mlops/github-runner:latest                                            0.0s
+ => => naming to ghcr.io/username/a-guide-to-mlops/github-runner:latest                                            0.0s
 ```
 
 Push the docker image to the GitHub Container Registry
@@ -406,7 +398,7 @@ Push the docker image to the GitHub Container Registry
 docker push ghcr.io/<my_username>/<my_repository_name>/github-runner:latest
 ```
 
-#### Adjust imegae visibility
+#### Adjust image visibility
 
 Make sure to set the image visibility to `Public` in the GitHub Container
 Registry settings.
@@ -440,9 +432,9 @@ the training of the model on the node with the GPU.
           image: ghcr.io/heigvd-software-engineering/swissimage-vision/github-runner:latest
           // FIXME: image: europe-west6-docker.pkg.dev/mlops-mc-31/mlops-registry/celestial-bodies-classifier:latest
           env:
-            - name: GITHUB_RUNNER_LABELS
+            - name: RUNNER_LABELS
               value: "base-runner"
-            - name: GITHUB_RUNNER_PAT
+            - name: RUNNER_PAT
               valueFrom:
                 secretKeyRef:
                   name: github-runner-pat
