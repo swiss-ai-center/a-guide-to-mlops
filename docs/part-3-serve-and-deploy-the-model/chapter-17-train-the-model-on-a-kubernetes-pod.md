@@ -238,6 +238,8 @@ the image.
 Replace `<my_username>` and `<my_repository_name>` with your own username and
 repository name.
 
+@todo: `RUNNER_LABELS`
+
 ```yaml title="docker/startup.sh"
 #!/bin/bash
 
@@ -320,14 +322,14 @@ ENTRYPOINT ["./startup.sh"]
 
 Before continuing, you'll need to create a personal access token. Follow the
 [_Managing Personal Access Token_ - GitHub docs](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
-guide to create a personal access token (classic) named `CR_PAT` with the
+guide to create a personal access token (classic) named `GHCR_PAT` with the
 `write:package` scope.
 
 Export your token in as environment variable. Replace
 `<my_container_repository_token>` with your own token.
 
 ```sh title="Execute the following command(s) in a terminal"
-export CR_PAT=<my_container_repository_token>
+export GHCR_PAT=<my_container_repository_token>
 ```
 
 #### Build and push the image to the container regsitry
@@ -338,7 +340,7 @@ image is built and pushed to the Container Registry.
 First, authenticate to the Container Registry:
 
 ```sh title="Execute the following command(s) in a terminal"
-echo $CR_PAT | docker login -u <my_username> ghcr.io --password-stdin
+echo $GHCR_PAT | docker login -u <my_username> ghcr.io --password-stdin
 ```
 
 The output should be similar to this:
@@ -407,6 +409,108 @@ In your repository page, click on *Packages* * on the right hand side, then on
 your **github-runner** package. In **Package settings** in the **Danger Zone**
 section,choose **Change package visibility** and set the package to **public**.
 
+## Deploy the self-hosted runner
+
+### Self-hosted runner
+
+We will now deploy our self-hosted GitHub runner to our Kubernetes cluster
+(runner.yaml). As a reminder, the runner is used to execute the GitHub Action
+workflows defined in the repository.
+
+The runner will use the custom Docker image that we built and pushed to the
+GitHub Container Registry. Replace `<my_username>` and `<my_repository_name>`
+with your own username and repository name.
+
+```txt title="kubernetes/runner.yaml"
+apiVersion: v1
+kind: Pod
+metadata:
+  name: github-runner
+  labels:
+    app: github-runner
+spec:
+  containers:
+    - name: github-runner
+      image: ghcr.io/<my_username>/<my_repository_name>/github-runner:latest
+      env:
+        - name: GITHUB_RUNNER_LABELS
+          value: "base-runner"
+        - name: GITHUB_RUNNER_PAT
+          valueFrom:
+            secretKeyRef:
+              name: github-runner-pat
+              key: token
+      securityContext:
+        runAsUser: 1000
+      resources:
+        limits:
+          cpu: "4"
+          memory: "2Gi"
+        requests:
+          cpu: "4"
+          memory: "2Gi"
+```
+
+### GPU runner
+
+We also have a similar yaml file for the GPU runner (runner-gpu.yaml). This is
+used within the workflow train-and-report.yaml to create a self-hosted GPU
+runner only for executing the needed steps. This has the advantage of only
+utilizing the GPU resources when needed. It also uses the same Docker image as
+the CPU runner.
+
+The step train-and-report of the workflow train-and-report.yaml runs on a
+self-hosted runner that has the label gpu-runner. We configured runner-gpu.yaml
+in order to create a self-hosted runner with the label gpu-runner.
+
+    @TODO: (repharse) # The label `gpu-runner` corresponds to the self-hosted runner
+    with this label in the runner-gpu.yaml file.
+
+Replace `<my_username>` and `<my_repository_name>` with your own username and
+repository name.
+
+```txt title="kubernetes/runner-gpu.yaml"
+apiVersion: v1
+kind: Pod
+metadata:
+  name: github-runner-gpu-${GITHUB_RUN_ID}
+  labels:
+    app: github-runner-gpu-${GITHUB_RUN_ID}
+spec:
+  volumes:
+    - name: dshm
+      emptyDir:
+        medium: Memory
+        sizeLimit: 16Gi
+  containers:
+    - name: github-runner-gpu-${GITHUB_RUN_ID}
+      image: ghcr.io/<my_username>/<my_repository_name>/github-runner:latest
+      # We mount a shared memory volume for training with PyTorch
+      volumeMounts:
+        - name: dshm
+          mountPath: /dev/shm
+      env:
+        - name: GITHUB_RUNNER_LABELS
+          value: "gpu-runner"
+        - name: GITHUB_RUNNER_PAT
+          valueFrom:
+            secretKeyRef:
+              name: github-runner-pat
+              key: token
+      securityContext:
+        runAsUser: 1000
+      resources:
+        limits:
+          cpu: "16"
+          memory: "64Gi"
+          nvidia.com/gpu: "1"
+        requests:
+          cpu: "16"
+          memory: "64Gi"
+          nvidia.com/gpu: "1"
+```
+
+
 ### Update the CI/CD configuration file
 
 You'll now update the CI/CD configuration file to start a runner on the
@@ -418,82 +522,6 @@ the training of the model on the node with the GPU.
     Update the `.github/workflows/mlops.yaml` file. Replace `<my_cluster_name>` with
     your own name (ex: `mlops-kubernetes`). Replace `<my_cluster_zone>` with your
     own zone (ex: `europe-west6-a` for Zurich, Switzerland).
-
-    ```yaml title="kubernetes/runner.yaml"
-    apiVersion: v1
-    kind: Pod
-    metadata:
-      name: github-runner
-      labels:
-        app: github-runner
-    spec:
-      containers:
-        - name: github-runner
-          image: ghcr.io/heigvd-software-engineering/swissimage-vision/github-runner:latest
-          // FIXME: image: europe-west6-docker.pkg.dev/mlops-mc-31/mlops-registry/celestial-bodies-classifier:latest
-          env:
-            - name: RUNNER_LABELS
-              value: "base-runner"
-            - name: RUNNER_PAT
-              valueFrom:
-                secretKeyRef:
-                  name: github-runner-pat
-                  key: token
-          securityContext:
-            runAsUser: 1000
-          resources:
-            limits:
-              cpu: "4"
-              memory: "2Gi"
-            requests:
-              cpu: "4"
-              memory: "2Gi"
-    ```
-
-    ```yaml title="kubernetes/github-runner-gpu.yaml"
-    apiVersion: v1
-    kind: Pod
-    metadata:
-      name: github-runner-gpu-${GITHUB_RUN_ID}
-      labels:
-        app: github-runner-gpu-${GITHUB_RUN_ID}
-    spec:
-      volumes:
-        - name: dshm
-          emptyDir:
-            medium: Memory
-            sizeLimit: 16Gi
-      containers:
-        - name: github-runner-gpu-${GITHUB_RUN_ID}
-          image: ghcr.io/heigvd-software-engineering/swissimage-vision/github-runner:latest
-          # We mount a shared memory volume for training with PyTorch
-          volumeMounts:
-            - name: dshm
-              mountPath: /dev/shm
-          env:
-            - name: GITHUB_RUNNER_LABELS
-              value: "gpu-runner"
-            - name: GITHUB_RUNNER_PAT
-              valueFrom:
-                secretKeyRef:
-                  name: github-runner-pat
-                  key: token
-          securityContext:
-            runAsUser: 1000
-          resources:
-            limits:
-              cpu: "16"
-              memory: "64Gi"
-              nvidia.com/gpu: "1"
-            requests:
-              cpu: "16"
-              memory: "64Gi"
-              nvidia.com/gpu: "1"
-    ```
-
-    @TODO: (repharse) # The label `gpu-runner` corresponds to the self-hosted runner
-    with this
-            # label in the runner-gpu.yaml file.
 
     ```yaml title=".github/workflows/mlops.yaml" hl_lines="15-18 21-49 52-54 71-77 169-186"
     name: MLOps
