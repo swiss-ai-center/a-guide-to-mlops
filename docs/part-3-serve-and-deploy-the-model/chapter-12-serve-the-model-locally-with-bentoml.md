@@ -12,7 +12,7 @@ In this chapter, you will learn how to:
 1. Serve the model with BentoML and FastAPI
 2. Push the changes to DVC and Git
 
-The following diagram illustrates control flow of the experiment at the end of
+The following diagram illustrates the control flow of the experiment at the end of
 this chapter:
 
 ```mermaid

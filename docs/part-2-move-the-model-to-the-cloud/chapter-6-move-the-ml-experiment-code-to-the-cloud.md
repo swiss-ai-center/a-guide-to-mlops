@@ -10,7 +10,7 @@ By linking your local project to a remote repository on platforms like
 [:simple-github: GitHub](../tools.md) or [:simple-gitlab: GitLab](../tools.md),
 you can easily push, pull, and synchronize changes with your team.
 
-The following diagram illustrates control flow of the experiment at the end of
+The following diagram illustrates the control flow of the experiment at the end of
 this chapter:
 
 ```mermaid

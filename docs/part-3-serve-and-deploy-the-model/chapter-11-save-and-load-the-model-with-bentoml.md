@@ -18,7 +18,7 @@ In this chapter, you will learn how to:
 3. Update and run the experiment to use BentoML to save and load the model to
    and from the model's store
 
-The following diagram illustrates control flow of the experiment at the end of
+The following diagram illustrates the control flow of the experiment at the end of
 this chapter:
 
 ```mermaid

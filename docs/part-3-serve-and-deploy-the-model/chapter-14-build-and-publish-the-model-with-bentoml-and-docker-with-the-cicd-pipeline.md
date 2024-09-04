@@ -17,7 +17,7 @@ In this chapter, you will learn how to:
 2. Store the container registry credentials in the CI/CD configuration
 3. Create the CI/CD pipeline for publishing the model to the container registry
 
-The following diagram illustrates control flow of the experiment at the end of
+The following diagram illustrates the control flow of the experiment at the end of
 this chapter:
 
 ```mermaid
