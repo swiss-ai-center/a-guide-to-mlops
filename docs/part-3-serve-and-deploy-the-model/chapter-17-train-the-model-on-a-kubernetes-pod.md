@@ -407,6 +407,42 @@ spec:
 
 @todo: prepare k8s config for deployment.
 
+### Install the base runner
+First, you need to create a Kubernetes secret to store a personal access token (PAT) in order to create the runner.
+
+The PAT is required to have the following permissions:
+
+repo - to access the repository
+
+Run the following command to create the secret:
+
+```sh title="Execute the following command(s) in a terminal"
+printf "Enter your GitHub runner PAT: " && read TOKEN \
+   && kubectl create secret generic github-runner-pat --from-literal=token=$TOKEN
+```
+
+To deploy runner to Kubernetes cluster, run navigate to this folder and the following command:
+
+kubectl apply -f runner.yaml
+This will deploy a GitHub runner pod named github-runner in your current namespace. The runner will automatically register itself to the repository. See startup.sh for more information.
+
+You can check the runner logs by connecting to the pod:
+
+```sh title="Execute the following command(s) in a terminal"
+kubectl exec -it github-runner -- bash
+tail -f run.log
+```
+
+!!! note
+
+    To remove the runner from the Kubernetes cluster, run the following command:
+
+    ```sh title="Execute the following command(s) in a terminal"
+    kubectl delete -f kubernetes/runner.yaml
+    ```
+
+    The runner will also automatically be removed from the repository.
+
 ### Self-hosted GPU runner
 
 We also have a similar yaml file for the GPU runner (runner-gpu.yaml). This is
