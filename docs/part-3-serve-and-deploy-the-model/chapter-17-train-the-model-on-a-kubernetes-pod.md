@@ -131,53 +131,6 @@ graph TB
 
     Please check back later for updates specific to using :simple-gitlab: GitLab. Thank you!
 
-### Display the cluster nodes names and labels
-
-Display the nodes with the following command.
-
-```sh title="Execute the following command(s) in a terminal"
-# Display the nodes
-kubectl get nodes --show-labels
-```
-
-The output should be similar to this: As noticed, you have two nodes in your
-cluster with their labels.
-
-```
-NAME                                              STATUS   ROLES    AGE   VERSION            LABELS
-gke-mlops-kubernetes-default-pool-d4f966ea-8rbn   Ready    <none>   49s   v1.24.9-gke.3200   beta.kubernetes.io/arch=amd64,[...]
-gke-mlops-kubernetes-default-pool-d4f966ea-p7qm   Ready    <none>   50s   v1.24.9-gke.3200   beta.kubernetes.io/arch=amd64,[...]
-```
-
-Export the name of the two nodes as environment variables. Replace the
-`<my_node_1_name>` and `<my_node_2_name>` placeholders with the names of your
-nodes (`gke-mlops-kubernetes-default-pool-d4f966ea-8rbn` and
-`gke-mlops-kubernetes-default-pool-d4f966ea-p7qm` in this example).
-
-```sh title="Execute the following command(s) in a terminal"
-export K8S_NODE_1_NAME=<my_node_1_name>
-```
-
-```sh title="Execute the following command(s) in a terminal"
-export K8S_NODE_2_NAME=<my_node_2_name>
-```
-
-### Labelize the nodes
-
-Let's imagine one node has a GPU and the other one doesn't. You can labelize the
-nodes to be able to use the GPU node for the training of the model.
-
-```sh title="Execute the following command(s) in a terminal"
-# Labelize the nodes
-kubectl label nodes $K8S_NODE_1_NAME gpu=true
-kubectl label nodes $K8S_NODE_2_NAME gpu=false
-```
-
-You can check the labels with the `kubectl get nodes --show-labels` command. You
-should see the nodes with the respective `gpu=true` and `gpu=false` labels.
-
-
-
 ### Create a self-hosted runner container image
 
 Jobs in a CI/CD workflow are executed on applications known as runners. These
