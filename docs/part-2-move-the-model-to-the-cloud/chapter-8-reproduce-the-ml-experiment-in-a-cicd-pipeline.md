@@ -135,7 +135,7 @@ data inside the CI/CD pipeline:
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
     [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
     not officially support them.
 
@@ -172,7 +172,7 @@ be different:
         Google Cloud as `base64`. It allows to hide the secret in GitLab CI logs as a
         security measure.
 
-        === ":simple-linux: Linux and :simple-windows: Windows"
+        === ":simple-linux: Linux and :fontawesome-brands-windows: Windows"
 
             ```sh title="Execute the following command(s) in a terminal"
             # Encode the Google Service Account key to base64
@@ -221,7 +221,7 @@ be different:
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
     [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
     not officially support them.
 

@@ -237,7 +237,7 @@ This is the same process as in
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
     [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
     not officially support them.
 
@@ -320,7 +320,7 @@ Depending on the CI/CD platform you are using, the process will be different.
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
     [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
     not officially support them.
 
@@ -833,7 +833,7 @@ The pod should be created on the Kubernetes Cluster.
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
     [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
     not officially support them.
 

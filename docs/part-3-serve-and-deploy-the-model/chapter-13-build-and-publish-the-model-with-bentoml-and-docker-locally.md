@@ -371,7 +371,7 @@ for an efficient models management.
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
     [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
     not officially support them.
 
@@ -430,7 +430,7 @@ for an efficient models management.
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
     [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
     not officially support them.
 

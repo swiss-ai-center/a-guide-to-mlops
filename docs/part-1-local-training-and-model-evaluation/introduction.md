@@ -10,7 +10,7 @@ Learn how to train a model locally and evaluate it using
 ## Environment
 
 This guide has been written with :simple-apple: macOS and :simple-linux: Linux
-operating systems in mind. If you use :simple-windows: Windows, you might
+operating systems in mind. If you use :fontawesome-brands-windows: Windows, you might
 encounter issues. Please use the
 [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/)
 (WSL 2) for optimal results.
@@ -20,7 +20,7 @@ encounter issues. Please use the
 The following requirements are necessary to follow this part:
 
 - An IDE. We recommend to use
-  [:simple-visualstudiocode: Visual Studio Code](https://code.visualstudio.com/)
+  [:material-microsoft-visual-studio-code: Visual Studio Code](https://code.visualstudio.com/)
   to follow this guide.
 - [:simple-python: Python 3.11](https://www.python.org/downloads/)
 - [:simple-python: pip](https://pip.pypa.io/)

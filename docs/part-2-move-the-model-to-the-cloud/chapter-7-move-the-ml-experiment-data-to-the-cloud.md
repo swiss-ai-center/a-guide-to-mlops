@@ -118,7 +118,7 @@ Install and configure the cloud provider CLI tool to manage the cloud resources:
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
     [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
     not officially support them.
 
@@ -180,7 +180,7 @@ This step will create a project on a cloud provider to host the data.
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
     [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
     not officially support them.
 
@@ -228,7 +228,7 @@ resources:
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
     [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
     not officially support them.
 
@@ -294,7 +294,7 @@ Create the Storage Bucket to store the data with the cloud provider CLI:
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
     [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
     not officially support them.
 
@@ -366,7 +366,7 @@ Install the DVC Storage plugin for the cloud provider:
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
     [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
     not officially support them.
 
@@ -394,7 +394,7 @@ Configure DVC to use the Storage Bucket on the cloud provider:
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
     [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
     not officially support them.
 
