@@ -22,8 +22,10 @@ of this chapter:
 
 ```mermaid
 graph TB
-    dot_dvc[(.dvc)] <-->|dvc pull\ndvc push| s3_storage[(S3 Storage)]
-    dot_git[(.git)] <-->|git pull\ngit push| repository[(Repository)]
+    dot_dvc[(.dvc)] <-->|dvc pull
+                         dvc push| s3_storage[(S3 Storage)]
+    dot_git[(.git)] <-->|git pull
+                         git push| repository[(Repository)]
     workspaceGraph <-....-> dot_git
     data[data/raw]
 
@@ -51,19 +53,23 @@ graph TB
         subgraph gitGraph[Git Remote]
             repository --> action[Action]
         end
-        registry[(Container\nregistry)]
-        action --> |bentoml build\nbentoml containerize\ndocker push|registry
+        registry[(Container
+                  registry)]
+        action --> |bentoml build
+                    bentoml containerize
+                    docker push|registry
         s3_storage --> |...|repository
         subgraph clusterGraph[Kubernetes]
             subgraph clusterPodGraph[Kubernetes Pod]
-                pod_runner[Runner] -->|dvc pull\ndvc repro| pod_train[Train stage]
+                pod_runner[Runner] -->|dvc pull
+                                       dvc repro| pod_train[Train stage]
                 k8s_gpu[GPUs] -.-> pod_train
             end
             bento_service_cluster[classifier.bentomodel] --> k8s_fastapi[FastAPI]
         end
         action --> |runner|pod_runner
         pod_train -->|dvc push| s3_storage
-        registry[(Container\nregistry)] --> bento_service_cluster
+        registry --> bento_service_cluster
         action --> |kubectl apply|bento_service_cluster
     end
 
