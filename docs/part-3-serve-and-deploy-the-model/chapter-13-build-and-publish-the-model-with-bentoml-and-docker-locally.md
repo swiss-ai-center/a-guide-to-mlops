@@ -18,8 +18,8 @@ In this chapter, you will learn how to:
 5. Publish the containerized model artifact Docker image to the container
    registry
 
-The following diagram illustrates the control flow of the experiment at the end of
-this chapter:
+The following diagram illustrates the control flow of the experiment at the end
+of this chapter:
 
 ```mermaid
 flowchart TB

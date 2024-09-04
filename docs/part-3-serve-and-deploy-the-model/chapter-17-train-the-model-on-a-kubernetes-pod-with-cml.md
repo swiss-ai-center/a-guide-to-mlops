@@ -23,8 +23,8 @@ In this chapter, you will learn how to:
 2. Start the training of the model from your CI/CD pipeline on the Kubernetes
    cluster
 
-The following diagram illustrates the control flow of the experiment at the end of
-this chapter:
+The following diagram illustrates the control flow of the experiment at the end
+of this chapter:
 
 ```mermaid
 flowchart TB

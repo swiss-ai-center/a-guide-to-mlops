@@ -21,8 +21,8 @@ In this chapter, you will learn how to:
 4. Push the data files to DVC
 5. Commit the metadata files to Git
 
-The following diagram illustrates the control flow of the experiment at the end of
-this chapter:
+The following diagram illustrates the control flow of the experiment at the end
+of this chapter:
 
 ```mermaid
 flowchart TB

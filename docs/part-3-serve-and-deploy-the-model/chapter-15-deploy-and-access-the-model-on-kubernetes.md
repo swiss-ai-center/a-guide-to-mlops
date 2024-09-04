@@ -23,8 +23,8 @@ In this chapter, you will learn how to:
     Kubernetes clusters are not free on most cloud providers and can be expensive.
     Make sure to delete the resources at the end of the guide.
 
-The following diagram illustrates the control flow of the experiment at the end of
-this chapter:
+The following diagram illustrates the control flow of the experiment at the end
+of this chapter:
 
 ```mermaid
 flowchart TB

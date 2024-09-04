@@ -18,8 +18,8 @@ In this chapter, you will learn how to:
 4. Push the CI/CD pipeline configuration file to [:simple-git: Git](../tools.md)
 5. Visualize the execution of the CI/CD pipeline
 
-The following diagram illustrates the control flow of the experiment at the end of
-this chapter:
+The following diagram illustrates the control flow of the experiment at the end
+of this chapter:
 
 ```mermaid
 flowchart TB
