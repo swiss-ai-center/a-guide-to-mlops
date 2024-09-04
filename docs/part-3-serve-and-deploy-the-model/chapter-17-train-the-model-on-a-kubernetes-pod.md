@@ -116,6 +116,21 @@ graph TB
 
 ## Steps
 
+!!! note
+
+    For our small experiment, there is actually no need to have a GPU to train the
+    model. This is done solely for demonstration purposes. In a real-life production
+    setup with a larger machine learning experiment, however, training with a GPU is
+    likely to be a strong requirement due to the increased computational demands and
+    the need for faster processing times.
+
+
+!!! warning
+
+    This part is a work in progress. It focuses for now on using :simple-github: GitHub.
+
+    Please check back later for updates specific to using :simple-gitlab: GitLab. Thank you!
+
 ### Display the cluster nodes names and labels
 
 Display the nodes with the following command.
@@ -152,14 +167,6 @@ export K8S_NODE_2_NAME=<my_node_2_name>
 Let's imagine one node has a GPU and the other one doesn't. You can labelize the
 nodes to be able to use the GPU node for the training of the model.
 
-!!! note
-
-    For our small experiment, there is actually no need to have a GPU to train the
-    model. This is done solely for demonstration purposes. In a real-life production
-    setup with a larger machine learning experiment, however, training with a GPU is
-    likely to be a strong requirement due to the increased computational demands and
-    the need for faster processing times.
-
 ```sh title="Execute the following command(s) in a terminal"
 # Labelize the nodes
 kubectl label nodes $K8S_NODE_1_NAME gpu=true
@@ -179,13 +186,12 @@ on a public cloud, like the runner used for our workflow so far, or on-premises
 within your own infrastructure.
 
 We will create a custom container image for a self-hosted runner and deploy it
-on our Kubernetes cluster on Google Cloud. The runner listens for jobs from
-GitHub Actions and creates specialized GPU runner pods on the Kubernetes cluster
-to execute the jobs. This specialized runner will then be destoyed. This
-approach can also be easily adapted to run on a on-premises Kubernetes cluster.
+on our Kubernetes cluster on Google Cloud. This base runner listens for jobs from
+GitHub Actions. When asked to, it creates specialized GPU runner pods on the Kubernetes cluster to execute the jobs. This specialized runner will then be destoyed.
 
-The runner uses a custom Docker image that includes the necessary dependencies
-to run the workflows.
+This approach can also be easily adapted to run on a on-premises Kubernetes cluster.
+
+The runner uses a custom Docker image that includes the necessary dependencies to run the workflows.
 
 #### Configure hardened security
 
@@ -197,43 +203,29 @@ While our self-hosted runner will be set up in a containerized isolated
 environment that limits the impact of any malicious code, unwanted pull requests
 in forks could still exhaust computational resources that you pay for.
 
-=== ":simple-github: GitHub"
+!!! danger
 
-    !!! danger
+    Creating a self-hosted runner allows other users to execute code on your
+    infrastructure. Make sure to secure your runner and restrict access to the
+    repository. For more information, see
+    [Self-hosted runner security](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners#self-hosted-runner-security).
 
-        Creating a self-hosted runner allows other users to execute code on your
-        infrastructure. Make sure to secure your runner and restrict access to the
-        repository. For more information, see
-        [Self-hosted runner security](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners#self-hosted-runner-security).
+In the repository, go to **Settings > Actions > General**. In the
+**Fork pull request workflows** section, disable
+**Run workflows from fork pull requests** and click on **Save**.
 
-    In the repository, go to **Settings > Actions > General**. In the
-    **Fork pull request workflows** section, disable
-    **Run workflows from fork pull requests** and click on **Save**.
+More generally, it is recommended that you only use self-hosted runners with
+private repositories.
 
-    More generally, it is recommended that you only use self-hosted runners with
-    private repositories.
-
-    If not already done, you can change the repository visibility in
-    **Settings > General**. In the **Danger Zone** section, choose
-    **Change visibility** and set the repository to **private**.
-
-=== ":simple-gitlab: GitLab"
-
-    !!! danger
-
-        Creating a self-hosted runner allows other users to execute code on your
-        infrastructure. Make sure to secure your runner and restrict access to the
-        repository. For more information, see
-        [Security for self-managed runners](https://docs.gitlab.com/runner/security/).
-
-    !!! warning "This is a work in progress"
-
-        This part is a work in progress. Please check back later for updates. Thank you!
-
+If not already done, you can change the repository visibility in
+**Settings > General**. In the **Danger Zone** section, choose
+**Change visibility** and set the repository to **private**.
 
 #### Create the startup script
 
 At the root level of your Git repository, create a `docker` folder.
+
+@todo: table description of scripts
 
 This script will act as an entrypoint for the Docker image. It will be used to
 initialize our Docker container when launched from the image we are creating.
@@ -243,8 +235,6 @@ the image.
 
 Replace `<my_username>` and `<my_repository_name>` with your own username and
 repository name.
-
-@todo: `RUNNER_LABELS`
 
 ```yaml title="docker/startup.sh"
 #!/bin/bash
@@ -256,14 +246,14 @@ REPOSITORY_NAME=<my_repository_name>
 
 # Set the runner token (expires after 1 hour)
 set_token() {
-    REG_TOKEN=$(curl -s -X POST -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${RUNNER_PAT}" https://api.github.com/repos/${REPOSITORY_OWNER}/${REPOSITORY_NAME}/actions/runners/registration-token | jq -r .token)
+    REG_TOKEN=$(curl -s -X POST -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${GITHUB_RUNNER_PAT}" https://api.github.com/repos/${REPOSITORY_OWNER}/${REPOSITORY_NAME}/actions/runners/registration-token | jq -r .token)
 }
 
 # Configure the runner
 set_token
 ./config.sh --unattended \
     --url https://github.com/${REPOSITORY_OWNER}/${REPOSITORY_NAME} \
-    --replace --labels ${RUNNER_LABELS} --token ${REG_TOKEN}
+    --replace --labels ${GITHUB_RUNNER_LABELS} --token ${REG_TOKEN}
 
 # Cleanup the runner
 cleanup() {
@@ -279,6 +269,10 @@ trap 'cleanup; exit 143' TERM
 ./run.sh > run.log 2>&1 & wait $!
 ```
 
+@todo: `GITHUB_RUNNER_LABELS`
+@todo: `GITHUB_RUNNER_PAT`
+@todo: define these variables
+
 #### Create the Dockerfile
 
 The Dockerfile provides the instructions needed to create a custom Docker
@@ -287,6 +281,8 @@ container image that incorporates the
 necessary dependencies to run the workflow.
 
 Replace `<my_repository_url>` with your own repository name.
+
+@todo: Why is the URTL useful?
 
 ```yaml title="docker/Dockerfile"
 FROM ubuntu:24.04
@@ -297,11 +293,9 @@ LABEL RunnerVersion=${RUNNER_VERSION}
 LABEL org.opencontainers.image.source="<my_repository_url>"
 
 # Install dependencies
-RUN apt-get update -y && apt-get install -y \
-    build-essential lsb-release \
-    python3 python3-pip \
-    curl jq vim gpg wget \
-    git unzip tar gettext-base
+RUN apt-get update -y && \
+    apt-get install -y build-essential lsb-release python3 python3-pip \
+    curl jq vim gpg wget git unzip tar gettext-base
 
 # Add a non-root user
 RUN useradd -m runner
@@ -400,7 +394,7 @@ The output should be similar to this:
  => => naming to ghcr.io/username/a-guide-to-mlops/github-runner:latest                                            0.0s
 ```
 
-Push the docker image to the GitHub Container Registry
+Lastly, push the docker image to the GitHub Container Registry:
 
 ```sh title="Execute the following command(s) in a terminal"
 docker push ghcr.io/<my_username>/<my_repository_name>/github-runner:latest
@@ -417,14 +411,15 @@ section,choose **Change package visibility** and set the package to **public**.
 
 ## Deploy the self-hosted runner
 
-### Self-hosted runner
+### Self-hosted base runner
 
-We will now deploy our self-hosted GitHub runner to our Kubernetes cluster
-(runner.yaml). As a reminder, the runner is used to execute the GitHub Action
+We will now deploy our self-hosted GitHub runner to our Kubernetes cluster with the help of a `runner.yaml configuration file. As a reminder, the runner is used to execute the GitHub Action
 workflows defined in the repository.
 
-The runner will use the custom Docker image that we built and pushed to the
-GitHub Container Registry. Replace `<my_username>` and `<my_repository_name>`
+The runner will use the custom Docker image that we pushed to the
+GitHub Container Registry. It is identified by a `base-runner` label.
+
+Replace `<my_username>` and `<my_repository_name>`
 with your own username and repository name.
 
 ```txt title="kubernetes/runner.yaml"
@@ -457,7 +452,9 @@ spec:
           memory: "2Gi"
 ```
 
-### GPU runner
+@todo: prepare k8s config for deployment.
+
+### Self-hosted GPU runner
 
 We also have a similar yaml file for the GPU runner (runner-gpu.yaml). This is
 used within the workflow train-and-report.yaml to create a self-hosted GPU
@@ -468,6 +465,8 @@ the CPU runner.
 The step train-and-report of the workflow train-and-report.yaml runs on a
 self-hosted runner that has the label gpu-runner. We configured runner-gpu.yaml
 in order to create a self-hosted runner with the label gpu-runner.
+
+ It will be identified by a `gpu-runner` label.
 
     @TODO: (repharse) # The label `gpu-runner` corresponds to the self-hosted runner
     with this label in the runner-gpu.yaml file.
@@ -516,6 +515,19 @@ spec:
           nvidia.com/gpu: "1"
 ```
 
+@todo: explain dependencies of gpu-runner.
+
+!!! tip
+
+    The python dependencies for the GPU runner are listed in the requirements-freeze.txt file. The dependencies are installed in the Docker image used by the runner. This speeds up the workflow execution by avoiding dependency resolution and makes the workflow more reproducible.
+
+    To update the dependencies, run the following command:
+
+    pip freeze > requirements-freeze.txt
+
+### Prepare Kubeconfig secret
+
+@todo KUBECONFIG in GitHub secrets
 
 ### Update the CI/CD configuration file
 
@@ -525,9 +537,9 @@ the training of the model on the node with the GPU.
 
 === ":simple-github: GitHub"
 
-    Update the `.github/workflows/mlops.yaml` file. Replace `<my_cluster_name>` with
-    your own name (ex: `mlops-kubernetes`). Replace `<my_cluster_zone>` with your
-    own zone (ex: `europe-west6-a` for Zurich, Switzerland).
+    Update the `.github/workflows/mlops.yaml` file.
+
+    Take some time to understand the new steps:
 
     ```yaml title=".github/workflows/mlops.yaml" hl_lines="15-18 21-49 52-54 71-77 169-186"
     name: MLOps
@@ -551,7 +563,7 @@ the training of the model on the node with the GPU.
 
     jobs:
       setup-runner:
-        runs-on: ubuntu-latest
+        runs-on: [self-hosted, base-runner]
         steps:
           - name: Checkout repository
             uses: actions/checkout@v4
@@ -717,6 +729,12 @@ the training of the model on the node with the GPU.
               export GITHUB_RUN_ID="${{ github.run_id }}"
               envsubst < kubernetes/github-runner-gpu.yaml | kubectl delete --wait=false -f -
     ```
+
+    Here, the following should be noted:
+
+    * the `setup-runner` job creates a self-hosted GPU runner.
+    * the `train-report-publish-and-deploy` job run the DVC pipeline and reports the results back to the pull request.
+    * the `cleanup-runner` job deletes the self-hosted GPU runner.
 
     Check the differences with Git to validate the changes.
 
@@ -917,7 +935,10 @@ Highly inspired by:
 
 - [_About self-hosted runners_ - GitHub docs](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners)
 - [_GitHub Actions self-hosted runners on Google Cloud_ - github.blog](https://github.blog/news-insights/product-news/github-actions-self-hosted-runners-on-google-cloud/)
+- [_Working with the Container registry_ - GitHub docs](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry)
 - [_Create a Docker based Self Hosted GitHub runner Linux container_ - dev.to](https://dev.to/pwd9000/create-a-docker-based-self-hosted-github-runner-linux-container-48dh)
+- [_Self-hosted runner security_ - GitHubdocs](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners#self-hosted-runner-security)
+- [_Security for self-managed runners_ - GitLab docs](https://docs.gitlab.com/runner/security/)
 - [_Install kubectl and configure cluster access_ - cloud.google.com](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl)
 - [_gcloud container clusters create_ - cloud.google.com](https://cloud.google.com/sdk/gcloud/reference/container/clusters/create)
 - [_Install Tools_ - kubernetes.io](https://kubernetes.io/docs/tasks/tools/)
