@@ -26,8 +26,8 @@ of this chapter:
 
 ```mermaid
 flowchart TB
-    dot_dvc[(.dvc)] <-->|dvc push\ndvc pull| s3_storage[(S3 Storage)]
-    dot_git[(.git)] <-->|git push\ngit pull| gitGraph[Git Remote]
+    dot_dvc[(.dvc)] <-->|dvc push / dvc pull| s3_storage[(S3 Storage)]
+    dot_git[(.git)] <-->|git push / git pull| gitGraph[Git Remote]
     workspaceGraph <-....-> dot_git
     data[data/raw] <-.-> dot_dvc
     subgraph remoteGraph[REMOTE]

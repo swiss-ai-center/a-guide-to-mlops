@@ -16,7 +16,7 @@ of this chapter:
 ```mermaid
 flowchart TB
     dot_dvc[(.dvc)]
-    dot_git[(.git)] <-->|git push\ngit pull| gitGraph[Git Remote]
+    dot_git[(.git)] <-->|git push / git pull| gitGraph[Git Remote]
     workspaceGraph <-....-> dot_git
     data[data/raw] <-.-> dot_dvc
     subgraph remoteGraph[REMOTE]
