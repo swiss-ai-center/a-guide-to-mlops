@@ -58,6 +58,21 @@ flowchart TB
         params -.- train
         params <-.-> dot_dvc
     end
+    style workspaceGraph opacity:0.4,color:#7f7f7f80
+    style cacheGraph opacity:0.4,color:#7f7f7f80
+    style data opacity:0.4,color:#7f7f7f80
+    style prepare opacity:0.4,color:#7f7f7f80
+    style train opacity:0.4,color:#7f7f7f80
+    style evaluate opacity:0.4,color:#7f7f7f80
+    linkStyle 3 opacity:0.4,color:#7f7f7f80
+    linkStyle 9 opacity:0.4,color:#7f7f7f80
+    linkStyle 10 opacity:0.4,color:#7f7f7f80
+    linkStyle 11 opacity:0.4,color:#7f7f7f80
+    linkStyle 12 opacity:0.4,color:#7f7f7f80
+    linkStyle 13 opacity:0.4,color:#7f7f7f80
+    linkStyle 14 opacity:0.4,color:#7f7f7f80
+    linkStyle 15 opacity:0.4,color:#7f7f7f80
+    linkStyle 17 opacity:0.4,color:#7f7f7f80
 ```
 
 ## Steps
