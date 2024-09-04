@@ -127,9 +127,11 @@ graph TB
 
 !!! warning
 
-    This part is a work in progress. It focuses for now on using :simple-github: GitHub.
+    This part is a work in progress. It focuses for now on using :simple-github:
+    GitHub.
 
-    Please check back later for updates specific to using :simple-gitlab: GitLab. Thank you!
+    Please check back later for updates specific to using :simple-gitlab: GitLab.
+    Thank you!
 
 ### Create a self-hosted runner container image
 
@@ -139,12 +141,16 @@ on a public cloud, like the runner used for our workflow so far, or on-premises
 within your own infrastructure.
 
 We will create a custom container image for a self-hosted runner and deploy it
-on our Kubernetes cluster on Google Cloud. This base runner listens for jobs from
-GitHub Actions. When asked to, it creates specialized GPU runner pods on the Kubernetes cluster to execute the jobs. This specialized runner will then be destoyed.
+on our Kubernetes cluster on Google Cloud. This base runner listens for jobs
+from GitHub Actions. When asked to, it creates specialized GPU runner pods on
+the Kubernetes cluster to execute the jobs. This specialized runner will then be
+destoyed.
 
-This approach can also be easily adapted to run on a on-premises Kubernetes cluster.
+This approach can also be easily adapted to run on a on-premises Kubernetes
+cluster.
 
-The runner uses a custom Docker image that includes the necessary dependencies to run the workflows.
+The runner uses a custom Docker image that includes the necessary dependencies
+to run the workflows.
 
 #### Configure hardened security
 
@@ -222,9 +228,8 @@ trap 'cleanup; exit 143' TERM
 ./run.sh > run.log 2>&1 & wait $!
 ```
 
-@todo: `GITHUB_RUNNER_LABELS`
-@todo: `GITHUB_RUNNER_PAT`
-@todo: define these variables
+@todo: `GITHUB_RUNNER_LABELS` @todo: `GITHUB_RUNNER_PAT` @todo: define these
+variables
 
 #### Create the Dockerfile
 
@@ -366,14 +371,15 @@ section,choose **Change package visibility** and set the package to **public**.
 
 ### Self-hosted base runner
 
-We will now deploy our self-hosted GitHub runner to our Kubernetes cluster with the help of a `runner.yaml configuration file. As a reminder, the runner is used to execute the GitHub Action
-workflows defined in the repository.
+We will now deploy our self-hosted GitHub runner to our Kubernetes cluster with
+the help of a `runner.yaml configuration file. As a reminder, the runner is used
+to execute the GitHub Action workflows defined in the repository.
 
-The runner will use the custom Docker image that we pushed to the
-GitHub Container Registry. It is identified by a `base-runner` label.
+The runner will use the custom Docker image that we pushed to the GitHub
+Container Registry. It is identified by a `base-runner` label.
 
-Replace `<my_username>` and `<my_repository_name>`
-with your own username and repository name.
+Replace `<my_username>` and `<my_repository_name>` with your own username and
+repository name.
 
 ```txt title="kubernetes/runner.yaml"
 apiVersion: v1
@@ -408,7 +414,8 @@ spec:
 @todo: prepare k8s config for deployment.
 
 ### Install the base runner
-First, you need to create a Kubernetes secret to store a personal access token (PAT) in order to create the runner.
+First, you need to create a Kubernetes secret to store a personal access token
+(PAT) in order to create the runner.
 
 The PAT is required to have the following permissions:
 
@@ -421,10 +428,12 @@ printf "Enter your GitHub runner PAT: " && read TOKEN \
    && kubectl create secret generic github-runner-pat --from-literal=token=$TOKEN
 ```
 
-To deploy runner to Kubernetes cluster, run navigate to this folder and the following command:
+To deploy runner to Kubernetes cluster, run navigate to this folder and the
+following command:
 
-kubectl apply -f runner.yaml
-This will deploy a GitHub runner pod named github-runner in your current namespace. The runner will automatically register itself to the repository. See startup.sh for more information.
+kubectl apply -f runner.yaml This will deploy a GitHub runner pod named
+github-runner in your current namespace. The runner will automatically register
+itself to the repository. See startup.sh for more information.
 
 You can check the runner logs by connecting to the pod:
 
@@ -508,7 +517,10 @@ spec:
 
 !!! tip
 
-    The python dependencies for the GPU runner are listed in the requirements-freeze.txt file. The dependencies are installed in the Docker image used by the runner. This speeds up the workflow execution by avoiding dependency resolution and makes the workflow more reproducible.
+    The python dependencies for the GPU runner are listed in the
+    requirements-freeze.txt file. The dependencies are installed in the Docker image
+    used by the runner. This speeds up the workflow execution by avoiding dependency
+    resolution and makes the workflow more reproducible.
 
     To update the dependencies, run the following command:
 
@@ -722,7 +734,8 @@ the training of the model on the node with the GPU.
     Here, the following should be noted:
 
     * the `setup-runner` job creates a self-hosted GPU runner.
-    * the `train-report-publish-and-deploy` job run the DVC pipeline and reports the results back to the pull request.
+    * the `train-report-publish-and-deploy` job run the DVC pipeline and reports the
+      results back to the pull request.
     * the `cleanup-runner` job deletes the self-hosted GPU runner.
 
     Check the differences with Git to validate the changes.
