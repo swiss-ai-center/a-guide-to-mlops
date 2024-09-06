@@ -35,22 +35,17 @@ graph TB
     dot_git[(.git)] <-->|git pull
                          git push| repository[(Repository)]
     workspaceGraph <-....-> dot_git
-    base_runner_artifact <-->|docker push| registry_docker[(GH Container
+    runner_artifact -->|docker push| registry_docker[(GH Container
                                                     registry)]
     data[data/raw]
     subgraph cacheGraph[CACHE]
         dot_dvc
         dot_git
-        base_runner_artifact[(Containerized
-                        base runner)]
+        runner_artifact[(Containerized
+                        runner)]
     end
 
     subgraph workspaceGraph[WORKSPACE]
-        subgraph runnerBase[base runner]
-            direction TB
-            Dockerfile <--> startup.sh
-        end
-        runnerBase --> |docker build| base_runner_artifact
         data --> code[*.py]
         subgraph dvcGraph["dvc.yaml"]
             code
@@ -58,10 +53,13 @@ graph TB
         params[params.yaml] -.- code
         code <--> bento_model[classifier.bentomodel]
         subgraph bentoGraph[bentofile.yaml]
-            bento_model
             serve[serve.py] <--> bento_model
         end
         bento_model <-.-> dot_dvc
+        subgraph runnerGraph[runner]
+            startup.sh -.- Dockerfile
+        end
+        Dockerfile --> |docker build| runner_artifact
     end
 
     subgraph remoteGraph[REMOTE]
@@ -76,19 +74,24 @@ graph TB
         action --> |bentoml build
                     bentoml containerize
                     docker push|registry
-        s3_storage --> |...|repository
+
         subgraph clusterGraph[Kubernetes]
-            subgraph clusterPodGraph[Kubernetes Pod]
-                pod_runner[Runner] -->|dvc pull
-                                       dvc repro| pod_train[Train stage]
+            base_runner[Base runner]
+            bento_service_cluster[classifier.bentomodel] --> k8s_fastapi[FastAPI]
+            subgraph specialized_runner[Specialized runner]
+                pod_train[Train stage]
                 k8s_gpu[GPUs] -.-> pod_train
             end
-            bento_service_cluster[classifier.bentomodel] --> k8s_fastapi[FastAPI]
         end
-        action --> |runner|pod_runner
-        pod_train -->|dvc push| s3_storage
+        action <-.-> base_runner
+        registry_docker --> |kubectl apply|base_runner
         registry --> bento_service_cluster
+        specialized_runner --> |dvc push|s3_storage
         action --> |kubectl apply|bento_service_cluster
+
+        base_runner --> specialized_runner
+        action --> |dvc pull
+                    dvc repro|pod_train
     end
 
     subgraph browserGraph[BROWSER]
@@ -118,18 +121,18 @@ graph TB
     linkStyle 0 opacity:0.4,color:#7f7f7f80
     linkStyle 1 opacity:0.4,color:#7f7f7f80
     linkStyle 2 opacity:0.4,color:#7f7f7f80
-    linkStyle 3 opacity:0.4,color:#7f7f7f80
+
     linkStyle 4 opacity:0.4,color:#7f7f7f80
     linkStyle 5 opacity:0.4,color:#7f7f7f80
     linkStyle 6 opacity:0.4,color:#7f7f7f80
     linkStyle 7 opacity:0.4,color:#7f7f7f80
     linkStyle 8 opacity:0.4,color:#7f7f7f80
-    linkStyle 9 opacity:0.4,color:#7f7f7f80
-    linkStyle 10 opacity:0.4,color:#7f7f7f80
-    linkStyle 13 opacity:0.4,color:#7f7f7f80
-    linkStyle 16 opacity:0.4,color:#7f7f7f80
-    linkStyle 17 opacity:0.4,color:#7f7f7f80
-    linkStyle 18 opacity:0.4,color:#7f7f7f80
+    linkStyle 11 opacity:0.4,color:#7f7f7f8
+    linkStyle 12 opacity:0.4,color:#7f7f7f8
+    linkStyle 13 opacity:0.4,color:#7f7f7f8
+    linkStyle 17 opacity:0.4,color:#7f7f7f8
+    linkStyle 19 opacity:0.4,color:#7f7f7f8
+    linkStyle 22 opacity:0.4,color:#7f7f7f8
 ```
 
 ## Steps
@@ -141,12 +144,12 @@ can be physical servers, virtual machines, or container images, and may operate
 on a public cloud, like the runner used for our workflow so far, or on-premises
 within your own infrastructure.
 
-We will create a custom container image for a self-hosted runner and deploy it
-on our Kubernetes cluster.
+We will now create a custom container image for a self-hosted runner and deploy
+it on our Kubernetes cluster.
 
 It is important to understand that using a self-hosted runner allows other users
-to execute code on your infrastructure. Specifically, forks of your public
-repository will trigger the workflow when a pull request is created.
+to execute code on your infrastructure. Specifically, **forks** of your public
+repository **will trigger the workflow** when a pull request is created.
 
 Consequently, other users can potentially run malicious code on your self-hosted
 runner machine by executing a workflow.
@@ -184,6 +187,9 @@ on our Kubernetes cluster. This base runner listens for jobs from GitHub
 Actions. When asked to, it creates specialized GPU runner pods on the Kubernetes
 cluster to execute the jobs. This specialized runner will then be destroyed.
 
+This approach optimizes resource usage by ensuring that GPU resources are only
+used when necessary.
+
 !!! note
 
     For our small experiment, there is actually no need to have a GPU to train the
@@ -191,9 +197,6 @@ cluster to execute the jobs. This specialized runner will then be destroyed.
     setup with a larger machine learning experiment, however, training with a GPU is
     likely to be a strong requirement due to the increased computational demands and
     the need for faster processing times.
-
-This approach can also be easily adapted to run on a on-premises Kubernetes
-cluster.
 
 #### Create the base runner files
 
@@ -276,7 +279,7 @@ set_token() {
 set_token
 ./config.sh --unattended \
     --url https://github.com/${REPOSITORY_OWNER}/${REPOSITORY_NAME} \
-    --replace --labels ${GITHUB_RUNNER_LABELS} --token ${REG_TOKEN}
+    --replace --labels ${GITHUB_RUNNER_LABEL} --token ${REG_TOKEN}
 
 # Cleanup the runner
 cleanup() {
@@ -292,8 +295,8 @@ trap 'cleanup; exit 143' TERM
 ./run.sh > run.log 2>&1 & wait $!
 ```
 
-@todo: `GITHUB_RUNNER_LABELS` @todo: `GITHUB_RUNNER_PAT` @todo: define these
-variables
+Note the `GITHUB_RUNNER_LABEL` variable will be used to identify the runner in
+subsequent steps.
 
 #### Create a Personal access token
 
@@ -326,8 +329,9 @@ GHCR_PAT=<my_container_repository_token>
 With the entrypoint script ready, we can now build the Docker image. The Docker
 image is built and pushed to the Container Registry.
 
-Build the docker image. Make sure to update the tag of the Docker image to match
-your username and repository.
+To build the docker image, navigate to the `docker` folder and run the following
+command. Make sure to update the tag of the Docker image to match your username
+and repository.
 
 ```sh title="Execute the following command(s) in a terminal"
 docker build -t ghcr.io/<my_username>/<my_repository_name>/github-runner:latest .
@@ -382,18 +386,19 @@ docker push ghcr.io/<my_username>/<my_repository_name>/github-runner:latest
 Make sure to set the image visibility to `Public` in the GitHub Container
 Registry settings.
 
-In your repository page, click on *Packages* * on the right hand side, then on
+In your repository page, click on **Packages** on the right hand side, then on
 your **github-runner** package. In **Package settings** in the **Danger Zone**
-section,choose **Change package visibility** and set the package to **public**.
+section, choose **Change package visibility** and set the package to **public**.
 
-### Deploy the self-hosted runner
+### Install the self-hosted base runner
 
 We will now deploy our self-hosted GitHub runner to our Kubernetes cluster with
 the help of a YAML configuration file. As a reminder, the runner is used to
 execute the GitHub Action workflows defined in the repository.
 
 The runner will use the custom Docker image that we pushed to the GitHub
-Container Registry. It is identified by a `base-runner` label.
+Container Registry. This image is identified by the label named
+`GITHUB_RUNNER_LABEL` which is set to the value `base-runner`.
 
 Create a new file called `runner.yaml` in the `kubernetes` directory with the
 following content. Replace `<my_username>` and `<my_repository_name>` with your
@@ -411,7 +416,7 @@ spec:
     - name: github-runner
       image: ghcr.io/<my_username>/<my_repository_name>/github-runner:latest
       env:
-        - name: GITHUB_RUNNER_LABELS
+        - name: GITHUB_RUNNER_LABEL
           value: "base-runner"
         - name: GITHUB_RUNNER_PAT
           valueFrom:
@@ -429,13 +434,10 @@ spec:
           memory: "2Gi"
 ```
 
+#### Prepare Kubeconfig secret
 
-
-### Prepare Kubeconfig secret
-
-You will need to create another personal access token. This token will be used
-to authenticate you on the GitHub repository, allowing you to register the
-self-hosted runner.
+To enable the registration of the self-hosted runner, a Personal Access Token
+(PAT) must be generated to authenticate it with the GitHub repository.
 
 Follow the
 [_Managing Personal Access Token_ - GitHub docs](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
@@ -446,7 +448,7 @@ Export your token in as a variable. Replace `<my_repository_token>` with your
 own token.
 
 ```
-GH_RUNNER_PAT=<my_repository_token>
+export GH_RUNNER_PAT=<my_repository_token>
 ```
 
 Run the following command to create the secret:
@@ -456,10 +458,10 @@ printf "Enter your GitHub runner PAT: " && read GH_RUNNER_PAT \
    && kubectl create secret generic github-runner-pat --from-literal=token=$GH_RUNNER_PAT
 ```
 
-### Install the base runner
+#### Deploy the base runner
 
-To deploy the base runner to the Kubernetes cluster, navigate to `kubernetes`
-folder and run the following command:
+To deploy the base runner to the Kubernetes cluster, navigate to the
+`kubernetes` folder and run the following command:
 
 ```sh title="Execute the following command(s) in a terminal"
 kubectl apply -f runner.yaml
@@ -467,13 +469,19 @@ kubectl apply -f runner.yaml
 
 This will deploy a GitHub runner pod named `github-runner` in your current
 Kubernetes namespace. The runner will automatically register itself to the
-repository. See startup.sh for more information.
+repository.
 
 You can check the runner logs by connecting to the pod:
 
 ```sh title="Execute the following command(s) in a terminal"
 kubectl exec -it github-runner -- bash
 tail -f run.log
+```
+
+The output should be similar to this:
+
+```text
+TODO
 ```
 
 !!! note
@@ -484,18 +492,17 @@ tail -f run.log
     kubectl delete -f kubernetes/runner.yaml
     ```
 
-    The runner will also automatically be removed from the repository.
+    The runner will also automatically be unregistered from the repository.
 
 ### Self-hosted GPU runner
 
 We also create a similar configuration file for the GPU runner, which is used
 exclusively during the `train-report-publish-and-deploy` step of the workflow to
-create a self-hosted GPU runner specifically for executing this step. This
-approach optimizes resource usage by ensuring that GPU resources are only
-utilized when necessary.
+create a self-hosted GPU runner specifically for executing this step.
 
-It also uses the same custom Docker image as the base runner. It is identified
-by a `gpu-runner` label.
+The runner will use the same custom Docker image that we pushed to the GitHub
+Container Registry. This image is identified by the label `GITHUB_RUNNER_LABEL`
+which is set to the value `gpu-runner`.
 
 Create a new file called `runner-gpu.yaml` in the `kubernetes` directory with
 the following content. Replace `<my_username>` and `<my_repository_name>` with
@@ -517,12 +524,12 @@ spec:
   containers:
     - name: github-runner-gpu-${GITHUB_RUN_ID}
       image: ghcr.io/<my_username>/<my_repository_name>/github-runner:latest
-      # We mount a shared memory volume for training with PyTorch
+      # We mount a shared memory volume for training
       volumeMounts:
         - name: dshm
           mountPath: /dev/shm
       env:
-        - name: GITHUB_RUNNER_LABELS
+        - name: GITHUB_RUNNER_LABEL
           value: "gpu-runner"
         - name: GITHUB_RUNNER_PAT
           valueFrom:
@@ -555,295 +562,291 @@ spec:
 
     pip freeze > requirements-freeze.txt
 
+#### Add Kubeconfig as secret
+
+@todo
+
+Get credentials for your Google Cloud Kubernetes cluster: Use the following
+command to configure your kubeconfig file with the credentials for your GKE
+cluster:
+
+Replace YOUR_CLUSTER_NAME with the name of your GKE cluster and
+YOUR_CLUSTER_ZONE with the zone where your cluster is located
+
+```sh title="Execute the following command(s) in a terminal"
+# Get Kubernetes cluster credentials
+gcloud container clusters get-credentials YOUR_CLUSTER_NAME --zone YOUR_CLUSTER_ZONE
+```
+
+@todo: check if `YOUR_CLUSTER_NAME` and `YOUR_CLUSTER_ZONE` are really necessary
+(`gcloud container clusters get-credentials` might be sufficient?)
+
+This updates the kubeconfig file (`~/.kube/config`) used by `kubectl` with the
+necessary information to connect to your Google Cloud Kubernetes cluster.
+
+The relevant section of the kubeconfig file will look something like this:
+
+```yaml
+Copy Code apiVersion: v1 clusters:
+- cluster:
+    certificate-authority-data: REDACTED
+    server: https://YOUR_CLUSTER_ENDPOINT
+  name: gke_YOUR_PROJECT_ID_YOUR_ZONE_YOUR_CLUSTER_NAME
+contexts:
+- context:
+    cluster: gke_YOUR_PROJECT_ID_YOUR_ZONE_YOUR_CLUSTER_NAME
+    user: gke_YOUR_PROJECT_ID_YOUR_ZONE_YOUR_CLUSTER_NAME
+  name: gke_YOUR_PROJECT_ID_YOUR_ZONE_YOUR_CLUSTER_NAME
+current-context: gke_YOUR_PROJECT_ID_YOUR_ZONE_YOUR_CLUSTER_NAME
+kind: Config
+preferences: {}
+users:
+- name: gke_YOUR_PROJECT_ID_YOUR_ZONE_YOUR_CLUSTER_NAME
+  user:
+    auth-provider:
+      config:
+        access-token: REDACTED
+        cmd-args: config config-helper --format=json
+        cmd-path: gcloud
+        expiry: REDACTED
+        token: REDACTED
+      name: gcp
+```
+
+@todo: update the above
+
+Key Points: The server field contains the endpoint of your GKE cluster. The
+certificate-authority-data is used to verify the server's certificate. The
+auth-provider section is configured to use Google Cloud authentication, which
+handles token management for you.
+
+After setting up your kubeconfig, you can use `kubectl` commands to interact
+with your Google Cloud Kubernetes cluster.
+
 ### Update the CI/CD configuration file
 
 You'll now update the CI/CD configuration file to start a runner on the
 Kubernetes cluster. Using the labels defined previously, you'll be able to start
 the training of the model on the node with the GPU.
 
-=== ":simple-github: GitHub"
+Update the `.github/workflows/mlops.yaml` file.
 
-    Update the `.github/workflows/mlops.yaml` file.
+Take some time to understand the new steps:
 
-    Take some time to understand the new steps:
+```yaml title=".github/workflows/mlops.yaml" hl_lines="15-18 21-49 52-54 71-77 169-186"
+name: MLOps
+on:
+  # Runs on pushes targeting main branch
+  push:
+    branches:
+      - main
 
-    ```yaml title=".github/workflows/mlops.yaml" hl_lines="15-18 21-49 52-54 71-77 169-186"
-    name: MLOps
+  # Runs on pull requests
+  pull_request:
 
-    on:
-      # Runs on pushes targeting main branch
-      push:
-        branches:
-          - main
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
-      # Runs on pull requests
-      pull_request:
+# Allow the creation and usage of self-hosted runners
+permissions:
+  contents: read id-token: write
 
-      # Allows you to run this workflow manually from the Actions tab
-      workflow_dispatch:
+jobs:
+  setup-runner:
+    runs-on: [self-hosted, base-runner] steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Login to Google Cloud
+        uses: google-github-actions/auth@v2 with:
+          credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
+      - name: Get Google Cloud's Kubernetes credentials
+        uses: 'google-github-actions/get-gke-credentials@v2' with:
+          cluster_name: ${{ secrets.GCP_K8S_CLUSTER_NAME }} location: ${{ secrets.GCP_K8S_CLUSTER_ZONE }}
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v3
+      - name: Initialize runner on Kubernetes
+        env:
+          KUBECONFIG_DATA: ${{ secrets.KUBECONFIG }}
+        # We use envsubst to replace variables in runner-gpu.yaml
+        # in order to create a unique runner name with the
+        # GitHub run ID. This prevents conflicts when multiple
+        # runners are created at the same time.
+        run: |
+          echo "$KUBECONFIG_DATA" > kubeconfig export KUBECONFIG=kubeconfig
+          # We use run_id to make the runner name unique
+          export GITHUB_RUN_ID="${{ github.run_id }}" envsubst < kubernetes/github-runner-gpu.yaml | kubectl apply -f -
 
-    # Allow the creation and usage of self-hosted runners
-    permissions:
-      contents: read
-      id-token: write
+  train-report-publish-and-deploy:
+    permissions: write-all needs: setup-runner runs-on: [self-hosted, gpu-runner] steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5 with:
+          python-version: '3.11' cache: pip
+      - name: Install dependencies
+        run: pip install --requirement requirements-freeze.txt
+      - name: Login to Google Cloud
+        uses: google-github-actions/auth@v2 with:
+          credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
+      - name: Train model
+        run: dvc repro --pull
+      - name: Push the outcomes to DVC remote storage
+        run: dvc push
+      - name: Commit changes in dvc.lock
+        uses: stefanzweifel/git-auto-commit-action@v5 with:
+          commit_message: Commit changes in dvc.lock file_pattern: dvc.lock
+      - name: Setup CML
+        if: github.event_name == 'pull_request' uses: iterative/setup-cml@v2 with:
+          version: '0.20.0'
+      - name: Create CML report
+        if: github.event_name == 'pull_request' env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Fetch all other Git branches
+          git fetch --depth=1 origin main:main
 
-    jobs:
-      setup-runner:
-        runs-on: [self-hosted, base-runner]
-        steps:
-          - name: Checkout repository
-            uses: actions/checkout@v4
-          - name: Login to Google Cloud
-            uses: google-github-actions/auth@v2
-            with:
-              credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
-          - name: Get Google Cloud's Kubernetes credentials
-            uses: 'google-github-actions/get-gke-credentials@v2'
-            with:
-              cluster_name: ${{ secrets.GCP_K8S_CLUSTER_NAME }}
-              location: ${{ secrets.GCP_K8S_CLUSTER_ZONE }}
-          - name: Setup kubectl
-            uses: azure/setup-kubectl@v3
-          - name: Initialize runner on Kubernetes
-            env:
-              KUBECONFIG_DATA: ${{ secrets.KUBECONFIG }}
-            # We use envsubst to replace variables in runner-gpu.yaml
-            # in order to create a unique runner name with the
-            # GitHub run ID. This prevents conflicts when multiple
-            # runners are created at the same time.
-            run: |
-              echo "$KUBECONFIG_DATA" > kubeconfig
-              export KUBECONFIG=kubeconfig
-              # We use run_id to make the runner name unique
-              export GITHUB_RUN_ID="${{ github.run_id }}"
-              envsubst < kubernetes/github-runner-gpu.yaml | kubectl apply -f -
+          # Add title to the report
+          echo "# Experiment Report (${{ github.sha }})" >> report.md
 
-      train-report-publish-and-deploy:
-        permissions: write-all
-        needs: setup-runner
-        runs-on: [self-hosted, gpu-runner]
-        steps:
-          - name: Checkout repository
-            uses: actions/checkout@v4
-          - name: Setup Python
-            uses: actions/setup-python@v5
-            with:
-              python-version: '3.11'
-              cache: pip
-          - name: Install dependencies
-            run: pip install --requirement requirements-freeze.txt
-          - name: Login to Google Cloud
-            uses: google-github-actions/auth@v2
-            with:
-              credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
-          - name: Train model
-            run: dvc repro --pull
-          - name: Push the outcomes to DVC remote storage
-            run: dvc push
-          - name: Commit changes in dvc.lock
-            uses: stefanzweifel/git-auto-commit-action@v5
-            with:
-              commit_message: Commit changes in dvc.lock
-              file_pattern: dvc.lock
-          - name: Setup CML
-            if: github.event_name == 'pull_request'
-            uses: iterative/setup-cml@v2
-            with:
-              version: '0.20.0'
-          - name: Create CML report
-            if: github.event_name == 'pull_request'
-            env:
-              REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            run: |
-              # Fetch all other Git branches
-              git fetch --depth=1 origin main:main
+          # Compare parameters to main branch
+          echo "## Params workflow vs. main" >> report.md dvc params diff main --md >> report.md
 
-              # Add title to the report
-              echo "# Experiment Report (${{ github.sha }})" >> report.md
+          # Compare metrics to main branch
+          echo "## Metrics workflow vs. main" >> report.md dvc metrics diff main --md >> report.md
 
-              # Compare parameters to main branch
-              echo "## Params workflow vs. main" >> report.md
-              dvc params diff main --md >> report.md
+          # Compare plots (images) to main branch
+          dvc plots diff main
 
-              # Compare metrics to main branch
-              echo "## Metrics workflow vs. main" >> report.md
-              dvc metrics diff main --md >> report.md
+          # Create plots
+          echo "## Plots" >> report.md
 
-              # Compare plots (images) to main branch
-              dvc plots diff main
+          # Create training history plot
+          echo "### Training History" >> report.md echo "#### main" >> report.md echo '![](./dvc_plots/static/main_evaluation_plots_training_history.png "Training History")' >> report.md echo "#### workspace" >> report.md echo '![](./dvc_plots/static/workspace_evaluation_plots_training_history.png "Training History")' >> report.md
 
-              # Create plots
-              echo "## Plots" >> report.md
+          # Create predictions preview
+          echo "### Predictions Preview" >> report.md echo "#### main" >> report.md echo '![](./dvc_plots/static/main_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md echo "#### workspace" >> report.md echo '![](./dvc_plots/static/workspace_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
 
-              # Create training history plot
-              echo "### Training History" >> report.md
-              echo "#### main" >> report.md
-              echo '![](./dvc_plots/static/main_evaluation_plots_training_history.png "Training History")' >> report.md
-              echo "#### workspace" >> report.md
-              echo '![](./dvc_plots/static/workspace_evaluation_plots_training_history.png "Training History")' >> report.md
+          # Create confusion matrix
+          echo "### Confusion Matrix" >> report.md echo "#### main" >> report.md echo '![](./dvc_plots/static/main_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md echo "#### workspace" >> report.md echo '![](./dvc_plots/static/workspace_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
 
-              # Create predictions preview
-              echo "### Predictions Preview" >> report.md
-              echo "#### main" >> report.md
-              echo '![](./dvc_plots/static/main_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
-              echo "#### workspace" >> report.md
-              echo '![](./dvc_plots/static/workspace_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
+          # Publish the CML report
+          cml comment update --target=pr --publish report.md
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3 with:
+          registry: ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }} username: _json_key password: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+      - name: Import the BentoML model
+        if: github.ref == 'refs/heads/main' run: bentoml models import model/celestial_bodies_classifier _model.bentomodel
+      - name: Build the BentoML model artifact
+        if: github.ref == 'refs/heads/main' run: bentoml build src
+      - name: Containerize and publish the BentoML model artifact Docker image
+        if: github.ref == 'refs/heads/main' run: |
+          # Containerize the Bento
+          bentoml containerize celestial_bodies_classifier:latest \
+            --image-tag ${{ secrets.GCP_CONTAINER_REGISTRY _HOST }}/celestial-bodies-classifier:latest \ --image-tag ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:${{ github.sha }}
+          # Push the container to the Container Registry
+          docker push --all-tags ${{ secrets.GCP_CONTAINER_REGISTRY _HOST }}/celestial-bodies-classifier
+      - name: Get Google Cloud's Kubernetes credentials
+        if: github.ref == 'refs/heads/main' uses: google-github-actions/get-gke-credentials@v2 with:
+          cluster_name: ${{ secrets.GCP_K8S_CLUSTER_NAME }} location: ${{ secrets.GCP_K8S_CLUSTER_ZONE }}
+      - name: Update the Kubernetes deployment
+        if: github.ref == 'refs/heads/main' run: |
+          yq -i '.spec.template.spec.containers[0].image = "${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:${{ github.sha }}"' kubernetes/deployment.yaml
+      - name: Deploy the model on Kubernetes
+        if: github.ref == 'refs/heads/main' run: |
+          kubectl apply \
+            -f kubernetes/deployment.yaml \ -f kubernetes/service.yaml
 
-              # Create confusion matrix
-              echo "### Confusion Matrix" >> report.md
-              echo "#### main" >> report.md
-              echo '![](./dvc_plots/static/main_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
-              echo "#### workspace" >> report.md
-              echo '![](./dvc_plots/static/workspace_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
+cleanup-runner:
+    needs: train-report-publish-and-deploy runs-on: [self-hosted, base-runner]
+    # Always run this job even if the previous jobs fail
+    if: always() steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v3
+      - name: Cleanup runner on Kubernetes
+        env:
+          KUBECONFIG_DATA: ${{ secrets.KUBECONFIG }}
+        run: |
+          echo "$KUBECONFIG_DATA" > kubeconfig export KUBECONFIG=kubeconfig export GITHUB_RUN_ID="${{ github.run_id }}" envsubst < kubernetes/github-runner-gpu.yaml | kubectl delete --wait=false -f -
+```
 
-              # Publish the CML report
-              cml comment update --target=pr --publish report.md
-          - name: Log in to the Container registry
-            uses: docker/login-action@v3
-            with:
-              registry: ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}
-              username: _json_key
-              password: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
-          - name: Import the BentoML model
-            if: github.ref == 'refs/heads/main'
-            run: bentoml models import model/celestial_bodies_classifier_model.bentomodel
-          - name: Build the BentoML model artifact
-            if: github.ref == 'refs/heads/main'
-            run: bentoml build src
-          - name: Containerize and publish the BentoML model artifact Docker image
-            if: github.ref == 'refs/heads/main'
-            run: |
-              # Containerize the Bento
-              bentoml containerize celestial_bodies_classifier:latest \
-                --image-tag ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:latest \
-                --image-tag ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:${{ github.sha }}
-              # Push the container to the Container Registry
-              docker push --all-tags ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier
-          - name: Get Google Cloud's Kubernetes credentials
-            if: github.ref == 'refs/heads/main'
-            uses: google-github-actions/get-gke-credentials@v2
-            with:
-              cluster_name: ${{ secrets.GCP_K8S_CLUSTER_NAME }}
-              location: ${{ secrets.GCP_K8S_CLUSTER_ZONE }}
-          - name: Update the Kubernetes deployment
-            if: github.ref == 'refs/heads/main'
-            run: |
-              yq -i '.spec.template.spec.containers[0].image = "${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:${{ github.sha }}"' kubernetes/deployment.yaml
-          - name: Deploy the model on Kubernetes
-            if: github.ref == 'refs/heads/main'
-            run: |
-              kubectl apply \
-                -f kubernetes/deployment.yaml \
-                -f kubernetes/service.yaml
+Here, the following should be noted:
 
-    cleanup-runner:
-        needs: train-report-publish-and-deploy
-        runs-on: [self-hosted, base-runner]
-        # Always run this job even if the previous jobs fail
-        if: always()
-        steps:
-          - name: Checkout repository
-            uses: actions/checkout@v4
-          - name: Setup kubectl
-            uses: azure/setup-kubectl@v3
-          - name: Cleanup runner on Kubernetes
-            env:
-              KUBECONFIG_DATA: ${{ secrets.KUBECONFIG }}
-            run: |
-              echo "$KUBECONFIG_DATA" > kubeconfig
-              export KUBECONFIG=kubeconfig
-              export GITHUB_RUN_ID="${{ github.run_id }}"
-              envsubst < kubernetes/github-runner-gpu.yaml | kubectl delete --wait=false -f -
-    ```
+* the `setup-runner` job creates a self-hosted GPU runner.
+* the `train-report-publish-and-deploy` job run the DVC pipeline and reports the
+  results back to the pull request.
+* the `cleanup-runner` job deletes the self-hosted GPU runner.
 
-    Here, the following should be noted:
+Check the differences with Git to validate the changes.
 
-    * the `setup-runner` job creates a self-hosted GPU runner.
-    * the `train-report-publish-and-deploy` job run the DVC pipeline and reports the
-      results back to the pull request.
-    * the `cleanup-runner` job deletes the self-hosted GPU runner.
+```sh title="Execute the following command(s) in a terminal"
+# Show the differences with Git
+git diff .github/workflows/mlops.yaml
+```
 
-    Check the differences with Git to validate the changes.
+The output should be similar to this:
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Show the differences with Git
-    git diff .github/workflows/mlops.yaml
-    ```
+```diff
+diff --git a/.github/workflows/mlops.yaml b/.github/workflows/mlops.yaml
+index 30bbce8..5d4a6dd 100644
+--- a/.github/workflows/mlops.yaml
++++ b/.github/workflows/mlops.yaml
+@@ -12,10 +12,48 @@ on:
+   # Allows you to run this workflow manually from the Actions tab
+   workflow_dispatch:
 
-    The output should be similar to this:
++# Allow the creation and usage of self-hosted runners
++permissions:
++  contents: read
++  id-token: write
++
+ jobs:
++  setup-runner:
++    runs-on: ubuntu-latest
++    steps:
++      - name: Checkout repository
++        uses: actions/checkout@v3
++      - name: Login to Google Cloud
++        uses: 'google-github-actions/auth@v1'
++        with:
++          credentials_json: '${{ secrets.CML_GCP_SERVICE_ACCOUNT_KEY }}'
++      - name: Get Google Cloud's Kubernetes credentials
++        uses: 'google-github-actions/get-gke-credentials@v1'
++        with:
++          cluster_name: '<my_cluster_name>'
++          location: '<my_cluster_zone>'
++      - uses: iterative/setup-cml@v1
++        with:
++          version: '0.19.1'
++      - name: Initialize runner on Kubernetes
++        env:
++          REPO_TOKEN: ${{ secrets.CML_PAT }}
++        run: |
++          export KUBERNETES_CONFIGURATION=$(cat $KUBECONFIG)
++          # https://cml.dev/doc/ref/runner
++ #
+           https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#machine-type
++ #
+           https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#{cpu}-{memory}
++          cml runner \
++            --labels="cml-runner" \
++            --cloud="kubernetes" \
++            --cloud-type="1-2000" \
++            --cloud-kubernetes-node-selector="gpu=true" \
++            --single
++
+   train-and-report:
+     permissions: write-all
+-    runs-on: ubuntu-latest
++    needs: setup-runner
++    runs-on: [self-hosted, cml-runner]
+     steps:
+       - name: Checkout repository
+         uses: actions/checkout@v3
+```
 
-    ```diff
-    diff --git a/.github/workflows/mlops.yaml b/.github/workflows/mlops.yaml
-    index 30bbce8..5d4a6dd 100644
-    --- a/.github/workflows/mlops.yaml
-    +++ b/.github/workflows/mlops.yaml
-    @@ -12,10 +12,48 @@ on:
-       # Allows you to run this workflow manually from the Actions tab
-       workflow_dispatch:
-
-    +# Allow the creation and usage of self-hosted runners
-    +permissions:
-    +  contents: read
-    +  id-token: write
-    +
-     jobs:
-    +  setup-runner:
-    +    runs-on: ubuntu-latest
-    +    steps:
-    +      - name: Checkout repository
-    +        uses: actions/checkout@v3
-    +      - name: Login to Google Cloud
-    +        uses: 'google-github-actions/auth@v1'
-    +        with:
-    +          credentials_json: '${{ secrets.CML_GCP_SERVICE_ACCOUNT_KEY }}'
-    +      - name: Get Google Cloud's Kubernetes credentials
-    +        uses: 'google-github-actions/get-gke-credentials@v1'
-    +        with:
-    +          cluster_name: '<my_cluster_name>'
-    +          location: '<my_cluster_zone>'
-    +      - uses: iterative/setup-cml@v1
-    +        with:
-    +          version: '0.19.1'
-    +      - name: Initialize runner on Kubernetes
-    +        env:
-    +          REPO_TOKEN: ${{ secrets.CML_PAT }}
-    +        run: |
-    +          export KUBERNETES_CONFIGURATION=$(cat $KUBECONFIG)
-    +          # https://cml.dev/doc/ref/runner
-    +          # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#machine-type
-    +          # https://registry.terraform.io/providers/iterative/iterative/latest/docs/resources/task#{cpu}-{memory}
-    +          cml runner \
-    +            --labels="cml-runner" \
-    +            --cloud="kubernetes" \
-    +            --cloud-type="1-2000" \
-    +            --cloud-kubernetes-node-selector="gpu=true" \
-    +            --single
-    +
-       train-and-report:
-         permissions: write-all
-    -    runs-on: ubuntu-latest
-    +    needs: setup-runner
-    +    runs-on: [self-hosted, cml-runner]
-         steps:
-           - name: Checkout repository
-             uses: actions/checkout@v3
-    ```
-
-    Take some time to understand the changes made to the file.
-
-=== ":simple-gitlab: GitLab"
-
-    !!! warning "This is a work in progress"
-
-        This part is a work in progress. Please check back later for updates. Thank you!
-
-    Update the `.gitlab-ci.yml` file.
-
-    Check the differences with Git to validate the changes.
-
-    The output should be similar to this:
-
-    Take some time to understand the changes made to the file.
+Take some time to understand the changes made to the file.
 
 ### Push the CI/CD pipeline configuration file to Git
 
@@ -887,32 +890,19 @@ The pod should be created on the Kubernetes Cluster.
 
 === ":simple-googlecloud: Google Cloud"
 
-    On Google Cloud Console, you can see the pod that has been created on the
-    **Kubernetes Engine > Workloads** page. Open the pod and go to the **YAML** tab
-    to see the configuration of the pod. You should notice that the pod has been
-    created with the node selector `gpu=true` and that it has been created on the
-    right node.
+    On Google Cloud Console, you can see the pod that has been created on the **Kubernetes Engine > Workloads** page. Open the pod and go to the **YAML** tab to see the configuration of the pod. You should notice that the pod has been created with the node selector `gpu=true` and that it has been created on the right node.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
+    This guide has been written with Google Cloud in mind. We are open to contributions to add support for other cloud providers such as [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com), [:simple-exoscale: Exoscale](https://www.exoscale.com), [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might not officially support them.
 
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
+    If you want to contribute, please open an issue or a pull request on the [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your help is greatly appreciated!
 
 This chapter is done, you can check the summary.
 
 ## Summary
 
-Congratulations! You now can train your model on on a custom infrastructure with
-custom hardware for specific use-cases.
+Congratulations! You now can train your model on on a custom infrastructure with custom hardware for specific use-cases.
 
 In this chapter, you have successfully:
 
@@ -934,27 +924,20 @@ gcloud container clusters delete --zone europe-west6-a mlops-kubernetes
 - [x] Notebook has been transformed into scripts for production
 - [x] Codebase and dataset are versioned
 - [x] Steps used to create the model are documented and can be re-executed
-- [x] Changes done to a model can be visualized with parameters, metrics and
-      plots to identify differences between iterations
+- [x] Changes done to a model can be visualized with parameters, metrics and plots to identify differences between iterations
 - [x] Codebase can be shared and improved by multiple developers
-- [x] Dataset can be shared among the developers and is placed in the right
-      directory in order to run the experiment
-- [x] Experiment can be executed on a clean machine with the help of a CI/CD
-      pipeline
-- [x] CI/CD pipeline is triggered on pull requests and reports the results of
-      the experiment
-- [x] Changes to model can be thoroughly reviewed and discussed before
-      integrating them into the codebase
+- [x] Dataset can be shared among the developers and is placed in the right directory in order to run the experiment
+- [x] Experiment can be executed on a clean machine with the help of a CI/CD pipeline
+- [x] CI/CD pipeline is triggered on pull requests and reports the results of the experiment
+- [x] Changes to model can be thoroughly reviewed and discussed before integrating them into the codebase
 - [x] Model can be saved and loaded with all required artifacts for future usage
 - [x] Model can be easily used outside of the experiment context
 - [x] Model publication to the artifact registry is automated
 - [x] Model can be accessed from a Kubernetes cluster
 - [x] Model is continuously deployed with the CI/CD
-- [x] Model can be trained on a custom infrastructure with custom hardware for
-      specific use-cases
+- [x] Model can be trained on a custom infrastructure with custom hardware for specific use-cases
 
-You can now safely continue to the next chapter of this guide concluding your
-journey and the next things you could do with your model.
+You can now safely continue to the next chapter of this guide concluding your journey and the next things you could do with your model.
 
 ## Sources
 
