@@ -13,20 +13,21 @@ In this chapter, you will learn how to:
 2. Push the CI/CD pipeline configuration file to Git
 3. Visualize the execution of the CI/CD pipeline
 
-The following diagram illustrates control flow of the experiment at the end of
-this chapter:
+The following diagram illustrates the control flow of the experiment at the end
+of this chapter:
 
 ```mermaid
-flowchart LR
-    dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]
-    s3_storage -->|dvc pull| dot_dvc
-    dot_git[(.git)] -->|git push| gitGraph[Git Remote]
-    gitGraph -->|git pull| dot_git
+flowchart TB
+    dot_dvc[(.dvc)] <-->|dvc push
+                         dvc pull| s3_storage[(S3 Storage)]
+    dot_git[(.git)] <-->|git push
+                         git pull| gitGraph[Git Remote]
     workspaceGraph <-....-> dot_git
     data[data/raw] <-.-> dot_dvc
     subgraph remoteGraph[REMOTE]
         s3_storage
         subgraph gitGraph[Git Remote]
+            direction TB
             repository[(Repository)] --> action[Action]
             action -->|dvc pull| action_data[data/raw]
             action_data -->|dvc repro| action_out[metrics & plots]
@@ -73,8 +74,9 @@ flowchart LR
     linkStyle 4 opacity:0.4,color:#7f7f7f80
     linkStyle 5 opacity:0.4,color:#7f7f7f80
     linkStyle 6 opacity:0.4,color:#7f7f7f80
-    linkStyle 7 opacity:0.4,color:#7f7f7f80
     linkStyle 8 opacity:0.4,color:#7f7f7f80
+    linkStyle 9 opacity:0.4,color:#7f7f7f80
+    linkStyle 10 opacity:0.4,color:#7f7f7f80
     linkStyle 11 opacity:0.4,color:#7f7f7f80
     linkStyle 12 opacity:0.4,color:#7f7f7f80
     linkStyle 13 opacity:0.4,color:#7f7f7f80
@@ -82,8 +84,6 @@ flowchart LR
     linkStyle 15 opacity:0.4,color:#7f7f7f80
     linkStyle 16 opacity:0.4,color:#7f7f7f80
     linkStyle 17 opacity:0.4,color:#7f7f7f80
-    linkStyle 18 opacity:0.4,color:#7f7f7f80
-    linkStyle 19 opacity:0.4,color:#7f7f7f80
 ```
 
 ## Steps

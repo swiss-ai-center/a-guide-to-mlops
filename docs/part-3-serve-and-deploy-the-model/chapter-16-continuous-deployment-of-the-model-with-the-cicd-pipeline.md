@@ -18,8 +18,8 @@ In this chapter, you will learn how to:
 4. Push the CI/CD pipeline configuration file to [:simple-git: Git](../tools.md)
 5. Visualize the execution of the CI/CD pipeline
 
-The following diagram illustrates control flow of the experiment at the end of
-this chapter:
+The following diagram illustrates the control flow of the experiment at the end
+of this chapter:
 
 ```mermaid
 flowchart TB
@@ -132,7 +132,7 @@ but this time for the Kubernetes cluster.
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
     [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
     not officially support them.
 
@@ -174,7 +174,7 @@ different:
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
     [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
     not officially support them.
 

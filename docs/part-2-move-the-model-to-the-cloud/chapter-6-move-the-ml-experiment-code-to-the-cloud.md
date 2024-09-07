@@ -10,14 +10,14 @@ By linking your local project to a remote repository on platforms like
 [:simple-github: GitHub](../tools.md) or [:simple-gitlab: GitLab](../tools.md),
 you can easily push, pull, and synchronize changes with your team.
 
-The following diagram illustrates control flow of the experiment at the end of
-this chapter:
+The following diagram illustrates the control flow of the experiment at the end
+of this chapter:
 
 ```mermaid
-flowchart LR
+flowchart TB
     dot_dvc[(.dvc)]
-    dot_git[(.git)] -->|git push| gitGraph[Git Remote]
-    gitGraph -->|git pull| dot_git
+    dot_git[(.git)] <-->|git push
+                         git pull| gitGraph[Git Remote]
     workspaceGraph <-....-> dot_git
     data[data/raw] <-.-> dot_dvc
     subgraph remoteGraph[REMOTE]
@@ -51,6 +51,7 @@ flowchart LR
     style train opacity:0.4,color:#7f7f7f80
     style evaluate opacity:0.4,color:#7f7f7f80
     style params opacity:0.4,color:#7f7f7f80
+    linkStyle 1 opacity:0.4,color:#7f7f7f80
     linkStyle 2 opacity:0.4,color:#7f7f7f80
     linkStyle 3 opacity:0.4,color:#7f7f7f80
     linkStyle 4 opacity:0.4,color:#7f7f7f80
@@ -61,7 +62,6 @@ flowchart LR
     linkStyle 9 opacity:0.4,color:#7f7f7f80
     linkStyle 10 opacity:0.4,color:#7f7f7f80
     linkStyle 11 opacity:0.4,color:#7f7f7f80
-    linkStyle 12 opacity:0.4,color:#7f7f7f80
 ```
 
 ## Create a remote Git repository

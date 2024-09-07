@@ -10,8 +10,8 @@ Learn how to serve and deploy the model using [BentoML](../tools.md) and
 ## Environment
 
 This guide has been written with :simple-apple: macOS and :simple-linux: Linux
-operating systems in mind. If you use :simple-windows: Windows, you might
-encounter issues. Please use the
+operating systems in mind. If you use :fontawesome-brands-windows: Windows, you
+might encounter issues. Please use the
 [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/)
 (WSL 2) for optimal results.
 
@@ -38,7 +38,7 @@ those described in the
     contributions to add support for other cloud providers such as
     [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:simple-microsoftazure: Microsoft Azure](https://azure.microsoft.com) or
+    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
     [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
     not officially support them.
 

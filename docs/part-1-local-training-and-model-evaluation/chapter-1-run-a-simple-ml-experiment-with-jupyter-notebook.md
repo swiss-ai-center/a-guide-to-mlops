@@ -33,8 +33,8 @@ In this chapter, you will learn how to:
    experiment
 5. Launch the experiment locally for the first time
 
-The following diagram illustrates control flow of the experiment at the end of
-this chapter:
+The following diagram illustrates the control flow of the experiment at the end
+of this chapter:
 
 ```mermaid
 flowchart

@@ -22,20 +22,20 @@ In this chapter, you will learn how to:
 8. Merge the pull request/merge request to the main branch
 9. Switch back to the main branch and pull latest changes
 
-The following diagram illustrates control flow of the experiment at the end of
-this chapter:
+The following diagram illustrates the control flow of the experiment:
 
 ```mermaid
-flowchart LR
-    dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]
-    s3_storage -->|dvc pull| dot_dvc
-    dot_git[(.git)] -->|git push| gitGraph[Git Remote]
-    gitGraph -->|git pull| dot_git
+flowchart TB
+    dot_dvc[(.dvc)] <-->|dvc push
+                         dvc pull| s3_storage[(S3 Storage)]
+    dot_git[(.git)] <-->|git push
+                         git pull| gitGraph[Git Remote]
     workspaceGraph <-....-> dot_git
     data[data/raw] <-.-> dot_dvc
     subgraph remoteGraph[REMOTE]
         s3_storage
         subgraph gitGraph[Git Remote]
+            direction TB
             repository[(Repository)] --> action[Action]
             action -->|dvc pull| action_data[data/raw]
             action_data -->|dvc repro| action_out[metrics & plots]
@@ -61,38 +61,20 @@ flowchart LR
         params <-.-> dot_dvc
     end
     style workspaceGraph opacity:0.4,color:#7f7f7f80
-    style dvcGraph opacity:0.4,color:#7f7f7f80
     style cacheGraph opacity:0.4,color:#7f7f7f80
     style data opacity:0.4,color:#7f7f7f80
-    style dot_git opacity:0.4,color:#7f7f7f80
-    style dot_dvc opacity:0.4,color:#7f7f7f80
     style prepare opacity:0.4,color:#7f7f7f80
     style train opacity:0.4,color:#7f7f7f80
     style evaluate opacity:0.4,color:#7f7f7f80
-    style params opacity:0.4,color:#7f7f7f80
-    style s3_storage opacity:0.4,color:#7f7f7f80
-    style repository opacity:0.4,color:#7f7f7f80
-    style action opacity:0.4,color:#7f7f7f80
-    style action_data opacity:0.4,color:#7f7f7f80
-    style action_out opacity:0.4,color:#7f7f7f80
-    linkStyle 0 opacity:0.4,color:#7f7f7f80
-    linkStyle 1 opacity:0.4,color:#7f7f7f80
-    linkStyle 2 opacity:0.4,color:#7f7f7f80
     linkStyle 3 opacity:0.4,color:#7f7f7f80
-    linkStyle 4 opacity:0.4,color:#7f7f7f80
-    linkStyle 5 opacity:0.4,color:#7f7f7f80
-    linkStyle 6 opacity:0.4,color:#7f7f7f80
-    linkStyle 7 opacity:0.4,color:#7f7f7f80
-    linkStyle 8 opacity:0.4,color:#7f7f7f80
+    linkStyle 9 opacity:0.4,color:#7f7f7f80
+    linkStyle 10 opacity:0.4,color:#7f7f7f80
     linkStyle 11 opacity:0.4,color:#7f7f7f80
     linkStyle 12 opacity:0.4,color:#7f7f7f80
     linkStyle 13 opacity:0.4,color:#7f7f7f80
     linkStyle 14 opacity:0.4,color:#7f7f7f80
     linkStyle 15 opacity:0.4,color:#7f7f7f80
-    linkStyle 16 opacity:0.4,color:#7f7f7f80
     linkStyle 17 opacity:0.4,color:#7f7f7f80
-    linkStyle 18 opacity:0.4,color:#7f7f7f80
-    linkStyle 19 opacity:0.4,color:#7f7f7f80
 ```
 
 ## Steps
