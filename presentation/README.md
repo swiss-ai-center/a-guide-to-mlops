@@ -80,8 +80,6 @@ _paginate: false
 
 <!-- _class: lead -->
 
-<div>
-
 ## ML code vs ML system
 
 ![bg right:39% 100%](./images/ml_system.svg)
