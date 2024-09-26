@@ -117,7 +117,7 @@ Install the Kubernetes CLI (kubectl) on your machine.
 
     This guide has been written with Google Cloud in mind. We are open to
     contributions to add support for other cloud providers such as
-    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
     [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
     [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
@@ -218,7 +218,7 @@ Follow the steps below to create one.
 
     This guide has been written with Google Cloud in mind. We are open to
     contributions to add support for other cloud providers such as
-    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
     [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
     [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
