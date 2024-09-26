@@ -890,19 +890,32 @@ The pod should be created on the Kubernetes Cluster.
 
 === ":simple-googlecloud: Google Cloud"
 
-    On Google Cloud Console, you can see the pod that has been created on the **Kubernetes Engine > Workloads** page. Open the pod and go to the **YAML** tab to see the configuration of the pod. You should notice that the pod has been created with the node selector `gpu=true` and that it has been created on the right node.
+    On Google Cloud Console, you can see the pod that has been created on the
+    **Kubernetes Engine > Workloads** page. Open the pod and go to the **YAML** tab
+    to see the configuration of the pod. You should notice that the pod has been
+    created with the node selector `gpu=true` and that it has been created on the
+    right node.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
-    This guide has been written with Google Cloud in mind. We are open to contributions to add support for other cloud providers such as [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com), [:simple-exoscale: Exoscale](https://www.exoscale.com), [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might not officially support them.
+    This guide has been written with Google Cloud in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
 
-    If you want to contribute, please open an issue or a pull request on the [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your help is greatly appreciated!
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
+    help is greatly appreciated!
 
 This chapter is done, you can check the summary.
 
 ## Summary
 
-Congratulations! You now can train your model on on a custom infrastructure with custom hardware for specific use-cases.
+Congratulations! You now can train your model on on a custom infrastructure with
+custom hardware for specific use-cases.
 
 In this chapter, you have successfully:
 
@@ -924,20 +937,27 @@ gcloud container clusters delete --zone europe-west6-a mlops-kubernetes
 - [x] Notebook has been transformed into scripts for production
 - [x] Codebase and dataset are versioned
 - [x] Steps used to create the model are documented and can be re-executed
-- [x] Changes done to a model can be visualized with parameters, metrics and plots to identify differences between iterations
+- [x] Changes done to a model can be visualized with parameters, metrics and
+      plots to identify differences between iterations
 - [x] Codebase can be shared and improved by multiple developers
-- [x] Dataset can be shared among the developers and is placed in the right directory in order to run the experiment
-- [x] Experiment can be executed on a clean machine with the help of a CI/CD pipeline
-- [x] CI/CD pipeline is triggered on pull requests and reports the results of the experiment
-- [x] Changes to model can be thoroughly reviewed and discussed before integrating them into the codebase
+- [x] Dataset can be shared among the developers and is placed in the right
+      directory in order to run the experiment
+- [x] Experiment can be executed on a clean machine with the help of a CI/CD
+      pipeline
+- [x] CI/CD pipeline is triggered on pull requests and reports the results of
+      the experiment
+- [x] Changes to model can be thoroughly reviewed and discussed before
+      integrating them into the codebase
 - [x] Model can be saved and loaded with all required artifacts for future usage
 - [x] Model can be easily used outside of the experiment context
 - [x] Model publication to the artifact registry is automated
 - [x] Model can be accessed from a Kubernetes cluster
 - [x] Model is continuously deployed with the CI/CD
-- [x] Model can be trained on a custom infrastructure with custom hardware for specific use-cases
+- [x] Model can be trained on a custom infrastructure with custom hardware for
+      specific use-cases
 
-You can now safely continue to the next chapter of this guide concluding your journey and the next things you could do with your model.
+You can now safely continue to the next chapter of this guide concluding your
+journey and the next things you could do with your model.
 
 ## Sources
 
