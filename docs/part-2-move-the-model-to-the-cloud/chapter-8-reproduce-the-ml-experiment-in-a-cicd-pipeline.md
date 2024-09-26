@@ -133,7 +133,7 @@ data inside the CI/CD pipeline:
 
     This guide has been written with Google Cloud in mind. We are open to
     contributions to add support for other cloud providers such as
-    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
     [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
     [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
@@ -219,7 +219,7 @@ be different:
 
     This guide has been written with Google Cloud in mind. We are open to
     contributions to add support for other cloud providers such as
-    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
     [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
     [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might

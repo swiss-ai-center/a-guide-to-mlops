@@ -115,7 +115,7 @@ Install and configure the cloud provider CLI tool to manage the cloud resources:
 
     This guide has been written with Google Cloud in mind. We are open to
     contributions to add support for other cloud providers such as
-    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
     [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
     [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
@@ -177,7 +177,7 @@ This step will create a project on a cloud provider to host the data.
 
     This guide has been written with Google Cloud in mind. We are open to
     contributions to add support for other cloud providers such as
-    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
     [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
     [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
@@ -225,7 +225,7 @@ resources:
 
     This guide has been written with Google Cloud in mind. We are open to
     contributions to add support for other cloud providers such as
-    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
     [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
     [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
@@ -291,7 +291,7 @@ Create the Storage Bucket to store the data with the cloud provider CLI:
 
     This guide has been written with Google Cloud in mind. We are open to
     contributions to add support for other cloud providers such as
-    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
     [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
     [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
@@ -363,7 +363,7 @@ Install the DVC Storage plugin for the cloud provider:
 
     This guide has been written with Google Cloud in mind. We are open to
     contributions to add support for other cloud providers such as
-    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
     [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
     [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
@@ -391,7 +391,7 @@ Configure DVC to use the Storage Bucket on the cloud provider:
 
     This guide has been written with Google Cloud in mind. We are open to
     contributions to add support for other cloud providers such as
-    [:simple-amazonaws: Amazon Web Services](https://aws.amazon.com),
+    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
     [:simple-exoscale: Exoscale](https://www.exoscale.com),
     [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
     [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
