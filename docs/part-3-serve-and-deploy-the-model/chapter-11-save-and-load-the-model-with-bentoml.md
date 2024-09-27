@@ -23,15 +23,19 @@ of this chapter:
 
 ```mermaid
 flowchart TB
-    dot_dvc[(.dvc)] <-->|dvc pull\ndvc push| s3_storage[(S3 Storage)]
-    dot_git[(.git)] <-->|git pull\ngit push| gitGraph[Git Remote]
+    dot_dvc[(.dvc)] <-->|dvc pull
+                         dvc push| s3_storage[(S3 Storage)]
+    dot_git[(.git)] <-->|git pull
+                         git push| gitGraph[Git Remote]
     workspaceGraph <-....-> dot_git
     data[data/raw]
     subgraph remoteGraph[REMOTE]
         s3_storage
         subgraph gitGraph[Git Remote]
             repository[(Repository)] --> action[Action]
-            action[Action] --> request[PR]
+            action --> |dvc pull
+                        dvc repro
+                        cml publish|request[PR]
             request --> repository[(Repository)]
         end
     end
@@ -47,8 +51,10 @@ flowchart TB
         params[params.yaml] -.- code
         bento_model[model/classifier.bentomodel]
         bento_model <-.-> dot_dvc
-        code --> |save_model\nexport_model|bento_model
-        bento_model --> |import_model\nload_model|code
+        code --> |save_model
+                  export_model|bento_model
+        bento_model --> |import_model
+                         load_model|code
     end
     style workspaceGraph opacity:0.4,color:#7f7f7f80
     style dvcGraph opacity:0.4,color:#7f7f7f80
