@@ -208,8 +208,6 @@ used when necessary.
     likely to be a strong requirement due to the increased computational demands and
     the need for faster processing times.
 
-#### Create the runner container files
-
 The runner uses a custom Docker image that includes the necessary dependencies
 to run the workflows.
 
@@ -221,6 +219,8 @@ The following table describes the files that you will create in this folder:
 | ----------------- | -------------------------------------------------- | --------------------------------------------- |
 | `Dockerfile`      | Instructions for building a Docker container image | Package runner files and dependencies         |
 | `startup.sh`      | The entrypoint for the Docker image                | Initialize the docker container when launched |
+
+#### Create the Dockerfile
 
 The `Dockerfile` provides the instructions needed to create a custom Docker
 container image that incorporates the
@@ -262,6 +262,8 @@ USER runner
 
 ENTRYPOINT ["./startup.sh"]
 ```
+
+#### Create the startup script
 
 This `startup.sh` script will act as an entrypoint for the Docker image. It will
 be used to initialize our Docker container when launched from the image we are
@@ -308,7 +310,9 @@ trap 'cleanup; exit 143' TERM
 Note the `GITHUB_RUNNER_LABEL` variable will be used to identify the runner in
 subsequent steps.
 
-#### Create a Personal Access Token
+### Login to the remote Container Registry
+
+#### Authenticate with the GitHub Container Registry
 
 Before proceeding, you will need to create a personal access token. This token
 will be used to authenticate you on the GitHub Container Registry, allowing you
@@ -334,7 +338,14 @@ your own token.
 export GHCR_PAT=<my_personal_access_token>
 ```
 
-#### Build and push the image to the container regsitry
+Authenticate to the Container Registry. Replace `<my_username>` with your own
+username.
+
+```sh title="Execute the following command(s) in a terminal"
+echo $GHCR_PAT | docker login -u <my_username> ghcr.io --password-stdin
+```
+
+### Build and push the image to the container regsitry
 
 With the entrypoint script ready, we can now build the Docker image. The Docker
 image is built and pushed to the Container Registry.
@@ -379,19 +390,13 @@ The output should be similar to this:
  => => naming to ghcr.io/username/a-guide-to-mlops/github-runner:latest                                            0.0s
 ```
 
-Authenticate to the Container Registry:
-
-```sh title="Execute the following command(s) in a terminal"
-echo $GHCR_PAT | docker login -u <my_username> ghcr.io --password-stdin
-```
-
-Lastly, push the docker image to the GitHub Container Registry:
+Push the docker image to the GitHub Container Registry:
 
 ```sh title="Execute the following command(s) in a terminal"
 docker push ghcr.io/<my_username>/<my_repository_name>/github-runner:latest
 ```
 
-#### Adjust image visibility
+### Adjust image visibility
 
 Make sure to set the image visibility to `Public` in the GitHub Container
 Registry settings.
@@ -418,8 +423,9 @@ To mitigate these risks, it is advisable to secure your runner by disabling
 workflow triggers by forks.
 
 In the repository, go to **Settings > Actions > General**. In the
-**Fork pull request workflows** section, disable
-**Run workflows from fork pull requests** and click on **Save**.
+**Fork pull request workflows** section, ensure the
+**Run workflows from fork pull requests** checkbox is disabled and click on
+**Save**.
 
 !!! danger
 
@@ -480,7 +486,8 @@ spec:
   nodeSelector:
     gpu: "false"
 ```
-Note the `nodeSelector` parameter that will choose a node with a `gpu=false` label.
+
+Note the `nodeSelector` field that will select a node with a `gpu=false` label.
 
 #### Add Kubeconfig secret
 
@@ -493,7 +500,7 @@ machine.
 Follow the
 [_Managing Personal Access Token_ - GitHub docs](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
 guide to create a personal access token (classic) named `GH_RUNNER_PAT` with the
-`repo` scope.
+`repo` and `read:org` scopes
 
 Export your token in as a variable. Replace `<my_repository_token>` with your
 own token.
@@ -508,9 +515,9 @@ Run the following command to create the secret:
 kubectl create secret generic github-runner-pat --from-literal=token=$GH_RUNNER_PAT
 ```
 
-This updates the kubeconfig file `~/.kube/config` with the necessary information
-to connect to your Kubernetes cluster. This allows you to execute `kubectl`
-commands to interact with the cluster.
+The created secret is stored within the Kubernetes cluster itself. As such, the
+secret is securely kept within the cluster and can be accessed by Kubernetes
+components running in that cluster.
 
 #### Deploy the base runner
 
@@ -532,19 +539,38 @@ kubectl get pods
 
 The output should be similar to this:
 
+!!! info
+
+     This can take several minutes.
+
 ```text
 NAME                                                      READY   STATUS    RESTARTS   AGE
 celestial-bodies-classifier-deployment-5f47f7dddc-t4swp   1/1     Running   0          15m
 github-runner                                             1/1     Running   0          2m11s
 ```
 
-On the pod is running, you can connect to the pod and check the runner logs
+Once the pod is running, you can connect to the pod and check the runner logs
 with:
 
 ```sh title="Execute the following command(s) in a terminal"
 kubectl exec -it github-runner -- bash
 tail -f run.log
 ```
+
+The output should be similar to this:
+
+```
+√ Connected to GitHub
+
+Current runner version: '2.319.1'
+2024-09-27 12:15:19Z: Listening for Jobs
+```
+
+Exit the process by pressing ++ctrl+c++ in the terminal, then exit the pod by
+entering `exit`.
+
+In addtion, in **Settings** > **Actions** > **Runners**, you should now be able
+to see the `github-runner` runner listed with the *Idle* status.
 
 !!! note
 
@@ -611,8 +637,7 @@ spec:
         gpu: "true"
 ```
 
-Note the `nodeSelector` parameter that will choose a node with a `gpu=true`
-label.
+Note the `nodeSelector` field that will select a node with a `gpu=true` label.
 
 #### Add Kubeconfig secret
 
@@ -660,7 +685,7 @@ users:
       name: gcp
 ```
 
-```yaml
+```yaml title=".kube/config"
 apiVersion: v1
 clusters:
 - cluster:
@@ -696,7 +721,7 @@ handles token management for you.
 After setting up your kubeconfig, you can use `kubectl` commands to interact
 with your Google Cloud Kubernetes cluster.
 
-### Add Kubernetes CI/CD secrets
+#### Add Kubernetes CI/CD secrets
 
 Add the Kubernetes secrets to access the Kubernetes cluster from the CI/CD
 pipeline. Depending on the CI/CD platform you are using, the process will be
@@ -1123,7 +1148,7 @@ When you are done with the chapter, you can destroy the Kubernetes cluster.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Destroy the Kubernetes cluster
-gcloud container clusters delete --zone europe-west6-a mlops-kubernetes
+gcloud container clusters delete --zone $GCP_K8S_CLUSTER_ZONE $GCP_K8S_CLUSTER_NAME
 ```
 
 ## State of the MLOps process
@@ -1164,6 +1189,7 @@ Highly inspired by:
 - [_Self-hosted runner security_ - GitHubdocs](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners#self-hosted-runner-security)
 - [_Security for self-managed runners_ - GitLab docs](https://docs.gitlab.com/runner/security/)
 - [_Install kubectl and configure cluster access_ - cloud.google.com](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl)
+- [_Deploying to Google Kubernetes Engine_ - GitHub docs](https://docs.github.com/en/actions/use-cases-and-examples/deploying/deploying-to-google-kubernetes-engine)
 - [_gcloud container clusters create_ - cloud.google.com](https://cloud.google.com/sdk/gcloud/reference/container/clusters/create)
 - [_Install Tools_ - kubernetes.io](https://kubernetes.io/docs/tasks/tools/)
 - [_Assigning Pods to Nodes_ - kubernetes.io](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
