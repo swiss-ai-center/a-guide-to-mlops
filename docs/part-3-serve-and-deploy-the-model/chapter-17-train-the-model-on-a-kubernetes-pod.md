@@ -610,24 +610,11 @@ spec:
           cpu: "1"
           memory: "2Gi"
       nodeSelector:
-        gpu: "true"
+        gpu: "false"
 ```
 
-Note the `nodeSelector` parameter that will choose a node with a `gpu=true`
+Note the `nodeSelector` parameter that will choose a node with a `gpu=false`
 label.
-
-@todo: explain dependencies of gpu-runner.
-
-!!! tip
-
-    The python dependencies for the GPU runner are listed in the
-    requirements-freeze.txt file. The dependencies are installed in the Docker image
-    used by the runner. This speeds up the workflow execution by avoiding dependency
-    resolution and makes the workflow more reproducible.
-
-    To update the dependencies, run the following command:
-
-    pip freeze > requirements-freeze.txt
 
 #### Add Kubeconfig secret
 
@@ -638,6 +625,7 @@ necessary credentials:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Get Kubernetes cluster credentials
+export USE_GKE_GCLOUD_AUTH_PLUGIN=True
 gcloud container clusters get-credentials $GCP_K8S_CLUSTER_NAME --zone $GCP_K8S_CLUSTER_ZONE
 ```
 
