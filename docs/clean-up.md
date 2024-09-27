@@ -40,7 +40,7 @@ provider.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Disable the Google Kubernetes Engine API
-    gcloud services disable container.googleapis.com
+    gcloud services disable container.googleapis.com --force
     ```
 
     **Delete the Google Artifact Registry**
@@ -60,7 +60,7 @@ provider.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Disable the Google Artifact Registry API
-    gcloud services disable artifactregistry.googleapis.com
+    gcloud services disable artifactregistry.googleapis.com --force
     ```
 
     **Delete the Google Storage bucket**
