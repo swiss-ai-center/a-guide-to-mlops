@@ -478,11 +478,9 @@ spec:
           cpu: "1"
           memory: "4Gi"
   nodeSelector:
-    gpu: "true"
+    gpu: "false"
 ```
-
-@todo: gpu false? Note the `nodeSelector` parameter that will choose a node with
-a `gpu=true` label.
+Note the `nodeSelector` parameter that will choose a node with a `gpu=false` label.
 
 #### Add Kubeconfig secret
 
@@ -610,10 +608,10 @@ spec:
           cpu: "1"
           memory: "4Gi"
       nodeSelector:
-        gpu: "false"
+        gpu: "true"
 ```
 
-Note the `nodeSelector` parameter that will choose a node with a `gpu=false`
+Note the `nodeSelector` parameter that will choose a node with a `gpu=true`
 label.
 
 #### Add Kubeconfig secret
