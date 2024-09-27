@@ -137,41 +137,6 @@ graph TB
 
 ## Steps
 
-### Configure hardened security
-
-It is important to understand that using a self-hosted runner allows other users
-to execute code on your infrastructure. Specifically, **forks** of your public
-repository **will trigger the workflow** when a pull request is created.
-
-Consequently, other users can potentially run malicious code on your self-hosted
-runner machine by executing a workflow.
-
-While our self-hosted runner will be set up in a containerized, isolated
-environment that limits the impact of any malicious code, unwanted pull requests
-in forks could still exhaust the computational resources for which you are
-responsible.
-
-To mitigate these risks, it is advisable to secure your runner by disabling
-workflow triggers by forks.
-
-In the repository, go to **Settings > Actions > General**. In the
-**Fork pull request workflows** section, disable
-**Run workflows from fork pull requests** and click on **Save**.
-
-!!! danger
-
-    Creating a self-hosted runner allows other users to execute code on your
-    infrastructure. Make sure to secure your runner and restrict access to the
-    repository. For more information, see
-    [Self-hosted runner security](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners#self-hosted-runner-security).
-
-    More generally, it is recommended that you only use self-hosted runners with
-    private repositories.
-
-    If not already done, you can change the repository visibility in
-    **Settings > General**. In the **Danger Zone** section, choose
-    **Change visibility** and set the repository to **private**.
-
 ### Display the nodes names and labels
 
 Display the nodes with the following command.
@@ -434,6 +399,41 @@ Registry settings.
 In your repository page, click on **Packages** on the right hand side, then on
 your **github-runner** package. In **Package settings** in the **Danger Zone**
 section, choose **Change package visibility** and set the package to **public**.
+
+### Configure hardened security
+
+It is important to understand that using a self-hosted runner allows other users
+to execute code on your infrastructure. Specifically, **forks** of your public
+repository **will trigger the workflow** when a pull request is created.
+
+Consequently, other users can potentially run malicious code on your self-hosted
+runner machine by executing a workflow.
+
+While our self-hosted runner will be set up in a containerized, isolated
+environment that limits the impact of any malicious code, unwanted pull requests
+in forks could still exhaust the computational resources for which you are
+responsible.
+
+To mitigate these risks, it is advisable to secure your runner by disabling
+workflow triggers by forks.
+
+In the repository, go to **Settings > Actions > General**. In the
+**Fork pull request workflows** section, disable
+**Run workflows from fork pull requests** and click on **Save**.
+
+!!! danger
+
+    Creating a self-hosted runner allows other users to execute code on your
+    infrastructure. Make sure to secure your runner and restrict access to the
+    repository. For more information, see
+    [Self-hosted runner security](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners#self-hosted-runner-security).
+
+    More generally, it is recommended that you only use self-hosted runners with
+    private repositories.
+
+    If not already done, you can change the repository visibility in
+    **Settings > General**. In the **Danger Zone** section, choose
+    **Change visibility** and set the repository to **private**.
 
 ### Set the self-hosted base runner
 
