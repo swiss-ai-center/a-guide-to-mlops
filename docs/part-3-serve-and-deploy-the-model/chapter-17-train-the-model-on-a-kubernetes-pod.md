@@ -480,7 +480,8 @@ spec:
   nodeSelector:
     gpu: "false"
 ```
-Note the `nodeSelector` parameter that will choose a node with a `gpu=false` label.
+
+Note the `nodeSelector` field that will select a node with a `gpu=false` label.
 
 #### Add Kubeconfig secret
 
@@ -532,6 +533,10 @@ kubectl get pods
 
 The output should be similar to this:
 
+!!! info
+
+     This can take several minutes.
+
 ```text
 NAME                                                      READY   STATUS    RESTARTS   AGE
 celestial-bodies-classifier-deployment-5f47f7dddc-t4swp   1/1     Running   0          15m
@@ -544,6 +549,15 @@ with:
 ```sh title="Execute the following command(s) in a terminal"
 kubectl exec -it github-runner -- bash
 tail -f run.log
+```
+
+The output should be similar to this:
+
+```
+√ Connected to GitHub
+
+Current runner version: '2.319.1'
+2024-09-27 12:15:19Z: Listening for Jobs
 ```
 
 !!! note
@@ -611,8 +625,7 @@ spec:
         gpu: "true"
 ```
 
-Note the `nodeSelector` parameter that will choose a node with a `gpu=true`
-label.
+Note the `nodeSelector` field that will select a node with a `gpu=true` label.
 
 #### Add Kubeconfig secret
 
@@ -660,7 +673,7 @@ users:
       name: gcp
 ```
 
-```yaml
+```yaml title=".kube/config"
 apiVersion: v1
 clusters:
 - cluster:
@@ -696,7 +709,7 @@ handles token management for you.
 After setting up your kubeconfig, you can use `kubectl` commands to interact
 with your Google Cloud Kubernetes cluster.
 
-### Add Kubernetes CI/CD secrets
+#### Add Kubernetes CI/CD secrets
 
 Add the Kubernetes secrets to access the Kubernetes cluster from the CI/CD
 pipeline. Depending on the CI/CD platform you are using, the process will be
@@ -1164,6 +1177,7 @@ Highly inspired by:
 - [_Self-hosted runner security_ - GitHubdocs](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners#self-hosted-runner-security)
 - [_Security for self-managed runners_ - GitLab docs](https://docs.gitlab.com/runner/security/)
 - [_Install kubectl and configure cluster access_ - cloud.google.com](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl)
+- [_Deploying to Google Kubernetes Engine_ - GitHub docs](https://docs.github.com/en/actions/use-cases-and-examples/deploying/deploying-to-google-kubernetes-engine)
 - [_gcloud container clusters create_ - cloud.google.com](https://cloud.google.com/sdk/gcloud/reference/container/clusters/create)
 - [_Install Tools_ - kubernetes.io](https://kubernetes.io/docs/tasks/tools/)
 - [_Assigning Pods to Nodes_ - kubernetes.io](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
