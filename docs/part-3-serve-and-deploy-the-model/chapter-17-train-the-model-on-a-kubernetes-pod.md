@@ -473,10 +473,10 @@ spec:
       resources:
         limits:
           cpu: "1"
-          memory: "2Gi"
+          memory: "4Gi"
         requests:
           cpu: "1"
-          memory: "2Gi"
+          memory: "4Gi"
   nodeSelector:
     gpu: "true"
 ```
@@ -584,7 +584,7 @@ spec:
     - name: dshm
       emptyDir:
         medium: Memory
-        sizeLimit: 16Gi
+        sizeLimit: 4Gi
   containers:
     - name: github-runner-gpu-${GITHUB_RUN_ID}
       image: ghcr.io/<my_username>/<my_repository_name>/github-runner:latest
@@ -605,10 +605,10 @@ spec:
       resources:
         limits:
           cpu: "1"
-          memory: "2Gi"
+          memory: "4Gi"
         requests:
           cpu: "1"
-          memory: "2Gi"
+          memory: "4Gi"
       nodeSelector:
         gpu: "false"
 ```
