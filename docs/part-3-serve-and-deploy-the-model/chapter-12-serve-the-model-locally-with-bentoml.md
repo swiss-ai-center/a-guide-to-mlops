@@ -17,8 +17,10 @@ of this chapter:
 
 ```mermaid
 flowchart TB
-    dot_dvc[(.dvc)] <-->|dvc pull\ndvc push| s3_storage[(S3 Storage)]
-    dot_git[(.git)] <-->|git pull\ngit push| gitGraph[Git Remote]
+    dot_dvc[(.dvc)] <-->|dvc pull
+                         dvc push| s3_storage[(S3 Storage)]
+    dot_git[(.git)] <-->|git pull
+                         git push| gitGraph[Git Remote]
     workspaceGraph <-....-> dot_git
     data[data/raw]
     subgraph remoteGraph[REMOTE]
@@ -42,7 +44,7 @@ flowchart TB
         subgraph bentoGraph[" "]
             bento_model[classifier.bentomodel]
             serve[serve.py] <--> bento_model
-            fastapi[FastAPI] <--> |bentoml serve\nserve:classifierService| serve
+            fastapi[FastAPI] <--> |bentoml serve serve:classifierService| serve
         end
         bento_model <-.-> dot_dvc
         code <--> bento_model

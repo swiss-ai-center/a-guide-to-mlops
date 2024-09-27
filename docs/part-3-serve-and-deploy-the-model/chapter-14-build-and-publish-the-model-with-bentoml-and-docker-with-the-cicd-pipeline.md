@@ -22,8 +22,10 @@ of this chapter:
 
 ```mermaid
 flowchart TB
-    dot_dvc[(.dvc)] <-->|dvc pull\ndvc push| s3_storage[(S3 Storage)]
-    dot_git[(.git)] <-->|git pull\ngit push| repository[(Repository)]
+    dot_dvc[(.dvc)] <-->|dvc pull
+                         dvc push| s3_storage[(S3 Storage)]
+    dot_git[(.git)] <-->|git pull
+                         git push| repository[(Repository)]
     workspaceGraph <-....-> dot_git
     data[data/raw]
 
@@ -51,8 +53,11 @@ flowchart TB
         subgraph gitGraph[Git Remote]
             repository <--> |...|action[Action]
         end
-        registry[(Container\nregistry)]
-        action --> |bentoml build\nbentoml containerize\ndocker push|registry
+        registry[(Container
+                  registry)]
+        action --> |bentoml build
+                    bentoml containerize
+                    docker push|registry
     end
 
     style workspaceGraph opacity:0.4,color:#7f7f7f80

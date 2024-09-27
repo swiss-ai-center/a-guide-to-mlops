@@ -23,23 +23,25 @@ of this chapter:
 
 ```mermaid
 flowchart TB
-    dot_dvc[(.dvc)] <-->|dvc pull\ndvc push| s3_storage[(S3 Storage)]
-    dot_git[(.git)] <-->|git pull\ngit push| gitGraph[Git Remote]
+    dot_dvc[(.dvc)] <-->|dvc pull
+                         dvc push| s3_storage[(S3 Storage)]
+    dot_git[(.git)] <-->|git pull
+                         git push| gitGraph[Git Remote]
     workspaceGraph <-....-> dot_git
     data[data/raw]
     subgraph cacheGraph[CACHE]
         dot_dvc
         dot_git
-        bento_artifact[(Containerized\nartifact)]
+        bento_artifact[(Containerized
+                        artifact)]
     end
     subgraph remoteGraph[REMOTE]
         s3_storage
         subgraph gitGraph[Git Remote]
-            repository[(Repository)] --> action[Action]
-            action[Action] --> |...|request[PR]
-            request --> repository[(Repository)]
+            action[Action] <--> |...|repository[(Repository)]
         end
-        registry[(Container\nregistry)]
+        registry[(Container
+                  registry)]
     end
     subgraph workspaceGraph[WORKSPACE]
         data --> code[*.py]
@@ -54,9 +56,11 @@ flowchart TB
             fastapi[FastAPI] <--> |bento serve|serve
         end
 
-        bentoGraph -->|bento build\nbento containerize| bento_artifact
+        bentoGraph -->|bento build
+                       bento containerize| bento_artifact
         bento_model <-.-> dot_dvc
-        bento_artifact -->|docker tag\ndocker push| registry
+        bento_artifact -->|docker tag
+                           docker push| registry
     end
     subgraph browserGraph[BROWSER]
         localhost <--> |docker run|bento_artifact
@@ -77,7 +81,6 @@ flowchart TB
     style s3_storage opacity:0.4,color:#7f7f7f80
     style repository opacity:0.4,color:#7f7f7f80
     style action opacity:0.4,color:#7f7f7f80
-    style request opacity:0.4,color:#7f7f7f80
     style remoteGraph opacity:0.4,color:#7f7f7f80
     style gitGraph opacity:0.4,color:#7f7f7f80
     linkStyle 0 opacity:0.4,color:#7f7f7f80
@@ -89,9 +92,8 @@ flowchart TB
     linkStyle 6 opacity:0.4,color:#7f7f7f80
     linkStyle 7 opacity:0.4,color:#7f7f7f80
     linkStyle 8 opacity:0.4,color:#7f7f7f80
-    linkStyle 9 opacity:0.4,color:#7f7f7f80
+
     linkStyle 10 opacity:0.4,color:#7f7f7f80
-    linkStyle 12 opacity:0.4,color:#7f7f7f80
 ```
 
 ## Steps
@@ -196,7 +198,6 @@ bentoml list
 The output should be similar to this:
 
 ```text
-bentoml list
  Tag                                           Size       Model Size  Creation Time
  celestial_bodies_classifier:7yx472dbkoisvr2j  18.83 KiB  9.43 MiB    2024-08-23 15:31:26
 ```

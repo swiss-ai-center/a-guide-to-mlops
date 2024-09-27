@@ -28,8 +28,10 @@ of this chapter:
 
 ```mermaid
 flowchart TB
-    dot_dvc[(.dvc)] <-->|dvc pull\ndvc push| s3_storage[(S3 Storage)]
-    dot_git[(.git)] <-->|git pull\ngit push| repository[(Repository)]
+    dot_dvc[(.dvc)] <-->|dvc pull
+                         dvc push| s3_storage[(S3 Storage)]
+    dot_git[(.git)] <-->|git pull
+                         git push| repository[(Repository)]
     workspaceGraph <-....-> dot_git
     data[data/raw]
 
@@ -57,12 +59,15 @@ flowchart TB
         subgraph gitGraph[Git Remote]
             repository <--> |...|action[Action]
         end
-        registry[(Container\nregistry)]
-        action --> |bentoml build\nbentoml containerize\ndocker push|registry
+        registry[(Container
+                  registry)]
+        action --> |bentoml build
+                    bentoml containerize
+                    docker push|registry
         subgraph clusterGraph[Kubernetes]
             bento_service_cluster[classifier.bentomodel] --> k8s_fastapi[FastAPI]
         end
-        registry[(Container\nregistry)] --> |kubectl apply|bento_service_cluster
+        registry --> |kubectl apply|bento_service_cluster
     end
 
     subgraph browserGraph[BROWSER]
@@ -203,15 +208,15 @@ Follow the steps below to create one.
 
     ```text
     Default change: VPC-native is the default mode during cluster creation for versions greater than 1.21.0-gke.1500. To create advanced routes based clusters, please pass the `--no-enable-ip-alias` flag
-    Default change: During creation of nodepools or autoscaling configuration changes for cluster versions greater than 1.24.1-gke.800 a default location policy is applied. For Spot and PVM it defaults to ANY, and for all other VM kinds a BALANCED policy is used. To change the default values use the `--location-policy` flag.
+    Note: The Kubelet readonly port (10255) is now deprecated. Please update your workloads to use the recommended alternatives. See https://cloud.google.com/kubernetes-engine/docs/how-to/disable-kubelet-readonly-port for ways to check usage and for migration instructions.
     Note: Your Pod address range (`--cluster-ipv4-cidr`) can accommodate at most 1008 node(s).
-    Creating cluster mlops-kubernetes in europe-west6-a... Cluster is being health-checked (master is hea
-    lthy)...done.
-    Created [https://container.googleapis.com/v1/projects/mlops-code-395207/zones/europe-west6-a/clusters/mlops-kubernetes].
-    To inspect the contents of your cluster, go to: https://console.cloud.google.com/kubernetes/workload_/gcloud/europe-west6-a/mlops-kubernetes?project=mlops-code-395207
+    Creating cluster mlops-kubernetes in europe-west6-a... Cluster is being health-checked (mast
+    er is healthy)...done.
+    Created [https://container.googleapis.com/v1/projects/mlops-guide/zones/europe-west6-a/clusters/mlops-guide-kubernetes].
+    To inspect the contents of your cluster, go to: https://console.cloud.google.com/kubernetes/workload_/gcloud/europe-west6-a/mlops-kubernetes?project=mlops-kubernetes
     kubeconfig entry generated for mlops-kubernetes.
-    NAME              LOCATION        MASTER_VERSION   MASTER_IP    MACHINE_TYPE   NODE_VERSION     NUM_NODES  STATUS
-    mlops-kubernetes  europe-west6-a  1.27.2-gke.1200  34.65.19.80  e2-standard-2  1.27.2-gke.1200  2          RUNNING
+    NAME              LOCATION        MASTER_VERSION      MASTER_IP    MACHINE_TYPE   NODE_VERSION        NUM_NODES  STATUS
+    mlops-kubernetes  europe-west6-a  1.30.3-gke.1969001  34.65.77.52  e2-standard-2  1.30.3-gke.1969001  2          RUNNING
     ```
 
 === ":material-cloud: Using another cloud provider? Read this!"
@@ -367,19 +372,21 @@ Selector:                 app=celestial-bodies-classifier
 Type:                     LoadBalancer
 IP Family Policy:         SingleStack
 IP Families:              IPv4
-IP:                       10.24.1.34
-IPs:                      10.24.1.34
-LoadBalancer Ingress:     34.65.255.92
+IP:                       34.118.228.127
+IPs:                      34.118.228.127
+LoadBalancer Ingress:     34.65.255.92 (VIP)
 Port:                     http  80/TCP
 TargetPort:               3000/TCP
-NodePort:                 http  30882/TCP
-Endpoints:                10.20.0.9:3000
+NodePort:                 http  30773/TCP
+Endpoints:
 Session Affinity:         None
 External Traffic Policy:  Cluster
+Internal Traffic Policy:  Cluster
 Events:
-  Type    Reason                Age                  From                Message
-  ----    ------                ----                 ----                -------
-  Normal  Type                  36m                  service-controller  ClusterIP -> LoadBalancer
+  Type    Reason                Age   From                Message
+  ----    ------                ----  ----                -------
+  Normal  EnsuringLoadBalancer  91s   service-controller  Ensuring load balancer
+  Normal  EnsuredLoadBalancer   56s   service-controller  Ensured load balancer
 ```
 
 The `LoadBalancer Ingress` field contains the external IP address of the

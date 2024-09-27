@@ -49,7 +49,7 @@ provider.
     created, you can execute the following command:
 
     ```sh title="Execute the following command(s) in a terminal"
-    # Delete the Kubernetes cluster
+    # Delete the artifact repository
     gcloud artifacts repositories delete --location $GCP_CONTAINER_REGISTRY_LOCATION $GCP_CONTAINER_REGISTRY_NAME
     ```
 
