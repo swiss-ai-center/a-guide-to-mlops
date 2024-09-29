@@ -246,9 +246,6 @@ be different:
         branches:
           - main
 
-      # Runs on pull requests
-      pull_request:
-
       # Allows you to run this workflow manually from the Actions tab
       workflow_dispatch:
 
