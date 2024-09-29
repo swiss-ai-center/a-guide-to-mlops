@@ -33,7 +33,7 @@ The following diagram illustrates the control flow of the experiment at the end
 of this chapter:
 
 ```mermaid
-flowchart LR
+flowchart TB
     dot_dvc[(.dvc)]
     dot_git[(.git)]
     data[data/raw] <-.-> dot_dvc

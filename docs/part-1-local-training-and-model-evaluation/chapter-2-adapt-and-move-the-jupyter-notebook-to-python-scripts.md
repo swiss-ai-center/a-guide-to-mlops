@@ -26,13 +26,13 @@ The following diagram illustrates the control flow of the experiment at the end
 of this chapter:
 
 ```mermaid
-flowchart
+flowchart LR
     subgraph workspaceGraph[WORKSPACE]
-        data[data/raw] --> prepare
         prepare[prepare.py] --> train
         train[train.py] --> evaluate[evaluate.py]
         params[params.yaml] -.- prepare
         params -.- train
+        data[data/raw] --> prepare
     end
     style data opacity:0.4,color:#7f7f7f80
 ```

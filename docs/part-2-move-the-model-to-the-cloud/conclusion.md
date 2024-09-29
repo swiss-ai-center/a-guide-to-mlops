@@ -17,16 +17,17 @@ new model or not.
 The following diagram illustrates the bricks you set up at the end of this part:
 
 ```mermaid
-flowchart LR
-    dot_dvc[(.dvc)] -->|dvc push| s3_storage[(S3 Storage)]
-    s3_storage -->|dvc pull| dot_dvc
-    dot_git[(.git)] -->|git push| gitGraph[Git Remote]
-    gitGraph -->|git pull| dot_git
+flowchart TB
+    dot_dvc[(.dvc)] <-->|dvc push
+                         dvc pull| s3_storage[(S3 Storage)]
+    dot_git[(.git)] <-->|git push
+                         git pull| gitGraph[Git Remote]
     workspaceGraph <-....-> dot_git
     data[data/raw] <-.-> dot_dvc
     subgraph remoteGraph[REMOTE]
         s3_storage
         subgraph gitGraph[Git Remote]
+            direction TB
             repository[(Repository)] --> action[Action]
             action -->|dvc pull| action_data[data/raw]
             action_data -->|dvc repro| action_out[metrics & plots]

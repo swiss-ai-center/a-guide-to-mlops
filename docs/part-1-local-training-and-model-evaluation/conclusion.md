@@ -14,7 +14,7 @@ evolution with DVC.
 The following diagram illustrates the bricks you set up at the end of this part.
 
 ```mermaid
-flowchart LR
+flowchart TB
     dot_dvc[(.dvc)]
     dot_git[(.git)]
     data[data/raw] <-.-> dot_dvc
