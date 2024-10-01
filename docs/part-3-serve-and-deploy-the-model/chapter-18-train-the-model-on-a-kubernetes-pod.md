@@ -35,14 +35,10 @@ graph TB
     dot_git[(.git)] <-->|git pull
                          git push| repository[(Repository)]
     workspaceGraph <-....-> dot_git
-    runner_artifact -->|docker push| registry_docker[(GH Container
-                                                    registry)]
     data[data/raw]
     subgraph cacheGraph[CACHE]
         dot_dvc
         dot_git
-        runner_artifact[(Containerized
-                        runner)]
     end
 
     subgraph workspaceGraph[WORKSPACE]
@@ -63,8 +59,6 @@ graph TB
     end
 
     subgraph remoteGraph[REMOTE]
-        registry_docker[(GH Container
-                  registry)]
         s3_storage
         subgraph gitGraph[Git Remote]
             repository --> action[Action]
@@ -84,7 +78,6 @@ graph TB
             end
         end
         action <-.-> base_runner
-        registry_docker --> |kubectl apply|base_runner
         registry --> bento_service_cluster
         specialized_runner --> |dvc push|s3_storage
         action --> |kubectl apply|bento_service_cluster
@@ -131,8 +124,6 @@ graph TB
     linkStyle 12 opacity:0.4,color:#7f7f7f8
     linkStyle 13 opacity:0.4,color:#7f7f7f8
     linkStyle 17 opacity:0.4,color:#7f7f7f8
-    linkStyle 19 opacity:0.4,color:#7f7f7f8
-    linkStyle 22 opacity:0.4,color:#7f7f7f8
 ```
 
 ## Steps

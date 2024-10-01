@@ -77,7 +77,12 @@ flowchart TB
                     docker push|registry
         subgraph clusterGraph[Kubernetes]
             bento_service_cluster[classifier.bentomodel] --> k8s_fastapi[FastAPI]
+            subgraph base_runner[Self-hosted runner]
+                pod_train[Train stage]
+                k8s_gpu[GPUs] -.-> pod_train
+            end
         end
+        registry_docker --> |kubectl apply|base_runner
         registry --> bento_service_cluster
         action --> |kubectl apply|bento_service_cluster
     end
