@@ -397,7 +397,7 @@ index 5c69e2f..b845eb3 100644
 
 Update the `src/evaluate.py` file to load the model from BentoML:
 
-```py title="src/evaluate.py" hl_lines="9 132-139"
+```py title="src/evaluate.py" hl_lines="9 132-137 139"
 import json
 import sys
 from pathlib import Path

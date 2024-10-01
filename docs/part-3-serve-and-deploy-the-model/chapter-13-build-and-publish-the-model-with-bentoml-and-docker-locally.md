@@ -121,7 +121,7 @@ include:
 python:
   packages:
     - "tensorflow==2.17.0"
-    - "matplotlib==3.9.1"
+    - "matplotlib==3.9.2"
     - "pillow==10.4.0"
 docker:
     python_version: "3.11"
