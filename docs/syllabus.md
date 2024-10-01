@@ -26,14 +26,15 @@ What you will learn from this guide.
     - [Chapter 14 - Build and publish the model with BentoML and Docker](./part-3-serve-and-deploy-the-model/chapter-14-build-and-publish-the-model-with-bentoml-and-docker-with-the-cicd-pipeline.md)
     - [Chapter 15 - Deploy and access the model on Kubernetes](./part-3-serve-and-deploy-the-model/chapter-15-deploy-and-access-the-model-on-kubernetes.md)
     - [Chapter 16 - Continuous deployment of the model with the CI/CD pipeline](./part-3-serve-and-deploy-the-model/chapter-16-continuous-deployment-of-the-model-with-the-cicd-pipeline.md)
-    - [Chapter 17 - Train the model on a Kubernetes pod](./part-3-serve-and-deploy-the-model/chapter-17-train-the-model-on-a-kubernetes-pod.md)
+    - [Chapter 17 - Use a self-hosted CI/CD pipeline](./part-3-serve-and-deploy-the-model/chapter-17-use-a-self-hosted-cicd-pipeline.md)
+    - [Chapter 18 - Train the model on a Kubernetes pod](./part-3-serve-and-deploy-the-model/chapter-18-train-the-model-on-a-kubernetes-pod.md)
 - [Part 4 - Labeling the data and retrain the model](./part-4-labeling-the-data-and-retrain/introduction.md) -
   Learn how to label new data and retrain the model using Label Studio.
-    - [Chapter 18 - Setup Label Studio](./part-4-labeling-the-data-and-retrain/chapter-18-setup-label-studio.md)
-    - [Chapter 19 - Import existing data to Label Studio](./part-4-labeling-the-data-and-retrain/chapter-19-import-existing-data-to-label-studio.md)
-    - [Chapter 20 - Label new data with Label Studio](./part-4-labeling-the-data-and-retrain/chapter-20-label-new-data-with-label-studio.md)
-    - [Chapter 21 - Retrain the model from new data with DVC Sync](./part-4-labeling-the-data-and-retrain/chapter-21-retrain-the-model-from-new-data-with-dvc-sync.md)
-    - [Chapter 22 - Link the model to Label Studio and get predictions](./part-4-labeling-the-data-and-retrain/chapter-22-link-the-model-to-label-studio-and-get-predictions.md)
+    - [Chapter 19 - Setup Label Studio](./part-4-labeling-the-data-and-retrain/chapter-19-setup-label-studio.md)
+    - [Chapter 20 - Import existing data to Label Studio](./part-4-labeling-the-data-and-retrain/chapter-20-import-existing-data-to-label-studio.md)
+    - [Chapter 21 - Label new data with Label Studio](./part-4-labeling-the-data-and-retrain/chapter-21-label-new-data-with-label-studio.md)
+    - [Chapter 22 - Retrain the model from new data with DVC Sync](./part-4-labeling-the-data-and-retrain/chapter-22-retrain-the-model-from-new-data-with-dvc-sync.md)
+    - [Chapter 23 - Link the model to Label Studio and get predictions](./part-4-labeling-the-data-and-retrain/chapter-23-link-the-model-to-label-studio-and-get-predictions.md)
 - [Conclusion](./conclusion.md) - Summary of what you have done and what is left
   to be done.
 
