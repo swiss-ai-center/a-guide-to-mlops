@@ -92,7 +92,7 @@ tensorflow==2.17.0
 matplotlib==3.9.2
 pyyaml==6.0.2
 dvc[gs]==3.53.2
-bentoml==1.3.2
+bentoml==1.3.7
 pillow==10.4.0
 ```
 
@@ -114,7 +114,7 @@ index 4b8d3d9..d584cca 100644
  matplotlib==3.9.2
  pyyaml==6.0.2
  dvc[gs]==3.53.2
-+bentoml==1.3.2
++bentoml==1.3.7
 +pillow==10.4.0
 ```
 
