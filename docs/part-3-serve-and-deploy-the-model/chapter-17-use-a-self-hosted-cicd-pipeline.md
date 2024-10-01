@@ -1,4 +1,4 @@
-# Chapter 17 - Train the model on a Kubernetes pod
+# Chapter 17 - Use a self-hosted CI/CD pipeline
 
 ## Introduction
 
@@ -15,7 +15,8 @@ a GPU to train a deep learning model.
 
 Training these experiments locally can be challenging. You may not have the
 required hardware, or you may not want to use your local machine for training.
-In this case, you can use a specialized Kubernetes pod to train your model.
+In this case, you can run your CI/CD workflow on your own specialized hardware
+such as a high-performance machine or a Kubernetes cluster.
 
 In this chapter, you will learn how to:
 
@@ -29,20 +30,21 @@ The following diagram illustrates the control flow of the experiment at the end
 of this chapter:
 
 ```mermaid
-graph TB
+flowchart TB
     dot_dvc[(.dvc)] <-->|dvc pull
                          dvc push| s3_storage[(S3 Storage)]
     dot_git[(.git)] <-->|git pull
                          git push| repository[(Repository)]
     workspaceGraph <-....-> dot_git
     runner_artifact -->|docker push| registry_docker[(GH Container
-                                                    registry)]
+                                                      registry)]
     data[data/raw]
+
     subgraph cacheGraph[CACHE]
         dot_dvc
         dot_git
         runner_artifact[(Containerized
-                        runner)]
+                         runner)]
     end
 
     subgraph workspaceGraph[WORKSPACE]
@@ -53,6 +55,7 @@ graph TB
         params[params.yaml] -.- code
         code <--> bento_model[classifier.bentomodel]
         subgraph bentoGraph[bentofile.yaml]
+            bento_model
             serve[serve.py] <--> bento_model
         end
         bento_model <-.-> dot_dvc
@@ -63,35 +66,20 @@ graph TB
     end
 
     subgraph remoteGraph[REMOTE]
-        registry_docker[(GH Container
-                  registry)]
         s3_storage
         subgraph gitGraph[Git Remote]
-            repository --> action[Action]
+            repository <--> |...|action[Action]
         end
         registry[(Container
                   registry)]
         action --> |bentoml build
                     bentoml containerize
                     docker push|registry
-
         subgraph clusterGraph[Kubernetes]
-            base_runner[Base runner]
             bento_service_cluster[classifier.bentomodel] --> k8s_fastapi[FastAPI]
-            subgraph specialized_runner[Specialized runner]
-                pod_train[Train stage]
-                k8s_gpu[GPUs] -.-> pod_train
-            end
         end
-        action <-.-> base_runner
-        registry_docker --> |kubectl apply|base_runner
         registry --> bento_service_cluster
-        specialized_runner --> |dvc push|s3_storage
         action --> |kubectl apply|bento_service_cluster
-
-        base_runner --> specialized_runner
-        action --> |dvc pull
-                    dvc repro|pod_train
     end
 
     subgraph browserGraph[BROWSER]
@@ -109,96 +97,28 @@ graph TB
     style serve opacity:0.4,color:#7f7f7f80
     style bento_model opacity:0.4,color:#7f7f7f80
     style params opacity:0.4,color:#7f7f7f80
+    style s3_storage opacity:0.4,color:#7f7f7f80
     style remoteGraph opacity:0.4,color:#7f7f7f80
     style gitGraph opacity:0.4,color:#7f7f7f80
     style repository opacity:0.4,color:#7f7f7f80
-    style bento_service_cluster opacity:0.4,color:#7f7f7f80
     style registry opacity:0.4,color:#7f7f7f80
-    style clusterGraph opacity:0.4,color:#7f7f7f80
-    style k8s_fastapi opacity:0.4,color:#7f7f7f80
     style browserGraph opacity:0.4,color:#7f7f7f80
     style publicURL opacity:0.4,color:#7f7f7f80
     linkStyle 0 opacity:0.4,color:#7f7f7f80
     linkStyle 1 opacity:0.4,color:#7f7f7f80
     linkStyle 2 opacity:0.4,color:#7f7f7f80
-
+    linkStyle 3 opacity:0.4,color:#7f7f7f80
     linkStyle 4 opacity:0.4,color:#7f7f7f80
     linkStyle 5 opacity:0.4,color:#7f7f7f80
     linkStyle 6 opacity:0.4,color:#7f7f7f80
     linkStyle 7 opacity:0.4,color:#7f7f7f80
     linkStyle 8 opacity:0.4,color:#7f7f7f80
-    linkStyle 11 opacity:0.4,color:#7f7f7f8
-    linkStyle 12 opacity:0.4,color:#7f7f7f8
-    linkStyle 13 opacity:0.4,color:#7f7f7f8
-    linkStyle 17 opacity:0.4,color:#7f7f7f8
-    linkStyle 19 opacity:0.4,color:#7f7f7f8
-    linkStyle 22 opacity:0.4,color:#7f7f7f8
+    linkStyle 9 opacity:0.4,color:#7f7f7f80
+    linkStyle 11 opacity:0.4,color:#7f7f7f80
+    linkStyle 13 opacity:0.4,color:#7f7f7f80
 ```
 
 ## Steps
-
-### Display the nodes names and labels
-
-Display the nodes with the following command.
-
-```sh title="Execute the following command(s) in a terminal"
-# Display the nodes
-kubectl get nodes --show-labels
-```
-
-The output should be similar to this: As noticed, you have two nodes in your
-cluster with their labels.
-
-```
-NAME                                              STATUS   ROLES    AGE   VERSION               LABELS
-gke-mlops-kubernetes-default-pool-d4f966ea-8rbn   Ready    <none>   49s   v1.30.3-gke.1969001   beta.kubernetes.io/arch=amd64,[...]
-gke-mlops-kubernetes-default-pool-d4f966ea-p7qm   Ready    <none>   50s   v1.30.3-gke.1969001   beta.kubernetes.io/arch=amd64,[...]
-```
-
-Export the name of the two nodes as environment variables. Replace the
-`<my_node_1_name>` and `<my_node_2_name>` placeholders with the names of your
-nodes (`gke-mlops-kubernetes-default-pool-d4f966ea-8rbn` and
-`gke-mlops-kubernetes-default-pool-d4f966ea-p7qm` in this example).
-
-```sh title="Execute the following command(s) in a terminal"
-export K8S_NODE_1_NAME=<my_node_1_name>
-```
-
-```sh title="Execute the following command(s) in a terminal"
-export K8S_NODE_2_NAME=<my_node_2_name>
-```
-
-### Labelize the nodes
-
-Let's imagine one node has a GPU and the other one doesn't. You can labelize the
-nodes to be able to use the GPU node for the training of the model. For our
-experiment, there is no need to have a GPU to train the model but it's for
-demonstration purposes.
-
-```sh title="Execute the following command(s) in a terminal"
-# Labelize the nodes
-kubectl label nodes $K8S_NODE_1_NAME gpu=true
-kubectl label nodes $K8S_NODE_2_NAME gpu=false
-```
-
-You can check the labels with the `kubectl get nodes --show-labels` command. You
-should see the node with the `gpu=true`/ `gpu=false` labels.
-
-### Create a self-hosted runner container image
-
-Jobs in a CI/CD workflow are executed on applications known as runners. These
-can be physical servers, virtual machines, or container images, and may operate
-on a public cloud, like the runner used for our workflow so far, or on-premises
-within your own infrastructure.
-
-We will create a custom container image for a self-hosted runner and deploy it
-on our Kubernetes cluster. A base instance of this runner listens for jobs from
-GitHub Actions. When asked to, it creates specialized GPU runner pods on the
-Kubernetes cluster to execute the jobs. This specialized runner will then be
-destroyed.
-
-This approach optimizes resource usage by ensuring that GPU resources are only
-used when necessary.
 
 !!! note
 
