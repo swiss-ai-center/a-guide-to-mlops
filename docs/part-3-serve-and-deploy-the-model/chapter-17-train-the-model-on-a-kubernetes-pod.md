@@ -764,6 +764,11 @@ You'll now update the CI/CD configuration file to start a runner on the
 Kubernetes cluster. Using the labels defined previously, you'll be able to start
 the training of the model on the node with the GPU.
 
+Additionally, as the experiment is now being reproduced directly from the CI/CD
+pipeline, we will modify the workflow to automatically push the results to the
+DVC remote storage and enable the updated lock file to be committed to the
+repository automatically.
+
 Update the `.github/workflows/mlops.yaml` file.
 
 Take some time to understand the new steps:
