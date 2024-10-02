@@ -58,17 +58,15 @@ graph TB
             repository[(Repository)] --> action[Action]
             request[PR] --> |merge|repository
         end
-        registry[(Container\nregistry)]
         action --> |bentoml build
                     bentoml containerize
                     docker push|registry
-        s3_storage --> |dvc pull
-                        dvc repro
-                        cml publish|request
+        s3_storage --> |cml publish|request
         subgraph clusterGraph[Kubernetes]
+            pod_runner[Runner] -->|dvc pull
+                                   dvc repro| pod_train
             subgraph clusterPodGraph[Kubernetes Pod]
-                pod_runner[Runner] -->|dvc pull
-                                       dvc repro| pod_train[Train stage]
+                pod_train[Train stage]
                 k8s_gpu[GPUs] -.-> pod_train
             end
             bento_service_cluster[classifier.bentomodel] --> k8s_fastapi[FastAPI]
