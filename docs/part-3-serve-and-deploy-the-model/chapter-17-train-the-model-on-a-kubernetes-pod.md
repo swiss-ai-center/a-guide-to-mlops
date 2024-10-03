@@ -808,8 +808,10 @@ jobs:
         with:
           cluster_name: ${{ secrets.GCP_K8S_CLUSTER_NAME }}
           location: ${{ secrets.GCP_K8S_CLUSTER_ZONE }}
-      - name: Setup kubectl
-        uses: azure/setup-kubectl@v3
+      - name: 'Set up GCloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+        with:
+          version: '>= 494.0.0'
       - name: Initialize runner on Kubernetes
         env:
           KUBECONFIG_DATA: ${{ secrets.GCP_K8S_KUBECONFIG }}
