@@ -110,13 +110,17 @@ Install the Kubernetes CLI (kubectl) on your machine.
 
 === ":simple-googlecloud: Google Cloud"
 
-    Install kubectl with the Google Cloud CLI. You might need to follow the
-    instructions in the terminal if you are using a different operating system.
+    Install kubectl with the
+    [Google Cloud CLI](https://cloud.google.com/sdk/docs/install). You might need to
+    follow the instructions in the terminal and the related documentation.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Install kubectl with gcloud
     gcloud components install kubectl
     ```
+
+    As per the instructions, you will need to install the `gke-gcloud-auth-plugin`
+    authentication plugin as well.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
