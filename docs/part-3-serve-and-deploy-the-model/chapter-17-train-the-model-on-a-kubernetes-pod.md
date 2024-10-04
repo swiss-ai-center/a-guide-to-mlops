@@ -20,7 +20,7 @@ In this case, you can use a specialized Kubernetes pod to train your model.
 In this chapter, you will learn how to:
 
 1. Create a self-hosted runner Docker container image
-2. Publish the containerized runner image to the container registry
+2. Publish the runner image to the container registry and deploy it
 3. Configure the CI/CD to start the containerized runner on Kubernetes
 4. Start the training of the model from your CI/CD pipeline on a specialized pod
    on the Kubernetes cluster
@@ -61,22 +61,21 @@ flowchart TB
         subgraph gitGraph[Git Remote]
             repository[(Repository)] <--> action[Action]
         end
-        action --> |bentoml containerize
+        action --> |dvc pull
+                    dvc repro
+                    bentoml build
+                    bentoml containerize
                     docker push|registry
         s3_storage -.- |...|repository
         subgraph clusterGraph[Kubernetes]
             subgraph clusterPodGraph[Kubernetes Pod]
                 pod_train[Train model] <-.-> k8s_gpu[GPUs]
-                bento_artifact[Model artifact]
             end
             pod_runner[Runner] --> clusterPodGraph
-            action --> |dvc pull
-                        dvc repro|bento_artifact
             action -->|dvc pull
                        dvc repro| pod_train
             bento_service_cluster[classifier.bentomodel] --> k8s_fastapi[FastAPI]
         end
-        bento_artifact -->|bentoml build|action
         action --> |self-hosted|pod_runner
         pod_train -->|...| action
         pod_train -->|dvc push| s3_storage
@@ -121,10 +120,10 @@ flowchart TB
     linkStyle 8 opacity:0.4,color:#7f7f7f80
     linkStyle 9 opacity:0.4,color:#7f7f7f80
     linkStyle 10 opacity:0.0
-    linkStyle 15 opacity:0.4,color:#7f7f7f80
+    linkStyle 14 opacity:0.4,color:#7f7f7f80
+    linkStyle 18 opacity:0.4,color:#7f7f7f80
+    linkStyle 19 opacity:0.4,color:#7f7f7f80
     linkStyle 20 opacity:0.4,color:#7f7f7f80
-    linkStyle 21 opacity:0.4,color:#7f7f7f80
-    linkStyle 22 opacity:0.4,color:#7f7f7f80
 ```
 
 ## Steps
@@ -193,13 +192,12 @@ should see the node with the `gpu=true`/ `gpu=false` labels.
 
 Jobs in a CI/CD workflow are executed on applications known as runners. These
 can be physical servers, virtual machines (like the default runner used for our
-workflow so far), or container images, and may operate on a public cloud, like
-the runner used for our workflow so far, or on-premises within your own
-infrastructure.
+workflow so far), or container images, and may operate on a public cloud or
+on-premises within your own infrastructure.
 
 We will create a custom container image for a self-hosted runner and deploy it
 on our Kubernetes cluster. A base instance of this runner listens for jobs from
-GitHub Actions. When asked to, it creates specialized GPU runner pods on the
+GitHub Actions. When asked to, it creates a specialized GPU runner pods on the
 Kubernetes cluster to execute the jobs. This specialized runner will then be
 destroyed.
 
@@ -208,12 +206,13 @@ used when necessary.
 
 !!! info
 
-    Since Kubernetes does not allow running Docker directly within a container for
-    security and architectural reasons, only the training and reporting steps will
-    be executed on the self-hosted runner. The generated model artifact will then be
-    transferred to the main runner on GitHub, which operates on a traditional VM.
-    This environment supports Docker, allowing the artifact to be containerized and
-    stored in the container registry.
+    Kubernetes restricts the direct execution of Docker within a container due to
+    security and architectural considerations. As a result, only the training and
+    reporting steps will be executed on the self-hosted runner. The resulting model
+    will be uploaded to the remote bucket using DVC, making it available to the main
+    runner that operates on a conventional VM. As this environment supports Docker,
+    it allows the model artifact to be built, containerized, and stored in the
+    container registry prior to deployment.
 
 The runner uses a custom Docker image that includes the necessary dependencies
 to run the workflows.
@@ -221,10 +220,10 @@ to run the workflows.
 At the root level of your Git repository, create a `docker` folder. The
 following table describes the files that you will create in this folder:
 
-| **File**          | **Description**                                    | *Role**                                       |
-| ----------------- | -------------------------------------------------- | --------------------------------------------- |
-| `Dockerfile`      | Instructions for building a Docker container image | Package runner files and dependencies         |
-| `startup.sh`      | The entrypoint for the Docker image                | Initialize the docker container when launched |
+| **File**     | **Description**                                    | **Role**                               |
+| ------------ | -------------------------------------------------- | ---------------------------------------|
+| `Dockerfile` | Instructions for building a Docker container image | Package runner files and dependencies  |
+| `startup.sh` | The entrypoint for the Docker image                | Initialize the container when launched |
 
 #### Create the Dockerfile
 
@@ -351,12 +350,13 @@ echo $GHCR_PAT | docker login -u <my_username> ghcr.io --password-stdin
 
 #### Build and push the image to the container regsitry
 
-With the entrypoint script ready, we can now build the Docker image. The Docker
-image is built and pushed to the Container Registry.
+With the entrypoint script ready, we can now build the Docker image before
+pushing it to the Container Registry.
 
 To build the docker image, navigate to the `docker` folder and run the following
-command. Make sure to update the tag of the Docker image to match your own
-username and repository.
+command. Make sure to adjust the `my_username` and `my_repository_name`
+variables in the tag of the Docker image to match your own your own username and
+repository.
 
 ```sh title="Execute the following command(s) in a terminal"
 docker build -t ghcr.io/<my_username>/<my_repository_name>/github-runner:latest .
@@ -424,27 +424,23 @@ in forks could still exhaust the computational resources for which you are
 responsible.
 
 To mitigate these risks, it is advisable to secure your runner by disabling
-workflow triggers by forks.
-
-In the repository, go to **Settings > Actions > General**. In the
-**Fork pull request workflows** section, ensure the
-**Run workflows from fork pull requests** checkbox is disabled and click on
-**Save**.
+workflow triggers by forks. In the repository, go to
+**Settings > Actions > General**. In the **Fork pull request workflows**
+section, ensure the **Run workflows from fork pull requests** checkbox is
+disabled and click on **Save**.
 
 !!! danger
 
-    Creating a self-hosted runner allows other users to execute code on your
-    infrastructure. Make sure to secure your runner and restrict access to the
-    repository. For more information, see
+    Make sure to secure your runner and restrict access to the repository. For more
+    information, see
     [Self-hosted runner security](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners#self-hosted-runner-security).
 
     More generally, it is recommended that you only use self-hosted runners with
     private repositories.
 
-    If not already done, you can change the repository visibility in
-    **Settings > General**. In the **Danger Zone** section, choose
-    **Change visibility** and set the repository to **private**.
-
+    You can change the repository visibility in **Settings > General**. In the
+    **Danger Zone** section, choose **Change visibility** and set the repository to
+    **private**.
 
 ### Set the self-hosted base runner
 

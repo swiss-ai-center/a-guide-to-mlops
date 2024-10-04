@@ -58,22 +58,21 @@ flowchart TB
             repository[(Repository)] --> action[Action]
             request[PR] --> |merge|repository
         end
-        action --> |bentoml containerize
+        action --> |dvc pull
+                    dvc repro
+                    bentoml build
+                    bentoml containerize
                     docker push|registry
         s3_storage -.- |...|request
         subgraph clusterGraph[Kubernetes]
             subgraph clusterPodGraph[Kubernetes Pod]
                 pod_train[Train model] <-.-> k8s_gpu[GPUs]
-                bento_artifact[Model artifact]
             end
             pod_runner[Runner] --> clusterPodGraph
-            action --> |dvc pull
-                        dvc repro|bento_artifact
             action -->|dvc pull
                        dvc repro| pod_train
             bento_service_cluster[classifier.bentomodel] --> k8s_fastapi[FastAPI]
         end
-        bento_artifact -->|bentoml build|action
         action --> |self-hosted|pod_runner
         pod_train -->|cml publish| request
         pod_train -->|dvc push| s3_storage
