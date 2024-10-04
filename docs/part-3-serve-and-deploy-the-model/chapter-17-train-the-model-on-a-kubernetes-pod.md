@@ -727,10 +727,17 @@ You'll now update the CI/CD configuration file to start a runner on the
 Kubernetes cluster. Using the labels defined previously, you'll be able to start
 the training of the model on the node with the GPU.
 
-Additionally, as the experiment is now being reproduced directly from the CI/CD
-pipeline, we will modify the workflow to automatically push the results to the
-DVC remote storage and enable the updated lock file to be committed to the
-repository automatically.
+Additionally, as the experiment is now being trained directly from the CI/CD
+pipeline, the workflow will be modified to automatically push the results to the
+remote storage with DVC and to commit the updated lock file to the repository
+automatically.
+
+!!! tip
+
+    When proposing changes to the model files in a branch, you no longer need to run
+    `dvc repro` locally before pushing your code with `git push`. However, you will
+    need to obtain the updated `dvc.lock` file, which is automatically generated, by
+    using `git pull` before submitting your changes.
 
 Update the `.github/workflows/mlops.yaml` file.
 
@@ -961,7 +968,7 @@ Here, the following should be noted:
 * the `train-report-publish-and-deploy` job is separated into `train-report` and
   `publish-and-deploy`.
 * the `train-report` job runs on the self-hosted GPU runner on pull requests. It
-  trains the model.
+  trains the model and push the model to the remote bucket.
 * the `publish-and-deploy` runs on the main runner when merging pull requests.
   It containerizes and deploys the models.
 * the `cleanup-runner` job deletes the self-hosted GPU runner.
@@ -1150,7 +1157,6 @@ index 3ac0f67..db9db1d 100644
 ```
 
 Take some time to understand the changes made to the file.
-
 
 ### Check the changes
 
