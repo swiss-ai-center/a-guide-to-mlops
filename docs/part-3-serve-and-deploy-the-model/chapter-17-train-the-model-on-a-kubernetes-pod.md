@@ -740,7 +740,7 @@ Update the `.github/workflows/mlops.yaml` file.
 
 Take some time to understand the new steps:
 
-```yaml title=".github/workflows/mlops.yaml" hl_lines="15-56 58 60-61 78-89 149-157 159 162 177 185-191 214-238"
+```yaml title=".github/workflows/mlops.yaml" hl_lines="15-19 21-56 57 59-60 77-88 148-159 160 175 183-189 211-235"
 name: MLOps
 
 on:
@@ -797,7 +797,6 @@ jobs:
           # We use run_id to make the runner name unique
           export GITHUB_RUN_ID="${{ github.run_id }}"
           envsubst < kubernetes/runner-gpu.yaml | kubectl apply -f -
-
   train-and-report:
     permissions: write-all
     needs: setup-runner
@@ -898,7 +897,6 @@ jobs:
         with:
           name: bentoml-artifact
           path: ./celestial_bodies_classifier.bento
-
   publish-and-deploy:
     needs: train-and-report
     runs-on: ubuntu-latest
@@ -953,7 +951,6 @@ jobs:
           kubectl apply \
             -f kubernetes/deployment.yaml \
             -f kubernetes/service.yaml
-
   cleanup-runner:
     needs: train-and-report
     runs-on: [self-hosted, base-runner]
@@ -1004,46 +1001,230 @@ The output should be similar to this:
 
 ```diff
 diff --git a/.github/workflows/mlops.yaml b/.github/workflows/mlops.yaml
-index 3ac0f67..3bfe240 100644
+index 3ac0f67..b08180b 100644
 --- a/.github/workflows/mlops.yaml
 +++ b/.github/workflows/mlops.yaml
+@@ -12,10 +12,53 @@ on:
+   # Allows you to run this workflow manually from the Actions tab
+   workflow_dispatch:
 
-TODO
++# Allow the creation and usage of self-hosted runners
++permissions:
++  contents: read
++  id-token: write
++
+ jobs:
+-  train-report-publish-and-deploy:
++  setup-runner:
++    runs-on: [self-hosted, base-runner]
++    steps:
++      - name: Checkout repository
++        uses: actions/checkout@v4
++      - name: Login to Google Cloud
++        uses: google-github-actions/auth@v2
++        with:
++          credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
++      - name: Get Google Cloud's Kubernetes credentials
++        uses: google-github-actions/get-gke-credentials@v2
++        with:
++          cluster_name: ${{ secrets.GCP_K8S_CLUSTER_NAME }}
++          location: ${{ secrets.GCP_K8S_CLUSTER_ZONE }}
++      - name: Set up GCloud SDK
++        uses: google-github-actions/setup-gcloud@v2
++        with:
++          version: '>= 494.0.0'
++      - name: Install gke-gcloud-auth-plugin
++        run: |
++          gcloud components install gke-gcloud-auth-plugin
++      - name: Setup kubectl
++        uses: azure/setup-kubectl@v4
++      - name: Initialize runner on Kubernetes
++        env:
++          KUBECONFIG_DATA: ${{ secrets.GCP_K8S_KUBECONFIG }}
++        # We use envsubst to replace variables in runner-gpu.yaml
++        # in order to create a unique runner name with the
++        # GitHub run ID. This prevents conflicts when multiple
++        # runners are created at the same time.
++        run: |
++          echo "$KUBECONFIG_DATA" > kubeconfig
++          export KUBECONFIG=kubeconfig
++          # We use run_id to make the runner name unique
++          export GITHUB_RUN_ID="${{ github.run_id }}"
++          envsubst < kubernetes/runner-gpu.yaml | kubectl apply -f -
++  train-and-report:
+     permissions: write-all
+-    runs-on: ubuntu-latest
++    needs: setup-runner
++    runs-on: [self-hosted, gpu-runner]
+     steps:
+       - name: Checkout repository
+         uses: actions/checkout@v4
+@@ -32,6 +75,18 @@ jobs:
+           credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
+       - name: Train model
+         run: dvc repro --pull
++      - name: Push the outcomes to DVC remote storage
++        run: dvc push
++      - name: Commit changes in dvc.lock
++        uses: stefanzweifel/git-auto-commit-action@v5
++        with:
++          commit_message: Commit changes in dvc.lock
++          file_pattern: dvc.lock
++      - name: Setup Node
++        if: github.event_name == 'pull_request'
++        uses: actions/setup-node@v4
++        with:
++          node-version: 18
+       - name: Setup CML
+         if: github.event_name == 'pull_request'
+         uses: iterative/setup-cml@v2
+@@ -85,20 +140,56 @@ jobs:
+
+           # Publish the CML report
+           cml comment update --target=pr --publish report.md
+-      - name: Log in to the Container registry
+-        uses: docker/login-action@v3
+-        with:
+-          registry: ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}
+-          username: _json_key
+-          password: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+       - name: Import the BentoML model
+         if: github.ref == 'refs/heads/main'
+         run: bentoml models import model/celestial_bodies_classifier_model.bentomodel
+       - name: Build the BentoML model artifact
+         if: github.ref == 'refs/heads/main'
+         run: bentoml build src
+-      - name: Containerize and publish the BentoML model artifact Docker image
++      - name: Export the BentoML model artifact
++        if: github.ref == 'refs/heads/main'
++        run: bentoml export celestial_bodies_classifier ./celestial_bodies_classifier.bento
++      - name: Upload BentoML artifact
+         if: github.ref == 'refs/heads/main'
++        uses: actions/upload-artifact@v4
++        with:
++          name: bentoml-artifact
++          path: ./celestial_bodies_classifier.bento
++  publish-and-deploy:
++    needs: train-and-report
++    runs-on: ubuntu-latest
++    if: github.ref == 'refs/heads/main'
++    steps:
++      - name: Checkout repository
++        uses: actions/checkout@v4
++      - name: Setup Python
++        uses: actions/setup-python@v5
++        with:
++          python-version: '3.11'
++          cache: pip
++      - name: Install dependencies
++        run: pip install --requirement requirements-freeze.txt
++      - name: Login to Google Cloud
++        uses: google-github-actions/auth@v2
++        with:
++          credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
++      - name: Check model
++        run: dvc repro --pull
++      - name: Log in to the Container registry
++        uses: docker/login-action@v3
++        with:
++          registry: ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}
++          username: _json_key
++          password: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
++      - name: Download BentoML artifact
++        uses: actions/download-artifact@v4
++        with:
++          name: bentoml-artifact
++          path: ./
++      - name: Import the BentoML model artifact
++        run: bentoml import ./celestial_bodies_classifier.bento
++      - name: Containerize and publish the BentoML model artifact Docker image
+         run: |
+           # Containerize the Bento
+           bentoml containerize celestial_bodies_classifier:latest \
+@@ -107,18 +198,41 @@ jobs:
+           # Push the container to the Container Registry
+           docker push --all-tags ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier
+       - name: Get Google Cloud's Kubernetes credentials
+-        if: github.ref == 'refs/heads/main'
+         uses: google-github-actions/get-gke-credentials@v2
+         with:
+           cluster_name: ${{ secrets.GCP_K8S_CLUSTER_NAME }}
+           location: ${{ secrets.GCP_K8S_CLUSTER_ZONE }}
+       - name: Update the Kubernetes deployment
+-        if: github.ref == 'refs/heads/main'
+         run: |
+           yq -i '.spec.template.spec.containers[0].image = "${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:${{ github.sha }}"' kubernetes/deployment.yaml
+       - name: Deploy the model on Kubernetes
+-        if: github.ref == 'refs/heads/main'
+         run: |
+           kubectl apply \
+             -f kubernetes/deployment.yaml \
+             -f kubernetes/service.yaml
++  cleanup-runner:
++    needs: train-and-report
++    runs-on: [self-hosted, base-runner]
++    # Always run this job even if the previous jobs fail
++    if: always()
++    steps:
++      - name: Checkout repository
++        uses: actions/checkout@v4
++      - name: Set up GCloud SDK
++        uses: google-github-actions/setup-gcloud@v2
++        with:
++          version: '>= 494.0.0'
++      - name: Install gke-gcloud-auth-plugin
++        run: |
++          gcloud components install gke-gcloud-auth-plugin
++      - name: Setup kubectl
++        uses: azure/setup-kubectl@v4
++      - name: Cleanup runner on Kubernetes
++        env:
++          KUBECONFIG_DATA: ${{ secrets.GCP_K8S_KUBECONFIG }}
++        run: |
++          echo "$KUBECONFIG_DATA" > kubeconfig
++          export KUBECONFIG=kubeconfig
++          export GITHUB_RUN_ID="${{ github.run_id }}"
++          envsubst < kubernetes/runner-gpu.yaml | kubectl delete --wait=false -f -
 ```
 
 Take some time to understand the changes made to the file.
 
+
+### Check the changes
+
+Check the changes with Git to ensure that all the necessary files are tracked.
+
+```sh title="Execute the following command(s) in a terminal"
+# Add all the files
+git add .
+
+# Check the changes
+git status
+```
+
+The output should look like this.
+
+```text
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   .github/workflows/mlops.yaml
+        new file:   docker/Dockerfile
+        new file:   docker/startup.sh
+        new file:   kubernetes/runner-gpu.yaml
+        new file:   kubernetes/runner.yaml
+```
+
 ### Push the CI/CD pipeline configuration file to Git
 
-=== ":simple-github: GitHub"
+Push the CI/CD pipeline configuration file to Git.
 
-    Push the CI/CD pipeline configuration file to Git.
+```sh title="Execute the following command(s) in a terminal"
+# Commit the changes
+git commit -m "A pipeline will run my experiment on Kubernetes on each push"
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Add the configuration file
-    git add .github/workflows/mlops.yaml
-
-    # Commit the changes
-    git commit -m "A pipeline will run my experiment on Kubernetes on each push"
-
-    # Push the changes
-    git push
-    ```
-
-=== ":simple-gitlab: GitLab"
-
-    Push the CI/CD pipeline configuration file to Git.
-
-    ```sh title="Execute the following command(s) in a terminal"
-    # Add the configuration file
-    git add .gitlab-ci.yml
-
-    # Commit the changes
-    git commit -m "A pipeline will run my experiment on Kubernetes on each push"
-
-    # Push the changes
-    git push
-    ```
+# Push the changes
+git push
+```
 
 ### Check the results
 
