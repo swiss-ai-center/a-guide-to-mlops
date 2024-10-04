@@ -736,7 +736,7 @@ Update the `.github/workflows/mlops.yaml` file.
 
 Take some time to understand the new steps:
 
-```yaml title=".github/workflows/mlops.yaml" hl_lines="15-19 21-56 57 59-60 77-88 148-159 160 175 183-189 211-235"
+```yaml title=".github/workflows/mlops.yaml" hl_lines="15-19 21-58 60-62 79-89 141-159 191-216"
 name: MLOps
 
 on:
@@ -775,11 +775,12 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
         with:
           version: '>= 494.0.0'
+      - name: Install kubectl
+        run: |
+          gcloud components install kubectl
       - name: Install gke-gcloud-auth-plugin
         run: |
           gcloud components install gke-gcloud-auth-plugin
-      - name: Setup kubectl
-        uses: azure/setup-kubectl@v4
       - name: Initialize runner on Kubernetes
         env:
           KUBECONFIG_DATA: ${{ secrets.GCP_K8S_KUBECONFIG }}
@@ -797,6 +798,7 @@ jobs:
     permissions: write-all
     needs: setup-runner
     runs-on: [self-hosted, gpu-runner]
+    if: github.event_name == 'pull_request'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -821,17 +823,14 @@ jobs:
           commit_message: Commit changes in dvc.lock
           file_pattern: dvc.lock
       - name: Setup Node
-        if: github.event_name == 'pull_request'
         uses: actions/setup-node@v4
         with:
           node-version: 18
       - name: Setup CML
-        if: github.event_name == 'pull_request'
         uses: iterative/setup-cml@v2
         with:
           version: '0.20.0'
       - name: Create CML report
-        if: github.event_name == 'pull_request'
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -878,23 +877,7 @@ jobs:
 
           # Publish the CML report
           cml comment update --target=pr --publish report.md
-      - name: Import the BentoML model
-        if: github.ref == 'refs/heads/main'
-        run: bentoml models import model/celestial_bodies_classifier_model.bentomodel
-      - name: Build the BentoML model artifact
-        if: github.ref == 'refs/heads/main'
-        run: bentoml build src
-      - name: Export the BentoML model artifact
-        if: github.ref == 'refs/heads/main'
-        run: bentoml export celestial_bodies_classifier ./celestial_bodies_classifier.bento
-      - name: Upload BentoML artifact
-        if: github.ref == 'refs/heads/main'
-        uses: actions/upload-artifact@v4
-        with:
-          name: bentoml-artifact
-          path: ./celestial_bodies_classifier.bento
   publish-and-deploy:
-    needs: train-and-report
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
@@ -919,13 +902,10 @@ jobs:
           registry: ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}
           username: _json_key
           password: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
-      - name: Download BentoML artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: bentoml-artifact
-          path: ./
-      - name: Import the BentoML model artifact
-        run: bentoml import ./celestial_bodies_classifier.bento
+      - name: Import the BentoML model
+        run: bentoml models import model/celestial_bodies_classifier_model.bentomodel
+      - name: Build the BentoML model artifact
+        run: bentoml build src
       - name: Containerize and publish the BentoML model artifact Docker image
         run: |
           # Containerize the Bento
@@ -959,11 +939,12 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
         with:
           version: '>= 494.0.0'
+      - name: Install kubectl
+        run: |
+          gcloud components install kubectl
       - name: Install gke-gcloud-auth-plugin
         run: |
           gcloud components install gke-gcloud-auth-plugin
-      - name: Setup kubectl
-        uses: azure/setup-kubectl@v4
       - name: Cleanup runner on Kubernetes
         env:
           KUBECONFIG_DATA: ${{ secrets.GCP_K8S_KUBECONFIG }}
@@ -979,10 +960,10 @@ Here, the following should be noted:
 * the `setup-runner` job creates a self-hosted GPU runner.
 * the `train-report-publish-and-deploy` job is separated into `train-report` and
   `publish-and-deploy`.
-* the `train-report` job runs on the self-hosted GPU runner and creates the
-  model artifact.
-* the `publish-and-deploy` runs on main runner and containerizes and deploys the
-  models artifact.
+* the `train-report` job runs on the self-hosted GPU runner on pull requests. It
+  trains the model.
+* the `publish-and-deploy` runs on the main runner when merging pull requests.
+  It containerizes and deploys the models.
 * the `cleanup-runner` job deletes the self-hosted GPU runner.
 
 Check the differences with Git to validate the changes.
@@ -994,13 +975,12 @@ git diff .github/workflows/mlops.yaml
 
 The output should be similar to this:
 
-
 ```diff
 diff --git a/.github/workflows/mlops.yaml b/.github/workflows/mlops.yaml
-index 3ac0f67..b08180b 100644
+index 3ac0f67..db9db1d 100644
 --- a/.github/workflows/mlops.yaml
 +++ b/.github/workflows/mlops.yaml
-@@ -12,10 +12,53 @@ on:
+@@ -12,10 +12,54 @@ on:
    # Allows you to run this workflow manually from the Actions tab
    workflow_dispatch:
 
@@ -1029,11 +1009,12 @@ index 3ac0f67..b08180b 100644
 +        uses: google-github-actions/setup-gcloud@v2
 +        with:
 +          version: '>= 494.0.0'
++      - name: Install kubectl
++        run: |
++          gcloud components install kubectl
 +      - name: Install gke-gcloud-auth-plugin
 +        run: |
 +          gcloud components install gke-gcloud-auth-plugin
-+      - name: Setup kubectl
-+        uses: azure/setup-kubectl@v4
 +      - name: Initialize runner on Kubernetes
 +        env:
 +          KUBECONFIG_DATA: ${{ secrets.GCP_K8S_KUBECONFIG }}
@@ -1052,10 +1033,11 @@ index 3ac0f67..b08180b 100644
 -    runs-on: ubuntu-latest
 +    needs: setup-runner
 +    runs-on: [self-hosted, gpu-runner]
++    if: github.event_name == 'pull_request'
      steps:
        - name: Checkout repository
          uses: actions/checkout@v4
-@@ -32,6 +75,18 @@ jobs:
+@@ -32,13 +76,22 @@ jobs:
            credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
        - name: Train model
          run: dvc repro --pull
@@ -1067,41 +1049,24 @@ index 3ac0f67..b08180b 100644
 +          commit_message: Commit changes in dvc.lock
 +          file_pattern: dvc.lock
 +      - name: Setup Node
-+        if: github.event_name == 'pull_request'
 +        uses: actions/setup-node@v4
 +        with:
 +          node-version: 18
        - name: Setup CML
-         if: github.event_name == 'pull_request'
+-        if: github.event_name == 'pull_request'
          uses: iterative/setup-cml@v2
-@@ -85,20 +140,56 @@ jobs:
+         with:
+           version: '0.20.0'
+       - name: Create CML report
+-        if: github.event_name == 'pull_request'
+         env:
+           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+         run: |
+@@ -85,6 +138,25 @@ jobs:
 
            # Publish the CML report
            cml comment update --target=pr --publish report.md
--      - name: Log in to the Container registry
--        uses: docker/login-action@v3
--        with:
--          registry: ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}
--          username: _json_key
--          password: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
-       - name: Import the BentoML model
-         if: github.ref == 'refs/heads/main'
-         run: bentoml models import model/celestial_bodies_classifier_model.bentomodel
-       - name: Build the BentoML model artifact
-         if: github.ref == 'refs/heads/main'
-         run: bentoml build src
--      - name: Containerize and publish the BentoML model artifact Docker image
-+      - name: Export the BentoML model artifact
-+        if: github.ref == 'refs/heads/main'
-+        run: bentoml export celestial_bodies_classifier ./celestial_bodies_classifier.bento
-+      - name: Upload BentoML artifact
-         if: github.ref == 'refs/heads/main'
-+        uses: actions/upload-artifact@v4
-+        with:
-+          name: bentoml-artifact
-+          path: ./celestial_bodies_classifier.bento
 +  publish-and-deploy:
-+    needs: train-and-report
 +    runs-on: ubuntu-latest
 +    if: github.ref == 'refs/heads/main'
 +    steps:
@@ -1120,24 +1085,24 @@ index 3ac0f67..b08180b 100644
 +          credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
 +      - name: Check model
 +        run: dvc repro --pull
-+      - name: Log in to the Container registry
-+        uses: docker/login-action@v3
-+        with:
-+          registry: ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}
-+          username: _json_key
-+          password: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
-+      - name: Download BentoML artifact
-+        uses: actions/download-artifact@v4
-+        with:
-+          name: bentoml-artifact
-+          path: ./
-+      - name: Import the BentoML model artifact
-+        run: bentoml import ./celestial_bodies_classifier.bento
-+      - name: Containerize and publish the BentoML model artifact Docker image
+       - name: Log in to the Container registry
+         uses: docker/login-action@v3
+         with:
+@@ -92,13 +164,10 @@ jobs:
+           username: _json_key
+           password: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+       - name: Import the BentoML model
+-        if: github.ref == 'refs/heads/main'
+         run: bentoml models import model/celestial_bodies_classifier_model.bentomodel
+       - name: Build the BentoML model artifact
+-        if: github.ref == 'refs/heads/main'
+         run: bentoml build src
+       - name: Containerize and publish the BentoML model artifact Docker image
+-        if: github.ref == 'refs/heads/main'
          run: |
            # Containerize the Bento
            bentoml containerize celestial_bodies_classifier:latest \
-@@ -107,18 +198,41 @@ jobs:
+@@ -107,18 +176,41 @@ jobs:
            # Push the container to the Container Registry
            docker push --all-tags ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier
        - name: Get Google Cloud's Kubernetes credentials
@@ -1168,11 +1133,12 @@ index 3ac0f67..b08180b 100644
 +        uses: google-github-actions/setup-gcloud@v2
 +        with:
 +          version: '>= 494.0.0'
++      - name: Install kubectl
++        run: |
++          gcloud components install kubectl
 +      - name: Install gke-gcloud-auth-plugin
 +        run: |
 +          gcloud components install gke-gcloud-auth-plugin
-+      - name: Setup kubectl
-+        uses: azure/setup-kubectl@v4
 +      - name: Cleanup runner on Kubernetes
 +        env:
 +          KUBECONFIG_DATA: ${{ secrets.GCP_K8S_KUBECONFIG }}
