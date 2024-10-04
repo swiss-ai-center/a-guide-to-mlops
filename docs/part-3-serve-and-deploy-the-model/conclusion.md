@@ -14,8 +14,9 @@ pod.
 The model is now ready to be used in production.
 
 The following diagram illustrates the bricks you set up at the end of this part:
+
 ```mermaid
-graph TB
+flowchart TB
     dot_dvc[(.dvc)] <-->|dvc pull
                          dvc push| s3_storage[(S3 Storage)]
     dot_git[(.git)] <-->|git pull
@@ -65,10 +66,11 @@ graph TB
                 pod_train[Train model] <-.-> k8s_gpu[GPUs]
                 bento_artifact[Model artifact]
             end
-            pod_runner --> |dvc pull
-                            dvc repro|bento_artifact
-            pod_runner[Runner] -->|dvc pull
-                                   dvc repro| pod_train
+            pod_runner[Runner] --> clusterPodGraph
+            action --> |dvc pull
+                        dvc repro|bento_artifact
+            action -->|dvc pull
+                       dvc repro| pod_train
             bento_service_cluster[classifier.bentomodel] --> k8s_fastapi[FastAPI]
         end
         bento_artifact -->|bentoml build|action
@@ -84,7 +86,8 @@ graph TB
     subgraph browserGraph[BROWSER]
         k8s_fastapi <--> publicURL["public URL"]
     end
-    linkStyle 19 opacity:0.0,color:#7f7f7f80
+
+    linkStyle 19 opacity:0.0
 ```
 
 The main goal of the MLOps process is to ensure that the model is reproducible,

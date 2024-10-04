@@ -29,7 +29,7 @@ The following diagram illustrates the control flow of the experiment at the end
 of this chapter:
 
 ```mermaid
-graph TB
+flowchart TB
     dot_dvc[(.dvc)] <-->|dvc pull
                          dvc push| s3_storage[(S3 Storage)]
     dot_git[(.git)] <-->|git pull
@@ -69,10 +69,11 @@ graph TB
                 pod_train[Train model] <-.-> k8s_gpu[GPUs]
                 bento_artifact[Model artifact]
             end
-            pod_runner --> |dvc pull
-                            dvc repro|bento_artifact
-            pod_runner[Runner] -->|dvc pull
-                                   dvc repro| pod_train
+            pod_runner[Runner] --> clusterPodGraph
+            action --> |dvc pull
+                        dvc repro|bento_artifact
+            action -->|dvc pull
+                       dvc repro| pod_train
             bento_service_cluster[classifier.bentomodel] --> k8s_fastapi[FastAPI]
         end
         bento_artifact -->|bentoml build|action
@@ -120,11 +121,10 @@ graph TB
     linkStyle 8 opacity:0.4,color:#7f7f7f80
     linkStyle 9 opacity:0.4,color:#7f7f7f80
     linkStyle 10 opacity:0.0
-    linkStyle 14 opacity:0.4,color:#7f7f7f80
-    linkStyle 17 opacity:0.4,color:#7f7f7f80
-    linkStyle 19 opacity:0.4,color:#7f7f7f80
+    linkStyle 15 opacity:0.4,color:#7f7f7f80
     linkStyle 20 opacity:0.4,color:#7f7f7f80
     linkStyle 21 opacity:0.4,color:#7f7f7f80
+    linkStyle 22 opacity:0.4,color:#7f7f7f80
 ```
 
 ## Steps
