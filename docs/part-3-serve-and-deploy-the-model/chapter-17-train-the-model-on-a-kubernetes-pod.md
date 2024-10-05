@@ -550,11 +550,15 @@ celestial-bodies-classifier-deployment-5f47f7dddc-t4swp   1/1     Running   0   
 github-runner                                             1/1     Running   0          2m11s
 ```
 
-Once the pod is running, you can connect to the pod and check the runner logs
-with:
+You can connect to the pod once it is running with:
 
 ```sh title="Execute the following command(s) in a terminal"
 kubectl exec -it github-runner -- bash
+```
+
+You can then check the runner logs with:
+
+```sh title="Execute the following command(s) in a terminal"
 tail -f run.log
 ```
 
@@ -735,9 +739,9 @@ automatically.
 !!! tip
 
     When proposing changes to the model files in a branch, you no longer need to run
-    `dvc repro` locally before pushing your code with `git push`. However, you will
-    need to obtain the updated `dvc.lock` file, which is automatically generated, by
-    using `git pull` before submitting your changes.
+    `dvc repro` locally before pushing the changes with `git push`. You can obtain
+    the updated `dvc.lock` file and model by using `git pull` and `dvc pull` on the
+    main branch.
 
 Update the `.github/workflows/mlops.yaml` file.
 
@@ -832,7 +836,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
       - name: Setup CML
         uses: iterative/setup-cml@v2
         with:
@@ -965,12 +969,10 @@ jobs:
 Here, the following should be noted:
 
 * the `setup-runner` job creates a self-hosted GPU runner.
-* the `train-report-publish-and-deploy` job is separated into `train-report` and
-  `publish-and-deploy`.
 * the `train-report` job runs on the self-hosted GPU runner on pull requests. It
-  trains the model and push the model to the remote bucket.
+  trains the model and DVC pushes the trained model to the remote bucket.
 * the `publish-and-deploy` runs on the main runner when merging pull requests.
-  It containerizes and deploys the models.
+  It retrieves the model with DVC, containerizes then deploys the model artifact.
 * the `cleanup-runner` job deletes the self-hosted GPU runner.
 
 Check the differences with Git to validate the changes.
@@ -1058,7 +1060,7 @@ index 3ac0f67..db9db1d 100644
 +      - name: Setup Node
 +        uses: actions/setup-node@v4
 +        with:
-+          node-version: 18
++          node-version: 20
        - name: Setup CML
 -        if: github.event_name == 'pull_request'
          uses: iterative/setup-cml@v2
