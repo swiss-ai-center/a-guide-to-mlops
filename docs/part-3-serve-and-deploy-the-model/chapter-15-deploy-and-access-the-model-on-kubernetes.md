@@ -214,8 +214,7 @@ Follow the steps below to create one.
     Default change: VPC-native is the default mode during cluster creation for versions greater than 1.21.0-gke.1500. To create advanced routes based clusters, please pass the `--no-enable-ip-alias` flag
     Note: The Kubelet readonly port (10255) is now deprecated. Please update your workloads to use the recommended alternatives. See https://cloud.google.com/kubernetes-engine/docs/how-to/disable-kubelet-readonly-port for ways to check usage and for migration instructions.
     Note: Your Pod address range (`--cluster-ipv4-cidr`) can accommodate at most 1008 node(s).
-    Creating cluster mlops-kubernetes in europe-west6-a... Cluster is being health-checked (mast
-    er is healthy)...done.
+    Creating cluster mlops-kubernetes in europe-west6-a... Cluster is being health-checked (master is healthy)...done.
     Created [https://container.googleapis.com/v1/projects/mlops-guide/zones/europe-west6-a/clusters/mlops-guide-kubernetes].
     To inspect the contents of your cluster, go to: https://console.cloud.google.com/kubernetes/workload_/gcloud/europe-west6-a/mlops-kubernetes?project=mlops-kubernetes
     kubeconfig entry generated for mlops-kubernetes.
