@@ -128,7 +128,7 @@ source .venv/bin/activate
 Create a `requirements.txt` file to list the dependencies:
 
 ```txt title="requirements.txt"
-tensorflow==2.17.0
+tensorflow==2.16.2
 matplotlib==3.9.2
 pyyaml==6.0.2
 ```
@@ -207,10 +207,10 @@ transitive dependencies are also listed. This will help with reproducibility:
 pip freeze --local --all > requirements-freeze.txt
 ```
 
-- The `--local` flag ensures that if a virtualenv has global access, it will not
-  output globally-installed packages.
-- The `--all` flag ensures that it does not skip these packages in the output:
-  `setuptools`, `wheel`, `pip`, `distribute`.
+-   The `--local` flag ensures that if a virtualenv has global access, it will not
+    output globally-installed packages.
+-   The `--all` flag ensures that it does not skip these packages in the output:
+    `setuptools`, `wheel`, `pip`, `distribute`.
 
 ### Split the Jupyter Notebook into scripts
 
@@ -220,13 +220,13 @@ command line, making it ideal for automation tasks.
 
 The following table describes the files that you will create in this codebase:
 
-| **File**                | **Description**                                   | **Input**                                       | **Output**                                                      |
-| ----------------------- | ------------------------------------------------- | ----------------------------------------------- | --------------------------------------------------------------- |
-| `params.yaml`           | The parameters to run the ML experiment           | -                                               | -                                                               |
-| `src/prepare.py`        | Prepare the dataset to run the ML experiment      | The dataset to prepare in `data/raw` directory  | The prepared data in `data/prepared` directory                  |
-| `src/train.py`          | Train the ML model                                | The prepared dataset                            | The model trained with the dataset                              |
-| `src/evaluate.py`       | Evaluate the ML model using scikit-learn          | The model to evaluate                           | The results of the model evaluation in `evaluation` directory   |
-| `src/utils/seed.py`     | Util function to fix the seed                     | -                                               | -                                                               |
+| **File**            | **Description**                              | **Input**                                      | **Output**                                                    |
+| ------------------- | -------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------- |
+| `params.yaml`       | The parameters to run the ML experiment      | -                                              | -                                                             |
+| `src/prepare.py`    | Prepare the dataset to run the ML experiment | The dataset to prepare in `data/raw` directory | The prepared data in `data/prepared` directory                |
+| `src/train.py`      | Train the ML model                           | The prepared dataset                           | The model trained with the dataset                            |
+| `src/evaluate.py`   | Evaluate the ML model using scikit-learn     | The model to evaluate                          | The results of the model evaluation in `evaluation` directory |
+| `src/utils/seed.py` | Util function to fix the seed                | -                                              | -                                                             |
 
 #### Move the parameters to its own file
 
@@ -234,18 +234,18 @@ Let's split the parameters to run the ML experiment with in a distinct file:
 
 ```yaml title="params.yaml"
 prepare:
-  seed: 77
-  split: 0.2
-  image_size: [32, 32]
-  grayscale: True
+    seed: 77
+    split: 0.2
+    image_size: [32, 32]
+    grayscale: True
 
 train:
-  seed: 77
-  lr: 0.0001
-  epochs: 5
-  conv_size: 32
-  dense_size: 64
-  output_classes: 11
+    seed: 77
+    lr: 0.0001
+    epochs: 5
+    conv_size: 32
+    dense_size: 64
+    output_classes: 11
 ```
 
 #### Move the preparation step to its own file
@@ -659,6 +659,7 @@ This repository contains the code from
 [A guide to MLOps](https://mlops.swiss-ai-center.ch/).
 
 ## Notes
+
 <!-- Enter your notes below -->
 ```
 
@@ -758,12 +759,12 @@ Your working directory should now be similar to this:
 
 Here, the following should be noted:
 
-- the `prepare.py` script created the `data/prepared` directory and divided the
-  dataset into a training set and a test set
-- the `train.py` script created the `model` directory and trained the model with
-  the prepared data.
-- the `evaluate.py` script created the `evaluation` directory and generated some
-  plots and metrics to evaluate the model
+-   the `prepare.py` script created the `data/prepared` directory and divided the
+    dataset into a training set and a test set
+-   the `train.py` script created the `model` directory and trained the model with
+    the prepared data.
+-   the `evaluate.py` script created the `evaluation` directory and generated some
+    plots and metrics to evaluate the model
 
 Take some time to get familiar with the scripts and the results.
 
@@ -780,11 +781,11 @@ In this chapter, you have:
 
 However, you may have identified the following areas for improvement:
 
-- [ ] Codebase is not versioned
-- [ ] Dataset still needs manual download and placement
-- [ ] Steps to run the experiment were not documented
-- [ ] Codebase is not easily sharable
-- [ ] Dataset is not easily sharable
+-   [ ] Codebase is not versioned
+-   [ ] Dataset still needs manual download and placement
+-   [ ] Steps to run the experiment were not documented
+-   [ ] Codebase is not easily sharable
+-   [ ] Dataset is not easily sharable
 
 In the next chapters, you will enhance the workflow to fix those issues.
 
@@ -792,23 +793,23 @@ You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
-- [x] Notebook has been transformed into scripts for production
-- [ ] Codebase and dataset are not versioned
-- [ ] Model steps rely on verbal communication and may be undocumented
-- [ ] Changes to model are not easily visualized
-- [ ] Codebase requires manual download and setup
-- [ ] Dataset requires manual download and placement
-- [ ] Experiment may not be reproducible on other machines
-- [ ] CI/CD pipeline does not report the results of the experiment
-- [ ] Changes to model are not thoroughly reviewed and discussed before
-      integration
-- [ ] Model may have required artifacts that are forgotten or omitted in
-      saved/loaded state
-- [ ] Model cannot be easily used from outside of the experiment context
-- [ ] Model requires manual publication to the artifact registry
-- [ ] Model is not accessible on the Internet and cannot be used anywhere
-- [ ] Model requires manual deployment on the cluster
-- [ ] Model cannot be trained on hardware other than the local machine
+-   [x] Notebook has been transformed into scripts for production
+-   [ ] Codebase and dataset are not versioned
+-   [ ] Model steps rely on verbal communication and may be undocumented
+-   [ ] Changes to model are not easily visualized
+-   [ ] Codebase requires manual download and setup
+-   [ ] Dataset requires manual download and placement
+-   [ ] Experiment may not be reproducible on other machines
+-   [ ] CI/CD pipeline does not report the results of the experiment
+-   [ ] Changes to model are not thoroughly reviewed and discussed before
+        integration
+-   [ ] Model may have required artifacts that are forgotten or omitted in
+        saved/loaded state
+-   [ ] Model cannot be easily used from outside of the experiment context
+-   [ ] Model requires manual publication to the artifact registry
+-   [ ] Model is not accessible on the Internet and cannot be used anywhere
+-   [ ] Model requires manual deployment on the cluster
+-   [ ] Model cannot be trained on hardware other than the local machine
 
 You will address these issues in the next chapters for improved efficiency and
 collaboration. Continue the guide to learn how.
@@ -817,5 +818,5 @@ collaboration. Continue the guide to learn how.
 
 Highly inspired by:
 
-- [_Get Started: Data Pipelines_ - dvc.org](https://dvc.org/doc/start/data-management/data-pipelines)
-- [_How to get stable results with TensorFlow, setting random seed_ - stackoverflow.com](https://stackoverflow.com/questions/36288235/how-to-get-stable-results-with-tensorflow-setting-random-seed)
+-   [_Get Started: Data Pipelines_ - dvc.org](https://dvc.org/doc/start/data-management/data-pipelines)
+-   [_How to get stable results with TensorFlow, setting random seed_ - stackoverflow.com](https://stackoverflow.com/questions/36288235/how-to-get-stable-results-with-tensorflow-setting-random-seed)
