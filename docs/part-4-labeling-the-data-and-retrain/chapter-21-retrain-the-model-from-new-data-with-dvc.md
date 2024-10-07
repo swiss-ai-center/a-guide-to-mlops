@@ -1,4 +1,4 @@
-# Chapter 21 - Retrain the model from new data with DVC Sync
+# Chapter 21 - Retrain the model from new data with DVC
 
 !!! warning "This is a work in progress"
 
