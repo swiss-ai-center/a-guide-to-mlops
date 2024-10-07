@@ -7,11 +7,11 @@ on Kubernetes, set up continuous deployment with a CI/CD pipeline, and trained
 the model on a Kubernetes pod. Now, we will focus on labeling new data to
 further improve our model's performance.
 
-[Label Studio](https://labelstud.io) is an open-source data labeling tool that supports various data
-types, including text, images, audio, and video. In this chapter, we will guide
-you through the process of setting up Label Studio in your environment. This
-includes installing the necessary dependencies, configuring the tool, and
-preparing it for data labeling tasks.
+[Label Studio](https://labelstud.io) is an open-source data labeling tool that
+supports various data types, including text, images, audio, and video. In this
+chapter, we will guide you through the process of setting up Label Studio in
+your environment. This includes installing the necessary dependencies,
+configuring the tool, and preparing it for data labeling tasks.
 
 By the end of this chapter, you will have a fully functional Label Studio
 instance ready to label new data, which will be used in subsequent chapters to
@@ -128,7 +128,7 @@ pip install --requirement requirements.txt
 pip freeze --local --all > requirements-freeze.txt
 ```
 
-### Create a New Project
+### Start Label Studio
 
 You can now start label studio with the following command:
 
@@ -138,6 +138,8 @@ label-studio start
 
 Label Studio will start on <http://localhost:8080>. Open the URL in your browser
 and sign up for an account.
+
+### Create a New Project
 
 Once you have signed up, you can create a new project in Label Studio:
 
