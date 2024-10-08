@@ -67,9 +67,9 @@ index dee3012..cbfa93b 100644
  
  # DVC will add new files after this line
  /model
--
--# Label Studio
--extra-data/
++
++# Label Studio
++extra-data/
 ```
 
 ### Install Label Studio

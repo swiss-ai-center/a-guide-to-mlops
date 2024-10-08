@@ -58,7 +58,9 @@ with open("extra-data/annotations.json") as f:
     annotations = json.load(f)
 
 for annotation in annotations:
-    filename = annotation["image"].split("-")[1]
+    # Here we perform the same manipulation as `src/serve_label_studio.py`
+    # to retrieve the correct filename
+    filename = "".join(annotation["image"].split("-")[1:])
     choice = annotation["choice"]
 
     source_path = EXTRA_DATA_FOLDER_PATH / filename

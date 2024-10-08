@@ -139,7 +139,7 @@ async def predict(data: Dict):
     # This is a simplification to get the filename from the image id.
     # In a real-world scenario, you would store the image on S3
     # and fetch it here.
-    filename = task["data"]["image"].split("-")[1]
+    filename = "".join(task["data"]["image"].split("-")[1:])
     image_path = DATA_FOLDER_PATH / filename
     image = Image.open(image_path)
 
