@@ -26,7 +26,7 @@ pressing the corresponding key on your keyboard.
 ![Label Studio Label Image](../assets/images/label-studio-label-image.png)
 
 1. Select the correct label for the image. In this case, the image is of the
-   planet Venus.
+   planet Uranus.
 2. Click `Submit` to save the label.
 3. The next image will be displayed for labeling. We will not be labeling more
    images, so you can go back to the project view by
