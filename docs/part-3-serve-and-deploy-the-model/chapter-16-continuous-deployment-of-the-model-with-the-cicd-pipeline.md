@@ -145,7 +145,6 @@ but this time for the Kubernetes cluster.
     [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
     help is greatly appreciated!
 
-
 ### Add Kubernetes CI/CD secrets
 
 Add the Kubernetes secrets to access the Kubernetes cluster from the CI/CD

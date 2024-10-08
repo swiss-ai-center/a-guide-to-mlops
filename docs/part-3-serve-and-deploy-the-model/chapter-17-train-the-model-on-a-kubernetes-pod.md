@@ -587,7 +587,6 @@ to see the `github-runner` runner listed with the *Idle* status.
 
     The runner will also automatically be unregistered from the repository.
 
-
 ### Set self-hosted GPU runner
 
 We also create a similar configuration file for the GPU runner, which is used
@@ -639,8 +638,8 @@ spec:
         requests:
           cpu: "1"
           memory: "4Gi"
-      nodeSelector:
-        gpu: "true"
+  nodeSelector:
+    gpu: "true"
 ```
 
 Note the `nodeSelector` field that will select a node with a `gpu=true` label.

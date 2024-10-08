@@ -171,7 +171,7 @@ Follow the steps below to create one.
     Export the cluster name as an environment variable. Replace `<my_cluster_name>`
     with a cluster name of your choice. It has to be lowercase and words separated
     by hyphens. For example, use `mlops-kubernetes` for the cluster name.
-    
+
     !!! warning
 
         The cluster name must be unique across all Google Cloud projects and users.
