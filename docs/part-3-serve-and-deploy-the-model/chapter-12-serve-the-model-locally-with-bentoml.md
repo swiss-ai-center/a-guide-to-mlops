@@ -172,7 +172,7 @@ Here are some example you can use.
 Download the following image of the moon on your computer.
 
 <figure markdown>
-  ![Moon](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/extra-data/extra_data/Moon_145.jpg)
+  ![Moon](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/extra-data/extra_data/TW9vbl8xNDU=.jpg)
 </figure>
 
 Upload it to the `/predict` endpoint and check the prediction.
@@ -203,7 +203,7 @@ The output should be similar to this:
 Download the following image of Makemake on your computer.
 
 <figure markdown>
-  ![Makemake](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/extra-data/extra_data/Makemake_146.jpg)
+  ![Makemake](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/extra-data/extra_data/TWFrZW1ha2VfMTQ2.jpg)
 </figure>
 
 Upload it to the `/predict` endpoint and check the prediction.
@@ -234,7 +234,7 @@ The output should be similar to this:
 Download the following image of Neptune on your computer.
 
 <figure markdown>
-  ![Neptune](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/extra-data/extra_data/Neptune_146.jpg)
+  ![Neptune](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/extra-data/extra_data/TmVwdHVuZV8xNDY=.jpg)
 </figure>
 
 Upload it to the `/predict` endpoint and check the prediction.
