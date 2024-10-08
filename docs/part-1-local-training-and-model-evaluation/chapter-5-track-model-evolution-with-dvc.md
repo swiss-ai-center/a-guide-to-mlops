@@ -144,6 +144,12 @@ generated on `HEAD` and the ones that were generated in your current
 dvc plots diff --open
 ```
 
+!!! warning
+
+    Do **not** enable auto-opening using the suggested command
+    `dvc config plots.auto_open true`, as this will cause complications in
+    subsequent steps.
+
 The effect of the `dvc plots diff` command is to create a `dvc_plots` directory
 in the working directory. This directory contains a report to visualize the
 plots in a browser.
