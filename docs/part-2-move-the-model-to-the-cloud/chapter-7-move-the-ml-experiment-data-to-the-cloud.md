@@ -311,7 +311,7 @@ Install the DVC Storage plugin for the cloud provider:
     `requirements.txt` file:
 
     ```txt title="requirements.txt" hl_lines="4"
-    tensorflow==2.17.0
+    tensorflow==2.16.2
     matplotlib==3.9.2
     pyyaml==6.0.2
     dvc[gs]==3.53.2
@@ -332,7 +332,7 @@ Install the DVC Storage plugin for the cloud provider:
     --- a/requirements.txt
     +++ b/requirements.txt
     @@ -1,4 +1,4 @@
-     tensorflow==2.17.0
+     tensorflow==2.16.2
      matplotlib==3.9.2
      pyyaml==6.0.2
     -dvc==3.53.2
@@ -474,7 +474,7 @@ In this chapter, you have successfully:
 
 You fixed some of the previous issues:
 
-- [x] Data no longer needs manual download and is placed in the right directory.
+-   [x] Data no longer needs manual download and is placed in the right directory.
 
 When used by another member of the team, they can easily get a copy of the
 experiment data from DVC with the following command:
@@ -496,25 +496,25 @@ You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
-- [x] Notebook has been transformed into scripts for production
-- [x] Codebase and dataset are versioned
-- [x] Steps used to create the model are documented and can be re-executed
-- [x] Changes done to a model can be visualized with parameters, metrics and
-      plots to identify differences between iterations
-- [x] Codebase can be shared and improved by multiple developers
-- [x] Dataset can be shared among the developers and is placed in the right
-      directory in order to run the experiment
-- [ ] Experiment may not be reproducible on other machines
-- [ ] CI/CD pipeline does not report the results of the experiment
-- [ ] Changes to model are not thoroughly reviewed and discussed before
-      integration
-- [ ] Model may have required artifacts that are forgotten or omitted in
-      saved/loaded state
-- [ ] Model cannot be easily used from outside of the experiment context
-- [ ] Model requires manual publication to the artifact registry
-- [ ] Model is not accessible on the Internet and cannot be used anywhere
-- [ ] Model requires manual deployment on the cluster
-- [ ] Model cannot be trained on hardware other than the local machine
+-   [x] Notebook has been transformed into scripts for production
+-   [x] Codebase and dataset are versioned
+-   [x] Steps used to create the model are documented and can be re-executed
+-   [x] Changes done to a model can be visualized with parameters, metrics and
+        plots to identify differences between iterations
+-   [x] Codebase can be shared and improved by multiple developers
+-   [x] Dataset can be shared among the developers and is placed in the right
+        directory in order to run the experiment
+-   [ ] Experiment may not be reproducible on other machines
+-   [ ] CI/CD pipeline does not report the results of the experiment
+-   [ ] Changes to model are not thoroughly reviewed and discussed before
+        integration
+-   [ ] Model may have required artifacts that are forgotten or omitted in
+        saved/loaded state
+-   [ ] Model cannot be easily used from outside of the experiment context
+-   [ ] Model requires manual publication to the artifact registry
+-   [ ] Model is not accessible on the Internet and cannot be used anywhere
+-   [ ] Model requires manual deployment on the cluster
+-   [ ] Model cannot be trained on hardware other than the local machine
 
 You will address these issues in the next chapters for improved efficiency and
 collaboration. Continue the guide to learn how.
@@ -523,7 +523,7 @@ collaboration. Continue the guide to learn how.
 
 Highly inspired by:
 
-- [_Supported storage types_ - dvc.org](https://dvc.org/doc/command-reference/remote/add#supported-storage-types)
-- [_Install the Google Cloud CLI_ - cloud.google.com](https://cloud.google.com/sdk/docs/install-sdk)
-- [_Create storage buckets_ - cloud.google.com](https://cloud.google.com/storage/docs/creating-buckets)
-- [_gcloud storage buckets create_ - cloud.google.com](https://cloud.google.com/sdk/gcloud/reference/storage/buckets/create)
+-   [_Supported storage types_ - dvc.org](https://dvc.org/doc/command-reference/remote/add#supported-storage-types)
+-   [_Install the Google Cloud CLI_ - cloud.google.com](https://cloud.google.com/sdk/docs/install-sdk)
+-   [_Create storage buckets_ - cloud.google.com](https://cloud.google.com/storage/docs/creating-buckets)
+-   [_gcloud storage buckets create_ - cloud.google.com](https://cloud.google.com/sdk/gcloud/reference/storage/buckets/create)

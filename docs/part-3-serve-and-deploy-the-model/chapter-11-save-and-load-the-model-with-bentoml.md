@@ -88,7 +88,7 @@ Add the `bentoml` package to install BentoML support. `pillow` is also added to
 support image processing:
 
 ```txt title="requirements.txt" hl_lines="5-6"
-tensorflow==2.17.0
+tensorflow==2.16.2
 matplotlib==3.9.2
 pyyaml==6.0.2
 dvc[gs]==3.53.2
@@ -110,7 +110,7 @@ diff --git a/requirements.txt b/requirements.txt
 index 4b8d3d9..d584cca 100644
 --- a/requirements.txt
 +++ b/requirements.txt
-@@ -2,3 +2,5 @@ tensorflow==2.17.0
+@@ -2,3 +2,5 @@ tensorflow==2.16.2
  matplotlib==3.9.2
  pyyaml==6.0.2
  dvc[gs]==3.53.2
@@ -299,9 +299,9 @@ These custom objects can be used to save the model with arbitrary data that can
 be used afterword when loading back the model. In this case, the following
 objects are saved with the model:
 
-- `preprocess` is used to preprocess the input data before feeding it to the
-  model.
-- `postprocess` is used to postprocess the output of the model.
+-   `preprocess` is used to preprocess the input data before feeding it to the
+    model.
+-   `postprocess` is used to postprocess the output of the model.
 
 These functions will be used later to transform the input and output data when
 using the model through a HTTP REST API.
@@ -685,32 +685,32 @@ In this chapter, you have successfully:
 
 You did fix some of the previous issues:
 
-- [x] Model can be saved and loaded with all required artifacts for future usage
+-   [x] Model can be saved and loaded with all required artifacts for future usage
 
 You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
-- [x] Notebook has been transformed into scripts for production
-- [x] Codebase and dataset are versioned
-- [x] Steps used to create the model are documented and can be re-executed
-- [x] Changes done to a model can be visualized with parameters, metrics and
-      plots to identify differences between iterations
-- [x] Codebase can be shared and improved by multiple developers
-- [x] Dataset can be shared among the developers and is placed in the right
-      directory in order to run the experiment
-- [x] Experiment can be executed on a clean machine with the help of a CI/CD
-      pipeline
-- [x] CI/CD pipeline is triggered on pull requests and reports the results of
-      the experiment
-- [x] Changes to model can be thoroughly reviewed and discussed before
-      integrating them into the codebase
-- [x] Model can be saved and loaded with all required artifacts for future usage
-- [ ] Model cannot be easily used from outside of the experiment context
-- [ ] Model requires manual publication to the artifact registry
-- [ ] Model is not accessible on the Internet and cannot be used anywhere
-- [ ] Model requires manual deployment on the cluster
-- [ ] Model cannot be trained on hardware other than the local machine
+-   [x] Notebook has been transformed into scripts for production
+-   [x] Codebase and dataset are versioned
+-   [x] Steps used to create the model are documented and can be re-executed
+-   [x] Changes done to a model can be visualized with parameters, metrics and
+        plots to identify differences between iterations
+-   [x] Codebase can be shared and improved by multiple developers
+-   [x] Dataset can be shared among the developers and is placed in the right
+        directory in order to run the experiment
+-   [x] Experiment can be executed on a clean machine with the help of a CI/CD
+        pipeline
+-   [x] CI/CD pipeline is triggered on pull requests and reports the results of
+        the experiment
+-   [x] Changes to model can be thoroughly reviewed and discussed before
+        integrating them into the codebase
+-   [x] Model can be saved and loaded with all required artifacts for future usage
+-   [ ] Model cannot be easily used from outside of the experiment context
+-   [ ] Model requires manual publication to the artifact registry
+-   [ ] Model is not accessible on the Internet and cannot be used anywhere
+-   [ ] Model requires manual deployment on the cluster
+-   [ ] Model cannot be trained on hardware other than the local machine
 
 You will address these issues in the next chapters for improved efficiency and
 collaboration. Continue the guide to learn how.
@@ -719,9 +719,9 @@ collaboration. Continue the guide to learn how.
 
 Highly inspired by:
 
-- [_Quickstart_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/get-started/quickstart.html)
-- [_Keras_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/reference/frameworks/keras.html)
-- [_Model Store_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/guides/model-store.html)
-- [_Bento and model APIs_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/reference/stores.html)
-- [_BentoML SDK_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/reference/sdk.html)
-- [_BentoML CLI_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/reference/cli.html)
+-   [_Quickstart_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/get-started/quickstart.html)
+-   [_Keras_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/reference/frameworks/keras.html)
+-   [_Model Store_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/guides/model-store.html)
+-   [_Bento and model APIs_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/reference/stores.html)
+-   [_BentoML SDK_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/reference/sdk.html)
+-   [_BentoML CLI_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/reference/cli.html)
