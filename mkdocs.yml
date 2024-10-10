@@ -43,10 +43,9 @@ nav:
   - 🏷️ Labeling the data and retrain:
       - "Introduction": part-4-labeling-the-data-and-retrain/introduction.md
       - "Chapter 18 - Setup Label Studio": part-4-labeling-the-data-and-retrain/chapter-18-setup-label-studio.md
-      - "Chapter 19 - Import existing data to Label Studio": part-4-labeling-the-data-and-retrain/chapter-19-import-existing-data-to-label-studio.md
-      - "Chapter 20 - Label new data with Label Studio": part-4-labeling-the-data-and-retrain/chapter-20-label-new-data-with-label-studio.md
-      - "Chapter 21 - Retrain the model from new data with DVC Sync": part-4-labeling-the-data-and-retrain/chapter-21-retrain-the-model-from-new-data-with-dvc-sync.md
-      - "Chapter 22 - Link the model to Label Studio and get predictions": part-4-labeling-the-data-and-retrain/chapter-22-link-the-model-to-label-studio-and-get-predictions.md
+      - "Chapter 19 - Label new data with Label Studio": part-4-labeling-the-data-and-retrain/chapter-19-label-new-data-with-label-studio.md
+      - "Chapter 20 - Link the model to Label Studio": part-4-labeling-the-data-and-retrain/chapter-20-link-the-model-to-label-studio.md
+      - "Chapter 21 - Retrain the model from new data with DVC": part-4-labeling-the-data-and-retrain/chapter-21-retrain-the-model-from-new-data-with-dvc.md
       - "Conclusion": part-4-labeling-the-data-and-retrain/conclusion.md
       - "Clean up": part-4-labeling-the-data-and-retrain/clean-up.md
   - 🪄 Conclusion:
