@@ -2,16 +2,28 @@
 
 ## Introduction
 
-In the previous chapters, we have successfully deployed and accessed our model
-on Kubernetes, set up continuous deployment with a CI/CD pipeline, and trained
-the model on a Kubernetes pod. Now, we will focus on labeling new data to
-further improve our model's performance.
+In the previous chapters, we successfully deployed and accessed our model on
+Kubernetes, set up continuous deployment with a CI/CD pipeline, and trained the
+model on a Kubernetes pod. Now, we will focus on labeling new data to further
+improve our model's performance.
+
+The quality of data is crucial for any machine learning model. The saying
+"garbage in, garbage out" holds true; if the data fed into the model is of poor
+quality, the model's predictions will also be poor. Therefore, careful attention
+must be paid to the data labeling process to ensure high-quality, accurate data.
+
+Collecting and labeling data is not a one-time task but an iterative process.
+Just as developing a machine learning model involves multiple iterations of
+training and fine-tuning, the data collection and labeling process also requires
+continuous refinement. As new data becomes available and the model's
+requirements evolve, additional rounds of data labeling and quality checks are
+necessary to maintain and improve the model's performance.
 
 [Label Studio](https://labelstud.io) is an open-source data labeling tool that
 supports various data types, including text, images, audio, and video. In this
-chapter, we will guide you through the process of setting up Label Studio in
-your environment. This includes installing the necessary dependencies,
-configuring the tool, and preparing it for data labeling tasks.
+chapter, we will guide you through setting up Label Studio in your environment.
+This includes installing the necessary dependencies, configuring the tool, and
+preparing it for data labeling tasks.
 
 By the end of this chapter, you will have a fully functional Label Studio
 instance ready to label new data, which will be used in subsequent chapters to
