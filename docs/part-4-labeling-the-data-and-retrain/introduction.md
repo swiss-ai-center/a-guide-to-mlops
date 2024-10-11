@@ -22,5 +22,9 @@ might encounter issues. Please use the
 
 ## Requirements
 
-The necessary requirements to follow this part are those described in the
-[first part](../part-1-local-training-and-model-evaluation/introduction.md#requirements).
+The following requirements are necessary to follow this part in addition to
+those described in the
+[first part](../part-1-local-training-and-model-evaluation/introduction.md#requirements):
+
+- A :simple-googlechrome: Chrome or a :material-firefox: Firefox based browser
+  for better compatibility
