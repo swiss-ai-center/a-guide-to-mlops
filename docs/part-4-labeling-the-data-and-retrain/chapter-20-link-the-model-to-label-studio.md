@@ -171,17 +171,17 @@ async def predict(data: Dict):
 
 This file is structured in 3 parts:
 
-1. Defines some useful constants.
-2. Creates the FastAPI app and loads the model similarly to BentoML
+1. Definition of some useful constants.
+2. Creation of the FastAPI app and loads the model similarly to BentoML
     `src/serve.py`.
-3. Defines the API endpoints required by Label Studio.
+3. Definition the API endpoints required by Label Studio.
 
 !!! note
 
-    We do nothing with the `/setup` and `/webhook` endpoints as they are not
-    required for the model to work with Label Studio. If you would like to go
-    further, please refer the
-    [Label Studio ML integration documentation](https://labelstud.io/guide/ml).
+    We do nothing with the `/setup` and `/webhook` endpoints as we do not need the
+    functionality they offer. However, they are still required to exist for the
+    model to work with Label Studio. If you would like to go further, please refer
+    the [Label Studio ML integration documentation](https://labelstud.io/guide/ml).
 
 ### Run the Model API
 
@@ -245,6 +245,18 @@ Now that the model is connected, you can start labeling the data.
 And that's it! You can view the annotations in the project view:
 
 ![Label Studio Annotations](../assets/images/label-studio-annotations.png)
+
+!!! warning
+
+    While AI-assisted labeling can significantly speed up the labeling process, it
+    is important to be aware of its limitations. Human labelers might become overly
+    reliant on the model's predictions and accept them without proper verification,
+    especially when dealing with large datasets over extended periods. This can lead
+    to inaccuracies in the labeled data.
+
+    To mitigate this risk, consider implementing cross-labeling, where multiple
+    labelers annotate the same data and discrepancies are reviewed. This ensures
+    higher accuracy and reliability of the labeled data.
 
 ## Summary
 

@@ -46,7 +46,7 @@ Finally, add the `extra-data` folder to the `.gitignore` file:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Add the `extra-data` folder to the `.gitignore` file
-echo "\n# Label Studio\nextra-data/" >> .gitignore
+echo -e "\n# Label Studio\nextra-data/" >> .gitignore
 ```
 
 Check the differences with Git to validate the changes:
@@ -138,6 +138,12 @@ label-studio start
 
 Label Studio will start on <http://localhost:8080>. Open the URL in your browser
 and sign up for an account.
+
+!!! note
+
+    The account creation is completely offline and local. It is not related to any
+    service or enterprise offer from Label Studio. This is only done once to create
+    an ID locally.
 
 ### Create a New Project
 
