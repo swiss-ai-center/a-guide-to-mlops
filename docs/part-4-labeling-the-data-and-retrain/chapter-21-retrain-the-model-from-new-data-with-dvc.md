@@ -9,20 +9,20 @@ improved.
 
 ## Steps
 
-### Download the Annotations
+### Download the annotations
 
 Make sure Label Studio is running at <http://localhost:8080>.
 
-1. In the project view, click on the `Export` button and select `JSON-MINI`.
+1. In the project view, click on the **Export** button and select `JSON-MINI`.
 
     ![Label Studio Export Annotations](../assets/images/label-studio-export-annotations.png)
 
-2. Click on the `Export` button to download the annotations.
+2. Click on the **Export** button to download the annotations.
 
 3. Rename the downloaded json file to `annotations.json`.
 
-4. Move the file to your mlops repository (`a-guide-to-mlops`) under the
-   `extra-data/` folder.
+4. Move the file to your `a-guide-to-mlops` repository under the `extra-data/`
+   folder.
 
     ```yaml hl_lines="4"
     .
@@ -36,7 +36,7 @@ Make sure Label Studio is running at <http://localhost:8080>.
 
     1. This is the annotations file we downloaded from Label Studio.
 
-### Parse the Annotations
+### Parse the annotations
 
 Label Studio exports the annotations in a specific format. We need to parse
 these annotations to extract the labels and the corresponding data.
@@ -95,7 +95,19 @@ Copying extra-data/extra_data/VXJhbnVzXzE0Nw.jpg -> data/raw/Uranus/VXJhbnVzXzE0
 ...
 ```
 
-### Retrain the Model
+### Commit the changes to Git
+
+Commit the changes to Git.
+
+```sh title="Execute the following command(s) in a terminal"
+# Add all the files
+git add .
+
+# Commit the changes
+git commit -m "Add annotation parser script"
+```
+
+### Retrain the model
 
 Now that we have the new data, we can retrain the model. We will use DVC:
 
@@ -114,9 +126,14 @@ dvc plots diff --open
 The plot shows the performance of the old (right) and new model (left). You can
 see if the new model has improved.
 
-
 ## Summary
 
 In this chapter, we retrained the model using the new data we labeled in Label
 Studio. We downloaded the annotations, parsed them, and retrained the model
 using DVC. We then evaluated the new model to see if it has improved.
+
+## State of the labeling process
+
+- [x] Labeling of supplemental data can be done systematically and uniformly
+- [x] Labeling of supplemental data is accelerated with AI assistance
+- [x] Model is retrained with the supplemental data

@@ -4,7 +4,8 @@ title: "Part 4 - Introduction"
 
 # Introduction
 
-Learn how to label new data and retrain the model using Label Studio.
+Learn how to use the model to label new data using Label Studio and retrain the
+model iteratively.
 
 !!! note
 
@@ -21,6 +22,5 @@ might encounter issues. Please use the
 
 ## Requirements
 
-The following requirements are necessary to follow this part are those described
-in the
+The necessary requirements to follow this part are those described in the
 [first part](../part-1-local-training-and-model-evaluation/introduction.md#requirements).

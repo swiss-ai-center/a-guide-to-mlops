@@ -2,11 +2,11 @@
 
 ## Introduction
 
-In this chapter, we will start by creating an API for the model using
-[FastAPI](https://fastapi.tiangolo.com). We will then link the model we trained
-in the previous chapter to Label Studio. The model will be used to make
-predictions on the data we have in Label Studio thus making the labeling process
-more efficient.
+In this chapter, you will begin by creating an API for the model. Next, you will
+link the model you trained in the previous chapters to Label Studio using this
+API. This integration will enable the model to make predictions on the unlabeled
+data within Label Studio, rendering the labeling process "AI assisted" and thus
+making it significantly more efficient.
 
 ## Steps
 
@@ -69,7 +69,7 @@ pip install --requirement requirements.txt
 pip freeze --local --all > requirements-freeze.txt
 ```
 
-### Create the Model API
+### Create the model API
 
 Let's start building the API which will allow Label Studio to talk with our
 model. Label Studio expects the following API endpoints:
@@ -183,7 +183,19 @@ This file is structured in 3 parts:
     model to work with Label Studio. If you would like to go further, please refer
     the [Label Studio ML integration documentation](https://labelstud.io/guide/ml).
 
-### Run the Model API
+### Commit the changes to Git
+
+Commit the changes to Git.
+
+```sh title="Execute the following command(s) in a terminal"
+# Add all the files
+git add .
+
+# Commit the changes
+git commit -m "Add FastAPI integration to Label Studio"
+```
+
+### Run the model API
 
 Run the model API by executing the following command:
 
@@ -196,16 +208,16 @@ documentation at <http://localhost:8000/docs>.
 
 Make sure to keep the server running in the background for the next steps.
 
-### Add the Model to Label Studio
+### Add the model to Label Studio
 
 Make sure Label Studio is running at <http://localhost:8080>.
 
-1. Click on the `Settings` button on the top right corner of the screen and
-   select `Model` from the sidebar.
+1. Click on the **Settings** button on the top right corner of the screen and
+   select **Model** from the sidebar.
 
     ![Label Studio Settings Model](../assets/images/label-studio-settings-model.png)
 
-2. Click on the `Connect Model` button and enter the following details:
+2. Click on the **Connect Model** button and enter the following details:
 
     - **Name**: `celestial_bodies_classifier_model`
     - **Backend URL**: `http://localhost:8000`
@@ -214,22 +226,22 @@ Make sure Label Studio is running at <http://localhost:8080>.
 
     ![Label Studio Connect Model](../assets/images/label-studio-connect-model.png)
 
-3. Click on `Validate and Save` to add the model.
+3. Click on **Validate and Save** to add the model.
 
 You should now see your model with a status of `Connected`:
 
 ![Label Studio Model Connected](../assets/images/label-studio-model-connected.png)
 
-### Label with the Model
+### Label with the model
 
 Now that the model is connected, you can start labeling the data.
 
-1. **Click on your project name** on the top navigation bar to go back to the
+1. Click on your **project name** on the top navigation bar to go back to the
    project view.
 
     ![Label Studio Label Project View](../assets/images/label-studio-label-project-view.png)
 
-2. Click on the `Label All Tasks` button to start labeling the data. This will
+2. Click on the **Label All Tasks** button to start labeling the data. This will
    resume the labeling process from where you left off.
 
     You should now see the image has been labeled automatically by the model:
@@ -238,7 +250,7 @@ Now that the model is connected, you can start labeling the data.
 
 3. Review the prediction and make any necessary corrections.
 
-4. Click on the `Submit` button to save the annotation.
+4. Click on the **Submit** button to save the annotation.
 
 5. Continue labeling the data until you have labeled all the images.
 
@@ -264,6 +276,12 @@ Wow! You have successfully linked the model to Label Studio. You can now use the
 model to make predictions on the data you have in Label Studio to speed up the
 labeling process. In the next chapter, we will retrain the model using the new
 data we have labeled.
+
+## State of the labeling process
+
+- [x] Labeling of supplemental data can be done systematically and uniformly
+- [x] Labeling of supplemental data is accelerated with AI assistance
+- [ ] Model needs to be retrained using higher-quality data
 
 ## Sources
 

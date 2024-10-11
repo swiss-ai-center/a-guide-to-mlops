@@ -8,16 +8,18 @@ model on a Kubernetes pod. Now, we will focus on labeling new data to further
 improve our model's performance.
 
 The quality of data is crucial for any machine learning model. The saying
-"garbage in, garbage out" holds true; if the data fed into the model is of poor
-quality, the model's predictions will also be poor. Therefore, careful attention
-must be paid to the data labeling process to ensure high-quality, accurate data.
+*"garbage in, garbage out"* holds true: if the data fed into the model is of
+poor quality, the predictions of the model will also be poor. Therefore, giving
+careful attention to the data labeling process is essential to guarantee
+high-quality, accurate data.
 
-Collecting and labeling data is not a one-time task but an iterative process.
-Just as developing a machine learning model involves multiple iterations of
-training and fine-tuning, the data collection and labeling process also requires
-continuous refinement. As new data becomes available and the model's
-requirements evolve, additional rounds of data labeling and quality checks are
-necessary to maintain and improve the model's performance.
+In Supervised Learning tasks, collecting and labeling data is usually not a
+one-time task but an iterative process. Just as developing a machine learning
+model involves multiple iterations of training and parameter adjustments, the
+data collection and labeling process also requires continuous refinement. As new
+data becomes available and the requirements of the model evolve, additional
+rounds of data labeling and quality checks are necessary to maintain and improve
+the model's performance.
 
 [Label Studio](https://labelstud.io) is an open-source data labeling tool that
 supports various data types, including text, images, audio, and video. In this
@@ -25,9 +27,14 @@ chapter, we will guide you through setting up Label Studio in your environment.
 This includes installing the necessary dependencies, configuring the tool, and
 preparing it for data labeling tasks.
 
-By the end of this chapter, you will have a fully functional Label Studio
-instance ready to label new data, which will be used in subsequent chapters to
-retrain and enhance your model.
+In this chapter, you will learn how to:
+
+1. Set up Label Studio to have a fully functional instance ready to label new
+   data
+2. Import supplemental data for labeling
+
+The new data will be used in subsequent chapters to retrain and improve your
+model.
 
 ## Steps
 
@@ -76,7 +83,7 @@ index dee3012..cbfa93b 100644
 --- a/.gitignore
 +++ b/.gitignore
 @@ -11,6 +11,3 @@ dvc_plots
- 
+
  # DVC will add new files after this line
  /model
 +
@@ -140,11 +147,24 @@ pip install --requirement requirements.txt
 pip freeze --local --all > requirements-freeze.txt
 ```
 
+### Commit the changes to Git
+
+Commit the changes to Git.
+
+```sh title="Execute the following command(s) in a terminal"
+# Add all the files
+git add .
+
+# Commit the changes
+git commit -m "Add Label Studio"
+```
+
 ### Start Label Studio
 
 You can now start label studio with the following command:
 
 ```sh title="Execute the following command(s) in a terminal"
+# Start Label Studio
 label-studio start
 ```
 
@@ -161,27 +181,28 @@ and sign up for an account.
 
 Once you have signed up, you can create a new project in Label Studio:
 
-1. Click `Create Project` to create a project.
+1. Click **Create Project** to create a project.
 2. Give your project a name (ex: `MLOps Guide`).
 
     ![Label Studio Create Project](../assets/images/label-studio-project-name.png)
 
-3. Select the `Data Import` tab and click on the `Upload File` button. Select
-   all the images from the `extra-data/extra_data` folder you downloaded earlier.
+3. Select the **Data Import** tab and click on the **Upload File** button.
+   Select all the images from the `extra-data/extra_data` folder you downloaded
+   earlier.
 
-    ![Label Studio Data Import](../assets/images/label-studio-data-import.png)
-
-    !!! note
+    !!! tip
 
         For WSL2 users, the Linux distribution is accessible through the
         `\\wsl.localhost\` address in the file explorer.
 
-4. Select the `Labeling Setup` tab and choose `Image Classification` under the
-   `Computer Vision` menu.
+    ![Label Studio Data Import](../assets/images/label-studio-data-import.png)
+
+4. Select the **Labeling Setup** tab and choose **Image Classification** under
+   the **Computer Vision** menu.
 
     ![Label Studio Labeling Setup](../assets/images/label-studio-labeling-setup.png)
 
-5. Under `Labeling Interface` select `Code` and paste the following
+5. Under **Labeling Interface** select **Code** and paste the following
    configuration:
 
     ```xml
@@ -214,13 +235,18 @@ Once you have signed up, you can create a new project in Label Studio:
 
     ![Label Studio Labeling Interface](../assets/images/label-studio-labeling-interface.png)
 
-6. Click `Save` to create the project.
+6. Click **Save** to create the project.
 
 ## Summary
 
-Congratulations! You have successfully set up Label Studio in your environment.
+Congratulations! You have successfully set up Label Studio in your environment
+and imported new data. You are now ready to start labeling your data!
 
-You are now ready to start labeling your data!
+## State of the labeling process
+
+- [ ] Labeling of supplemental data needs to be systematic and uniform
+- [ ] Labeling of supplemental data is time intensive
+- [ ] Model needs to be retrained using higher-quality data
 
 ## Sources
 
