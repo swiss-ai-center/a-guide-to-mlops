@@ -171,6 +171,11 @@ Once you have signed up, you can create a new project in Label Studio:
 
     ![Label Studio Data Import](../assets/images/label-studio-data-import.png)
 
+    !!! note
+
+        For WSL2 users, the Linux distribution is accessible through the
+        `\\wsl.localhost\` address in the file explorer.
+
 4. Select the `Labeling Setup` tab and choose `Image Classification` under the
    `Computer Vision` menu.
 
