@@ -126,6 +126,24 @@ dvc plots diff --open
 The plot shows the performance of the old (right) and new model (left). You can
 see if the new model has improved.
 
+### Commit and push the updated data
+
+Once you want to share the new data, commit the changes and push to DVC and Git:
+
+```sh title="Execute the following command(s) in a terminal"
+# Upload the experiment data, model and cache to the remote bucket
+dvc push
+
+# Add all the files
+git add .
+
+# Commit the changes
+git commit -m "Update the data"
+
+# Push the changes
+git push
+```
+
 ## Summary
 
 In this chapter, we retrained the model using the new data we labeled in Label
