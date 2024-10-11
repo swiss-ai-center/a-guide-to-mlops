@@ -65,7 +65,7 @@ Check the differences with Git to validate the changes:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Show the differences with Git
-git diff requirements.txt
+git diff .gitignore
 ```
 
 The output should be similar to this:
