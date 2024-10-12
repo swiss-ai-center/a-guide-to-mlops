@@ -36,6 +36,22 @@ In this chapter, you will learn how to:
 The new data will be used in subsequent chapters to retrain and improve your
 model.
 
+The following diagram illustrates the control flow of the experiment at the end
+of this chapter:
+
+```mermaid
+flowchart TB
+    extra_data -->|upload| labelStudioTasks
+
+    subgraph workspaceGraph[WORKSPACE]
+        extra_data[extra-data/extra_data]
+    end
+
+    subgraph labelStudioGraph[LABEL STUDIO]
+        labelStudioTasks[Tasks]
+    end
+```
+
 ## Steps
 
 ### Download the Data

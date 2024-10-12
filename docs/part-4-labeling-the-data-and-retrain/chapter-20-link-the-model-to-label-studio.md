@@ -8,6 +8,36 @@ API. This integration will enable the model to make predictions on the unlabeled
 data within Label Studio, rendering the labeling process "AI assisted" and thus
 making it significantly more efficient.
 
+The following diagram illustrates the control flow of the experiment at the end
+of this chapter:
+
+```mermaid
+flowchart TB
+    extra_data -->|upload| labelStudioTasks
+    labelStudioTasks -->|label| labelStudioAnnotations
+    bento_model -->|load| fastapi
+    labelStudioTasks -->|POST /predict| fastapi
+    fastapi --> labelStudioPredictions
+    labelStudioPredictions -->|submit| labelStudioAnnotations
+
+    subgraph workspaceGraph[WORKSPACE]
+        extra_data[extra-data/extra_data]
+        bento_model[model/classifier.bentomodel]
+        fastapi[src/serve_label_studio.py]
+    end
+
+    subgraph labelStudioGraph[LABEL STUDIO]
+        labelStudioTasks[Tasks]
+        labelStudioAnnotations[Annotations]
+        labelStudioPredictions[Predictions]
+    end
+
+    style extra_data opacity:0.4,color:#7f7f7f80
+    style labelStudioTasks opacity:0.4,color:#7f7f7f80
+    linkStyle 0 opacity:0.4,color:#7f7f7f80
+    linkStyle 1 opacity:0.4,color:#7f7f7f80
+```
+
 ## Steps
 
 ### Install FastAPI

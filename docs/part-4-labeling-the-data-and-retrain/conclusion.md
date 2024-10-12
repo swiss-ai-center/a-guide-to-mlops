@@ -23,3 +23,34 @@ The final part of the guide will cover cleaning up the resources and
 environments you have generated. We strongly recommend to go through the
 [Clean up](../clean-up.md) section to ensure the proper removal of the resources
 and environments you have generated.
+
+The following diagram illustrates the bricks you set up at the end of this part:
+
+```mermaid
+flowchart TB
+    extra_data -->|upload| labelStudioTasks
+    labelStudioTasks -->|label| labelStudioAnnotations
+    bento_model -->|load| fastapi
+    labelStudioTasks -->|POST /predict| fastapi
+    fastapi --> labelStudioPredictions
+    labelStudioPredictions -->|submit| labelStudioAnnotations
+    labelStudioAnnotations -->|download| extra_data_annotations
+    extra_data_annotations --> |load| parse_annotations
+    parse_annotations -->|copy| data_raw
+    data_raw -->|dvc repro| bento_model
+
+    subgraph workspaceGraph[WORKSPACE]
+        extra_data[extra-data/extra_data]
+        extra_data_annotations[extra-data/extra_data/annotations.json]
+        bento_model[model/classifier.bentomodel]
+        fastapi[src/serve_label_studio.py]
+        parse_annotations[scripts/parse_annotations.py]
+        data_raw[data/raw]
+    end
+
+    subgraph labelStudioGraph[LABEL STUDIO]
+        labelStudioTasks[Tasks]
+        labelStudioAnnotations[Annotations]
+        labelStudioPredictions[Predictions]
+    end
+```

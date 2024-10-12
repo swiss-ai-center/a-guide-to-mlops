@@ -5,6 +5,29 @@
 In this chapter, you will explore the process of using Label Studio to manually
 annotate images.
 
+The following diagram illustrates the control flow of the experiment at the end
+of this chapter:
+
+```mermaid
+flowchart TB
+    extra_data -->|upload| labelStudioTasks
+    labelStudioTasks -->|label| labelStudioAnnotations
+
+    subgraph workspaceGraph[WORKSPACE]
+        extra_data[extra-data/extra_data]
+    end
+
+    subgraph labelStudioGraph[LABEL STUDIO]
+        labelStudioTasks[Tasks]
+        labelStudioAnnotations[Annotations]
+    end
+
+    style workspaceGraph opacity:0.4,color:#7f7f7f80
+    style extra_data opacity:0.4,color:#7f7f7f80
+    style labelStudioTasks opacity:0.4,color:#7f7f7f80
+    linkStyle 0 opacity:0.4,color:#7f7f7f80
+```
+
 ## Steps
 
 ### Start the Labeling Interface
