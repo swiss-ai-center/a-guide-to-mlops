@@ -359,7 +359,7 @@ variables in the tag of the Docker image to match your own your own username and
 repository.
 
 ```sh title="Execute the following command(s) in a terminal"
-docker build -t --platform=linux/amd64 ghcr.io/<my_username>/<my_repository_name>/github-runner:latest .
+docker build --platform=linux/amd64 --tag ghcr.io/<my_username>/<my_repository_name>/github-runner:latest .
 ```
 
 !!! note
