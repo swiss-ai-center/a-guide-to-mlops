@@ -359,8 +359,15 @@ variables in the tag of the Docker image to match your own your own username and
 repository.
 
 ```sh title="Execute the following command(s) in a terminal"
-docker build -t ghcr.io/<my_username>/<my_repository_name>/github-runner:latest .
+docker build -t --platform=linux/amd64 ghcr.io/<my_username>/<my_repository_name>/github-runner:latest .
 ```
+
+!!! note
+
+    Please note that the `--platform` parameter is important to set if your machine
+    does not use the [x86_64](https://en.wikipedia.org/wiki/X86-64) architecture
+    (like Apple Silicon). This is necessary because the runner, on which the Docker
+    image will be deployed, operates on a 64-bit Linux environment.
 
 The output should be similar to this:
 
