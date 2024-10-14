@@ -2,8 +2,11 @@
 
 Congratulations! You did it! You were able to convert a ML experiment with a
 traditional approach to a well-defined, well-documented workflow that can scale
-and serve a model to the outside world! Let's take the time to make a summary of
-what you have done.
+and serve a model to the outside world! You also learned how to improve the
+performance of your model with additional and high-quality data in an iterative
+manner.
+
+Let's take the time to make a summary of what you have done.
 
 ## Summary of what you have done
 
@@ -44,16 +47,27 @@ server.
 
 - [x] The model can be trained on a Kubernetes pod
 
-Thanks to CML, the model can be trained on specialized hardware on a Kubernetes
-pod.
+Thanks to a self-hosted runner, the model can be trained on specialized hardware
+on a Kubernetes pod.
+
+- [x] The model performance can be improved by retraining with additional data.
+
+Thanks to Label Studio, additional and high-quality training data can be used to
+retrain the model.
 
 ## End of your journey
 
-We appreciate your continued support! We trust that you found this guide
-enjoyable and informative. We have additional content available on advanced
-concepts and labelization topics, which we believe might pique your interest.
-Feel free to explore the left sidebar for more MLOps-related resources.
+We appreciate your continued support! We trust that you found this guide both
+enjoyable and informative. We encourage you to explore the left sidebar for
+additional MLOps-related resources that we believe might further enhance your
+understanding and skills in this rapidly evolving and increasingly important
+field.
 
 If you encounter any difficulties, please don't hesitate to reach out to us on
-[GitHub](https://github.com/swiss-ai-center/a-guide-to-mlops). Happy learning!
-:)
+[GitHub](https://github.com/swiss-ai-center/a-guide-to-mlops).
+
+Additionally, if you found our MLOps guide valuable, we would be grateful if you
+could take a moment to star our GitHub repository. Your support helps us improve
+and expand our offerings for the community. Thank you!
+
+Happy learning! :)
