@@ -83,6 +83,7 @@ theme:
         icon: material/brightness-4
         name: Switch to system preference
   features:
+    - announce.dismiss
     - content.code.annotate
     - content.code.copy
     - content.action.edit
