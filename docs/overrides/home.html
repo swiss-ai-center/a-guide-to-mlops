@@ -1,5 +1,18 @@
 {% extends "main.html" %}
 
+<!-- Announcement bar -->
+{% block announce %}
+<!-- Add announcement here, including arbitrary HTML -->
+<div class="announcement-section">
+<p>🎙️ Understand key MLOps concepts: Tune in now!</p>
+<audio controls>
+    <source src="../assets/audio/mlops_concepts.wav" type="audio/mpeg">
+    <source src="../assets/audio/mlops_concepts.ogg" type="audio/ogg">
+    Your browser does not support the audio element.
+</audio>
+</div>
+{% endblock %}
+
 <!-- Render hero under tabs -->
 {% block tabs %}
 {{ super() }}
@@ -98,6 +111,14 @@
         section {
             padding: 3rem 2rem;
         }
+    }
+
+    .announcement-section {
+        display: flex; /* Enables flexbox layout */
+        align-items: center;
+        justify-content: flex-end;
+        margin-right: 2rem;
+        gap: 2rem;
     }
 
     @media screen and (max-width: 65em) {
