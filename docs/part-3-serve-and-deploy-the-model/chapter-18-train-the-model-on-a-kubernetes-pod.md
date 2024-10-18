@@ -10,20 +10,15 @@
 
     Thank you!
 
-Some experiments can require specific hardware to run. For example, you may need
-a GPU to train a deep learning model.
+You can now train your model on the cluster. However, some experiments may require specific hardware to run. For instance, training a deep learning model might require a GPU. This GPU could be shared among multiple teams for different purposes, so it is important to avoid monopolizong its use.
 
-Training these experiments locally can be challenging. You may not have the
-required hardware, or you may not want to use your local machine for training.
-In this case, you can use a specialized Kubernetes pod to train your model.
+In such situation, you can use a specialized Kubernetes pod for on-demand model training.
 
 In this chapter, you will learn how to:
 
-1. Create a self-hosted runner Docker container image
-2. Publish the runner image to the container registry and deploy it
-3. Configure the CI/CD to start the containerized runner on Kubernetes
-4. Start the training of the model from your CI/CD pipeline on a specialized pod
-   on the Kubernetes cluster
+1. Create a specialized on-demand pod within the Kubernetes cluster
+2. Start the model training from your CI/CD pipeline using the specialized pod
+   in the Kubernetes cluster
 
 The following diagram illustrates the control flow of the experiment at the end
 of this chapter:
@@ -851,10 +846,8 @@ custom hardware for specific use-cases.
 
 In this chapter, you have successfully:
 
-1. Created a self-hosted runner Docker container image
-2. Published the containerized runner image to the container registry
-3. Deployed the self-hosted runner on Kubernetes
-4. Trained the model on a specialized pod on the Kubernetes cluster
+1. Set up an specialized on-demand runner on a pod in Kubernetes
+2. Trained the model on a specialized pod on the Kubernetes cluster
 
 ### Destroy the Kubernetes cluster
 
@@ -914,10 +907,6 @@ journey and the next things you could do with your model.
 
 Highly inspired by:
 
-- [_Adding self-hosted runners_ - GitHub docs](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners)
-- [_GitHub Actions self-hosted runners on Google Cloud_ - github.blog](https://github.blog/news-insights/product-news/github-actions-self-hosted-runners-on-google-cloud/)
-- [_Self-hosted runner security_ - GitHubdocs](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners#self-hosted-runner-security)
-- [_Security for self-managed runners_ - GitLab docs](https://docs.gitlab.com/runner/security/)
 - [_Install kubectl and configure cluster access_ - cloud.google.com](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl)
 - [_Deploying to Google Kubernetes Engine_ - GitHub docs](https://docs.github.com/en/actions/use-cases-and-examples/deploying/deploying-to-google-kubernetes-engine)
 - [_gcloud container clusters create_ - cloud.google.com](https://cloud.google.com/sdk/gcloud/reference/container/clusters/create)
