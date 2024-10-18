@@ -232,6 +232,7 @@ In the next chapters, you will enhance the workflow to fix those issues.
 - [ ] Model is not accessible on the Internet and cannot be used anywhere
 - [ ] Model requires manual deployment on the cluster
 - [ ] Model cannot be trained on hardware other than the local machine
+- [ ] Model cannot be trained on custom hardware for specific use-cases
 
 You will address these issues in the next chapters for improved efficiency and
 collaboration. Continue the guide to learn how.

@@ -903,6 +903,7 @@ gcloud container clusters delete --zone $GCP_K8S_CLUSTER_ZONE $GCP_K8S_CLUSTER_N
 - [x] Model publication to the artifact registry is automated
 - [x] Model can be accessed from a Kubernetes cluster
 - [x] Model is continuously deployed with the CI/CD
+- [x] Model can be trained on a custom infrastructure
 - [x] Model can be trained on a custom infrastructure with custom hardware for
       specific use-cases
 
