@@ -812,8 +812,8 @@ pushed to the main branch.
 - [x] Model publication to the artifact registry is automated
 - [x] Model can be accessed from a Kubernetes cluster
 - [x] Model is continuously deployed with the CI/CD
-- [ ] Model can be trained on a custom infrastructure with custom hardware for
-      specific use-cases
+- [ ] Model cannot be trained on hardware other than the local machine
+- [ ] Model cannot be trained on custom hardware for specific use-cases
 
 You can now safely continue to the next chapter of this guide concluding your
 journey and the next things you could do with your model.
