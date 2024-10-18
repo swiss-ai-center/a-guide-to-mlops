@@ -1,4 +1,4 @@
-# Chapter 21 - Retrain the model from new data with DVC
+# Chapter 22 - Retrain the model from new data with DVC
 
 ## Introduction
 
