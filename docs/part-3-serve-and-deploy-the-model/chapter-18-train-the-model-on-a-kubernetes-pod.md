@@ -194,6 +194,20 @@ TODO: Adjust the YAML file to mark the GPU runner as having GPU.
 ```
 Note the `nodeSelector` field that will select a node with a `gpu=false` label.
 
+```
+$ git diff kubernetes/runner.yaml
+diff --git a/kubernetes/runner.yaml b/kubernetes/runner.yaml
+index 8c9d1d8..59b79f1 100644
+--- a/kubernetes/runner.yaml
++++ b/kubernetes/runner.yaml
+@@ -25,4 +25,6 @@ spec:
+         requests:
+           cpu: "1"
+           memory: "4Gi"
++  nodeSelector:
++    gpu: "false"
+```
+
 ### Set self-hosted GPU runner
 
 We also create a similar configuration file for the GPU runner, which is used
@@ -206,7 +220,7 @@ which is set to the value `gpu-runner`.
 
 Create a new file called `runner-gpu.yaml` in the `kubernetes` directory with
 the following content. Replace `<my_username>` and `<my_repository_name>` with
-your own username and repository name.
+your own GitHub username and repository name.
 
 ```txt title="kubernetes/runner-gpu.yaml"
 apiVersion: v1
@@ -595,23 +609,14 @@ git diff .github/workflows/mlops.yaml
 The output should be similar to this:
 
 ```diff
-@TODO: Update
-
 diff --git a/.github/workflows/mlops.yaml b/.github/workflows/mlops.yaml
-index 3ac0f67..db9db1d 100644
+index 5a8d863..ad093ef 100644
 --- a/.github/workflows/mlops.yaml
 +++ b/.github/workflows/mlops.yaml
-@@ -12,10 +12,54 @@ on:
-   # Allows you to run this workflow manually from the Actions tab
-   workflow_dispatch:
+@@ -18,9 +18,47 @@ permissions:
+   id-token: write
 
-+# Allow the creation and usage of self-hosted runners
-+permissions:
-+  contents: read
-+  id-token: write
-+
  jobs:
--  train-report-publish-and-deploy:
 +  setup-runner:
 +    runs-on: [self-hosted, base-runner]
 +    if: github.event_name == 'pull_request'
@@ -650,96 +655,15 @@ index 3ac0f67..db9db1d 100644
 +          # We use run_id to make the runner name unique
 +          export GITHUB_RUN_ID="${{ github.run_id }}"
 +          envsubst < kubernetes/runner-gpu.yaml | kubectl apply -f -
-+  train-and-report:
+   train-and-report:
      permissions: write-all
--    runs-on: ubuntu-latest
+-    runs-on: [self-hosted]
 +    needs: setup-runner
 +    runs-on: [self-hosted, gpu-runner]
-+    if: github.event_name == 'pull_request'
+     if: github.event_name == 'pull_request'
      steps:
        - name: Checkout repository
-         uses: actions/checkout@v4
-@@ -32,13 +76,22 @@ jobs:
-           credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
-       - name: Train model
-         run: dvc repro --pull
-+      - name: Push the outcomes to DVC remote storage
-+        run: dvc push
-+      - name: Commit changes in dvc.lock
-+        uses: stefanzweifel/git-auto-commit-action@v5
-+        with:
-+          commit_message: Commit changes in dvc.lock
-+          file_pattern: dvc.lock
-+      - name: Setup Node
-+        uses: actions/setup-node@v4
-+        with:
-+          node-version: 20
-       - name: Setup CML
--        if: github.event_name == 'pull_request'
-         uses: iterative/setup-cml@v2
-         with:
-           version: '0.20.0'
-       - name: Create CML report
--        if: github.event_name == 'pull_request'
-         env:
-           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-         run: |
-@@ -85,6 +138,25 @@ jobs:
-
-           # Publish the CML report
-           cml comment update --target=pr --publish report.md
-+  publish-and-deploy:
-+    runs-on: ubuntu-latest
-+    if: github.ref == 'refs/heads/main'
-+    steps:
-+      - name: Checkout repository
-+        uses: actions/checkout@v4
-+      - name: Setup Python
-+        uses: actions/setup-python@v5
-+        with:
-+          python-version: '3.11'
-+          cache: pip
-+      - name: Install dependencies
-+        run: pip install --requirement requirements-freeze.txt
-+      - name: Login to Google Cloud
-+        uses: google-github-actions/auth@v2
-+        with:
-+          credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
-+      - name: Check model
-+        run: dvc repro --pull
-       - name: Log in to the Container registry
-         uses: docker/login-action@v3
-         with:
-@@ -92,13 +164,10 @@ jobs:
-           username: _json_key
-           password: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
-       - name: Import the BentoML model
--        if: github.ref == 'refs/heads/main'
-         run: bentoml models import model/celestial_bodies_classifier_model.bentomodel
-       - name: Build the BentoML model artifact
--        if: github.ref == 'refs/heads/main'
-         run: bentoml build src
-       - name: Containerize and publish the BentoML model artifact Docker image
--        if: github.ref == 'refs/heads/main'
-         run: |
-           # Containerize the Bento
-           bentoml containerize celestial_bodies_classifier:latest \
-@@ -107,18 +176,41 @@ jobs:
-           # Push the container to the Container Registry
-           docker push --all-tags ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier
-       - name: Get Google Cloud's Kubernetes credentials
--        if: github.ref == 'refs/heads/main'
-         uses: google-github-actions/get-gke-credentials@v2
-         with:
-           cluster_name: ${{ secrets.GCP_K8S_CLUSTER_NAME }}
-           location: ${{ secrets.GCP_K8S_CLUSTER_ZONE }}
-       - name: Update the Kubernetes deployment
--        if: github.ref == 'refs/heads/main'
-         run: |
-           yq -i '.spec.template.spec.containers[0].image = "${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:${{ github.sha }}"' kubernetes/deployment.yaml
-       - name: Deploy the model on Kubernetes
--        if: github.ref == 'refs/heads/main'
-         run: |
+@@ -150,4 +186,30 @@ jobs:
            kubectl apply \
              -f kubernetes/deployment.yaml \
              -f kubernetes/service.yaml
@@ -791,8 +715,8 @@ The output should look like this.
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
         modified:   .github/workflows/mlops.yaml
-        modified:   kubernetes/runner.yaml
         new file:   kubernetes/runner-gpu.yaml
+        modified:   kubernetes/runner.yaml
 ```
 
 ### Push the CI/CD pipeline configuration file to Git
