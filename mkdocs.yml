@@ -47,10 +47,10 @@ nav:
       - "Chapter 20 - Link the model to Label Studio": part-4-labeling-the-data-and-retrain/chapter-20-link-the-model-to-label-studio.md
       - "Chapter 21 - Retrain the model from new data with DVC": part-4-labeling-the-data-and-retrain/chapter-21-retrain-the-model-from-new-data-with-dvc.md
       - "Conclusion": part-4-labeling-the-data-and-retrain/conclusion.md
-      - "Clean up": part-4-labeling-the-data-and-retrain/clean-up.md
+      - "Clean up": clean-up.md
   - 🪄 Conclusion:
-    - "Clean up": clean-up.md
-    - "Conclusion": conclusion.md
+      - "Clean up": clean-up.md
+      - "Conclusion": conclusion.md
 edit_uri: blob/main/docs/
 theme:
   language: en
