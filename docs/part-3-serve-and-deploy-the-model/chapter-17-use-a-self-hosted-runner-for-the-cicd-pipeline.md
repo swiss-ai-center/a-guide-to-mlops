@@ -126,12 +126,19 @@ can be physical servers, virtual machines (like the default runner used for our
 workflow so far), or container images, and may operate on a public cloud or
 on-premises within your own infrastructure.
 
-We will create a custom Docker container image for a self-hosted runner and
-deploy it on our Kubernetes cluster. An instance of this runner will then listen
+We will create a custom Docker container image for a self-hosted runner, store it in the Container Registry and deploy it on our Kubernetes cluster. An instance of this runner will then listen
 for jobs from GitHub Actions and execute them.
 
 This container image will include all the necessary dependencies to run the
 workflows.
+
+!!! note
+
+    We opted to use the GitHub Container Registry for our self-hosted Docker image
+    because of its close integration with our existing GitHub environment. This
+    decision allows us to restrict our CI/CD processes to the GitHub infrastructure
+    while also demonstrating its use. However, we could have also used our existing
+    Google Cloud Container Registry.
 
 !!! info
 
@@ -205,8 +212,7 @@ creating. The primary purpose of this script is to register a new self-hosted
 GitHub runner instance for our repository, each time a new container is started
 from the image.
 
-Replace `<my_username>` and `<my_repository_name>` with your own username and
-repository name.
+Since we use the GitHub Container Registry, replace `<my_username>` and `<my_repository_name>` with your own GitHub username and repository name.
 
 ```yaml title="docker/startup.sh"
 #!/bin/bash
@@ -250,14 +256,6 @@ Before proceeding, you will need to create a personal access token. This token
 will be used to authenticate you on the GitHub Container Registry, allowing you
 to push the image there.
 
-!!! note
-
-    We opted to use the GitHub Container Registry for our self-hosted Docker image
-    because of its close integration with our existing GitHub environment. This
-    decision allows us to restrict our CI/CD processes to the GitHub infrastructure
-    while also demonstrating its use. However, we could have also used our existing
-    Google Cloud Container Registry.
-
 Follow the
 [_Managing Personal Access Token_ - GitHub docs](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
 guide to create a personal access token (classic) named `GHCR_PAT` with the
@@ -284,8 +282,8 @@ pushing it to the Container Registry.
 
 To build the docker image, navigate to the `docker` folder and run the following
 command. Make sure to adjust the `my_username` and `my_repository_name`
-variables in the tag of the Docker image to match your own your own username and
-repository.
+variables in the tag of the Docker image to match your own your own GitHub username and
+repository name.
 
 ```sh title="Execute the following command(s) in a terminal"
 docker build --platform=linux/amd64 --tag ghcr.io/<my_username>/<my_repository_name>/github-runner:latest .
@@ -390,7 +388,7 @@ Container Registry. This image is identified by the label named
 
 Create a new file called `runner.yaml` in the `kubernetes` directory with the
 following content. Replace also `<my_username>` and `<my_repository_name>` with
-your own username and repository name.
+your own GitHub username and repository name.
 
 ```txt title="kubernetes/runner.yaml"
 apiVersion: v1
@@ -540,9 +538,7 @@ Update the `.github/workflows/mlops.yaml` file.
 
 Take some time to understand the new steps:
 
-@TODO: Update diff
-
-```yaml title=".github/workflows/mlops.yaml" hl_lines="15-19 21-58 60-62 79-89 141-159 191-216"
+```yaml title=".github/workflows/mlops.yaml" hl_lines="15-19 21 23-24 41-52 103-121"
 name: MLOps
 
 on:
@@ -714,13 +710,11 @@ git diff .github/workflows/mlops.yaml
 The output should be similar to this:
 
 ```diff
-@TODO: Update
-
 diff --git a/.github/workflows/mlops.yaml b/.github/workflows/mlops.yaml
-index 3ac0f67..db9db1d 100644
+index b15a68f..5a8d863 100644
 --- a/.github/workflows/mlops.yaml
 +++ b/.github/workflows/mlops.yaml
-@@ -12,10 +12,54 @@ on:
+@@ -12,10 +12,16 @@ on:
    # Allows you to run this workflow manually from the Actions tab
    workflow_dispatch:
 
@@ -734,13 +728,12 @@ index 3ac0f67..db9db1d 100644
 +  train-and-report:
      permissions: write-all
 -    runs-on: ubuntu-latest
-+    needs: setup-runner
-+    runs-on: [self-hosted, gpu-runner]
++    runs-on: [self-hosted]
 +    if: github.event_name == 'pull_request'
      steps:
        - name: Checkout repository
          uses: actions/checkout@v4
-@@ -32,13 +76,22 @@ jobs:
+@@ -32,13 +38,22 @@ jobs:
            credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
        - name: Train model
          run: dvc repro --pull
@@ -765,7 +758,7 @@ index 3ac0f67..db9db1d 100644
          env:
            REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
          run: |
-@@ -85,6 +138,25 @@ jobs:
+@@ -85,6 +100,25 @@ jobs:
 
            # Publish the CML report
            cml comment update --target=pr --publish report.md
@@ -791,7 +784,7 @@ index 3ac0f67..db9db1d 100644
        - name: Log in to the Container registry
          uses: docker/login-action@v3
          with:
-@@ -92,13 +164,10 @@ jobs:
+@@ -92,13 +126,10 @@ jobs:
            username: _json_key
            password: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
        - name: Import the BentoML model
@@ -805,7 +798,7 @@ index 3ac0f67..db9db1d 100644
          run: |
            # Containerize the Bento
            bentoml containerize celestial_bodies_classifier:latest \
-@@ -107,18 +176,41 @@ jobs:
+@@ -107,17 +138,14 @@ jobs:
            # Push the container to the Container Registry
            docker push --all-tags ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier
        - name: Get Google Cloud's Kubernetes credentials
@@ -823,7 +816,6 @@ index 3ac0f67..db9db1d 100644
          run: |
            kubectl apply \
              -f kubernetes/deployment.yaml \
-             -f kubernetes/service.yaml
 ```
 
 Take some time to understand the changes made to the file.
