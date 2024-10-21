@@ -324,13 +324,13 @@ for an efficient models management.
 
     Export the repository name as an environment variable. Replace
     `<my_repository_name>` with a registy name of your choice. It has to be
-    lowercase and words separated by hyphens. For example, use `mlops-registry` for
-    the registry name:
+    lowercase and words separated by hyphens.
 
     !!! warning
 
-        The container registry name must be unique across all Google Cloud projects and
-        users. Change the container registry name if the command fails.
+        The container registry name must be **unique** across all Google Cloud projects
+        and users. For example, use `mlops-<surname>-registry`, where `surname` is based
+        on your name. Change the container registry name if the command fails.
 
     ```sh title="Execute the following command(s) in a terminal"
     export GCP_CONTAINER_REGISTRY_NAME=<my_repository_name>
@@ -360,10 +360,10 @@ for an efficient models management.
     The output should be similar to this:
 
     ```text
-    Create request issued for: [mlops-registry]
-    Waiting for operation [projects/mlops-code-395207/locations/europe-west6/operations/be8b09fa-279c-468
+    Create request issued for: [mlops-surname-registry]
+    Waiting for operation [projects/mlops-surname-project/locations/europe-west6/operations/be8b09fa-279c-468
     5-b451-1f3c900d4a36] to complete...done.
-    Created repository [mlops-registry].
+    Created repository [mlops-surname-registry].
     ```
 
 === ":material-cloud: Using another cloud provider? Read this!"
@@ -414,8 +414,8 @@ for an efficient models management.
         The output should be similar to this:
 
         ```text
-        PROJECT_ID             NAME            PROJECT_NUMBER
-        mlops-workshop-396007  mlops-workshop  475307267926
+        PROJECT_ID             NAME                   PROJECT_NUMBER
+        mlops-surname-project  mlops-surname-project  123456789012
         ```
 
         Copy the `PROJECT_ID` and export it as an environment variable. Replace

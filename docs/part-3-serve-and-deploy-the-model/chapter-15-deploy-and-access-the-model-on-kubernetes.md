@@ -170,12 +170,13 @@ Follow the steps below to create one.
 
     Export the cluster name as an environment variable. Replace `<my_cluster_name>`
     with a cluster name of your choice. It has to be lowercase and words separated
-    by hyphens. For example, use `mlops-kubernetes` for the cluster name.
+    by hyphens.
 
     !!! warning
 
-        The cluster name must be unique across all Google Cloud projects and users.
-        Change the cluster name if the command fails.
+        The cluster name must be **unique** across all Google Cloud projects and users.
+        For example, use `mlops-<surname>-cluster`, where `surname` is based on your
+        name. Change the cluster name if the command fails.
 
     ```sh title="Execute the following command(s) in a terminal"
     export GCP_K8S_CLUSTER_NAME=<my_cluster_name>
@@ -211,15 +212,14 @@ Follow the steps below to create one.
     The output should be similar to this:
 
     ```text
-    Default change: VPC-native is the default mode during cluster creation for versions greater than 1.21.0-gke.1500. To create advanced routes based clusters, please pass the `--no-enable-ip-alias` flag
     Note: The Kubelet readonly port (10255) is now deprecated. Please update your workloads to use the recommended alternatives. See https://cloud.google.com/kubernetes-engine/docs/how-to/disable-kubelet-readonly-port for ways to check usage and for migration instructions.
     Note: Your Pod address range (`--cluster-ipv4-cidr`) can accommodate at most 1008 node(s).
-    Creating cluster mlops-kubernetes in europe-west6-a... Cluster is being health-checked (master is healthy)...done.
-    Created [https://container.googleapis.com/v1/projects/mlops-guide/zones/europe-west6-a/clusters/mlops-guide-kubernetes].
-    To inspect the contents of your cluster, go to: https://console.cloud.google.com/kubernetes/workload_/gcloud/europe-west6-a/mlops-kubernetes?project=mlops-kubernetes
-    kubeconfig entry generated for mlops-kubernetes.
-    NAME              LOCATION        MASTER_VERSION      MASTER_IP    MACHINE_TYPE   NODE_VERSION        NUM_NODES  STATUS
-    mlops-kubernetes  europe-west6-a  1.30.3-gke.1969001  34.65.77.52  e2-standard-2  1.30.3-gke.1969001  2          RUNNING
+    Creating cluster mlops-surname-cluster in europe-west6-a... Cluster is being health-checked (Kubernetes Control Plane is healthy)...done.
+    Created [https://container.googleapis.com/v1/projects/mlops-surname-project/zones/europe-west6-a/clusters/mlops-surname-cluster].
+    To inspect the contents of your cluster, go to: https://console.cloud.google.com/kubernetes/workload_/gcloud/europe-west6-a/mlops-surname-cluster?project=mlops-surname-cluster
+    kubeconfig entry generated for mlops-surname-cluster.
+    NAME                   LOCATION        MASTER_VERSION      MASTER_IP      MACHINE_TYPE   NODE_VERSION        NUM_NODES  STATUS
+    mlops-surname-cluster  europe-west6-a  1.30.5-gke.1014001  34.65.137.236  e2-standard-2  1.30.5-gke.1014001  2          RUNNING
     ```
 
 === ":material-cloud: Using another cloud provider? Read this!"

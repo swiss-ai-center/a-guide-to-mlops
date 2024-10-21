@@ -160,8 +160,8 @@ different:
         and select **New repository secret**:
 
         - `GCP_K8S_CLUSTER_NAME`: The name of the Kubernetes cluster (ex:
-          `mlops-kubernetes`, from the variable `GCP_K8S_CLUSTER_NAME` in the previous
-          chapters)
+          `mlops-surname-cluster`, from the variable `GCP_K8S_CLUSTER_NAME` in the
+          previous chapters)
         - `GCP_K8S_CLUSTER_ZONE`: The zone of the Kubernetes cluster (ex:
           `europe-west6-a` for Zurich, Switzerland, from the variable
           `GCP_K8S_CLUSTER_ZONE` in the previous chapters)
