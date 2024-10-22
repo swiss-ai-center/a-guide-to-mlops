@@ -10,9 +10,13 @@
 
     Thank you!
 
-Training experiments locally can be challenging, as they often demand significantly more computational power than your personal machine can provide, or they may require specific hardware to operate.
+Training experiments locally can be challenging, as they often demand
+significantly more computational power than your personal machine can provide,
+or they may require specific hardware to operate.
 
-As you may lack the necessary hardware or prefer not to use your local machine for training, you can shift the model training to the more powerful Kubernetes cluster.
+As you may lack the necessary hardware or prefer not to use your local machine
+for training, you can shift the model training to the more powerful Kubernetes
+cluster by using a self-hosted runner.
 
 In this chapter, you will learn how to:
 
@@ -126,32 +130,21 @@ can be physical servers, virtual machines (like the default runner used for our
 workflow so far), or container images, and may operate on a public cloud or
 on-premises within your own infrastructure.
 
-We will create a custom Docker container image for a self-hosted runner, store it in the Container Registry and deploy it on our Kubernetes cluster. An instance of this runner will then listen
-for jobs from GitHub Actions and execute them.
+We will create a custom Docker container image for a self-hosted runner, store
+it in the Container Registry and deploy it on our Kubernetes cluster. An
+instance of this runner will then listen for jobs from GitHub Actions and
+execute them.
 
 This container image will include all the necessary dependencies to run the
 workflows.
 
 !!! note
 
-    We opted to use the GitHub Container Registry for our self-hosted Docker image
-    because of its close integration with our existing GitHub environment. This
-    decision allows us to restrict our CI/CD processes to the GitHub infrastructure
-    while also demonstrating its use. However, we could have also used our existing
-    Google Cloud Container Registry.
-
-!!! info
-
-    Kubernetes restricts the direct execution of Docker within a container due to
-    security and architectural considerations. As a result, only the training and
-    reporting steps will be executed on the self-hosted runner. The resulting model
-    will be uploaded to the remote bucket using DVC, making it available to the main
-    runner that operates on a conventional virtual machine. As this environment
-    supports Docker, it allows the model artifact to be built, containerized, and
-    stored in the container registry prior to deployment.
-
-@TODO: Mention other tools such as kubevirt and kaniko. @TODO: Mention firewall
-issue and VPN layer and wireguard.
+    For our self-hosted Docker image storage, we opted to use the GitHub Container
+    Registry because of its close integration with our existing GitHub environment.
+    This decision allows us to restrict our CI/CD processes to the GitHub
+    infrastructure while also demonstrating its use. However, we could have also
+    used our existing Google Cloud Container Registry.
 
 At the root level of your Git repository, create a `docker` folder. The
 following table describes the files that you will create in this folder:
@@ -212,7 +205,8 @@ creating. The primary purpose of this script is to register a new self-hosted
 GitHub runner instance for our repository, each time a new container is started
 from the image.
 
-Since we use the GitHub Container Registry, replace `<my_username>` and `<my_repository_name>` with your own GitHub username and repository name.
+Since we use the GitHub Container Registry, replace `<my_username>` and
+`<my_repository_name>` with your own GitHub username and repository name.
 
 ```yaml title="docker/startup.sh"
 #!/bin/bash
@@ -282,8 +276,8 @@ pushing it to the Container Registry.
 
 To build the docker image, navigate to the `docker` folder and run the following
 command. Make sure to adjust the `my_username` and `my_repository_name`
-variables in the tag of the Docker image to match your own your own GitHub username and
-repository name.
+variables in the tag of the Docker image to match your own your own GitHub
+username and repository name.
 
 ```sh title="Execute the following command(s) in a terminal"
 docker build --platform=linux/amd64 --tag ghcr.io/<my_username>/<my_repository_name>/github-runner:latest .
@@ -519,26 +513,45 @@ to see the `github-runner` runner listed with the *Idle* status.
 
 ### Update the CI/CD configuration file
 
-You'll now update the CI/CD configuration file to start a runner on the
-Kubernetes cluster.
+You will now update the CI/CD configuration file to initiate a runner on the
+Kubernetes cluster, which will be responsible for training the model. The
+trained model will be uploaded to the remote bucket using DVC, making it
+available for publishing and deployment.
 
-Additionally, as the experiment is now being trained directly from the CI/CD
-pipeline, the workflow will be modified to automatically push the results to the
-remote storage with DVC and to commit the updated lock file to the repository
-automatically.
+!!! info
+
+    Kubernetes restricts the direct execution of Docker within a container due to
+    security and architectural reasons. As a result, only the training and reporting
+    steps will be executed on the self-hosted runner. The trained model will be
+    accessible to the main runner running on a traditional virtual machine via the
+    remote bucket using DVC. This environment, which supports Docker, allows the
+    model artifact to be built, containerized, and stored in the container registry
+    prior to deployment.
+
 
 !!! tip
 
-    When proposing changes to the model files in a branch, you no longer need to run
-    `dvc repro` locally before pushing the changes with `git push`. You can obtain
-    the updated `dvc.lock` file and model by using `git pull` and `dvc pull` on the
-    main branch.
+    For those interested in fully utilizing a self-hosted runner, including the
+    Dockerization of the trained model, tools like [KubeVirt](https://kubevirt.io/)
+    and [Kaniko](https://github.com/GoogleContainerTools/kaniko) can be employed.
+    These tools can be particularly beneficial for scenarios involving the use of a
+    complete on-premise infrastructure or strong data privacy.
+
+Additionally, since the experiment is now being trained directly from the CI/CD
+pipeline, the workflow will be modified to automatically push the results to the
+remote storage using DVC and to commit the updated lock file to the repository
+automatically.
+
+As a result, when proposing changes to the model files in a branch, you no
+longer need to run`dvc repro` locally before pushing the changes with
+`git push`. After proposed changes are integrated into the main branch, you can
+obtain the updated `dvc.lock` file and model by using `git pull` and `dvc pull`.
 
 Update the `.github/workflows/mlops.yaml` file.
 
 Take some time to understand the new steps:
 
-```yaml title=".github/workflows/mlops.yaml" hl_lines="15-19 21 23-24 41-52 103-121"
+```yaml title=".github/workflows/mlops.yaml" hl_lines="15-19 21 23-24 41-51 103-121"
 name: MLOps
 
 on:
@@ -863,8 +876,8 @@ On GitLab, you can see the pipeline running on the **CI/CD > Pipelines** page.
 
 === ":simple-googlecloud: Google Cloud"
 
-    On Google Cloud Console, you can see that the self-hosted runner has been created on the
-    **Kubernetes Engine > Workloads** page.
+    On Google Cloud Console, you can see that the self-hosted runner has been
+    created on the **Kubernetes Engine > Workloads** page.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
