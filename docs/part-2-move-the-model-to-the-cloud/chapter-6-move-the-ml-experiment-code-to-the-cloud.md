@@ -66,7 +66,8 @@ flowchart TB
 
 ## Create a remote Git repository
 
-Create a Git repository on your preferred service to collaborate with peers.
+Create a Git repository on your preferred service to collaborate with peers. For
+example, choose `mlops-guide` as repository name.
 
 === ":simple-github: GitHub"
 
@@ -87,8 +88,6 @@ Create a Git repository on your preferred service to collaborate with peers.
 
     Create a new GitLab blank project for this chapter by accessing
     <https://gitlab.com/projects/new>.
-
-For example, choose `mlops-guide` as repository name.
 
 ## Configure Git for the remote branch
 
