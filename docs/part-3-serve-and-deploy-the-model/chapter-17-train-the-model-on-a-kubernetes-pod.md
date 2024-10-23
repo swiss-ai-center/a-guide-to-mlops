@@ -1272,6 +1272,7 @@ gcloud container clusters delete --zone $GCP_K8S_CLUSTER_ZONE $GCP_K8S_CLUSTER_N
     * Deploy the containerized model on Kubernetes.
     * Identify the specialized node.
     * Label the nodes.
+    * Create the Kubernetes secret for the base runner registration.
     * Deploy the base runner.
     * Retrieve the Kubernetes cluster credentials.
     * Update the Kubernetes `GCP_K8S_KUBECONFIG` CI/CD secret.
