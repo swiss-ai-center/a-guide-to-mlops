@@ -346,6 +346,42 @@ git push
     improvements made to it. You can visualize and discuss the changes made to a
     model before merging them into the codebase.
 
+!!! tip "Protecing the codebase"
+
+    To ensure reliability and continuous improvement, the `main` branch should only
+    include thoroughly reviewed and validated changes that benefit the model and can
+    be replicated.
+
+    Establishing branch protection rules that require a pull request (PR) or merge
+    request (MR) process before merging into the main codebase guarantees that all
+    changes are reviewed. This approach not only encourages collaboration and
+    knowledge sharing among team members, but also reduces the risk of introducing
+    errors that could disrupt the production workflow.
+
+    === ":simple-github: GitHub"
+
+        To set up branch protection in your GitHub repository, navigate to
+        **Settings > Branches**. Here, you can add branch protection rules for the
+        `main` branch:
+
+        * Check *Require a pull request before merging*
+        * Uncheck *Allow force pushes*
+        * Uncheck *Allow deletions*
+
+        These settings ensure that all changes pass the CI/CD pipeline before merging.
+
+    === ":simple-gitlab: GitLab"
+
+        To set up branch protection in your GitLab repository, navigate to
+        **Settings > Repository > Protected branches**. Here, you can add protection
+        rules for the `main` branch:
+
+        * From the *Allowed to merge* list, select **Developers + Maintainers**.
+        * From the *Allowed to push and merge* list, select **No one**.
+        * Uncheck *Allowed to force push*
+
+        These settings ensure that all changes pass the CI/CD pipeline before merging.
+
 ### Switch back to the main branch and pull latest changes
 
 Now that the merge is done, you can get the changes on the main branch.
