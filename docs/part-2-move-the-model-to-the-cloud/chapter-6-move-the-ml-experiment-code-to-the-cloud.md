@@ -66,7 +66,8 @@ flowchart TB
 
 ## Create a remote Git repository
 
-Create a Git repository on your preferred service to collaborate with peers.
+Create a Git repository on your preferred service to collaborate with peers. For
+example, choose `mlops-guide` as repository name.
 
 === ":simple-github: GitHub"
 
@@ -87,8 +88,6 @@ Create a Git repository on your preferred service to collaborate with peers.
 
     Create a new GitLab blank project for this chapter by accessing
     <https://gitlab.com/projects/new>.
-
-For example, choose `mlops-guide` as repository name.
 
 ## Configure Git for the remote branch
 
@@ -166,6 +165,7 @@ You can now safely continue to the next chapter.
 - [ ] Model is not accessible on the Internet and cannot be used anywhere
 - [ ] Model requires manual deployment on the cluster
 - [ ] Model cannot be trained on hardware other than the local machine
+- [ ] Model cannot be trained on custom hardware for specific use-cases
 
 You will address these issues in the next chapters for improved efficiency and
 collaboration. Continue the guide to learn how.

@@ -19,20 +19,21 @@ What you will learn from this guide.
     - [Chapter 9 - Track model evolution in the CI/CD pipeline with CML](./part-2-move-the-model-to-the-cloud/chapter-9-track-model-evolution-in-the-cicd-pipeline-with-cml.md)
     - [Chapter 10 - Work efficiently and collaboratively with Git](./part-2-move-the-model-to-the-cloud/chapter-10-work-efficiently-and-collaboratively-with-git.md)
 - [Part 3 - Serve and deploy the model](./part-3-serve-and-deploy-the-model/introduction.md) -
-  Learn how to serve and deploy the model using BentoML and CML.
+  Learn how to serve and deploy the model using BentoML and Docker.
     - [Chapter 11 - Save and load the model with BentoML](./part-3-serve-and-deploy-the-model/chapter-11-save-and-load-the-model-with-bentoml.md)
     - [Chapter 12 - Serve the model locally with BentoML](./part-3-serve-and-deploy-the-model/chapter-12-serve-the-model-locally-with-bentoml.md)
     - [Chapter 13 - Build and publish the model with BentoML and Docker](./part-3-serve-and-deploy-the-model/chapter-13-build-and-publish-the-model-with-bentoml-and-docker-locally.md)
     - [Chapter 14 - Build and publish the model with BentoML and Docker](./part-3-serve-and-deploy-the-model/chapter-14-build-and-publish-the-model-with-bentoml-and-docker-with-the-cicd-pipeline.md)
     - [Chapter 15 - Deploy and access the model on Kubernetes](./part-3-serve-and-deploy-the-model/chapter-15-deploy-and-access-the-model-on-kubernetes.md)
     - [Chapter 16 - Continuous deployment of the model with the CI/CD pipeline](./part-3-serve-and-deploy-the-model/chapter-16-continuous-deployment-of-the-model-with-the-cicd-pipeline.md)
-    - [Chapter 17 - Train the model on a Kubernetes pod](./part-3-serve-and-deploy-the-model/chapter-17-train-the-model-on-a-kubernetes-pod.md)
+    - [Chapter 17 - Use a self-hosted runner for the CI/CD pipeline](./part-3-serve-and-deploy-the-model/chapter-17-use-a-self-hosted-runner-for-the-cicd-pipeline.md)
+    - [Chapter 18 - Train the model on a Kubernetes pod](./part-3-serve-and-deploy-the-model/chapter-18-train-the-model-on-a-kubernetes-pod.md)
 - [Part 4 - Labeling the data and retrain the model](./part-4-labeling-the-data-and-retrain/introduction.md) -
   Learn how to label new data and retrain the model using Label Studio.
-    - [Chapter 18 - Setup Label Studio](./part-4-labeling-the-data-and-retrain/chapter-18-setup-label-studio.md)
-    - [Chapter 19 - Label new data with Label Studio](./part-4-labeling-the-data-and-retrain/chapter-19-label-new-data-with-label-studio.md)
-    - [Chapter 20 - Link the model to Label Studio](./part-4-labeling-the-data-and-retrain/chapter-20-link-the-model-to-label-studio.md)
-    - [Chapter 21 - Retrain the model from new data with DVC](./part-4-labeling-the-data-and-retrain/chapter-21-retrain-the-model-from-new-data-with-dvc.md)
+    - [Chapter 19 - Setup Label Studio](./part-4-labeling-the-data-and-retrain/chapter-19-setup-label-studio.md)
+    - [Chapter 20 - Label new data with Label Studio](./part-4-labeling-the-data-and-retrain/chapter-20-label-new-data-with-label-studio.md)
+    - [Chapter 21 - Link the model to Label Studio](./part-4-labeling-the-data-and-retrain/chapter-21-link-the-model-to-label-studio.md)
+    - [Chapter 22 - Retrain the model from new data with DVC](./part-4-labeling-the-data-and-retrain/chapter-22-retrain-the-model-from-new-data-with-dvc.md)
 - [Conclusion](./conclusion.md) - Summary of what you have done and what is left
   to be done.
 
