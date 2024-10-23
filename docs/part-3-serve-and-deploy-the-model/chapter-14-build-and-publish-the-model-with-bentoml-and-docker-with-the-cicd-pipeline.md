@@ -149,7 +149,7 @@ be different:
         and select **New repository secret**:
 
         - `GCP_CONTAINER_REGISTRY_HOST`: The host of the container registry (ex:
-          `europe-west6-docker.pkg.dev/mlops-workshop-github-406009/mlops-registry`, from
+          `europe-west6-docker.pkg.dev/mlops-surname-project/mlops-surname-registry`, from
           the variable `GCP_CONTAINER_REGISTRY_HOST` in the previous chapter)
 
         Save the variables by selecting **Add secret**.
@@ -161,7 +161,7 @@ be different:
         **Add variable**:
 
         - `GCP_CONTAINER_REGISTRY_HOST`: The host of the container registry (ex:
-          `europe-west6-docker.pkg.dev/mlops-workshop-gitlab-406009/mlops-registry`, from
+          `europe-west6-docker.pkg.dev/mlops-surname-project/mlops-surname-registry`, from
           the variable `GCP_CONTAINER_REGISTRY_HOST` in the previous chapter)
             - **Protect variable**: _Unchecked_
             - **Mask variable**: _Checked_
