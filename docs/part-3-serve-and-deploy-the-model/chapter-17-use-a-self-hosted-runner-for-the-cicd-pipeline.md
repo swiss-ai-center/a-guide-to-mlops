@@ -574,7 +574,7 @@ permissions:
 jobs:
   train-and-report:
     permissions: write-all
-    runs-on: [self-hosted]
+    runs-on: self-hosted
     if: github.event_name == 'pull_request'
     steps:
       - name: Checkout repository
@@ -741,7 +741,7 @@ index b15a68f..5a8d863 100644
 +  train-and-report:
      permissions: write-all
 -    runs-on: ubuntu-latest
-+    runs-on: [self-hosted]
++    runs-on: self-hosted
 +    if: github.event_name == 'pull_request'
      steps:
        - name: Checkout repository
