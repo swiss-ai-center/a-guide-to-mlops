@@ -19,7 +19,7 @@ What you will learn from this guide.
     - [Chapter 9 - Track model evolution in the CI/CD pipeline with CML](./part-2-move-the-model-to-the-cloud/chapter-9-track-model-evolution-in-the-cicd-pipeline-with-cml.md)
     - [Chapter 10 - Work efficiently and collaboratively with Git](./part-2-move-the-model-to-the-cloud/chapter-10-work-efficiently-and-collaboratively-with-git.md)
 - [Part 3 - Serve and deploy the model](./part-3-serve-and-deploy-the-model/introduction.md) -
-  Learn how to serve and deploy the model using BentoML and CML.
+  Learn how to serve and deploy the model using BentoML and Docker.
     - [Chapter 11 - Save and load the model with BentoML](./part-3-serve-and-deploy-the-model/chapter-11-save-and-load-the-model-with-bentoml.md)
     - [Chapter 12 - Serve the model locally with BentoML](./part-3-serve-and-deploy-the-model/chapter-12-serve-the-model-locally-with-bentoml.md)
     - [Chapter 13 - Build and publish the model with BentoML and Docker](./part-3-serve-and-deploy-the-model/chapter-13-build-and-publish-the-model-with-bentoml-and-docker-locally.md)
