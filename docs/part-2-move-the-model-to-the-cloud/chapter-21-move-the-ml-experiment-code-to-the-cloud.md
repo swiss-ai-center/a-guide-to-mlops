@@ -1,4 +1,4 @@
-# Chapter 6 - Move the ML experiment code to the cloud
+# Chapter 2.1 - Move the ML experiment code to the cloud
 
 ## Introduction
 

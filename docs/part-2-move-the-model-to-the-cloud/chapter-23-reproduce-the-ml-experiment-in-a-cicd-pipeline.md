@@ -1,4 +1,4 @@
-# Chapter 8 - Reproduce the ML experiment in a CI/CD pipeline
+# Chapter 2.3 - Reproduce the ML experiment in a CI/CD pipeline
 
 ## Introduction
 

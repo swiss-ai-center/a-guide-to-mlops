@@ -1,4 +1,4 @@
-# Chapter 12 - Serve the model locally with BentoML
+# Chapter 3.2 - Serve the model locally with BentoML
 
 ## Introduction
 

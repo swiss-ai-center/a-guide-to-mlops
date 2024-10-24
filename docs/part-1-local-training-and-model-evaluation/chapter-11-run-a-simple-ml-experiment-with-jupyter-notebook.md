@@ -1,4 +1,4 @@
-# Chapter 1 - Run a simple ML experiment with Jupyter Notebook
+# Chapter 1.1 - Run a simple ML experiment with Jupyter Notebook
 
 ## Introduction
 

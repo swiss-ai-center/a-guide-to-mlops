@@ -1,4 +1,4 @@
-# Chapter 9 - Track model evolution in the CI/CD pipeline with CML
+# Chapter 2.4 - Track model evolution in the CI/CD pipeline with CML
 
 ## Introduction
 

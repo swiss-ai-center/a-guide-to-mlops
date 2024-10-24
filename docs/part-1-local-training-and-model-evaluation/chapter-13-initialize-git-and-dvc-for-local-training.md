@@ -1,4 +1,4 @@
-# Chapter 3 - Initialize Git and DVC for local training
+# Chapter 1.3 - Initialize Git and DVC for local training
 
 ## Introduction
 
