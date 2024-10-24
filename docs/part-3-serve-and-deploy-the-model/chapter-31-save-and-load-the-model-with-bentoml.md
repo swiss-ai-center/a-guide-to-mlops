@@ -1,4 +1,4 @@
-# Chapter 11 - Save and load the model with BentoML
+# Chapter 3.1 - Save and load the model with BentoML
 
 ## Introduction
 
@@ -711,6 +711,7 @@ You can now safely continue to the next chapter.
 - [ ] Model is not accessible on the Internet and cannot be used anywhere
 - [ ] Model requires manual deployment on the cluster
 - [ ] Model cannot be trained on hardware other than the local machine
+- [ ] Model cannot be trained on custom hardware for specific use-cases
 
 You will address these issues in the next chapters for improved efficiency and
 collaboration. Continue the guide to learn how.

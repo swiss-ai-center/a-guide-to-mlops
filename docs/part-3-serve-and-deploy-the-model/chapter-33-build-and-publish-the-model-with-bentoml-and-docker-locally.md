@@ -1,4 +1,4 @@
-# Chapter 13 - Build and publish the model with BentoML and Docker locally
+# Chapter 3.3 - Build and publish the model with BentoML and Docker locally
 
 ## Introduction
 
@@ -522,6 +522,7 @@ In this chapter, you have successfully:
 - [ ] Model is accessible from the Internet and can be used anywhere
 - [ ] Model requires manual deployment on the cluster
 - [ ] Model cannot be trained on hardware other than the local machine
+- [ ] Model cannot be trained on custom hardware for specific use-cases
 
 You will address these issues in the next chapters for improved efficiency and
 collaboration. Continue the guide to learn how.

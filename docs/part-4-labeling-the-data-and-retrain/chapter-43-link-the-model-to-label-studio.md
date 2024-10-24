@@ -1,4 +1,4 @@
-# Chapter 20 - Link the model to Label Studio
+# Chapter 4.3 - Link the model to Label Studio
 
 ## Introduction
 

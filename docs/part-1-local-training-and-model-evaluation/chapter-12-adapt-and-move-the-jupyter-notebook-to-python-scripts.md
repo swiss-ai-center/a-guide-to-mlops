@@ -1,4 +1,4 @@
-# Chapter 2 - Adapt and move the Jupyter Notebook to Python scripts
+# Chapter 1.2 - Adapt and move the Jupyter Notebook to Python scripts
 
 ## Introduction
 
@@ -809,6 +809,7 @@ You can now safely continue to the next chapter.
 - [ ] Model is not accessible on the Internet and cannot be used anywhere
 - [ ] Model requires manual deployment on the cluster
 - [ ] Model cannot be trained on hardware other than the local machine
+- [ ] Model cannot be trained on custom hardware for specific use-cases
 
 You will address these issues in the next chapters for improved efficiency and
 collaboration. Continue the guide to learn how.

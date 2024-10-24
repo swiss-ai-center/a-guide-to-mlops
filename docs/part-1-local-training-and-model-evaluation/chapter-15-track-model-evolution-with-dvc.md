@@ -1,4 +1,4 @@
-# Chapter 5 - Track model evolution with DVC
+# Chapter 1.5 - Track model evolution with DVC
 
 ## Introduction
 
@@ -88,7 +88,7 @@ working directory.
 !!! note
 
     Remember? You did set the parameters, metrics and plots in the previous chapter:
-    [Chapter 4: Reproduce the ML experiment with DVC](./chapter-4-reproduce-the-ml-experiment-with-dvc.md).
+    [Chapter 1.4: Reproduce the ML experiment with DVC](./chapter-14-reproduce-the-ml-experiment-with-dvc.md).
 
 #### Compare the parameters difference
 
@@ -297,6 +297,7 @@ You can now safely continue to the next chapter.
 - [ ] Model is not accessible on the Internet and cannot be used anywhere
 - [ ] Model requires manual deployment on the cluster
 - [ ] Model cannot be trained on hardware other than the local machine
+- [ ] Model cannot be trained on custom hardware for specific use-cases
 
 You will address these issues in the next chapters for improved efficiency and
 collaboration. Continue the guide to learn how.

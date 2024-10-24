@@ -1,4 +1,4 @@
-# Chapter 18 - Setup Label Studio
+# Chapter 4.1 - Setup Label Studio
 
 ## Introduction
 
