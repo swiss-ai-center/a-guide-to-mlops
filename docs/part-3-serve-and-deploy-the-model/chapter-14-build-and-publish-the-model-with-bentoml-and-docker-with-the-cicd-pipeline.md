@@ -224,7 +224,7 @@ container registry. The following steps will be performed:
           - name: Setup Python
             uses: actions/setup-python@v5
             with:
-              python-version: '3.11'
+              python-version: '3.12'
               cache: pip
           - name: Install dependencies
             run: pip install --requirement requirements-freeze.txt
@@ -389,7 +389,7 @@ container registry. The following steps will be performed:
 
     train:
       stage: train
-      image: python:3.11
+      image: python:3.12
       rules:
         - if: $CI_COMMIT_BRANCH == "main"
         - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -397,7 +397,7 @@ container registry. The following steps will be performed:
         # Set the Google Service Account key
         - echo "${GOOGLE_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
         # Create the virtual environment for caching
-        - python3.11 -m venv .venv
+        - python3.12 -m venv .venv
         - source .venv/bin/activate
       script:
         # Install dependencies
@@ -472,7 +472,7 @@ container registry. The following steps will be performed:
 
     publish:
       stage: publish
-      image: python:3.11
+      image: python:3.12
       needs:
         - train
       rules:
@@ -496,7 +496,7 @@ container registry. The following steps will be performed:
         # Login to the Google Container Registry
         - cat "${GOOGLE_APPLICATION_CREDENTIALS}" | docker login -u _json_key --password-stdin "${GCP_CONTAINER_REGISTRY_HOST}"
         # Create the virtual environment for caching
-        - python3.11 -m venv .venv
+        - python3.12 -m venv .venv
         - source .venv/bin/activate
       script:
         # Install dependencies
@@ -551,7 +551,7 @@ container registry. The following steps will be performed:
     +
     +publish:
     +  stage: publish
-    +  image: python:3.11
+    +  image: python:3.12
     +  needs:
     +    - train
     +  rules:
@@ -575,7 +575,7 @@ container registry. The following steps will be performed:
     +    # Login to the Google Container Registry
     +    - cat "${GOOGLE_APPLICATION_CREDENTIALS}" | docker login -u _json_key --password-stdin "${GCP_CONTAINER_REGISTRY_HOST}"
     +    # Create the virtual environment for caching
-    +    - python3.11 -m venv .venv
+    +    - python3.12 -m venv .venv
     +    - source .venv/bin/activate
     +  script:
     +    # Install dependencies
