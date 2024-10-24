@@ -37,15 +37,16 @@ nav:
       - "Chapter 14 - Build and publish the model with BentoML and Docker with the CI/CD pipeline": part-3-serve-and-deploy-the-model/chapter-14-build-and-publish-the-model-with-bentoml-and-docker-with-the-cicd-pipeline.md
       - "Chapter 15 - Deploy and access the model on Kubernetes": part-3-serve-and-deploy-the-model/chapter-15-deploy-and-access-the-model-on-kubernetes.md
       - "Chapter 16 - Continuous deployment of the model with the CI/CD pipeline": part-3-serve-and-deploy-the-model/chapter-16-continuous-deployment-of-the-model-with-the-cicd-pipeline.md
-      - "Chapter 17 - Train the model on a Kubernetes pod": part-3-serve-and-deploy-the-model/chapter-17-train-the-model-on-a-kubernetes-pod.md
+      - "Chapter 17 - Use a self-hosted runner for the CI/CD pipeline": part-3-serve-and-deploy-the-model/chapter-17-use-a-self-hosted-runner-for-the-cicd-pipeline.md
+      - "Chapter 18 - Train the model on a Kubernetes pod": part-3-serve-and-deploy-the-model/chapter-18-train-the-model-on-a-kubernetes-pod.md
       - "Conclusion": part-3-serve-and-deploy-the-model/conclusion.md
       - "Clean up": part-3-serve-and-deploy-the-model/clean-up.md
   - 🏷️ Labeling the data and retrain:
       - "Introduction": part-4-labeling-the-data-and-retrain/introduction.md
-      - "Chapter 18 - Setup Label Studio": part-4-labeling-the-data-and-retrain/chapter-18-setup-label-studio.md
-      - "Chapter 19 - Label new data with Label Studio": part-4-labeling-the-data-and-retrain/chapter-19-label-new-data-with-label-studio.md
-      - "Chapter 20 - Link the model to Label Studio": part-4-labeling-the-data-and-retrain/chapter-20-link-the-model-to-label-studio.md
-      - "Chapter 21 - Retrain the model from new data with DVC": part-4-labeling-the-data-and-retrain/chapter-21-retrain-the-model-from-new-data-with-dvc.md
+      - "Chapter 19 - Setup Label Studio": part-4-labeling-the-data-and-retrain/chapter-19-setup-label-studio.md
+      - "Chapter 20 - Label new data with Label Studio": part-4-labeling-the-data-and-retrain/chapter-20-label-new-data-with-label-studio.md
+      - "Chapter 21 - Link the model to Label Studio": part-4-labeling-the-data-and-retrain/chapter-21-link-the-model-to-label-studio.md
+      - "Chapter 22 - Retrain the model from new data with DVC": part-4-labeling-the-data-and-retrain/chapter-22-retrain-the-model-from-new-data-with-dvc.md
       - "Conclusion": part-4-labeling-the-data-and-retrain/conclusion.md
       - "Clean up": clean-up.md
   - 🪄 Conclusion:

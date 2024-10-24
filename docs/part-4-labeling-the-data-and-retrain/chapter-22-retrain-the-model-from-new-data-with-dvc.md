@@ -1,4 +1,4 @@
-# Chapter 21 - Retrain the model from new data with DVC
+# Chapter 22 - Retrain the model from new data with DVC
 
 ## Introduction
 
@@ -122,10 +122,10 @@ images to the corresponding folders in the `data/raw` directory.
 You can run the script using the following command:
 
 ```sh title="Execute the following command(s) in a terminal"
-python3.11 scripts/parse_annotations.py
+python3.12 scripts/parse_annotations.py
 ```
 
-The annotated images will be copied to the `data/raw` directory. The output
+The a3.12ated images will be copied to the `data/raw` directory. The output
 should look like this:
 
 ```text

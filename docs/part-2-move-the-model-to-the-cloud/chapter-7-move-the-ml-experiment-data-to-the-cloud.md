@@ -316,7 +316,7 @@ Install the DVC Storage plugin for the cloud provider:
     tensorflow==2.17.0
     matplotlib==3.9.2
     pyyaml==6.0.2
-    dvc[gs]==3.53.2
+    dvc[gs]==3.56.0
     ```
 
     Check the differences with Git to validate the changes:
@@ -337,8 +337,8 @@ Install the DVC Storage plugin for the cloud provider:
      tensorflow==2.17.0
      matplotlib==3.9.2
      pyyaml==6.0.2
-    -dvc==3.53.2
-    +dvc[gs]==3.53.2
+    -dvc==3.56.0
+    +dvc[gs]==3.56.0
     ```
 
     Install the dependencies and update the freeze file:
@@ -517,6 +517,7 @@ You can now safely continue to the next chapter.
 - [ ] Model is not accessible on the Internet and cannot be used anywhere
 - [ ] Model requires manual deployment on the cluster
 - [ ] Model cannot be trained on hardware other than the local machine
+- [ ] Model cannot be trained on custom hardware for specific use-cases
 
 You will address these issues in the next chapters for improved efficiency and
 collaboration. Continue the guide to learn how.
