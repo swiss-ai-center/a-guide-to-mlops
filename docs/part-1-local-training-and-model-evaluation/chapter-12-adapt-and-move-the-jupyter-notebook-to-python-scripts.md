@@ -106,7 +106,7 @@ Firstly, create the virtual environment:
 
     **How to manage virtual environments?**
 
-    - Create a virtual environment: `#!sh python3.11 -m venv .venv`
+    - Create a virtual environment: `#!sh python3.12 -m venv .venv`
     - Activate the virtual environment: `#!sh source .venv/bin/activate`
     - Deactivate the virtual environment: `#!sh deactivate`
 
@@ -119,7 +119,7 @@ Firstly, create the virtual environment:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Create the environment
-python3.11 -m venv .venv
+python3.12 -m venv .venv
 
 # Activate the environment
 source .venv/bin/activate
@@ -701,13 +701,13 @@ You can now follow these steps to reproduce the experiment:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Prepare the dataset
-python3.11 src/prepare.py data/raw data/prepared
+python3.12 src/prepare.py data/raw data/prepared
 
 # Train the model with the train dataset and save it
-python3.11 src/train.py data/prepared model
+python3.12 src/train.py data/prepared model
 
 # Evaluate the model performance
-python3.11 src/evaluate.py model data/prepared
+python3.12 src/evaluate.py model data/prepared
 ```
 
 The experiment will take some time to run. Once it is done, you will find the

@@ -139,7 +139,7 @@ collaboration and decision-making within the team.
           - name: Setup Python
             uses: actions/setup-python@v5
             with:
-              python-version: '3.11'
+              python-version: '3.12'
               cache: pip
           - name: Install dependencies
             run: pip install --requirement requirements-freeze.txt
@@ -343,7 +343,7 @@ collaboration and decision-making within the team.
 
     train:
       stage: train
-      image: python:3.11
+      image: python:3.12
       rules:
         - if: $CI_COMMIT_BRANCH == "main"
         - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -351,7 +351,7 @@ collaboration and decision-making within the team.
         # Set the Google Service Account key
         - echo "${GOOGLE_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
         # Create the virtual environment for caching
-        - python3.11 -m venv .venv
+        - python3.12 -m venv .venv
         - source .venv/bin/activate
       script:
         # Install dependencies
