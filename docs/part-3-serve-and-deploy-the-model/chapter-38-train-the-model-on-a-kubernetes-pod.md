@@ -1,4 +1,4 @@
-# Chapter 18 - Train the model on a Kubernetes pod
+# Chapter 3.8 - Train the model on a Kubernetes pod
 
 ## Introduction
 

@@ -1,4 +1,4 @@
-# Chapter 15: Deploy and access the model on Kubernetes
+# Chapter 3.5: Deploy and access the model on Kubernetes
 
 ## Introduction
 

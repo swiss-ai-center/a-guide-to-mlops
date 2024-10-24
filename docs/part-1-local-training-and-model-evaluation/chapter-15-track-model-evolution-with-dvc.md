@@ -1,4 +1,4 @@
-# Chapter 5 - Track model evolution with DVC
+# Chapter 1.5 - Track model evolution with DVC
 
 ## Introduction
 
@@ -88,7 +88,7 @@ working directory.
 !!! note
 
     Remember? You did set the parameters, metrics and plots in the previous chapter:
-    [Chapter 4: Reproduce the ML experiment with DVC](./chapter-4-reproduce-the-ml-experiment-with-dvc.md).
+    [Chapter 1.4: Reproduce the ML experiment with DVC](./chapter-14-reproduce-the-ml-experiment-with-dvc.md).
 
 #### Compare the parameters difference
 

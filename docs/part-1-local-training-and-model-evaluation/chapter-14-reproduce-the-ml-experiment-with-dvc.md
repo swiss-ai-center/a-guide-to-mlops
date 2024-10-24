@@ -1,4 +1,4 @@
-# Chapter 4 - Reproduce the ML experiment with DVC
+# Chapter 1.4 - Reproduce the ML experiment with DVC
 
 ## Introduction
 

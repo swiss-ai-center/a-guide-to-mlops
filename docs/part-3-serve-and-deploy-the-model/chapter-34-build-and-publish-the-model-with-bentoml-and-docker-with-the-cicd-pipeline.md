@@ -1,4 +1,4 @@
-# Chapter 14 - Build and publish the model with BentoML and Docker in the CI/CD pipeline
+# Chapter 3.4 - Build and publish the model with BentoML and Docker in the CI/CD pipeline
 
 ## Introduction
 
@@ -94,7 +94,7 @@ The container registry will need to be accessed inside the CI/CD pipeline to
 push the Docker image.
 
 This is the same process you did for DVC as described in
-[Chapter 8 - Reproduce the ML experiment in a CI/CD pipeline](../part-2-move-the-model-to-the-cloud/chapter-8-reproduce-the-ml-experiment-in-a-cicd-pipeline.md)
+[Chapter 8 - Reproduce the ML experiment in a CI/CD pipeline](../part-2-move-the-model-to-the-cloud/chapter-23-reproduce-the-ml-experiment-in-a-cicd-pipeline.md)
 but this time for the container registry.
 
 === ":simple-googlecloud: Google Cloud"

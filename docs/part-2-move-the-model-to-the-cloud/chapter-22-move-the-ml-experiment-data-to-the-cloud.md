@@ -1,4 +1,4 @@
-# Chapter 7 - Move the ML experiment data to the cloud
+# Chapter 2.2 - Move the ML experiment data to the cloud
 
 ## Introduction
 

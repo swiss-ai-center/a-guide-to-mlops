@@ -1,4 +1,4 @@
-# Chapter 13 - Build and publish the model with BentoML and Docker locally
+# Chapter 3.3 - Build and publish the model with BentoML and Docker locally
 
 ## Introduction
 
