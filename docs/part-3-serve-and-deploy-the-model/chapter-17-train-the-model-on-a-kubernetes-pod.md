@@ -956,7 +956,7 @@ jobs:
   cleanup-runner:
     needs: train-and-report
     runs-on: [self-hosted, base-runner]
-    # Run this job if the event is a pull request and regardless of whether the previous job failed or was canceled
+    # Run this job if the event is a pull request and regardless of whether the previous job failed or was cancelled
     if: github.event_name == 'pull_request' && (success() || failure() || cancelled())
     steps:
       - name: Checkout repository
