@@ -68,7 +68,8 @@ flowchart TB
             subgraph clusterPodGraph[Kubernetes Pod]
                 pod_train[Train model] <-.-> k8s_gpu[GPUs]
             end
-            pod_runner[Runner] --> clusterPodGraph
+            pod_runner[Runner] --> |create
+                                    destroy|clusterPodGraph
             action -->|dvc pull
                        dvc repro| pod_train
             bento_service_cluster[classifier.bentomodel] --> k8s_fastapi[FastAPI]
