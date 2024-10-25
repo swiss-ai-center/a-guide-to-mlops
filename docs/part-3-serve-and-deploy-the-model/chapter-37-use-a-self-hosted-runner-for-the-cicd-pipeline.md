@@ -1,4 +1,4 @@
-# Chapter 17 - Use a self-hosted runner for the CI/CD pipeline
+# Chapter 3.7 - Use a self-hosted runner for the CI/CD pipeline
 
 ## Introduction
 

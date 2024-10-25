@@ -1,4 +1,4 @@
-# Chapter 11 - Save and load the model with BentoML
+# Chapter 3.1 - Save and load the model with BentoML
 
 ## Introduction
 

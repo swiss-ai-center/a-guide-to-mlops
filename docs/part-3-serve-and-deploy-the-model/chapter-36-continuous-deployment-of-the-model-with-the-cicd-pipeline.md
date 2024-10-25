@@ -1,4 +1,4 @@
-# Chapter 16 - Continuous deployment of the model with the CI/CD pipeline
+# Chapter 3.6 - Continuous deployment of the model with the CI/CD pipeline
 
 ## Introduction
 
@@ -110,7 +110,7 @@ The Kubernetes cluster will need to be accessed inside the CI/CD pipeline to
 deploy the Docker image.
 
 This is the same process you did for the container registry as described in
-[Chapter 14 - Build and publish the model with BentoML and Docker in the CI/CD pipeline](../part-3-serve-and-deploy-the-model/chapter-14-build-and-publish-the-model-with-bentoml-and-docker-with-the-cicd-pipeline.md)
+[Chapter 3.4 - Build and publish the model with BentoML and Docker in the CI/CD pipeline](../part-3-serve-and-deploy-the-model/chapter-34-build-and-publish-the-model-with-bentoml-and-docker-with-the-cicd-pipeline.md)
 but this time for the Kubernetes cluster.
 
 === ":simple-googlecloud: Google Cloud"
