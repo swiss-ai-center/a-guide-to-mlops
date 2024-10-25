@@ -761,7 +761,7 @@ Update the `.github/workflows/mlops.yaml` file.
 
 Take some time to understand the new steps:
 
-```yaml title=".github/workflows/mlops.yaml" hl_lines="15-19 21-58 60-62 79-89 141-159 191-216"
+```yaml title=".github/workflows/mlops.yaml" hl_lines="15-19 21-59 61-63 80-90 142-160 192-217"
 name: MLOps
 
 on:
@@ -784,6 +784,7 @@ permissions:
 jobs:
   setup-runner:
     runs-on: [self-hosted, base-runner]
+    if: github.event_name == 'pull_request'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -955,8 +956,8 @@ jobs:
   cleanup-runner:
     needs: train-and-report
     runs-on: [self-hosted, base-runner]
-    # Always run this job even if the previous jobs fail
-    if: always()
+    # Run this job if the event is a pull request and regardless of whether the previous job failed or was cancelled
+    if: github.event_name == 'pull_request' && (success() || failure() || cancelled())
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -982,12 +983,19 @@ jobs:
 
 Here, the following should be noted:
 
+When creating pull requests:
+
 * the `setup-runner` job creates a self-hosted GPU runner.
-* the `train-report` job runs on the self-hosted GPU runner on pull requests. It
-  trains the model and DVC pushes the trained model to the remote bucket.
+* the `train-report` job runs on the self-hosted GPU runner. It trains the model
+  and pushes the trained model to the remote bucket with DVC.
+* the `cleanup-runner` job destroys the self-hosted GPU runner that was created.
+  It also guarantees that the GPU runner pod is removed, even when if the previous
+  step failed or was manually cancelled.
+
+When merging pull requests:
+
 * the `publish-and-deploy` runs on the main runner when merging pull requests.
   It retrieves the model with DVC, containerizes then deploys the model artifact.
-* the `cleanup-runner` job deletes the self-hosted GPU runner.
 
 Check the differences with Git to validate the changes.
 
@@ -1016,6 +1024,7 @@ index 3ac0f67..db9db1d 100644
 -  train-report-publish-and-deploy:
 +  setup-runner:
 +    runs-on: [self-hosted, base-runner]
++    if: github.event_name == 'pull_request'
 +    steps:
 +      - name: Checkout repository
 +        uses: actions/checkout@v4
@@ -1147,8 +1156,8 @@ index 3ac0f67..db9db1d 100644
 +  cleanup-runner:
 +    needs: train-and-report
 +    runs-on: [self-hosted, base-runner]
-+    # Always run this job even if the previous jobs fail
-+    if: always()
++    # Run this job if the event is a pull request and regardless of whether the previous job failed or was canceled
++    if: github.event_name == 'pull_request' && (success() || failure() || cancelled())
 +    steps:
 +      - name: Checkout repository
 +        uses: actions/checkout@v4
