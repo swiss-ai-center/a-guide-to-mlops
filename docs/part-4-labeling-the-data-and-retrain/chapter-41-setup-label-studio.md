@@ -206,10 +206,11 @@ Once you have signed up, you can create a new project in Label Studio:
    Select all the images from the `extra-data/extra_data` folder you downloaded
    earlier.
 
-    !!! tip
+    !!! tip "Tip for WSL2 users"
 
-        For WSL2 users, the Linux distribution is accessible through the
-        `\\wsl.localhost\` address in the file explorer.
+        The Linux distribution is accessible through the `\\wsl.localhost\` address in
+        the file explorer. The current directory can also be opened directly from the
+        shell with the `explorer.exe .` command.
 
     ![Label Studio Data Import](../assets/images/label-studio-data-import.png)
 
