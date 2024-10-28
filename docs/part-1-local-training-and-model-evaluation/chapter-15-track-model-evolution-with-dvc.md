@@ -146,7 +146,7 @@ dvc plots diff --open
 
 !!! tip "Tip for WSL2 users"
 
-    When using WSL2, this command will by default not succeed but the report is
+    When using WSL2, this command will not succeed by default but the report is
     available by clicking on the `dvc_plots/index.html` file.
 
     The Linux distribution is accessible through the `\\wsl.localhost\` address in
