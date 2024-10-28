@@ -144,6 +144,15 @@ generated on `HEAD` and the ones that were generated in your current
 dvc plots diff --open
 ```
 
+!!! tip "Tip for WSL2 users"
+
+    When using WSL2, this command will by default not succeed but the report is
+    available by clicking on the `dvc_plots/index.html` file.
+
+    The Linux distribution is accessible through the `\\wsl.localhost\` address in
+    the file explorer. The current directory can also be opened directly from the
+    shell with the `explorer.exe .` command.
+
 !!! warning
 
     Do **not** enable auto-opening using the suggested command
