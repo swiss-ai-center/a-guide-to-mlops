@@ -25,8 +25,9 @@ provider.
 
     **Delete the Kubernetes cluster**
 
-    To delete the Kubernetes cluster you created, you can execute the following
-    command:
+    To delete the
+    [Google Kubernetes cluster](https://console.cloud.google.com/kubernetes) you
+    created, you can execute the following command:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Delete the Kubernetes cluster
@@ -35,8 +36,8 @@ provider.
 
     Press ++y++ to confirm the deletion.
 
-    To disable the Google Kubernetes Engine Registry API, you can execute the
-    following command:
+    To disable the Google Kubernetes Engine API, you can execute the following
+    command:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Disable the Google Kubernetes Engine API
@@ -45,8 +46,9 @@ provider.
 
     **Delete the Google Artifact Registry**
 
-    To delete the Google Artifact Registry used to store the Docker images you
-    created, you can execute the following command:
+    To delete the
+    [Google Artifact Registry](https://console.cloud.google.com/artifacts) used to
+    store the Docker images you created, you can execute the following command:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Delete the artifact repository
@@ -71,8 +73,8 @@ provider.
         Storage bucket, the DVC remote will be disrupted. To continue using DVC with the
         Git repository, you will need to reconfigure it with a new remote.
 
-    To delete the Google Storage bucket you created, you can execute the following
-    command:
+    To delete the [Google Storage bucket](https://console.cloud.google.com/storage)
+    you created, you can execute the following command:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Delete the Google Storage bucket
@@ -83,8 +85,9 @@ provider.
 
     **Delete the Google Service Account**
 
-    To delete the Google Service Account you created, you can execute the following
-    command:
+    To delete the
+    [Google Service Account](https://console.cloud.google.com/iam-admin/serviceaccounts)
+    you created, you can execute the following command:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Delete the Google Service Account
@@ -117,8 +120,9 @@ provider.
 
     **Delete the Google Cloud project**
 
-    To delete the Google Cloud project you created, you can execute the following
-    command:
+    To delete the
+    [Google Cloud project](https://console.cloud.google.com/home/dashboard) you
+    created, you can execute the following command:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Delete the Google Cloud project

@@ -454,6 +454,25 @@ git push
 Open the Bucket Storage on the cloud provider and check that the files were
 hashed and have been uploaded.
 
+=== ":simple-googlecloud: Google Cloud"
+
+    Open the [Cloud Storage](https://console.cloud.google.com/storage) on the Google
+    cloud interface and click on your bucket to access the details.
+
+=== ":material-cloud: Using another cloud provider? Read this!"
+
+    This guide has been written with Google Cloud in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
+
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
+    help is greatly appreciated!
+
 <!-- TODO: Add explanation on how to check the files on the cloud provider, the
 difference between the data and the cache, and how to download the data from the
 cloud provider. -->

@@ -455,6 +455,28 @@ docker push $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest
 The image is now available in the container registry. You can use it from
 anywhere using Docker or Kubernetes.
 
+Open the container registry interface on the cloud provider and check that the
+artifact files have been uploaded.
+
+=== ":simple-googlecloud: Google Cloud"
+
+    Open the [Artifact Registry](https://console.cloud.google.com/artifacts) on the
+    Google cloud interface and click on your registry to access the details.
+
+=== ":material-cloud: Using another cloud provider? Read this!"
+
+    This guide has been written with Google Cloud in mind. We are open to
+    contributions to add support for other cloud providers such as
+    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
+    [:simple-exoscale: Exoscale](https://www.exoscale.com),
+    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
+    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
+    not officially support them.
+
+    If you want to contribute, please open an issue or a pull request on the
+    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
+    help is greatly appreciated!
+
 ### Check the changes
 
 Check the changes with Git to ensure that all the necessary files are tracked:
