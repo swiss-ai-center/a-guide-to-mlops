@@ -782,8 +782,7 @@ When you are done with the chapter, you can destroy the Kubernetes cluster.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Destroy the Kubernetes cluster
-gcloud container clusters delete --zone
-$GCP_K8S_CLUSTER_ZONE $GCP_K8S_CLUSTER_NAME
+gcloud container clusters delete --zone $GCP_K8S_CLUSTER_ZONE $GCP_K8S_CLUSTER_NAME
 ```
 
 !!! tip

@@ -528,7 +528,6 @@ available for publishing and deployment.
     model artifact to be built, containerized, and stored in the container registry
     prior to deployment.
 
-
 !!! tip
 
     For those interested in fully utilizing a self-hosted runner, including the
