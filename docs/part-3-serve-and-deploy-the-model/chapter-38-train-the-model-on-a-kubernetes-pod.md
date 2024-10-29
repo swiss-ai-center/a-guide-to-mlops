@@ -444,7 +444,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Python
         uses: actions/setup-python@v5 with:
-          python-version: '3.11' cache: pip
+          python-version: '3.12' cache: pip
       - name: Install dependencies
         run: pip install --requirement requirements-freeze.txt
       - name: Login to Google Cloud
@@ -517,7 +517,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Python
         uses: actions/setup-python@v5 with:
-          python-version: '3.11' cache: pip
+          python-version: '3.12' cache: pip
       - name: Install dependencies
         run: pip install --requirement requirements-freeze.txt
       - name: Login to Google Cloud

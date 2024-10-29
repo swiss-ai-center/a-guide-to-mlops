@@ -53,7 +53,7 @@ sudo apt install --yes \
     libz-dev
 
 # Create the virtual environment
-python3.11 -m venv .venv
+python3.12 -m venv .venv
 
 # Activate the virtual environment
 source .venv/bin/activate
@@ -91,7 +91,7 @@ To format the Markdown documentation, run
 
 ```sh
 # Create the virtual environment
-python3.11 -m venv .venv
+python3.12 -m venv .venv
 
 # Activate the virtual environment
 source .venv/bin/activate

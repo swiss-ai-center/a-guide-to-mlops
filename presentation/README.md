@@ -236,7 +236,7 @@ Before we start:
 
 📝 Editor and Terminal (VS Code recommended)
 
-🛠️ Python 3.11, pip, git, wget, unzip, docker
+🛠️ Python 3.12, pip, git, wget, unzip, docker
 
 ☁️ GitHub account, Google Cloud account
 

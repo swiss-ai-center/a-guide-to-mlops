@@ -197,7 +197,7 @@ Add the main `dvc` dependency to the `requirements.txt` file:
 tensorflow==2.17.0
 matplotlib==3.9.2
 pyyaml==6.0.2
-dvc==3.53.2
+dvc==3.56.0
 ```
 
 Check the differences with Git to validate the changes:
