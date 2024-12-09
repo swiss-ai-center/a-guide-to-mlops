@@ -194,10 +194,10 @@ git commit -m "My first ML experiment versioned with Git"
 Add the main `dvc` dependency to the `requirements.txt` file:
 
 ```txt title="requirements.txt" hl_lines="4"
-tensorflow==2.17.0
-matplotlib==3.9.2
+tensorflow==2.17.1
+matplotlib==3.9.3
 pyyaml==6.0.2
-dvc==3.56.0
+dvc==3.58.0
 ```
 
 Check the differences with Git to validate the changes:
@@ -215,10 +215,10 @@ index 250f32c..152b868 100644
 --- a/requirements.txt
 +++ b/requirements.txt
 @@ -1,3 +1,4 @@
- tensorflow==2.17.0
- matplotlib==3.9.2
+ tensorflow==2.17.1
+ matplotlib==3.9.3
  pyyaml==6.0.2
-+dvc==3.53.2
++dvc==3.58.0
 ```
 
 Install the dependencies and update the freeze file:

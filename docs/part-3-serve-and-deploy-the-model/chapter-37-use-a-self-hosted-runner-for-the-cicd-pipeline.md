@@ -166,7 +166,7 @@ Replace `<my_repository_url>` with your own git repository URL.
 ```yaml title="docker/Dockerfile"
 FROM ubuntu:22.04
 
-ENV RUNNER_VERSION=2.319.1
+ENV RUNNER_VERSION=2.321.0
 
 LABEL RunnerVersion=${RUNNER_VERSION}
 LABEL org.opencontainers.image.source="<my_repository_url>"
@@ -296,11 +296,11 @@ The output should be similar to this:
 [+] Building 57.3s (14/14) FINISHED                                                                      docker:default
  => [internal] load build definition from Dockerfile                                                               0.1s
  => => transferring dockerfile: 920B                                                                               0.0s
- => [internal] load metadata for docker.io/library/ubuntu:24.04                                                    1.8s
+ => [internal] load metadata for docker.io/library/ubuntu:22.04                                                    1.8s
  => [internal] load .dockerignore                                                                                  0.0s
  => => transferring context: 2B                                                                                    0.0s
- => [1/9] FROM docker.io/library/ubuntu:24.04@sha256:8a37d68f4f73ebf3d4efafbcf66379bf3728902a8038616808f04e34a9ab  2.5s
- => => resolve docker.io/library/ubuntu:24.04@sha256:8a37d68f4f73ebf3d4efafbcf66379bf3728902a8038616808f04e34a9ab  0.0s
+ => [1/9] FROM docker.io/library/ubuntu:22.04@sha256:8a37d68f4f73ebf3d4efafbcf66379bf3728902a8038616808f04e34a9ab  2.5s
+ => => resolve docker.io/library/ubuntu:22.04@sha256:8a37d68f4f73ebf3d4efafbcf66379bf3728902a8038616808f04e34a9ab  0.0s
  => => sha256:8a37d68f4f73ebf3d4efafbcf66379bf3728902a8038616808f04e34a9ab63ee 1.34kB / 1.34kB                     0.0s
  => => sha256:d35dfc2fe3ef66bcc085ca00d3152b482e6cafb23cdda1864154caf3b19094ba 424B / 424B                         0.0s
  => => sha256:edbfe74c41f8a3501ce542e137cf28ea04dd03e6df8c9d66519b6ad761c2598a 2.30kB / 2.30kB                     0.0s
@@ -311,8 +311,8 @@ The output should be similar to this:
  => [2/9] RUN apt-get update -y && apt-get install -y     build-essential lsb-release     python3 python3-pip     26.6s
  => [3/9] RUN useradd -m runner                                                                                    0.3s
  => [4/9] WORKDIR /home/actions-runner                                                                             0.1s
- => [5/9] RUN curl -o actions-runner-linux-x64-2.319.1.tar.gz -L https://github.com/actions/runner/releases/downl  7.3s
- => [6/9] RUN tar xzf ./actions-runner-linux-x64-2.319.1.tar.gz                                                    4.2s
+ => [5/9] RUN curl -o actions-runner-linux-x64-2.312.0.tar.gz -L https://github.com/actions/runner/releases/downl  7.3s
+ => [6/9] RUN tar xzf ./actions-runner-linux-x64-2.21.0.tar.gz                                                    4.2s
  => [7/9] RUN ./bin/installdependencies.sh                                                                        12.3s
  => [8/9] COPY startup.sh .                                                                                        0.2s
  => [9/9] RUN chmod +x startup.sh                                                                                  0.3s
@@ -491,8 +491,8 @@ The output should be similar to this:
 ```
 √ Connected to GitHub
 
-Current runner version: '2.319.1'
-2024-09-27 12:15:19Z: Listening for Jobs
+Current runner version: '2.321.0'
+2024-12-10 12:15:19Z: Listening for Jobs
 ```
 
 Exit the process by pressing ++ctrl+c++ in the terminal, then exit the pod by
