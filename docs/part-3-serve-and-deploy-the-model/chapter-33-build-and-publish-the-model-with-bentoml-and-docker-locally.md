@@ -124,7 +124,7 @@ python:
     - "matplotlib==3.9.2"
     - "pillow==10.4.0"
 docker:
-    python_version: "3.11"
+    python_version: "3.12"
 ```
 
 Do not forget to include the `serve.py` file in the BentoML model artifact. This
@@ -223,11 +223,11 @@ INFO: Building OCI-compliant image for celestial_bodies_classifier:7yx472dbkoisv
 [+] Building 101.4s (17/17) FINISHED                                                                                           docker:default
  => [internal] load build definition from Dockerfile                                                                                     0.1s
  => => transferring dockerfile: 1.86kB                                                                                                   0.0s
- => [internal] load metadata for docker.io/library/python:3.11-slim                                                                      1.7s
+ => [internal] load metadata for docker.io/library/python:3.12-slim                                                                      1.7s
  => [internal] load .dockerignore                                                                                                        0.0s
  => => transferring context: 2B                                                                                                          0.0s
- => [base-container  1/12] FROM docker.io/library/python:3.11-slim@sha256:ad5dadd957a398226996bc4846e522c39f2a77340b531b28aaab85b2d3612  3.6s
- => => resolve docker.io/library/python:3.11-slim@sha256:ad5dadd957a398226996bc4846e522c39f2a77340b531b28aaab85b2d361210b                0.0s
+ => [base-container  1/12] FROM docker.io/library/python:3.12-slim@sha256:ad5dadd957a398226996bc4846e522c39f2a77340b531b28aaab85b2d3612  3.6s
+ => => resolve docker.io/library/python:3.12-slim@sha256:ad5dadd957a398226996bc4846e523.12f2a77340b531b28aaab85b2d361210b                0.0s
  => => sha256:10f461201cdbe84a59218caa9976c7a294128bef510ddb598cec9f50b5e55f04 6.89kB / 6.89kB                                           0.0s
  => => sha256:e4fff0779e6ddd22366469f08626c3ab1884b5cbe1719b26da238c95f247b305 29.13MB / 29.13MB                                         1.2s
  => => sha256:d97016d0706d079bfc16658b73e95706493240aab21c350f864b2c5534a5cc54 3.51MB / 3.51MB                                           1.0s

@@ -91,8 +91,8 @@ support image processing:
 tensorflow==2.17.0
 matplotlib==3.9.2
 pyyaml==6.0.2
-dvc[gs]==3.53.2
-bentoml==1.3.7
+dvc[gs]==3.56.0
+bentoml==1.3.9
 pillow==10.4.0
 ```
 
@@ -113,8 +113,8 @@ index 4b8d3d9..d584cca 100644
 @@ -2,3 +2,5 @@ tensorflow==2.17.0
  matplotlib==3.9.2
  pyyaml==6.0.2
- dvc[gs]==3.53.2
-+bentoml==1.3.7
+ dvc[gs]==3.56.0
++bentoml==1.3.9
 +pillow==10.4.0
 ```
 

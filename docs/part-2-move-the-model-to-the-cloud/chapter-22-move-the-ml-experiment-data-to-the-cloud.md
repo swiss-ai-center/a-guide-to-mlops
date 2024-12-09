@@ -316,7 +316,7 @@ Install the DVC Storage plugin for the cloud provider:
     tensorflow==2.17.0
     matplotlib==3.9.2
     pyyaml==6.0.2
-    dvc[gs]==3.53.2
+    dvc[gs]==3.56.0
     ```
 
     Check the differences with Git to validate the changes:
@@ -337,8 +337,8 @@ Install the DVC Storage plugin for the cloud provider:
      tensorflow==2.17.0
      matplotlib==3.9.2
      pyyaml==6.0.2
-    -dvc==3.53.2
-    +dvc[gs]==3.53.2
+    -dvc==3.56.0
+    +dvc[gs]==3.56.0
     ```
 
     Install the dependencies and update the freeze file:
