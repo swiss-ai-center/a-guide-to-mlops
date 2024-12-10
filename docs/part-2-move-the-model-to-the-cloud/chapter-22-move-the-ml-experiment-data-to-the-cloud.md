@@ -456,8 +456,8 @@ hashed and have been uploaded.
 
 === ":simple-googlecloud: Google Cloud"
 
-    Open the [Cloud Storage](https://console.cloud.google.com/storage) on the Google
-    cloud interface and click on your bucket to access the details.
+    Open the [Cloud Storage](https://console.cloud.google.com/storage/browser) on
+    the Google cloud interface and click on your bucket to access the details.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
