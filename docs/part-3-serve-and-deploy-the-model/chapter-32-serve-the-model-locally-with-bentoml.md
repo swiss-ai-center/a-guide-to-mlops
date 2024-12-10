@@ -183,17 +183,17 @@ The output should be similar to this:
 {
   "prediction": "Moon",
   "probabilities": {
-    "Earth": 7.035154793791354e-13,
-    "Jupiter": 0.00007276538963196799,
-    "MakeMake": 0.02092079259455204,
-    "Mars": 0.010689028538763523,
-    "Mercury": 0.023408930748701096,
-    "Moon": 0.9338789582252502,
-    "Neptune": 0.000002209141257480951,
-    "Pluto": 0.0028652558103203773,
-    "Saturn": 1.8474166695123945e-13,
-    "Uranus": 1.9255971039910946e-7,
-    "Venus": 0.008161773905158043
+    "Earth": 1.5809072800854196e-12,
+    "Jupiter": 0.00019006800721399486,
+    "MakeMake": 0.025988487526774406,
+    "Mars": 0.05602957680821419,
+    "Mercury": 0.06992407888174057,
+    "Moon": 0.8260593414306641,
+    "Neptune": 0.000008633615834696684,
+    "Pluto": 0.014808151870965958,
+    "Saturn": 6.161330126652764e-13,
+    "Uranus": 9.311889357377368e-7,
+    "Venus": 0.006990684662014246
   }
 }
 ```
@@ -214,17 +214,17 @@ The output should be similar to this:
 {
   "prediction": "MakeMake",
   "probabilities": {
-    "Earth": 1.7512833494492952e-7,
-    "Jupiter": 0.041287556290626526,
-    "MakeMake": 0.8213532567024231,
-    "Mars": 0.0008790065185166895,
-    "Mercury": 0.05630605295300484,
-    "Moon": 0.07207279652357101,
-    "Neptune": 0.0020877758506685495,
-    "Pluto": 0.001172061893157661,
-    "Saturn": 3.342878756029677e-7,
-    "Uranus": 0.0000021771340925624827,
-    "Venus": 0.004838812164962292
+    "Earth": 3.275762878729438e-7,
+    "Jupiter": 0.07843036204576492,
+    "MakeMake": 0.5988457798957825,
+    "Mars": 0.0052123647183179855,
+    "Mercury": 0.173521026968956,
+    "Moon": 0.12065114825963974,
+    "Neptune": 0.009154518134891987,
+    "Pluto": 0.006169575732201338,
+    "Saturn": 7.211715455923695e-7,
+    "Uranus": 0.0000155931556946598,
+    "Venus": 0.007998582907021046
   }
 }
 ```
@@ -234,7 +234,7 @@ The output should be similar to this:
 Download the following image of Neptune on your computer.
 
 <figure markdown>
-  ![Neptune](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/extra-data/extra_data/TmVwdHVuZV8xNDY.jpg)
+  ![Neptune](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/extra-data/extra_data/TmVwdHVuZV8xNDc.jpg)
 </figure>
 
 Upload it to the `/predict` endpoint and check the prediction.
@@ -246,17 +246,17 @@ predicted Uranus instead!
 {
   "prediction": "Uranus",
   "probabilities": {
-    "Earth": 1.949044925453336e-9,
-    "Jupiter": 0.02630659192800522,
-    "MakeMake": 0.00044166349107399583,
-    "Mars": 0.0023288053926080465,
-    "Mercury": 0.0007231549825519323,
-    "Moon": 0.0012503587640821934,
-    "Neptune": 0.3933066725730896,
-    "Pluto": 0.002935060765594244,
-    "Saturn": 0.0000018027430996880867,
-    "Uranus": 0.5725908279418945,
-    "Venus": 0.00011510706099215895
+    "Earth": 5.58305268683057e-9,
+    "Jupiter": 0.044645022600889206,
+    "MakeMake": 0.0007660466944798827,
+    "Mars": 0.002677031559869647,
+    "Mercury": 0.0006953442352823913,
+    "Moon": 0.0018753453623503447,
+    "Neptune": 0.3948681056499481,
+    "Pluto": 0.004337918013334274,
+    "Saturn": 0.0000032214618386205984,
+    "Uranus": 0.5497848987579346,
+    "Venus": 0.0003470888768788427
   }
 }
 ```
