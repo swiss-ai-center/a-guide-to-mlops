@@ -364,7 +364,7 @@ Commit the changes to the local Git repository:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
-git commit -m "My ML experiment commands are saved with DVC"
+git commit -m "Use DVC to save the commands of my ML experiment"
 ```
 
 This chapter is done, you can check the summary.

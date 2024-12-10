@@ -443,7 +443,7 @@ DVC as well.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
-git commit -m "My ML experiment data is shared with DVC"
+git commit -m "Use DVC to share my ML experiment data"
 
 # Push the changes
 git push

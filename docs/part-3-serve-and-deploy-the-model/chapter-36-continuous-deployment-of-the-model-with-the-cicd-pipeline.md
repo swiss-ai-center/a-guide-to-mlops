@@ -729,7 +729,7 @@ Push the CI/CD pipeline configuration file to Git.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
-git commit -m "A pipeline will deploy the model on the Kubernetes cluster"
+git commit -m "Use the pipeline to deploy the model on the Kubernetes cluster"
 
 # Push the changes
 git push

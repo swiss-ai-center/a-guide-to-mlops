@@ -668,7 +668,7 @@ Commit the changes to DVC and Git:
 dvc push
 
 # Commit the changes
-git commit -m "BentoML can save and load the model"
+git commit -m "Use BentoML ton save and load the model"
 
 # Push the changes
 git push

@@ -630,7 +630,7 @@ Commit the changes to Git.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
-git commit -m "A pipeline will containerize the model artifact and publish it on the model registry"
+git commit -m "Use the pipeline to containerize and publish the model artifact to the model registry"
 
 # Push the changes
 git push

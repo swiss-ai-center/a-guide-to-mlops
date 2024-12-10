@@ -232,7 +232,7 @@ Push the changes to the remote repository.
 dvc push
 
 # Commit the changes
-git commit -m "Made some changes to the model"
+git commit -m "Make some changes to the model"
 
 # Push the changes
 git push

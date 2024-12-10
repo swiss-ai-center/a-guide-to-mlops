@@ -181,7 +181,7 @@ dvc push
 git add .
 
 # Commit the changes
-git commit -m "Update the data"
+git commit -m "Update the experiment data"
 
 # Push the changes
 git push

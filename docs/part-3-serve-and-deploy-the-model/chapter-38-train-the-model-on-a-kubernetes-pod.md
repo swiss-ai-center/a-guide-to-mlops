@@ -727,8 +727,7 @@ Push the CI/CD pipeline configuration file to Git.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
-git commit -m "A pipeline will run my experiment on a specialized Kubernetes pod
-on each push"
+git commit -m "Use the pipeline to run my experiment on a specialized Kubernetes pod on each push"
 
 # Push the changes
 git push

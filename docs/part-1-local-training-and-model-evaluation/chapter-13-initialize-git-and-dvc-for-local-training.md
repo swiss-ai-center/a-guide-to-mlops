@@ -184,7 +184,7 @@ Commit the changes to Git:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
-git commit -m "My first ML experiment versioned with Git"
+git commit -m "Use Git to version my ML experiment"
 ```
 
 ### Create a DVC repository
@@ -389,7 +389,7 @@ changes as well.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
-git commit -m "My first ML experiment data versioned with DVC"
+git commit -m "Use DVC to version the data in my ML experiment"
 ```
 
 This chapter is done, you can check the summary.
