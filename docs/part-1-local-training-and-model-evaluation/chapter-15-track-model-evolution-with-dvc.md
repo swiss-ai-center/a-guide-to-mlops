@@ -259,7 +259,7 @@ Commit the changes to the local Git repository:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
-git commit -m "My ML experiment changes are tracked"
+git commit -m "Track changes of my ML experiment"
 ```
 
 This chapter is done, you can check the summary.

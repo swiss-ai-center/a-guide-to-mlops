@@ -238,7 +238,7 @@ container registry. The following steps will be performed:
             if: github.event_name == 'pull_request'
             uses: iterative/setup-cml@v2
             with:
-              version: '0.20.0'
+              version: '0.20.6'
           - name: Create CML report
             if: github.event_name == 'pull_request'
             env:
@@ -630,7 +630,7 @@ Commit the changes to Git.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
-git commit -m "A pipeline will containerize the model on the model artifact"
+git commit -m "Use the pipeline to containerize and publish the model artifact to the model registry"
 
 # Push the changes
 git push

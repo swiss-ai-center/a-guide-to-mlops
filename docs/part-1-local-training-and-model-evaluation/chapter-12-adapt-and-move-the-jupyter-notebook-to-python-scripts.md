@@ -128,8 +128,8 @@ source .venv/bin/activate
 Create a `requirements.txt` file to list the dependencies:
 
 ```txt title="requirements.txt"
-tensorflow==2.17.0
-matplotlib==3.9.2
+tensorflow==2.17.1
+matplotlib==3.9.3
 pyyaml==6.0.2
 ```
 

@@ -242,7 +242,7 @@ following steps will be performed:
             if: github.event_name == 'pull_request'
             uses: iterative/setup-cml@v2
             with:
-              version: '0.20.0'
+              version: '0.20.6'
           - name: Create CML report
             if: github.event_name == 'pull_request'
             env:
@@ -729,7 +729,7 @@ Push the CI/CD pipeline configuration file to Git.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
-git commit -m "A pipeline will deploy the model on the Kubernetes cluster"
+git commit -m "Use the pipeline to deploy the model on the Kubernetes cluster"
 
 # Push the changes
 git push

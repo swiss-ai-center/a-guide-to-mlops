@@ -313,10 +313,10 @@ Install the DVC Storage plugin for the cloud provider:
     `requirements.txt` file:
 
     ```txt title="requirements.txt" hl_lines="4"
-    tensorflow==2.17.0
-    matplotlib==3.9.2
+    tensorflow==2.17.1
+    matplotlib==3.9.3
     pyyaml==6.0.2
-    dvc[gs]==3.56.0
+    dvc[gs]==3.58.0
     ```
 
     Check the differences with Git to validate the changes:
@@ -334,11 +334,11 @@ Install the DVC Storage plugin for the cloud provider:
     --- a/requirements.txt
     +++ b/requirements.txt
     @@ -1,4 +1,4 @@
-     tensorflow==2.17.0
-     matplotlib==3.9.2
+     tensorflow==2.17.1
+     matplotlib==3.9.3
      pyyaml==6.0.2
-    -dvc==3.56.0
-    +dvc[gs]==3.56.0
+    -dvc==3.58.0
+    +dvc[gs]==3.58.0
     ```
 
     Install the dependencies and update the freeze file:
@@ -443,7 +443,7 @@ DVC as well.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
-git commit -m "My ML experiment data is shared with DVC"
+git commit -m "Use DVC to share my ML experiment data"
 
 # Push the changes
 git push
@@ -456,8 +456,8 @@ hashed and have been uploaded.
 
 === ":simple-googlecloud: Google Cloud"
 
-    Open the [Cloud Storage](https://console.cloud.google.com/storage) on the Google
-    cloud interface and click on your bucket to access the details.
+    Open the [Cloud Storage](https://console.cloud.google.com/storage/browser) on
+    the Google cloud interface and click on your bucket to access the details.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 

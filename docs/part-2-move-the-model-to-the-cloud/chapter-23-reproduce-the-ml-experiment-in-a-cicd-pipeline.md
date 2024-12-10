@@ -334,7 +334,7 @@ be different:
     git add .github/workflows/mlops.yaml
 
     # Commit the changes
-    git commit -m "A pipeline will run my experiment on each push"
+    git commit -m "Use a pipeline to run my experiment on each push"
 
     # Push the changes
     git push
@@ -349,7 +349,7 @@ be different:
     git add .gitlab-ci.yml
 
     # Commit the changes
-    git commit -m "A pipeline will run my experiment on each push"
+    git commit -m "Use a pipeline to run my experiment on each push"
 
     # Push the changes
     git push

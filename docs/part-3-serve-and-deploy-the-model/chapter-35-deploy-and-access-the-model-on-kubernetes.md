@@ -452,7 +452,7 @@ Commit the changes to Git.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
-git commit -m "Kubernetes can be used to deploy the model"
+git commit -m "Use Kubernetes to deploy the model"
 
 # Push the changes
 git push

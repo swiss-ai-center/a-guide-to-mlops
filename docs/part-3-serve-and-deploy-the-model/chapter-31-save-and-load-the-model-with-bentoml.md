@@ -88,12 +88,12 @@ Add the `bentoml` package to install BentoML support. `pillow` is also added to
 support image processing:
 
 ```txt title="requirements.txt" hl_lines="5-6"
-tensorflow==2.17.0
-matplotlib==3.9.2
+tensorflow==2.17.1
+matplotlib==3.9.3
 pyyaml==6.0.2
-dvc[gs]==3.56.0
-bentoml==1.3.9
-pillow==10.4.0
+dvc[gs]==3.58.0
+bentoml==1.3.15
+pillow==11.0.0
 ```
 
 Check the differences with Git to validate the changes:
@@ -110,12 +110,12 @@ diff --git a/requirements.txt b/requirements.txt
 index 4b8d3d9..d584cca 100644
 --- a/requirements.txt
 +++ b/requirements.txt
-@@ -2,3 +2,5 @@ tensorflow==2.17.0
- matplotlib==3.9.2
+@@ -2,3 +2,5 @@ tensorflow==2.17.1
+ matplotlib==3.9.3
  pyyaml==6.0.2
- dvc[gs]==3.56.0
-+bentoml==1.3.9
-+pillow==10.4.0
+ dvc[gs]==3.58.0
++bentoml==1.3.15
++pillow==11.0.0
 ```
 
 Install the package and update the freeze file.
@@ -631,7 +631,7 @@ The output should look like this:
 
 ```text
  Tag                                                 Module                   Size      Creation Time
- celestial_bodies_classifier_model:pdpajhwlcojiflg6  bentoml.keras            9.53 MiB  2024-02-14 09:31:38
+ celestial_bodies_classifier_model:o2bgmsfw3cov4aav  bentoml.keras  9.43 MiB  2024-12-10 10:23:48
 ```
 
 ### Check the changes
@@ -668,7 +668,7 @@ Commit the changes to DVC and Git:
 dvc push
 
 # Commit the changes
-git commit -m "BentoML can save and load the model"
+git commit -m "Use BentoML ton save and load the model"
 
 # Push the changes
 git push
