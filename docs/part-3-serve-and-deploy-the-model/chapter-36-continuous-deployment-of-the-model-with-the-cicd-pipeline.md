@@ -242,7 +242,7 @@ following steps will be performed:
             if: github.event_name == 'pull_request'
             uses: iterative/setup-cml@v2
             with:
-              version: '0.20.0'
+              version: '0.20.6'
           - name: Create CML report
             if: github.event_name == 'pull_request'
             env:

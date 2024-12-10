@@ -462,7 +462,7 @@ jobs:
           node-version: 20
       - name: Setup CML
         uses: iterative/setup-cml@v2 with:
-          version: '0.20.0'
+          version: '0.20.6'
       - name: Create CML report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
