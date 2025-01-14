@@ -896,15 +896,14 @@ This chapter is done, you can check the summary.
 
 ## Summary
 
-Congratulations! You now can train your model on on a custom infrastructure with
-custom hardware for specific use-cases.
+Congratulations! You now can train your model on a custom infrastructure.
 
 In this chapter, you have successfully:
 
 1. Created a self-hosted runner Docker container image
 2. Published the containerized runner image to the container registry
 3. Deployed the self-hosted runner on Kubernetes
-4. Trained the model on a specialized pod on the Kubernetes cluster
+4. Trained the model on the Kubernetes cluster
 
 ## State of the MLOps process
 
