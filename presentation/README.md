@@ -10,7 +10,7 @@ author: Swiss AI Center contributors
 title: 'A guide to MLOps - Presentation'
 description: 'Presentation of the MLOps guide'
 url: https://mlops.swiss-ai-center.ch/presentation/
-footer: '**Swiss AI Center** - A guide to MLOps 2024 - CC BY-SA 4.0'
+footer: '**Swiss AI Center** - A guide to MLOps 2025 - CC BY-SA 4.0'
 style: |
     :root {
         --color-background: #080809;
