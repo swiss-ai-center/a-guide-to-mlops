@@ -13,7 +13,7 @@
 You can now train your model on the cluster. However, some experiments may
 require specific hardware to run. For instance, training a deep learning model
 might require a GPU. This GPU could be shared among multiple teams for different
-purposes, so it is important to avoid monopolizong its use.
+purposes, so it is important to avoid monopolizing its use.
 
 In such situation, you can use a specialized Kubernetes pod for on-demand model
 training.
@@ -789,6 +789,57 @@ git commit -m "Use the pipeline to run my experiment on a specialized Kubernetes
 git push
 ```
 
+### Try it out one final time
+
+Finally, try to update some parameters of your model to test the training on the
+kubernetes specilized pod.
+
+Similarly to what you have done in
+[Chapter 2.5: Work efficiently and collaboratively with Git](../part-2-move-the-model-to-the-cloud/chapter-25-work-efficiently-and-collaboratively-with-git.md),
+create an issue **Demonstrate model training on kubernetes pod** and a new
+branch for the issue.
+
+On your machine, check out the new branch.
+
+Update your experiment by editing for example the `params.yaml` file with the
+following parameters:
+
+```yaml title="params.yaml" hl_lines="10"
+prepare:
+  seed: 77
+  split: 0.2
+  image_size: [32, 32]
+  grayscale: True
+
+train:
+  seed: 77
+  lr: 0.001
+  epochs: 20
+  conv_size: 64
+  dense_size: 128
+  output_classes: 11
+```
+
+You can now commit and push the above changes to trigger a change on the remote
+repository.
+
+This time, **do not** execute `dvc repro` locally but let the cluster pod handle
+the job for you. Push the changes to the remote repository.
+
+```sh title="Execute the following command(s) in a terminal"
+# Add all the files
+git add .
+
+# Check the status
+git status
+
+# Commit the changes
+git commit -m "Make some changes to the model"
+
+# Push the changes
+git push
+```
+
 ### Check the results
 
 On GitHub, you can see the pipeline running on the **Actions** page.
@@ -800,10 +851,10 @@ The pod should be created on the Kubernetes Cluster.
 === ":simple-googlecloud: Google Cloud"
 
     On Google Cloud Console, you can see the pod that has been created on the
-    **Kubernetes Engine > Workloads** page. Open the pod and go to the **YAML** tab
-    to see the configuration of the pod. You should notice that the pod has been
-    created with the node selector `gpu=true` and that it has been created on the
-    right node.
+    [Kubernetes Engine Workloads](https://console.cloud.google.com/kubernetes/workload/)
+    page. Open the pod and go to the **YAML** tab to see the configuration of the
+    pod. You should notice that the pod has been created with the node selector
+    `gpu=true` and that it has been created on the right node.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
@@ -819,6 +870,15 @@ The pod should be created on the Kubernetes Cluster.
     [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
     help is greatly appreciated!
 
+Go back to your GitHub repository.
+
+* Create a pull request and visualize the execution of the CI/CD pipeline. The
+  `train-report` job will run on the self-hosted runner. It trains the model and
+  DVC pushes the trained model to the remote bucket.
+* Merge the pull request/merge request, and switch back to the main branch and
+  pull the latest changes. The `publish-and-deploy` will run on the main runner.
+  It retrieves the model with DVC, containerizes then deploys the model artifact.
+
 This chapter is done, you can check the summary.
 
 ## Summary
@@ -829,7 +889,7 @@ custom hardware for specific use-cases.
 In this chapter, you have successfully:
 
 1. Set up an specialized on-demand runner on a pod in Kubernetes
-2. Trained the model on a specialized pod on the Kubernetes cluster
+2. Trained the model on the specialized pod on the Kubernetes cluster
 
 ### Destroy the Kubernetes cluster
 
