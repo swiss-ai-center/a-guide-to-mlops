@@ -23,7 +23,7 @@ What you will learn from this guide.
     - [Chapter 3.1 - Save and load the model with BentoML](./part-3-serve-and-deploy-the-model/chapter-31-save-and-load-the-model-with-bentoml.md)
     - [Chapter 3.2 - Serve the model locally with BentoML](./part-3-serve-and-deploy-the-model/chapter-32-serve-the-model-locally-with-bentoml.md)
     - [Chapter 3.3 - Build and publish the model with BentoML and Docker](./part-3-serve-and-deploy-the-model/chapter-33-build-and-publish-the-model-with-bentoml-and-docker-locally.md)
-    - [Chapter 3.4 - Build and publish the model with BentoML and Docker](./part-3-serve-and-deploy-the-model/chapter-34-build-and-publish-the-model-with-bentoml-and-docker-with-the-cicd-pipeline.md)
+    - [Chapter 3.4 - Build and publish the model with BentoML and Docker in the CI/CD pipeline](./part-3-serve-and-deploy-the-model/chapter-34-build-and-publish-the-model-with-bentoml-and-docker-with-the-cicd-pipeline.md)
     - [Chapter 3.5 - Deploy and access the model on Kubernetes](./part-3-serve-and-deploy-the-model/chapter-35-deploy-and-access-the-model-on-kubernetes.md)
     - [Chapter 3.6 - Continuous deployment of the model with the CI/CD pipeline](./part-3-serve-and-deploy-the-model/chapter-36-continuous-deployment-of-the-model-with-the-cicd-pipeline.md)
     - [Chapter 3.7 - Use a self-hosted runner for the CI/CD pipeline](./part-3-serve-and-deploy-the-model/chapter-37-use-a-self-hosted-runner-for-the-cicd-pipeline.md)
