@@ -43,7 +43,7 @@ nav:
       - "Clean up": part-3-serve-and-deploy-the-model/clean-up.md
   - 🏷️ Labeling the data and retrain:
       - "Introduction": part-4-labeling-the-data-and-retrain/introduction.md
-      - "Chapter 4.1 - Setup Label Studio": part-4-labeling-the-data-and-retrain/chapter-41-setup-label-studio.md
+      - "Chapter 4.1 - Set up Label Studio": part-4-labeling-the-data-and-retrain/chapter-41-set-up-label-studio.md
       - "Chapter 4.2 - Label new data with Label Studio": part-4-labeling-the-data-and-retrain/chapter-42-label-new-data-with-label-studio.md
       - "Chapter 4.3 - Link the model to Label Studio": part-4-labeling-the-data-and-retrain/chapter-43-link-the-model-to-label-studio.md
       - "Chapter 4.4 - Retrain the model from new data with DVC": part-4-labeling-the-data-and-retrain/chapter-44-retrain-the-model-from-new-data-with-dvc.md
