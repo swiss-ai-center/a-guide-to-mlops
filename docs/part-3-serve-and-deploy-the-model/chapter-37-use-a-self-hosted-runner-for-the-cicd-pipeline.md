@@ -875,8 +875,9 @@ On GitLab, you can see the pipeline running on the **CI/CD > Pipelines** page.
 
 === ":simple-googlecloud: Google Cloud"
 
-    On Google Cloud Console, you can see that the self-hosted runner has been
-    created on the **Kubernetes Engine > Workloads** page.
+    On Google Cloud Console, you can see the pod that has been created on the
+    [Kubernetes Engine Workloads](https://console.cloud.google.com/kubernetes/workload/)
+    page.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
@@ -892,19 +893,21 @@ On GitLab, you can see the pipeline running on the **CI/CD > Pipelines** page.
     [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
     help is greatly appreciated!
 
+Before starting the entire model training from your CI/CD pipeline one final
+time, we will update the workflow to include another important element: a
+specialized Kubernetes pod for on-demand model training.
+
 This chapter is done, you can check the summary.
 
 ## Summary
 
-Congratulations! You now can train your model on on a custom infrastructure with
-custom hardware for specific use-cases.
+Congratulations! You now can train your model on a custom infrastructure.
 
 In this chapter, you have successfully:
 
 1. Created a self-hosted runner Docker container image
 2. Published the containerized runner image to the container registry
 3. Deployed the self-hosted runner on Kubernetes
-4. Trained the model on a specialized pod on the Kubernetes cluster
 
 ## State of the MLOps process
 

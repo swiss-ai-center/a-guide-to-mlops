@@ -217,7 +217,7 @@ The output of the `git status` command should be similar to this.
 
 ```text
 On branch 1-demonstrate-model-evolution-tracking
-Your branch is up to date with 'cml-report'.
+Your branch is up to date with 'origin/main'.
 
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
