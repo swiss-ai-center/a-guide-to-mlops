@@ -419,19 +419,23 @@ Models are hard to share and deploy in production.
 
 ![bg right:40% w:60%](./images/kubernetes-logo.svg)
 
-### Labellisation (1/2)
+### Labeling (1/2)
 
 **Current situation**
 
-TODO
+-   Model code and parameters are optimized
+-   Model's performances is as good as the quality of the current data
+-   We need new data to improve the model's performances
 
 ![bg right:40%](#)
 
-### Labellisation (2/2)
+### Labeling (2/2)
 
 **What we are trying to improve**
 
-TODO
+-   Labeling new data to further improve the model's performance
+-   Use new data to retrain and improve the model
+-   Make use of AI inference to speed up the labeling process
 
 ![bg right:40% w:60%](./images/label-studio-logo.svg)
 
