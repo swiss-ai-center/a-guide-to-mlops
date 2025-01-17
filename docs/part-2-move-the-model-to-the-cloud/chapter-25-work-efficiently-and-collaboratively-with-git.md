@@ -280,7 +280,7 @@ git push
 
     When the CI/CD pipeline completes, a new comment is added to your pull request.
     Check the pull request and examine the report published by CML. As it uses the
-    evaluation data that was pulled from DVC, it can uses it to display all the
+    evaluation data that was pulled from DVC, it can use it to display all the
     plots.
 
     <div style="display: flex" markdown>
