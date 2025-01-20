@@ -194,7 +194,7 @@ Follow the steps below to create one.
     ```
 
     Create the Kubernetes cluster. You can also view the available types of machine
-    with the `gcloud compute machine-types list` command:
+    with the `gcloud compute machine-types list` command.
 
     !!! info
 
