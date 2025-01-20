@@ -161,7 +161,14 @@ container image that incorporates the
 [GitHub Actions runner](https://github.com/actions/runner) along with the
 workflow files and all its necessary dependencies.
 
-Replace `<my_repository_url>` with your own git repository URL.
+Replace `<my_repository_url>` with your own git repository URL, for example
+`https://github.com/<my_username>/<my_repository_name>`.
+
+??? warning "Using uppercase letters in your username or repository name? Read this!"
+
+    Docker requires the use of only lowercase characters for the image label. If you
+    have uppercase letters in your username or repository name, simply convert them
+    to lowercase.
 
 ```yaml title="docker/Dockerfile" hl_lines="6"
 FROM ubuntu:22.04
@@ -279,6 +286,12 @@ command. Make sure to adjust the `my_username` and `my_repository_name`
 variables in the tag of the Docker image to match your own your own GitHub
 username and repository name.
 
+??? warning "Using uppercase letters in your username or repository name? Read this!"
+
+    Docker requires the use of only lowercase characters for the image tag. If you
+    have uppercase letters in your username or repository name, simply convert them
+    to lowercase.
+
 ```sh title="Execute the following command(s) in a terminal"
 docker build --platform=linux/amd64 --tag ghcr.io/<my_username>/<my_repository_name>/github-runner:latest .
 ```
@@ -323,6 +336,12 @@ The output should be similar to this:
 ```
 
 Push the docker image to the GitHub Container Registry:
+
+??? warning "Using uppercase letters in your username or repository name? Read this!"
+
+    Docker requires the use of only lowercase characters for the image tag. If you
+    have uppercase letters in your username or repository name, simply convert them
+    to lowercase.
 
 ```sh title="Execute the following command(s) in a terminal"
 docker push ghcr.io/<my_username>/<my_repository_name>/github-runner:latest
