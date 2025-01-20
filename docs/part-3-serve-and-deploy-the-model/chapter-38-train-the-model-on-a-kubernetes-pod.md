@@ -354,6 +354,13 @@ gcloud container clusters get-credentials $GCP_K8S_CLUSTER_NAME --zone $GCP_K8S_
 This updates the kubeconfig file (`~/.kube/config`) used by `kubectl` with the
 necessary information to connect to your Google Cloud Kubernetes cluster.
 
+Display the content of the `~/.kube/config` file:
+
+```sh title="Execute the following command(s) in a terminal"
+# Display the kubeconfig file
+cat ~/.kube/config
+```
+
 The relevant section of the kubeconfig file will look something like this:
 
 ```yaml title="~/.kube/config"
@@ -404,8 +411,8 @@ different:
         top header of your GitHub repository. Select **Secrets and variables > Actions**
         and select **New repository secret**:
 
-        - `GCP_K8S_KUBECONFIG`: The content of the kubeconfig file of the Kubernetes
-          cluster.
+        - `GCP_K8S_KUBECONFIG`: The content of the `~/.kube/config` file of the
+          Kubernetes cluster.
 
         Save the variables by selecting **Add secret**.
 
