@@ -200,7 +200,16 @@ configuration to prevent it from using the GPU-enabled node, as this is not
 required for its purpose. This change will also help keep the hardware resources
 available for the training job.
 
-```txt title="kubernetes/runner.yaml" hl_lines="28-29"
+Replace also `<my_username>` and `<my_repository_name>` with your own GitHub
+username and repository name.
+
+??? warning "Using uppercase letters in your username or repository name? Read this!"
+
+    Docker requires the use of only lowercase characters for the image tag. If you
+    have uppercase letters in your username or repository name, simply convert them
+    to lowercase.
+
+```txt title="kubernetes/runner.yaml" hl_lines="10 28-29"
 apiVersion: v1
 kind: Pod
 metadata:
@@ -281,7 +290,13 @@ Create a new file called `runner-gpu.yaml` in the `kubernetes` directory with
 the following content. Replace `<my_username>` and `<my_repository_name>` with
 your own GitHub username and repository name.
 
-```txt title="kubernetes/runner-gpu.yaml"
+??? warning "Using uppercase letters in your username or repository name? Read this!"
+
+    Docker requires the use of only lowercase characters for the image tag. If you
+    have uppercase letters in your username or repository name, simply convert them
+    to lowercase.
+
+```txt title="kubernetes/runner-gpu.yaml" hl_lines="15"
 apiVersion: v1
 kind: Pod
 metadata:
@@ -339,9 +354,16 @@ gcloud container clusters get-credentials $GCP_K8S_CLUSTER_NAME --zone $GCP_K8S_
 This updates the kubeconfig file (`~/.kube/config`) used by `kubectl` with the
 necessary information to connect to your Google Cloud Kubernetes cluster.
 
+Display the content of the `~/.kube/config` file:
+
+```sh title="Execute the following command(s) in a terminal"
+# Display the kubeconfig file
+cat ~/.kube/config
+```
+
 The relevant section of the kubeconfig file will look something like this:
 
-```yaml title=".kube/config"
+```yaml title="~/.kube/config"
 apiVersion: v1
 clusters:
 - cluster:
@@ -389,8 +411,8 @@ different:
         top header of your GitHub repository. Select **Secrets and variables > Actions**
         and select **New repository secret**:
 
-        - `GCP_K8S_KUBECONFIG`: The content of the kubeconfig file of the Kubernetes
-          cluster.
+        - `GCP_K8S_KUBECONFIG`: The content of the `~/.kube/config` file of the
+          Kubernetes cluster.
 
         Save the variables by selecting **Add secret**.
 

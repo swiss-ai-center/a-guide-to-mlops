@@ -172,7 +172,7 @@ be different:
         Google Cloud as `base64`. It allows to hide the secret in GitLab CI logs as a
         security measure.
 
-        === ":simple-linux: Linux and :fontawesome-brands-windows: Windows"
+        === ":simple-linux: Linux"
 
             ```sh title="Execute the following command(s) in a terminal"
             # Encode the Google Service Account key to base64

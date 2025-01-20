@@ -161,9 +161,16 @@ container image that incorporates the
 [GitHub Actions runner](https://github.com/actions/runner) along with the
 workflow files and all its necessary dependencies.
 
-Replace `<my_repository_url>` with your own git repository URL.
+Replace `<my_repository_url>` with your own git repository URL, for example
+`https://github.com/<my_username>/<my_repository_name>`.
 
-```yaml title="docker/Dockerfile"
+??? warning "Using uppercase letters in your username or repository name? Read this!"
+
+    Docker requires the use of only lowercase characters for the image label. If you
+    have uppercase letters in your username or repository name, simply convert them
+    to lowercase.
+
+```yaml title="docker/Dockerfile" hl_lines="6"
 FROM ubuntu:22.04
 
 ENV RUNNER_VERSION=2.321.0
@@ -208,7 +215,7 @@ from the image.
 Since we use the GitHub Container Registry, replace `<my_username>` and
 `<my_repository_name>` with your own GitHub username and repository name.
 
-```yaml title="docker/startup.sh"
+```yaml title="docker/startup.sh" hl_lines="5-6"
 #!/bin/bash
 
 set -e  # Exit on error
@@ -279,6 +286,12 @@ command. Make sure to adjust the `my_username` and `my_repository_name`
 variables in the tag of the Docker image to match your own your own GitHub
 username and repository name.
 
+??? warning "Using uppercase letters in your username or repository name? Read this!"
+
+    Docker requires the use of only lowercase characters for the image tag. If you
+    have uppercase letters in your username or repository name, simply convert them
+    to lowercase.
+
 ```sh title="Execute the following command(s) in a terminal"
 docker build --platform=linux/amd64 --tag ghcr.io/<my_username>/<my_repository_name>/github-runner:latest .
 ```
@@ -324,6 +337,12 @@ The output should be similar to this:
 
 Push the docker image to the GitHub Container Registry:
 
+??? warning "Using uppercase letters in your username or repository name? Read this!"
+
+    Docker requires the use of only lowercase characters for the image tag. If you
+    have uppercase letters in your username or repository name, simply convert them
+    to lowercase.
+
 ```sh title="Execute the following command(s) in a terminal"
 docker push ghcr.io/<my_username>/<my_repository_name>/github-runner:latest
 ```
@@ -353,9 +372,16 @@ responsible.
 
 To mitigate these risks, it is advisable to secure your runner by disabling
 workflow triggers by forks. In the repository, go to
-**Settings > Actions > General**. In the **Fork pull request workflows**
-section, ensure the **Run workflows from fork pull requests** checkbox is
-disabled and click on **Save**.
+**Settings > Actions > General**.
+
+* If your repository is **public**: In the
+  **Approval for running fork pull request workflows from contributors** section,
+  ensure the **Require approval for all external contributors** option is selected
+  and click on **Save**.
+
+* If your repository is **private**: In the **Fork pull request workflows**
+  section, ensure the **Run workflows from fork pull requests** checkbox is
+  disabled and click on **Save**.
 
 !!! danger
 
@@ -384,7 +410,7 @@ Create a new file called `runner.yaml` in the `kubernetes` directory with the
 following content. Replace also `<my_username>` and `<my_repository_name>` with
 your own GitHub username and repository name.
 
-```txt title="kubernetes/runner.yaml"
+```txt title="kubernetes/runner.yaml" hl_lines="10"
 apiVersion: v1
 kind: Pod
 metadata:

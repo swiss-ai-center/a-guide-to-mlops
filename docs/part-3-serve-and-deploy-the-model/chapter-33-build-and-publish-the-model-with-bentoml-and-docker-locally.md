@@ -397,13 +397,23 @@ for an efficient models management.
 
     Press ++y++ to validate the changes.
 
-    Export the container registry host:
+    Ensure your `GCP_PROJECT_ID` variable is still correctly exported:
 
     ```sh title="Execute the following command(s) in a terminal"
-    export GCP_CONTAINER_REGISTRY_HOST=${GCP_CONTAINER_REGISTRY_LOCATION}-docker.pkg.dev/${GCP_PROJECT_ID}/${GCP_CONTAINER_REGISTRY_NAME}
+    # Check the exported project ID
+    echo $GCP_PROJECT_ID
     ```
 
-    !!! tip
+    The output should be similar to this:
+
+    ```text
+    mlops-<surname>-project
+    ```
+
+    ??? tip "Is the `GCP_PROJECT_ID` variable empty? Read this!"
+
+        If the `GCP_PROJECT_ID` variable is empty, you need to export your Google Cloud
+        Project ID again.
 
         To get the ID of your project, you can use the Google Cloud CLI.
 
@@ -419,12 +429,19 @@ for an efficient models management.
         mlops-surname-project  mlops-surname-project  123456789012
         ```
 
-        Copy the `PROJECT_ID` and export it as an environment variable. Replace
-        `<my_project_id>` with your own project ID:
+        Ensure to copy the `PROJECT_ID` value (**not** the `PROJECT_NUMBER` value) and
+        export it as an environment variable. Replace `<my_project_id>` with your own
+        project ID:
 
         ```sh title="Execute the following command(s) in a terminal"
         export GCP_PROJECT_ID=<my_project_id>
         ```
+
+    Export the container registry host:
+
+    ```sh title="Execute the following command(s) in a terminal"
+    export GCP_CONTAINER_REGISTRY_HOST=${GCP_CONTAINER_REGISTRY_LOCATION}-docker.pkg.dev/${GCP_PROJECT_ID}/${GCP_CONTAINER_REGISTRY_NAME}
+    ```
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
