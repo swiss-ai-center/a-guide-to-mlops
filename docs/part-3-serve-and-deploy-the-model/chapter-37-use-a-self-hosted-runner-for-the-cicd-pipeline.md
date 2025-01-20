@@ -372,9 +372,16 @@ responsible.
 
 To mitigate these risks, it is advisable to secure your runner by disabling
 workflow triggers by forks. In the repository, go to
-**Settings > Actions > General**. In the **Fork pull request workflows**
-section, ensure the **Run workflows from fork pull requests** checkbox is
-disabled and click on **Save**.
+**Settings > Actions > General**.
+
+* If your repository is **public**: In the
+  **Approval for running fork pull request workflows from contributors** section,
+  ensure the **Require approval for all external contributors** option is selected
+  and click on **Save**.
+
+* If your repository is **private**: In the **Fork pull request workflows**
+  section, ensure the **Run workflows from fork pull requests** checkbox is
+  disabled and click on **Save**.
 
 !!! danger
 
