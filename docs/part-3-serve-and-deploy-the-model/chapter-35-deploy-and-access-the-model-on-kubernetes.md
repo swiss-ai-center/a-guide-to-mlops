@@ -281,7 +281,7 @@ created in the previous steps:
     echo $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest
     ```
 
-```yaml title="kubernetes/deployment.yaml"
+```yaml title="kubernetes/deployment.yaml" hl_lines="19"
 apiVersion: apps/v1
 kind: Deployment
 metadata:

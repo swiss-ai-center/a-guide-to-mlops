@@ -200,7 +200,10 @@ configuration to prevent it from using the GPU-enabled node, as this is not
 required for its purpose. This change will also help keep the hardware resources
 available for the training job.
 
-```txt title="kubernetes/runner.yaml" hl_lines="28-29"
+Replace also `<my_username>` and `<my_repository_name>` with your own GitHub
+username and repository name.
+
+```txt title="kubernetes/runner.yaml" hl_lines="10 28-29"
 apiVersion: v1
 kind: Pod
 metadata:
@@ -281,7 +284,7 @@ Create a new file called `runner-gpu.yaml` in the `kubernetes` directory with
 the following content. Replace `<my_username>` and `<my_repository_name>` with
 your own GitHub username and repository name.
 
-```txt title="kubernetes/runner-gpu.yaml"
+```txt title="kubernetes/runner-gpu.yaml" hl_lines="15"
 apiVersion: v1
 kind: Pod
 metadata:
@@ -341,7 +344,7 @@ necessary information to connect to your Google Cloud Kubernetes cluster.
 
 The relevant section of the kubeconfig file will look something like this:
 
-```yaml title=".kube/config"
+```yaml title="~/.kube/config"
 apiVersion: v1
 clusters:
 - cluster:

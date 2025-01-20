@@ -163,7 +163,7 @@ workflow files and all its necessary dependencies.
 
 Replace `<my_repository_url>` with your own git repository URL.
 
-```yaml title="docker/Dockerfile"
+```yaml title="docker/Dockerfile" hl_lines="6"
 FROM ubuntu:22.04
 
 ENV RUNNER_VERSION=2.321.0
@@ -208,7 +208,7 @@ from the image.
 Since we use the GitHub Container Registry, replace `<my_username>` and
 `<my_repository_name>` with your own GitHub username and repository name.
 
-```yaml title="docker/startup.sh"
+```yaml title="docker/startup.sh" hl_lines="5-6"
 #!/bin/bash
 
 set -e  # Exit on error
@@ -384,7 +384,7 @@ Create a new file called `runner.yaml` in the `kubernetes` directory with the
 following content. Replace also `<my_username>` and `<my_repository_name>` with
 your own GitHub username and repository name.
 
-```txt title="kubernetes/runner.yaml"
+```txt title="kubernetes/runner.yaml" hl_lines="10"
 apiVersion: v1
 kind: Pod
 metadata:
