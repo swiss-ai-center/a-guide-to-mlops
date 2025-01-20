@@ -91,9 +91,28 @@ example, choose `mlops-guide` as repository name.
 
 ## Configure Git for the remote branch
 
-Add the remote origin to your repository. Replace `<my_git_repository_url>` with
-the URL of your Git repository. Your Git service should provide these
-instructions as well:
+Using the SSH protocol, you can connect and authenticate to your Git service
+provider without supplying your username and personal access token each time
+your want to share your changes.
+
+=== ":simple-github: GitHub"
+
+    Generate a SSH key pair and configure your SSH access using
+    [Connecting to GitHub with SSH](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/about-ssh).
+
+    Add the remote origin to your Git repository using SSH. For example, replace
+    `<my_git_repository_url>` with
+    `git@github.com:<my_username>/<my_repository_name>.git`.
+
+=== ":simple-gitlab: GitLab"
+
+    Generate a SSH key pair and configure your SSH access using
+    [Use SSH keys to communicate with GitLab](https://docs.gitlab.com/ee/user/ssh.html).
+
+    Add the remote origin to your Git repository using SSH. For example, replace
+    `<my_git_repository_url>` with
+    `git@gitlab.com:<my_username>/<my_repository_name>.git`.
+
 
 ```sh title="Execute the following command(s) in a terminal"
 # Add the remote origin
