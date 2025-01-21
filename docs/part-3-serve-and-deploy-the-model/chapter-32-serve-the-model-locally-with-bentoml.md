@@ -2,10 +2,10 @@
 
 ## Introduction
 
-Now that the model is using [BentoML](../tools.md), enabling the extraction of
-metadata upon saving, you will serve the model with the help of
-[FastAPI](https://fastapi.tiangolo.com/) to create local endpoints for
-interacting with the model.
+Now that the model is using [:simple-bentoml: BentoML](../tools.md), enabling
+the extraction of metadata upon saving, you will serve the model with the help
+of [:simple-fastapi: FastAPI](https://fastapi.tiangolo.com/) to create local
+endpoints for interacting with the model.
 
 In this chapter, you will learn how to:
 

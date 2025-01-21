@@ -4,8 +4,9 @@
 
 In this chapter, you will containerize and push the model to the container
 registry with the help of the CI/CD pipeline. You will use
-[BentoML](../tools.md) and [Docker](../tools.md) to containerize and publish the
-model and the pipeline to trigger the publishing.
+[:simple-bentoml: BentoML](../tools.md) and
+[:simple-docker: Docker](../tools.md) to containerize and publish the model and
+the pipeline to trigger the publishing.
 
 The steps will be similar to the last chapter, but we will use the pipeline to
 automate the process.
