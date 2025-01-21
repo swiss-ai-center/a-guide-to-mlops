@@ -4,7 +4,8 @@
 
 Serving the model locally is great for testing purposes, but it is not
 sufficient for production. In this chapter, you will learn how to build and
-publish the model with [BentoML](../tools.md) and [Docker](../tools.md).
+publish the model with [:simple-bentoml: BentoML](../tools.md) and
+[:simple-docker: Docker](../tools.md).
 
 This will allow to share the model with others and deploy it on a Kubernetes in
 a later chapter.

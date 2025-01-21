@@ -4,8 +4,9 @@ title: "Part 3 - Introduction"
 
 # Introduction
 
-Learn how to serve and deploy the model using [BentoML](../tools.md) and
-[Docker](../tools.md).
+Learn how to serve and deploy the model using
+[:simple-bentoml: BentoML](../tools.md) and
+[:simple-docker: Docker](../tools.md).
 
 ## Environment
 

@@ -3,8 +3,9 @@
 ## Introduction
 
 The purpose of this chapter is to serve and use the model for usage outside of
-the experiment context with the help of [BentoML](../tools.md), a tool designed
-for easy packaging, deployment, and serving of Machine Learning models.
+the experiment context with the help of [:simple-bentoml: BentoML](../tools.md),
+a tool designed for easy packaging, deployment, and serving of Machine Learning
+models.
 
 By transforming your model into a BentoML model artifact, it is possible to load
 the model for future usage with all its dependencies. This will allow you to use
