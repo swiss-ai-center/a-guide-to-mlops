@@ -11,6 +11,7 @@ nav:
       - "Syllabus": syllabus.md
       - "Concept": concept.md
       - "Tools": tools.md
+      - "Cheatsheet": cheatsheet.md
   - 🏠 Local training and model evaluation:
       - "Introduction": part-1-local-training-and-model-evaluation/introduction.md
       - "Chapter 1.1 - Run a simple ML experiment with Jupyter Notebook": part-1-local-training-and-model-evaluation/chapter-11-run-a-simple-ml-experiment-with-jupyter-notebook.md
