@@ -121,9 +121,9 @@ include:
   - serve.py
 python:
   packages:
-    - "tensorflow==2.17.1"
-    - "matplotlib==3.9.3"
-    - "pillow==11.0.0"
+    - "tensorflow==2.19.0"
+    - "matplotlib==3.10.3"
+    - "pillow==11.2.1"
 docker:
     python_version: "3.12"
 ```
@@ -162,7 +162,7 @@ bentoml build src
 The output should be similar to this:
 
 ```text
-INFO: Adding current BentoML version to requirements.txt: bentoml==1.3.15
+INFO: Adding current BentoML version to requirements.txt: bentoml==1.4.17
 INFO: Locking PyPI package versions.
 
 ██████╗ ███████╗███╗   ██╗████████╗ ██████╗ ███╗   ███╗██╗

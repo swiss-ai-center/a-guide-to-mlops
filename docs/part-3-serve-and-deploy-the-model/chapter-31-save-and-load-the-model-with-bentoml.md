@@ -89,12 +89,12 @@ Add the `bentoml` package to install BentoML support. `pillow` is also added to
 support image processing:
 
 ```txt title="requirements.txt" hl_lines="5-6"
-tensorflow==2.17.1
-matplotlib==3.9.3
+tensorflow==2.19.0
+matplotlib==3.10.3
 pyyaml==6.0.2
-dvc[gs]==3.58.0
-bentoml==1.3.15
-pillow==11.0.0
+dvc[gs]==3.60.1
+bentoml==1.4.17
+pillow==11.2.1
 ```
 
 Check the differences with Git to validate the changes:
@@ -111,12 +111,12 @@ diff --git a/requirements.txt b/requirements.txt
 index 4b8d3d9..d584cca 100644
 --- a/requirements.txt
 +++ b/requirements.txt
-@@ -2,3 +2,5 @@ tensorflow==2.17.1
- matplotlib==3.9.3
- pyyaml==6.0.2
- dvc[gs]==3.58.0
-+bentoml==1.3.15
-+pillow==11.0.0
+@@ -2,3 +2,5 @@ tensorflow==2.19.0
+matplotlib==3.10.3
+pyyaml==6.0.2
+dvc[gs]==3.60.1
++bentoml==1.4.17
++pillow==11.2.1
 ```
 
 Install the package and update the freeze file.

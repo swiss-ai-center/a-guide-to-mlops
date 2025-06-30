@@ -128,8 +128,8 @@ source .venv/bin/activate
 Create a `requirements.txt` file to list the dependencies:
 
 ```txt title="requirements.txt"
-tensorflow==2.17.1
-matplotlib==3.9.3
+tensorflow==2.19.0
+matplotlib==3.10.3
 pyyaml==6.0.2
 ```
 
@@ -672,24 +672,24 @@ Your working directory should now look like this:
 │   ├── raw
 │   │   └── ...
 │   └── README.md
-├── src # (1)!
-│   ├── utils
-│   │   ├── __init__.py
-│   │   └── seed.py
-│   ├── evaluate.py
-│   ├── prepare.py
-│   └── train.py
+├── params.yaml # (1)!
 ├── README.md # (2)!
-├── params.yaml # (3)!
-├── requirements-freeze.txt # (4)!
-└── requirements.txt # (5)!
+├── requirements-freeze.txt # (3)!
+├── requirements.txt # (4)!
+└── src # (5)!
+    ├── utils
+    │   ├── __init__.py
+    │   └── seed.py
+    ├── evaluate.py
+    ├── prepare.py
+    └── train.py
 ```
 
-1. This, and all its sub-directory, is new.
+1. This is new.
 2. This is new.
 3. This is new.
 4. This is new.
-5. This is new.
+5. This, and all its sub-directory, is new.
 
 ### Run the experiment
 
@@ -721,40 +721,39 @@ Your working directory should now be similar to this:
 .
 ├── data
 │   ├── prepared # (1)!
+│   │   ├── labels.json
+│   │   ├── preview.png
 │   │   ├── test
 │   │   │   └── ...
-│   │   ├── train
-│   │   │   └── ...
-│   │   ├── labels.json
-│   │   └── preview.png
+│   │   └── train
+│   │       └── ...
 │   ├── raw
 │   │   └── ...
 │   └── README.md
 ├── evaluation # (2)!
-│   ├── plots
-│   │   ├── confusion_matrix.png
-│   │   ├── pred_preview.png
-│   │   └── training_history.png
-│   └── metrics.json
-├── model # (4)!
+│   ├── metrics.json
+│   └── plots
+│       ├── confusion_matrix.png
+│       ├── pred_preview.png
+│       └── training_history.png
+├── model # (3)!
 │   └── ...
-├── src
-│   ├── utils
-│   │   ├── __init__.py
-│   │   └── seed.py
-│   ├── evaluate.py
-│   ├── prepare.py
-│   └── train.py
-├── README.md
 ├── params.yaml
+├── README.md
 ├── requirements-freeze.txt
-└── requirements.txt
+├── requirements.txt
+└── src
+    ├── evaluate.py
+    ├── prepare.py
+    ├── train.py
+    └── utils
+        ├── __init__.py
+        └── seed.py
 ```
 
 1. This, and all its sub-directory, is new.
 2. This, and all its sub-directory, is new.
 3. This is new.
-4. This is new.
 
 Here, the following should be noted:
 
