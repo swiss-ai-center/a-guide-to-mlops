@@ -260,6 +260,16 @@ kube-public          Active   2m45s
 kube-system          Active   2m45s
 ```
 
+!!! tip
+
+    If you have an existing Kubernetes configuration on your local machine, you can
+    merge your new GCP cluster's credentials into your current kubeconfig using the
+    following command:
+
+    ```sh title="Execute the following command(s) in a terminal"
+    gcloud container clusters get-credentials $GCP_K8S_CLUSTER_NAME --zone $GCP_K8S_CLUSTER_ZONE
+    ```
+
 ### Create the Kubernetes configuration files
 
 In order to deploy the model on Kubernetes, you will need to create the
