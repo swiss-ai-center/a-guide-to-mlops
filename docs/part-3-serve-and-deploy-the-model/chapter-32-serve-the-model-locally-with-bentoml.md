@@ -263,7 +263,7 @@ predicted Uranus instead!
 
 ### Check the changes
 
-Check the changes with Git to ensure that all the necessary files are tracked.
+Check the changes with Git to ensure that all the necessary files are tracked:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Add all the files
@@ -273,7 +273,7 @@ git add .
 git status
 ```
 
-The output should look like this.
+The output should look like this:
 
 ```text
 On branch main
@@ -284,7 +284,7 @@ Changes to be committed:
 
 ### Commit the changes to Git
 
-Commit the changes to Git.
+Commit the changes to Git:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes

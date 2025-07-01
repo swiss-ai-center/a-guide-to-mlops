@@ -342,7 +342,7 @@ be different:
 
 === ":simple-gitlab: GitLab"
 
-    Push the CI/CD pipeline configuration file to Git.
+    Push the CI/CD pipeline configuration file to Git:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Add the configuration file

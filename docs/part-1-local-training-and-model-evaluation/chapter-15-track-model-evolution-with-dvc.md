@@ -242,7 +242,7 @@ git add .
 git status
 ```
 
-The output should look like this.
+The output should look like this:
 
 ```text
 On branch main

@@ -689,7 +689,7 @@ following steps will be performed:
 
 ### Check the changes
 
-Check the changes with Git to ensure that all the necessary files are tracked.
+Check the changes with Git to ensure that all the necessary files are tracked:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Add all the files
@@ -699,7 +699,7 @@ git add .
 git status
 ```
 
-The output should look like this.
+The output should look like this:
 
 === ":simple-github: GitHub"
 
@@ -725,7 +725,7 @@ The output should look like this.
 
 ### Commit the changes to Git
 
-Push the CI/CD pipeline configuration file to Git.
+Push the CI/CD pipeline configuration file to Git:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
