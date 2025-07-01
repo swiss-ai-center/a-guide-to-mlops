@@ -138,14 +138,32 @@ Copying extra-data/extra_data/VXJhbnVzXzE0Nw.jpg -> data/raw/Uranus/VXJhbnVzXzE0
 ...
 ```
 
-### Commit the changes to Git
+### Check the changes
 
-Commit the changes to Git.
+Check the changes with Git to ensure that all the necessary files are tracked:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Add all the files
 git add .
 
+# Check the changes
+git status
+```
+
+The output should look like this:
+
+```text
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   scripts/parse_annotations.py
+```
+
+### Commit the changes to Git
+
+Commit the changes to Git:
+
+```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
 git commit -m "Add annotation parser script"
 ```

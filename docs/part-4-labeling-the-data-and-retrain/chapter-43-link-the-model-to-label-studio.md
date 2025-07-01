@@ -51,11 +51,11 @@ Python has many packages for building web frameworks. In this guide we will use
 tensorflow==2.17.0
 matplotlib==3.9.2
 pyyaml==6.0.2
-dvc[gs]==3.53.2
-bentoml==1.3.7
-pillow==10.4.0
-label-studio==1.13.1
-fastapi[standard]==0.115.0
+dvc[gs]==3.60.1
+bentoml==1.4.17
+pillow==11.2.1
+label-studio==1.20.0
+fastapi[standard]==0.115.14
 ```
 
 Check the differences with Git to validate the changes:
@@ -72,11 +72,11 @@ diff --git a/requirements.txt b/requirements.txt
 index 160d09c..1721a7f 100644
 --- a/requirements.txt
 +++ b/requirements.txt
-@@ -5,3 +5,4 @@ dvc[gs]==3.53.2
- bentoml==1.3.7
- pillow==10.4.0
- label-studio==1.13.1
-+fastapi[standard]==0.115.0
+@@ -5,3 +5,4 @@ dvc[gs]==3.60.1
+ bentoml==1.4.17
+ pillow==11.2.1
+ label-studio==1.20.0
++fastapi[standard]==0.115.14
 ```
 
 Install the package and update the freeze file.
@@ -213,14 +213,35 @@ This file is structured in 3 parts:
     model to work with Label Studio. If you would like to go further, please refer
     the [Label Studio ML integration documentation](https://labelstud.io/guide/ml).
 
-### Commit the changes to Git
 
-Commit the changes to Git.
+### Check the changes
+
+Check the changes with Git to ensure that all the necessary files are tracked:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Add all the files
 git add .
 
+# Check the changes
+git status
+```
+
+The output should look like this:
+
+```text
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   requirements-freeze.txt
+        modified:   requirements.txt
+        new file:   src/server_label_studio.py
+```
+
+### Commit the changes to Git
+
+Commit the changes to Git:
+
+```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
 git commit -m "Add FastAPI integration to Label Studio"
 ```

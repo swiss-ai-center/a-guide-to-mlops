@@ -113,13 +113,13 @@ Next, we will install Label Studio in our environment. Add the main
 `label-studio` dependency to the `requirements.txt` file:
 
 ```txt title="requirements.txt" hl_lines="7"
-tensorflow==2.17.0
-matplotlib==3.9.2
+tensorflow==2.19.0
+matplotlib==3.10.3
 pyyaml==6.0.2
-dvc[gs]==3.53.2
-bentoml==1.3.7
-pillow==10.4.0
-label-studio==1.13.1
+dvc[gs]==3.60.1
+bentoml==1.4.17
+pillow==11.2.1
+label-studio==1.20.0
 ```
 
 Check the differences with Git to validate the changes:
@@ -137,10 +137,10 @@ index 4b8d3d9..d584cca 100644
 --- a/requirements.txt
 +++ b/requirements.txt
 @@ -4,3 +4,4 @@ pyyaml==6.0.2
- dvc[gs]==3.53.2
- bentoml==1.3.7
- pillow==10.4.0
-+label-studio==1.13.1
+ dvc[gs]==3.60.1
+ bentoml==1.4.17
+ pillow==11.2.1
++label-studio==1.20.0
 ```
 
 Install the package and update the freeze file.
@@ -163,14 +163,34 @@ pip install --requirement requirements.txt
 pip freeze --local --all > requirements-freeze.txt
 ```
 
-### Commit the changes to Git
+### Check the changes
 
-Commit the changes to Git.
+Check the changes with Git to ensure that all the necessary files are tracked:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Add all the files
 git add .
 
+# Check the changes
+git status
+```
+
+The output should look like this:
+
+```text
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   .gitignore
+        modified:   requirements-freeze.txt
+        modified:   requirements.txt
+```
+
+### Commit the changes to Git
+
+Commit the changes to Git:
+
+```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
 git commit -m "Add Label Studio"
 ```
