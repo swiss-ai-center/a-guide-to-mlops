@@ -162,7 +162,7 @@ bentoml build src
 The output should be similar to this:
 
 ```text
-INFO: Adding current BentoML version to requirements.txt: bentoml==1.4.17
+INFO: Adding current BentoML version to requirements.txt: bentoml==1.4.25
 INFO: Locking PyPI package versions.
 
 ██████╗ ███████╗███╗   ██╗████████╗ ██████╗ ███╗   ███╗██╗
