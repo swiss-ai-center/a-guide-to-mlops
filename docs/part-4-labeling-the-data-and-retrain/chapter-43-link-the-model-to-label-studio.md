@@ -52,7 +52,7 @@ tensorflow==2.17.0
 matplotlib==3.9.2
 pyyaml==6.0.2
 dvc[gs]==3.60.1
-bentoml==1.4.17
+bentoml==1.4.25
 pillow==11.2.1
 label-studio==1.20.0
 fastapi[standard]==0.115.14
@@ -73,7 +73,7 @@ index 160d09c..1721a7f 100644
 --- a/requirements.txt
 +++ b/requirements.txt
 @@ -5,3 +5,4 @@ dvc[gs]==3.60.1
- bentoml==1.4.17
+ bentoml==1.4.25
  pillow==11.2.1
  label-studio==1.20.0
 +fastapi[standard]==0.115.14
