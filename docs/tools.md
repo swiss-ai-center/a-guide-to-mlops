@@ -82,9 +82,18 @@ at the
 [`awesome-data-labeling`](https://github.com/heartexlabs/awesome-data-labeling)
 Git repository for specific alternatives.
 
+### Model orchestration
+
+These are alternatives to GitHub Actions and GitLab CI.
+
+- [Gitea](https://about.gitea.com/) - A painless self-hosted Git service with
+  built-in CI/CD using GitHub Actions-compatible syntax
+- [Forgejo](https://forgejo.org/) - A self-hosted Git service and soft fork of
+  Gitea with GitHub Actions-compatible workflows
+
 ### Model management/deployment
 
-These are alternatives to BentoML.
+These are alternatives to BentoML and Docker.
 
 - [Kubeflow](https://www.kubeflow.org/) - The Kubeflow project is dedicated to
   making deployments of machine learning (ML) workflows on Kubernetes simple,
@@ -93,6 +102,9 @@ These are alternatives to BentoML.
   deployments
 - [Cog](https://github.com/replicate/cog) - An open-source tool that lets you
   package machine learning models in a standard, production-ready container
+- [Podman](https://podman.io/) - A daemonless, open source, Linux native tool
+  designed to make it easy to find, run, build, share and deploy applications
+  using Open Container Initiative containers and images
 
 ### End-to-end
 
