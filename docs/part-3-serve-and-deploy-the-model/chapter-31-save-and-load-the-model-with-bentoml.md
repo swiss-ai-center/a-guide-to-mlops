@@ -281,11 +281,11 @@ def main() -> None:
     # Export the model from the model store to the local model folder
     bentoml.models.export_model(
         "celestial_bodies_classifier_model:latest",
-        f"{model_folder}/celestial_bodies_classifier_model.bentomodel",
+        f"{model_folder.absolute()}/celestial_bodies_classifier_model.bentomodel",
     )
 
     # Save the model history
-    np.save(model_folder / "history.npy", model.history.history)
+    np.save(model_folder.absolute() / "history.npy", model.history.history)
 
     print(f"\nModel saved at {model_folder.absolute()}")
 
@@ -351,7 +351,7 @@ index 5c69e2f..b845eb3 100644
      # Save the model
      model_folder.mkdir(parents=True, exist_ok=True)
 -    model_path = model_folder / "model.keras"
--    model.save(model_path)
+-    model.save(model_path
 +
 +    def preprocess(x: Image):
 +        # convert PIL image to tensor
@@ -387,11 +387,11 @@ index 5c69e2f..b845eb3 100644
 +    # Export the model from the model store to the local model folder
 +    bentoml.models.export_model(
 +        "celestial_bodies_classifier_model:latest",
-+        f"{model_folder}/celestial_bodies_classifier_model.bentomodel",
++        f"{model_folder.absolute()}/celestial_bodies_classifier_model.bentomodel",
 +    )
 +
      # Save the model history
-     np.save(model_folder / "history.npy", model.history.history)
+     np.save(model_folder.absolute() / "history.npy", model.history.history)
 ```
 
 #### Update `src/evaluate.py`
@@ -532,13 +532,13 @@ def main() -> None:
 
     # Import the model to the model store from a local model folder
     try:
-        bentoml.models.import_model(f"{model_folder}/celestial_bodies_classifier_model.bentomodel")
+        bentoml.models.import_model(f"{model_folder.absolute()}/celestial_bodies_classifier_model.bentomodel")
     except bentoml.exceptions.BentoMLException:
         print("Model already exists in the model store - skipping import.")
 
     # Load model
     model = bentoml.keras.load_model("celestial_bodies_classifier_model")
-    model_history = np.load(model_folder / "history.npy", allow_pickle=True).item()
+    model_history = np.load(model_folder.absolute() / "history.npy", allow_pickle=True).item()
 
     # Log metrics
     val_loss, val_acc = model.evaluate(ds_test)
@@ -596,7 +596,7 @@ index 3bca979..11322bd 100644
 
 +    # Import the model to the model store from a local model folder
 +    try:
-+        bentoml.models.import_model(f"{model_folder}/celestial_bodies_classifier_model.bentomodel")
++        bentoml.models.import_model(f"{model_folder.absolute()}/celestial_bodies_classifier_model.bentomodel")
 +    except bentoml.exceptions.BentoMLException:
 +        print("Model already exists in the model store - skipping import.")
 +
