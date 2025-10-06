@@ -459,6 +459,11 @@ hashed and have been uploaded.
     Open the [Cloud Storage](https://console.cloud.google.com/storage/browser) on
     the Google cloud interface and click on your bucket to access the details.
 
+    !!! tip
+
+        If the DVC data is not visible, check that the correct project is selected in
+        the project selector at the top of the Google Cloud interface.
+
 === ":material-cloud: Using another cloud provider? Read this!"
 
     This guide has been written with Google Cloud in mind. We are open to
