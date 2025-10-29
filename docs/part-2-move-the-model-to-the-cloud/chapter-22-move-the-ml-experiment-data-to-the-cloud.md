@@ -206,11 +206,11 @@ resources:
     [Google Cloud Console](https://console.cloud.google.com/billing) and then link
     it to the project.
 
-    Export the billing account ID with the following command. Replace
-    `<my_billing_account_id>` with your own billing account ID:
+    Export the billing ACCOUNT_ID with the following command. Replace `<my_billing
+    _account_id>` with your own billing ACCOUNT_ID:
 
     ```sh title="Execute the following command(s) in a terminal"
-    # Export the billing account ID
+    # Export the billing ACCOUNT_ID
     export GCP_BILLING_ACCOUNT_ID=<my_billing_account_id>
     ```
 

@@ -213,7 +213,6 @@ This file is structured in 3 parts:
     model to work with Label Studio. If you would like to go further, please refer
     the [Label Studio ML integration documentation](https://labelstud.io/guide/ml).
 
-
 ### Check the changes
 
 Check the changes with Git to ensure that all the necessary files are tracked:
