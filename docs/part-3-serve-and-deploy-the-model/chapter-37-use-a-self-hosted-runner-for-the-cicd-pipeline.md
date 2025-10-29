@@ -173,7 +173,7 @@ Replace `<my_repository_url>` with your own git repository URL, for example
 ```yaml title="docker/Dockerfile" hl_lines="6"
 FROM ubuntu:22.04
 
-ENV RUNNER_VERSION=2.325.0
+ENV RUNNER_VERSION=2.329.0
 
 LABEL RunnerVersion=${RUNNER_VERSION}
 LABEL org.opencontainers.image.source="<my_repository_url>"
@@ -517,8 +517,8 @@ The output should be similar to this:
 ```
 √ Connected to GitHub
 
-Current runner version: '2.325.0'
-2024-12-10 12:15:19Z: Listening for Jobs
+Current runner version: '2.329.0'
+2025-29-10 14:09:31Z: Listening for Jobs
 ```
 
 Exit the process by pressing ++ctrl+c++ in the terminal, then exit the pod by
