@@ -428,10 +428,10 @@ def main() -> None:
 
     # Save the model
     model_folder.mkdir(parents=True, exist_ok=True)
-    model_path = model_folder / "model.keras"
+    model_path = model_folder.absolute() / "model.keras"
     model.save(model_path)
     # Save the model history
-    np.save(model_folder / "history.npy", model.history.history)
+    np.save(model_folder.absolute() / "history.npy", model.history.history)
 
     print(f"\nModel saved at {model_folder.absolute()}")
 
@@ -578,9 +578,9 @@ def main() -> None:
         labels = json.load(f)
 
     # Load model
-    model_path = model_folder / "model.keras"
+    model_path = model_folder.absolute() / "model.keras"
     model = tf.keras.models.load_model(model_path)
-    model_history = np.load(model_folder / "history.npy", allow_pickle=True).item()
+    model_history = np.load(model_folder.absolute() / "history.npy", allow_pickle=True).item()
 
     # Log metrics
     val_loss, val_acc = model.evaluate(ds_test)
