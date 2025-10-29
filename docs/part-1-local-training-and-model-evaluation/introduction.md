@@ -22,7 +22,7 @@ The following requirements are necessary to follow this part:
 - An IDE. We recommend to use
   [:material-microsoft-visual-studio-code: Visual Studio Code](https://code.visualstudio.com/)
   to follow this guide.
-- [:simple-python: Python 3.12](https://www.python.org/downloads/)
+- [:simple-python: Python 3.13](https://www.python.org/downloads/)
 - [:simple-python: pip](https://pip.pypa.io/)
 - [:simple-git: Git](https://git-scm.com/)
 - [unzip](https://linux.die.net/man/1/unzip)

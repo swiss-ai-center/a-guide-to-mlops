@@ -513,7 +513,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
-          python-version: '3.12'
+          python-version: '3.13'
           cache: pip
       - name: Install dependencies
         run: pip install --requirement requirements-freeze.txt
@@ -594,7 +594,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
-          python-version: '3.12'
+          python-version: '3.13'
           cache: pip
       - name: Install dependencies
         run: pip install --requirement requirements-freeze.txt

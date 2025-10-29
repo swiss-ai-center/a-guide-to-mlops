@@ -121,11 +121,11 @@ include:
   - serve.py
 python:
   packages:
-    - "tensorflow==2.19.0"
-    - "matplotlib==3.10.3"
-    - "pillow==11.2.1"
+    - "tensorflow==2.20.0"
+    - "matplotlib==3.10.7"
+    - "pillow==11.3.0"
 docker:
-    python_version: "3.12"
+    python_version: "3.13"
 ```
 
 Do not forget to include the `serve.py` file in the BentoML model artifact. This
@@ -162,7 +162,7 @@ bentoml build src
 The output should be similar to this:
 
 ```text
-INFO: Adding current BentoML version to requirements.txt: bentoml==1.4.25
+INFO: Adding current BentoML version to requirements.txt: bentoml==1.4.28
 INFO: Locking PyPI package versions.
 
 ██████╗ ███████╗███╗   ██╗████████╗ ██████╗ ███╗   ███╗██╗
@@ -224,15 +224,15 @@ INFO: Building OCI-compliant image for celestial_bodies_classifier:v5rlmavw4kahq
 [+] Building 57.1s (17/17) FINISHED                                                                      docker:default
  => [internal] load build definition from Dockerfile                                                               0.1s
  => => transferring dockerfile: 1.92kB                                                                             0.0s
- => [internal] load metadata for docker.io/library/python:3.12-slim                                                2.3s
+ => [internal] load metadata for docker.io/library/python:3.13-slim                                                2.3s
  => [internal] load .dockerignore                                                                                  0.0s
  => => transferring context: 2B                                                                                    0.0s
- => [base-container  1/12] FROM docker.io/library/python:3.12-slim@sha256:2b0079146a74e23bf4ae8f6a28e1b484c6292f6  3.6s
- => => resolve docker.io/library/python:3.12-slim@sha256:2b0079146a74e23bf4ae8f6a28e1b484c6292f6fb904cbb51825b4a1  0.0s
+ => [base-container  1/12] FROM docker.io/library/python:3.13-slim@sha256:2b0079146a74e23bf4ae8f6a28e1b484c6292f6  3.6s
+ => => resolve docker.io/library/python:3.13-slim@sha256:2b0079146a74e23bf4ae8f6a28e1b484c6292f6fb904cbb51825b4a1  0.0s
  => => sha256:bc0965b23a04fe7f2d9fb20f597008fcf89891de1c705ffc1c80483a1f098e4f 28.23MB / 28.23MB                   1.2s
  => => sha256:9b871d410cbf35a95adbe8c061f6d60e2e129bd2fd9b60485a8dd397ee3fcf61 3.32MB / 3.32MB                     1.1s
  => => sha256:8bfa778b5b231c44fb4d35b4783fe69f55f2b3f59dad4c8205661c3f752494a6 13.65MB / 13.65MB                   1.6s
- => => sha256:2b0079146a74e23bf4ae8f6a28e1b484c6292f6fb904cbb51825b4a19812fcd8 9.12kB / 9.12kB                     0.0s
+ => => sha256:2b0079146a74e23bf4ae8f6a28e1b484c6292f63.134cbb51825b4a19812fcd8 9.12kB / 9.12kB                     0.0s
  => => sha256:027e90762c20461da8dc5f530b0ca8604b38c382dadacb4471ea47377c7cf951 1.75kB / 1.75kB                     0.0s
  => => sha256:3ebf71e888419589c6cda9e15384dc2bff81338fb591f54af96ca5529df597c2 5.17kB / 5.17kB                     0.0s
  => => sha256:258b25b9265525eaafd659e18f862525eea9e6379dce2ef29defd91ba0b8868c 249B / 249B                         1.4s
