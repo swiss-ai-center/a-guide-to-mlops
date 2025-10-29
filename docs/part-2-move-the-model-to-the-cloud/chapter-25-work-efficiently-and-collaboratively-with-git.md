@@ -87,7 +87,7 @@ flowchart TB
     your GitHub repository. Select **New issue** and describe the
     work/improvements/ideas that you want to integrate to the codebase. In this
     guide, you can name the issue _Demonstrate model evolution tracking_. Create the
-    issue by selecting **Submit new issue**.
+    issue by selecting **Create**.
 
 === ":simple-gitlab: GitLab"
 
