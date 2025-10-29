@@ -1,5 +1,5 @@
 # Base image
-FROM python:3.12
+FROM python:3.13
 
 # Working directory
 WORKDIR /workspaces/a-guide-to-mlops
