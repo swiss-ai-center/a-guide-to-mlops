@@ -224,16 +224,16 @@ following steps will be performed:
         runs-on: ubuntu-latest
         steps:
           - name: Checkout repository
-            uses: actions/checkout@v4
+            uses: actions/checkout@v5
           - name: Setup Python
-            uses: actions/setup-python@v5
+            uses: actions/setup-python@v6
             with:
               python-version: '3.12'
               cache: pip
           - name: Install dependencies
             run: pip install --requirement requirements-freeze.txt
           - name: Login to Google Cloud
-            uses: google-github-actions/auth@v2
+            uses: google-github-actions/auth@v3
             with:
               credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
           - name: Train model
@@ -314,7 +314,7 @@ following steps will be performed:
               docker push --all-tags ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier
           - name: Get Google Cloud's Kubernetes credentials
             if: github.ref == 'refs/heads/main'
-            uses: google-github-actions/get-gke-credentials@v2
+            uses: google-github-actions/get-gke-credentials@v3
             with:
               cluster_name: ${{ secrets.GCP_K8S_CLUSTER_NAME }}
               location: ${{ secrets.GCP_K8S_CLUSTER_ZONE }}
@@ -359,7 +359,7 @@ following steps will be performed:
                docker push --all-tags ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier
     +      - name: Get Google Cloud's Kubernetes credentials
     +        if: github.ref == 'refs/heads/main'
-    +        uses: google-github-actions/get-gke-credentials@v2
+    +        uses: google-github-actions/get-gke-credentials@v3
     +        with:
     +          cluster_name: ${{ secrets.GCP_K8S_CLUSTER_NAME }}
     +          location: ${{ secrets.GCP_K8S_CLUSTER_ZONE }}

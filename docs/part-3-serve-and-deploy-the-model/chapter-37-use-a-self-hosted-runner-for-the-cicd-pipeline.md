@@ -603,16 +603,16 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.12'
           cache: pip
       - name: Install dependencies
         run: pip install --requirement requirements-freeze.txt
       - name: Login to Google Cloud
-        uses: google-github-actions/auth@v2
+        uses: google-github-actions/auth@v3
         with:
           credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
       - name: Train model
@@ -620,14 +620,14 @@ jobs:
       - name: Push the outcomes to DVC remote storage
         run: dvc push
       - name: Commit changes in dvc.lock
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: Commit changes in dvc.lock
           file_pattern: dvc.lock
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
       - name: Setup CML
         uses: iterative/setup-cml@v2
         with:
@@ -684,16 +684,16 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.12'
           cache: pip
       - name: Install dependencies
         run: pip install --requirement requirements-freeze.txt
       - name: Login to Google Cloud
-        uses: google-github-actions/auth@v2
+        uses: google-github-actions/auth@v3
         with:
           credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
       - name: Check model
@@ -717,7 +717,7 @@ jobs:
           # Push the container to the Container Registry
           docker push --all-tags ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier
       - name: Get Google Cloud's Kubernetes credentials
-        uses: google-github-actions/get-gke-credentials@v2
+        uses: google-github-actions/get-gke-credentials@v3
         with:
           cluster_name: ${{ secrets.GCP_K8S_CLUSTER_NAME }}
           location: ${{ secrets.GCP_K8S_CLUSTER_ZONE }}
@@ -770,7 +770,7 @@ index b15a68f..5a8d863 100644
 +    if: github.event_name == 'pull_request'
      steps:
        - name: Checkout repository
-         uses: actions/checkout@v4
+         uses: actions/checkout@v5
 @@ -32,13 +38,22 @@ jobs:
            credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
        - name: Train model
@@ -778,14 +778,14 @@ index b15a68f..5a8d863 100644
 +      - name: Push the outcomes to DVC remote storage
 +        run: dvc push
 +      - name: Commit changes in dvc.lock
-+        uses: stefanzweifel/git-auto-commit-action@v5
++        uses: stefanzweifel/git-auto-commit-action@v7
 +        with:
 +          commit_message: Commit changes in dvc.lock
 +          file_pattern: dvc.lock
 +      - name: Setup Node
-+        uses: actions/setup-node@v4
++        uses: actions/setup-node@v6
 +        with:
-+          node-version: 20
++          node-version: 24
        - name: Setup CML
 -        if: github.event_name == 'pull_request'
          uses: iterative/setup-cml@v2
@@ -805,16 +805,16 @@ index b15a68f..5a8d863 100644
 +    if: github.ref == 'refs/heads/main'
 +    steps:
 +      - name: Checkout repository
-+        uses: actions/checkout@v4
++        uses: actions/checkout@v5
 +      - name: Setup Python
-+        uses: actions/setup-python@v5
++        uses: actions/setup-python@v6
 +        with:
 +          python-version: '3.12'
 +          cache: pip
 +      - name: Install dependencies
 +        run: pip install --requirement requirements-freeze.txt
 +      - name: Login to Google Cloud
-+        uses: google-github-actions/auth@v2
++        uses: google-github-actions/auth@v3
 +        with:
 +          credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
 +      - name: Check model
@@ -841,7 +841,7 @@ index b15a68f..5a8d863 100644
            docker push --all-tags ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier
        - name: Get Google Cloud's Kubernetes credentials
 -        if: github.ref == 'refs/heads/main'
-         uses: google-github-actions/get-gke-credentials@v2
+         uses: google-github-actions/get-gke-credentials@v3
          with:
            cluster_name: ${{ secrets.GCP_K8S_CLUSTER_NAME }}
            location: ${{ secrets.GCP_K8S_CLUSTER_ZONE }}
