@@ -470,20 +470,20 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Login to Google Cloud
-        uses: google-github-actions/auth@v2
+        uses: google-github-actions/auth@v3
         with:
           credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
       - name: Get Google Cloud's Kubernetes credentials
-        uses: google-github-actions/get-gke-credentials@v2
+        uses: google-github-actions/get-gke-credentials@v3
         with:
           cluster_name: ${{ secrets.GCP_K8S_CLUSTER_NAME }}
           location: ${{ secrets.GCP_K8S_CLUSTER_ZONE }}
       - name: Set up GCloud SDK
-        uses: google-github-actions/setup-gcloud@v2
+        uses: google-github-actions/setup-gcloud@v3
         with:
-          version: '>= 494.0.0'
+          version: '>= 545.0.0'
       - name: Install kubectl
         run: |
           gcloud components install kubectl
@@ -509,16 +509,16 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.12'
           cache: pip
       - name: Install dependencies
         run: pip install --requirement requirements-freeze.txt
       - name: Login to Google Cloud
-        uses: google-github-actions/auth@v2
+        uses: google-github-actions/auth@v3
         with:
           credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
       - name: Train model
@@ -526,14 +526,14 @@ jobs:
       - name: Push the outcomes to DVC remote storage
         run: dvc push
       - name: Commit changes in dvc.lock
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: Commit changes in dvc.lock
           file_pattern: dvc.lock
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
       - name: Setup CML
         uses: iterative/setup-cml@v2
         with:
@@ -590,16 +590,16 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.12'
           cache: pip
       - name: Install dependencies
         run: pip install --requirement requirements-freeze.txt
       - name: Login to Google Cloud
-        uses: google-github-actions/auth@v2
+        uses: google-github-actions/auth@v3
         with:
           credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
       - name: Check model
@@ -623,7 +623,7 @@ jobs:
           # Push the container to the Container Registry
           docker push --all-tags ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier
       - name: Get Google Cloud's Kubernetes credentials
-        uses: google-github-actions/get-gke-credentials@v2
+        uses: google-github-actions/get-gke-credentials@v3
         with:
           cluster_name: ${{ secrets.GCP_K8S_CLUSTER_NAME }}
           location: ${{ secrets.GCP_K8S_CLUSTER_ZONE }}
@@ -642,11 +642,11 @@ jobs:
     if: github.event_name == 'pull_request' && (success() || failure() || cancelled())
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Set up GCloud SDK
-        uses: google-github-actions/setup-gcloud@v2
+        uses: google-github-actions/setup-gcloud@v3
         with:
-          version: '>= 494.0.0'
+          version: '>= 545.0.0'
       - name: Install kubectl
         run: |
           gcloud components install kubectl
@@ -702,20 +702,20 @@ index 5a8d863..ad093ef 100644
 +    if: github.event_name == 'pull_request'
 +    steps:
 +      - name: Checkout repository
-+        uses: actions/checkout@v4
++        uses: actions/checkout@v5
 +      - name: Login to Google Cloud
-+        uses: google-github-actions/auth@v2
++        uses: google-github-actions/auth@v3
 +        with:
 +          credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
 +      - name: Get Google Cloud's Kubernetes credentials
-+        uses: google-github-actions/get-gke-credentials@v2
++        uses: google-github-actions/get-gke-credentials@v3
 +        with:
 +          cluster_name: ${{ secrets.GCP_K8S_CLUSTER_NAME }}
 +          location: ${{ secrets.GCP_K8S_CLUSTER_ZONE }}
 +      - name: Set up GCloud SDK
-+        uses: google-github-actions/setup-gcloud@v2
++        uses: google-github-actions/setup-gcloud@v3
 +        with:
-+          version: '>= 494.0.0'
++          version: '>= 545.0.0'
 +      - name: Install kubectl
 +        run: |
 +          gcloud components install kubectl
@@ -754,11 +754,11 @@ index 5a8d863..ad093ef 100644
 +    if: github.event_name == 'pull_request' && (success() || failure() || cancelled())
 +    steps:
 +      - name: Checkout repository
-+        uses: actions/checkout@v4
++        uses: actions/checkout@v5
 +      - name: Set up GCloud SDK
-+        uses: google-github-actions/setup-gcloud@v2
++        uses: google-github-actions/setup-gcloud@v3
 +        with:
-+          version: '>= 494.0.0'
++          version: '>= 545.0.0'
 +      - name: Install kubectl
 +        run: |
 +          gcloud components install kubectl
