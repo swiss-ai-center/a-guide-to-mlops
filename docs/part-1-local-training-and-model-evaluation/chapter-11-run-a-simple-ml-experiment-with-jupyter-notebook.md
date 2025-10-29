@@ -68,7 +68,7 @@ the Jupyter Notebook for this machine learning experiment:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Download the archive containing the Jupyter Notebook
-wget https://github.com/swiss-ai-center/a-guide-to-mlops/archive/refs/heads/jupyter-notebook.zip -O jupyter-notebook.zip
+curl -L -o jupyter-notebook.zip https://github.com/swiss-ai-center/a-guide-to-mlops/archive/refs/heads/jupyter-notebook.zip
 ```
 
 Unzip the Jupyter Notebook into your working directory:
@@ -91,7 +91,7 @@ the dataset for this machine learning experiment:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Download the archive containing the dataset
-wget https://github.com/swiss-ai-center/a-guide-to-mlops/archive/refs/heads/data.zip -O data.zip
+curl -L -o data.zip https://github.com/swiss-ai-center/a-guide-to-mlops/archive/refs/heads/data.zip
 ```
 
 This archive must be decompressed and its contents be moved in the `data`
