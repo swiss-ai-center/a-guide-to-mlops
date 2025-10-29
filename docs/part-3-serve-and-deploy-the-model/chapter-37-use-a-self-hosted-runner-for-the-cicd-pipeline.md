@@ -181,7 +181,7 @@ LABEL org.opencontainers.image.source="<my_repository_url>"
 # Install dependencies
 RUN apt-get update -y && \
     apt-get install -y build-essential lsb-release python3 python3-pip \
-    curl jq vim gpg wget git unzip tar gettext-base
+    curl jq vim gpg git unzip tar gettext-base
 
 # Add a non-root user
 RUN useradd -m runner

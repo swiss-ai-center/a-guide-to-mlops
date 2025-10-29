@@ -25,7 +25,6 @@ The following requirements are necessary to follow this part:
 - [:simple-python: Python 3.12](https://www.python.org/downloads/)
 - [:simple-python: pip](https://pip.pypa.io/)
 - [:simple-git: Git](https://git-scm.com/)
-- [wget](https://linux.die.net/man/1/wget)
 - [unzip](https://linux.die.net/man/1/unzip)
 
 ??? danger "Using a virtual environment manager other than vanilla Python (Conda, Anaconda, etc.)? Read this!"

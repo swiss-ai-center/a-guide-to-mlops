@@ -61,7 +61,7 @@ for labeling.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Download the archive containing the extra data
-wget https://github.com/swiss-ai-center/a-guide-to-mlops/archive/refs/heads/extra-data.zip -O extra-data.zip
+curl -L -o extra-data.zip https://github.com/swiss-ai-center/a-guide-to-mlops/archive/refs/heads/extra-data.zip
 ```
 
 The downloaded archive must be decompressed and renamed:
