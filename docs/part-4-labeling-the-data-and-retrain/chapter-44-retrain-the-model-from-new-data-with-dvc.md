@@ -211,6 +211,27 @@ In this chapter, we retrained the model using the new data we labeled in Label
 Studio. We downloaded the annotations, parsed them, and retrained the model
 using DVC. We then evaluated the new model to see if it has improved.
 
+!!! abstract "Take away"
+
+    - **Closing the loop from labeling to training is where MLOps delivers value**:
+      The real benefit of tools like Label Studio and DVC isn't in any single step,
+      but in how they connect data labeling, model training, and evaluation into a
+      repeatable workflow where adding new labeled data automatically triggers
+      retraining and performance comparison.
+    - **Automation scripts transform labels into training data**: Building small
+      utilities like `parse_annotations.py` to convert labeling tool exports into your
+      training format creates a bridge between annotation workflows and ML pipelines,
+      making it trivial to incorporate new data without manual file manipulation.
+    - **DVC's intelligent caching saves time on iterations**: When you run
+      `dvc repro` after adding new labeled images, DVC automatically detects that only
+      the data has changed and re-runs just the necessary stages (prepare, train,
+      evaluate), skipping unchanged preprocessing steps and saving computational
+      resources.
+    - **Visual comparison reveals whether new data helps**: The `dvc plots diff`
+      command shows side-by-side metrics and confusion matrices from before and after
+      retraining, making it immediately clear whether the newly labeled data improved
+      model performance or introduced new issues that need investigation.
+
 ## State of the labeling process
 
 - [x] Labeling of supplemental data can be done systematically and uniformly

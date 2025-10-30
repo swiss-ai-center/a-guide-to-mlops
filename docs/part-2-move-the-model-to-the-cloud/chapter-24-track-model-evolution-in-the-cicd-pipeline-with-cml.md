@@ -604,6 +604,21 @@ You fixed some of the previous issues:
 
 You can now safely continue to the next chapter.
 
+!!! abstract "Take away"
+
+    - **CML brings experiment results into code review**: By automatically posting
+      comparison reports to pull requests, CML makes model performance changes visible
+      alongside code changes, enabling informed decisions before merging.
+    - **Automated reporting reduces manual effort**: Instead of manually running
+      `dvc metrics diff` and sharing screenshots, CML generates comprehensive reports
+      with parameters, metrics, and plots automatically on every PR.
+    - **Visual comparisons tell the story**: Side-by-side plots showing training
+      history, predictions, and confusion matrices from main vs. workspace make it
+      immediately clear whether changes improve or degrade model performance.
+    - **Integration with PR/MR workflows encourages best practices**: By tying
+      experiment reports to pull requests, CML naturally encourages code review,
+      discussion, and validation before changes are merged into the main branch.
+
 ## State of the MLOps process
 
 - [x] Notebook has been transformed into scripts for production

@@ -520,6 +520,13 @@ dvc repro
 
 You can now safely continue to the next chapter.
 
+!!! abstract "Take away"
+
+    - **Cloud storage buckets are designed for large data files**: Unlike Git, which struggles with large files, cloud storage (S3, Google Cloud Storage, etc.) efficiently handles datasets of any size with built-in redundancy and accessibility.
+    - **DVC extends version control to data**: By configuring a DVC remote pointing to cloud storage, you get Git-like versioning for your datasets with `dvc push` and `dvc pull` commands that mirror Git's workflow.
+    - **Service accounts enable secure automation**: Instead of using personal credentials, cloud service accounts provide scoped access that can be safely shared with CI/CD pipelines and easily revoked if compromised.
+    - **DVC plugins bridge storage providers**: Installing the appropriate DVC storage plugin (like `dvc[gs]` for Google Cloud) allows DVC to communicate with various cloud providers using a unified interface.
+
 ## State of the MLOps process
 
 - [x] Notebook has been transformed into scripts for production

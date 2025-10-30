@@ -398,6 +398,25 @@ In the next chapters, you will enhance the workflow to fix these issues.
 
 You can now safely continue to the next chapter.
 
+!!! abstract "Take away"
+
+    - **DVC pipelines automate reproducibility**: By defining stages with
+      `dvc stage add`, you document your entire ML workflow in `dvc.yaml`. Running
+      `dvc repro` executes the pipeline automatically, ensuring experiments can be
+      reproduced consistently.
+    - **Dependency tracking prevents unnecessary computation**: DVC tracks
+      dependencies (`-d`) and outputs (`-o`) for each stage. It only re-runs stages
+      when their dependencies change, saving time and computational resources on large
+      experiments.
+    - **The `dvc.yaml` defines the pipeline, `dvc.lock` tracks execution**: The
+      human-readable `dvc.yaml` describes stages and their relationships, while
+      `dvc.lock` records the exact state of each execution (checksums, parameters) for
+      reproducibility.
+    - **Parameters, metrics, and plots are first-class citizens**: DVC explicitly
+      tracks parameters (`-p`), metrics (`--metrics`), and plots (`--plots`), making
+      it easy to compare experiments and understand what changed between model
+      iterations.
+
 ## State of the MLOps process
 
 - [x] Notebook has been transformed into scripts for production

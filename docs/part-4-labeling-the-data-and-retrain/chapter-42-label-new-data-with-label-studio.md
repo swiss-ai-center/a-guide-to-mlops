@@ -88,6 +88,26 @@ datasets.
 
 That concludes this chapter.
 
+!!! abstract "Take away"
+
+    - **Manual labeling quickly reveals scale challenges**: Even with an efficient
+      tool like Label Studio, labeling hundreds or thousands of images manually is
+      time-consuming and error-prone, highlighting the need for strategies like active
+      learning, pre-labeling, or semi-supervised approaches to scale annotation
+      efforts.
+    - **Keyboard shortcuts are essential for labeling efficiency**: The difference
+      between clicking each label versus pressing a single key adds up dramatically
+      over thousands of annotations. Optimizing the labeling interface for speed
+      directly impacts project timelines and labeler fatigue.
+    - **Annotation metadata enables quality control**: Label Studio's tracking of
+      annotator identity, timestamps, and annotation history creates an audit trail
+      that helps identify inconsistencies, measure inter-annotator agreement, and
+      validate data quality before training.
+    - **Systematic labeling prevents inconsistencies**: Using a structured tool with
+      predefined categories and validation rules ensures uniform labeling conventions
+      across the dataset, reducing the noise that can harm model performance when
+      different annotators use different standards.
+
 ## State of the labeling process
 
 - [x] Labeling of supplemental data can be done systematically and uniformly

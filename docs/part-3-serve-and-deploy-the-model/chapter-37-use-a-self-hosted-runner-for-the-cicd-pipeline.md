@@ -940,6 +940,24 @@ In this chapter, you have successfully:
 2. Published the containerized runner image to the container registry
 3. Deployed the self-hosted runner on Kubernetes
 
+!!! abstract "Take away"
+
+    - **Self-hosted runners enable custom infrastructure**: Running CI/CD jobs on
+      your own infrastructure (rather than provider-managed runners) allows you to use
+      specialized hardware like GPUs, access private networks, and control compute
+      costs more granularly.
+    - **Containerized runners provide consistency and isolation**: Packaging runners
+      as Docker containers ensures they have all required dependencies and provides
+      isolation between jobs, preventing one job from affecting another's environment.
+    - **Security considerations intensify with self-hosting**: Self-hosted runners
+      executing untrusted code (from forks, external contributors) require careful
+      security measures like disabling fork workflows, using private repositories, and
+      implementing proper isolation to prevent malicious code execution.
+    - **On-demand infrastructure optimizes resource usage**: Creating runners
+      dynamically for training jobs (rather than keeping them always running) allows
+      you to use expensive resources like GPUs only when needed, significantly
+      reducing costs.
+
 ## State of the MLOps process
 
 - [x] Notebook has been transformed into scripts for production

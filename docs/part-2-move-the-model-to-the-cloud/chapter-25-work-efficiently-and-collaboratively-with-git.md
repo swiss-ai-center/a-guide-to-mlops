@@ -423,6 +423,21 @@ In the next chapters, you will enhance the workflow to fix those issues.
 
 You can now safely continue to the next chapter.
 
+!!! abstract "Take away"
+
+    - **Issue tracking creates accountability and traceability**: Opening issues
+      before starting work documents the intent, provides context for changes, and
+      creates a searchable history of project decisions and improvements.
+    - **Feature branches isolate work and enable parallel development**: Creating
+      dedicated branches for each feature or issue allows multiple team members to
+      work independently without interfering with each other or the main branch.
+    - **Pull requests are the gateway to quality**: The PR/MR workflow with CML
+      reports provides a formal review process where changes can be discussed,
+      validated with data, and approved before integration.
+    - **Branch protection enforces best practices**: Requiring PRs before merging
+      and preventing force pushes to main ensures that all changes are reviewed,
+      tested by CI/CD, and properly documented.
+
 ## State of the MLOps process
 
 - [x] Notebook has been transformed into scripts for production

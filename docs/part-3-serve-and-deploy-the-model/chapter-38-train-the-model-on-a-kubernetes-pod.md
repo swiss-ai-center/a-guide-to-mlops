@@ -918,6 +918,25 @@ In this chapter, you have successfully:
 1. Set up an specialized on-demand runner on a pod in Kubernetes
 2. Trained the model on the specialized pod on the Kubernetes cluster
 
+!!! abstract "Take away"
+
+    - **Node selection enables hardware-specific workloads**: Kubernetes
+      nodeSelector and labels allow you to route compute-intensive jobs (like model
+      training) to nodes with specialized hardware (GPUs, high-memory instances),
+      ensuring workloads run on appropriate infrastructure.
+    - **On-demand pods optimize expensive resource usage**: Creating specialized
+      training pods only when needed (and cleaning them up afterwards) prevents
+      monopolizing shared GPU resources and reduces costs compared to always-running
+      infrastructure.
+    - **Workflow orchestration coordinates complex jobs**: Using job dependencies
+      (`needs` in GitHub Actions) ensures proper sequencing. Setup runs first,
+      training runs on the created infrastructure, and cleanup happens regardless of
+      success/failure, preventing resource leaks.
+    - **Separation of training and serving infrastructure makes sense**: Training
+      models on specialized GPU runners while serving on standard instances allows you
+      to optimize for different workload characteristics. Training benefits from GPUs
+      while serving prioritizes availability and cost efficiency.
+
 ### Destroy the Kubernetes cluster
 
 When you are done with the chapter, you can destroy the Kubernetes cluster.

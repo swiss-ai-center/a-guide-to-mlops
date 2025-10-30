@@ -541,6 +541,25 @@ In this chapter, you have successfully:
 1. Created and containerized a BentoML model artifact
 2. Published the BentoML model artifact Docker image to the container registry
 
+!!! abstract "Take away"
+
+    - **Bentofiles define reproducible deployment environments**: The
+      `bentofile.yaml` specifies exactly which code, dependencies, and Python version
+      are needed to run your service, making deployments reproducible across
+      environments and preventing "works on my machine" issues.
+    - **Containerization makes models portable and scalable**: By packaging your
+      BentoML service as a Docker container, you create a self-contained unit that can
+      run anywhere Docker is supported, from local machines to cloud platforms to
+      Kubernetes clusters.
+    - **Container registries serve as model deployment hubs**: Publishing
+      containerized models to a registry (Google Artifact Registry, Docker Hub, etc.)
+      creates a centralized, versioned repository where deployment systems can pull
+      production-ready model images.
+    - **Separation of concerns improves the build process**: BentoML handles
+      ML-specific concerns (model loading, inference logic) while Docker handles
+      deployment concerns (environment isolation, portability), allowing each tool to
+      excel at what it does best.
+
 ## State of the MLOps process
 
 - [x] Notebook has been transformed into scripts for production

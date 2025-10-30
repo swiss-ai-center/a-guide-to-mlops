@@ -789,6 +789,22 @@ In the next chapters, you will enhance the workflow to fix those issues.
 
 You can now safely continue to the next chapter.
 
+!!! abstract "Take away"
+
+    - **Modular Python scripts enable production-ready ML workflows**: Converting
+      notebooks to separate `prepare.py`, `train.py`, and `evaluate.py` scripts
+      creates clear separation of concerns and makes code easier to test, maintain,
+      and integrate into automated pipelines.
+    - **Parameters should be externalized**: Using a `params.yaml` file to store
+      configuration separates logic from configuration, making it easy to experiment
+      with different hyperparameters without modifying code.
+    - **Dependency management requires two levels**: `requirements.txt` tracks
+      high-level dependencies you explicitly need, while `requirements-freeze.txt`
+      captures all transitive dependencies with exact versions for reproducibility.
+    - **Command-line interfaces make automation possible**: Scripts that accept
+      arguments and can be run from the terminal integrate seamlessly with scheduling
+      tools, CI/CD pipelines, and orchestration systems.
+
 ## State of the MLOps process
 
 - [x] Notebook has been transformed into scripts for production

@@ -435,6 +435,23 @@ You fixed some of the previous issues:
 
 You can now safely continue to the next chapter.
 
+!!! abstract "Take away"
+
+    - **Git and DVC solve different version control problems**: Git excels at
+      tracking code changes with its line-by-line diffs, while DVC efficiently handles
+      large files (datasets, models) using chunking and content-addressable storage
+      without bloating your repository.
+    - **The `.dvc` files are metadata, not data**: When you `dvc add` a file, DVC
+      creates a small `.dvc` metadata file that gets committed to Git, while the
+      actual data is stored in the DVC cache. This separation keeps repositories
+      lightweight.
+    - **Smart `.gitignore` configuration is essential**: Configure `.gitignore` to
+      exclude raw data and model directories while allowing DVC metadata files (`.dvc`
+      files and DVC-generated `.gitignore` files) to be tracked by Git.
+    - **Local versioning enables future collaboration**: Setting up Git and DVC
+      locally is the foundation. In later chapters, you'll push to remote repositories
+      to enable team collaboration and experiment tracking.
+
 ## State of the MLOps process
 
 - [x] Notebook has been transformed into scripts for production
