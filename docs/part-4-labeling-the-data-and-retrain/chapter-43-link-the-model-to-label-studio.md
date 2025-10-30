@@ -48,14 +48,14 @@ Python has many packages for building web frameworks. In this guide we will use
 `fastapi[standard]` dependency to the `requirements.txt` file:
 
 ```txt title="requirements.txt" hl_lines="8"
-tensorflow==2.17.0
-matplotlib==3.9.2
-pyyaml==6.0.2
-dvc[gs]==3.60.1
-bentoml==1.4.25
-pillow==11.2.1
-label-studio==1.20.0
-fastapi[standard]==0.115.14
+tensorflow==2.20.0
+matplotlib==3.10.7
+pyyaml==6.0.3
+dvc[gs]==3.63.0
+bentoml==1.4.28
+pillow==11.3.0
+label-studio==1.22.0
+fastapi[standard]==0.120.4
 ```
 
 Check the differences with Git to validate the changes:
@@ -72,11 +72,11 @@ diff --git a/requirements.txt b/requirements.txt
 index 160d09c..1721a7f 100644
 --- a/requirements.txt
 +++ b/requirements.txt
-@@ -5,3 +5,4 @@ dvc[gs]==3.60.1
- bentoml==1.4.25
- pillow==11.2.1
- label-studio==1.20.0
-+fastapi[standard]==0.115.14
+@@ -5,3 +5,4 @@ dvc[gs]==3.63.0
+ bentoml==1.4.28
+ pillow==11.3.0
+ label-studio==1.21.0
++fastapi[standard]==0.120.4
 ```
 
 Install the package and update the freeze file.
