@@ -253,6 +253,19 @@ dvc init
 The `dvc init` command creates a `.dvc` directory in the working directory,
 which serves as the configuration directory for DVC.
 
+!!! info
+
+    By default, DVC collects anonymized usage analytics to help improve the tool. If
+    you prefer to opt out, you can disable analytics with the following command:
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Disable DVC analytics
+    dvc config core.analytics false
+    ```
+
+    For more information, see the
+    [DVC Analytics documentation](https://dvc.org/doc/user-guide/analytics).
+
 #### Update the .gitignore file and add the experiment data to DVC
 
 With DVC now set up, you can begin adding files to it.
