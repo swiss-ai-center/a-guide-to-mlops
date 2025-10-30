@@ -122,10 +122,10 @@ images to the corresponding folders in the `data/raw` directory.
 You can run the script using the following command:
 
 ```sh title="Execute the following command(s) in a terminal"
-python3.12 scripts/parse_annotations.py
+python3.13 scripts/parse_annotations.py
 ```
 
-The annotated images will be copied to the `data/raw` directory. The output
+The a3.13ated images will be copied to the `data/raw` directory. The output
 should look like this:
 
 ```text

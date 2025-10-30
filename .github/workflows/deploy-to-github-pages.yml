@@ -34,7 +34,7 @@ jobs:
 
       - uses: actions/setup-python@v6
         with:
-          python-version: 3.12
+          python-version: 3.13
           cache: 'pip'
 
       - name: Install dependencies
@@ -53,7 +53,7 @@ jobs:
 
       - uses: actions/setup-python@v6
         with:
-          python-version: 3.12
+          python-version: 3.13
           cache: pip
 
       - uses: actions/cache@v4
