@@ -10,6 +10,15 @@ By linking your local project to a remote repository on platforms like
 [:simple-github: GitHub](../tools.md) or [:simple-gitlab: GitLab](../tools.md),
 you can easily push, pull, and synchronize changes with your team.
 
+!!! warning "GitHub Required for Later Chapters"
+
+    **Important:** Chapters 3.7 and 3.8 currently support only :simple-github:
+    GitHub. If you plan to complete the entire guide, we recommend using GitHub from
+    the start to avoid switching platforms later.
+
+    We are working on adding :simple-gitlab: GitLab support for these chapters.
+    Thank you for your patience!
+
 The following diagram illustrates the control flow of the experiment at the end
 of this chapter:
 

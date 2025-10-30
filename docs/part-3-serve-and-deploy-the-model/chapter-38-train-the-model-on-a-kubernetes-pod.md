@@ -2,13 +2,18 @@
 
 ## Introduction
 
-!!! warning
+!!! warning "GitHub Only"
 
-    This chapter is a work in progress. It focuses for now solely on :simple-github:
-    GitHub. Please check back later for updates specific to using :simple-gitlab:
-    GitLab.
+    **This chapter currently supports only :simple-github: GitHub.** We are actively
+    working on adding support for :simple-gitlab: GitLab.
 
-    Thank you!
+    If you have been using GitLab up to this point, you may need to either:
+
+    - Wait for GitLab support to be added
+    - Switch to GitHub for these chapters
+    - Skip these chapters for now
+
+    We appreciate your understanding!
 
 You can now train your model on the cluster. However, some experiments may
 require specific hardware to run. For instance, training a deep learning model
