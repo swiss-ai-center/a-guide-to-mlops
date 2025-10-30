@@ -35,7 +35,7 @@ jsmin==3.0.1
 markdown==3.9
 markupsafe==3.0.3
 mccabe==0.7.0
-mdwrap @ git+https://github.com/swiss-ai-center/mdwrap.git@1e7870e1446def80e087628feb2d2e40278366f4
+mdwrap @ git+https://github.com/swiss-ai-center/mdwrap.git@0.2.4
 mergedeep==1.3.4
 mkdocs==1.6.1
 mkdocs-get-deps==0.2.0
