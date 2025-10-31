@@ -654,8 +654,8 @@ Here, the following should be noted:
 When creating pull requests:
 
 * the `setup-runner` job creates a self-hosted GPU runner.
-* the `train-report` job runs on the self-hosted GPU runner. It trains the model
-  and pushes the trained model to the remote bucket with DVC.
+* the `train-and-report` job runs on the self-hosted GPU runner. It trains the
+  model and pushes the trained model to the remote bucket with DVC.
 * the `cleanup-runner` job destroys the self-hosted GPU runner that was created.
   It also guarantees that the GPU runner pod is removed, even when if the previous
   step failed or was manually cancelled.
@@ -850,9 +850,15 @@ git push
 
 ### Check the results
 
-You can see the pipeline running on the **Actions** page.
+Go back to your GitHub repository.
 
-The pod should be created on the Kubernetes Cluster.
+* Create a pull request and visualize the execution of the CI/CD pipeline on the
+  **Actions** page. The `train-and-report` job will run on a pod created by the
+  self-hosted runner on the Kubernetes Cluster. It trains the model and DVC pushes
+  the trained model to the remote bucket.
+* Merge the pull request, and switch back to the main branch and pull the latest
+  changes. The `publish-and-deploy` will run on the main runner. It retrieves the
+  model with DVC, containerizes then deploys the model artifact.
 
 === ":simple-googlecloud: Google Cloud"
 
@@ -875,15 +881,6 @@ The pod should be created on the Kubernetes Cluster.
     If you want to contribute, please open an issue or a pull request on the
     [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
     help is greatly appreciated!
-
-Go back to your GitHub repository.
-
-* Create a pull request and visualize the execution of the CI/CD pipeline. The
-  `train-report` job will run on the self-hosted runner. It trains the model and
-  DVC pushes the trained model to the remote bucket.
-* Merge the pull request/merge request, and switch back to the main branch and
-  pull the latest changes. The `publish-and-deploy` will run on the main runner.
-  It retrieves the model with DVC, containerizes then deploys the model artifact.
 
 This chapter is done, you can check the summary.
 

@@ -16,10 +16,10 @@ In this chapter, you will learn how to:
 2. Create a new branch to add your changes
 3. Check out the new branch
 4. Commit and push experiment changes
-5. Create a pull request/merge request
+5. Create a pull request
 6. Visualize the execution of the CI/CD pipeline
-7. Visualize the CML report that is added to your pull request/merge request
-8. Merge the pull request/merge request to the main branch
+7. Visualize the CML report that is added to your pull request
+8. Merge the pull request to the main branch
 9. Switch back to the main branch and pull latest changes
 
 The following diagram illustrates the control flow of the experiment:
@@ -219,7 +219,7 @@ git commit -m "Make some changes to the model"
 git push
 ```
 
-### Create a pull request/merge request
+### Create a pull request
 
 Go back to your GitHub repository. A new **Compare & pull request** button
 should automatically appear. Click on it. Name the pull request
@@ -257,7 +257,7 @@ plots.
     </figure>
 </div>
 
-### Merge the pull request/merge request
+### Merge the pull request
 
 Once you are satisfied with the model's performance, you can merge the changes.
 
@@ -307,7 +307,7 @@ git fetch origin
 # Check to the main branch
 git checkout main
 
-# Pull the changes made by the pull request/merge request
+# Pull the changes made by the pull request
 git pull
 ```
 
@@ -323,10 +323,10 @@ In this chapter, you have successfully:
 4. Created a new branch to add your changes
 5. Checked out the new branch
 6. Commit and pushed experiment changes
-7. Created a pull request/merge request
+7. Created a pull request
 8. Visualized the execution of the CI/CD pipeline
-9. Visualized the CML report that is added to your pull request/merge request
-10. Merged the pull request/merge request to the main branch
+9. Visualized the CML report that is added to your pull request
+10. Merged the pull request to the main branch
 11. Switched back to the main branch and pulled latest changes
 
 However, you might have identified the following areas for improvement:
@@ -345,7 +345,7 @@ You can now safely continue to the next chapter.
     - **Feature branches isolate work and enable parallel development**: Creating
       dedicated branches for each feature or issue allows multiple team members to
       work independently without interfering with each other or the main branch.
-    - **Pull requests are the gateway to quality**: The PR/MR workflow with CML
+    - **Pull requests are the gateway to quality**: The PR workflow with CML
       reports provides a formal review process where changes can be discussed,
       validated with data, and approved before integration.
     - **Branch protection enforces best practices**: Requiring PRs before merging
