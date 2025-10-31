@@ -81,37 +81,18 @@ flowchart TB
 
 ### Open an issue
 
-=== ":simple-github: GitHub"
-
-    Create a new issue by going to the **Issues** section from the top header of
-    your GitHub repository. Select **New issue** and describe the
-    work/improvements/ideas that you want to integrate to the codebase. In this
-    guide, you can name the issue _Demonstrate model evolution tracking_. Create the
-    issue by selecting **Create**.
-
-=== ":simple-gitlab: GitLab"
-
-    Create a new issue by going to the **Issues** section from the left sidebar of
-    your GitLab project. Select **New issue** and describe the
-    work/improvements/ideas that you want to integrate to the codebase. In this
-    guide, you can name the issue _Demonstrate model evolution tracking_. Create the
-    issue by selecting **Submit new issue**.
+Create a new issue by going to the **Issues** section from the top header of
+your GitHub repository. Select **New issue** and describe the
+work/improvements/ideas that you want to integrate to the codebase. In this
+guide, you can name the issue _Demonstrate model evolution tracking_. Create the
+issue by selecting **Create**.
 
 ### Create a branch for the issue
 
-=== ":simple-github: GitHub"
-
-    In the newly created issue, select
-    **Create a branch for this issue or link a pull request** from the right
-    sidebar. Create the branch by selecting **Create branch**. A new pop-up opens
-    with the name of the branch you want to checkout to.
-
-=== ":simple-gitlab: GitLab"
-
-    In the newly created issue, select **Create merge request** and change the merge
-    request configuration if needed. Create the merge request by selecting
-    **Create merge request**. This will automatically create a new branch linked to
-    the issue.
+In the newly created issue, select
+**Create a branch for this issue or link a pull request** from the right
+sidebar. Create the branch by selecting **Create branch**. A new pop-up opens
+with the name of the branch you want to checkout to.
 
 ### Checkout the new branch
 
@@ -240,111 +221,58 @@ git push
 
 ### Create a pull request/merge request
 
-=== ":simple-github: GitHub"
-
-    Go back to your GitHub repository. A new **Compare & pull request** button
-    should automatically appear. Click on it. Name the pull request
-    _Demonstrate model evolution tracking_ and select **Create pull request**.
-
-=== ":simple-gitlab: GitLab"
-
-    The merge request has already been created from the issue earlier, you can
-    proceed to the next step.
+Go back to your GitHub repository. A new **Compare & pull request** button
+should automatically appear. Click on it. Name the pull request
+_Demonstrate model evolution tracking_ and select **Create pull request**.
 
 ### Visualize the execution of the CI/CD pipeline
 
-=== ":simple-github: GitHub"
+The pull request opens and automatically starts the workflow
+`MLOps / train_and_report (pull_request)` under the
+**Some checks haven’t completed yet** section. You can click on **Details** to
+see the execution details.
 
-    The pull request opens and automatically starts the workflow
-    `MLOps / train_and_report (pull_request)` under the
-    **Some checks haven’t completed yet** section. You can click on **Details** to
-    see the execution details.
+Explore the output and try to identify the steps that are executed.
 
-    Explore the output and try to identify the steps that are executed.
-
-    Once the workflow has successfully been executed, the
-    **Some checks haven't completed yet** section should become
-    **All checks have passed**.
-
-=== ":simple-gitlab: GitLab"
-
-    Open the merge request. The pipeline should start. Click on the pipeline number
-    to see its details.
-
-    Explore the stages and jobs and try to see how the configuration file shows up
-    in GitLab.
+Once the workflow has successfully been executed, the
+**Some checks haven't completed yet** section should become
+**All checks have passed**.
 
 ### Visualize the CML report
 
-=== ":simple-github: GitHub"
+When the CI/CD pipeline completes, a new comment is added to your pull request.
+Check the pull request and examine the report published by CML. As it uses the
+evaluation data that was pulled from DVC, it can use it to display all the
+plots.
 
-    When the CI/CD pipeline completes, a new comment is added to your pull request.
-    Check the pull request and examine the report published by CML. As it uses the
-    evaluation data that was pulled from DVC, it can use it to display all the
-    plots.
-
-    <div style="display: flex" markdown>
-        <figure markdown>
-            ![Plots Diff 1 Light](../assets/images/github_cml_report_1_light.png#only-light){ loading=lazy }
-        </figure> <figure markdown>
-            ![Plots Diff 1 Dark](../assets/images/github_cml_report_1_dark.png#only-dark){ loading=lazy }
-        </figure> <figure markdown>
-            ![Plots Diff 2 Light](../assets/images/github_cml_report_2_light.png#only-light){ loading=lazy }
-        </figure> <figure markdown>
-            ![Plots Diff 2 Dark](../assets/images/github_cml_report_2_dark.png#only-dark){ loading=lazy }
-        </figure>
-    </div>
-
-=== ":simple-gitlab: GitLab"
-
-    When the CI/CD pipeline completes, a new comment is added to your merge request.
-    Check the merge request and examine the report made by CML. As it uses the
-    evaluation data that was pulled DVC, it can uses it to display all the plots.
-
-    <div style="display: flex" markdown>
-        <figure markdown>
-            ![Plots Diff 1 Light](../assets/images/gitlab_cml_report_1_light.png#only-light){ loading=lazy }
-        </figure> <figure markdown>
-            ![Plots Diff 1 Dark](../assets/images/gitlab_cml_report_1_dark.png#only-dark){ loading=lazy }
-        </figure> <figure markdown>
-            ![Plots Diff 2 Light](../assets/images/gitlab_cml_report_2_light.png#only-light){ loading=lazy }
-        </figure> <figure markdown>
-            ![Plots Diff 2 Dark](../assets/images/gitlab_cml_report_2_dark.png#only-dark){ loading=lazy }
-        </figure>
-    </div>
+<div style="display: flex" markdown>
+    <figure markdown>
+        ![Plots Diff 1 Light](../assets/images/github_cml_report_1_light.png#only-light){ loading=lazy }
+    </figure> <figure markdown>
+        ![Plots Diff 1 Dark](../assets/images/github_cml_report_1_dark.png#only-dark){ loading=lazy }
+    </figure> <figure markdown>
+        ![Plots Diff 2 Light](../assets/images/github_cml_report_2_light.png#only-light){ loading=lazy }
+    </figure> <figure markdown>
+        ![Plots Diff 2 Dark](../assets/images/github_cml_report_2_dark.png#only-dark){ loading=lazy }
+    </figure>
+</div>
 
 ### Merge the pull request/merge request
 
-=== ":simple-github: GitHub"
+Once you are satisfied with the model's performance, you can merge the changes.
 
-    Once you are satisfied with the model's performance, you can merge the changes.
+Go back to the pull request. At the end of the page, select
+**Merge pull request**. Confirm the merge by selecting **Confirm merge**.
 
-    Go back to the pull request. At the end of the page, select
-    **Merge pull request**. Confirm the merge by selecting **Confirm merge**.
+The associated issue will be automatically closed as well.
 
-    The associated issue will be automatically closed as well.
+You can delete the branch by clicking **Delete branch** to clean up your
+repository. If you ever need to go back to this branch, you can always restore
+the branch from this menu.
 
-    You can delete the branch by clicking **Delete branch** to clean up your
-    repository. If you ever need to go back to this branch, you can always restore
-    the branch from this menu.
-
-    Congratulations! You can now iterate on your model while keeping a trace of the
-    improvements made to it. You can visualize and discuss the changes made to a
-    model before merging them into the codebase.
-
-=== ":simple-gitlab: GitLab"
-
-    Once you are satisfied with the model's performance, you can merge the changes.
-
-    Go back to the merge request. Select **Mark as ready**. This will allow to merge
-    the changes. Confirm the merge by selecting **Merge** (you might need to refresh
-    the page to see this button).
-
-    The associated issue will be automatically closed as well.
-
-    Congratulations! You can now iterate on your model while keeping a trace of the
-    improvements made to it. You can visualize and discuss the changes made to a
-    model before merging them into the codebase.
+Congratulations! You can now iterate on your model while keeping a trace of the
+improvements made to it. You can visualize and discuss the changes made to a
+model before merging them into the codebase.
 
 !!! tip "Protecing the codebase"
 
@@ -352,35 +280,21 @@ git push
     include thoroughly reviewed and validated changes that benefit the model and can
     be replicated.
 
-    Establishing branch protection rules that require a pull request (PR) or merge
-    request (MR) process before merging into the main codebase guarantees that all
-    changes are reviewed. This approach not only encourages collaboration and
-    knowledge sharing among team members, but also reduces the risk of introducing
-    errors that could disrupt the production workflow.
+    Establishing branch protection rules that require a pull request (PR) process
+    before merging into the main codebase guarantees that all changes are reviewed.
+    This approach not only encourages collaboration and knowledge sharing among team
+    members, but also reduces the risk of introducing errors that could disrupt the
+    production workflow.
 
-    === ":simple-github: GitHub"
+    To set up branch protection in your GitHub repository, navigate to
+    **Settings > Branches**. Here, you can add branch protection rules for the
+    `main` branch:
 
-        To set up branch protection in your GitHub repository, navigate to
-        **Settings > Branches**. Here, you can add branch protection rules for the
-        `main` branch:
+    * Check *Require a pull request before merging*
+    * Uncheck *Allow force pushes*
+    * Uncheck *Allow deletions*
 
-        * Check *Require a pull request before merging*
-        * Uncheck *Allow force pushes*
-        * Uncheck *Allow deletions*
-
-        These settings ensure that all changes pass the CI/CD pipeline before merging.
-
-    === ":simple-gitlab: GitLab"
-
-        To set up branch protection in your GitLab repository, navigate to
-        **Settings > Repository > Protected branches**. Here, you can add protection
-        rules for the `main` branch:
-
-        * From the *Allowed to merge* list, select **Developers + Maintainers**.
-        * From the *Allowed to push and merge* list, select **No one**.
-        * Uncheck *Allowed to force push*
-
-        These settings ensure that all changes pass the CI/CD pipeline before merging.
+    These settings ensure that all changes pass the CI/CD pipeline before merging.
 
 ### Switch back to the main branch and pull latest changes
 

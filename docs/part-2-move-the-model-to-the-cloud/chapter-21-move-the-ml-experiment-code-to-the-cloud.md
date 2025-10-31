@@ -7,17 +7,8 @@ the experiment, let's set up a remote repository for sharing the code with the
 team.
 
 By linking your local project to a remote repository on platforms like
-[:simple-github: GitHub](../tools.md) or [:simple-gitlab: GitLab](../tools.md),
-you can easily push, pull, and synchronize changes with your team.
-
-!!! warning "GitHub Required for Later Chapters"
-
-    **Important:** Chapters 3.7 and 3.8 currently support only :simple-github:
-    GitHub. If you plan to complete the entire guide, we recommend using GitHub from
-    the start to avoid switching platforms later.
-
-    We are working on adding :simple-gitlab: GitLab support for these chapters.
-    Thank you for your patience!
+[:simple-github: GitHub](../tools.md), you can easily push, pull, and
+synchronize changes with your team.
 
 The following diagram illustrates the control flow of the experiment at the end
 of this chapter:
@@ -78,25 +69,13 @@ flowchart TB
 Create a Git repository on your preferred service to collaborate with peers. For
 example, choose `mlops-guide` as repository name.
 
-=== ":simple-github: GitHub"
+!!! danger "Important"
 
-    !!! danger "Important"
+    Configure the repository as you wish but **do not** check the box
+    _"Add a README file"_, _"Add .gitignore"_ nor _"Choose a license"_.
 
-        Configure the repository as you wish but **do not** check the box
-        _"Add a README file"_, _"Add .gitignore"_ nor _"Choose a license"_.
-
-    Create a new GitHub repository for this chapter by accessing
-    <https://github.com/new>.
-
-=== ":simple-gitlab: GitLab"
-
-    !!! danger "Important"
-
-        Configure the repository as you wish but **do not** check the box
-        _"Initialize repository with a README"_.
-
-    Create a new GitLab blank project for this chapter by accessing
-    <https://gitlab.com/projects/new>.
+Create a new GitHub repository for this chapter by accessing
+<https://github.com/new>.
 
 ## Configure Git for the remote branch
 
@@ -104,23 +83,12 @@ Using the SSH protocol, you can connect and authenticate to your Git service
 provider without supplying your username and personal access token each time
 your want to share your changes.
 
-=== ":simple-github: GitHub"
+Generate a SSH key pair and configure your SSH access using
+[Connecting to GitHub with SSH](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/about-ssh).
 
-    Generate a SSH key pair and configure your SSH access using
-    [Connecting to GitHub with SSH](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/about-ssh).
-
-    Add the remote origin to your Git repository using SSH. For example, replace
-    `<my_git_repository_url>` with
-    `git@github.com:<my_username>/<my_repository_name>.git`.
-
-=== ":simple-gitlab: GitLab"
-
-    Generate a SSH key pair and configure your SSH access using
-    [Use SSH keys to communicate with GitLab](https://docs.gitlab.com/ee/user/ssh.html).
-
-    Add the remote origin to your Git repository using SSH. For example, replace
-    `<my_git_repository_url>` with
-    `git@gitlab.com:<my_username>/<my_repository_name>.git`.
+Add the remote origin to your Git repository using SSH. For example, replace
+`<my_git_repository_url>` with
+`git@github.com:<my_username>/<my_repository_name>.git`.
 
 
 ```sh title="Execute the following command(s) in a terminal"
@@ -176,8 +144,8 @@ You can now safely continue to the next chapter.
 !!! abstract "Take away"
 
     - **Remote Git repositories enable team collaboration**: By pushing your local
-      Git repository to GitHub or GitLab, you create a centralized source of truth
-      that all team members can access, clone, and contribute to.
+      Git repository to GitHub, you create a centralized source of truth that all team
+      members can access, clone, and contribute to.
     - **SSH keys provide secure, passwordless authentication**: Setting up SSH
       authentication eliminates the need to enter credentials with every push/pull
       operation, streamlining your workflow while maintaining security.
@@ -218,6 +186,5 @@ collaboration. Continue the guide to learn how.
 Highly inspired by:
 
 - [_Creating a new repository_ - docs.github.com](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository)
-- [_Create a project_ - docs.gitlab.com](https://docs.gitlab.com/ee/user/project/working_with_projects.html#create-a-project)
 - [_Managing remote repositories_ - github.com](https://docs.github.com/en/get-started/getting-started-with-git/managing-remote-repositories)
 - [_git-remote_ - git-scm.com](https://git-scm.com/docs/git-remote)

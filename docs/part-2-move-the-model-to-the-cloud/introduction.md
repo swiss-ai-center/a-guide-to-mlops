@@ -22,9 +22,16 @@ The following requirements are necessary to follow this part in addition to
 those described in the
 [first part](../part-1-local-training-and-model-evaluation/introduction.md#requirements):
 
-- A [:simple-github: GitHub](https://github.com) or a
-  [:simple-gitlab: GitLab](https://gitlab.com) account
+- A [:simple-github: GitHub](https://github.com) account
 - A [:simple-googlecloud: Google Cloud](https://cloud.google.com) account
+
+??? info "Using another development platform? Read this!"
+
+    This guide has been written with GitHub in mind, but the core MLOps principles
+    and architecture patterns remain applicable across on-premise platforms like
+    [GitLab](https://about.gitlab.com/) and [Gitea](https://about.gitea.com/) with
+    some specific adjustments. GitLab offers a comprehensive built-in CI/CD system,
+    while Gitea is largely compatible with GitHub Actions syntax.
 
 ??? info "Using another cloud provider? Read this!"
 

@@ -2,19 +2,6 @@
 
 ## Introduction
 
-!!! warning "GitHub Only"
-
-    **This chapter currently supports only :simple-github: GitHub.** We are actively
-    working on adding support for :simple-gitlab: GitLab.
-
-    If you have been using GitLab up to this point, you may need to either:
-
-    - Wait for GitLab support to be added
-    - Switch to GitHub for these chapters
-    - Skip these chapters for now
-
-    We appreciate your understanding!
-
 You can now train your model on the cluster. However, some experiments may
 require specific hardware to run. For instance, training a deep learning model
 might require a GPU. This GPU could be shared among multiple teams for different
@@ -410,20 +397,14 @@ different:
 
 === ":simple-googlecloud: Google Cloud"
 
-    === ":simple-github: GitHub"
+    Create the following new variable by going to the **Settings** section from the
+    top header of your GitHub repository. Select **Secrets and variables > Actions**
+    and select **New repository secret**:
 
-        Create the following new variable by going to the **Settings** section from the
-        top header of your GitHub repository. Select **Secrets and variables > Actions**
-        and select **New repository secret**:
+    - `GCP_K8S_KUBECONFIG`: The content of the `~/.kube/config` file of the
+      Kubernetes cluster.
 
-        - `GCP_K8S_KUBECONFIG`: The content of the `~/.kube/config` file of the
-          Kubernetes cluster.
-
-        Save the variables by selecting **Add secret**.
-
-    === ":simple-gitlab: GitLab"
-
-        No additional secret variables are necessary for the GitLab CI/CD.
+    Save the variables by selecting **Add secret**.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
@@ -869,9 +850,7 @@ git push
 
 ### Check the results
 
-On GitHub, you can see the pipeline running on the **Actions** page.
-
-On GitLab, you can see the pipeline running on the **CI/CD > Pipelines** page.
+You can see the pipeline running on the **Actions** page.
 
 The pod should be created on the Kubernetes Cluster.
 

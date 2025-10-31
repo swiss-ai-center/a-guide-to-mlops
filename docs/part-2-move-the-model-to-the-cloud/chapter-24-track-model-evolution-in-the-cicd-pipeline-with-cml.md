@@ -97,9 +97,8 @@ Alternatively, it can be a branch, enabling a comparison between the current run
 and the run linked to the target branch.
 
 Numerous workflows facilitate discussions and the integration of work into a
-target reference. In this guide, you will focus on two methods that are commonly
-used on GitHub - pull requests (PRs) - and GitLab - merge requests (MRs) - to
-incorporate the work performed into the `main` branch.
+target reference. You will focus on a method that is commonly used on GitHub -
+pull requests (PRs) - to incorporate the work performed into the `main` branch.
 
 ### Update the CI/CD pipeline configuration file
 
@@ -109,282 +108,59 @@ parameters and new metrics to the main branch, and published as a comment.
 These additions will enable a comprehensive analysis of branches and facilitate
 collaboration and decision-making within the team.
 
-=== ":simple-github: GitHub"
+Update the `.github/workflows/mlops.yaml` file with the following content.
+Explore this file to understand the `train-and-report` stage and its steps:
 
-    Update the `.github/workflows/mlops.yaml` file with the following content.
-    Explore this file to understand the `train-and-report` stage and its steps:
+```yaml title=".github/workflows/mlops.yaml" hl_lines="16-17 35-87"
+name: MLOps
 
-    ```yaml title=".github/workflows/mlops.yaml" hl_lines="16-17 35-87"
-    name: MLOps
+on:
+  # Runs on pushes targeting main branch
+  push:
+    branches:
+      - main
 
-    on:
-      # Runs on pushes targeting main branch
-      push:
-        branches:
-          - main
+  # Runs on pull requests
+  pull_request:
 
-      # Runs on pull requests
-      pull_request:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
-      # Allows you to run this workflow manually from the Actions tab
-      workflow_dispatch:
-
-    jobs:
-      train-and-report:
-        permissions: write-all
-        runs-on: ubuntu-latest
-        steps:
-          - name: Checkout repository
-            uses: actions/checkout@v5
-          - name: Setup Python
-            uses: actions/setup-python@v6
-            with:
-              python-version: '3.13'
-              cache: pip
-          - name: Install dependencies
-            run: pip install --requirement requirements-freeze.txt
-          - name: Login to Google Cloud
-            uses: google-github-actions/auth@v3
-            with:
-              credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
-          - name: Train model
-            run: dvc repro --pull
-          - name: Setup CML
-            if: github.event_name == 'pull_request'
-            uses: iterative/setup-cml@v2
-            with:
-              version: '0.20.6'
-          - name: Create CML report
-            if: github.event_name == 'pull_request'
-            env:
-              REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            run: |
-              # Fetch all other Git branches
-              git fetch --depth=1 origin main:main
-
-              # Add title to the report
-              echo "# Experiment Report (${{ github.sha }})" >> report.md
-
-              # Compare parameters to main branch
-              echo "## Params workflow vs. main" >> report.md
-              dvc params diff main --md >> report.md
-
-              # Compare metrics to main branch
-              echo "## Metrics workflow vs. main" >> report.md
-              dvc metrics diff main --md >> report.md
-
-              # Compare plots (images) to main branch
-              dvc plots diff main
-
-              # Create plots
-              echo "## Plots" >> report.md
-
-              # Create training history plot
-              echo "### Training History" >> report.md
-              echo "#### main" >> report.md
-              echo '![](./dvc_plots/static/main_evaluation_plots_training_history.png "Training History")' >> report.md
-              echo "#### workspace" >> report.md
-              echo '![](./dvc_plots/static/workspace_evaluation_plots_training_history.png "Training History")' >> report.md
-
-              # Create predictions preview
-              echo "### Predictions Preview" >> report.md
-              echo "#### main" >> report.md
-              echo '![](./dvc_plots/static/main_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
-              echo "#### workspace" >> report.md
-              echo '![](./dvc_plots/static/workspace_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
-
-              # Create confusion matrix
-              echo "### Confusion Matrix" >> report.md
-              echo "#### main" >> report.md
-              echo '![](./dvc_plots/static/main_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
-              echo "#### workspace" >> report.md
-              echo '![](./dvc_plots/static/workspace_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
-
-              # Publish the CML report
-              cml comment update --target=pr --publish report.md
-    ```
-
-    The updated `train-and-report` job is responsible for reporting the results of
-    the model evaluation and comparing it with the main branch. Some steps in this
-    job are triggered only on pull requests. The job checks out the repository, sets
-    up DVC and CML, creates and publishes the report as a pull request comment.
-
-    Check the differences with Git to validate the changes:
-
-    ```sh title="Execute the following command(s) in a terminal"
-    # Show the differences with Git
-    git diff .github/workflows/mlops.yaml
-    ```
-
-    The output should be similar to this:
-
-    ```diff
-    diff --git a/.github/workflows/mlops.yaml b/.github/workflows/mlops.yaml
-    index 5aae2a1..1fa989b 100644
-    --- a/.github/workflows/mlops.yaml
-    +++ b/.github/workflows/mlops.yaml
-    @@ -13,7 +13,8 @@ on:
-       workflow_dispatch:
-
-     jobs:
-    -  train:
-    +  train-and-report:
-    +    permissions: write-all
-         runs-on: ubuntu-latest
-         steps:
-           - name: Checkout repository
-    @@ -31,3 +32,56 @@ jobs:
-               credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
-           - name: Train model
-             run: dvc repro --pull
-    +      - name: Setup CML
-    +        if: github.event_name == 'pull_request'
-    +        uses: iterative/setup-cml@v2
-    +        with:
-    +          version: '0.20.6'
-    +      - name: Create CML report
-    +        if: github.event_name == 'pull_request'
-    +        env:
-    +          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    +        run: |
-    +          # Fetch all other Git branches
-    +          git fetch --depth=1 origin main:main
-    +
-    +          # Add title to the report
-    +          echo "# Experiment Report (${{ github.sha }})" >> report.md
-    +
-    +          # Compare parameters to main branch
-    +          echo "## Params workflow vs. main" >> report.md
-    +          dvc params diff main --md >> report.md
-    +
-    +          # Compare metrics to main branch
-    +          echo "## Metrics workflow vs. main" >> report.md
-    +          dvc metrics diff main --md >> report.md
-    +
-    +          # Compare plots (images) to main branch
-    +          dvc plots diff main
-    +
-    +          # Create plots
-    +          echo "## Plots" >> report.md
-    +
-    +          # Create training history plot
-    +          echo "### Training History" >> report.md
-    +          echo "#### main" >> report.md
-    +          echo '![](./dvc_plots/static/main_evaluation_plots_training_history.png "Training History")' >> report.md
-    +          echo "#### workspace" >> report.md
-    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_training_history.png "Training History")' >> report.md
-    +
-    +          # Create predictions preview
-    +          echo "### Predictions Preview" >> report.md
-    +          echo "#### main" >> report.md
-    +          echo '![](./dvc_plots/static/main_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
-    +          echo "#### workspace" >> report.md
-    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
-    +
-    +          # Create confusion matrix
-    +          echo "### Confusion Matrix" >> report.md
-    +          echo "#### main" >> report.md
-    +          echo '![](./dvc_plots/static/main_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
-    +          echo "#### workspace" >> report.md
-    +          echo '![](./dvc_plots/static/workspace_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
-    +
-    +          # Publish the CML report
-    +          cml comment update --target=pr --publish report.md
-    ```
-
-=== ":simple-gitlab: GitLab"
-
-    In order to allow commit from the CI and later generate reports with CML, a
-    Personal Access Token (PAT) must be created. A Project or a Group Access Token
-    are not sufficient for the usage of CML's runners that will be used in the next
-    steps.
-
-    To create a Personal Access Token, go in your
-    **Profile preferences > Access Tokens**.
-
-    - **Token name**: _gitlab-ci[bot]_
-    - **Expiration date**: _None_
-    - **Select scopes**: `api`, `read_repository` and `write_repository`
-
-    Select **Create personal access token** to create the token. Copy it. It will be
-    displayed only once.
-
-    Store the PAT as a CI/CD variable by going to **Settings > CI/CD** from the left
-    sidebar of your GitLab project.
-
-    Select **Variables** and select **Add variable**.
-
-    Create a new variable named `GITLAB_PAT` with the PAT value as its value.
-
-    - **Protect variable**: _Unchecked_
-    - **Mask variable**: _Checked_
-    - **Expand variable reference**: _Unchecked_
-
-    Save the variable by clicking **Add variable**.
-
-    Update the `.gitlab-ci.yml` file with the following content. Explore this file
-    to understand the `report` stage and its steps:
-
-    ```yaml title=".gitlab-ci.yml" hl_lines="3 13-14 40-97"
-    stages:
-      - train
-      - report
-
-    variables:
-      # Change pip's cache directory to be inside the project directory since we can
-      # only cache local items.
-      PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
-      # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
-      GIT_DEPTH: "0"
-      # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
-      GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
-      # Environment variable for CML
-      REPO_TOKEN: $GITLAB_PAT
-
-    train:
-      stage: train
-      image: python:3.13
-      rules:
-        - if: $CI_COMMIT_BRANCH == "main"
-        - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      before_script:
-        # Set the Google Service Account key
-        - echo "${GOOGLE_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
-        # Create the virtual environment for caching
-        - python3.13 -m venv .venv
-        - source .venv/bin/activate
-      script:
-        # Install dependencies
-        - pip install --requirement requirements-freeze.txt
-        # Run the experiment
-        - dvc repro --pull
-      cache:
-        paths:
-          # Pip's cache doesn't store the Python packages
-          # https://pip.pypa.io/en/stable/reference/pip_install/#caching
-          - .cache/pip
-          - .venv/
-
-    report:
-      stage: report
-      image: iterativeai/cml:0-dvc3-base1
-      needs:
-        - train
-      rules:
-        - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      before_script:
-        # Set the Google Service Account key
-        - echo "${GOOGLE_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
-      script:
-        - |
-          # Fetch the experiment changes
-          dvc pull
-
+jobs:
+  train-and-report:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+          cache: pip
+      - name: Install dependencies
+        run: pip install --requirement requirements-freeze.txt
+      - name: Login to Google Cloud
+        uses: google-github-actions/auth@v3
+        with:
+          credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
+      - name: Train model
+        run: dvc repro --pull
+      - name: Setup CML
+        if: github.event_name == 'pull_request'
+        uses: iterative/setup-cml@v2
+        with:
+          version: '0.20.6'
+      - name: Create CML report
+        if: github.event_name == 'pull_request'
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
           # Fetch all other Git branches
           git fetch --depth=1 origin main:main
 
           # Add title to the report
-          echo "# Experiment Report (${CI_COMMIT_SHA})" >> report.md
+          echo "# Experiment Report (${{ github.sha }})" >> report.md
 
           # Compare parameters to main branch
           echo "## Params workflow vs. main" >> report.md
@@ -423,158 +199,116 @@ collaboration and decision-making within the team.
 
           # Publish the CML report
           cml comment update --target=pr --publish report.md
-    ```
+```
 
-    The new `report` job is responsible for reporting the results of the model
-    evaluation and comparing it with the main branch. This job is triggered only on
-    merge requests. The job checks out the repository, sets up DVC and CML, creates
-    and publishes the report as a merge request comment.
+The updated `train-and-report` job is responsible for reporting the results of
+the model evaluation and comparing it with the main branch. Some steps in this
+job are triggered only on pull requests. The job checks out the repository, sets
+up DVC and CML, creates and publishes the report as a pull request comment.
 
-    !!! note
+Check the differences with Git to validate the changes:
 
-        You may notice that the `report` stage doesn't use the project dependencies. As
-        you do not need to reproduce the experiment, you can use DVC from the
-        `iterativeai/cml:0-dvc3-base1` Docker image without the project dependencies.
-        DVC will then retrieve the data stored on the bucket on its own.
+```sh title="Execute the following command(s) in a terminal"
+# Show the differences with Git
+git diff .github/workflows/mlops.yaml
+```
 
-    Check the differences with Git to validate the changes.
+The output should be similar to this:
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Show the differences with Git
-    git diff .gitlab-ci.yml
-    ```
+```diff
+diff --git a/.github/workflows/mlops.yaml b/.github/workflows/mlops.yaml
+index 5aae2a1..1fa989b 100644
+--- a/.github/workflows/mlops.yaml
++++ b/.github/workflows/mlops.yaml
+@@ -13,7 +13,8 @@ on:
+   workflow_dispatch:
 
-    The output should be similar to this:
-
-    ```diff
-    diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-    index d2445e9..dc7c69c 100644
-    --- a/.gitlab-ci.yml
-    +++ b/.gitlab-ci.yml
-    @@ -1,5 +1,6 @@
-     stages:
-       - train
-    +  - report
-
-     variables:
-       # Change pip's cache directory to be inside the project directory since we can
-    @@ -9,6 +10,8 @@ variables:
-       GIT_DEPTH: "0"
-       # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
-       GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
-    +  # Environment variable for CML
-    +  REPO_TOKEN: $GITLAB_PAT
-
-     train:
-       stage: train
-    @@ -33,3 +36,62 @@ train:
-           # https://pip.pypa.io/en/stable/reference/pip_install/#caching
-           - .cache/pip
-           - .venv/
-    +
-    +report:
-    +  stage: report
-    +  image: iterativeai/cml:0-dvc3-base1
-    +  needs:
-    +    - train
-    +  rules:
-    +    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    +  before_script:
-    +    # Set the Google Service Account key
-    +    - echo "${GOOGLE_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
-    +  script:
-    +    - |
-    +      # Fetch the experiment changes
-    +      dvc pull
-    +
-    +      # Fetch all other Git branches
-    +      git fetch --depth=1 origin main:main
-    +
-    +      # Add title to the report
-    +      echo "# Experiment Report (${CI_COMMIT_SHA})" >> report.md
-    +
-    +      # Compare parameters to main branch
-    +      echo "## Params workflow vs. main" >> report.md
-    +      dvc params diff main --md >> report.md
-    +
-    +      # Compare metrics to main branch
-    +      echo "## Metrics workflow vs. main" >> report.md
-    +      dvc metrics diff main --md >> report.md
-    +
-    +      # Compare plots (images) to main branch
-    +      dvc plots diff main
-    +
-    +      # Create plots
-    +      echo "## Plots" >> report.md
-    +
-    +      # Create training history plot
-    +      echo "### Training History" >> report.md
-    +      echo "#### main" >> report.md
-    +      echo '![](./dvc_plots/static/main_evaluation_plots_training_history.png "Training History")' >> report.md
-    +      echo "#### workspace" >> report.md
-    +      echo '![](./dvc_plots/static/workspace_evaluation_plots_training_history.png "Training History")' >> report.md
-    +
-    +      # Create predictions preview
-    +      echo "### Predictions Preview" >> report.md
-    +      echo "#### main" >> report.md
-    +      echo '![](./dvc_plots/static/main_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
-    +      echo "#### workspace" >> report.md
-    +      echo '![](./dvc_plots/static/workspace_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
-    +
-    +      # Create confusion matrix
-    +      echo "### Confusion Matrix" >> report.md
-    +      echo "#### main" >> report.md
-    +      echo '![](./dvc_plots/static/main_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
-    +      echo "#### workspace" >> report.md
-    +      echo '![](./dvc_plots/static/workspace_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
-    +
-    +      # Publish the CML report
-    +      cml comment update --target=pr --publish report.md
-    ```
+ jobs:
+-  train:
++  train-and-report:
++    permissions: write-all
+     runs-on: ubuntu-latest
+     steps:
+       - name: Checkout repository
+@@ -31,3 +32,56 @@ jobs:
+           credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
+       - name: Train model
+         run: dvc repro --pull
++      - name: Setup CML
++        if: github.event_name == 'pull_request'
++        uses: iterative/setup-cml@v2
++        with:
++          version: '0.20.6'
++      - name: Create CML report
++        if: github.event_name == 'pull_request'
++        env:
++          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
++        run: |
++          # Fetch all other Git branches
++          git fetch --depth=1 origin main:main
++
++          # Add title to the report
++          echo "# Experiment Report (${{ github.sha }})" >> report.md
++
++          # Compare parameters to main branch
++          echo "## Params workflow vs. main" >> report.md
++          dvc params diff main --md >> report.md
++
++          # Compare metrics to main branch
++          echo "## Metrics workflow vs. main" >> report.md
++          dvc metrics diff main --md >> report.md
++
++          # Compare plots (images) to main branch
++          dvc plots diff main
++
++          # Create plots
++          echo "## Plots" >> report.md
++
++          # Create training history plot
++          echo "### Training History" >> report.md
++          echo "#### main" >> report.md
++          echo '![](./dvc_plots/static/main_evaluation_plots_training_history.png "Training History")' >> report.md
++          echo "#### workspace" >> report.md
++          echo '![](./dvc_plots/static/workspace_evaluation_plots_training_history.png "Training History")' >> report.md
++
++          # Create predictions preview
++          echo "### Predictions Preview" >> report.md
++          echo "#### main" >> report.md
++          echo '![](./dvc_plots/static/main_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
++          echo "#### workspace" >> report.md
++          echo '![](./dvc_plots/static/workspace_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
++
++          # Create confusion matrix
++          echo "### Confusion Matrix" >> report.md
++          echo "#### main" >> report.md
++          echo '![](./dvc_plots/static/main_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
++          echo "#### workspace" >> report.md
++          echo '![](./dvc_plots/static/workspace_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
++
++          # Publish the CML report
++          cml comment update --target=pr --publish report.md
+```
 
 Take some time to understand the changes made to the file.
 
 ### Push the CI/CD pipeline configuration file to Git
 
-=== ":simple-github: GitHub"
+Push the CI/CD pipeline configuration file to Git:
 
-    Push the CI/CD pipeline configuration file to Git:
+```sh title="Execute the following command(s) in a terminal"
+# Add the configuration file
+git add .github/workflows/mlops.yaml
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Add the configuration file
-    git add .github/workflows/mlops.yaml
+# Commit the changes
+git commit -m "Add CML reporting to CI/CD pipeline"
 
-    # Commit the changes
-    git commit -m "Add CML reporting to CI/CD pipeline"
-
-    # Push the changes
-    git push
-    ```
-
-=== ":simple-gitlab: GitLab"
-
-    Push the CI/CD pipeline configuration file to Git:
-
-    ```sh title="Execute the following command(s) in a terminal"
-    # Add the configuration file
-    git add .gitlab-ci.yml
-
-    # Commit the changes
-    git commit -m "Add CML reporting to CI/CD pipeline"
-
-    # Push the changes
-    git push
-    ```
+# Push the changes
+git push
+```
 
 ### Check the results
 
-=== ":simple-github: GitHub"
-
-    You can see the pipeline running on the **Actions** page.
-
-=== ":simple-gitlab: GitLab"
-
-    You can see the pipeline running on the **CI/CD > Pipelines** page.
+You can see the pipeline running on the **Actions** page.
 
 You should see a pipeline running on the `main` branch. The pipeline should run
 the same way as in the previous chapter. In the next chapter, you will see how
@@ -615,7 +349,7 @@ You can now safely continue to the next chapter.
     - **Visual comparisons tell the story**: Side-by-side plots showing training
       history, predictions, and confusion matrices from main vs. workspace make it
       immediately clear whether changes improve or degrade model performance.
-    - **Integration with PR/MR workflows encourages best practices**: By tying
+    - **Integration with the PR workflow encourages best practices**: By tying
       experiment reports to pull requests, CML naturally encourages code review,
       discussion, and validation before changes are merged into the main branch.
 
@@ -652,12 +386,8 @@ collaboration. Continue the guide to learn how.
 Highly inspired by:
 
 - [_Get Started with CML on GitHub_ - cml.dev](https://cml.dev/doc/start/github)
-- [_Get Started with CML on GitLab_ - cml.dev](https://cml.dev/doc/start/gitlab)
-- [_Personal access tokens_ - docs.gitlab.com](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html)
 
 And the following Git repositories:
 
 - [`example_cml` - github.com](https://github.com/iterative/example_cml)
 - [`cml_dvc_case` - github.com](https://github.com/iterative/cml_dvc_case)
-- [`example_cml` - gitlab.com](https://gitlab.com/iterative.ai/example_cml)
-- [`cml-dvc-case` - gitlab.com](https://gitlab.com/iterative.ai/cml-dvc-case)
