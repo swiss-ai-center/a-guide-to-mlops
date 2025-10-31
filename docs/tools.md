@@ -21,20 +21,6 @@ process:
 - Model deploying: [:simple-kubernetes: Kubernetes](https://kubernetes.io/)
 - Data annotation: [Label Studio](https://labelstud.io/)
 
-??? info "Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
-
 You will go into details about each tool in the following parts of this guide.
 
 <!-- TODO: Add an illustration to display the different tools and their

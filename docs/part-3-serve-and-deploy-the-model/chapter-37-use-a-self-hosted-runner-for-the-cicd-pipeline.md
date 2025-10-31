@@ -891,25 +891,9 @@ On GitHub, you can see the pipeline running on the **Actions** page.
 
 On GitLab, you can see the pipeline running on the **CI/CD > Pipelines** page.
 
-=== ":simple-googlecloud: Google Cloud"
-
-    On Google Cloud Console, you can see the pod that has been created on the
-    [Kubernetes Engine Workloads](https://console.cloud.google.com/kubernetes/workload/)
-    page.
-
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
+On Google Cloud Console, you can see the pod that has been created on the
+[Kubernetes Engine Workloads](https://console.cloud.google.com/kubernetes/workload/)
+page.
 
 Before starting the entire model training from your CI/CD pipeline one final
 time, we will update the workflow to include another important element: a

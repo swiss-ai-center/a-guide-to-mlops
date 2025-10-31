@@ -245,17 +245,10 @@ Check the pull request and examine the report published by CML. As it uses the
 evaluation data that was pulled from DVC, it can use it to display all the
 plots.
 
-<div style="display: flex" markdown>
-    <figure markdown>
-        ![Plots Diff 1 Light](../assets/images/github_cml_report_1_light.png#only-light){ loading=lazy }
-    </figure> <figure markdown>
-        ![Plots Diff 1 Dark](../assets/images/github_cml_report_1_dark.png#only-dark){ loading=lazy }
-    </figure> <figure markdown>
-        ![Plots Diff 2 Light](../assets/images/github_cml_report_2_light.png#only-light){ loading=lazy }
-    </figure> <figure markdown>
-        ![Plots Diff 2 Dark](../assets/images/github_cml_report_2_dark.png#only-dark){ loading=lazy }
-    </figure>
-</div>
+![Plots Diff 1 Light](../assets/images/github_cml_report_1_light.png#only-light)
+![Plots Diff 1 Dark](../assets/images/github_cml_report_1_dark.png#only-dark)
+![Plots Diff 2 Light](../assets/images/github_cml_report_2_light.png#only-light)
+![Plots Diff 2 Dark](../assets/images/github_cml_report_2_dark.png#only-dark)
 
 ### Merge the pull request
 

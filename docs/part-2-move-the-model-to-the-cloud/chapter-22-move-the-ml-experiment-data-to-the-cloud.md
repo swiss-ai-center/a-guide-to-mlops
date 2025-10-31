@@ -88,42 +88,26 @@ Let's get started!
 
 Install and configure the cloud provider CLI tool to manage the cloud resources:
 
-=== ":simple-googlecloud: Google Cloud"
+To install `gcloud`, follow the official documentation:
+[_Install the Google Cloud CLI_ - cloud.google.com](https://cloud.google.com/sdk/docs/install-sdk)
 
-    To install `gcloud`, follow the official documentation:
-    [_Install the Google Cloud CLI_ - cloud.google.com](https://cloud.google.com/sdk/docs/install-sdk)
+**Initialize and configure the Google Cloud CLI**
 
-    **Initialize and configure the Google Cloud CLI**
+The following process will authenticate to Google Cloud using the Google Cloud
+CLI with the following command. It should open a browser window to authenticate
+to Google Cloud. You might need to follow the instructions in the terminal to
+authenticate:
 
-    The following process will authenticate to Google Cloud using the Google Cloud
-    CLI with the following command. It should open a browser window to authenticate
-    to Google Cloud. You might need to follow the instructions in the terminal to
-    authenticate:
+!!! warning
 
-    !!! warning
+    If gcloud asks you to pick a project or create a project, exit the process by
+    pressing ++ctrl+c++ in the terminal and follow the next steps to create a
+    project.
 
-        If gcloud asks you to pick a project or create a project, exit the process by
-        pressing ++ctrl+c++ in the terminal and follow the next steps to create a
-        project.
-
-    ```sh title="Execute the following command(s) in a terminal"
-    # Initialize and login to Google Cloud
-    gcloud init
-    ```
-
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
+```sh title="Execute the following command(s) in a terminal"
+# Initialize and login to Google Cloud
+gcloud init
+```
 
 ### Create a project on a cloud provider
 
@@ -135,106 +119,74 @@ This step will create a project on a cloud provider to host the data.
     will create a new project and link it to a billing account for you, without
     navigating through the web interface.
 
-=== ":simple-googlecloud: Google Cloud"
+Export a Google Cloud Project ID with the following command. Replace
+`<my_project_id>` with a project ID of your choice. It has to be lowercase and
+words separated by hyphens.
 
-    Export a Google Cloud Project ID with the following command. Replace
-    `<my_project_id>` with a project ID of your choice. It has to be lowercase and
-    words separated by hyphens.
+!!! warning
 
-    !!! warning
+    The project ID must be **unique** across all Google Cloud projects and users.
+    For example, use `mlops-<surname>-project`, where `surname` is based on your
+    name. Change the project ID if the command fails.
 
-        The project ID must be **unique** across all Google Cloud projects and users.
-        For example, use `mlops-<surname>-project`, where `surname` is based on your
-        name. Change the project ID if the command fails.
+```sh title="Execute the following command(s) in a terminal"
+# Export the project ID
+export GCP_PROJECT_ID=<my_project_id>
+```
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Export the project ID
-    export GCP_PROJECT_ID=<my_project_id>
-    ```
+Create a Google Cloud Project with the following commands:
 
-    Create a Google Cloud Project with the following commands:
+```sh title="Execute the following command(s) in a terminal"
+# Create a new project
+gcloud projects create $GCP_PROJECT_ID
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Create a new project
-    gcloud projects create $GCP_PROJECT_ID
+# Select your Google Cloud project
+gcloud config set project $GCP_PROJECT_ID
+```
 
-    # Select your Google Cloud project
-    gcloud config set project $GCP_PROJECT_ID
-    ```
+Then run the following command to authenticate to Google Cloud with the
+Application Default. It will create a credentials file in
+`~/.config/gcloud/application_default_credentials.json`. This file must not be
+shared and will be used by DVC to authenticate to Google Cloud Storage.
 
-    Then run the following command to authenticate to Google Cloud with the
-    Application Default. It will create a credentials file in
-    `~/.config/gcloud/application_default_credentials.json`. This file must not be
-    shared and will be used by DVC to authenticate to Google Cloud Storage.
-
-    ```sh title="Execute the following command(s) in a terminal"
-    # Set authentication for our ML experiment
-    # https://dvc.org/doc/user-guide/data-management/remote-storage/google-cloud-storage
-    # https://cloud.google.com/sdk/gcloud/reference/auth/application-default/login
-    gcloud auth application-default login
-    ```
-
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
+```sh title="Execute the following command(s) in a terminal"
+# Set authentication for our ML experiment
+# https://dvc.org/doc/user-guide/data-management/remote-storage/google-cloud-storage
+# https://cloud.google.com/sdk/gcloud/reference/auth/application-default/login
+gcloud auth application-default login
+```
 
 ### Link a billing account to the project
 
 Link a billing account to the project to be able to create to create cloud
 resources:
 
-=== ":simple-googlecloud: Google Cloud"
+List the billing accounts with the following command:
 
-    List the billing accounts with the following command:
+```sh title="Execute the following command(s) in a terminal"
+# List the billing accounts
+gcloud billing accounts list
+```
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # List the billing accounts
-    gcloud billing accounts list
-    ```
+If no billing account is available, you can add a new one from the
+[Google Cloud Console](https://console.cloud.google.com/billing) and then link
+it to the project.
 
-    If no billing account is available, you can add a new one from the
-    [Google Cloud Console](https://console.cloud.google.com/billing) and then link
-    it to the project.
+Export the billing ACCOUNT_ID with the following command. Replace `<my_billing
+_account_id>` with your own billing ACCOUNT_ID:
 
-    Export the billing ACCOUNT_ID with the following command. Replace `<my_billing
-    _account_id>` with your own billing ACCOUNT_ID:
+```sh title="Execute the following command(s) in a terminal"
+# Export the billing ACCOUNT_ID
+export GCP_BILLING_ACCOUNT_ID=<my_billing_account_id>
+```
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Export the billing ACCOUNT_ID
-    export GCP_BILLING_ACCOUNT_ID=<my_billing_account_id>
-    ```
+Link a billing account to the project with the following command:
 
-    Link a billing account to the project with the following command:
-
-    ```sh title="Execute the following command(s) in a terminal"
-    # Link the billing account to the project
-    gcloud billing projects link $GCP_PROJECT_ID \
-        --billing-account $GCP_BILLING_ACCOUNT_ID
-    ```
-
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
+```sh title="Execute the following command(s) in a terminal"
+# Link the billing account to the project
+gcloud billing projects link $GCP_PROJECT_ID \
+    --billing-account $GCP_BILLING_ACCOUNT_ID
+```
 
 ### Create the Storage Bucket on the cloud provider
 
@@ -242,166 +194,117 @@ Create the Storage Bucket to store the data with the cloud provider CLI:
 
 !!! info
 
-    On most cloud providers, the project must be linked to an active billing account
-    to be able to create the bucket. You must set up a valid billing account for the
-    cloud provider.
+    The project must be linked to an active billing account to be able to create the
+    bucket. You must set up a valid billing account.
 
-=== ":simple-googlecloud: Google Cloud"
+Create the Google Storage Bucket to store the data with the Google Cloud CLI.
 
-    Create the Google Storage Bucket to store the data with the Google Cloud CLI.
+Export the bucket name as an environment variable. Replace `<my_bucket_name>`
+with a bucket name of your choice. It has to be lowercase and words separated by
+hyphens.
 
-    Export the bucket name as an environment variable. Replace `<my_bucket_name>`
-    with a bucket name of your choice. It has to be lowercase and words separated by
-    hyphens.
+!!! warning
 
-    !!! warning
+    The bucket name must be **unique** across all Google Cloud projects and users.
+    For example, use `mlops-<surname>-bucket`, where `surname` is based on your
+    name. Change the bucket name if the command fails.
 
-        The bucket name must be **unique** across all Google Cloud projects and users.
-        For example, use `mlops-<surname>-bucket`, where `surname` is based on your
-        name. Change the bucket name if the command fails.
+```sh title="Execute the following command(s) in a terminal"
+# Export the bucket name
+export GCP_BUCKET_NAME=<my_bucket_name>
+```
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Export the bucket name
-    export GCP_BUCKET_NAME=<my_bucket_name>
-    ```
+Export the bucket location as an environment variable. You can view the
+available locations at
+[Cloud locations](https://cloud.google.com/about/locations). You should ideally
+select a location close to where most of the expected traffic will come from.
+Replace `<my_bucket_location>` with your own zone. For example, use
+`europe-west6` for Switzerland (Zurich):
 
-    Export the bucket location as an environment variable. You can view the
-    available locations at
-    [Cloud locations](https://cloud.google.com/about/locations). You should ideally
-    select a location close to where most of the expected traffic will come from.
-    Replace `<my_bucket_location>` with your own zone. For example, use
-    `europe-west6` for Switzerland (Zurich):
+```sh title="Execute the following command(s) in a terminal"
+# Export the bucket location
+export GCP_BUCKET_LOCATION=<my_bucket_location>
+```
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Export the bucket location
-    export GCP_BUCKET_LOCATION=<my_bucket_location>
-    ```
+Create the bucket:
 
-    Create the bucket:
+```sh title="Execute the following command(s) in a terminal"
+# Create the Google Storage Bucket
+gcloud storage buckets create gs://$GCP_BUCKET_NAME \
+    --location=$GCP_BUCKET_LOCATION \
+    --uniform-bucket-level-access \
+    --public-access-prevention
+```
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Create the Google Storage Bucket
-    gcloud storage buckets create gs://$GCP_BUCKET_NAME \
-        --location=$GCP_BUCKET_LOCATION \
-        --uniform-bucket-level-access \
-        --public-access-prevention
-    ```
-
-    You now have everything you need for DVC.
-
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
+You now have everything you need for DVC.
 
 ### Install the DVC Storage plugin
 
 Install the DVC Storage plugin for the cloud provider:
 
-=== ":simple-googlecloud: Google Cloud"
+Here, the `dvc[gs]` package enables support for Google Cloud Storage. Update the
+`requirements.txt` file:
 
-    Here, the `dvc[gs]` package enables support for Google Cloud Storage. Update the
-    `requirements.txt` file:
+```txt title="requirements.txt" hl_lines="4"
+tensorflow==2.20.0
+matplotlib==3.10.7
+pyyaml==6.0.3
+dvc[gs]==3.63.0
+```
 
-    ```txt title="requirements.txt" hl_lines="4"
-    tensorflow==2.20.0
-    matplotlib==3.10.7
-    pyyaml==6.0.3
-    dvc[gs]==3.63.0
-    ```
+Check the differences with Git to validate the changes:
 
-    Check the differences with Git to validate the changes:
+```sh title="Execute the following command(s) in a terminal"
+# Show the differences with Git
+git diff requirements.txt
+```
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Show the differences with Git
-    git diff requirements.txt
-    ```
+The output should be similar to this:
 
-    The output should be similar to this:
+```diff
+diff --git a/requirements.txt b/requirements.txt
+index 0b88f4a..4b8d3d9 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,4 +1,4 @@
+ tensorflow==2.20.0
+ matplotlib==3.10.7
+ pyyaml==6.0.3
+-dvc==3.63.0
++dvc[gs]==3.63.0
+```
 
-    ```diff
-    diff --git a/requirements.txt b/requirements.txt
-    index 0b88f4a..4b8d3d9 100644
-    --- a/requirements.txt
-    +++ b/requirements.txt
-    @@ -1,4 +1,4 @@
-     tensorflow==2.20.0
-     matplotlib==3.10.7
-     pyyaml==6.0.3
-    -dvc==3.63.0
-    +dvc[gs]==3.63.0
-    ```
+Install the dependencies and update the freeze file:
 
-    Install the dependencies and update the freeze file:
+!!! warning
 
-    !!! warning
+    Prior to running any pip commands, it is crucial to ensure the virtual
+    environment is activated to avoid potential conflicts with system-wide Python
+    packages.
 
-        Prior to running any pip commands, it is crucial to ensure the virtual
-        environment is activated to avoid potential conflicts with system-wide Python
-        packages.
+    To check its status, simply run `pip -V`. If the virtual environment is active,
+    the output will show the path to the virtual environment's Python executable. If
+    it is not, you can activate it with `source .venv/bin/activate`.
 
-        To check its status, simply run `pip -V`. If the virtual environment is active,
-        the output will show the path to the virtual environment's Python executable. If
-        it is not, you can activate it with `source .venv/bin/activate`.
+```sh title="Execute the following command(s) in a terminal"
+# Install the dependencies
+pip install --requirement requirements.txt
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Install the dependencies
-    pip install --requirement requirements.txt
-
-    # Freeze the dependencies
-    pip freeze --local --all > requirements-freeze.txt
-    ```
-
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
+# Freeze the dependencies
+pip freeze --local --all > requirements-freeze.txt
+```
 
 ### Configure DVC to use the Storage Bucket
 
 Configure DVC to use the Storage Bucket on the cloud provider:
 
-=== ":simple-googlecloud: Google Cloud"
+Configure DVC to use a Google Storage remote bucket. The `dvcstore` is a
+user-defined path on the bucket. You can change it if needed:
 
-    Configure DVC to use a Google Storage remote bucket. The `dvcstore` is a
-    user-defined path on the bucket. You can change it if needed:
-
-    ```sh title="Execute the following command(s) in a terminal"
-    # Add the Google Storage remote bucket
-    dvc remote add -d data gs://$GCP_BUCKET_NAME/dvcstore
-    ```
-
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
+```sh title="Execute the following command(s) in a terminal"
+# Add the Google Storage remote bucket
+dvc remote add -d data gs://$GCP_BUCKET_NAME/dvcstore
+```
 
 ### Check the changes
 
@@ -454,33 +357,13 @@ git push
 Open the Bucket Storage on the cloud provider and check that the files were
 hashed and have been uploaded.
 
-=== ":simple-googlecloud: Google Cloud"
+Open the [Cloud Storage](https://console.cloud.google.com/storage/browser) on
+the Google cloud interface and click on your bucket to access the details.
 
-    Open the [Cloud Storage](https://console.cloud.google.com/storage/browser) on
-    the Google cloud interface and click on your bucket to access the details.
+!!! tip
 
-    !!! tip
-
-        If the DVC data is not visible, check that the correct project is selected in
-        the project selector at the top of the Google Cloud interface.
-
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
-
-<!-- TODO: Add explanation on how to check the files on the cloud provider, the
-difference between the data and the cache, and how to download the data from the
-cloud provider. -->
+    If the DVC data is not visible, check that the correct project is selected in
+    the project selector at the top of the Google Cloud interface.
 
 ## Summary
 
@@ -522,10 +405,19 @@ You can now safely continue to the next chapter.
 
 !!! abstract "Take away"
 
-    - **Cloud storage buckets are designed for large data files**: Unlike Git, which struggles with large files, cloud storage (S3, Google Cloud Storage, etc.) efficiently handles datasets of any size with built-in redundancy and accessibility.
-    - **DVC extends version control to data**: By configuring a DVC remote pointing to cloud storage, you get Git-like versioning for your datasets with `dvc push` and `dvc pull` commands that mirror Git's workflow.
-    - **Service accounts enable secure automation**: Instead of using personal credentials, cloud service accounts provide scoped access that can be safely shared with CI/CD pipelines and easily revoked if compromised.
-    - **DVC plugins bridge storage providers**: Installing the appropriate DVC storage plugin (like `dvc[gs]` for Google Cloud) allows DVC to communicate with various cloud providers using a unified interface.
+    - **Cloud storage buckets are designed for large data files**: Unlike Git, which
+      struggles with large files, cloud storage (S3, Google Cloud Storage, etc.)
+      efficiently handles datasets of any size with built-in redundancy and
+      accessibility.
+    - **DVC extends version control to data**: By configuring a DVC remote pointing
+      to cloud storage, you get Git-like versioning for your datasets with `dvc push`
+      and `dvc pull` commands that mirror Git's workflow.
+    - **Service accounts enable secure automation**: Instead of using personal
+      credentials, cloud service accounts provide scoped access that can be safely
+      shared with CI/CD pipelines and easily revoked if compromised.
+    - **DVC plugins bridge storage providers**: Installing the appropriate DVC
+      storage plugin (like `dvc[gs]` for Google Cloud) allows DVC to communicate with
+      various cloud providers using a unified interface.
 
 ## State of the MLOps process
 

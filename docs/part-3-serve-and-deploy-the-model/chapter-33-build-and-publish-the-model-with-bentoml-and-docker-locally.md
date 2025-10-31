@@ -297,166 +297,134 @@ standardized model formats and easy sharing of access. Its support for automated
 deployment pipelines ensures consistent and reliable model deployment, allowing
 for an efficient models management.
 
-=== ":simple-googlecloud: Google Cloud"
+To improve the deployment process on the Kubernetes server, you will use Google
+Artifact Registry as the ML model registry to publish and pull Docker images.
 
-    To improve the deployment process on the Kubernetes server, you will use Google
-    Artifact Registry as the ML model registry to publish and pull Docker images.
+**Enable the Google Artifact Registry API**
 
-    **Enable the Google Artifact Registry API**
+You must enable the Google Artifact Registry API to create a container registry
+on Google Cloud with the following command:
 
-    You must enable the Google Artifact Registry API to create a container registry
-    on Google Cloud with the following command:
+!!! tip
 
-    !!! tip
-
-        You can display the available services in your project with the following
-        command:
-
-        ```sh title="Execute the following command(s) in a terminal"
-        # List the services
-        gcloud services list
-        ```
+    You can display the available services in your project with the following
+    command:
 
     ```sh title="Execute the following command(s) in a terminal"
-    # Enable the Google Artifact Registry API
-    gcloud services enable artifactregistry.googleapis.com
+    # List the services
+    gcloud services list
     ```
 
-    **Create the Google Container Registry**
+```sh title="Execute the following command(s) in a terminal"
+# Enable the Google Artifact Registry API
+gcloud services enable artifactregistry.googleapis.com
+```
 
-    Export the repository name as an environment variable. Replace
-    `<my_repository_name>` with a registy name of your choice. It has to be
-    lowercase and words separated by hyphens.
+**Create the Google Container Registry**
 
-    !!! warning
+Export the repository name as an environment variable. Replace
+`<my_repository_name>` with a registy name of your choice. It has to be
+lowercase and words separated by hyphens.
 
-        The container registry name must be **unique** across all Google Cloud projects
-        and users. For example, use `mlops-<surname>-registry`, where `surname` is based
-        on your name. Change the container registry name if the command fails.
+!!! warning
 
-    ```sh title="Execute the following command(s) in a terminal"
-    export GCP_CONTAINER_REGISTRY_NAME=<my_repository_name>
-    ```
+    The container registry name must be **unique** across all Google Cloud projects
+    and users. For example, use `mlops-<surname>-registry`, where `surname` is based
+    on your name. Change the container registry name if the command fails.
 
-    Export the repository location as an environment variable. You can view the
-    available locations at
-    [Cloud locations](https://cloud.google.com/about/locations). You should ideally
-    select a location close to where most of the expected traffic will come from.
-    Replace `<my_repository_location>` with your own zone. For example, use
-    `europe-west6` for Switzerland (Zurich):
+```sh title="Execute the following command(s) in a terminal"
+export GCP_CONTAINER_REGISTRY_NAME=<my_repository_name>
+```
 
-    ```sh title="Execute the following command(s) in a terminal"
-    export GCP_CONTAINER_REGISTRY_LOCATION=<my_repository_location>
-    ```
+Export the repository location as an environment variable. You can view the
+available locations at
+[Cloud locations](https://cloud.google.com/about/locations). You should ideally
+select a location close to where most of the expected traffic will come from.
+Replace `<my_repository_location>` with your own zone. For example, use
+`europe-west6` for Switzerland (Zurich):
 
-    Lastly, when creating the repository, remember to specify the repository format
-    as `docker`.
+```sh title="Execute the following command(s) in a terminal"
+export GCP_CONTAINER_REGISTRY_LOCATION=<my_repository_location>
+```
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Create the Google Container Registry
-    gcloud artifacts repositories create $GCP_CONTAINER_REGISTRY_NAME \
-        --repository-format=docker \
-        --location=$GCP_CONTAINER_REGISTRY_LOCATION
-    ```
+Lastly, when creating the repository, remember to specify the repository format
+as `docker`.
 
-    The output should be similar to this:
+```sh title="Execute the following command(s) in a terminal"
+# Create the Google Container Registry
+gcloud artifacts repositories create $GCP_CONTAINER_REGISTRY_NAME \
+    --repository-format=docker \
+    --location=$GCP_CONTAINER_REGISTRY_LOCATION
+```
 
-    ```text
-    Create request issued for: [mlops-surname-registry]
-    Waiting for operation [projects/mlops-surname-project/locations/europe-west6/operations/be8b09fa-279c-468
-    5-b451-1f3c900d4a36] to complete...done.
-    Created repository [mlops-surname-registry].
-    ```
+The output should be similar to this:
 
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
-    appreciated!
+```text
+Create request issued for: [mlops-surname-registry]
+Waiting for operation [projects/mlops-surname-project/locations/europe-west6/operations/be8b09fa-279c-468
+5-b451-1f3c900d4a36] to complete...done.
+Created repository [mlops-surname-registry].
+```
 
 ### Login to the remote Container Registry
 
-=== ":simple-googlecloud: Google Cloud"
+**Authenticate with the Google Container Registry**
 
-    **Authenticate with the Google Container Registry**
+Configure gcloud to use the Google Container Registry as a Docker credential
+helper.
 
-    Configure gcloud to use the Google Container Registry as a Docker credential
-    helper.
+```sh title="Execute the following command(s) in a terminal"
+# Authenticate with the Google Container Registry
+gcloud auth configure-docker ${GCP_CONTAINER_REGISTRY_LOCATION}-docker.pkg.dev
+```
+
+Press ++y++ to validate the changes.
+
+Ensure your `GCP_PROJECT_ID` variable is still correctly exported:
+
+```sh title="Execute the following command(s) in a terminal"
+# Check the exported project ID
+echo $GCP_PROJECT_ID
+```
+
+The output should be similar to this:
+
+```text
+mlops-<surname>-project
+```
+
+??? tip "Is the `GCP_PROJECT_ID` variable empty? Read this!"
+
+    If the `GCP_PROJECT_ID` variable is empty, you need to export your Google Cloud
+    Project ID again.
+
+    To get the ID of your project, you can use the Google Cloud CLI.
 
     ```sh title="Execute the following command(s) in a terminal"
-    # Authenticate with the Google Container Registry
-    gcloud auth configure-docker ${GCP_CONTAINER_REGISTRY_LOCATION}-docker.pkg.dev
-    ```
-
-    Press ++y++ to validate the changes.
-
-    Ensure your `GCP_PROJECT_ID` variable is still correctly exported:
-
-    ```sh title="Execute the following command(s) in a terminal"
-    # Check the exported project ID
-    echo $GCP_PROJECT_ID
+    # List the projects
+    gcloud projects list
     ```
 
     The output should be similar to this:
 
     ```text
-    mlops-<surname>-project
+    PROJECT_ID             NAME                   PROJECT_NUMBER
+    mlops-surname-project  mlops-surname-project  123456789012
     ```
 
-    ??? tip "Is the `GCP_PROJECT_ID` variable empty? Read this!"
-
-        If the `GCP_PROJECT_ID` variable is empty, you need to export your Google Cloud
-        Project ID again.
-
-        To get the ID of your project, you can use the Google Cloud CLI.
-
-        ```sh title="Execute the following command(s) in a terminal"
-        # List the projects
-        gcloud projects list
-        ```
-
-        The output should be similar to this:
-
-        ```text
-        PROJECT_ID             NAME                   PROJECT_NUMBER
-        mlops-surname-project  mlops-surname-project  123456789012
-        ```
-
-        Ensure to copy the `PROJECT_ID` value (**not** the `PROJECT_NUMBER` value) and
-        export it as an environment variable. Replace `<my_project_id>` with your own
-        project ID:
-
-        ```sh title="Execute the following command(s) in a terminal"
-        export GCP_PROJECT_ID=<my_project_id>
-        ```
-
-    Export the container registry host:
+    Ensure to copy the `PROJECT_ID` value (**not** the `PROJECT_NUMBER` value) and
+    export it as an environment variable. Replace `<my_project_id>` with your own
+    project ID:
 
     ```sh title="Execute the following command(s) in a terminal"
-    export GCP_CONTAINER_REGISTRY_HOST=${GCP_CONTAINER_REGISTRY_LOCATION}-docker.pkg.dev/${GCP_PROJECT_ID}/${GCP_CONTAINER_REGISTRY_NAME}
+    export GCP_PROJECT_ID=<my_project_id>
     ```
 
-=== ":material-cloud: Using another cloud provider? Read this!"
+Export the container registry host:
 
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/csia-pme/csia-pme). Your help is greatly
-    appreciated!
+```sh title="Execute the following command(s) in a terminal"
+export GCP_CONTAINER_REGISTRY_HOST=${GCP_CONTAINER_REGISTRY_LOCATION}-docker.pkg.dev/${GCP_PROJECT_ID}/${GCP_CONTAINER_REGISTRY_NAME}
+```
 
 ### Publish the BentoML model artifact Docker image to the container registry
 
@@ -477,24 +445,8 @@ anywhere using Docker or Kubernetes.
 Open the container registry interface on the cloud provider and check that the
 artifact files have been uploaded.
 
-=== ":simple-googlecloud: Google Cloud"
-
-    Open the [Artifact Registry](https://console.cloud.google.com/artifacts) on the
-    Google cloud interface and click on your registry to access the details.
-
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
+Open the [Artifact Registry](https://console.cloud.google.com/artifacts) on the
+Google cloud interface and click on your registry to access the details.
 
 ### Check the changes
 

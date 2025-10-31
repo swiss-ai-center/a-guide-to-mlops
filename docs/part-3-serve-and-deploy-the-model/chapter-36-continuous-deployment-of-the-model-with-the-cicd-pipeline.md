@@ -113,37 +113,21 @@ This is the same process you did for the container registry as described in
 [Chapter 3.4 - Build and publish the model with BentoML and Docker in the CI/CD pipeline](../part-3-serve-and-deploy-the-model/chapter-34-build-and-publish-the-model-with-bentoml-and-docker-with-the-cicd-pipeline.md)
 but this time for the Kubernetes cluster.
 
-=== ":simple-googlecloud: Google Cloud"
+Update the Google Service Account and its associated Google Service Account Key
+to access Google Cloud from the CI/CD pipeline without your own credentials.
 
-    Update the Google Service Account and its associated Google Service Account Key
-    to access Google Cloud from the CI/CD pipeline without your own credentials.
+```sh title="Execute the following command(s) in a terminal"
+# Set the Kubernetes Cluster permissions for the Google Service Account
+gcloud projects add-iam-policy-binding $GCP_PROJECT_ID \
+    --member="serviceAccount:google-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com" \
+    --role="roles/container.developer"
+```
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Set the Kubernetes Cluster permissions for the Google Service Account
-    gcloud projects add-iam-policy-binding $GCP_PROJECT_ID \
-        --member="serviceAccount:google-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com" \
-        --role="roles/container.developer"
-    ```
+!!! tip
 
-    !!! tip
+    There is no need to update the value in the CI/CD pipeline configuration.
 
-        There is no need to update the value in the CI/CD pipeline configuration.
-
-        All changes are made at the Google Cloud level and the key file is not changed.
-
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
+    All changes are made at the Google Cloud level and the key file is not changed.
 
 ### Add Kubernetes CI/CD secrets
 
@@ -151,34 +135,18 @@ Add the Kubernetes secrets to access the Kubernetes cluster from the CI/CD
 pipeline. Depending on the CI/CD platform you are using, the process will be
 different:
 
-=== ":simple-googlecloud: Google Cloud"
+Create the following new variables by going to the **Settings** section from the
+top header of your GitHub repository. Select **Secrets and variables > Actions**
+and select **New repository secret**:
 
-    Create the following new variables by going to the **Settings** section from the
-    top header of your GitHub repository. Select **Secrets and variables > Actions**
-    and select **New repository secret**:
+- `GCP_K8S_CLUSTER_NAME`: The name of the Kubernetes cluster (ex:
+  `mlops-surname-cluster`, from the variable `GCP_K8S_CLUSTER_NAME` in the
+  previous chapters)
+- `GCP_K8S_CLUSTER_ZONE`: The zone of the Kubernetes cluster (ex:
+  `europe-west6-a` for Zurich, Switzerland, from the variable
+  `GCP_K8S_CLUSTER_ZONE` in the previous chapters)
 
-    - `GCP_K8S_CLUSTER_NAME`: The name of the Kubernetes cluster (ex:
-      `mlops-surname-cluster`, from the variable `GCP_K8S_CLUSTER_NAME` in the
-      previous chapters)
-    - `GCP_K8S_CLUSTER_ZONE`: The zone of the Kubernetes cluster (ex:
-      `europe-west6-a` for Zurich, Switzerland, from the variable
-      `GCP_K8S_CLUSTER_ZONE` in the previous chapters)
-
-    Save the variables by selecting **Add secret**.
-
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
+Save the variables by selecting **Add secret**.
 
 ### Update the CI/CD pipeline configuration file
 
