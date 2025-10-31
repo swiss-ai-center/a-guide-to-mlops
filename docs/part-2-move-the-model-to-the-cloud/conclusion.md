@@ -54,7 +54,31 @@ flowchart TB
     end
 ```
 
-Do not forget to [Clean up](./clean-up.md) if you want to stop here or continue
-with
+## Next steps
+
+**Ready to continue?**
+
+Proceed to
 [Part 3 - Serve and deploy the model](../part-3-serve-and-deploy-the-model/introduction.md)
-of the MLOps guide!
+to learn how to serve your model in production and deploy it to Kubernetes.
+
+**Stopping here?**
+
+If you decide to conclude your progress at this point, see the
+[Clean up guide](../clean-up.md) for instructions on removing the resources you
+created:
+
+- Local Git repository and DVC cache
+- Python virtual environment
+- Cloud storage bucket (S3/GCS)
+- CI/CD pipeline configurations
+- Remote Git repository resources
+
+This is necessary to return to a clean state on your computer, avoid unnecessary
+incurring costs, and address potential security concerns when using cloud
+services.
+
+!!! note
+
+    You can safely skip cleanup if you plan to continue with the next part of the
+    guide immediately.

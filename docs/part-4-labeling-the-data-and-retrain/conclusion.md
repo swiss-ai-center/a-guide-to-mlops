@@ -19,11 +19,6 @@ This concludes the guide. We hope you enjoyed it and learned a lot. If you have
 any questions or feedback, please feel free to reach out to us on
 [GitHub](https://github.com/swiss-ai-center/a-guide-to-mlops).
 
-The final part of the guide will cover cleaning up the resources and
-environments you have generated. We strongly recommend to go through the
-[Clean up](../clean-up.md) section to ensure the proper removal of the resources
-and environments you have generated.
-
 The following diagram illustrates the bricks you set up at the end of this part:
 
 ```mermaid
@@ -54,3 +49,29 @@ flowchart TB
         labelStudioPredictions[Predictions]
     end
 ```
+
+## Next steps
+
+**Clean up your resources**
+
+Now that you've completed the guide, see the [Clean up guide](../clean-up.md)
+for comprehensive instructions on removing all resources you created:
+
+- Local Git repository and DVC cache
+- Python virtual environment
+- Cloud storage bucket (S3/GCS)
+- Container registry and Docker images
+- Kubernetes cluster and deployments
+- CI/CD pipeline configurations
+- Self-hosted runners (if configured)
+- Label Studio installation and data
+
+This is necessary to return to a clean state on your computer, avoid unnecessary
+incurring costs, and address potential security concerns.
+
+!!! warning
+
+    Unlike previous parts where you could skip cleanup to continue, we
+    **strongly recommend** completing the full cleanup after finishing Part 4 to
+    avoid ongoing cloud costs (especially Kubernetes clusters) and potential
+    security risks from exposed resources.

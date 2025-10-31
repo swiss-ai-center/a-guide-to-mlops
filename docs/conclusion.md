@@ -1,10 +1,11 @@
 # Conclusion
 
-Congratulations! You did it! You were able to convert a ML experiment with a
-traditional approach to a well-defined, well-documented workflow that can scale
-and serve a model to the outside world! You also learned how to improve the
-performance of your model with additional and high-quality data in an iterative
-manner.
+**Congratulations on completing the entire guide!**
+
+You did it! You were able to convert a ML experiment with a traditional approach
+to a well-defined, well-documented workflow that can scale and serve a model to
+the outside world! You also learned how to improve the performance of your model
+with additional and high-quality data in an iterative manner.
 
 Let's take the time to make a summary of what you have done.
 
@@ -82,11 +83,19 @@ retrain the model.
 
 ## End of your journey
 
-We appreciate your continued support! We trust that you found this guide both
-enjoyable and informative. We encourage you to explore the left sidebar for
-additional MLOps-related resources that we believe might further enhance your
-understanding and skills in this rapidly evolving and increasingly important
-field.
+You've built a complete MLOps workflow from local experimentation to production
+deployment on Kubernetes, with continuous improvement through systematic data
+labeling. You now have the skills to:
+
+- Version control code, data, and models
+- Automate training and deployment with CI/CD
+- Serve models in production with monitoring
+- Continuously improve models with new labeled data
+
+We trust that you found this guide both enjoyable and informative. We encourage
+you to explore the [additional MLOps-related resources](../references/) that we
+believe might further enhance your understanding and skills in this rapidly
+evolving and increasingly important field.
 
 If you encounter any difficulties, please don't hesitate to reach out to us on
 [GitHub](https://github.com/swiss-ai-center/a-guide-to-mlops).
