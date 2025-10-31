@@ -156,64 +156,24 @@ be different:
     The service account key is stored on your computer as a JSON file. You need to
     display it and store it as a CI/CD variable in a text format.
 
-    === ":simple-github: GitHub"
+    Display the Google Service Account key that you have downloaded from Google
+    Cloud:
 
-        Display the Google Service Account key that you have downloaded from Google
-        Cloud:
-
-        ```sh title="Execute the following command(s) in a terminal"
-        # Display the Google Service Account key
-        cat ~/.config/gcloud/google-service-account-key.json
-        ```
-
-    === ":simple-gitlab: GitLab"
-
-        Encode and display the Google Service Account key that you have downloaded from
-        Google Cloud as `base64`. It allows to hide the secret in GitLab CI logs as a
-        security measure.
-
-        === ":simple-linux: Linux"
-
-            ```sh title="Execute the following command(s) in a terminal"
-            # Encode the Google Service Account key to base64
-            base64 -w 0 -i ~/.config/gcloud/google-service-account-key.json
-            ```
-
-        === ":simple-apple: macOS"
-
-            ```sh title="Execute the following command(s) in a terminal"
-            # Encode the Google Service Account key to base64
-            base64 -i ~/.config/gcloud/google-service-account-key.json
-            ```
+    ```sh title="Execute the following command(s) in a terminal"
+    # Display the Google Service Account key
+    cat ~/.config/gcloud/google-service-account-key.json
+    ```
 
     **Store the Google Service Account key as a CI/CD variable**
 
-    === ":simple-github: GitHub"
+    Store the output as a CI/CD variable by going to the **Settings** section from
+    the top header of your GitHub repository.
 
-        Store the output as a CI/CD variable by going to the **Settings** section from
-        the top header of your GitHub repository.
+    Select **Secrets and variables > Actions** and select **New repository secret**.
 
-        Select **Secrets and variables > Actions** and select **New repository secret**.
-
-        Create a new variable named `GOOGLE_SERVICE_ACCOUNT_KEY` with the output value
-        of the Google Service Account key file as its value. Save the variable by
-        selecting **Add secret**.
-
-    === ":simple-gitlab: GitLab"
-
-        Store the output as a CI/CD Variable by going to **Settings > CI/CD** from the
-        left sidebar of your GitLab project.
-
-        Select **Variables** and select **Add variable**.
-
-        Create a new variable named `GOOGLE_SERVICE_ACCOUNT_KEY` with the Google Service
-        Account key file encoded in `base64` as its value.
-
-        - **Protect variable**: _Unchecked_
-        - **Mask variable**: _Checked_
-        - **Expand variable reference**: _Unchecked_
-
-        Save the variable by clicking **Add variable**.
+    Create a new variable named `GOOGLE_SERVICE_ACCOUNT_KEY` with the output value
+    of the Google Service Account key file as its value. Save the variable by
+    selecting **Add secret**.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
@@ -231,92 +191,45 @@ be different:
 
 ### Create the CI/CD pipeline configuration file
 
-=== ":simple-github: GitHub"
+At the root level of your Git repository, create a GitHub Workflow configuration
+file `.github/workflows/mlops.yaml`. Take some time to understand the train job
+and its steps:
 
-    At the root level of your Git repository, create a GitHub Workflow configuration
-    file `.github/workflows/mlops.yaml`. Take some time to understand the train job
-    and its steps:
+```yaml title=".github/workflows/mlops.yaml"
+name: MLOps
 
-    ```yaml title=".github/workflows/mlops.yaml"
-    name: MLOps
+on:
+  # Runs on pushes targeting main branch
+  push:
+    branches:
+      - main
 
-    on:
-      # Runs on pushes targeting main branch
-      push:
-        branches:
-          - main
+  # Runs on pull requests
+  pull_request:
 
-      # Runs on pull requests
-      pull_request:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
-      # Allows you to run this workflow manually from the Actions tab
-      workflow_dispatch:
-
-    jobs:
-      train:
-        runs-on: ubuntu-latest
-        steps:
-          - name: Checkout repository
-            uses: actions/checkout@v5
-          - name: Setup Python
-            uses: actions/setup-python@v6
-            with:
-              python-version: '3.13'
-              cache: pip
-          - name: Install dependencies
-            run: pip install --requirement requirements-freeze.txt
-          - name: Login to Google Cloud
-            uses: google-github-actions/auth@v3
-            with:
-              credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
-          - name: Train model
-            run: dvc repro --pull
-    ```
-
-=== ":simple-gitlab: GitLab"
-
-    At the root level of your Git repository, create a GitLab CI configuration file
-    `.gitlab-ci.yml`.
-
-    Explore this file to understand the train stage and its steps.
-
-    ```yaml title=".gitlab-ci.yml"
-    stages:
-      - train
-
-    variables:
-      # Change pip's cache directory to be inside the project directory since we can
-      # only cache local items.
-      PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
-      # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
-      GIT_DEPTH: "0"
-      # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
-      GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
-
-    train:
-      stage: train
-      image: python:3.13
-      rules:
-        - if: $CI_COMMIT_BRANCH == "main"
-        - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      before_script:
-        # Set the Google Service Account key
-        - echo "${GOOGLE_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
-        # Create the virtual environment for caching
-        - python3.13 -m venv .venv
-        - source .venv/bin/activate
-      script:
-        # Install dependencies
-        - pip install --requirement requirements-freeze.txt
-        # Run the experiment
-        - dvc repro --pull
-      cache:
-        paths:
-          # Pip's cache doesn't store the Python packages
-          # https://pip.pypa.io/en/stable/reference/pip_install/#caching
-          - .cache/pip
-          - .venv/
-    ```
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+          cache: pip
+      - name: Install dependencies
+        run: pip install --requirement requirements-freeze.txt
+      - name: Login to Google Cloud
+        uses: google-github-actions/auth@v3
+        with:
+          credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
+      - name: Train model
+        run: dvc repro --pull
+```
 
 !!! tip
 
@@ -325,45 +238,22 @@ be different:
 
 ### Push the CI/CD pipeline configuration file to Git
 
-=== ":simple-github: GitHub"
+Push the CI/CD pipeline configuration file to Git:
 
-    Push the CI/CD pipeline configuration file to Git:
+```sh title="Execute the following command(s) in a terminal"
+# Add the configuration file
+git add .github/workflows/mlops.yaml
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Add the configuration file
-    git add .github/workflows/mlops.yaml
+# Commit the changes
+git commit -m "Use a pipeline to run my experiment on each push"
 
-    # Commit the changes
-    git commit -m "Use a pipeline to run my experiment on each push"
-
-    # Push the changes
-    git push
-    ```
-
-=== ":simple-gitlab: GitLab"
-
-    Push the CI/CD pipeline configuration file to Git:
-
-    ```sh title="Execute the following command(s) in a terminal"
-    # Add the configuration file
-    git add .gitlab-ci.yml
-
-    # Commit the changes
-    git commit -m "Use a pipeline to run my experiment on each push"
-
-    # Push the changes
-    git push
-    ```
+# Push the changes
+git push
+```
 
 ### Check the results
 
-=== ":simple-github: GitHub"
-
-    You can see the pipeline running on the **Actions** page.
-
-=== ":simple-gitlab: GitLab"
-
-    You can see the pipeline running on the **CI/CD > Pipelines** page.
+You can see the pipeline running on the **Actions** page.
 
 You should see a newly created pipeline. The pipeline should log into Google
 Cloud, pull the data from DVC and reproduce the experiment. If you encounter
@@ -405,9 +295,8 @@ You can now safely continue to the next chapter.
       experiments in a fresh, clean environment on every commit, you ensure that your
       code is truly reproducible and doesn't rely on hidden local configurations.
     - **Secrets management is critical for cloud access**: Storing cloud credentials
-      as CI/CD secrets (GitHub Secrets, GitLab Variables) keeps sensitive information
-      out of your codebase while allowing automated workflows to access required
-      resources.
+      as CI/CD secrets (GitHub Secrets) keeps sensitive information out of your
+      codebase while allowing automated workflows to access required resources.
     - **dvc repro --pull combines data retrieval and execution**: This single
       command pulls data from DVC remote storage and reproduces the experiment, making
       CI/CD pipeline configurations simpler and more maintainable.
@@ -451,5 +340,4 @@ Highly inspired by:
 - [_IAM basic and predefined roles reference_ - cloud.google.com](https://cloud.google.com/iam/docs/understanding-roles)
 - [_Using service accounts_ - dvc.org](https://dvc.org/doc/user-guide/setup-google-drive-remote#using-service-accounts)
 - [_Creating encrypted secrets for a repository_ - docs.github.com](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
-- [_Add a CI/CD variable to a project_ - docs.gitlab.com](https://docs.gitlab.com/ee/ci/variables/#add-a-cicd-variable-to-a-project)
 - [_Triggering a workflow_ - docs.github.com](https://docs.github.com/en/actions/using-workflows/triggering-a-workflow)

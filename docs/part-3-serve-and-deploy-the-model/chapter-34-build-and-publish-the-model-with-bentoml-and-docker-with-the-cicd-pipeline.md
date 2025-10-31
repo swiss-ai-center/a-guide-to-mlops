@@ -143,32 +143,15 @@ be different:
 
 === ":simple-googlecloud: Google Cloud"
 
-    === ":simple-github: GitHub"
+    Create the following new variables by going to the **Settings** section from the
+    top header of your GitHub repository. Select **Secrets and variables > Actions**
+    and select **New repository secret**:
 
-        Create the following new variables by going to the **Settings** section from the
-        top header of your GitHub repository. Select **Secrets and variables > Actions**
-        and select **New repository secret**:
+    - `GCP_CONTAINER_REGISTRY_HOST`: The host of the container registry (ex:
+      `europe-west6-docker.pkg.dev/mlops-surname-project/mlops-surname-registry`, from
+      the variable `GCP_CONTAINER_REGISTRY_HOST` in the previous chapter)
 
-        - `GCP_CONTAINER_REGISTRY_HOST`: The host of the container registry (ex:
-          `europe-west6-docker.pkg.dev/mlops-surname-project/mlops-surname-registry`, from
-          the variable `GCP_CONTAINER_REGISTRY_HOST` in the previous chapter)
-
-        Save the variables by selecting **Add secret**.
-
-    === ":simple-gitlab: GitLab"
-
-        Create the following new variables by going to **Settings > CI/CD** from the
-        left sidebar of your GitLab project. Select **Variables** and select
-        **Add variable**:
-
-        - `GCP_CONTAINER_REGISTRY_HOST`: The host of the container registry (ex:
-          `europe-west6-docker.pkg.dev/mlops-surname-project/mlops-surname-registry`, from
-          the variable `GCP_CONTAINER_REGISTRY_HOST` in the previous chapter)
-            - **Protect variable**: _Unchecked_
-            - **Mask variable**: _Checked_
-            - **Expand variable reference**: _Unchecked_
-
-        Save the variables by selecting **Add secret**.
+    Save the variables by selecting **Add secret**.
 
 === ":material-cloud: Using another cloud provider? Read this!"
 
@@ -194,244 +177,60 @@ container registry. The following steps will be performed:
 3. Build the Docker image
 4. Push the Docker image to the container registry
 
-=== ":simple-github: GitHub"
+Update the `.github/workflows/mlops.yaml` file with the following content.
 
-    Update the `.github/workflows/mlops.yaml` file with the following content.
+Take some time to understand the deploy job and its steps:
 
-    Take some time to understand the deploy job and its steps:
+```yaml title=".github/workflows/mlops.yaml" hl_lines="16 88-133"
+name: MLOps
 
-    ```yaml title=".github/workflows/mlops.yaml" hl_lines="16 88-133"
-    name: MLOps
+on:
+  # Runs on pushes targeting main branch
+  push:
+    branches:
+      - main
 
-    on:
-      # Runs on pushes targeting main branch
-      push:
-        branches:
-          - main
+  # Runs on pull requests
+  pull_request:
 
-      # Runs on pull requests
-      pull_request:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
-      # Allows you to run this workflow manually from the Actions tab
-      workflow_dispatch:
-
-    jobs:
-      train-report-and-publish:
-        permissions: write-all
-        runs-on: ubuntu-latest
-        steps:
-          - name: Checkout repository
-            uses: actions/checkout@v5
-          - name: Setup Python
-            uses: actions/setup-python@v6
-            with:
-              python-version: '3.13'
-              cache: pip
-          - name: Install dependencies
-            run: pip install --requirement requirements-freeze.txt
-          - name: Login to Google Cloud
-            uses: google-github-actions/auth@v3
-            with:
-              credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
-          - name: Train model
-            run: dvc repro --pull
-          - name: Setup CML
-            if: github.event_name == 'pull_request'
-            uses: iterative/setup-cml@v2
-            with:
-              version: '0.20.6'
-          - name: Create CML report
-            if: github.event_name == 'pull_request'
-            env:
-              REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            run: |
-              # Fetch all other Git branches
-              git fetch --depth=1 origin main:main
-
-              # Add title to the report
-              echo "# Experiment Report (${{ github.sha }})" >> report.md
-
-              # Compare parameters to main branch
-              echo "## Params workflow vs. main" >> report.md
-              dvc params diff main --md >> report.md
-
-              # Compare metrics to main branch
-              echo "## Metrics workflow vs. main" >> report.md
-              dvc metrics diff main --md >> report.md
-
-              # Compare plots (images) to main branch
-              dvc plots diff main
-
-              # Create plots
-              echo "## Plots" >> report.md
-
-              # Create training history plot
-              echo "### Training History" >> report.md
-              echo "#### main" >> report.md
-              echo '![](./dvc_plots/static/main_evaluation_plots_training_history.png "Training History")' >> report.md
-              echo "#### workspace" >> report.md
-              echo '![](./dvc_plots/static/workspace_evaluation_plots_training_history.png "Training History")' >> report.md
-
-              # Create predictions preview
-              echo "### Predictions Preview" >> report.md
-              echo "#### main" >> report.md
-              echo '![](./dvc_plots/static/main_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
-              echo "#### workspace" >> report.md
-              echo '![](./dvc_plots/static/workspace_evaluation_plots_pred_preview.png "Predictions Preview")' >> report.md
-
-              # Create confusion matrix
-              echo "### Confusion Matrix" >> report.md
-              echo "#### main" >> report.md
-              echo '![](./dvc_plots/static/main_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
-              echo "#### workspace" >> report.md
-              echo '![](./dvc_plots/static/workspace_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
-
-              # Publish the CML report
-              cml comment update --target=pr --publish report.md
-          - name: Log in to the Container registry
-            uses: docker/login-action@v3
-            with:
-              registry: ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}
-              username: _json_key
-              password: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
-          - name: Import the BentoML model
-            if: github.ref == 'refs/heads/main'
-            run: bentoml models import model/celestial_bodies_classifier_model.bentomodel
-          - name: Build the BentoML model artifact
-            if: github.ref == 'refs/heads/main'
-            run: bentoml build src
-          - name: Containerize and publish the BentoML model artifact Docker image
-            if: github.ref == 'refs/heads/main'
-            run: |
-              # Containerize the Bento
-              bentoml containerize celestial_bodies_classifier:latest \
-                --image-tag ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:latest \
-                --image-tag ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:${{ github.sha }}
-              # Push the container to the Container Registry
-              docker push --all-tags ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier
-    ```
-
-    Check the differences with Git to validate the changes.
-
-    ```sh title="Execute the following command(s) in a terminal"
-    # Show the differences with Git
-    git diff .github/workflows/mlops.yaml
-    ```
-
-    The output should be similar to this:
-
-    ```diff
-    diff --git a/.github/workflows/mlops.yaml b/.github/workflows/mlops.yaml
-    index 1fa989b..6d479ef 100644
-    --- a/.github/workflows/mlops.yaml
-    +++ b/.github/workflows/mlops.yaml
-    @@ -13,7 +13,7 @@ on:
-       workflow_dispatch:
-
-     jobs:
-    -  train-and-report:
-    +  train-report-and-publish:
-         permissions: write-all
-         runs-on: ubuntu-latest
-         steps:
-    @@ -85,3 +85,43 @@ jobs:
-
-               # Publish the CML report
-               cml comment update --target=pr --publish report.md
-    +      - name: Log in to the Container registry
-    +        uses: docker/login-action@v3
-    +        with:
-    +          registry: ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}
-    +          username: _json_key
-    +          password: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
-    +      - name: Import the BentoML model
-    +        if: github.ref == 'refs/heads/main'
-    +        run: bentoml models import model/celestial_bodies_classifier_model.bentomodel
-    +      - name: Build the BentoML model artifact
-    +        if: github.ref == 'refs/heads/main'
-    +        run: bentoml build src
-    +      - name: Containerize and publish the BentoML model artifact Docker image
-    +        if: github.ref == 'refs/heads/main'
-    +        run: |
-    +          # Containerize the Bento
-    +          bentoml containerize celestial_bodies_classifier:latest \
-    +            --image-tag ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:latest \
-    +            --image-tag ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:${{ github.sha }}
-    +          # Push the container to the Container Registry
-    +          docker push --all-tags ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier
-    ```
-
-=== ":simple-gitlab: GitLab"
-
-    **Update the CI/CD pipeline configuration file**
-
-    Update the `.gitlab-ci.yml` file to add a new stage to deploy the model on the
-    Kubernetes cluster.
-
-    Take some time to understand the publish and deploy job and its steps.
-
-    ```yaml title=".gitlab-ci.yml" hl_lines="4-5 101-169"
-    stages:
-      - train
-      - report
-      - publish
-      - deploy
-
-    variables:
-      # Change pip's cache directory to be inside the project directory since we can
-      # only cache local items.
-      PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
-      # https://dvc.org/doc/user-guide/troubleshooting?tab=GitLab-CI-CD#git-shallow
-      GIT_DEPTH: "0"
-      # Set the path to Google Service Account key for DVC - https://dvc.org/doc/command-reference/remote/add#google-cloud-storage
-      GOOGLE_APPLICATION_CREDENTIALS: "${CI_PROJECT_DIR}/google-service-account-key.json"
-      # Environment variable for CML
-      REPO_TOKEN: $GITLAB_PAT
-
-    train:
-      stage: train
-      image: python:3.13
-      rules:
-        - if: $CI_COMMIT_BRANCH == "main"
-        - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      before_script:
-        # Set the Google Service Account key
-        - echo "${GOOGLE_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
-        # Create the virtual environment for caching
-        - python3.13 -m venv .venv
-        - source .venv/bin/activate
-      script:
-        # Install dependencies
-        - pip install --requirement requirements-freeze.txt
-        # Run the experiment
-        - dvc repro --pull
-      cache:
-        paths:
-          # Pip's cache doesn't store the Python packages
-          # https://pip.pypa.io/en/stable/reference/pip_install/#caching
-          - .cache/pip
-          - .venv/
-
-    report:
-      stage: report
-      image: iterativeai/cml:0-dvc3-base1
-      needs:
-        - train
-      rules:
-        - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      before_script:
-        # Set the Google Service Account key
-        - echo "${GOOGLE_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
-      script:
-        - |
-          # Fetch the experiment changes
-          dvc pull
-
+jobs:
+  train-report-and-publish:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+          cache: pip
+      - name: Install dependencies
+        run: pip install --requirement requirements-freeze.txt
+      - name: Login to Google Cloud
+        uses: google-github-actions/auth@v3
+        with:
+          credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
+      - name: Train model
+        run: dvc repro --pull
+      - name: Setup CML
+        if: github.event_name == 'pull_request'
+        uses: iterative/setup-cml@v2
+        with:
+          version: '0.20.6'
+      - name: Create CML report
+        if: github.event_name == 'pull_request'
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
           # Fetch all other Git branches
           git fetch --depth=1 origin main:main
 
           # Add title to the report
-          echo "# Experiment Report (${CI_COMMIT_SHA})" >> report.md
+          echo "# Experiment Report (${{ github.sha }})" >> report.md
 
           # Compare parameters to main branch
           echo "## Params workflow vs. main" >> report.md
@@ -470,137 +269,78 @@ container registry. The following steps will be performed:
 
           # Publish the CML report
           cml comment update --target=pr --publish report.md
-
-    publish:
-      stage: publish
-      image: python:3.13
-      needs:
-        - train
-      rules:
-        - if: $CI_COMMIT_BRANCH == "main"
-      services:
-        - docker:25.0.3-dind
-      variables:
-        DOCKER_HOST: "tcp://docker:2375"
-      before_script:
-        # Install Docker
-        - apt-get update
-        - apt-get install --yes ca-certificates curl
-        - install -m 0755 -d /etc/apt/keyrings
-        - curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
-        - chmod a+r /etc/apt/keyrings/docker.asc
-        - echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
-        - apt-get update
-        - apt-get install --yes docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-        # Set the Google Service Account key
-        - echo "${GOOGLE_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
-        # Login to the Google Container Registry
-        - cat "${GOOGLE_APPLICATION_CREDENTIALS}" | docker login -u _json_key --password-stdin "${GCP_CONTAINER_REGISTRY_HOST}"
-        # Create the virtual environment for caching
-        - python3.13 -m venv .venv
-        - source .venv/bin/activate
-      script:
-        # Install dependencies
-        - pip install --requirement requirements-freeze.txt
-        # Pull the BentoML model artifact
-        - dvc pull model/celestial_bodies_classifier_model.bentomodel
-        # Import the BentoML model
-        - bentoml models import model/celestial_bodies_classifier_model.bentomodel
-        # Build the BentoML model artifact
-        - bentoml build src
-        # Containerize and publish the BentoML model artifact Docker image
-        - |
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}
+          username: _json_key
+          password: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+      - name: Import the BentoML model
+        if: github.ref == 'refs/heads/main'
+        run: bentoml models import model/celestial_bodies_classifier_model.bentomodel
+      - name: Build the BentoML model artifact
+        if: github.ref == 'refs/heads/main'
+        run: bentoml build src
+      - name: Containerize and publish the BentoML model artifact Docker image
+        if: github.ref == 'refs/heads/main'
+        run: |
+          # Containerize the Bento
           bentoml containerize celestial_bodies_classifier:latest \
-            --image-tag $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest \
-            --image-tag $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:${CI_COMMIT_SHA}
-        # Push the container to the Container Registry
-        - docker push --all-tags $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier
-      cache:
-        paths:
-          # Pip's cache doesn't store the Python packages
-          # https://pip.pypa.io/en/stable/reference/pip_install/#caching
-          - .cache/pip
-          - .venv/
-    ```
+            --image-tag ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:latest \
+            --image-tag ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:${{ github.sha }}
+          # Push the container to the Container Registry
+          docker push --all-tags ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier
+```
 
-    Check the differences with Git to validate the changes.
+Check the differences with Git to validate the changes.
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Show the differences with Git
-    git diff .gitlab-ci.yml
-    ```
+```sh title="Execute the following command(s) in a terminal"
+# Show the differences with Git
+git diff .github/workflows/mlops.yaml
+```
 
-    The output should be similar to this:
+The output should be similar to this:
 
-    ```diff
-    diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-    index dbf3b25..7dcdfe7 100644
-    --- a/.gitlab-ci.yml
-    +++ b/.gitlab-ci.yml
-    @@ -1,6 +1,8 @@
-     stages:
-       - train
-       - report
-    +  - publish
+```diff
+diff --git a/.github/workflows/mlops.yaml b/.github/workflows/mlops.yaml
+index 1fa989b..6d479ef 100644
+--- a/.github/workflows/mlops.yaml
++++ b/.github/workflows/mlops.yaml
+@@ -13,7 +13,7 @@ on:
+   workflow_dispatch:
 
-     variables:
-       # Change pip's cache directory to be inside the project directory since we can
-    @@ -95,3 +97,73 @@ report:
+ jobs:
+-  train-and-report:
++  train-report-and-publish:
+     permissions: write-all
+     runs-on: ubuntu-latest
+     steps:
+@@ -85,3 +85,43 @@ jobs:
 
            # Publish the CML report
            cml comment update --target=pr --publish report.md
-    +
-    +publish:
-    +  stage: publish
-    +  image: python:3.13
-    +  needs:
-    +    - train
-    +  rules:
-    +    - if: $CI_COMMIT_BRANCH == "main"
-    +  services:
-    +    - docker:25.0.3-dind
-    +  variables:
-    +    DOCKER_HOST: "tcp://docker:2375"
-    +  before_script:
-    +    # Install Docker
-    +    - apt-get update
-    +    - apt-get install --yes ca-certificates curl
-    +    - install -m 0755 -d /etc/apt/keyrings
-    +    - curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
-    +    - chmod a+r /etc/apt/keyrings/docker.asc
-    +    - echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
-    +    - apt-get update
-    +    - apt-get install --yes docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-    +    # Set the Google Service Account key
-    +    - echo "${GOOGLE_SERVICE_ACCOUNT_KEY}" | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
-    +    # Login to the Google Container Registry
-    +    - cat "${GOOGLE_APPLICATION_CREDENTIALS}" | docker login -u _json_key --password-stdin "${GCP_CONTAINER_REGISTRY_HOST}"
-    +    # Create the virtual environment for caching
-    +    - python3.13 -m venv .venv
-    +    - source .venv/bin/activate
-    +  script:
-    +    # Install dependencies
-    +    - pip install --requirement requirements-freeze.txt
-    +    # Pull the BentoML model artifact
-    +    - dvc pull model/celestial_bodies_classifier_model.bentomodel
-    +    # Import the BentoML model
-    +    - bentoml models import model/celestial_bodies_classifier_model.bentomodel
-    +    # Build the BentoML model artifact
-    +    - bentoml build src
-    +    # Containerize and publish the BentoML model artifact Docker image
-    +    - |
-    +      bentoml containerize celestial_bodies_classifier:latest \
-    +        --image-tag $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest \
-    +        --image-tag $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:${CI_COMMIT_SHA}
-    +    # Push the container to the Container Registry
-    +    - docker push --all-tags $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier
-    +  cache:
-    +    paths:
-    +      # Pip's cache doesn't store the Python packages
-    +      # https://pip.pypa.io/en/stable/reference/pip_install/#caching
-    +      - .cache/pip
-    +      - .venv/
-    ```
++      - name: Log in to the Container registry
++        uses: docker/login-action@v3
++        with:
++          registry: ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}
++          username: _json_key
++          password: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
++      - name: Import the BentoML model
++        if: github.ref == 'refs/heads/main'
++        run: bentoml models import model/celestial_bodies_classifier_model.bentomodel
++      - name: Build the BentoML model artifact
++        if: github.ref == 'refs/heads/main'
++        run: bentoml build src
++      - name: Containerize and publish the BentoML model artifact Docker image
++        if: github.ref == 'refs/heads/main'
++        run: |
++          # Containerize the Bento
++          bentoml containerize celestial_bodies_classifier:latest \
++            --image-tag ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:latest \
++            --image-tag ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:${{ github.sha }}
++          # Push the container to the Container Registry
++          docker push --all-tags ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier
+```
 
 ### Check the changes
 

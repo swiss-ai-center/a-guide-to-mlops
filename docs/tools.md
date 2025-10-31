@@ -13,8 +13,7 @@ process:
 - Model reproducibility: [:simple-dvc: DVC](https://dvc.org/)
 - Model tracking: [:simple-dvc: DVC](https://dvc.org/) & [CML](https://cml.dev/)
 - Model orchestration:
-  [:simple-github: GitHub Actions](https://github.com/features/actions) or
-  [:simple-gitlab: GitLab CI](https://about.gitlab.com/topics/ci-cd/)
+  [:simple-github: GitHub Actions](https://github.com/features/actions)
 - A [:simple-googlecloud: Google Cloud](https://cloud.google.com) account
 - Model serving and distributing:
   [:simple-bentoml: BentoML](https://bentoml.com/) and
@@ -84,8 +83,9 @@ Git repository for specific alternatives.
 
 ### Model orchestration
 
-These are alternatives to GitHub Actions and GitLab CI.
+These are alternatives to GitHub Actions.
 
+- [GitLab CI](https://about.gitlab.com/topics/ci-cd/) - A complete DevOps platform with built-in CI/CD and container registry
 - [Gitea](https://about.gitea.com/) - A painless self-hosted Git service with
   built-in CI/CD using GitHub Actions-compatible syntax
 - [Forgejo](https://forgejo.org/) - A self-hosted Git service and soft fork of

@@ -2,19 +2,6 @@
 
 ## Introduction
 
-!!! warning "GitHub Only"
-
-    **This chapter currently supports only :simple-github: GitHub.** We are actively
-    working on adding support for :simple-gitlab: GitLab.
-
-    If you have been using GitLab up to this point, you may need to either:
-
-    - Wait for GitLab support to be added
-    - Switch to GitHub for these chapters
-    - Skip these chapters for now
-
-    We appreciate your understanding!
-
 Training experiments locally can be challenging, as they often demand
 significantly more computational power than your personal machine can provide,
 or they may require specific hardware to operate.

@@ -167,47 +167,25 @@ provider.
 
 ### Clean up your repository
 
-In this section, you will delete the repository you created on GitHub or GitLab.
+In this section, you will delete the repository you created on GitHub.
 
-=== ":simple-github: GitHub"
+To delete the GitHub repository you created:
 
-    To delete the GitHub repository you created:
+1. Go to the repository page in GitHub.
+2. Click on **Settings** above the repository.
+3. Scroll down to the "Danger Zone" section at the bottom of the page.
+4. Click on **Delete this repository**.
+5. Follow the instructions to delete the repository.
 
-    1. Go to the repository page in GitHub.
-    2. Click on **Settings** above the repository.
-    3. Scroll down to the "Danger Zone" section at the bottom of the page.
-    4. Click on **Delete this repository**.
-    5. Follow the instructions to delete the repository.
+To delete the GitHub Personal Access Token you created:
 
-    To delete the GitHub Personal Access Token you created:
-
-    1. Go to your GitHub **Settings** at the top right of the page.
-    2. Click on **Developers settings** in the left sidebar.
-    3. Click on **Personal access tokens** in the left sidebar and then on **Tokens
-       (classic)**.
-    4. Find the Personal Access Token you created for this guide.
-    5. Click on the **Delete** button next to it.
-    6. Follow the instructions to delete the token.
-
-=== ":simple-gitlab: GitLab"
-
-    To delete the GitLab repository you created:
-
-    1. Go to the repository page in GitLab.
-    2. Click on the **Settings** button on the left side of the page.
-    3. Scroll down to the "Advanced" section at the bottom of the page and click on
-       "Expand".
-    4. Scroll down to "Delete this project".
-    5. Click on the **Delete project** button.
-    6. Follow the instructions to delete the repository.
-
-    To delete the GitLab Personal Access Token you created:
-
-    1. Go to your GitLab **Profile preferences** at the top right of the page.
-    2. Click on **Access Tokens** in the left sidebar.
-    3. Find the Personal Access Token you created for this guide.
-    4. Click on the **Revoke** button next to it.
-    5. Follow the instructions to revoke the token.
+1. Go to your GitHub **Settings** at the top right of the page.
+2. Click on **Developers settings** in the left sidebar.
+3. Click on **Personal access tokens** in the left sidebar and then on **Tokens
+   (classic)**.
+4. Find the Personal Access Token you created for this guide.
+5. Click on the **Delete** button next to it.
+6. Follow the instructions to delete the token.
 
 ### Clean up your local environment
 

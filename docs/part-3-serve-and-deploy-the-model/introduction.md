@@ -26,12 +26,10 @@ The following requirements are necessary to follow this part in addition to
 those described in the
 [first part](../part-1-local-training-and-model-evaluation/introduction.md#requirements):
 
-- A [:simple-github: GitHub](https://github.com) or a
-  [:simple-gitlab: GitLab](https://gitlab.com) account
+- A [:simple-github: GitHub](https://github.com) account
 - A [:simple-googlecloud: Google Cloud](https://cloud.google.com) account
 - [:simple-docker: Docker](https://www.docker.com/) must be installed to set up
   and manage the container registry
-- [:simple-helm: Helm](https://helm.sh/) must be installed if using GitLab
 
 ??? info "Using another cloud provider? Read this!"
 
