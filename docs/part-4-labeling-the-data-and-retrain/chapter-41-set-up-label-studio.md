@@ -279,6 +279,26 @@ Once you have signed up, you can create a new project in Label Studio:
 Congratulations! You have successfully set up Label Studio in your environment
 and imported new data. You are now ready to start labeling your data!
 
+!!! abstract "Take away"
+
+    - **Data labeling is an iterative process, not a one-time task**: Just as model
+      training involves multiple rounds of adjustments, data collection and labeling
+      requires continuous refinement as new data becomes available and model
+      requirements evolve, making it essential to establish systematic labeling
+      workflows from the start.
+    - **Label Studio provides structure to an otherwise chaotic process**:
+      Open-source labeling tools like Label Studio transform manual annotation from
+      ad-hoc spreadsheets or file naming conventions into organized projects with
+      proper task tracking, annotation history, and quality control mechanisms.
+    - **Configuration-as-code enables reproducibility**: Defining labeling
+      interfaces through XML templates (rather than clicking through UI settings)
+      ensures the labeling schema is documented, version-controlled, and can be easily
+      replicated across projects or shared with team members.
+    - **Local-first development reduces barriers to experimentation**: Running Label
+      Studio locally without requiring cloud accounts or enterprise licenses allows
+      you to prototype labeling workflows quickly and iterate on the annotation schema
+      before scaling to production.
+
 ## State of the labeling process
 
 - [ ] Labeling of supplemental data needs to be systematic and uniform

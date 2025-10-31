@@ -317,6 +317,25 @@ automatically documented to interact with the model.
 
 You can now safely continue to the next chapter.
 
+!!! abstract "Take away"
+
+    - **BentoML services define your serving contract**: A BentoML service class
+      specifies exactly how your model will be exposed as an API, including
+      input/output types and validation, creating a clear contract between your ML
+      model and consuming applications.
+    - **FastAPI integration provides production-grade APIs automatically**: BentoML
+      leverages FastAPI to generate interactive documentation, input validation, and
+      type safety out of the box, eliminating the need to manually build REST APIs
+      around your models.
+    - **Local serving enables rapid iteration**: Being able to serve your model
+      locally with a single command (`bentoml serve`) allows you to test API behavior,
+      debug preprocessing logic, and validate predictions before investing time in
+      containerization and deployment.
+    - **Custom objects from training flow directly into serving**: The preprocessing
+      and postprocessing functions saved with your model in Chapter 3.1 are
+      automatically available in the service, ensuring consistency between how data is
+      handled during training and inference.
+
 ## State of the MLOps process
 
 - [x] Notebook has been transformed into scripts for production

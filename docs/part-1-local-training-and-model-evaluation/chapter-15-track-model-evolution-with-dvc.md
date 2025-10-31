@@ -286,6 +286,25 @@ the code codebase.
 
 You can now safely continue to the next chapter.
 
+!!! abstract "Take away"
+
+    - **Comparing experiments is essential for data-driven decisions**: DVC provides
+      `dvc params diff`, `dvc metrics diff`, and `dvc plots diff` to compare any two
+      points in your experiment history (e.g., HEAD vs workspace, or any two commits),
+      making it easy to evaluate whether changes improve your model.
+    - **Track parameters, metrics, and plots together**: The combination of
+      parameters (what you changed), metrics (quantitative results), and plots (visual
+      results) gives you a complete picture of how model modifications affect
+      performance.
+    - **Version control for ML experiments enables safe experimentation**: Just like
+      Git allows you to experiment with code changes and revert if needed, DVC enables
+      the same workflow for ML experiments. Try new approaches confidently knowing you
+      can always go back.
+    - **Visualizations make differences clear**: The `dvc plots diff --open` command
+      generates an HTML report with side-by-side comparisons, making it easy to share
+      results with team members and stakeholders without requiring them to run the
+      experiments themselves.
+
 ## State of the MLOps process
 
 - [x] Notebook has been transformed into scripts for production

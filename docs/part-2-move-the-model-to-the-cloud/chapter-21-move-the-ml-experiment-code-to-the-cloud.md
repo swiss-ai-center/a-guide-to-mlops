@@ -173,6 +173,21 @@ git clone <my_git_repository_url>
 
 You can now safely continue to the next chapter.
 
+!!! abstract "Take away"
+
+    - **Remote Git repositories enable team collaboration**: By pushing your local
+      Git repository to GitHub or GitLab, you create a centralized source of truth
+      that all team members can access, clone, and contribute to.
+    - **SSH keys provide secure, passwordless authentication**: Setting up SSH
+      authentication eliminates the need to enter credentials with every push/pull
+      operation, streamlining your workflow while maintaining security.
+    - **git push and git pull synchronize changes**: Once the remote is configured,
+      these simple commands keep local and remote repositories in sync, enabling
+      distributed collaboration on the same codebase.
+    - **Version-controlled code is shareable code**: Having code in a remote
+      repository means new team members can get started instantly with a simple
+      `git clone` command, reducing onboarding friction.
+
 ## State of the MLOps process
 
 - [x] Notebook has been transformed into scripts for production

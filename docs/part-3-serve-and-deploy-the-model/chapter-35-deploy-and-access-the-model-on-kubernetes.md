@@ -481,6 +481,25 @@ In this chapter, you have successfully:
    artifact on Kubernetes
 2. Accessed the model
 
+!!! abstract "Take away"
+
+    - **Kubernetes provides production-grade model hosting**: By deploying your
+      model to Kubernetes, you gain access to enterprise features like automatic
+      scaling, rolling updates, health checks, and high availability that are
+      difficult to implement with simpler hosting solutions.
+    - **Declarative configuration enables reproducible deployments**: Kubernetes
+      YAML files describe the desired state of your deployment (replicas, image
+      version, resources), allowing you to version control your infrastructure and
+      reproduce deployments consistently.
+    - **LoadBalancer services expose models to the internet**: Kubernetes Service
+      objects with type LoadBalancer automatically provision cloud load balancers and
+      public IPs, making your model accessible from anywhere without manual networking
+      configuration.
+    - **Separation of deployment and service enables flexibility**: Keeping
+      deployment configuration (how many pods, which image) separate from service
+      configuration (how to route traffic) allows you to update the model version
+      without changing how clients access it.
+
 ## State of the MLOps process
 
 - [x] Notebook has been transformed into scripts for production

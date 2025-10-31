@@ -791,6 +791,24 @@ cluster automatically with the CI/CD pipeline!
 New versions of the model will be deployed automatically as soon as they are
 pushed to the main branch.
 
+!!! abstract "Take away"
+
+    - **Continuous deployment closes the MLOps loop**: Automatically deploying every
+      model that reaches the main branch means improvements flow from experimentation
+      to production without manual intervention, enabling rapid iteration and reducing
+      time-to-value.
+    - **Dynamic image tag updates ensure version traceability**: Using commit SHAs
+      as Docker image tags and updating Kubernetes deployments to reference specific
+      versions creates an audit trail from code changes to deployed models, critical
+      for debugging and rollback.
+    - **GitOps principles apply to ML deployments**: Storing Kubernetes
+      configuration in Git and using CI/CD to apply changes treats infrastructure as
+      code, enabling peer review of deployment changes and providing a history of what
+      was deployed when.
+    - **Automated deployment reduces human error**: Removing manual kubectl commands
+      from the deployment process eliminates typos, forgotten steps, and configuration
+      drift, ensuring every deployment follows the same tested procedure.
+
 ## State of the MLOps process
 
 - [x] Notebook has been transformed into scripts for production

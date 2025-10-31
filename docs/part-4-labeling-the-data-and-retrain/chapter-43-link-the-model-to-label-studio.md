@@ -327,6 +327,28 @@ model to make predictions on the data you have in Label Studio to speed up the
 labeling process. In the next chapter, we will retrain the model using the new
 data we have labeled.
 
+!!! abstract "Take away"
+
+    - **AI-assisted labeling creates a virtuous cycle**: Using your model to
+      pre-label data speeds up annotation, which generates more labeled data to
+      retrain the model, which improves pre-labeling quality. This feedback loop is
+      central to continuous learning systems but requires careful monitoring to
+      prevent error propagation.
+    - **Model serving requires more than inference logic**: Building a
+      production-ready model API means implementing health checks, configuration
+      endpoints, and proper error handling, not just a `/predict` endpoint, to enable
+      robust integration with downstream systems like Label Studio.
+    - **BentoML's custom objects enable end-to-end integration**: Packaging
+      preprocessing and postprocessing functions with the model means the serving
+      layer automatically handles image transformation and probability decoding,
+      eliminating the need to duplicate data processing logic between training and
+      serving code.
+    - **Automation bias is a real risk in AI-assisted workflows**: When human
+      labelers see model predictions pre-filled, they may anchor to those suggestions
+      and accept incorrect labels without proper scrutiny, especially under time
+      pressure or with large datasets. Implementing cross-labeling and quality checks
+      helps mitigate this risk.
+
 ## State of the labeling process
 
 - [x] Labeling of supplemental data can be done systematically and uniformly

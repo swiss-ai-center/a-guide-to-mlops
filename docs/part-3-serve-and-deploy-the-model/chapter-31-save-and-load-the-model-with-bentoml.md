@@ -690,6 +690,26 @@ You did fix some of the previous issues:
 
 You can now safely continue to the next chapter.
 
+!!! abstract "Take away"
+
+    - **BentoML transforms models into production-ready artifacts**: By saving
+      models with BentoML, you package not just the weights but also
+      preprocessing/postprocessing logic and metadata, ensuring all dependencies
+      travel together and eliminating the "it works in training but fails in serving"
+      problem.
+    - **Custom objects enable end-to-end inference pipelines**: BentoML's ability to
+      save custom preprocessing and postprocessing functions alongside the model means
+      your serving layer automatically handles image resizing, normalization, and
+      output formatting without duplicating code.
+    - **The model store centralizes model management**: BentoML's local model store
+      at `~/bentoml/` acts as a versioned registry where models can be saved, loaded,
+      and exported, providing a single source of truth for model artifacts before
+      they're shared via DVC or deployed.
+    - **Export/import enables collaboration and CI/CD**: Exporting BentoML models to
+      `.bentomodel` files allows them to be tracked by DVC, shared with team members,
+      and imported in CI/CD pipelines, bridging the gap between local development and
+      automated deployment.
+
 ## State of the MLOps process
 
 - [x] Notebook has been transformed into scripts for production
