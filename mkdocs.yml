@@ -21,7 +21,6 @@ nav:
       - "Chapter 1.4 - Reproduce the ML experiment with DVC": part-1-local-training-and-model-evaluation/chapter-14-reproduce-the-ml-experiment-with-dvc.md
       - "Chapter 1.5 - Track model evolution with DVC": part-1-local-training-and-model-evaluation/chapter-15-track-model-evolution-with-dvc.md
       - "Conclusion": part-1-local-training-and-model-evaluation/conclusion.md
-      - "Clean up": part-1-local-training-and-model-evaluation/clean-up.md
   - ☁️ Move the model to the cloud:
       - "Introduction": part-2-move-the-model-to-the-cloud/introduction.md
       - "Chapter 2.1 - Move the ML experiment code to the cloud": part-2-move-the-model-to-the-cloud/chapter-21-move-the-ml-experiment-code-to-the-cloud.md
@@ -30,7 +29,6 @@ nav:
       - "Chapter 2.4 - Track model evolution in the CI/CD pipeline with CML": part-2-move-the-model-to-the-cloud/chapter-24-track-model-evolution-in-the-cicd-pipeline-with-cml.md
       - "Chapter 2.5 - Work efficiently and collaboratively with Git": part-2-move-the-model-to-the-cloud/chapter-25-work-efficiently-and-collaboratively-with-git.md
       - "Conclusion": part-2-move-the-model-to-the-cloud/conclusion.md
-      - "Clean up": part-2-move-the-model-to-the-cloud/clean-up.md
   - 🚚 Serve and deploy the model:
       - "Introduction": part-3-serve-and-deploy-the-model/introduction.md
       - "Chapter 3.1 - Save and load the model with BentoML": part-3-serve-and-deploy-the-model/chapter-31-save-and-load-the-model-with-bentoml.md
@@ -42,7 +40,6 @@ nav:
       - "Chapter 3.7 - Use a self-hosted runner for the CI/CD pipeline": part-3-serve-and-deploy-the-model/chapter-37-use-a-self-hosted-runner-for-the-cicd-pipeline.md
       - "Chapter 3.8 - Train the model on a Kubernetes pod": part-3-serve-and-deploy-the-model/chapter-38-train-the-model-on-a-kubernetes-pod.md
       - "Conclusion": part-3-serve-and-deploy-the-model/conclusion.md
-      - "Clean up": part-3-serve-and-deploy-the-model/clean-up.md
   - 🏷️ Labeling the data and retrain:
       - "Introduction": part-4-labeling-the-data-and-retrain/introduction.md
       - "Chapter 4.1 - Set up Label Studio": part-4-labeling-the-data-and-retrain/chapter-41-set-up-label-studio.md
@@ -50,7 +47,6 @@ nav:
       - "Chapter 4.3 - Link the model to Label Studio": part-4-labeling-the-data-and-retrain/chapter-43-link-the-model-to-label-studio.md
       - "Chapter 4.4 - Retrain the model from new data with DVC": part-4-labeling-the-data-and-retrain/chapter-44-retrain-the-model-from-new-data-with-dvc.md
       - "Conclusion": part-4-labeling-the-data-and-retrain/conclusion.md
-      - "Clean up": clean-up.md
   - 🪄 Conclusion:
       - "Clean up": clean-up.md
       - "Conclusion": conclusion.md

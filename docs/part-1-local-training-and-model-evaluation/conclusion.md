@@ -38,7 +38,28 @@ flowchart TB
     end
 ```
 
-Do not forget to [Clean up](./clean-up.md) if you want to stop here or continue
-with
+## Next steps
+
+**Ready to continue?**
+
+Proceed to
 [Part 2 - Move to the cloud](../part-2-move-the-model-to-the-cloud/introduction.md)
-of the MLOps guide!
+to learn how to move your ML workflow to cloud infrastructure.
+
+**Stopping here?**
+
+If you decide to conclude your progress at this point, see the
+[Clean up guide](../clean-up.md) for instructions on removing the resources you
+created:
+
+- Local Git repository and DVC cache
+- Python virtual environment
+- Data files and model artifacts
+
+This is necessary to return to a clean state on your computer and avoid
+potential issues when starting new projects.
+
+!!! note
+
+    You can safely skip cleanup if you plan to continue with the next part of the
+    guide immediately.
