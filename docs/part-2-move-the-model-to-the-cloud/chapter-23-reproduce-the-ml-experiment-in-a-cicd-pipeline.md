@@ -92,56 +92,40 @@ flowchart TB
 DVC will need to log in to the S3 bucket of the cloud provider to download the
 data inside the CI/CD pipeline:
 
-=== ":simple-googlecloud: Google Cloud"
+Google Cloud allows the creation of a "Service Account", so you don't have to
+store/share your own credentials. A Service Account can be deleted, hence
+revoking all the access it had.
 
-    Google Cloud allows the creation of a "Service Account", so you don't have to
-    store/share your own credentials. A Service Account can be deleted, hence
-    revoking all the access it had.
+Create the Google Service Account and its associated Google Service Account Key
+to access Google Cloud without your own credentials.
 
-    Create the Google Service Account and its associated Google Service Account Key
-    to access Google Cloud without your own credentials.
+The key will be stored in your `~/.config/gcloud` directory under the name
+`google-service-account-key.json`:
 
-    The key will be stored in your `~/.config/gcloud` directory under the name
-    `google-service-account-key.json`:
+!!! danger
 
-    !!! danger
+    You must **never** add and commit this file to your working directory. It is a
+    sensitive data that you must keep safe.
 
-        You must **never** add and commit this file to your working directory. It is a
-        sensitive data that you must keep safe.
+```sh title="Execute the following command(s) in a terminal"
+# Create the Google Service Account
+gcloud iam service-accounts create google-service-account \
+    --display-name="Google Service Account"
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Create the Google Service Account
-    gcloud iam service-accounts create google-service-account \
-        --display-name="Google Service Account"
+# Set the permissions for the Google Service Account
+gcloud projects add-iam-policy-binding $GCP_PROJECT_ID \
+    --member="serviceAccount:google-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com" \
+    --role="roles/storage.objectViewer"
 
-    # Set the permissions for the Google Service Account
-    gcloud projects add-iam-policy-binding $GCP_PROJECT_ID \
-        --member="serviceAccount:google-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com" \
-        --role="roles/storage.objectViewer"
+# Create the Google Service Account Key
+gcloud iam service-accounts keys create ~/.config/gcloud/google-service-account-key.json \
+    --iam-account=google-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com
+```
 
-    # Create the Google Service Account Key
-    gcloud iam service-accounts keys create ~/.config/gcloud/google-service-account-key.json \
-        --iam-account=google-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com
-    ```
+!!! info
 
-    !!! info
-
-        The path `~/.config/gcloud` should be created when installing `gcloud`. If it
-        does not exist, you can create it by running `mkdir -p ~/.config/gcloud`
-
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
+    The path `~/.config/gcloud` should be created when installing `gcloud`. If it
+    does not exist, you can create it by running `mkdir -p ~/.config/gcloud`
 
 ### Store the cloud provider credentials in the CI/CD configuration
 
@@ -149,45 +133,29 @@ Now that the credentials are created, you need to store them in the CI/CD
 configuration. Depending on the CI/CD platform you are using, the process will
 be different:
 
-=== ":simple-googlecloud: Google Cloud"
+**Display the Google Service Account key**
 
-    **Display the Google Service Account key**
+The service account key is stored on your computer as a JSON file. You need to
+display it and store it as a CI/CD variable in a text format.
 
-    The service account key is stored on your computer as a JSON file. You need to
-    display it and store it as a CI/CD variable in a text format.
+Display the Google Service Account key that you have downloaded from Google
+Cloud:
 
-    Display the Google Service Account key that you have downloaded from Google
-    Cloud:
+```sh title="Execute the following command(s) in a terminal"
+# Display the Google Service Account key
+cat ~/.config/gcloud/google-service-account-key.json
+```
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Display the Google Service Account key
-    cat ~/.config/gcloud/google-service-account-key.json
-    ```
+**Store the Google Service Account key as a CI/CD variable**
 
-    **Store the Google Service Account key as a CI/CD variable**
+Store the output as a CI/CD variable by going to the **Settings** section from
+the top header of your GitHub repository.
 
-    Store the output as a CI/CD variable by going to the **Settings** section from
-    the top header of your GitHub repository.
+Select **Secrets and variables > Actions** and select **New repository secret**.
 
-    Select **Secrets and variables > Actions** and select **New repository secret**.
-
-    Create a new variable named `GOOGLE_SERVICE_ACCOUNT_KEY` with the output value
-    of the Google Service Account key file as its value. Save the variable by
-    selecting **Add secret**.
-
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
+Create a new variable named `GOOGLE_SERVICE_ACCOUNT_KEY` with the output value
+of the Google Service Account key file as its value. Save the variable by
+selecting **Add secret**.
 
 ### Create the CI/CD pipeline configuration file
 

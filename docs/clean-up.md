@@ -21,149 +21,133 @@ Here's a step-by-step guide to help you do that.
 In this section, you will delete the resources you created on the cloud
 provider.
 
-=== ":simple-googlecloud: Google Cloud"
+**Delete the Kubernetes cluster**
 
-    **Delete the Kubernetes cluster**
+To delete the
+[Google Kubernetes cluster](https://console.cloud.google.com/kubernetes) you
+created, you can execute the following command:
 
-    To delete the
-    [Google Kubernetes cluster](https://console.cloud.google.com/kubernetes) you
-    created, you can execute the following command:
+```sh title="Execute the following command(s) in a terminal"
+# Delete the Kubernetes cluster
+gcloud container clusters delete --zone $GCP_K8S_CLUSTER_ZONE $GCP_K8S_CLUSTER_NAME
+```
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Delete the Kubernetes cluster
-    gcloud container clusters delete --zone $GCP_K8S_CLUSTER_ZONE $GCP_K8S_CLUSTER_NAME
-    ```
+Press ++y++ to confirm the deletion.
 
-    Press ++y++ to confirm the deletion.
+To disable the Google Kubernetes Engine API, you can execute the following
+command:
 
-    To disable the Google Kubernetes Engine API, you can execute the following
-    command:
+```sh title="Execute the following command(s) in a terminal"
+# Disable the Google Kubernetes Engine API
+gcloud services disable container.googleapis.com --force
+```
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Disable the Google Kubernetes Engine API
-    gcloud services disable container.googleapis.com --force
-    ```
+**Delete the Google Artifact Registry**
 
-    **Delete the Google Artifact Registry**
+To delete the
+[Google Artifact Registry](https://console.cloud.google.com/artifacts) used to
+store the Docker images you created, you can execute the following command:
 
-    To delete the
-    [Google Artifact Registry](https://console.cloud.google.com/artifacts) used to
-    store the Docker images you created, you can execute the following command:
+```sh title="Execute the following command(s) in a terminal"
+# Delete the artifact repository
+gcloud artifacts repositories delete --location $GCP_CONTAINER_REGISTRY_LOCATION $GCP_CONTAINER_REGISTRY_NAME
+```
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Delete the artifact repository
-    gcloud artifacts repositories delete --location $GCP_CONTAINER_REGISTRY_LOCATION $GCP_CONTAINER_REGISTRY_NAME
-    ```
+Press ++y++ to confirm the deletion.
 
-    Press ++y++ to confirm the deletion.
+To disable the Google Artifact Registry API, you can execute the following
+command:
 
-    To disable the Google Artifact Registry API, you can execute the following
-    command:
+```sh title="Execute the following command(s) in a terminal"
+# Disable the Google Artifact Registry API
+gcloud services disable artifactregistry.googleapis.com --force
+```
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Disable the Google Artifact Registry API
-    gcloud services disable artifactregistry.googleapis.com --force
-    ```
+**Delete the Google Storage bucket**
 
-    **Delete the Google Storage bucket**
+!!! warning
 
-    !!! warning
+    If you intend to keep the Git repository but proceed with deleting the Google
+    Storage bucket, the DVC remote will be disrupted. To continue using DVC with the
+    Git repository, you will need to reconfigure it with a new remote.
 
-        If you intend to keep the Git repository but proceed with deleting the Google
-        Storage bucket, the DVC remote will be disrupted. To continue using DVC with the
-        Git repository, you will need to reconfigure it with a new remote.
+To delete the [Google Storage bucket](https://console.cloud.google.com/storage)
+you created, you can execute the following command:
 
-    To delete the [Google Storage bucket](https://console.cloud.google.com/storage)
-    you created, you can execute the following command:
+```sh title="Execute the following command(s) in a terminal"
+# Delete the Google Storage bucket
+gcloud storage rm --recursive gs://$GCP_BUCKET_NAME
+```
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Delete the Google Storage bucket
-    gcloud storage rm --recursive gs://$GCP_BUCKET_NAME
-    ```
+Press ++y++ to confirm the deletion.
 
-    Press ++y++ to confirm the deletion.
+**Delete the Google Service Account**
 
-    **Delete the Google Service Account**
+To delete the
+[Google Service Account](https://console.cloud.google.com/iam-admin/serviceaccounts)
+you created, you can execute the following command:
 
-    To delete the
-    [Google Service Account](https://console.cloud.google.com/iam-admin/serviceaccounts)
-    you created, you can execute the following command:
+```sh title="Execute the following command(s) in a terminal"
+# Delete the Google Service Account
+gcloud iam service-accounts delete google-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com
+```
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Delete the Google Service Account
-    gcloud iam service-accounts delete google-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com
-    ```
+Press ++y++ to confirm the deletion.
 
-    Press ++y++ to confirm the deletion.
+**Delete the local Google Service Account**
 
-    **Delete the local Google Service Account**
+You can run the following command to delete the Google Service Account you
+exported locally:
 
-    You can run the following command to delete the Google Service Account you
-    exported locally:
+```sh title="Execute the following command(s) in a terminal"
+# Delete the local Google Service Account
+rm ~/.config/gcloud/google-service-account-key.json
+```
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Delete the local Google Service Account
-    rm ~/.config/gcloud/google-service-account-key.json
-    ```
+**Unlink the billing account**
 
-    **Unlink the billing account**
+You can run the following command to unlink the billing account from the
+project:
 
-    You can run the following command to unlink the billing account from the
-    project:
+```sh title="Execute the following command(s) in a terminal"
+# Unlink the billing account
+gcloud billing projects unlink $GCP_PROJECT_ID
+```
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Unlink the billing account
-    gcloud billing projects unlink $GCP_PROJECT_ID
-    ```
+Press ++y++ to confirm the unlinking.
 
-    Press ++y++ to confirm the unlinking.
+**Delete the Google Cloud project**
 
-    **Delete the Google Cloud project**
+To delete the
+[Google Cloud project](https://console.cloud.google.com/home/dashboard) you
+created, you can execute the following command:
 
-    To delete the
-    [Google Cloud project](https://console.cloud.google.com/home/dashboard) you
-    created, you can execute the following command:
+```sh title="Execute the following command(s) in a terminal"
+# Delete the Google Cloud project
+gcloud projects delete $GCP_PROJECT_ID
+```
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Delete the Google Cloud project
-    gcloud projects delete $GCP_PROJECT_ID
-    ```
+Press ++y++ to confirm the deletion.
 
-    Press ++y++ to confirm the deletion.
+**Close the Billing Account**
 
-    **Close the Billing Account**
+To close the Billing Account you created:
 
-    To close the Billing Account you created:
+1. Go to the
+   [Google Cloud Billing Console](https://console.cloud.google.com/billing){:target="\_blank"}.
+2. Select the Billing Account you created.
+3. Click on **Account management** in the menu.
+4. Select **Actions** from the project list and select **Disable billing**.
+5. Select *Close Billing Account* at the top of the page.
+6. Follow the instructions to close the account.
 
-    1. Go to the
-       [Google Cloud Billing Console](https://console.cloud.google.com/billing){:target="\_blank"}.
-    2. Select the Billing Account you created.
-    3. Click on **Account management** in the menu.
-    4. Select **Actions** from the project list and select **Disable billing**.
-    5. Select *Close Billing Account* at the top of the page.
-    6. Follow the instructions to close the account.
+**Remove the Payment method**
 
-    **Remove the Payment method**
+To remove the payment method you added:
 
-    To remove the payment method you added:
-
-    1. Go to the **Payment method** in the 3-dots top right menu.
-    2. Select the card you added and select **Remove**.
-    3. Follow the instructions to remove the payment method.
-
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
+1. Go to the **Payment method** in the 3-dots top right menu.
+2. Select the card you added and select **Remove**.
+3. Follow the instructions to remove the payment method.
 
 ### Clean up your repository
 

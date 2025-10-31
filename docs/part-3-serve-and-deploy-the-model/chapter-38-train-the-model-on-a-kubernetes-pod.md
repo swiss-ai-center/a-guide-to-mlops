@@ -395,30 +395,14 @@ Add the Kubernetes secrets to access the Kubernetes cluster from the CI/CD
 pipeline. Depending on the CI/CD platform you are using, the process will be
 different:
 
-=== ":simple-googlecloud: Google Cloud"
+Create the following new variable by going to the **Settings** section from the
+top header of your GitHub repository. Select **Secrets and variables > Actions**
+and select **New repository secret**:
 
-    Create the following new variable by going to the **Settings** section from the
-    top header of your GitHub repository. Select **Secrets and variables > Actions**
-    and select **New repository secret**:
+- `GCP_K8S_KUBECONFIG`: The content of the `~/.kube/config` file of the
+  Kubernetes cluster.
 
-    - `GCP_K8S_KUBECONFIG`: The content of the `~/.kube/config` file of the
-      Kubernetes cluster.
-
-    Save the variables by selecting **Add secret**.
-
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
+Save the variables by selecting **Add secret**.
 
 ### Update the CI/CD configuration file
 
@@ -860,27 +844,11 @@ Go back to your GitHub repository.
   changes. The `publish-and-deploy` will run on the main runner. It retrieves the
   model with DVC, containerizes then deploys the model artifact.
 
-=== ":simple-googlecloud: Google Cloud"
-
-    On Google Cloud Console, you can see the pod that has been created on the
-    [Kubernetes Engine Workloads](https://console.cloud.google.com/kubernetes/workload/)
-    page. Open the pod and go to the **YAML** tab to see the configuration of the
-    pod. You should notice that the pod has been created with the node selector
-    `gpu=true` and that it has been created on the right node.
-
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
+On Google Cloud Console, you can see the pod that has been created on the
+[Kubernetes Engine Workloads](https://console.cloud.google.com/kubernetes/workload/)
+page. Open the pod and go to the **YAML** tab to see the configuration of the
+pod. You should notice that the pod has been created with the node selector
+`gpu=true` and that it has been created on the right node.
 
 This chapter is done, you can check the summary.
 

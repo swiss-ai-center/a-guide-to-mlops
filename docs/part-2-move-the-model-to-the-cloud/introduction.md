@@ -25,27 +25,18 @@ those described in the
 - A [:simple-github: GitHub](https://github.com) account
 - A [:simple-googlecloud: Google Cloud](https://cloud.google.com) account
 
-??? info "Using another development platform? Read this!"
+??? info "Using different platforms? Read this!"
 
-    This guide has been written with GitHub in mind, but the core MLOps principles
-    and architecture patterns remain applicable across on-premise platforms like
-    [GitLab](https://about.gitlab.com/) and [Gitea](https://about.gitea.com/) with
-    some specific adjustments. GitLab offers a comprehensive built-in CI/CD system,
-    while Gitea is largely compatible with GitHub Actions syntax.
+    While this guide uses GitHub and Google Cloud for examples, the core MLOps
+    principles and architecture patterns apply to other platforms with some
+    adjustments:
 
-??? info "Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
+    - **Development platforms**: Works with on-premise solutions like
+      [GitLab](https://about.gitlab.com/) (comprehensive built-in CI/CD system) and
+      [Gitea](https://about.gitea.com/) (largely compatible with GitHub Actions
+      syntax).
+    - **Cloud providers**: Adaptable to other cloud platforms with appropriate
+      service mappings.
 
 !!! note
 

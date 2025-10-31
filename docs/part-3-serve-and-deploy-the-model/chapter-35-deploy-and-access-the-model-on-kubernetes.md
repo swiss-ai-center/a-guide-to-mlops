@@ -20,8 +20,8 @@ In this chapter, you will learn how to:
 
     The following steps will create resources on the cloud provider. These resources
     will be deleted at the end of the guide, but you might be charged for them.
-    Kubernetes clusters are not free on most cloud providers and can be expensive.
-    Make sure to delete the resources at the end of the guide.
+    Kubernetes clusters are not free and can be expensive. Make sure to delete the
+    resources at the end of the guide.
 
 The following diagram illustrates the control flow of the experiment at the end
 of this chapter:
@@ -106,35 +106,17 @@ flowchart TB
 
 ### Install the Kubernetes CLI
 
-Install the Kubernetes CLI (kubectl) on your machine.
+Install the Kubernetes CLI (kubectl) on your machine with the
+[Google Cloud CLI](https://cloud.google.com/sdk/docs/install). You might need to
+follow the instructions in the terminal and the related documentation.
 
-=== ":simple-googlecloud: Google Cloud"
+```sh title="Execute the following command(s) in a terminal"
+# Install kubectl with gcloud
+gcloud components install kubectl
+```
 
-    Install kubectl with the
-    [Google Cloud CLI](https://cloud.google.com/sdk/docs/install). You might need to
-    follow the instructions in the terminal and the related documentation.
-
-    ```sh title="Execute the following command(s) in a terminal"
-    # Install kubectl with gcloud
-    gcloud components install kubectl
-    ```
-
-    As per the instructions, you will need to install the `gke-gcloud-auth-plugin`
-    authentication plugin as well.
-
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
+As per the instructions, you will need to install the `gke-gcloud-auth-plugin`
+authentication plugin as well.
 
 ### Create the Kubernetes cluster
 
@@ -142,99 +124,83 @@ In order to deploy the model on Kubernetes, you will need a Kubernetes cluster.
 
 Follow the steps below to create one.
 
-=== ":simple-googlecloud: Google Cloud"
+**Enable the Google Kubernetes Engine API**
 
-    **Enable the Google Kubernetes Engine API**
+You must enable the Google Kubernetes Engine API to create Kubernetes clusters
+on Google Cloud with the following command:
 
-    You must enable the Google Kubernetes Engine API to create Kubernetes clusters
-    on Google Cloud with the following command:
+!!! tip
 
-    !!! tip
-
-        You can display the available services in your project with the following
-        command:
-
-        ```sh title="Execute the following command(s) in a terminal"
-        # List the services
-        gcloud services list
-        ```
+    You can display the available services in your project with the following
+    command:
 
     ```sh title="Execute the following command(s) in a terminal"
-    # Enable the Google Kubernetes Engine API
-    gcloud services enable container.googleapis.com
+    # List the services
+    gcloud services list
     ```
 
-    **Create the Kubernetes cluster**
+```sh title="Execute the following command(s) in a terminal"
+# Enable the Google Kubernetes Engine API
+gcloud services enable container.googleapis.com
+```
 
-    Create the Google Kubernetes cluster with the Google Cloud CLI.
+**Create the Kubernetes cluster**
 
-    Export the cluster name as an environment variable. Replace `<my_cluster_name>`
-    with a cluster name of your choice. It has to be lowercase and words separated
-    by hyphens.
+Create the Google Kubernetes cluster with the Google Cloud CLI.
 
-    !!! warning
+Export the cluster name as an environment variable. Replace `<my_cluster_name>`
+with a cluster name of your choice. It has to be lowercase and words separated
+by hyphens.
 
-        The cluster name must be **unique** across all Google Cloud projects and users.
-        For example, use `mlops-<surname>-cluster`, where `surname` is based on your
-        name. Change the cluster name if the command fails.
+!!! warning
 
-    ```sh title="Execute the following command(s) in a terminal"
-    export GCP_K8S_CLUSTER_NAME=<my_cluster_name>
-    ```
+    The cluster name must be **unique** across all Google Cloud projects and users.
+    For example, use `mlops-<surname>-cluster`, where `surname` is based on your
+    name. Change the cluster name if the command fails.
 
-    Export the cluster zone as an environment variable. You can view the available
-    zones at
-    [Regions and zones](https://cloud.google.com/compute/docs/regions-zones#available).
-    You should ideally select a zone close to where most of the expected traffic
-    will come from. Replace `<my_cluster_zone>` with your own zone (ex:
-    `europe-west6-a` for Zurich, Switzerland).
+```sh title="Execute the following command(s) in a terminal"
+export GCP_K8S_CLUSTER_NAME=<my_cluster_name>
+```
 
-    ```sh title="Execute the following command(s) in a terminal"
-    export GCP_K8S_CLUSTER_ZONE=<my_cluster_zone>
-    ```
+Export the cluster zone as an environment variable. You can view the available
+zones at
+[Regions and zones](https://cloud.google.com/compute/docs/regions-zones#available).
+You should ideally select a zone close to where most of the expected traffic
+will come from. Replace `<my_cluster_zone>` with your own zone (ex:
+`europe-west6-a` for Zurich, Switzerland).
 
-    Create the Kubernetes cluster. You can also view the available types of machine
-    with the `gcloud compute machine-types list` command.
+```sh title="Execute the following command(s) in a terminal"
+export GCP_K8S_CLUSTER_ZONE=<my_cluster_zone>
+```
 
-    !!! info
+Create the Kubernetes cluster. You can also view the available types of machine
+with the `gcloud compute machine-types list` command.
 
-         This can take several minutes. Please be patient.
+!!! info
 
-    ```sh title="Execute the following command(s) in a terminal"
-    # Create the Kubernetes cluster
-    gcloud container clusters create \
-        --machine-type=e2-standard-2 \
-        --num-nodes=2 \
-        --zone=$GCP_K8S_CLUSTER_ZONE \
-        $GCP_K8S_CLUSTER_NAME
-    ```
+     This can take several minutes. Please be patient.
 
-    The output should be similar to this:
+```sh title="Execute the following command(s) in a terminal"
+# Create the Kubernetes cluster
+gcloud container clusters create \
+    --machine-type=e2-standard-2 \
+    --num-nodes=2 \
+    --zone=$GCP_K8S_CLUSTER_ZONE \
+    $GCP_K8S_CLUSTER_NAME
+```
 
-    ```text
-    Note: The Kubelet readonly port (10255) is now deprecated. Please update your workloads to use the recommended alternatives. See https://cloud.google.com/kubernetes-engine/docs/how-to/disable-kubelet-readonly-port for ways to check usage and for migration instructions.
-    Note: Your Pod address range (`--cluster-ipv4-cidr`) can accommodate at most 1008 node(s).
-    Creating cluster mlops-surname-cluster in europe-west6-a... Cluster is being health-checked (Kubernetes Control Plane is healthy)...done.
-    Created [https://container.googleapis.com/v1/projects/mlops-surname-project/zones/europe-west6-a/clusters/mlops-surname-cluster].
-    To inspect the contents of your cluster, go to: https://console.cloud.google.com/kubernetes/workload_/gcloud/europe-west6-a/mlops-surname-cluster?project=mlops-surname-cluster
-    kubeconfig entry generated for mlops-surname-cluster.
-    NAME                   LOCATION        MASTER_VERSION      MASTER_IP      MACHINE_TYPE   NODE_VERSION        NUM_NODES  STATUS
-    mlops-surname-cluster  europe-west6-a  1.30.5-gke.1014001  34.65.137.236  e2-standard-2  1.30.5-gke.1014001  2          RUNNING
-    ```
+The output should be similar to this:
 
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
+```text
+Note: The Kubelet readonly port (10255) is now deprecated. Please update your workloads to use the recommended alternatives. See https://cloud.google.com/kubernetes-engine/docs/how-to/disable-kubelet-readonly-port for ways to check usage and for migration instructions.
+Note: Your Pod address range (`--cluster-ipv4-cidr`) can accommodate at most 1008 node(s).
+Creating cluster mlops-surname-cluster in europe-west6-a... Cluster is being health-checked (Kubernetes Control Plane is healthy)...done.
+Created [https://container.googleapis.com/v1/projects/mlops-surname-project/zones/europe-west6-a/clusters/mlops-surname-cluster].
+To inspect the contents of your cluster, go to: https://console.cloud.google.com/kubernetes/workload_/gcloud/europe-west6-a/mlops-surname-cluster?project=mlops-surname-cluster
+kubeconfig entry generated for mlops-surname-cluster.
+NAME                   LOCATION        MASTER_VERSION      MASTER_IP      MACHINE_TYPE   NODE_VERSION        NUM_NODES  STATUS
+mlops-surname-cluster  europe-west6-a  1.30.5-gke.1014001  34.65.137.236  e2-standard-2  1.30.5-gke.1014001  2          RUNNING
+```
 
 ### Validate kubectl can access the Kubernetes cluster
 
@@ -363,24 +329,8 @@ service/celestial-bodies-classifier-service created
 Open the cluster interface on the cloud provider and check that the model has
 been deployed.
 
-=== ":simple-googlecloud: Google Cloud"
-
-    Open the [Kubernetes Engine](https://console.cloud.google.com/kubernetes) on the
-    Google cloud interface and click on your cluster to access the details.
-
-=== ":material-cloud: Using another cloud provider? Read this!"
-
-    This guide has been written with Google Cloud in mind. We are open to
-    contributions to add support for other cloud providers such as
-    [:simple-amazonwebservices: Amazon Web Services](https://aws.amazon.com),
-    [:simple-exoscale: Exoscale](https://www.exoscale.com),
-    [:material-microsoft-azure: Microsoft Azure](https://azure.microsoft.com) or
-    [:simple-kubernetes: Self-hosted Kubernetes](https://kubernetes.io) but we might
-    not officially support them.
-
-    If you want to contribute, please open an issue or a pull request on the
-    [GitHub repository](https://github.com/swiss-ai-center/a-guide-to-mlops). Your
-    help is greatly appreciated!
+Open the [Kubernetes Engine](https://console.cloud.google.com/kubernetes) on the
+Google cloud interface and click on your cluster to access the details.
 
 ### Access the model
 
