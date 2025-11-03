@@ -93,7 +93,7 @@ labeling. You now have the skills to:
 - Continuously improve models with new labeled data
 
 We trust that you found this guide both enjoyable and informative. We encourage
-you to explore the [additional MLOps-related resources](../references/) that we
+you to explore the [additional MLOps-related resources](references.md) that we
 believe might further enhance your understanding and skills in this rapidly
 evolving and increasingly important field.
 
