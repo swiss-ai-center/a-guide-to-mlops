@@ -47,3 +47,12 @@ The following requirements are necessary to follow this part:
     vanilla Python environment as it has been tested and validated with it. If you
     still want to use Conda/Anaconda/etc., please be aware that you might encounter
     issues.
+
+??? warning "For WSL2 users"
+
+    Ensure you are working in the Linux filesystem, not the mounted Windows
+    filesystem.
+
+    Run `cd ~` to navigate to your Linux home directory. Avoid working in `/mnt/*`
+    paths, as cross-filesystem operations cause severe performance bottlenecks when
+    installing packages with pip.
