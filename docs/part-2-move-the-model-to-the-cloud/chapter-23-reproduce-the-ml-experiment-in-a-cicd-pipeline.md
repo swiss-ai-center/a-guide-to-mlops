@@ -224,13 +224,29 @@ git push
 You can see the pipeline running on the **Actions** page.
 
 You should see a newly created pipeline. The pipeline should log into Google
-Cloud, pull the data from DVC and reproduce the experiment. If you encounter
-cache errors, verify that you have pushed all data to DVC with `dvc push`.
+Cloud, pull the data and cached results from DVC remote storage, and reproduce
+the experiment. If you encounter cache errors, verify that you have pushed all
+data to DVC with `dvc push`.
 
 You may have noticed that DVC was able to skip all stages as its cache is up to
-date. It helps you to ensure the experiment can be run (all data and metadata
-are up to date) and that the experiment can be reproduced (the results are the
-same).
+date. This caching mechanism allows the pipeline to validate reproducibility
+quickly, ensuring the experiment can be run (all data and metadata are up to
+date) and reproduced (the results are the same) without requiring the full
+computational resources needed for training from scratch.
+
+!!! info "Understanding GitHub Actions for ML Workloads"
+
+    The `dvc repro --pull` command in this pipeline is designed to verify
+    reproducibility by checking cached results, not to train models from scratch.
+
+    GitHub Actions standard runners (2 CPU cores, 6-hour maximum job runtime, no GPU
+    acceleration) are sufficient for reproducing cached DVC experiments, running
+    tests and validation, and checking that your pipeline configuration is correct.
+    However, these resources are not adequate for actual ML training: training large
+    models, running GPU workloads, or executing jobs exceeding 6 hours.
+
+    In later chapters, you'll learn to overcome these limitations by using
+    self-hosted runners on powerful cloud infrastructure with GPU support.
 
 This chapter is done, you can check the summary.
 
