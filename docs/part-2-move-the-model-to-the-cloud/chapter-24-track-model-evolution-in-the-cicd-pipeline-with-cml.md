@@ -111,7 +111,7 @@ collaboration and decision-making within the team.
 Update the `.github/workflows/mlops.yaml` file with the following content.
 Explore this file to understand the `train-and-report` stage and its steps:
 
-```yaml title=".github/workflows/mlops.yaml" hl_lines="16-17 35-87"
+```yaml title=".github/workflows/mlops.yaml" hl_lines="9-11 16-17 35-87"
 name: MLOps
 
 on:
@@ -220,7 +220,14 @@ diff --git a/.github/workflows/mlops.yaml b/.github/workflows/mlops.yaml
 index 5aae2a1..1fa989b 100644
 --- a/.github/workflows/mlops.yaml
 +++ b/.github/workflows/mlops.yaml
-@@ -13,7 +13,8 @@ on:
+@@ -6,11 +6,15 @@ on:
+     branches:
+       - main
+
++  # Runs on pull requests
++  pull_request:
++
+   # Allows you to run this workflow manually from the Actions tab
    workflow_dispatch:
 
  jobs:
@@ -230,7 +237,7 @@ index 5aae2a1..1fa989b 100644
      runs-on: ubuntu-latest
      steps:
        - name: Checkout repository
-@@ -31,3 +32,56 @@ jobs:
+@@ -28,4 +32,57 @@ jobs:
            credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
        - name: Train model
          run: dvc repro --pull
