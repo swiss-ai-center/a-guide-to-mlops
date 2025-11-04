@@ -242,18 +242,16 @@ In order to deploy the model on Kubernetes, you will need to create the
 Kubernetes configuration files. These files describe the deployment and service
 of the model.
 
-Create a new directory called `kubernetes` in the root of the project.
-
-Create a new file called `deployment.yaml` in the `kubernetes` directory with
-the following content. Replace `<docker_image>` with the Docker image you have
-created in the previous steps:
+Create a new directory called `kubernetes` in the root of the project, then
+create a new file called `deployment.yaml` in the `kubernetes` directory with
+the following content.
 
 !!! tip
 
-    You can find the Docker image with the following command:
+    Verify your Docker image is available with the following command:
 
     ```sh title="Execute the following command(s) in a terminal"
-    # Get the Docker image
+    # Verify the Docker image path
     echo $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest
     ```
 
@@ -277,6 +275,13 @@ spec:
       containers:
       - name: celestial-bodies-classifier
         image: <docker_image>
+```
+
+Replace the `<docker_image>` placeholder with the actual Docker image path:
+
+```sh title="Execute the following command(s) in a terminal"
+# Replace the placeholder with the actual Docker image
+sed -i "s|<docker_image>|$GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest|g" kubernetes/deployment.yaml
 ```
 
 Create a new file called `service.yaml` in the `kubernetes` directory with the
