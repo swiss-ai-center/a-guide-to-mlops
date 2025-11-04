@@ -79,6 +79,34 @@ directory:
 git init --initial-branch=main
 ```
 
+??? info "First-time Git setup? Read this!"
+
+    If this is your first time using Git on this system (or WSL2 distribution), you
+    need to configure your Git identity. This is required for making commits and
+    should match your GitHub account information:
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Set your Git username (should match your GitHub username)
+    git config --global user.name "Your Name"
+
+    # Set your Git email (should match your GitHub email)
+    git config --global user.email "your.email@example.com"
+    ```
+
+    Additionally, configure line ending handling to avoid cross-platform issues:
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Convert CRLF to LF on commit
+    git config --global core.autocrlf input
+    ```
+
+    You can verify your configuration with:
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Check your Git configuration
+    git config --global --list
+    ```
+
 #### Check if Git tracks your files
 
 Initialize Git in your working directory. Verify available files for committing
