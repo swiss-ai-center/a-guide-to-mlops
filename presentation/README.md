@@ -282,6 +282,18 @@ state-of-the-art MLOps tools.
 You can go from experiment to production on the Cloud, using the best practices
 for ML. 🚀
 
+## Feedback
+
+Your feedback helps us improve! 🙏
+
+💬 Share your thoughts on what worked well and what could be better.
+
+🐛 Report issues or suggest improvements on [GitHub][github].
+
+⭐ Leave us a star if you found this guide helpful!
+
+🤝 Your input directly shapes future versions of this workshop.
+
 ## Bonus slides
 
 <!-- _class: lead -->
