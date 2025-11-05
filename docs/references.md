@@ -27,5 +27,7 @@ into MLOps.
 
 ## Others
 
-* [Awesome MLOps](https://github.com/visenger/awesome-mlops), an awesome list of
+* [MLOps guide](https://huyenchip.com/mlops/) :sparkles: a collection of
+  materials from introductory to advanced by Chip Huyen
+* [Awesome MLOps](https://github.com/visenger/awesome-mlops) a list of
   references for MLOps
