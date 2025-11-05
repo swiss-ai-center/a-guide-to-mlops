@@ -202,6 +202,22 @@ NAME                   LOCATION        MASTER_VERSION      MASTER_IP      MACHIN
 mlops-surname-cluster  europe-west6-a  1.30.5-gke.1014001  34.65.137.236  e2-standard-2  1.30.5-gke.1014001  2          RUNNING
 ```
 
+!!! note "Cluster configuration and cost considerations"
+
+    This cluster uses 2 nodes and `e2-standard-2` machines to prepare for the next
+    chapters, where we'll demonstrate managing heterogeneous node types (GPU and
+    CPU). While `e2-medium` would suffice for this tutorial, the cost difference is
+    minimal.
+
+    For most use cases, high-availability (HA) clusters spanning multiple zones
+    aren't necessary and significantly increase costs. This tutorial uses a
+    cost-effective zonal cluster. In production, optimize costs with
+    [smaller machine types](https://cloud.google.com/compute/docs/machine-resource),
+    autoscaling, and properly defined resource requirements. Note that GPUs are the
+    primary cost drivers for ML deployments. See the
+    [Compute Engine pricing page](https://cloud.google.com/compute/all-pricing) for
+    details.
+
 ### Validate kubectl can access the Kubernetes cluster
 
 Validate kubectl can access the Kubernetes cluster:
