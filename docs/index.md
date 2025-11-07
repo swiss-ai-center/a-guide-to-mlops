@@ -1,6 +1,7 @@
 ---
 template: overrides/home.html
-title: A guide to MLOps
+title: MLOps Guide - Complete Tutorial on Machine Learning Operations
+description: Complete MLOps guide covering ML operations tools and best practices - from conventional to modern approaches for deploying ML models in production
 hide:
   - navigation
   - toc

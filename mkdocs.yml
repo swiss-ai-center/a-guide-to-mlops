@@ -4,7 +4,7 @@ site_name: A guide to MLOps
 site_author: Swiss AI Center contributors
 site_url: https://mlops.swiss-ai-center.ch/
 site_description: >-
-  A simple yet complete guide to MLOps tools and practices - from a conventional way to a modern approach of working with ML projects.
+  MLOps guide: A complete tutorial on machine learning operations tools and practices - from conventional to modern approaches for ML projects.
 copyright: Copyright &copy; 2022 - 2025 Swiss AI Center
 nav:
   - 🏁 Introduction:
@@ -98,6 +98,7 @@ theme:
     - search.highlight
     - toc.follow
 plugins:
+  - meta
   - search
   - social
   - tags
