@@ -625,6 +625,25 @@ touch src/utils/__init__.py
 In this module, include `src/utils/seed.py` to handle the fixing of the seed
 parameters. This ensure the results are reproducible:
 
+??? tip "Understanding when to fix random seeds"
+
+    Fixed seeds enable **reproducibility** by eliminating randomness, making them
+    essential for comparing model changes fairly during development. However, they
+    can hide **variance** in model performance.
+
+    **When to fix seeds**: Development iterations, CI/CD pipelines, and debugging
+    require fixed seeds to ensure performance differences reflect your changes, not
+    random variation.
+
+    **When NOT to fix seeds**: Final model evaluation should reflect real-world
+    variability. Consider training with multiple seeds and reporting mean/std of
+    metrics to assess model stability. Production training may or may not use fixed
+    seeds depending on requirements.
+
+    **Best practice**: Keep seeds as configurable parameters (as in `params.yaml`)
+    rather than hardcoding them. This guide uses fixed seeds for reproducible
+    experiments, but final evaluation should quantify variance across multiple runs.
+
 ```py title="src/utils/seed.py"
 import os
 import random
@@ -804,6 +823,9 @@ You can now safely continue to the next chapter.
     - **Command-line interfaces make automation possible**: Scripts that accept
       arguments and can be run from the terminal integrate seamlessly with scheduling
       tools, CI/CD pipelines, and orchestration systems.
+    - **Fixed seeds enable reproducibility but hide variance**: Using fixed seeds
+      during development ensures fair comparison of model changes, while final
+      evaluation should use multiple seeds to assess real-world model stability.
 
 ## State of the MLOps process
 
