@@ -30,7 +30,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: actions/setup-python@v6
         with:
@@ -49,20 +49,22 @@ jobs:
     needs: lint
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - uses: actions/setup-python@v6
         with:
           python-version: 3.13
           cache: pip
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           key: ${{ github.ref }}
           path: .cache
 
       - name: Install Material for MkDocs dependencies
         run: |
+          sudo apt update
+
           sudo apt install --yes \
             libcairo2-dev \
             libfreetype6-dev \
@@ -84,7 +86,7 @@ jobs:
           mkdocs build --site-dir public
 
       - name: Upload files
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: material-for-mkdocs-files
           path: |
@@ -98,38 +100,38 @@ jobs:
     needs: lint
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Build presentation (content) with Marp (HTML)
-        uses: docker://marpteam/marp-cli:v3.0.2
+        uses: docker://marpteam/marp-cli:v4.2.3
         with:
           args: --config .github/workflows/marp.config.js --html --output "presentation/index.html" "presentation/README.md"
         env:
           MARP_USER: root:root
 
       - name: Build presentation (about us) with Marp (HTML)
-        uses: docker://marpteam/marp-cli:v3.0.2
+        uses: docker://marpteam/marp-cli:v4.2.3
         with:
           args: --config .github/workflows/marp.config.js --html --output "presentation/about.html" "presentation/ABOUT.md"
         env:
           MARP_USER: root:root
 
       - name: Build presentation (content) with Marp (PDF)
-        uses: docker://marpteam/marp-cli:v3.0.2
+        uses: docker://marpteam/marp-cli:v4.2.3
         with:
           args: --config .github/workflows/marp.config.js --html --allow-local-files --jpeg-quality 100 --pdf --output "presentation/a-guide-to-mlops-presentation.pdf" "presentation/README.md"
         env:
           MARP_USER: root:root
 
       - name: Build presentation (about us) with Marp (PDF)
-        uses: docker://marpteam/marp-cli:v3.0.2
+        uses: docker://marpteam/marp-cli:v4.2.3
         with:
           args: --config .github/workflows/marp.config.js --html --allow-local-files --jpeg-quality 100 --pdf --output "presentation/a-guide-to-mlops-about-us.pdf" "presentation/ABOUT.md"
         env:
           MARP_USER: root:root
 
       - name: Upload files
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: marp-files
           path: |
@@ -146,7 +148,7 @@ jobs:
     needs: [build-material-for-mkdocs, build-marp]
     steps:
       - name: Download files
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           pattern: "*-files"
 
@@ -167,7 +169,7 @@ jobs:
       - name: Upload files to GitHub Pages
         # Only run on main
         if: github.ref == 'refs/heads/main'
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: ./public
 
