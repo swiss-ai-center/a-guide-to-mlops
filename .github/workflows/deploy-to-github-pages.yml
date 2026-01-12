@@ -101,28 +101,28 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Build presentation (content) with Marp (HTML)
-        uses: docker://marpteam/marp-cli:v3.0.2
+        uses: docker://marpteam/marp-cli:v4.2.3
         with:
           args: --config .github/workflows/marp.config.js --html --output "presentation/index.html" "presentation/README.md"
         env:
           MARP_USER: root:root
 
       - name: Build presentation (about us) with Marp (HTML)
-        uses: docker://marpteam/marp-cli:v3.0.2
+        uses: docker://marpteam/marp-cli:v4.2.3
         with:
           args: --config .github/workflows/marp.config.js --html --output "presentation/about.html" "presentation/ABOUT.md"
         env:
           MARP_USER: root:root
 
       - name: Build presentation (content) with Marp (PDF)
-        uses: docker://marpteam/marp-cli:v3.0.2
+        uses: docker://marpteam/marp-cli:v4.2.3
         with:
           args: --config .github/workflows/marp.config.js --html --allow-local-files --jpeg-quality 100 --pdf --output "presentation/a-guide-to-mlops-presentation.pdf" "presentation/README.md"
         env:
           MARP_USER: root:root
 
       - name: Build presentation (about us) with Marp (PDF)
-        uses: docker://marpteam/marp-cli:v3.0.2
+        uses: docker://marpteam/marp-cli:v4.2.3
         with:
           args: --config .github/workflows/marp.config.js --html --allow-local-files --jpeg-quality 100 --pdf --output "presentation/a-guide-to-mlops-about-us.pdf" "presentation/ABOUT.md"
         env:
