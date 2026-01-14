@@ -440,7 +440,7 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Login to Google Cloud
         uses: google-github-actions/auth@v3
         with:
@@ -479,7 +479,7 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
@@ -560,7 +560,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
@@ -612,7 +612,7 @@ jobs:
     if: github.event_name == 'pull_request' && (success() || failure() || cancelled())
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Set up GCloud SDK
         uses: google-github-actions/setup-gcloud@v3
         with:
@@ -672,7 +672,7 @@ index 5a8d863..ad093ef 100644
 +    if: github.event_name == 'pull_request'
 +    steps:
 +      - name: Checkout repository
-+        uses: actions/checkout@v5
++        uses: actions/checkout@v6
 +      - name: Login to Google Cloud
 +        uses: google-github-actions/auth@v3
 +        with:
@@ -724,7 +724,7 @@ index 5a8d863..ad093ef 100644
 +    if: github.event_name == 'pull_request' && (success() || failure() || cancelled())
 +    steps:
 +      - name: Checkout repository
-+        uses: actions/checkout@v5
++        uses: actions/checkout@v6
 +      - name: Set up GCloud SDK
 +        uses: google-github-actions/setup-gcloud@v3
 +        with:

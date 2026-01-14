@@ -595,7 +595,7 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
@@ -676,7 +676,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
@@ -762,7 +762,7 @@ index b15a68f..5a8d863 100644
 +    if: github.event_name == 'pull_request'
      steps:
        - name: Checkout repository
-         uses: actions/checkout@v5
+         uses: actions/checkout@v6
 @@ -32,13 +38,22 @@ jobs:
            credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
        - name: Train model
@@ -797,7 +797,7 @@ index b15a68f..5a8d863 100644
 +    if: github.ref == 'refs/heads/main'
 +    steps:
 +      - name: Checkout repository
-+        uses: actions/checkout@v5
++        uses: actions/checkout@v6
 +      - name: Setup Python
 +        uses: actions/setup-python@v6
 +        with:
