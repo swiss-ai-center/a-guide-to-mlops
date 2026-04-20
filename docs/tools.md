@@ -34,7 +34,7 @@ for each stage of the workflow.
 
 Here is a list of related tools that can be explored as alternatives.
 Additionally, you can find another valuable compilation of tools at
-[https://mlops.toys](https://mlops.toys).
+[MLOps.toys](https://tools.mlops.community/).
 
 ### Data management
 
