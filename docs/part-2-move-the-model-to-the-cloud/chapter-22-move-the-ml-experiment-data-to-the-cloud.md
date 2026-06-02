@@ -246,10 +246,10 @@ Here, the `dvc[gs]` package enables support for Google Cloud Storage. Update the
 `requirements.txt` file:
 
 ```txt title="requirements.txt" hl_lines="4"
-tensorflow==2.20.0
-matplotlib==3.10.7
+tensorflow==2.21.0
+matplotlib==3.10.9
 pyyaml==6.0.3
-dvc[gs]==3.63.0
+dvc[gs]==3.67.1
 ```
 
 Check the differences with Git to validate the changes:
@@ -267,11 +267,11 @@ index 0b88f4a..4b8d3d9 100644
 --- a/requirements.txt
 +++ b/requirements.txt
 @@ -1,4 +1,4 @@
- tensorflow==2.20.0
- matplotlib==3.10.7
+ tensorflow==2.21.0
+ matplotlib==3.10.9
  pyyaml==6.0.3
--dvc==3.63.0
-+dvc[gs]==3.63.0
+-dvc==3.67.1
++dvc[gs]==3.67.1
 ```
 
 Install the dependencies and update the freeze file:

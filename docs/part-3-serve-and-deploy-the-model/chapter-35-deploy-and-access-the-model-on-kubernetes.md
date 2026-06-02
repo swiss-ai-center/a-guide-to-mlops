@@ -192,14 +192,13 @@ gcloud container clusters create \
 The output should be similar to this:
 
 ```text
-Note: The Kubelet readonly port (10255) is now deprecated. Please update your workloads to use the recommended alternatives. See https://cloud.google.com/kubernetes-engine/docs/how-to/disable-kubelet-readonly-port for ways to check usage and for migration instructions.
 Note: Your Pod address range (`--cluster-ipv4-cidr`) can accommodate at most 1008 node(s).
 Creating cluster mlops-surname-cluster in europe-west6-a... Cluster is being health-checked (Kubernetes Control Plane is healthy)...done.
 Created [https://container.googleapis.com/v1/projects/mlops-surname-project/zones/europe-west6-a/clusters/mlops-surname-cluster].
 To inspect the contents of your cluster, go to: https://console.cloud.google.com/kubernetes/workload_/gcloud/europe-west6-a/mlops-surname-cluster?project=mlops-surname-cluster
 kubeconfig entry generated for mlops-surname-cluster.
-NAME                   LOCATION        MASTER_VERSION      MASTER_IP      MACHINE_TYPE   NODE_VERSION        NUM_NODES  STATUS
-mlops-surname-cluster  europe-west6-a  1.30.5-gke.1014001  34.65.137.236  e2-standard-2  1.30.5-gke.1014001  2          RUNNING
+NAME                   LOCATION        MASTER_VERSION      MASTER_IP      MACHINE_TYPE   NODE_VERSION        NUM_NODES  STATUS   STACK_TYPE
+mlops-surname-cluster  europe-west6-a  1.35.3-gke.1389002  34.65.125.181  e2-standard-2  1.35.3-gke.1389002  2          RUNNING  IPV4
 ```
 
 !!! note "Cluster configuration and cost considerations"
@@ -230,7 +229,6 @@ kubectl get namespaces
 The output should be similar to this:
 
 ```text
-NAME              STATUS   AGE
 NAME                 STATUS   AGE
 default              Active   2m45s
 gke-managed-cim      Active   2m15s
@@ -319,11 +317,11 @@ spec:
     app: celestial-bodies-classifier
 ```
 
-The `deployment.yaml` file describes the deployment of the model. It contains
-the number of replicas, the image to use, and the labels to use.
+* The `deployment.yaml` file describes the deployment of the model. It contains
+  the number of replicas, the image to use, and the labels to use.
 
-The `service.yaml` file describes the service of the model. It contains the type
-of service, the ports to use, and the labels to use.
+* The `service.yaml` file describes the service of the model. It contains the
+  type of service, the ports to use, and the labels to use.
 
 ### Deploy the containerised model on Kubernetes
 

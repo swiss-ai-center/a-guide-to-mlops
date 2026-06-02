@@ -95,7 +95,7 @@ The container registry will need to be accessed inside the CI/CD pipeline to
 push the Docker image.
 
 This is the same process you did for DVC as described in
-[Chapter 8 - Reproduce the ML experiment in a CI/CD pipeline](../part-2-move-the-model-to-the-cloud/chapter-23-reproduce-the-ml-experiment-in-a-cicd-pipeline.md)
+[Chapter 2.3 - Reproduce the ML experiment in a CI/CD pipeline](../part-2-move-the-model-to-the-cloud/chapter-23-reproduce-the-ml-experiment-in-a-cicd-pipeline.md)
 but this time for the container registry.
 
 Update the Google Service Account and its associated Google Service Account Key
@@ -170,7 +170,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
@@ -238,7 +238,7 @@ jobs:
           # Publish the CML report
           cml comment update --target=pr --publish report.md
       - name: Log in to the Container registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}
           username: _json_key
@@ -288,7 +288,7 @@ index 1fa989b..6d479ef 100644
            # Publish the CML report
            cml comment update --target=pr --publish report.md
 +      - name: Log in to the Container registry
-+        uses: docker/login-action@v3
++        uses: docker/login-action@v4
 +        with:
 +          registry: ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}
 +          username: _json_key
