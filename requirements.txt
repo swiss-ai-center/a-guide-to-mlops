@@ -1,7 +1,7 @@
-CairoSVG==2.8.2
-mdwrap @ git+https://github.com/swiss-ai-center/mdwrap.git@0.2.4
-mkdocs-git-revision-date-localized-plugin==1.4.7
+CairoSVG==2.9.0
+mdwrap @ git+https://github.com/swiss-ai-center/mdwrap.git@0.2.5
+mkdocs-git-revision-date-localized-plugin==1.5.3
 mkdocs-glightbox==0.5.2
-mkdocs-material==9.6.22
+mkdocs-material==9.7.6
 mkdocs-minify-plugin==0.8.0
-pillow==11.3.0
+pillow==12.2.0
