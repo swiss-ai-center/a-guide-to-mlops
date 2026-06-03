@@ -238,6 +238,10 @@ Once the workflow has successfully been executed, the
 **Some checks haven't completed yet** section should become
 **All checks have passed**.
 
+Additionally, you may notice that GitHub CopilotAI provides a review of your
+changes in a comment on the pull request. This is different from the CML report
+that will be discussed in the next section.
+
 ### Visualize the CML report
 
 When the CI/CD pipeline completes, a new comment is added to your pull request.
