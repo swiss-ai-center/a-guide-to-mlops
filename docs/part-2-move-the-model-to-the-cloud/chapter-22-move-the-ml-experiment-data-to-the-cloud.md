@@ -412,6 +412,10 @@ You can now safely continue to the next chapter.
     - **DVC extends version control to data**: By configuring a DVC remote pointing
       to cloud storage, you get Git-like versioning for your datasets with `dvc push`
       and `dvc pull` commands that mirror Git's workflow.
+    - **DVC separates metadata from payload to keep repositories lightweight**: The
+      `.dvc` files and `dvc.yaml` tracked by Git are small pointers to your data; the
+      actual datasets and artifacts live in cloud storage. This split is what makes
+      versioning multi-gigabyte files practical without bloating your Git repository.
     - **DVC plugins bridge storage providers**: Installing the appropriate DVC
       storage plugin (like `dvc[gs]` for Google Cloud) allows DVC to communicate with
       various cloud providers using a unified interface.
