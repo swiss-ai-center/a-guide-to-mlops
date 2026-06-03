@@ -198,8 +198,15 @@ jobs:
 
 !!! tip
 
-    Instead of running `dvc pull` and `dvc repro` separately, you can run them
-    together with `dvc repro --pull`.
+    - Instead of running `dvc pull` and `dvc repro` separately, you can run them
+      together with `dvc repro --pull`.
+
+    - If you prefer to use [uv](https://docs.astral.sh/uv/) in CI/CD for faster
+      dependency installation, you can replace the `Setup Python` and
+      `Install dependencies` steps with the
+      [astral-sh/setup-uv](https://github.com/astral-sh/setup-uv) action and run
+      `uv pip install --requirement requirements-freeze.txt`. For simplicity, the rest
+      of this guide continues to use the default Python tools (`pip` and `venv`).
 
 ### Push the CI/CD pipeline configuration file to Git
 

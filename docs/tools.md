@@ -8,7 +8,8 @@ In this guide, you will use the following tools to demonstrate the MLOps
 process:
 
 - Code management: [:simple-git: Git](https://git-scm.com/)
-- Package management: [:simple-python: pip](https://pip.pypa.io/)
+- Package management: [:simple-python: pip](https://pip.pypa.io/) (or
+  [:simple-uv: uv](https://docs.astral.sh/uv/) as an alternative)
 - Data management: [:simple-dvc: DVC](https://dvc.org/)
 - Model reproducibility: [:simple-dvc: DVC](https://dvc.org/)
 - Model tracking: [:simple-dvc: DVC](https://dvc.org/) & [CML](https://cml.dev/)

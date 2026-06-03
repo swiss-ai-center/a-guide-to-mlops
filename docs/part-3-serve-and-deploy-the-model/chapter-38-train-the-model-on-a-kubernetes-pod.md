@@ -745,6 +745,14 @@ index 5a8d863..ad093ef 100644
 +          envsubst < kubernetes/runner-gpu.yaml | kubectl delete --wait=false -f -
 ```
 
+??? tip "Using uv in CI/CD"
+
+    If you prefer to use [uv](https://docs.astral.sh/uv/) in CI/CD for faster
+    dependency installation, you can replace the `Setup Python` and
+    `Install dependencies` steps with the
+    [astral-sh/setup-uv](https://github.com/astral-sh/setup-uv) action and run
+    `uv pip install --requirement requirements-freeze.txt`.
+
 Take some time to understand the changes made to the file.
 
 ### Check the changes

@@ -42,6 +42,8 @@ To improve the documentation locally, run
 [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) with the
 following commands:
 
+#### With standard Python tools
+
 ```sh
 # Install all dependencies for Material for MkDocs
 sudo apt install --yes \
@@ -60,6 +62,27 @@ source .venv/bin/activate
 
 # Install the Python dependencies
 pip install \
+    --requirement requirements.txt \
+    --requirement requirements-freeze.txt
+
+# Run Material for MkDocs
+mkdocs serve
+```
+
+#### With uv
+
+If you prefer to use [uv](https://docs.astral.sh/uv/) instead of the standard
+Python tools, run the following commands:
+
+```sh
+# Create the virtual environment
+uv venv --python 3.13
+
+# Activate the virtual environment
+source .venv/bin/activate
+
+# Install the Python dependencies
+uv pip install \
     --requirement requirements.txt \
     --requirement requirements-freeze.txt
 
@@ -89,6 +112,8 @@ docker compose up format
 To format the Markdown documentation, run
 [mdwrap](https://github.com/swiss-ai-center/mdwrap) with the following commands:
 
+#### With standard Python tools
+
 ```sh
 # Create the virtual environment
 python3.13 -m venv .venv
@@ -98,6 +123,27 @@ source .venv/bin/activate
 
 # Install the Python dependencies
 pip install \
+    --requirement requirements.txt \
+    --requirement requirements-all.txt
+
+# Run mdwrap
+mdwrap --fmt docs
+```
+
+#### With uv
+
+If you prefer to use [uv](https://docs.astral.sh/uv/) instead of the standard
+Python tools, run the following commands:
+
+```sh
+# Create the virtual environment
+uv venv --python 3.13
+
+# Activate the virtual environment
+source .venv/bin/activate
+
+# Install the Python dependencies
+uv pip install \
     --requirement requirements.txt \
     --requirement requirements-all.txt
 

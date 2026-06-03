@@ -81,13 +81,25 @@ cp -r ../a-guide-to-mlops-jupyter-notebook/data .
 
 Firstly, create the virtual environment:
 
-```sh title="Execute the following command(s) in a terminal"
-# Create the environment
-python3.13 -m venv .venv
+=== ":simple-python: Using pip"
 
-# Activate the environment
-source .venv/bin/activate
-```
+    ```sh title="Execute the following command(s) in a terminal"
+    # Create the environment
+    python3.13 -m venv .venv
+
+    # Activate the environment
+    source .venv/bin/activate
+    ```
+
+=== ":simple-uv: Using uv"
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Create the environment
+    uv venv --python 3.13
+
+    # Activate the environment
+    source .venv/bin/activate
+    ```
 
 Create a `requirements.txt` file to list the dependencies:
 
@@ -99,10 +111,19 @@ pyyaml==6.0.3
 
 Install the dependencies:
 
-```sh title="Execute the following command(s) in a terminal"
-# Install the dependencies
-pip install --requirement requirements.txt
-```
+=== ":simple-python: Using pip"
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Install the dependencies
+    pip install --requirement requirements.txt
+    ```
+
+=== ":simple-uv: Using uv"
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Install the dependencies
+    uv pip install --requirement requirements.txt
+    ```
 
 Create a freeze file to list the dependencies with their versions to ensure that
 transitive dependencies are also listed. This will help with reproducibility:
@@ -166,15 +187,24 @@ transitive dependencies are also listed. This will help with reproducibility:
     when needed. By following these practices, you can ensure the long-term success
     of your Python projects.
 
-```sh title="Execute the following command(s) in a terminal"
-# Freeze the dependencies
-pip freeze --local --all > requirements-freeze.txt
-```
+=== ":simple-python: Using pip"
 
-- The `--local` flag ensures that if a virtualenv has global access, it will not
-  output globally-installed packages.
-- The `--all` flag ensures that it does not skip these packages in the output:
-  `setuptools`, `wheel`, `pip`, `distribute`.
+    ```sh title="Execute the following command(s) in a terminal"
+    # Freeze the dependencies
+    pip freeze --local --all > requirements-freeze.txt
+    ```
+
+    - The `--local` flag ensures that if a virtualenv has global access, it will not
+      output globally-installed packages.
+    - The `--all` flag ensures that it does not skip these packages in the output:
+      `setuptools`, `wheel`, `pip`, `distribute`.
+
+=== ":simple-uv: Using uv"
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Freeze the dependencies
+    uv pip freeze > requirements-freeze.txt
+    ```
 
 ### Split the Jupyter Notebook into scripts
 
@@ -756,7 +786,7 @@ machine, this time using a modular approach that can be put into production.
 
 In this chapter, you have:
 
-1. Set up a Python environment using `pip` and `virtualenv`
+1. Set up a Python virtual environment
 2. Adapted the content of the Jupyter Notebook into Python scripts
 3. Launched the experiment locally
 

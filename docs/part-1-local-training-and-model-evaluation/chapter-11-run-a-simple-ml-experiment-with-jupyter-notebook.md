@@ -155,19 +155,34 @@ working directory:
 
     This ensures that when running Python commands, the system uses the specific
     interpreter and packages from the virtual environment, effectively isolating the
-    project from the global Python installation. This ensure stability,
-    reproducibility, and clean project separation.
+    project from the global Python installation for clean project separation and by
+    extension stability and reproducibility.
 
-```sh title="Execute the following command(s) in a terminal"
-# Create the virtual environment
-python3.13 -m venv .venv
+=== ":simple-python: Using pip"
 
-# Activate the virtual environment
-source .venv/bin/activate
+    ```sh title="Execute the following command(s) in a terminal"
+    # Create the virtual environment
+    python3.13 -m venv .venv
 
-# Install the dependencies
-pip install --requirement requirements.txt
-```
+    # Activate the virtual environment
+    source .venv/bin/activate
+
+    # Install the dependencies
+    pip install --requirement requirements.txt
+    ```
+
+=== ":simple-uv: Using uv"
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Create the virtual environment
+    uv venv --python 3.13
+
+    # Activate the virtual environment
+    source .venv/bin/activate
+
+    # Install the dependencies
+    uv pip install --requirement requirements.txt
+    ```
 
 ### Run the experiment
 
