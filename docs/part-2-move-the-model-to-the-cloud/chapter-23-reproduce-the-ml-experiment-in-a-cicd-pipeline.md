@@ -278,6 +278,9 @@ You can now safely continue to the next chapter.
     - **Secrets management is critical for cloud access**: Storing cloud credentials
       as CI/CD secrets (GitHub Secrets) keeps sensitive information out of your
       codebase while allowing automated workflows to access required resources.
+    - **Service accounts enable secure automation**: Instead of using personal
+      credentials, cloud service accounts provide scoped access that can be safely
+      shared with CI/CD pipelines and easily revoked if compromised.
     - **dvc repro --pull combines data retrieval and execution**: This single
       command pulls data from DVC remote storage and reproduces the experiment, making
       CI/CD pipeline configurations simpler and more maintainable.
