@@ -288,6 +288,11 @@ username and repository name.
 docker build --platform=linux/amd64 --tag ghcr.io/<my_username>/<my_repository_name>/github-runner:latest .
 ```
 
+!!! warning
+
+    Don't forget the `.` (dot) at the end of the command! It indicates that the
+    current directory is the build context for Docker.
+
 !!! note
 
     Please note that the `--platform` parameter is important to set if your machine
