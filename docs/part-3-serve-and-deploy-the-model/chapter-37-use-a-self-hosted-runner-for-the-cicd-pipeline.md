@@ -163,9 +163,9 @@ Replace `<my_repository_url>` with your own git repository URL, for example
     to lowercase.
 
 ```yaml title="docker/Dockerfile" hl_lines="6"
-FROM ubuntu:22.04
+FROM ubuntu:26.04
 
-ENV RUNNER_VERSION=2.329.0
+ENV RUNNER_VERSION=2.334.0
 
 LABEL RunnerVersion=${RUNNER_VERSION}
 LABEL org.opencontainers.image.source="<my_repository_url>"
@@ -173,12 +173,9 @@ LABEL org.opencontainers.image.source="<my_repository_url>"
 # Install dependencies
 RUN apt-get update -y && \
     apt-get install -y build-essential lsb-release python3 python3-pip \
-    curl jq vim gpg git unzip tar gettext-base
+    curl jq vim gpg git unzip tar gettext-base libicu-dev
 
-# Add a non-root user
-RUN useradd -m runner
-
-WORKDIR /home/actions-runner
+WORKDIR /home/ubuntu
 
 # Install GitHub Actions Runner
 RUN curl -o actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz -L https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz
@@ -191,7 +188,11 @@ COPY startup.sh .
 
 RUN chmod +x startup.sh
 
-USER runner
+# Ensure everything in the workdir belongs to the ubuntu user.
+RUN chown -R ubuntu:ubuntu /home/ubuntu && \
+    chmod -R u+rwX /home/ubuntu
+
+USER ubuntu
 
 ENTRYPOINT ["./startup.sh"]
 ```
@@ -514,8 +515,8 @@ The output should be similar to this:
 ```
 √ Connected to GitHub
 
-Current runner version: '2.329.0'
-2025-29-10 14:09:31Z: Listening for Jobs
+Current runner version: '2.334.0'
+2026-06-04 14:34:34Z: Listening for Jobs
 ```
 
 Exit the process by pressing ++ctrl+c++ in the terminal, then exit the pod by
