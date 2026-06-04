@@ -345,13 +345,18 @@ git commit -m "Use the pipeline to containerize and publish the model artifact t
 git push
 ```
 
+### Check the published image in the container registry
+
+Once the CI/CD pipeline has completed successfully, open the
+[Artifact Registry](https://console.cloud.google.com/artifacts) on the Google
+Cloud interface and click on your registry to access the details. The new
+`celestial-bodies-classifier` image should appear with both the `latest` and
+commit SHA tags.
+
 ## Summary
 
 Congratulations! You have successfully prepared the model for automated
 deployment in a production environment with the CI/CD pipeline!
-
-New versions of the model will be published to the artifact registry
-automatically as soon as they are pushed to the main branch.
 
 In this chapter, you have successfully:
 
