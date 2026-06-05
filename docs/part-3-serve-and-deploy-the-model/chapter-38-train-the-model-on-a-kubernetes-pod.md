@@ -440,7 +440,7 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Login to Google Cloud
         uses: google-github-actions/auth@v3
         with:
@@ -453,7 +453,7 @@ jobs:
       - name: Set up GCloud SDK
         uses: google-github-actions/setup-gcloud@v3
         with:
-          version: '>= 545.0.0'
+          version: '>= 568.0.0'
       - name: Install kubectl
         run: |
           gcloud components install kubectl
@@ -479,7 +479,7 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
@@ -560,7 +560,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
@@ -575,7 +575,7 @@ jobs:
       - name: Check model
         run: dvc repro --pull
       - name: Log in to the Container registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}
           username: _json_key
@@ -612,11 +612,11 @@ jobs:
     if: github.event_name == 'pull_request' && (success() || failure() || cancelled())
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Set up GCloud SDK
         uses: google-github-actions/setup-gcloud@v3
         with:
-          version: '>= 545.0.0'
+          version: '>= 568.0.0'
       - name: Install kubectl
         run: |
           gcloud components install kubectl
@@ -685,7 +685,7 @@ index 5a8d863..ad093ef 100644
 +      - name: Set up GCloud SDK
 +        uses: google-github-actions/setup-gcloud@v3
 +        with:
-+          version: '>= 545.0.0'
++          version: '>= 568.0.0'
 +      - name: Install kubectl
 +        run: |
 +          gcloud components install kubectl
@@ -728,7 +728,7 @@ index 5a8d863..ad093ef 100644
 +      - name: Set up GCloud SDK
 +        uses: google-github-actions/setup-gcloud@v3
 +        with:
-+          version: '>= 545.0.0'
++          version: '>= 568.0.0'
 +      - name: Install kubectl
 +        run: |
 +          gcloud components install kubectl
@@ -945,4 +945,3 @@ Highly inspired by:
 - [_Install Tools_ - kubernetes.io](https://kubernetes.io/docs/tasks/tools/)
 - [_Assigning Pods to Nodes_ - kubernetes.io](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
 - [_Assign Pods to Nodes_ - kubernetes.io](https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/)
-

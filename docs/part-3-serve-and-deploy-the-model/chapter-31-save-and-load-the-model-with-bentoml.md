@@ -89,12 +89,12 @@ Add the `bentoml` package to install BentoML support. `pillow` is also added to
 support image processing:
 
 ```txt title="requirements.txt" hl_lines="5-6"
-tensorflow==2.20.0
-matplotlib==3.10.7
+tensorflow==2.21.0
+matplotlib==3.10.9
 pyyaml==6.0.3
-dvc[gs]==3.63.0
-bentoml==1.4.28
-pillow==11.3.0
+dvc[gs]==3.67.1
+bentoml==1.4.39
+pillow==12.2.0
 ```
 
 Check the differences with Git to validate the changes:
@@ -108,15 +108,15 @@ The output should be similar to this:
 
 ```diff
 diff --git a/requirements.txt b/requirements.txt
-index 4b8d3d9..d584cca 100644
+index 3e4c255..780af47 100644
 --- a/requirements.txt
 +++ b/requirements.txt
-@@ -2,3 +2,5 @@ tensorflow==2.20.0
-matplotlib==3.10.7
-pyyaml==6.0.3
-dvc[gs]==3.63.0
-+bentoml==1.4.28
-+pillow==11.3.0
+@@ -2,3 +2,5 @@ tensorflow==2.21.0
+ matplotlib==3.10.9
+ pyyaml==6.0.3
+ dvc[gs]==3.67.1
++bentoml==1.4.39
++pillow==12.2.0
 ```
 
 Install the package and update the freeze file.
@@ -631,8 +631,8 @@ bentoml models list
 The output should look like this:
 
 ```text
- Tag                                                 Module                   Size      Creation Time
- celestial_bodies_classifier_model:o2bgmsfw3cov4aav  bentoml.keras  9.43 MiB  2024-12-10 10:23:48
+ Tag                                                 Module         Size      Creation Time
+ celestial_bodies_classifier_model:rcmpuas76oxdcn36  bentoml.keras  9.43 MiB  2026-06-04 10:58:19
 ```
 
 ### Check the changes

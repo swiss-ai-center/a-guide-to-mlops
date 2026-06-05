@@ -7,8 +7,8 @@ sufficient for production. In this chapter, you will learn how to build and
 publish the model with [:simple-bentoml: BentoML](../tools.md) and
 [:simple-docker: Docker](../tools.md).
 
-This will allow to share the model with others and deploy it on a Kubernetes in
-a later chapter.
+This will allow you to share the model with others and deploy it on a Kubernetes
+cluster in a later chapter.
 
 In this chapter, you will learn how to:
 
@@ -121,9 +121,9 @@ include:
   - serve.py
 python:
   packages:
-    - "tensorflow==2.20.0"
-    - "matplotlib==3.10.7"
-    - "pillow==11.3.0"
+    - "tensorflow==2.21.0"
+    - "matplotlib==3.10.9"
+    - "pillow==12.2.0"
 docker:
     python_version: "3.13"
 ```
@@ -200,7 +200,7 @@ The output should be similar to this:
 
 ```text
  Tag                                           Size       Model Size  Creation Time
- celestial_bodies_classifier:v5rlmavw4kahqaav  18.88 KiB  9.43 MiB    2024-12-10 11:37:00
+ celestial_bodies_classifier:y44i6os766cdrgjl  19.48 KiB  9.43 MiB    2026-06-04 11:28:43
 ```
 
 ### Containerize the BentoML model artifact with Docker

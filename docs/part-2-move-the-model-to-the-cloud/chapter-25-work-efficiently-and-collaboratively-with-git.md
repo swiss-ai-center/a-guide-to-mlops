@@ -198,7 +198,7 @@ The output of the `git status` command should be similar to this.
 
 ```text
 On branch 1-demonstrate-model-evolution-tracking
-Your branch is up to date with 'origin/main'.
+Your branch is up to date with 'origin/1-demonstrate-model-evolution-tracking'.
 
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
@@ -229,8 +229,8 @@ _Demonstrate model evolution tracking_ and select **Create pull request**.
 
 The pull request opens and automatically starts the workflow
 `MLOps / train_and_report (pull_request)` under the
-**Some checks haven’t completed yet** section. You can click on **Details** to
-see the execution details.
+**Some checks haven’t completed yet** section. You can click on **View details**
+to see the execution details.
 
 Explore the output and try to identify the steps that are executed.
 
