@@ -113,13 +113,13 @@ Next, we will install Label Studio in our environment. Add the main
 `label-studio` dependency to the `requirements.txt` file:
 
 ```txt title="requirements.txt" hl_lines="7"
-tensorflow==2.20.0
-matplotlib==3.10.7
+tensorflow==2.21.0
+matplotlib==3.10.9
 pyyaml==6.0.3
-dvc[gs]==3.63.0
-bentoml==1.4.28
-pillow==11.3.0
-label-studio==1.22.0
+dvc[gs]==3.67.1
+bentoml==1.4.39
+pillow==12.2.0
+label-studio==1.23.0
 ```
 
 Check the differences with Git to validate the changes:
@@ -137,13 +137,13 @@ index 12103ec..b32cb3f 100644
 --- a/requirements.txt
 +++ b/requirements.txt
 @@ -1,7 +1,8 @@
- tensorflow==2.20.0
- matplotlib==3.10.7
+ tensorflow==2.21.0
+ matplotlib==3.10.9
  pyyaml==6.0.3
- dvc[gs]==3.63.0
- bentoml==1.4.28
- pillow==11.3.0
-+label-studio==1.22.0
+ dvc[gs]==3.67.1
+ bentoml==1.4.39
+ pillow==12.2.0
++label-studio==1.23.0
 ```
 
 Install the package and update the freeze file.

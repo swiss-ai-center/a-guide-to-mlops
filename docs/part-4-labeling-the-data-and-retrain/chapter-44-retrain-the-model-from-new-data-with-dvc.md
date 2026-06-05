@@ -125,7 +125,7 @@ You can run the script using the following command:
 python3.13 scripts/parse_annotations.py
 ```
 
-The a3.13ated images will be copied to the `data/raw` directory. The output
+The annotated images will be copied to the `data/raw` directory. The output
 should look like this:
 
 ```text
