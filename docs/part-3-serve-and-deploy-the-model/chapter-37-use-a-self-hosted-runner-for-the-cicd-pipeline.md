@@ -491,7 +491,10 @@ The output should be similar to this:
 
 !!! info
 
-     This can take several minutes.
+    This can take several minutes. Kubernetes must pull the Docker image from the
+    container registry and create the container before it can start. The status
+    column will show `ContainerCreating` while this is happening, then change to
+    `Running` once the container is ready.
 
 ```text
 NAME                                                      READY   STATUS    RESTARTS   AGE
