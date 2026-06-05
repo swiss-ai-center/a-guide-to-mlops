@@ -470,7 +470,8 @@ components running in that cluster.
 
 #### Deploy the runner
 
-To deploy the runner to the Kubernetes cluster, run the following command:
+To deploy the runner to the Kubernetes cluster, navigate back to the root folder
+and run the following command:
 
 ```sh title="Execute the following command(s) in a terminal"
 kubectl apply -f kubernetes/runner.yaml
