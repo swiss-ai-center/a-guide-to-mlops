@@ -134,6 +134,30 @@ Your working directory should now look like this:
 Create the virtual environment and install necessary dependencies in your
 working directory:
 
+??? tip "Not familiar with virtual environments? Read this!"
+
+    **What are virtual environments?**
+
+    Python **virtual environments** are essential tools for managing dependencies
+    and isolating project environments. They allow developers to create separate,
+    self-contained environments for different projects, ensuring that each project
+    has its own set of dependencies **without interfering** with one another.
+
+    This is particularly important when working on multiple projects with different
+    versions of libraries or packages.
+
+    **How do virtual environments work?**
+
+    Virtual environments work by creating a local directory that contains a Python
+    interpreter and a copy of the desired Python packages. When activated, the
+    virtual environment modifies the system's PATH variable to prioritize the
+    interpreter and packages within the local directory.
+
+    This ensures that when running Python commands, the system uses the specific
+    interpreter and packages from the virtual environment, effectively isolating the
+    project from the global Python installation. This ensure stability,
+    reproducibility, and clean project separation.
+
 ```sh title="Execute the following command(s) in a terminal"
 # Create the virtual environment
 python3.13 -m venv .venv

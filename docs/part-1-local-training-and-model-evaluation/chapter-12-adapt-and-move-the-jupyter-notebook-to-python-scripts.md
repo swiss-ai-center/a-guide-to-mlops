@@ -81,42 +81,6 @@ cp -r ../a-guide-to-mlops-jupyter-notebook/data .
 
 Firstly, create the virtual environment:
 
-??? tip "Not familiar with virtual environments? Read this!"
-
-    **What are virtual environments?**
-
-    Python **virtual environments** are essential tools for managing dependencies
-    and isolating project environments. They allow developers to create separate,
-    self-contained environments for different projects, ensuring that each project
-    has its own set of dependencies **without interfering** with one another.
-
-    This is particularly important when working on multiple projects with different
-    versions of libraries or packages.
-
-    **How do virtual environments work?**
-
-    Virtual environments work by creating a local directory that contains a Python
-    interpreter and a copy of the desired Python packages. When activated, the
-    virtual environment modifies the system's PATH variable to prioritize the
-    interpreter and packages within the local directory.
-
-    This ensures that when running Python commands, the system uses the specific
-    interpreter and packages from the virtual environment, effectively isolating the
-    project from the global Python installation.
-
-    **How to manage virtual environments?**
-
-    - Create a virtual environment: `#!sh python3.13 -m venv .venv`
-    - Activate the virtual environment: `#!sh source .venv/bin/activate`
-    - Deactivate the virtual environment: `#!sh deactivate`
-
-    ***Conclusion***
-
-    Virtual environments are essential for dependency management and environment
-    isolation. They ensure stability, reproducibility, and clean project separation.
-    By using virtual environments, you achieve smoother collaboration, easier
-    debugging, and reliable deployment.
-
 ```sh title="Execute the following command(s) in a terminal"
 # Create the environment
 python3.13 -m venv .venv
