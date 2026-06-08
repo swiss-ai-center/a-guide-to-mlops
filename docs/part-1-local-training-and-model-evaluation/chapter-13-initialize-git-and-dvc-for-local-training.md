@@ -257,17 +257,29 @@ Install the dependencies and update the freeze file:
     environment is activated to avoid potential conflicts with system-wide Python
     packages.
 
-    To check its status, simply run `pip -V`. If the virtual environment is active,
-    the output will show the path to the virtual environment's Python executable. If
-    it is not, you can activate it with `source .venv/bin/activate`.
+    To check its status, simply run `which python`. If the virtual environment is
+    active, the output will show the path to the virtual environment's Python
+    executable. If it is not, you can activate it with `source .venv/bin/activate`.
 
-```sh title="Execute the following command(s) in a terminal"
-# Install the dependencies
-pip install --requirement requirements.txt
+=== ":simple-python: Using pip"
 
-# Freeze the dependencies
-pip freeze --local --all > requirements-freeze.txt
-```
+    ```sh title="Execute the following command(s) in a terminal"
+    # Install the dependencies
+    pip install --requirement requirements.txt
+
+    # Freeze the dependencies
+    pip freeze --local --all > requirements-freeze.txt
+    ```
+
+=== ":simple-uv: Using uv"
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Install the dependencies
+    uv pip install --requirement requirements.txt
+
+    # Freeze the dependencies
+    uv pip freeze > requirements-freeze.txt
+    ```
 
 #### Initialize DVC
 

@@ -81,49 +81,25 @@ cp -r ../a-guide-to-mlops-jupyter-notebook/data .
 
 Firstly, create the virtual environment:
 
-??? tip "Not familiar with virtual environments? Read this!"
+=== ":simple-python: Using pip"
 
-    **What are virtual environments?**
+    ```sh title="Execute the following command(s) in a terminal"
+    # Create the environment
+    python3.13 -m venv .venv
 
-    Python **virtual environments** are essential tools for managing dependencies
-    and isolating project environments. They allow developers to create separate,
-    self-contained environments for different projects, ensuring that each project
-    has its own set of dependencies **without interfering** with one another.
+    # Activate the environment
+    source .venv/bin/activate
+    ```
 
-    This is particularly important when working on multiple projects with different
-    versions of libraries or packages.
+=== ":simple-uv: Using uv"
 
-    **How do virtual environments work?**
+    ```sh title="Execute the following command(s) in a terminal"
+    # Create the environment
+    uv venv --python 3.13
 
-    Virtual environments work by creating a local directory that contains a Python
-    interpreter and a copy of the desired Python packages. When activated, the
-    virtual environment modifies the system's PATH variable to prioritize the
-    interpreter and packages within the local directory.
-
-    This ensures that when running Python commands, the system uses the specific
-    interpreter and packages from the virtual environment, effectively isolating the
-    project from the global Python installation.
-
-    **How to manage virtual environments?**
-
-    - Create a virtual environment: `#!sh python3.13 -m venv .venv`
-    - Activate the virtual environment: `#!sh source .venv/bin/activate`
-    - Deactivate the virtual environment: `#!sh deactivate`
-
-    ***Conclusion***
-
-    Virtual environments are essential for dependency management and environment
-    isolation. They ensure stability, reproducibility, and clean project separation.
-    By using virtual environments, you achieve smoother collaboration, easier
-    debugging, and reliable deployment.
-
-```sh title="Execute the following command(s) in a terminal"
-# Create the environment
-python3.13 -m venv .venv
-
-# Activate the environment
-source .venv/bin/activate
-```
+    # Activate the environment
+    source .venv/bin/activate
+    ```
 
 Create a `requirements.txt` file to list the dependencies:
 
@@ -135,10 +111,19 @@ pyyaml==6.0.3
 
 Install the dependencies:
 
-```sh title="Execute the following command(s) in a terminal"
-# Install the dependencies
-pip install --requirement requirements.txt
-```
+=== ":simple-python: Using pip"
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Install the dependencies
+    pip install --requirement requirements.txt
+    ```
+
+=== ":simple-uv: Using uv"
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Install the dependencies
+    uv pip install --requirement requirements.txt
+    ```
 
 Create a freeze file to list the dependencies with their versions to ensure that
 transitive dependencies are also listed. This will help with reproducibility:
@@ -202,15 +187,24 @@ transitive dependencies are also listed. This will help with reproducibility:
     when needed. By following these practices, you can ensure the long-term success
     of your Python projects.
 
-```sh title="Execute the following command(s) in a terminal"
-# Freeze the dependencies
-pip freeze --local --all > requirements-freeze.txt
-```
+=== ":simple-python: Using pip"
 
-- The `--local` flag ensures that if a virtualenv has global access, it will not
-  output globally-installed packages.
-- The `--all` flag ensures that it does not skip these packages in the output:
-  `setuptools`, `wheel`, `pip`, `distribute`.
+    ```sh title="Execute the following command(s) in a terminal"
+    # Freeze the dependencies
+    pip freeze --local --all > requirements-freeze.txt
+    ```
+
+    - The `--local` flag ensures that if a virtualenv has global access, it will not
+      output globally-installed packages.
+    - The `--all` flag ensures that it does not skip these packages in the output:
+      `setuptools`, `wheel`, `pip`, `distribute`.
+
+=== ":simple-uv: Using uv"
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Freeze the dependencies
+    uv pip freeze > requirements-freeze.txt
+    ```
 
 ### Split the Jupyter Notebook into scripts
 
@@ -792,7 +786,7 @@ machine, this time using a modular approach that can be put into production.
 
 In this chapter, you have:
 
-1. Set up a Python environment using `pip` and `virtualenv`
+1. Set up a Python virtual environment
 2. Adapted the content of the Jupyter Notebook into Python scripts
 3. Launched the experiment locally
 

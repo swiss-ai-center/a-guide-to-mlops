@@ -134,16 +134,55 @@ Your working directory should now look like this:
 Create the virtual environment and install necessary dependencies in your
 working directory:
 
-```sh title="Execute the following command(s) in a terminal"
-# Create the virtual environment
-python3.13 -m venv .venv
+??? tip "Not familiar with virtual environments? Read this!"
 
-# Activate the virtual environment
-source .venv/bin/activate
+    **What are virtual environments?**
 
-# Install the dependencies
-pip install --requirement requirements.txt
-```
+    Python **virtual environments** are essential tools for managing dependencies
+    and isolating project environments. They allow developers to create separate,
+    self-contained environments for different projects, ensuring that each project
+    has its own set of dependencies **without interfering** with one another.
+
+    This is particularly important when working on multiple projects with different
+    versions of libraries or packages.
+
+    **How do virtual environments work?**
+
+    Virtual environments work by creating a local directory that contains a Python
+    interpreter and a copy of the desired Python packages. When activated, the
+    virtual environment modifies the system's PATH variable to prioritize the
+    interpreter and packages within the local directory.
+
+    This ensures that when running Python commands, the system uses the specific
+    interpreter and packages from the virtual environment, effectively isolating the
+    project from the global Python installation for clean project separation and by
+    extension stability and reproducibility.
+
+=== ":simple-python: Using pip"
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Create the virtual environment
+    python3.13 -m venv .venv
+
+    # Activate the virtual environment
+    source .venv/bin/activate
+
+    # Install the dependencies
+    pip install --requirement requirements.txt
+    ```
+
+=== ":simple-uv: Using uv"
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Create the virtual environment
+    uv venv --python 3.13
+
+    # Activate the virtual environment
+    source .venv/bin/activate
+
+    # Install the dependencies
+    uv pip install --requirement requirements.txt
+    ```
 
 ### Run the experiment
 

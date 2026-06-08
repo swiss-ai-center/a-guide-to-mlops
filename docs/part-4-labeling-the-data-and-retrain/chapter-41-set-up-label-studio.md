@@ -158,13 +158,25 @@ Install the package and update the freeze file.
     the output will show the path to the virtual environment's Python executable. If
     it is not, you can activate it with `source .venv/bin/activate`.
 
-```sh title="Execute the following command(s) in a terminal"
-# Install the dependencies
-pip install --requirement requirements.txt
+=== ":simple-python: Using pip"
 
-# Freeze the dependencies
-pip freeze --local --all > requirements-freeze.txt
-```
+    ```sh title="Execute the following command(s) in a terminal"
+    # Install the dependencies
+    pip install --requirement requirements.txt
+
+    # Freeze the dependencies
+    pip freeze --local --all > requirements-freeze.txt
+    ```
+
+=== ":simple-uv: Using uv"
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Install the dependencies
+    uv pip install --requirement requirements.txt
+
+    # Freeze the dependencies
+    uv pip freeze > requirements-freeze.txt
+    ```
 
 ### Check the changes
 

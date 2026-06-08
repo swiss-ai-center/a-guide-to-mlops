@@ -266,6 +266,14 @@ To run your newly built Bento container, run:
     docker run --rm -p 3000:3000 celestial-bodies-classifier:latest
 ```
 
+!!! note "BentoML uses uv internally"
+
+    You might have noticed that BentoML uses `uv` internally during the
+    containerization process (see the `RUN curl -LO https://astral.sh/uv/install.sh`
+    line in the build output). This is because BentoML uses `uv` for fast package
+    installation inside the Docker image. This is independent of whether you use
+    `uv` or `pip` on your local machine.
+
 ### Test the containerized BentoML model artifact locally
 
 The BentoML model artifact is now containerized. To verify its behavior, serve
