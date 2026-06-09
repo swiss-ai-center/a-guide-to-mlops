@@ -50,22 +50,19 @@ The following requirements are necessary to follow this part:
     stable, universally available, and above all easy to debug when issues arise,
     which is a critical property for a tutorial.
 
-    **Why `uv` is the exception**
+    **`uv`: the one exception**
 
-    You might wonder why we warn against helper tools yet still show `uv` throughout
-    this guide. [uv](https://docs.astral.sh/uv/) is a notable exception because it
-    is extremely fast, adheres to the relevant [PEPs](https://peps.python.org/)
-    (Python Enhancement Proposals, the community's standardization documents), and
-    its `uv pip` interface is a drop-in replacement for `pip`. It also fills a
-    genuine gap in the standard toolchain: it can install and manage Python versions
-    themselves (`uv python install`), not just packages within an existing
-    interpreter. For this reason, optional `uv` command alternatives are shown
-    throughout the guide.
+    Many steps also show the equivalent `uv` command as an alternative for readers
+    who prefer it. [uv](https://docs.astral.sh/uv/) is extremely fast, adheres to
+    the relevant [PEPs](https://peps.python.org/) (Python Enhancement Proposals, the
+    community's standardization documents), and its `uv pip` interface is a drop-in
+    replacement for `pip`. It also fills a genuine gap in the standard toolchain: it
+    can install and manage Python versions themselves (`uv python install`), not
+    just packages within an existing interpreter.
 
-    Keep in mind, however, that `uv` is developed by a private company (Astral, now
-    part of OpenAI). While it is open source and production ready today, its
-    long-term roadmap could shift. Standard `pip` + `venv` will always remain the
-    safe, portable baseline.
+    Keep in mind that `uv` is developed by a private company (Astral, now part of
+    OpenAI). While it is open source and production ready today, its long-term
+    roadmap could shift.
 
 ??? warning "For WSL2 users"
 
