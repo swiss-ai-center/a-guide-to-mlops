@@ -320,6 +320,24 @@ And that's it! You can view the annotations in the project view:
 
 ![Label Studio Annotations](../assets/images/label-studio-annotations.png)
 
+!!! info "Retrieve predictions in batch and show the prediction score"
+
+    Instead of labeling images one by one, you can retrieve predictions for all
+    tasks at once directly from the project view.
+
+    1. In the project view, select all tasks by checking the box at the top of
+       the task list.
+    2. Open the batch actions dropdown and select **Retrieve Predictions**.
+    3. Go to **Settings > Annotation Settings**, and in the **Prelabeling**
+       section, select the **predictions** set created by the batch (by default
+       `v0.0.1`) as opposed to the connected model.
+    4. Once the predictions have been fetched, click on **Columns** and add the
+       **Prediction Score** column to the view.
+
+    The prediction score for each task will now be visible in the project view,
+    allowing you to quickly identify which images the model is most or least
+    confident about before reviewing them.
+
 !!! warning
 
     While AI-assisted labeling can significantly speed up the labeling process, it
