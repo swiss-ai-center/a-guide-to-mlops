@@ -129,12 +129,11 @@ The annotated images will be copied to the `data/raw` directory. The output
 should look like this:
 
 ```text
-Copying extra-data/extra_data/VXJhbnVzXzE0Ng.jpg -> data/raw/Uranus/VXJhbnVzXzE0Ng.jpg
-Copying extra-data/extra_data/VmVudXNfMTQ4.jpg -> data/raw/Venus/VmVudXNfMTQ4.jpg
-Copying extra-data/extra_data/VmVudXNfMTQ3.jpg -> data/raw/Venus/VmVudXNfMTQ3.jpg
-Copying extra-data/extra_data/VmVudXNfMTQ2.jpg -> data/raw/Venus/VmVudXNfMTQ2.jpg
-Copying extra-data/extra_data/VXJhbnVzXzE0OA.jpg -> data/raw/Uranus/VXJhbnVzXzE0OA.jpg
-Copying extra-data/extra_data/VXJhbnVzXzE0Nw.jpg -> data/raw/Uranus/VXJhbnVzXzE0Nw.jpg
+Copying extra-data/extra_data/M2M2YTk0MTFfTmVwdHVuZV8xNDg.jpg -> data/raw/Neptune/M2M2YTk0MTFfTmVwdHVuZV8xNDg.jpg
+Copying extra-data/extra_data/MDdlOWU5ZWRfVXJhbnVzXzE0Ng.jpg -> data/raw/Uranus/MDdlOWU5ZWRfVXJhbnVzXzE0Ng.jpg
+Copying extra-data/extra_data/MDJjZDE4NzRfSnVwaXRlcl8xNDc.jpg -> data/raw/Jupiter/MDJjZDE4NzRfSnVwaXRlcl8xNDc.jpg
+Copying extra-data/extra_data/MDViZjc2ZGRfTmVwdHVuZV8xNDY.jpg -> data/raw/Neptune/MDViZjc2ZGRfTmVwdHVuZV8xNDY.jpg
+Copying extra-data/extra_data/MGFlN2U3YWRfVXJhbnVzXzE0OA.jpg -> data/raw/Uranus/MGFlN2U3YWRfVXJhbnVzXzE0OA.jpg
 ...
 ```
 
