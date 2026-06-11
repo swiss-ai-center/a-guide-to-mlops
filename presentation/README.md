@@ -80,6 +80,21 @@ _paginate: false
 
 <!-- _class: lead -->
 
+## Beyond the LLM hype
+
+LLMs and Agentic AI are everywhere.
+
+---
+
+**Most companies do not have a generative AI problem**
+
+- Spreadsheets, logs, sensor data.
+- Forecasting from an ERP that barely works.
+- Classification on five years of messy history.
+- The cron jobs that actually keep things running.
+
+**The boring work that matters**
+
 ## ML code vs ML system
 
 ![bg right:39% 100%](./images/ml_system.svg)
