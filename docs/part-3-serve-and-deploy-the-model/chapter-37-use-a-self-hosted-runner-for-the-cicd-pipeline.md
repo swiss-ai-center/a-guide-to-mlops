@@ -163,7 +163,7 @@ Replace `<my_repository_url>` with your own git repository URL, for example
     to lowercase.
 
 ```yaml title="docker/Dockerfile" hl_lines="6"
-FROM ubuntu:24.04
+FROM ubuntu:26.04
 
 ENV RUNNER_VERSION=2.334.0
 
