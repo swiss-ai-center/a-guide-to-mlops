@@ -50,6 +50,23 @@ flowchart TB
     end
 ```
 
+## Going further
+
+!!! info "Scaling to cloud annotation"
+
+    The workflow you just completed runs Label Studio locally. The same approach
+    also works for collaborative team annotation in the cloud. Only three things
+    change:
+
+    - **Instance**: deploy Label Studio on a shared server, in a container, or use
+      [Label Studio Cloud](https://labelstud.io/guide/label_studio_cloud).
+    - **Data import**: upload from S3/GCS instead of your local disk.
+    - **Model backend**: use a reachable URL for the FastAPI backend instead of
+      `http://localhost:8000`.
+
+    The XML labeling interface, export format, and DVC retraining steps stay the
+    same.
+
 ## Next steps
 
 **Clean up your resources**
