@@ -347,12 +347,24 @@ docker push ghcr.io/<my_username>/<my_repository_name>/github-runner:latest
 
 #### Adjust image visibility
 
-Make sure to set the image visibility to `Public` in the GitHub Container
-Registry settings.
+Ensure the image visibility is set to `Private` in the GitHub Container Registry
+settings. Images pushed to the GitHub Container Registry are private by default,
+so you normally do not need to change anything.
 
-In your repository page, click on **Packages** on the right hand side, then on
-your **github-runner** package. In **Package settings** in the **Danger Zone**
-section, choose **Change package visibility** and set the package to **public**.
+If the package was previously made public, go to your repository page, click on
+**Packages** on the right hand side, then on your **github-runner** package. In
+**Package settings** in the **Danger Zone** section, choose
+**Change package visibility** and set the package to **private**.
+
+!!! note "Public vs. private image"
+
+    A public image is simpler to deploy because Kubernetes can pull it without
+    credentials. However, it also exposes the runner environment and its tooling to
+    anyone.
+
+    A private image requires configuring an image pull secret in Kubernetes, but it
+    keeps the runner image under your control and is consistent with the security
+    recommendations of this chapter. We therefore keep the image private.
 
 ### Configure security
 
@@ -408,7 +420,7 @@ Create a new file called `runner.yaml` in the `kubernetes` directory with the
 following content. Replace also `<my_username>` and `<my_repository_name>` with
 your own GitHub username and repository name.
 
-```txt title="kubernetes/runner.yaml" hl_lines="10"
+```txt title="kubernetes/runner.yaml" hl_lines="12"
 apiVersion: v1
 kind: Pod
 metadata:
@@ -416,6 +428,8 @@ metadata:
   labels:
     app: github-runner
 spec:
+  imagePullSecrets:
+    - name: ghcr-pull-secret
   containers:
     - name: github-runner
       image: ghcr.io/<my_username>/<my_repository_name>/github-runner:latest
@@ -467,6 +481,28 @@ kubectl create secret generic github-runner-pat --from-literal=token=$GH_RUNNER_
 The created secret is stored within the Kubernetes cluster itself. As such, the
 secret is securely kept within the cluster and can be accessed by Kubernetes
 components running in that cluster.
+
+#### Create an image pull secret
+
+Because the runner image is private, Kubernetes needs credentials to pull it
+from the GitHub Container Registry. Create a
+[Docker registry secret](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
+in the cluster.
+
+You can reuse the `GHCR_PAT` token created earlier or use a new personal access
+token with the `read:packages` scope. Run the following command and replace
+`<my_username>` and `<my_personal_access_token>` with your own values:
+
+```sh title="Execute the following command(s) in a terminal"
+kubectl create secret docker-registry ghcr-pull-secret \
+  --docker-server=ghcr.io \
+  --docker-username=<my_username> \
+  --docker-password=<my_personal_access_token>
+```
+
+This secret is used by Kubernetes to authenticate with the registry before
+downloading the image. It is separate from the `github-runner-pat` secret, which
+is consumed by the runner container to register itself with GitHub.
 
 #### Deploy the runner
 

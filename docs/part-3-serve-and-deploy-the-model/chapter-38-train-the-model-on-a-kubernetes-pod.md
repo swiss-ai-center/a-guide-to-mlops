@@ -201,7 +201,7 @@ username and repository name.
     have uppercase letters in your username or repository name, simply convert them
     to lowercase.
 
-```txt title="kubernetes/runner.yaml" hl_lines="10 28-29"
+```txt title="kubernetes/runner.yaml" hl_lines="12 30-31"
 apiVersion: v1
 kind: Pod
 metadata:
@@ -209,6 +209,8 @@ metadata:
   labels:
     app: github-runner
 spec:
+  imagePullSecrets:
+    - name: ghcr-pull-secret
   containers:
     - name: github-runner
       image: ghcr.io/<my_username>/<my_repository_name>/github-runner:latest
@@ -288,7 +290,7 @@ your own GitHub username and repository name.
     have uppercase letters in your username or repository name, simply convert them
     to lowercase.
 
-```txt title="kubernetes/runner-gpu.yaml" hl_lines="15"
+```txt title="kubernetes/runner-gpu.yaml" hl_lines="17"
 apiVersion: v1
 kind: Pod
 metadata:
@@ -301,6 +303,8 @@ spec:
       emptyDir:
         medium: Memory
         sizeLimit: 4Gi
+  imagePullSecrets:
+    - name: ghcr-pull-secret
   containers:
     - name: github-runner-gpu-${GITHUB_RUN_ID}
       image: ghcr.io/<my_username>/<my_repository_name>/github-runner:latest
