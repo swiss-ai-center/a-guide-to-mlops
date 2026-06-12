@@ -93,6 +93,26 @@ These are alternatives to BentoML and Docker.
   designed to make it easy to find, run, build, share and deploy applications
   using Open Container Initiative containers and images
 
+### Self-hosted / on-premise infrastructure
+
+These tools are useful if you want to run the MLOps stack on your own
+infrastructure instead of managed cloud services.
+
+- [CNCF Landscape](https://landscape.cncf.io/) - Explore graduated CNCF
+  projects that are generally considered production-ready
+- [Kubespray](https://kubespray.io/) - Deploy production-ready Kubernetes
+  clusters on bare-metal or virtual machines
+- [Argo](https://argoproj.github.io/) - Kubernetes-native continuous
+  delivery (Argo CD) and workflow orchestration (Argo Workflows)
+- [Harbor](https://goharbor.io/) - Self-hosted container registry with
+  vulnerability scanning and RBAC
+- [Distribution Registry](https://distribution.github.io/distribution/) -
+  Lightweight local container registry, also known as Docker Registry
+- [Helm](https://helm.sh/) - Package manager for Kubernetes; commonly used
+  to install and manage Argo, registries, and CI runners
+- [Docker Swarm](https://docs.docker.com/engine/swarm/) - Simpler,
+  built-in container orchestration alternative to Kubernetes
+
 ### End-to-end
 
 These tools can be used to manage the entire lifecycle of the ML experiment.
