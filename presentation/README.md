@@ -84,8 +84,6 @@ _paginate: false
 
 LLMs and Agentic AI are everywhere.
 
----
-
 **Most companies do not have a generative AI problem**
 
 - Spreadsheets, logs, sensor data.
