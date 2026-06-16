@@ -1,6 +1,0 @@
-## Docker volumes
-
-db-data
-label-studio-data
-label-studio-ml-backend-data
-label-studio-ml-backend-logs
