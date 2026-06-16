@@ -29,6 +29,10 @@ site_author = "Swiss AI Center contributors"
 # Read more: https://zensical.org/docs/setup/basics/#site_url
 site_url = "https://mlops.swiss-ai-center.ch/"
 
+# Repository information
+repo_url = "https://github.com/swiss-ai-center/a-guide-to-mlops"
+repo_name = "swiss-ai-center/a-guide-to-mlops"
+
 # The copyright notice appears in the page footer and can contain an HTML
 # fragment.
 #
@@ -314,7 +318,7 @@ features = [
 # ----------------------------------------------------------------------------
 [project.theme.icon]
 logo = "lucide/infinity"
-repo = "lucide/code"
+repo = "fontawesome/brands/github"
 previous = "lucide/chevron-left"
 next = "lucide/chevron-right"
 top = "lucide/chevron-up"
@@ -377,7 +381,7 @@ icon = "lucide/globe"
 link = "https://swiss-ai-center.ch/"
 
 [[project.extra.social]]
-icon = "lucide/code"
+icon = "fontawesome/brands/github"
 link = "https://github.com/swiss-ai-center/a-guide-to-mlops"
 
 # ----------------------------------------------------------------------------
