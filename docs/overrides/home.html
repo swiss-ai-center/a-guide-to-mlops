@@ -189,6 +189,11 @@
         -webkit-text-fill-color: transparent;
     }
 
+    .home-content {
+        position: relative;
+        z-index: 1;
+    }
+
     .planets {
         position: absolute;
         width: 100%;
@@ -201,7 +206,6 @@
 
     .planet {
         position: fixed;
-        transition: transform 0.1s ease-out;
     }
 
     .planet[data-name="earth"] {
@@ -224,7 +228,7 @@
         width: 17.5vw;
         bottom: 15%;
         left: 17.5%;
-        z-index: 1;
+        z-index: -11;
         filter: brightness(0.7);
     }
 
@@ -232,7 +236,7 @@
         width: 27.5vw;
         top: 15%;
         left: 2.5%;
-        z-index: -14;
+        z-index: -15;
         filter: brightness(0.55);
     }
 
@@ -250,7 +254,6 @@
         left: 40px;
         font-size: 0.7rem;
         opacity: 0.5;
-        transition: opacity 0.2s ease-out;
     }
 
     .stars {
@@ -275,9 +278,9 @@
 
 
 <div class="gradient"></div>
-<div class="stars parallax" data-speed="-10"></div>
+<div class="stars"></div>
 <section class="home-section">
-    <div>
+    <div class="home-content">
         <h2>A guide to</h2>
         <h1><span class="text-gradient">MLOps</span></h1>
         <p>
@@ -285,14 +288,14 @@
         </p>
     </div>
     <div class="planets">
-        <img src="assets/images/planets/earth.png" alt="planet" class="planet parallax" data-speed="0.4" data-name="earth">
-        <img src="assets/images/planets/moon.png" alt="planet" class="planet parallax" data-speed="0.5" data-name="moon">
-        <img src="assets/images/planets/mars.png" alt="planet" class="planet parallax" data-speed="0.6" data-name="mars">
-        <img src="assets/images/planets/saturn.png" alt="planet" class="planet parallax" data-speed="0.8" data-name="saturn">
-        <img src="assets/images/planets/neptune.png" alt="planet" class="planet parallax" data-speed="1" data-name="neptune">
+        <img src="assets/images/planets/earth.png" alt="planet" class="planet" data-name="earth">
+        <img src="assets/images/planets/moon.png" alt="planet" class="planet" data-name="moon">
+        <img src="assets/images/planets/mars.png" alt="planet" class="planet" data-name="mars">
+        <img src="assets/images/planets/saturn.png" alt="planet" class="planet" data-name="saturn">
+        <img src="assets/images/planets/neptune.png" alt="planet" class="planet" data-name="neptune">
     </div>
 </section>
-<div class="scroll-fade-out" id="planetsAttribution" data-offset="100"><a href="https://solarsystem.nasa.gov" target="_blank">© NASA Solar System</a></div>
+<div id="planetsAttribution"><a href="https://solarsystem.nasa.gov" target="_blank">© NASA Solar System</a></div>
 
 {% endblock %}
 
