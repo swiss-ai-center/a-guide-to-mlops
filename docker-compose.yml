@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
     command:
-      - mkdocs
+      - zensical
       - serve
       - --dev-addr
       - 0.0.0.0:8000
