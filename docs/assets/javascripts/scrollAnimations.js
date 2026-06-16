@@ -7,7 +7,7 @@
         const fadeElements = document.getElementsByClassName('scroll-fade-out');
         document.removeEventListener('scroll', scrollFadeOutHandler);
         if (fadeElements.length > 0) {
-            document.addEventListener('scroll', scrollFadeOutHandler);
+            document.addEventListener('scroll', scrollFadeOutHandler, { passive: true });
         }
 
         // Reveal elements when they enter the viewport
@@ -37,8 +37,8 @@
         const scroll = window.scrollY;
         for (let i = 0; i < elements.length; i++) {
             const element = elements[i];
-            const offset = element.getAttribute('data-offset');
-            if (scroll > offset) {
+            const offset = parseFloat(element.getAttribute('data-offset'));
+            if (!isNaN(offset) && scroll > offset) {
                 element.style.opacity = 0;
             } else {
                 element.style.opacity = '';

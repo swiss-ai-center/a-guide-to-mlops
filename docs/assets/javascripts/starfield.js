@@ -2,7 +2,19 @@
 (function () {
     function initStarfield() {
         const container = document.getElementById('starfield');
-        if (!container) return;
+        if (!container) {
+            if (window.__mlopsStarfieldCleanup) {
+                window.__mlopsStarfieldCleanup();
+                window.__mlopsStarfieldCleanup = null;
+            }
+            return;
+        }
+
+        // Tear down any previous instance before creating a new one.
+        if (window.__mlopsStarfieldCleanup) {
+            window.__mlopsStarfieldCleanup();
+            window.__mlopsStarfieldCleanup = null;
+        }
 
         const canvas = document.createElement('canvas');
         canvas.className = 'starfield-canvas';
@@ -14,6 +26,7 @@
         container.appendChild(canvas);
 
         const ctx = canvas.getContext('2d');
+        if (!ctx) return;
         let width, height;
 
         function isLightTheme() {
@@ -125,11 +138,27 @@
             });
         }
 
+        // Expose a cleanup function so instant navigation can tear down
+        // the old starfield before creating a new one.
+        window.__mlopsStarfieldCleanup = function () {
+            window.removeEventListener('resize', resize, { passive: true });
+            window.removeEventListener('scroll', requestDraw, { passive: true });
+            resizeObserver.disconnect();
+            themeObserver.disconnect();
+            if (canvas.parentNode) {
+                canvas.parentNode.removeChild(canvas);
+            }
+        };
+
         resize();
         requestDraw();
     }
 
-    if (document.readyState === 'loading') {
+    // Re-initialize on instant navigation; fall back to DOMContentLoaded
+    // when instant navigation is not available.
+    if (typeof document$ !== 'undefined') {
+        document$.subscribe(initStarfield);
+    } else if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initStarfield);
     } else {
         initStarfield();
