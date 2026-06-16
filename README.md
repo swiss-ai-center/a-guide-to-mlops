@@ -21,8 +21,7 @@ Temporary branches may also exist for ongoing issues and improvements to the gui
 ### Local development with Docker Compose (recommended)
 
 To improve the documentation locally, run
-[Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) with the
-following commands:
+[Zensical](https://zensical.org/) with the following commands:
 
 ```sh
 # Build the Docker container
@@ -39,21 +38,11 @@ If you make changes to the documentation, the web page should reload.
 ### Local development with Python
 
 To improve the documentation locally, run
-[Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) with the
-following commands:
+[Zensical](https://zensical.org/) with the following commands:
 
 #### With standard Python tools
 
 ```sh
-# Install all dependencies for Material for MkDocs
-sudo apt install --yes \
-    libcairo2-dev \
-    libfreetype6-dev \
-    libffi-dev \
-    libjpeg-dev \
-    libpng-dev \
-    libz-dev
-
 # Create the virtual environment
 python3.13 -m venv .venv
 
@@ -61,12 +50,10 @@ python3.13 -m venv .venv
 source .venv/bin/activate
 
 # Install the Python dependencies
-pip install \
-    --requirement requirements.txt \
-    --requirement requirements-freeze.txt
+pip install --requirement requirements-freeze.txt
 
-# Run Material for MkDocs
-mkdocs serve
+# Run Zensical
+zensical serve
 ```
 
 #### With uv
@@ -82,12 +69,10 @@ uv venv --python 3.13
 source .venv/bin/activate
 
 # Install the Python dependencies
-uv pip install \
-    --requirement requirements.txt \
-    --requirement requirements-freeze.txt
+uv pip install --requirement requirements-freeze.txt
 
-# Run Material for MkDocs
-mkdocs serve
+# Run Zensical
+zensical serve
 ```
 
 You can now access the local development server at <http://localhost:8000>.
@@ -122,9 +107,7 @@ python3.13 -m venv .venv
 source .venv/bin/activate
 
 # Install the Python dependencies
-pip install \
-    --requirement requirements.txt \
-    --requirement requirements-all.txt
+pip install --requirement requirements-freeze.txt
 
 # Run mdwrap
 mdwrap --fmt docs
@@ -143,9 +126,7 @@ uv venv --python 3.13
 source .venv/bin/activate
 
 # Install the Python dependencies
-uv pip install \
-    --requirement requirements.txt \
-    --requirement requirements-all.txt
+uv pip install --requirement requirements-freeze.txt
 
 # Run mdwrap
 mdwrap --fmt docs
