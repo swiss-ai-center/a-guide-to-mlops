@@ -34,7 +34,7 @@ jobs:
           python-version: 3.13
           cache: 'pip'
       - name: Install dependencies
-        run: pip install --requirement requirements.txt --requirement requirements-freeze.txt
+        run: pip install --requirement requirements-freeze.txt
       - name: Lint
         run: mdwrap --check docs
 
