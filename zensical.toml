@@ -86,13 +86,17 @@ nav = [
       { "Chapter 3.8 - Train the model on a Kubernetes pod" = "part-3-serve-and-deploy-the-model/chapter-38-train-the-model-on-a-kubernetes-pod.md" },
       { "Conclusion" = "part-3-serve-and-deploy-the-model/conclusion.md" },
     ] },
+  { "📊 Monitor and maintain" = [
+      { "Introduction" = "part-4-monitor-and-maintain/introduction.md" },
+      { "Conclusion" = "part-4-monitor-and-maintain/conclusion.md" },
+    ] },
   { "🏷️ Labeling the data and retrain" = [
-      { "Introduction" = "part-4-labeling-the-data-and-retrain/introduction.md" },
-      { "Chapter 4.1 - Set up Label Studio" = "part-4-labeling-the-data-and-retrain/chapter-41-set-up-label-studio.md" },
-      { "Chapter 4.2 - Label new data with Label Studio" = "part-4-labeling-the-data-and-retrain/chapter-42-label-new-data-with-label-studio.md" },
-      { "Chapter 4.3 - Link the model to Label Studio" = "part-4-labeling-the-data-and-retrain/chapter-43-link-the-model-to-label-studio.md" },
-      { "Chapter 4.4 - Retrain the model from new data with DVC" = "part-4-labeling-the-data-and-retrain/chapter-44-retrain-the-model-from-new-data-with-dvc.md" },
-      { "Conclusion" = "part-4-labeling-the-data-and-retrain/conclusion.md" },
+      { "Introduction" = "part-5-labeling-the-data-and-retrain/introduction.md" },
+      { "Chapter 5.1 - Set up Label Studio" = "part-5-labeling-the-data-and-retrain/chapter-51-set-up-label-studio.md" },
+      { "Chapter 5.2 - Label new data with Label Studio" = "part-5-labeling-the-data-and-retrain/chapter-52-label-new-data-with-label-studio.md" },
+      { "Chapter 5.3 - Link the model to Label Studio" = "part-5-labeling-the-data-and-retrain/chapter-53-link-the-model-to-label-studio.md" },
+      { "Chapter 5.4 - Retrain the model from new data with DVC" = "part-5-labeling-the-data-and-retrain/chapter-54-retrain-the-model-from-new-data-with-dvc.md" },
+      { "Conclusion" = "part-5-labeling-the-data-and-retrain/conclusion.md" },
     ] },
   { "🪄 Conclusion" = [
       { "Clean up" = "clean-up.md" },

@@ -28,12 +28,14 @@ What you will learn from this guide.
     - [Chapter 3.6 - Continuous deployment of the model with the CI/CD pipeline](./part-3-serve-and-deploy-the-model/chapter-36-continuous-deployment-of-the-model-with-the-cicd-pipeline.md)
     - [Chapter 3.7 - Use a self-hosted runner for the CI/CD pipeline](./part-3-serve-and-deploy-the-model/chapter-37-use-a-self-hosted-runner-for-the-cicd-pipeline.md)
     - [Chapter 3.8 - Train the model on a Kubernetes pod](./part-3-serve-and-deploy-the-model/chapter-38-train-the-model-on-a-kubernetes-pod.md)
-- [Part 4 - Labeling the data and retrain the model](./part-4-labeling-the-data-and-retrain/introduction.md) -
+- [Part 4 - Monitor and maintain](./part-4-monitor-and-maintain/introduction.md) -
+  Learn how to keep a model healthy in production.
+- [Part 5 - Labeling the data and retrain the model](./part-5-labeling-the-data-and-retrain/introduction.md) -
   Learn how to label new data and retrain the model using Label Studio.
-    - [Chapter 4.1 - Set up Label Studio](./part-4-labeling-the-data-and-retrain/chapter-41-set-up-label-studio.md)
-    - [Chapter 4.2 - Label new data with Label Studio](./part-4-labeling-the-data-and-retrain/chapter-42-label-new-data-with-label-studio.md)
-    - [Chapter 4.3 - Link the model to Label Studio](./part-4-labeling-the-data-and-retrain/chapter-43-link-the-model-to-label-studio.md)
-    - [Chapter 4.4 - Retrain the model from new data with DVC](./part-4-labeling-the-data-and-retrain/chapter-44-retrain-the-model-from-new-data-with-dvc.md)
+    - [Chapter 5.1 - Set up Label Studio](./part-5-labeling-the-data-and-retrain/chapter-51-set-up-label-studio.md)
+    - [Chapter 5.2 - Label new data with Label Studio](./part-5-labeling-the-data-and-retrain/chapter-52-label-new-data-with-label-studio.md)
+    - [Chapter 5.3 - Link the model to Label Studio](./part-5-labeling-the-data-and-retrain/chapter-53-link-the-model-to-label-studio.md)
+    - [Chapter 5.4 - Retrain the model from new data with DVC](./part-5-labeling-the-data-and-retrain/chapter-54-retrain-the-model-from-new-data-with-dvc.md)
 - [Conclusion](./conclusion.md) - Summary of what you have done and what is left
   to be done.
 
