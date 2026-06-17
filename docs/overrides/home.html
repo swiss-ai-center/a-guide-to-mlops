@@ -480,6 +480,24 @@
     align-self: center;
     filter: brightness(0) invert(1);
   }
+  .finale-launchpad {
+    position: absolute;
+    right: 6vw;
+    top: 50%;
+    transform: translateY(-50%);
+    width: clamp(160px, 22vw, 320px);
+    opacity: 0.9;
+    pointer-events: none;
+    z-index: 5;
+  }
+  .finale-launchpad img,
+  .finale-launchpad svg {
+    width: 100%;
+    height: auto;
+  }
+  @media (max-width: 1000px) {
+    .finale-launchpad { display: none; }
+  }
 
   /* Light theme overrides */
   body[data-md-color-scheme="default"] {
@@ -673,8 +691,8 @@
     a hands-on journey through local training, the cloud, serving, labeling, and retraining.
   </p>
   <a href="#story-start" class="hero-cta">
-    <span class="twemoji">{% include ".icons/lucide/play.svg" %}</span>
-    Start the journey
+    <span class="twemoji">{% include ".icons/lucide/compass.svg" %}</span>
+    Chart the course
   </a>
 
   <!-- Hero rocket / MLOps mark -->
@@ -865,6 +883,12 @@
     <span class="twemoji">{% include ".icons/lucide/rocket.svg" %}</span>
     Start the journey
   </a>
+
+  <!-- Launchpad illustration -->
+  <div class="finale-launchpad" aria-hidden="true">
+    <img src="{{ 'assets/images/launchpad.svg' | url }}" alt="">
+  </div>
+
   <img
     class="finale-logo"
     src="{{ 'assets/images/hes-so-logo.png' | url }}"
