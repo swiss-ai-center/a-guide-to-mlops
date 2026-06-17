@@ -10,8 +10,7 @@ title: "Part 4 - Introduction"
     to keep a model healthy in production by observing its behavior over time and
     reacting to changes.
 
-Learn how to monitor and maintain the model using
-[Evidently AI](https://www.evidentlyai.com/).
+Learn how to monitor and maintain the model using [Evidently AI](../tools.md).
 
 ## Environment
 

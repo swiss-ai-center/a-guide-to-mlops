@@ -20,6 +20,7 @@ process:
   [:simple-bentoml: BentoML](https://bentoml.com/) and
   [:simple-docker: Docker](https://docker.com/)
 - Model deploying: [:simple-kubernetes: Kubernetes](https://kubernetes.io/)
+- Model monitoring: [Evidently AI](https://evidentlyai.com/)
 - Data annotation: [Label Studio](https://labelstud.io/)
 
 You will go into details about each tool in the following parts of this guide.
@@ -57,8 +58,6 @@ These are alternatives to CML.
   it to build better machine learning models faster
 - [Aim](https://aimstack.io/) - An open-source, self-hosted ML experiment
   tracking tool
-- [Evidently AI](https://evidentlyai.com/) - A first-of-its-kind monitoring tool
-  that makes debugging machine learning models simple and interactive
 
 ### Data annotation
 
