@@ -15,10 +15,6 @@ accuracy and effectiveness over time. Based on the model performance feedback,
 you can revisite and update the annotations to create a broader and more robust
 training set that better meets the needs of your project.
 
-This concludes the guide. We hope you enjoyed it and learned a lot. If you have
-any questions or feedback, please feel free to reach out to us on
-[GitHub](https://github.com/swiss-ai-center/a-guide-to-mlops).
-
 The following diagram illustrates the bricks you set up at the end of this part:
 
 ```mermaid
