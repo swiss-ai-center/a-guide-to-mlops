@@ -43,8 +43,8 @@ flowchart TB
 **Ready to continue?**
 
 Proceed to
-[Part 2 - Move to the cloud](../part-2-move-the-model-to-the-cloud/introduction.md)
-to learn how to move your ML workflow to cloud infrastructure.
+[Part 2 - Move to the cloud](../part-2-move-to-the-cloud/introduction.md) to
+learn how to move your ML workflow to cloud infrastructure.
 
 **Stopping here?**
 

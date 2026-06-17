@@ -110,7 +110,7 @@ git checkout <the_name_of_the_new_branch>
 ### Update the parameters of the experiment
 
 Similarly to what you have done in
-[Chapter 1.5: Track model evolutions with DVC](../part-1-local-training-and-model-evaluation/chapter-15-track-model-evolution-with-dvc.md),
+[Chapter 1.5: Track model evolutions with DVC](../part-1-local-training-and-evaluation/chapter-15-track-model-evolution-with-dvc.md),
 you will update the experiment to see the evolution being tracked remotely by
 CML.
 

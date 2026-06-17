@@ -101,7 +101,7 @@ data and retrain the model using Label Studio.
 **Ready to continue?**
 
 Proceed to
-[Part 5 - Labeling the data and retrain](../part-5-labeling-the-data-and-retrain/introduction.md)
+[Part 5 - Labeling the data and retrain](../part-5-labeling-and-retrain/introduction.md)
 to learn how to systematically label new data and continuously improve your
 model.
 

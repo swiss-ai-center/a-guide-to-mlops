@@ -59,7 +59,7 @@ flowchart TB
 **Ready to continue?**
 
 Proceed to
-[Part 3 - Serve and deploy the model](../part-3-serve-and-deploy-the-model/introduction.md)
+[Part 3 - Serve and deploy the model](../part-3-serve-and-deploy/introduction.md)
 to learn how to serve your model in production and deploy it to Kubernetes.
 
 **Stopping here?**
