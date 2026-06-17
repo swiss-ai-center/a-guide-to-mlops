@@ -1,7 +1,20 @@
-  /* Planet belt scroll linkage */
-  (function () {
+/* Home-page enhancements: planet belt, header transparency, smooth-scroll links. */
+(function () {
+  function initHome() {
     const belt = document.getElementById('belt-track');
-    if (!belt) return;
+    const header = document.querySelector('.md-header');
+    const hero = document.getElementById('story-hero');
+
+    // Tear down any previous instance before re-initializing.
+    if (window.__mlopsHomeCleanup) {
+      window.__mlopsHomeCleanup();
+      window.__mlopsHomeCleanup = null;
+    }
+
+    // Only the home page has these elements; on other pages just clean up.
+    if (!belt || !header || !hero) {
+      return;
+    }
 
     const sections = [
       document.getElementById('section-about'),
@@ -109,18 +122,13 @@
     layoutBelt();
     updateBelt();
 
-    window.addEventListener('scroll', updateBelt, { passive: true });
-    window.addEventListener('resize', () => {
+    function onResize() {
       layoutBelt();
       updateBelt();
-    });
-  })();
+    }
 
-  /* Make header opaque once user leaves the hero */
-  (function () {
-    const header = document.querySelector('.md-header');
-    const hero = document.getElementById('story-hero');
-    if (!header || !hero) return;
+    window.addEventListener('scroll', updateBelt, { passive: true });
+    window.addEventListener('resize', onResize, { passive: true });
 
     function updateHeader() {
       const heroBottom = hero.getBoundingClientRect().bottom;
@@ -133,11 +141,8 @@
 
     window.addEventListener('scroll', updateHeader, { passive: true });
     updateHeader();
-  })();
 
-  /* Smooth scroll for Next section links */
-  (function () {
-    document.addEventListener('click', function (e) {
+    function onDocumentClick(e) {
       const link = e.target.closest('.next-section');
       if (!link) return;
       const hash = new URL(link.getAttribute('href'), window.location.href).hash;
@@ -146,5 +151,28 @@
         e.preventDefault();
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
-    });
-  })();
+    }
+
+    document.addEventListener('click', onDocumentClick);
+
+    // Expose a cleanup function so instant navigation can tear down the old
+    // home-page handlers before creating a new instance.
+    window.__mlopsHomeCleanup = function () {
+      window.removeEventListener('scroll', updateBelt, { passive: true });
+      window.removeEventListener('resize', onResize, { passive: true });
+      window.removeEventListener('scroll', updateHeader, { passive: true });
+      document.removeEventListener('click', onDocumentClick);
+      header.classList.remove('md-header--shadow');
+    };
+  }
+
+  // Re-initialize on instant navigation; fall back to DOMContentLoaded
+  // when instant navigation is not available.
+  if (typeof document$ !== 'undefined') {
+    document$.subscribe(initHome);
+  } else if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHome);
+  } else {
+    initHome();
+  }
+})();
