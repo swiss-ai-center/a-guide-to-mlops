@@ -15,10 +15,6 @@ accuracy and effectiveness over time. Based on the model performance feedback,
 you can revisite and update the annotations to create a broader and more robust
 training set that better meets the needs of your project.
 
-This concludes the guide. We hope you enjoyed it and learned a lot. If you have
-any questions or feedback, please feel free to reach out to us on
-[GitHub](https://github.com/swiss-ai-center/a-guide-to-mlops).
-
 The following diagram illustrates the bricks you set up at the end of this part:
 
 ```mermaid
@@ -49,6 +45,23 @@ flowchart TB
         labelStudioPredictions[Predictions]
     end
 ```
+
+## Going further
+
+!!! info "Scaling to cloud annotation"
+
+    The workflow you just completed runs Label Studio locally. The same approach
+    also works for collaborative team annotation in the cloud. Only three things
+    change:
+
+    - **Instance**: deploy Label Studio on a shared server, in a container, or use
+      [Label Studio Cloud](https://labelstud.io/guide/label_studio_cloud).
+    - **Data import**: upload from S3/GCS instead of your local disk.
+    - **Model backend**: use a reachable URL for the FastAPI backend instead of
+      `http://localhost:8000`.
+
+    The XML labeling interface, export format, and DVC retraining steps stay the
+    same.
 
 ## Next steps
 

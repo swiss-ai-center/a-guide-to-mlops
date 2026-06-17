@@ -9,8 +9,8 @@ model iteratively.
 
 !!! note
 
-     Although in previous parts we transitioned from local to cloud-based services,
-     this part will focus on labeling data locally.
+    This part focuses on labeling data locally so you can experiment without extra
+    infrastructure.
 
 ## Environment
 
