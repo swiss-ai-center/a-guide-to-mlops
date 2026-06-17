@@ -89,6 +89,7 @@ nav = [
     ] },
   { "📈 Monitor and maintain" = [
       { "Introduction" = "part-4-monitor-and-maintain/introduction.md" },
+      { "Chapter 4.1 - Log predictions and features locally" = "part-4-monitor-and-maintain/chapter-41-log-predictions-and-features-locally.md" },
       { "Conclusion" = "part-4-monitor-and-maintain/conclusion.md" },
     ] },
   { "🏷️ Label data and retrain" = [
