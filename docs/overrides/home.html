@@ -1,351 +1,959 @@
+<!-- Custom story landing page for A Guide to MLOps -->
 {% extends "main.html" %}
 
-<!-- Render hero under tabs -->
-{% block tabs %}
-{{ super() }}
+<!-- Hide default header tabs and make header transparent on hero -->
+{% block tabs %}{% endblock %}
 
-<!-- Additional styles for landing page -->
+{% block extrahead %}
+{{ super() }}
 <style>
-    :root {
-        --md-primary-bg-gradient-color: rgb(0, 0, 0);
-        --md-secondary-bg-gradient-color: rgb(34, 34, 37);
-        --bg-gradient: linear-gradient(-20deg,
-        var(--md-primary-bg-gradient-color) 0%,
-        var(--md-secondary-bg-gradient-color) 100%);
-        --md-color-text-primary: rgb(255, 255, 255);
-        --md-default-fg-color--light: rgb(255, 255, 255);
-        --text-gradient: linear-gradient(-54deg,
-                var(--md-primary-fg-color) 0%,
-                var(--md-primary-fg-color) 30%,
-                var(--md-accent-fg-color) 100%);
+  /* Page-wide reset for the landing story */
+  .md-header {
+    background: transparent !important;
+    box-shadow: none !important;
+    transition: background 0.4s ease, box-shadow 0.4s ease;
+    z-index: 30;
+  }
+  .md-banner {
+    position: relative;
+    z-index: 50;
+  }
+  .md-top {
+    z-index: 100;
+  }
+  .md-footer {
+    position: relative;
+    z-index: 5;
+  }
+  .md-header--shadow,
+  .md-header[data-md-state="shadow"] {
+    background: #0a0a0a !important;
+    border-bottom: 1px solid #333333;
+    box-shadow: none !important;
+  }
+  .md-tabs {
+    background: transparent !important;
+  }
+  .md-main,
+  .md-main__inner {
+    background: transparent;
+  }
+  .md-main__inner {
+    display: block;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+  .md-typeset h1 {
+    display: none;
+  }
+  html, body {
+    background: #0a0a0a;
+  }
 
+  /* Brutalist / Expanse technical tokens */
+  :root {
+    --space-black: #0a0a0a;
+    --space-panel: #111111;
+    --accent: #f59e0b;
+    --accent-dark: #d97706;
+    --soft-white: #e5e5e5;
+    --planet-scale: 1.25;
+    --tech-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  }
+
+  /* Icon sizing for twemoji spans used outside .md-typeset (hero, chapters) */
+  .twemoji {
+    --md-icon-size: 1.125em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--md-icon-size);
+    vertical-align: text-top;
+  }
+  .twemoji svg {
+    fill: currentcolor;
+    max-height: 100%;
+    width: var(--md-icon-size);
+  }
+  .twemoji svg.lucide {
+    fill: #0000;
+    stroke: currentcolor;
+  }
+
+  /* Starfield */
+  .starfield {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: #0a0a0a;
+    overflow: hidden;
+  }
+  .starfield::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(255, 255, 255, 0.03) 2px,
+      rgba(255, 255, 255, 0.03) 3px
+    );
+    pointer-events: none;
+  }
+  .starfield::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+    opacity: 0.35;
+    pointer-events: none;
+  }
+  .starfield-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Scrolling planet belt */
+  .planet-belt {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 5;
+    pointer-events: none;
+    overflow: visible;
+  }
+  .belt-track {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    will-change: transform;
+  }
+  .belt-planet {
+    position: absolute;
+    width: calc(var(--planet-size, 132px) * var(--planet-scale, 1));
+    height: calc(var(--planet-size, 132px) * var(--planet-scale, 1));
+    transform: translateX(-50%);
+    opacity: 0.75;
+    filter: none;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .belt-planet img,
+  .belt-planet svg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .belt-planet.active {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.2);
+    filter: drop-shadow(0 0 0 1px rgba(245, 158, 11, 0.5));
+  }
+  .belt-planet.filler {
+    --planet-size: 92px;
+    opacity: 0.55;
+  }
+  .belt-planet.filler.active {
+    opacity: 0.95;
+    transform: translateX(-50%) scale(1.12);
+  }
+
+  /* Relative planet sizes (Jupiter/Saturn are the biggest) */
+  .belt-planet[title="Mercury"] { --planet-size: 80px; }
+  .belt-planet[title="Venus"] { --planet-size: 110px; }
+  .belt-planet[title="Earth"] { --planet-size: 120px; }
+  .belt-planet[title="Mars"] { --planet-size: 90px; }
+  .belt-planet[title="Jupiter"] { --planet-size: 190px; }
+  .belt-planet[title="Saturn"] { --planet-size: 170px; }
+  .belt-planet[title="Neptune"] { --planet-size: 130px; }
+  .belt-planet[title="Uranus"] { --planet-size: 130px; }
+  .belt-planet[title="Pluto"] { --planet-size: 70px; }
+  .belt-planet[title="Haumea"] { --planet-size: 85px; }
+  .belt-planet[title="Makemake"] { --planet-size: 60px; }
+  .belt-planet[title="Comet"] { --planet-size: 150px; }
+  .belt-planet[title="Reentry capsule"] { --planet-size: 190px; }
+  .belt-planet[title="Sun"] { --planet-size: 260px; }
+  .belt-planet[title="Crew"] { --planet-size: 230px; }
+
+  @media (max-width: 1100px) {
+    .story-chapter:nth-of-type(even) .chapter-card {
+      margin-right: 3vw;
     }
-
-    body {
-        overflow: hidden;
+    .story-chapter:nth-of-type(odd) .chapter-card {
+      margin-left: 3vw;
     }
-
-    .md-typeset h1 {
-        display: none;
+    .belt-planet { --planet-scale: 0.85; }
+    .belt-planet[title="Sun"] { --planet-size: 200px; }
+    .belt-planet[title="Crew"] { --planet-size: 190px; }
+    .belt-planet[title="Reentry capsule"] { --planet-size: 160px; }
+  }
+  @media (max-width: 900px) {
+    .chapter-card,
+    .story-chapter:nth-of-type(even) .chapter-card,
+    .story-chapter:nth-of-type(odd) .chapter-card {
+      margin: 0 auto;
     }
+    .belt-planet { --planet-scale: 0.65; }
+    .belt-planet[title="Sun"] { --planet-size: 160px; }
+    .belt-planet[title="Crew"] { --planet-size: 150px; }
+    .belt-planet[title="Reentry capsule"] { --planet-size: 130px; }
+  }
+  @media (max-width: 600px) {
+    .planet-belt { display: none; }
+  }
 
-    .md-typeset .md-content__button {
-        display: none;
+  /* Hero */
+  .story-hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    text-align: left;
+    padding: 6rem 6vw 4rem;
+    overflow: hidden;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 0;
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-family: var(--tech-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .hero-title {
+    font-size: clamp(2.6rem, 6vw, 5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    margin: 0 0 1rem;
+    color: #e5e5e5;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+  }
+  .hero-title::before {
+    content: "> ";
+    color: var(--accent);
+  }
+  .hero-subtitle {
+    font-size: clamp(1rem, 2vw, 1.35rem);
+    max-width: 700px;
+    color: #a3a3a3;
+    margin: 0 0 2.5rem;
+    line-height: 1.6;
+    text-align: left;
+  }
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.8rem 1.5rem;
+    border-radius: 0;
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    font-family: var(--tech-mono);
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .hero-cta:hover {
+    background: var(--accent);
+    color: #0a0a0a;
+  }
+  .hero-cta .twemoji {
+    --md-icon-size: 1.35em;
+  }
+  .hero-rocket {
+    position: absolute;
+    right: 6vw;
+    top: 50%;
+    transform: translateY(-50%);
+    width: clamp(160px, 22vw, 320px);
+    opacity: 0.9;
+    pointer-events: none;
+    z-index: 5;
+  }
+  .hero-rocket img,
+  .hero-rocket svg {
+    width: 100%;
+    height: auto;
+  }
+  @media (max-width: 1000px) {
+    .hero-rocket { display: none; }
+  }
+  /* Story main */
+  .story-main {
+    position: relative;
+    z-index: 10;
+    counter-reset: chapter;
+  }
 
-    }
+  /* Chapter sections */
+  .story-chapter {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 6rem 2rem;
+  }
 
-    /* Application header should be static for the landing page */
-    .md-header {
-        position: initial;
-        background-color: transparent;
-        box-shadow: none;
-    }
+  .chapter-card {
+    max-width: 640px;
+    margin-left: 6vw;
+    padding: 2rem 2.2rem;
+    border-radius: 0;
+    background: #0f0f0f;
+    border: 1px solid #333333;
+    box-shadow: none;
+    transform: translateY(28px);
+    opacity: 0;
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.7s ease, border-color 0.2s ease;
+  }
+  .story-chapter:nth-of-type(even) .chapter-card {
+    margin-left: auto;
+    margin-right: 6vw;
+  }
+  .story-chapter:nth-of-type(odd) .chapter-card {
+    margin-left: 6vw;
+    margin-right: auto;
+  }
+  .chapter-card.visible {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  .chapter-card:hover {
+    border-color: #555555;
+  }
+  .chapter-label {
+    display: inline-block;
+    padding: 0.25rem 0.6rem;
+    border-radius: 0;
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-family: var(--tech-mono);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .chapter-title {
+    font-size: clamp(1.8rem, 3.6vw, 2.6rem);
+    font-weight: 800;
+    margin: 0 0 1rem;
+    color: #e5e5e5;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+  }
+  .chapter-title::before {
+    counter-increment: chapter;
+    content: "SEC " counter(chapter, decimal-leading-zero) " — ";
+    display: block;
+    font-family: var(--tech-mono);
+    font-size: 0.45em;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    margin-bottom: 0.35rem;
+  }
+  .chapter-title span {
+    color: var(--accent);
+  }
+  .chapter-card p {
+    color: #a3a3a3;
+    line-height: 1.7;
+    font-size: 1.05rem;
+  }
+  .chapter-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.6rem;
+  }
+  .chapter-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1rem;
+    border-radius: 0;
+    font-family: var(--tech-mono);
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .chapter-link.primary {
+    background: var(--accent);
+    color: #0a0a0a;
+    border: 1px solid var(--accent);
+  }
+  .chapter-link.primary:hover {
+    background: var(--accent-dark);
+    border-color: var(--accent-dark);
+  }
+  .chapter-link.secondary {
+    background: transparent;
+    color: #a3a3a3;
+    border: 1px solid #333333;
+  }
+  .chapter-link.secondary:hover {
+    border-color: #555555;
+    color: #e5e5e5;
+  }
+  .pdf-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--tech-mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-decoration: underline;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    transition: color 0.2s ease;
+  }
+  .pdf-link:hover {
+    color: #e5e5e5;
+  }
+  .crew-link {
+    color: var(--accent);
+    text-decoration: underline;
+  }
 
-    .md-header,
-    [data-md-color-scheme=default] {
-        color: var(--md-color-text-primary);
-    }
+  @media (max-width: 900px) {
+    .chapter-card { margin: 0 auto; }
+  }
 
-    .md-tabs {
-        background-color: transparent;
-    }
+  /* Reentry section */
+  .story-chapter.reentry .chapter-title span { color: #ef4444; }
+  .story-chapter.reentry .chapter-label {
+    background: transparent;
+    border-color: #ef4444;
+    color: #ef4444;
+  }
+  .story-chapter.reentry .chapter-link.primary {
+    background: #ef4444;
+    border-color: #ef4444;
+    color: #0a0a0a;
+  }
+  .story-chapter.reentry .chapter-link.primary:hover {
+    background: #b91c1c;
+    border-color: #b91c1c;
+  }
 
-    .md-tabs,
-    [data-md-color-scheme=default] {
-        color: var(--md-color-text-primary);
-    }
+  /* Finale */
+  .story-finale {
+    position: relative;
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    text-align: left;
+    padding: 5rem 6vw 2rem;
+    border-top: 1px solid #333333;
+  }
+  .finale-title {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    margin: 0 0 1rem;
+    color: #e5e5e5;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+  }
+  .finale-title::before {
+    content: "> ";
+    color: var(--accent);
+  }
+  .finale-title span {
+    color: var(--accent);
+  }
+  .finale-subtitle {
+    color: #a3a3a3;
+    max-width: 620px;
+    margin: 0 0 2rem;
+    font-size: 1.1rem;
+    text-align: left;
+  }
+  .finale-logo {
+    width: 220px;
+    height: auto;
+    opacity: 0.8;
+    margin-top: 1.5rem;
+    align-self: center;
+    filter: brightness(0) invert(1);
+  }
+  .finale-launchpad {
+    position: absolute;
+    right: 6vw;
+    top: 50%;
+    transform: translateY(-50%);
+    width: clamp(160px, 22vw, 320px);
+    opacity: 0.9;
+    pointer-events: none;
+    z-index: 5;
+  }
+  .finale-launchpad img,
+  .finale-launchpad svg {
+    width: 100%;
+    height: auto;
+  }
+  @media (max-width: 1000px) {
+    .finale-launchpad { display: none; }
+  }
 
-    /* These two are commented out but can be used to hide the header and tabs completely */
-    /* Remove spacing, as we cannot hide it completely */
-    /* .md-main__inner {
-        margin: 0;
-    } */
-
-    /* Hide main content for now */
-    /* .md-content {
-        display: none;
-    } */
-
-    /* Hide table of contents */
-    @media screen and (min-width: 60em) {
-        .md-sidebar--secondary {
-            display: none;
-        }
-    }
-
-    /* Hide navigation */
-    @media screen and (min-width: 76.25em) {
-        .md-sidebar--primary {
-            display: none;
-        }
-    }
-
-    .gradient {
-        background: rgb(35, 35, 40);
-        background: var(--bg-gradient);
-        top: 0;
-        height: 100vh;
-        width: 100vw;
-        position: fixed;
-        z-index: -50;
-    }
-
-    section {
-        padding: 4rem 10rem;
-    }
-
-    @media screen and (max-width: 76.25em) {
-        section {
-            padding: 3rem 2rem;
-        }
-    }
-
-    @media screen and (max-width: 65em) {
-        .home-section {
-            height: 100vh;
-            flex-direction: column-reverse;
-            text-align: center;
-            gap: 1rem;
-        }
-
-        .home-section h1 {
-            font-size: 5rem !important;
-        }
-
-        .home-section h2 {
-            font-size: 2rem !important
-        }
-
-        .home-image {
-            width: 350px !important;
-        }
-
-        .home-image-hesso {
-            width: 150px !important;
-        }
-
-        .home-button-logo {
-            justify-content: center;
-            flex-direction: column;
-            gap: 2rem !important;
-        }
-
-        .features-section {
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        .features-section .icon-feature {
-            max-width: unset !important;
-        }
-    }
-
-    .home-section {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 2.5rem;
-        padding: 5rem 10rem;
-        text-align: center;
-        height: calc(100vh - 116px); /* 116px = header height */
-    }
-
-    .navigation-section {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-    }
-
-    .navigation-section p {
-        text-align: center;
-        font-size: 0.8rem;
-    }
-
-    .home-section h1 {
-        font-size: 10rem;
-        margin-top: 0;
-        margin-bottom: 1rem;
-        white-space: nowrap;
-    }
-
-    .home-section h2 {
-        font-size: 2.5rem;
-        margin: 0;
-    }
-
-    .home-section p {
-        font-size: 1.25rem;
-        margin: 0 auto;
-        max-width: 35ch;
-        text-align: center;
-    }
-
-    .text-gradient {
-        background: var(--md-primary-fg-color);
-        background: var(--text-gradient);
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
-    .home-content {
-        position: relative;
-        z-index: 1;
-    }
-
-    .planets {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        right: 0;
-        overflow: hidden;
-        pointer-events: none;
-    }
-
-    .planet {
-        position: fixed;
-    }
-
-    .planet[data-name="earth"] {
-        width: 25vw;
-        bottom: -5%;
-        right: -2%;
-        z-index: -12;
-        filter: brightness(0.9);
-    }
-
-    .planet[data-name="moon"] {
-        width: 4vw;
-        bottom: 30%;
-        right: 15%;
-        z-index: -13;
-        filter: brightness(0.9);
-    }
-
-    .planet[data-name="mars"] {
-        width: 17.5vw;
-        bottom: 15%;
-        left: 17.5%;
-        z-index: -11;
-        filter: brightness(0.7);
-    }
-
-    .planet[data-name="saturn"] {
-        width: 27.5vw;
-        top: 15%;
-        left: 2.5%;
-        z-index: -15;
-        filter: brightness(0.55);
-    }
-
-    .planet[data-name="neptune"] {
-        width: 15vw;
-        top: 10%;
-        right: 20%;
-        z-index: -14;
-        filter: brightness(0.45);
-    }
-
-    #planetsAttribution {
-        position: fixed;
-        bottom: 40px;
-        left: 40px;
-        font-size: 0.7rem;
-        opacity: 0.5;
-    }
-
-    .stars {
-        position: absolute;
-        width: 100vw;
-        height: 100%;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        z-index: -20;
-        opacity: 0.75;
-        background-image:
-            radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 10px),
-            radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 5px),
-            radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 7px),
-            radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 2px, transparent 5px),
-            radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 1px, transparent 3px);
-        background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px, 100px 100px;
-        background-position: 0 0, 40px 60px, 130px 270px, 70px 100px, 30px 140px
-    }
+  /* Light theme overrides */
+  body[data-md-color-scheme="default"] {
+    background: #f7f8fc;
+  }
+  body[data-md-color-scheme="default"] .md-header--shadow,
+  body[data-md-color-scheme="default"] .md-header[data-md-state="shadow"] {
+    background: #f7f8fc !important;
+    border-bottom: 1px solid #d4d4d4;
+    box-shadow: none !important;
+  }
+  body[data-md-color-scheme="default"] .md-header {
+    --md-primary-bg-color: #0a0a0a;
+    --md-primary-bg-color--light: #3d3d3d;
+    color: #0a0a0a;
+  }
+  body[data-md-color-scheme="default"] .starfield {
+    background: #f7f8fc;
+  }
+  body[data-md-color-scheme="default"] .starfield::before {
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.03) 2px,
+      rgba(0, 0, 0, 0.03) 3px
+    );
+  }
+  body[data-md-color-scheme="default"] .starfield::after {
+    opacity: 0.15;
+  }
+  body[data-md-color-scheme="default"] .hero-badge {
+    background: transparent;
+    border-color: #b45309;
+    color: #b45309;
+  }
+  body[data-md-color-scheme="default"] .hero-title {
+    color: #0a0a0a;
+  }
+  body[data-md-color-scheme="default"] .hero-subtitle {
+    color: #525252;
+  }
+  body[data-md-color-scheme="default"] .hero-cta {
+    border-color: #b45309;
+    color: #b45309;
+  }
+  body[data-md-color-scheme="default"] .hero-cta:hover {
+    background: #b45309;
+    color: #ffffff;
+  }
+  body[data-md-color-scheme="default"] .chapter-card {
+    background: #ffffff;
+    border-color: #d4d4d4;
+    box-shadow: none;
+  }
+  body[data-md-color-scheme="default"] .chapter-card:hover {
+    border-color: #a3a3a3;
+  }
+  body[data-md-color-scheme="default"] .chapter-label {
+    background: transparent;
+    border-color: #b45309;
+    color: #b45309;
+  }
+  body[data-md-color-scheme="default"] .chapter-title {
+    color: #0a0a0a;
+  }
+  body[data-md-color-scheme="default"] .chapter-title span {
+    color: #b45309;
+  }
+  body[data-md-color-scheme="default"] .chapter-card p {
+    color: #525252;
+  }
+  body[data-md-color-scheme="default"] .chapter-link.secondary {
+    background: transparent;
+    color: #525252;
+    border-color: #d4d4d4;
+  }
+  body[data-md-color-scheme="default"] .chapter-link.secondary:hover {
+    border-color: #a3a3a3;
+    color: #0a0a0a;
+  }
+  body[data-md-color-scheme="default"] .crew-link {
+    color: #b45309;
+  }
+  body[data-md-color-scheme="default"] .pdf-link {
+    color: #b45309;
+  }
+  body[data-md-color-scheme="default"] .pdf-link:hover {
+    color: #0a0a0a;
+  }
+  body[data-md-color-scheme="default"] .chapter-link.primary {
+    background: #d97706;
+    border-color: #d97706;
+    color: #0a0a0a;
+  }
+  body[data-md-color-scheme="default"] .chapter-link.primary:hover {
+    background: #b45309;
+    border-color: #b45309;
+    color: #ffffff;
+  }
+  body[data-md-color-scheme="default"] .story-chapter.reentry .chapter-title span {
+    color: #b91c1c;
+  }
+  body[data-md-color-scheme="default"] .story-chapter.reentry .chapter-label {
+    background: transparent;
+    border-color: #ef4444;
+    color: #b91c1c;
+  }
+  body[data-md-color-scheme="default"] .story-chapter.reentry .chapter-link.primary {
+    background: #ef4444;
+    border-color: #ef4444;
+    color: #ffffff;
+  }
+  body[data-md-color-scheme="default"] .story-finale {
+    border-top-color: #d4d4d4;
+  }
+  body[data-md-color-scheme="default"] .story-finale .finale-title {
+    color: #0a0a0a;
+  }
+  body[data-md-color-scheme="default"] .story-finale .finale-title span {
+    color: #b45309;
+  }
+  body[data-md-color-scheme="default"] .story-finale .finale-subtitle {
+    color: #525252;
+  }
+  body[data-md-color-scheme="default"] .story-finale .finale-logo {
+    filter: none;
+  }
 </style>
-
-
-<div class="gradient"></div>
-<div class="stars"></div>
-<section class="home-section">
-    <div class="home-content">
-        <h2>A guide to</h2>
-        <h1><span class="text-gradient">MLOps</span></h1>
-        <p>
-            Classify celestial bodies using MLOps best practices
-        </p>
-    </div>
-    <div class="planets">
-        <img src="assets/images/planets/earth.png" alt="planet" class="planet" data-name="earth">
-        <img src="assets/images/planets/moon.png" alt="planet" class="planet" data-name="moon">
-        <img src="assets/images/planets/mars.png" alt="planet" class="planet" data-name="mars">
-        <img src="assets/images/planets/saturn.png" alt="planet" class="planet" data-name="saturn">
-        <img src="assets/images/planets/neptune.png" alt="planet" class="planet" data-name="neptune">
-    </div>
-</section>
-<div id="planetsAttribution"><a href="https://solarsystem.nasa.gov" target="_blank">© NASA Solar System</a></div>
-
 {% endblock %}
 
-<!-- Content -->
-{% block content %}
+{% block container %}
+<!-- Starfield -->
+<div class="starfield" id="starfield" aria-hidden="true"></div>
 
-<section class="navigation-section">
-    <div>
-        <h3>Welcome to our comprehensive guide to MLOps!</h3>
-
-        <p>You can find a presentation for this guide at the following links:</p>
-        <p><a href="https://mlops.swiss-ai-center.ch/presentation/" target="_blank" rel="noopener noreferrer">A guide to MLOps - Presentation (HTML)</a> | <a href="https://mlops.swiss-ai-center.ch/presentation/a-guide-to-mlops-presentation.pdf" target="_blank" rel="noopener noreferrer">A guide to MLOps - Presentation (PDF)</a></p>
+<!-- Scrolling planet belt -->
+<aside class="planet-belt" aria-hidden="true">
+  <div class="belt-track" id="belt-track">
+    <!-- Category planets (aligned with story sections) -->
+    <div class="belt-planet" data-section="about" title="Crew">
+      <img src="{{ 'assets/images/portals/astronaut-portal.svg' | url }}" alt="">
     </div>
+    <div class="belt-planet filler" title="Sun">
+      <img src="{{ 'assets/images/portals/sun-portal.svg' | url }}" alt="">
+    </div>
+    <div class="belt-planet" data-section="intro" title="Mercury">
+      <img src="{{ 'assets/images/portals/mercury-portal.svg' | url }}" alt="">
+    </div>
+    <div class="belt-planet filler" title="Venus">
+      <img src="{{ 'assets/images/portals/venus-portal.svg' | url }}" alt="">
+    </div>
+    <div class="belt-planet" data-section="part-1" title="Earth">
+      <img src="{{ 'assets/images/portals/earth-portal.svg' | url }}" alt="">
+    </div>
+    <div class="belt-planet filler" title="Mars">
+      <img src="{{ 'assets/images/portals/mars-portal.svg' | url }}" alt="">
+    </div>
+    <div class="belt-planet" data-section="part-2" title="Jupiter">
+      <img src="{{ 'assets/images/portals/jupiter-portal.svg' | url }}" alt="">
+    </div>
+    <div class="belt-planet filler" title="Saturn">
+      <img src="{{ 'assets/images/portals/saturn-portal.svg' | url }}" alt="">
+    </div>
+    <div class="belt-planet" data-section="part-3" title="Uranus">
+      <img src="{{ 'assets/images/portals/uranus-portal.svg' | url }}" alt="">
+    </div>
+    <div class="belt-planet filler" title="Neptune">
+      <img src="{{ 'assets/images/portals/neptune-portal.svg' | url }}" alt="">
+    </div>
+    <div class="belt-planet" data-section="part-4" title="Comet">
+      <img src="{{ 'assets/images/portals/comet-portal.svg' | url }}" alt="">
+    </div>
+    <div class="belt-planet filler" title="Pluto">
+      <img src="{{ 'assets/images/portals/pluto-portal.svg' | url }}" alt="">
+    </div>
+    <div class="belt-planet" data-section="part-5" title="Haumea">
+      <img src="{{ 'assets/images/portals/haumea-portal.svg' | url }}" alt="">
+    </div>
+    <div class="belt-planet filler" title="Makemake">
+      <img src="{{ 'assets/images/portals/makemake-portal.svg' | url }}" alt="">
+    </div>
+    <div class="belt-planet" data-section="reentry" title="Reentry capsule">
+      <img src="{{ 'assets/images/portals/reentry-capsule.svg' | url }}" alt="">
+    </div>
+  </div>
+</aside>
+
+<!-- Hero -->
+<section class="story-hero" id="story-hero">
+  <div class="hero-badge">
+    <span class="twemoji">{% include ".icons/lucide/rocket.svg" %}</span>
+    Mission briefing
+  </div>
+  <h1 class="hero-title">A Guide to MLOps</h1>
+  <p class="hero-subtitle">
+    Classify celestial bodies using best practices:
+    a hands-on journey through local training, the cloud, serving, monitoring, labeling, and retraining.
+  </p>
+  <a href="#story-start" class="hero-cta">
+    <span class="twemoji">{% include ".icons/lucide/compass.svg" %}</span>
+    Chart the course
+  </a>
+
+  <!-- Hero rocket / MLOps mark -->
+  <div class="hero-rocket" aria-hidden="true">
+    <img src="{{ 'assets/images/hero-rocket.svg' | url }}" alt="">
+  </div>
 </section>
 
-{{ super() }}
+<!-- Story chapters -->
+<main class="story-main" id="story-start">
+  <!-- About this guide -->
+  <section class="story-chapter" id="section-about">
+    <article class="chapter-card reveal">
+      <div class="chapter-label">Ground control</div>
+      <h2 class="chapter-title">Meet the <span>Crew</span></h2>
+      <p>
+        Ground control, reporting for duty. We are the
+        <a href="https://www.swiss-ai-center.ch/" class="crew-link" target="_blank" rel="noopener">Swiss AI Center</a>
+        crew, building a practical flight plan from machine-learning experiments to production.
+        We have carefully selected the most suitable tools to minimize friction within established
+        workflows and teams, with a particular focus on SMEs.
+      </p>
+      <div class="chapter-actions">
+        <a href="#section-intro" class="chapter-link primary next-section">
+          <span class="twemoji">{% include ".icons/lucide/chevron-down.svg" %}</span>
+          Next stop
+        </a>
+        <a href="https://mlops.swiss-ai-center.ch/presentation/" class="chapter-link secondary">
+          <span class="twemoji">{% include ".icons/lucide/monitor.svg" %}</span>
+          Presentation
+        </a>
+        <a href="https://mlops.swiss-ai-center.ch/presentation/a-guide-to-mlops-presentation.pdf" class="pdf-link">
+          <span class="twemoji">{% include ".icons/lucide/file-text.svg" %}</span>
+          PDF
+        </a>
+      </div>
+    </article>
+  </section>
 
-<section class="navigation-section">
-    <div>
-        <p>
-            <a href="syllabus">🏁 Introduction</a>
-        </p>
-        <p>
-            <a href="part-1-local-training-and-evaluation/introduction">🏠 Local training and model evaluation</a>
-        </p>
-        <p>
-            <a href="part-2-move-to-the-cloud/introduction">☁️ Move the model to the cloud</a>
-        </p>
-        <p>
-            <a href="part-3-serve-and-deploy/introduction">🚚 Serve and deploy the model</a>
-        </p>
-        <p>
-            <a href="part-4-monitor-and-maintain/introduction">📊 Monitor and maintain</a>
-        </p>
-        <p>
-            <a href="part-5-label-data-and-retrain/introduction">🏷️ Labeling the data and retrain</a>
-        </p>
-        <p>
-            <a href="clean-up">🪄 Conclusion</a>
-        </p>
-    </div>
+  <!-- Intro / Mission -->
+  <section class="story-chapter" id="section-intro" data-planet="moon">
+    <article class="chapter-card reveal">
+      <div class="chapter-label">Mission briefing</div>
+      <h2 class="chapter-title">Why this <span>guide?</span></h2>
+      <p>
+        Building a model is only the beginning. This guide is a step-by-step flight plan
+        that takes you from a notebook experiment to a reproducible, monitored, and
+        continuously-improved ML system. We use concrete tools — DVC, CML, Docker,
+        BentoML, Evidently AI and Label Studio — so you can follow along with real code.
+      </p>
+      <div class="chapter-actions">
+        <a href="#section-part-1" class="chapter-link primary next-section">
+          <span class="twemoji">{% include ".icons/lucide/chevron-down.svg" %}</span>
+          Next stop
+        </a>
+        <a href="{{ 'concept/' | url }}" class="chapter-link secondary">
+          <span class="twemoji">{% include ".icons/lucide/book-open.svg" %}</span>
+          Read the concept
+        </a>
+      </div>
+    </article>
+  </section>
+
+  <!-- Part 1: Local training -->
+  <section class="story-chapter" id="section-part-1" data-planet="earth">
+    <article class="chapter-card reveal">
+      <div class="chapter-label">Part 1 — Lift-off</div>
+      <h2 class="chapter-title">Local training &amp; <span>model evaluation</span></h2>
+      <p>
+        Start on solid ground. Version your data with DVC, track experiments with
+        CML, and build a reproducible training pipeline that you can run on your own
+        machine before you ever think about the cloud.
+      </p>
+      <div class="chapter-actions">
+        <a href="#section-part-2" class="chapter-link primary next-section">
+          <span class="twemoji">{% include ".icons/lucide/chevron-down.svg" %}</span>
+          Next stop
+        </a>
+        <a href="{{ 'part-1-local-training-and-evaluation/introduction/' | url }}" class="chapter-link secondary">
+          <span class="twemoji">{% include ".icons/lucide/flask-conical.svg" %}</span>
+          Train locally
+        </a>
+      </div>
+    </article>
+  </section>
+
+  <!-- Part 2: Cloud -->
+  <section class="story-chapter" id="section-part-2" data-planet="mars">
+    <article class="chapter-card reveal">
+      <div class="chapter-label">Part 2 — Escape velocity</div>
+      <h2 class="chapter-title">Move the model to the <span>cloud</span></h2>
+      <p>
+        When your local machine is no longer enough, move the pipeline to the cloud.
+        Use CML to automate training in CI, store artifacts in S3, and keep every
+        experiment reproducible no matter where it runs.
+      </p>
+      <div class="chapter-actions">
+        <a href="#section-part-3" class="chapter-link primary next-section">
+          <span class="twemoji">{% include ".icons/lucide/chevron-down.svg" %}</span>
+          Next stop
+        </a>
+        <a href="{{ 'part-2-move-to-the-cloud/introduction/' | url }}" class="chapter-link secondary">
+          <span class="twemoji">{% include ".icons/lucide/cloud.svg" %}</span>
+          Go cloud
+        </a>
+      </div>
+    </article>
+  </section>
+
+  <!-- Part 3: Serve & deploy -->
+  <section class="story-chapter" id="section-part-3" data-planet="saturn">
+    <article class="chapter-card reveal">
+      <div class="chapter-label">Part 3 — In orbit</div>
+      <h2 class="chapter-title">Serve &amp; <span>deploy</span> the model</h2>
+      <p>
+        A trained model only creates value when it can serve predictions. Package it
+        with BentoML, expose a REST API, deploy behind a reverse proxy, and add
+        monitoring so you know when performance starts to drift.
+      </p>
+      <div class="chapter-actions">
+        <a href="#section-part-4" class="chapter-link primary next-section">
+          <span class="twemoji">{% include ".icons/lucide/chevron-down.svg" %}</span>
+          Next stop
+        </a>
+        <a href="{{ 'part-3-serve-and-deploy/introduction/' | url }}" class="chapter-link secondary">
+          <span class="twemoji">{% include ".icons/lucide/server.svg" %}</span>
+          Deploy
+        </a>
+      </div>
+    </article>
+  </section>
+
+  <!-- Part 4: Monitor & maintain -->
+  <section class="story-chapter" id="section-part-4" data-planet="comet">
+    <article class="chapter-card reveal">
+      <div class="chapter-label">Part 4 — Sensor array</div>
+      <h2 class="chapter-title">Monitor &amp; <span>maintain</span></h2>
+      <p>
+        A model in production needs watching. Use Evidently AI to track predictions
+        and performance metrics, spot drift as data changes, and know when the model
+        needs attention. Reliable monitoring gives you the signal to react in time
+        through investigation, retraining, or rollback.
+      </p>
+      <div class="chapter-actions">
+        <a href="#section-part-5" class="chapter-link primary next-section">
+          <span class="twemoji">{% include ".icons/lucide/chevron-down.svg" %}</span>
+          Next stop
+        </a>
+        <a href="{{ 'part-4-monitor-and-maintain/introduction/' | url }}" class="chapter-link secondary">
+          <span class="twemoji">{% include ".icons/lucide/activity.svg" %}</span>
+          Observe
+        </a>
+      </div>
+    </article>
+  </section>
+
+  <!-- Part 5: Label & retrain -->
+  <section class="story-chapter" id="section-part-5" data-planet="haumea">
+    <article class="chapter-card reveal">
+      <div class="chapter-label">Part 5 — Deep space loop</div>
+      <h2 class="chapter-title">Label data &amp; <span>retrain</span></h2>
+      <p>
+        Production data changes. Set up a labeling workflow with Label Studio, review
+        edge cases, merge new labels back into your dataset, and trigger a new training
+        run without losing reproducibility.
+      </p>
+      <div class="chapter-actions">
+        <a href="#section-reentry" class="chapter-link primary next-section">
+          <span class="twemoji">{% include ".icons/lucide/chevron-down.svg" %}</span>
+          Next stop
+        </a>
+        <a href="{{ 'part-5-label-data-and-retrain/introduction/' | url }}" class="chapter-link secondary">
+          <span class="twemoji">{% include ".icons/lucide/tags.svg" %}</span>
+          Retrain
+        </a>
+      </div>
+    </article>
+  </section>
+
+  <!-- Reentry / Cleanup -->
+  <section class="story-chapter reentry" id="section-reentry" data-planet="capsule">
+    <article class="chapter-card reveal">
+      <div class="chapter-label">Reentry &amp; cleanup</div>
+      <h2 class="chapter-title">Bring it safely <span>back to Earth</span></h2>
+      <p>
+        The journey ends with a controlled landing. Tear down cloud resources, remove
+        containers and clusters, archive artifacts, and leave your environment clean.
+        A safe re-entry is the last step of a successful MLOps mission.
+      </p>
+      <div class="chapter-actions">
+        <a href="#story-finale" class="chapter-link primary next-section">
+          <span class="twemoji">{% include ".icons/lucide/chevron-down.svg" %}</span>
+          Next stop
+        </a>
+        <a href="{{ 'clean-up/' | url }}" class="chapter-link secondary">
+          <span class="twemoji">{% include ".icons/lucide/brush.svg" %}</span>
+          Clean up
+        </a>
+      </div>
+    </article>
+  </section>
+</main>
+
+<!-- Finale -->
+<section class="story-finale" id="story-finale">
+  <h2 class="finale-title">Ready for <span>launch?</span></h2>
+  <p class="finale-subtitle">
+    The guide is open source and built to be followed hands-on.
+    Pick a chapter, launch your terminal, and start shipping ML systems.
+  </p>
+  <a href="{{ 'syllabus/' | url }}" class="hero-cta">
+    <span class="twemoji">{% include ".icons/lucide/rocket.svg" %}</span>
+    Start the journey
+  </a>
+
+  <!-- Launchpad illustration -->
+  <div class="finale-launchpad" aria-hidden="true">
+    <img src="{{ 'assets/images/launchpad.svg' | url }}" alt="">
+  </div>
+
+  <img
+    class="finale-logo"
+    src="{{ 'assets/images/hes-so-logo.png' | url }}"
+    alt="HES-SO logo"
+  />
 </section>
-<figure>
-    <p>
-        <a href="https://www.hes-so.ch/swiss-ai-center" target="_blank"><img alt="Image title" src="assets/images/hes-so-logo.png" width="300"></a>
-    </p>
-</figure>
+
+<!-- Home-page scripts -->
+<script src="{{ 'assets/javascripts/home.js' | url }}"></script>
 {% endblock %}
 
-<!-- Application footer -->
 {% block footer %}
 {{ super() }}
 {% endblock %}

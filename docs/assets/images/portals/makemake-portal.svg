@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- HUD frame -->
+  <circle cx="200" cy="200" r="190" fill="none" stroke="#333333" stroke-width="2" shape-rendering="crispEdges"/>
+  <g stroke="#525252" stroke-width="2" shape-rendering="crispEdges">
+    <line x1="200" y1="10" x2="200" y2="38"/>
+    <line x1="200" y1="362" x2="200" y2="390"/>
+    <line x1="10" y1="200" x2="38" y2="200"/>
+    <line x1="362" y1="200" x2="390" y2="200"/>
+  </g>
+  <circle cx="200" cy="200" r="172" fill="none" stroke="#525252" stroke-width="1" stroke-dasharray="6 6" opacity="0.6"/>
+  <!-- Makemake -->
+  <g>
+    <circle cx="200" cy="200" r="113" fill="#d49870" stroke="#9e6240" stroke-width="2"/>
+    <g fill="#7a4428" opacity="0.5">
+      <ellipse cx="250" cy="170" rx="36" ry="26"/>
+      <ellipse cx="150" cy="230" rx="28" ry="20"/>
+      <ellipse cx="220" cy="250" rx="20" ry="14"/>
+      <ellipse cx="170" cy="140" rx="16" ry="12"/>
+    </g>
+    <g fill="none" stroke="#8b5e3c" stroke-width="3" opacity="0.35">
+      <path d="M95 190 Q200 175 305 190"/>
+      <path d="M100 220 Q200 205 300 220"/>
+    </g>
+    <ellipse cx="165" cy="155" rx="42" ry="30" fill="#ffffff" opacity="0.15"/>
+  </g>
+</svg>
