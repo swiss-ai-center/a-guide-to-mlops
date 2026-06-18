@@ -1,22 +1,22 @@
-# Chapter 3.4 - Build and publish the model with BentoML and Docker in the CI/CD pipeline
+# Chapter 3.6 - Continuous deployment of the model with the CI/CD pipeline
 
 ## Introduction
 
-In this chapter, you will containerize and push the model to the container
-registry with the help of the CI/CD pipeline. You will use
-[:simple-bentoml: BentoML](../tools.md) and
-[:simple-docker: Docker](../tools.md) to containerize and publish the model and
-the pipeline to trigger the publishing.
+In this chapter, you will deploy the model to the Kubernetes cluster with the
+help of the CI/CD pipeline. You will use [Kubernetes](../tools.md) to deploy the
+model to the cluster and the pipeline to trigger the deployment.
 
 The steps will be similar to the last chapter, but we will use the pipeline to
 automate the process.
 
 In this chapter, you will learn how to:
 
-1. Grant access to the container registry on the cloud provider for the CI/CD
+1. Grant access to the Kubernetes cluster on the cloud provider for the CI/CD
    pipeline
-2. Store the container registry credentials in the CI/CD configuration
-3. Create the CI/CD pipeline for publishing the model to the container registry
+2. Store the cloud provider credentials in the CI/CD configuration
+3. Create the CI/CD pipeline for deploying the model to the Kubernetes cluster
+4. Push the CI/CD pipeline configuration file to [:simple-git: Git](../tools.md)
+5. Visualize the execution of the CI/CD pipeline
 
 The following diagram illustrates the control flow of the experiment at the end
 of this chapter:
@@ -59,6 +59,15 @@ flowchart TB
         action --> |bentoml build
                     bentoml containerize
                     docker push|registry
+        subgraph clusterGraph[Kubernetes]
+            bento_service_cluster[classifier.bentomodel] --> k8s_fastapi[FastAPI]
+        end
+        registry --> bento_service_cluster
+        action --> |kubectl apply|bento_service_cluster
+    end
+
+    subgraph browserGraph[BROWSER]
+        k8s_fastapi <--> publicURL["public URL"]
     end
 
     style workspaceGraph opacity:0.4,color:#7f7f7f80
@@ -76,6 +85,9 @@ flowchart TB
     style remoteGraph opacity:0.4,color:#7f7f7f80
     style gitGraph opacity:0.4,color:#7f7f7f80
     style repository opacity:0.4,color:#7f7f7f80
+    style registry opacity:0.4,color:#7f7f7f80
+    style browserGraph opacity:0.4,color:#7f7f7f80
+    style publicURL opacity:0.4,color:#7f7f7f80
     linkStyle 0 opacity:0.4,color:#7f7f7f80
     linkStyle 1 opacity:0.4,color:#7f7f7f80
     linkStyle 2 opacity:0.4,color:#7f7f7f80
@@ -85,32 +97,30 @@ flowchart TB
     linkStyle 6 opacity:0.4,color:#7f7f7f80
     linkStyle 7 opacity:0.4,color:#7f7f7f80
     linkStyle 8 opacity:0.4,color:#7f7f7f80
+    linkStyle 9 opacity:0.4,color:#7f7f7f80
+    linkStyle 11 opacity:0.4,color:#7f7f7f80
+    linkStyle 13 opacity:0.4,color:#7f7f7f80
 ```
 
 ## Steps
 
-### Set up access to the container registry of the cloud provider
+### Set up access to the Kubernetes cluster of the cloud provider
 
-The container registry will need to be accessed inside the CI/CD pipeline to
-push the Docker image.
+The Kubernetes cluster will need to be accessed inside the CI/CD pipeline to
+deploy the Docker image.
 
-This is the same process you did for DVC as described in
-[Chapter 2.3 - Reproduce the ML experiment in a CI/CD pipeline](../part-2-move-the-model-to-the-cloud/chapter-23-reproduce-the-ml-experiment-in-a-cicd-pipeline.md)
-but this time for the container registry.
+This is the same process you did for the container registry as described in
+[Chapter 3.4 - Build and publish the model with BentoML and Docker in the CI/CD pipeline](../part-3-serve-and-deploy/chapter-34-build-and-publish-the-model-with-bentoml-and-docker-with-the-cicd-pipeline.md)
+but this time for the Kubernetes cluster.
 
 Update the Google Service Account and its associated Google Service Account Key
 to access Google Cloud from the CI/CD pipeline without your own credentials.
 
 ```sh title="Execute the following command(s) in a terminal"
-# Set the Cloud Storage permissions for the Google Service Account
+# Set the Kubernetes Cluster permissions for the Google Service Account
 gcloud projects add-iam-policy-binding $GCP_PROJECT_ID \
     --member="serviceAccount:google-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com" \
-    --role="roles/storage.objectAdmin"
-
-# Set the Artifact Registry permissions for the Google Service Account
-gcloud projects add-iam-policy-binding $GCP_PROJECT_ID \
-    --member="serviceAccount:google-service-account@${GCP_PROJECT_ID}.iam.gserviceaccount.com" \
-    --role="roles/artifactregistry.createOnPushWriter"
+    --role="roles/container.developer"
 ```
 
 !!! tip
@@ -119,37 +129,41 @@ gcloud projects add-iam-policy-binding $GCP_PROJECT_ID \
 
     All changes are made at the Google Cloud level and the key file is not changed.
 
-### Add container registry CI/CD secrets
+### Add Kubernetes CI/CD secrets
 
-Add the container registry secret to access the container registry from the
-CI/CD pipeline. Depending on the CI/CD platform you are using, the process will
-be different:
+Add the Kubernetes secrets to access the Kubernetes cluster from the CI/CD
+pipeline. Depending on the CI/CD platform you are using, the process will be
+different:
 
 Create the following new variables by going to the **Settings** section from the
 top header of your GitHub repository. Select **Secrets and variables > Actions**
 and select **New repository secret**:
 
-- `GCP_CONTAINER_REGISTRY_HOST`: The host of the container registry (ex:
-  `europe-west6-docker.pkg.dev/mlops-surname-project/mlops-surname-registry`, from
-  the variable `GCP_CONTAINER_REGISTRY_HOST` in the previous chapter)
+- `GCP_K8S_CLUSTER_NAME`: The name of the Kubernetes cluster (ex:
+  `mlops-surname-cluster`, from the variable `GCP_K8S_CLUSTER_NAME` in the
+  previous chapters)
+- `GCP_K8S_CLUSTER_ZONE`: The zone of the Kubernetes cluster (ex:
+  `europe-west6-a` for Zurich, Switzerland, from the variable
+  `GCP_K8S_CLUSTER_ZONE` in the previous chapters)
 
 Save the variables by selecting **Add secret**.
 
 ### Update the CI/CD pipeline configuration file
 
-You will adjust the pipeline to build and push the the docker image to the
-container registry. The following steps will be performed:
+You will adjust the pipeline to deploy the model to the Kubernetes cluster. The
+following steps will be performed:
 
 1. Detect a new commit on the `main` branch
 2. Authenticate to the cloud provider
 3. Build the Docker image
 4. Push the Docker image to the container registry
+5. Deploy the model on the Kubernetes cluster
 
 Update the `.github/workflows/mlops.yaml` file with the following content.
 
 Take some time to understand the deploy job and its steps:
 
-```yaml title=".github/workflows/mlops.yaml" hl_lines="16 88-133"
+```yaml title=".github/workflows/mlops.yaml" hl_lines="16 109-133"
 name: MLOps
 
 on:
@@ -165,7 +179,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  train-report-and-publish:
+  train-report-publish-and-deploy:
     permissions: write-all
     runs-on: ubuntu-latest
     steps:
@@ -258,6 +272,22 @@ jobs:
             --image-tag ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:${{ github.sha }}
           # Push the container to the Container Registry
           docker push --all-tags ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier
+      - name: Get Google Cloud's Kubernetes credentials
+        if: github.ref == 'refs/heads/main'
+        uses: google-github-actions/get-gke-credentials@v3
+        with:
+          cluster_name: ${{ secrets.GCP_K8S_CLUSTER_NAME }}
+          location: ${{ secrets.GCP_K8S_CLUSTER_ZONE }}
+      - name: Update the Kubernetes deployment
+        if: github.ref == 'refs/heads/main'
+        run: |
+          yq -i '.spec.template.spec.containers[0].image = "${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:${{ github.sha }}"' kubernetes/deployment.yaml
+      - name: Deploy the model on Kubernetes
+        if: github.ref == 'refs/heads/main'
+        run: |
+          kubectl apply \
+            -f kubernetes/deployment.yaml \
+            -f kubernetes/service.yaml
 ```
 
 Check the differences with Git to validate the changes.
@@ -278,36 +308,31 @@ index 1fa989b..6d479ef 100644
    workflow_dispatch:
 
  jobs:
--  train-and-report:
-+  train-report-and-publish:
+-  train-report-and-publish:
++  train-report-publish-and-deploy:
      permissions: write-all
      runs-on: ubuntu-latest
      steps:
-@@ -85,3 +85,43 @@ jobs:
+@@ -106,3 +106,43 @@ jobs:
 
-           # Publish the CML report
-           cml comment update --target=pr --publish report.md
-+      - name: Log in to the Container registry
-+        uses: docker/login-action@v4
+           # Push the container to the Container Registry
+           docker push --all-tags ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier
++      - name: Get Google Cloud's Kubernetes credentials
++        if: github.ref == 'refs/heads/main'
++        uses: google-github-actions/get-gke-credentials@v3
 +        with:
-+          registry: ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}
-+          username: _json_key
-+          password: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
-+      - name: Import the BentoML model
-+        if: github.ref == 'refs/heads/main'
-+        run: bentoml models import model/celestial_bodies_classifier_model.bentomodel
-+      - name: Build the BentoML model artifact
-+        if: github.ref == 'refs/heads/main'
-+        run: bentoml build src
-+      - name: Containerize and publish the BentoML model artifact Docker image
++          cluster_name: ${{ secrets.GCP_K8S_CLUSTER_NAME }}
++          location: ${{ secrets.GCP_K8S_CLUSTER_ZONE }}
++      - name: Update the Kubernetes deployment
 +        if: github.ref == 'refs/heads/main'
 +        run: |
-+          # Containerize the Bento
-+          bentoml containerize celestial_bodies_classifier:latest \
-+            --image-tag ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:latest \
-+            --image-tag ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:${{ github.sha }}
-+          # Push the container to the Container Registry
-+          docker push --all-tags ${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier
++          yq -i '.spec.template.spec.containers[0].image = "${{ secrets.GCP_CONTAINER_REGISTRY_HOST }}/celestial-bodies-classifier:${{ github.sha }}"' kubernetes/deployment.yaml
++      - name: Deploy the model on Kubernetes
++        if: github.ref == 'refs/heads/main'
++        run: |
++          kubectl apply \
++            -f kubernetes/deployment.yaml \
++            -f kubernetes/service.yaml
 ```
 
 ### Check the changes
@@ -322,7 +347,7 @@ git add .
 git status
 ```
 
-The output should look similar to this:
+The output should look like this:
 
 ```text
 On branch main
@@ -335,52 +360,82 @@ Changes to be committed:
 
 ### Commit the changes to Git
 
-Commit the changes to Git.
+Push the CI/CD pipeline configuration file to Git:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
-git commit -m "Use the pipeline to containerize and publish the model artifact to the model registry"
+git commit -m "Use the pipeline to deploy the model on the Kubernetes cluster"
 
 # Push the changes
 git push
 ```
 
-### Check the published image in the container registry
+### Check the results
 
-Once the CI/CD pipeline has completed successfully, open the
-[Artifact Registry](https://console.cloud.google.com/artifacts) on the Google
-Cloud interface and click on your registry to access the details. The new
-`celestial-bodies-classifier` image should appear with both the `latest` and
-commit SHA tags.
+With the new configuration in place, each and every commit that makes its way to
+the main branch will serve as a trigger for the pipeline, which will
+automatically set in motion the deployment of the model, ensuring that the
+latest version is consistently available on the Kubernetes server for use.
+
+In the **Actions** tab, click on the **MLOps** workflow.
+
+The output should look like this:
+
+```text
+Run kubectl apply \
+deployment.apps/celestial-bodies-classifier-deployment configured
+service/celestial-bodies-classifier-service configured
+```
+
+If you execute the pipeline a second time, you should see the following output:
+
+```text
+Run kubectl apply \
+deployment.apps/celestial-bodies-classifier-deployment configured
+service/celestial-bodies-classifier-service unchanged
+```
+
+As you can see, the deployment was successful and the service was unchanged.
+
+### Access the model
+
+You can access the new model at the same URL as before. The model should be
+updated with the latest version.
+
+!!! tip
+
+    To get the external IP of the service, you can use the Google Cloud CLI.
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Get the description of the service
+    kubectl describe services celestial-bodies-classifier
+    ```
 
 ## Summary
 
-Congratulations! You have successfully prepared the model for automated
-deployment in a production environment with the CI/CD pipeline!
+Congratulations! You have successfully deployed the model on the Kubernetes
+cluster automatically with the CI/CD pipeline!
 
-In this chapter, you have successfully:
-
-1. Automated the containerization and publication of the BentoML model artifact
-   to the container registry
+New versions of the model will be deployed automatically as soon as they are
+pushed to the main branch.
 
 !!! abstract "Take away"
 
-    - **Automation prevents deployment drift**: By building and publishing models
-      automatically in the CI/CD pipeline, you ensure that every model version that
-      reaches production follows the exact same build process, eliminating manual
-      steps that can introduce errors.
-    - **Service accounts enable secure automation**: Using cloud service accounts
-      with minimal required permissions (rather than personal credentials) follows the
-      principle of least privilege and allows CI/CD pipelines to authenticate securely
-      without exposing sensitive credentials.
-    - **Secrets management is critical for cloud integration**: Properly storing
-      credentials as CI/CD secrets (masked, encrypted, and access-controlled) prevents
-      accidental exposure while allowing automated workflows to interact with cloud
-      resources like container registries.
-    - **Automated publication shortens the deployment cycle**: Automatically
-      publishing new model versions to the container registry on every merge to main
-      enables rapid iteration and reduces the time from model improvement to
-      production deployment.
+    - **Continuous deployment closes the MLOps loop**: Automatically deploying every
+      model that reaches the main branch means improvements flow from experimentation
+      to production without manual intervention, enabling rapid iteration and reducing
+      time-to-value.
+    - **Dynamic image tag updates ensure version traceability**: Using commit SHAs
+      as Docker image tags and updating Kubernetes deployments to reference specific
+      versions creates an audit trail from code changes to deployed models, critical
+      for debugging and rollback.
+    - **GitOps principles apply to ML deployments**: Storing Kubernetes
+      configuration in Git and using CI/CD to apply changes treats infrastructure as
+      code, enabling peer review of deployment changes and providing a history of what
+      was deployed when.
+    - **Automated deployment reduces human error**: Removing manual kubectl commands
+      from the deployment process eliminates typos, forgotten steps, and configuration
+      drift, ensuring every deployment follows the same tested procedure.
 
 ## State of the MLOps process
 
@@ -401,19 +456,16 @@ In this chapter, you have successfully:
 - [x] Model can be saved and loaded with all required artifacts for future usage
 - [x] Model can be easily used outside of the experiment context
 - [x] Model publication to the artifact registry is automated
-- [ ] Model is accessible from the Internet and can be used anywhere
-- [ ] Model requires manual deployment on the cluster
+- [x] Model can be accessed from a Kubernetes cluster
+- [x] Model is continuously deployed with the CI/CD
 - [ ] Model cannot be trained on hardware other than the local machine
 - [ ] Model cannot be trained on custom hardware for specific use-cases
 
-You will address these issues in the next chapters for improved efficiency and
-collaboration. Continue the guide to learn how.
+You can now safely continue to the next chapter of this guide concluding your
+journey and the next things you could do with your model.
 
 ## Sources
 
 Highly inspired by:
 
-- [_Connecting a repository to a package_ - docs.github.com](https://docs.github.com/en/packages/learn-github-packages/connecting-a-repository-to-a-package)
-- [_Working with the Container registry_ - docs.github.com](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry)
-- [_Containerization_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/guides/containerization.html)
-- [_Build options_ - docs.bentoml.com](https://docs.bentoml.com/en/latest/guides/build-options.html)
+- [_Deploying to Google Kubernetes Engine_ - github.com](https://docs.github.com/en/actions/how-tos/deploy/deploy-to-third-party-platforms/google-kubernetes-engine)

@@ -1,4 +1,4 @@
-# Chapter 4.1 - Set up Label Studio
+# Chapter 5.1 - Set up Label Studio
 
 ## Introduction
 

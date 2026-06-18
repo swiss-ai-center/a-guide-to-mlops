@@ -24,7 +24,7 @@ utilized for setting up and managing the container registry.
 
 The following requirements are necessary to follow this part in addition to
 those described in the
-[first part](../part-1-local-training-and-model-evaluation/introduction.md#requirements):
+[first part](../part-1-local-training-and-evaluation/introduction.md#requirements):
 
 - A [:simple-github: GitHub](https://github.com) account
 - A [:simple-googlecloud: Google Cloud](https://cloud.google.com) account

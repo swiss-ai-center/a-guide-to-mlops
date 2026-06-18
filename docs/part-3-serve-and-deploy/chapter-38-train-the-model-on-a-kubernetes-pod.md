@@ -787,7 +787,7 @@ Finally, try to update some parameters of your model to test the training on the
 kubernetes specilized pod.
 
 Similarly to what you have done in
-[Chapter 2.5: Work efficiently and collaboratively with Git](../part-2-move-the-model-to-the-cloud/chapter-25-work-efficiently-and-collaboratively-with-git.md),
+[Chapter 2.5: Work efficiently and collaboratively with Git](../part-2-move-to-the-cloud/chapter-25-work-efficiently-and-collaboratively-with-git.md),
 create an issue **Demonstrate model training on kubernetes pod** and a new
 branch for the issue.
 

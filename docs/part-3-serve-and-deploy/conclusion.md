@@ -93,17 +93,17 @@ flowchart TB
 The main goal of the MLOps process is to ensure that the model is reproducible,
 reliable and can be used in production. This goal is now achieved.
 
-The next part is an improvement of the MLOps process. You will learn how to
-label new data and retrain the model using Label Studio.
+Part 4 adds the monitoring feedback loop. You will learn how to keep the model
+healthy in production by monitoring predictions and performance metrics.
 
 ## Next steps
 
 **Ready to continue?**
 
 Proceed to
-[Part 4 - Labeling the data and retrain](../part-4-labeling-the-data-and-retrain/introduction.md)
-to learn how to systematically label new data and continuously improve your
-model.
+[Part 4 - Monitor and maintain](../part-4-monitor-and-maintain/introduction.md)
+to learn how to observe the model in production and detect when it needs
+attention.
 
 **Stopping here?**
 
@@ -122,16 +122,3 @@ created:
 This is necessary to return to a clean state on your computer, avoid unnecessary
 incurring costs, and address potential security concerns when using cloud
 services.
-
-!!! note
-
-    Part 4 (data labeling) works entirely locally and doesn't require cloud
-    infrastructure. If you're continuing to Part 4, you can
-    **Clean up cloud resources** (delete your Kubernetes cluster, container
-    registry, and cloud storage) to avoid costs but keep your local resources (local
-    Git repository, DVC cache, and data files) as they are needed for the next
-    section.
-
-    You can safely skip cleanup if you plan to continue with the next part
-    immediately, but we strongly recommend stopping the **Kubernetes cluster** to
-    avoid unnecessary costs.

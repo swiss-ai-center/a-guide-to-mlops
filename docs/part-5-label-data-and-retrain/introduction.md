@@ -1,5 +1,5 @@
 ---
-title: "Part 4 - Introduction"
+title: "Part 5 - Introduction"
 ---
 
 # Introduction
@@ -24,7 +24,7 @@ might encounter issues. Please use the
 
 The following requirements are necessary to follow this part in addition to
 those described in the
-[first part](../part-1-local-training-and-model-evaluation/introduction.md#requirements):
+[first part](../part-1-local-training-and-evaluation/introduction.md#requirements):
 
 - A :simple-googlechrome: Chrome or a :material-firefox: Firefox based browser
   for better compatibility

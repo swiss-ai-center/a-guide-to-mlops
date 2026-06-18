@@ -1,4 +1,4 @@
-# Chapter 4.2 - Label new data with Label Studio
+# Chapter 5.2 - Label new data with Label Studio
 
 ## Introduction
 

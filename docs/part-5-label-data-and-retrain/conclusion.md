@@ -1,11 +1,11 @@
 ---
-title: "Part 4 - Conclusion"
+title: "Part 5 - Conclusion"
 ---
 
 # Conclusion
 
-Congratulations! You have successfully completed the fourth part of the guide.
-In this part, you learned how to annotate the data using Label Studio using AI
+Congratulations! You have successfully completed the fifth part of the guide. In
+this part, you learned how to annotate the data using Label Studio using AI
 assisted labeling. You finally retrained the model using the newly labeled data.
 
 As you work with your data and model, you may find that certain labels need
@@ -85,6 +85,6 @@ incurring costs, and address potential security concerns.
 !!! warning
 
     Unlike previous parts where you could skip cleanup to continue, we
-    **strongly recommend** completing the full cleanup after finishing Part 4 to
+    **strongly recommend** completing the full cleanup after finishing Part 5 to
     avoid ongoing cloud costs (especially Kubernetes clusters) and potential
     security risks from exposed resources.
