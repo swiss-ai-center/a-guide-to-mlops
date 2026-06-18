@@ -49,14 +49,14 @@ Copyright &copy; 2022 - 2026 Swiss AI Center
 #
 # Read more: https://zensical.org/docs/setup/navigation/
 nav = [
-  { "🏁 Introduction" = [
+  { "🧭 Introduction" = [
       { "Syllabus" = "syllabus.md" },
       { "Concept" = "concept.md" },
       { "Tools" = "tools.md" },
       { "References" = "references.md" },
       { "Cheatsheet" = "cheatsheet.md" },
     ] },
-  { "🏠 Local training and evaluation" = [
+  { "🧪 Local training and evaluation" = [
       { "Introduction" = "part-1-local-training-and-evaluation/introduction.md" },
       { "Chapter 1.1 - Run a simple ML experiment with Jupyter Notebook" = "part-1-local-training-and-evaluation/chapter-11-run-a-simple-ml-experiment-with-jupyter-notebook.md" },
       { "Chapter 1.2 - Adapt and move the Jupyter Notebook to Python scripts" = "part-1-local-training-and-evaluation/chapter-12-adapt-and-move-the-jupyter-notebook-to-python-scripts.md" },
@@ -86,7 +86,7 @@ nav = [
       { "Chapter 3.8 - Train the model on a Kubernetes pod" = "part-3-serve-and-deploy/chapter-38-train-the-model-on-a-kubernetes-pod.md" },
       { "Conclusion" = "part-3-serve-and-deploy/conclusion.md" },
     ] },
-  { "📊 Monitor and maintain" = [
+  { "📈 Monitor and maintain" = [
       { "Introduction" = "part-4-monitor-and-maintain/introduction.md" },
       { "Conclusion" = "part-4-monitor-and-maintain/conclusion.md" },
     ] },
@@ -98,7 +98,7 @@ nav = [
       { "Chapter 5.4 - Retrain the model from new data with DVC" = "part-5-label-data-and-retrain/chapter-54-retrain-the-model-from-new-data-with-dvc.md" },
       { "Conclusion" = "part-5-label-data-and-retrain/conclusion.md" },
     ] },
-  { "🪄 Conclusion" = [
+  { "🏁 Conclusion" = [
       { "Clean up" = "clean-up.md" },
       { "Conclusion" = "conclusion.md" },
     ] },
