@@ -174,7 +174,9 @@
   .belt-planet[title="Neptune"] { --planet-size: 130px; }
   .belt-planet[title="Uranus"] { --planet-size: 130px; }
   .belt-planet[title="Pluto"] { --planet-size: 70px; }
+  .belt-planet[title="Haumea"] { --planet-size: 85px; }
   .belt-planet[title="Makemake"] { --planet-size: 60px; }
+  .belt-planet[title="Comet"] { --planet-size: 150px; }
   .belt-planet[title="Reentry capsule"] { --planet-size: 190px; }
   .belt-planet[title="Sun"] { --planet-size: 260px; }
   .belt-planet[title="Crew"] { --planet-size: 230px; }
@@ -689,8 +691,14 @@
     <div class="belt-planet filler" title="Neptune">
       <img src="{{ 'assets/images/portals/neptune-portal.svg' | url }}" alt="">
     </div>
-    <div class="belt-planet" data-section="part-4" title="Pluto">
+    <div class="belt-planet" data-section="part-4" title="Comet">
+      <img src="{{ 'assets/images/portals/comet-portal.svg' | url }}" alt="">
+    </div>
+    <div class="belt-planet filler" title="Pluto">
       <img src="{{ 'assets/images/portals/pluto-portal.svg' | url }}" alt="">
+    </div>
+    <div class="belt-planet" data-section="part-5" title="Haumea">
+      <img src="{{ 'assets/images/portals/haumea-portal.svg' | url }}" alt="">
     </div>
     <div class="belt-planet filler" title="Makemake">
       <img src="{{ 'assets/images/portals/makemake-portal.svg' | url }}" alt="">
@@ -710,7 +718,7 @@
   <h1 class="hero-title">A Guide to MLOps</h1>
   <p class="hero-subtitle">
     Classify celestial bodies using best practices:
-    a hands-on journey through local training, the cloud, serving, labeling, and retraining.
+    a hands-on journey through local training, the cloud, serving, monitoring, labeling, and retraining.
   </p>
   <a href="#story-start" class="hero-cta">
     <span class="twemoji">{% include ".icons/lucide/compass.svg" %}</span>
@@ -763,7 +771,7 @@
         Building a model is only the beginning. This guide is a step-by-step flight plan
         that takes you from a notebook experiment to a reproducible, monitored, and
         continuously-improved ML system. We use concrete tools — DVC, CML, Docker,
-        BentoML and Label Studio — so you can follow along with real code.
+        BentoML, Evidently AI and Label Studio — so you can follow along with real code.
       </p>
       <div class="chapter-actions">
         <a href="#section-part-1" class="chapter-link primary next-section">
@@ -847,10 +855,34 @@
     </article>
   </section>
 
-  <!-- Part 4: Label & retrain -->
-  <section class="story-chapter" id="section-part-4" data-planet="neptune">
+  <!-- Part 4: Monitor & maintain -->
+  <section class="story-chapter" id="section-part-4" data-planet="comet">
     <article class="chapter-card reveal">
-      <div class="chapter-label">Part 4 — Deep space loop</div>
+      <div class="chapter-label">Part 4 — Sensor array</div>
+      <h2 class="chapter-title">Monitor &amp; <span>maintain</span></h2>
+      <p>
+        A model in production needs watching. Use Evidently AI to track predictions
+        and performance metrics, spot drift as data changes, and know when the model
+        needs attention. Reliable monitoring gives you the signal to react in time
+        through investigation, retraining, or rollback.
+      </p>
+      <div class="chapter-actions">
+        <a href="#section-part-5" class="chapter-link primary next-section">
+          <span class="twemoji">{% include ".icons/lucide/chevron-down.svg" %}</span>
+          Next stop
+        </a>
+        <a href="{{ 'part-4-monitor-and-maintain/introduction/' | url }}" class="chapter-link secondary">
+          <span class="twemoji">{% include ".icons/lucide/activity.svg" %}</span>
+          Observe
+        </a>
+      </div>
+    </article>
+  </section>
+
+  <!-- Part 5: Label & retrain -->
+  <section class="story-chapter" id="section-part-5" data-planet="haumea">
+    <article class="chapter-card reveal">
+      <div class="chapter-label">Part 5 — Deep space loop</div>
       <h2 class="chapter-title">Label data &amp; <span>retrain</span></h2>
       <p>
         Production data changes. Set up a labeling workflow with Label Studio, review
@@ -862,7 +894,7 @@
           <span class="twemoji">{% include ".icons/lucide/chevron-down.svg" %}</span>
           Next stop
         </a>
-        <a href="{{ 'part-4-label-data-and-retrain/introduction/' | url }}" class="chapter-link secondary">
+        <a href="{{ 'part-5-label-data-and-retrain/introduction/' | url }}" class="chapter-link secondary">
           <span class="twemoji">{% include ".icons/lucide/tags.svg" %}</span>
           Retrain
         </a>

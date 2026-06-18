@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- HUD frame -->
+  <circle cx="200" cy="200" r="190" fill="none" stroke="#333333" stroke-width="2" shape-rendering="crispEdges"/>
+  <g stroke="#525252" stroke-width="2" shape-rendering="crispEdges">
+    <line x1="200" y1="10" x2="200" y2="38"/>
+    <line x1="200" y1="362" x2="200" y2="390"/>
+    <line x1="10" y1="200" x2="38" y2="200"/>
+    <line x1="362" y1="200" x2="390" y2="200"/>
+  </g>
+  <circle cx="200" cy="200" r="172" fill="none" stroke="#525252" stroke-width="1" stroke-dasharray="6 6" opacity="0.6"/>
+
+  <!-- Comet -->
+  <defs>
+    <!-- Single straight dust tail -->
+    <linearGradient id="dustTail" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.7"/>
+      <stop offset="20%" stop-color="#e0f2fe" stop-opacity="0.45"/>
+      <stop offset="50%" stop-color="#93c5fd" stop-opacity="0.2"/>
+      <stop offset="85%" stop-color="#3b82f6" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#1e3a8a" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Coma glow -->
+    <radialGradient id="comaGlow" cx="35%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+      <stop offset="40%" stop-color="#e0f2fe" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#60a5fa" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Nucleus shading -->
+    <radialGradient id="nucleusShade" cx="30%" cy="35%" r="70%">
+      <stop offset="0%" stop-color="#f0f9ff"/>
+      <stop offset="45%" stop-color="#bae6fd"/>
+      <stop offset="100%" stop-color="#475569"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Comet oriented with tail at 20 degrees above horizontal -->
+  <g transform="rotate(-20 200 200)">
+    <!-- Flame-shaped tail wrapping around the back of the nucleus -->
+    <path d="M 185 162
+             C 230 150, 300 120, 440 95
+             L 440 245
+             C 300 220, 230 250, 185 238
+             C 165 228, 158 210, 158 200
+             C 158 190, 165 172, 185 162
+             Z"
+          fill="url(#dustTail)"/>
+
+    <!-- Inner tail core -->
+    <path d="M 200 178
+             C 245 165, 320 145, 410 130
+             L 410 220
+             C 320 205, 245 235, 200 222
+             C 185 215, 180 205, 180 200
+             C 180 195, 185 185, 200 178
+             Z"
+          fill="#ffffff" opacity="0.12"/>
+
+    <!-- Coma glow around back of nucleus -->
+    <ellipse cx="225" cy="200" rx="60" ry="50" fill="url(#comaGlow)"/>
+
+    <!-- Simplified icy nucleus, planet style -->
+    <ellipse cx="200" cy="200" rx="55" ry="42" fill="#e0f2fe" stroke="#7dd3fc" stroke-width="2"/>
+
+    <!-- Surface patches -->
+    <g fill="#475569" opacity="0.45">
+      <ellipse cx="180" cy="185" rx="16" ry="10" transform="rotate(-15 180 185)"/>
+      <ellipse cx="220" cy="205" rx="13" ry="8" transform="rotate(20 220 205)"/>
+      <ellipse cx="195" cy="222" rx="10" ry="6" transform="rotate(-10 195 222)"/>
+      <ellipse cx="215" cy="178" rx="8" ry="5" transform="rotate(25 215 178)"/>
+    </g>
+
+    <!-- Surface band -->
+    <path d="M 150 200 Q 200 190 250 200" fill="none" stroke="#38bdf8" stroke-width="3" opacity="0.25"/>
+
+
+  </g>
+</svg>

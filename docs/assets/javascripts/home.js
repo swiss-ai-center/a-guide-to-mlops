@@ -23,6 +23,7 @@
       document.getElementById('section-part-2'),
       document.getElementById('section-part-3'),
       document.getElementById('section-part-4'),
+      document.getElementById('section-part-5'),
       document.getElementById('section-reentry'),
     ].filter(Boolean);
 
