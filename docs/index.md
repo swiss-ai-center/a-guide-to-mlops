@@ -5,22 +5,191 @@ description: Complete MLOps guide covering ML operations tools and best practice
 hide:
   - navigation
   - toc
+home:
+  hero:
+    badge:
+      text: Mission briefing
+      icon: lucide/rocket
+    title: A Guide to MLOps
+    subtitle: |
+      Classify celestial bodies using best practices:
+      a hands-on journey through local training, the cloud, serving, monitoring, labeling, and retraining.
+    cta:
+      text: Chart the course
+      icon: lucide/compass
+      anchor: "#story-start"
+  chapters:
+    - id: about
+      label: Ground control
+      title: Meet the
+      title_highlight: Crew
+      body: |
+        Ground control, reporting for duty. We are the
+        <a href="https://www.swiss-ai-center.ch/" class="crew-link" target="_blank" rel="noopener">Swiss AI Center</a>
+        crew, building a practical flight plan from machine-learning experiments to production.
+        We have carefully selected the most suitable tools to minimize friction within established
+        workflows and teams, with a particular focus on SMEs.
+      actions:
+        - type: primary
+          text: Next stop
+          icon: lucide/chevron-down
+          anchor: "#section-intro"
+        - type: secondary
+          text: Presentation
+          icon: lucide/monitor
+          url: "https://mlops.swiss-ai-center.ch/presentation/"
+        - type: pdf
+          text: PDF
+          icon: lucide/file-text
+          url: "https://mlops.swiss-ai-center.ch/presentation/a-guide-to-mlops-presentation.pdf"
+    - id: intro
+      label: Mission briefing
+      title: Why this
+      title_highlight: "guide?"
+      planet: moon
+      body: |
+        Building a model is only the beginning. This guide is a step-by-step flight plan
+        that takes you from a notebook experiment to a reproducible, monitored, and
+        continuously-improved ML system. We use concrete tools — DVC, CML, Docker,
+        BentoML, Evidently AI and Label Studio — so you can follow along with real code.
+      actions:
+        - type: primary
+          text: Next stop
+          icon: lucide/chevron-down
+          anchor: "#section-part-1"
+        - type: secondary
+          text: Read the concept
+          icon: lucide/book-open
+          path: concept/
+    - id: part-1
+      label: Part 1 — Lift-off
+      title: Local training &
+      title_highlight: model evaluation
+      planet: earth
+      body: |
+        Start on solid ground. Move from a Jupyter notebook experiment to clean
+        Python scripts, then version your data and code with Git and DVC. Build a
+        reproducible prepare-train-evaluate pipeline on your own machine, and use
+        DVC to compare parameters, metrics, and plots so you can see how your
+        model evolves.
+      actions:
+        - type: primary
+          text: Next stop
+          icon: lucide/chevron-down
+          anchor: "#section-part-2"
+        - type: secondary
+          text: Train locally
+          icon: lucide/flask-conical
+          path: part-1-local-training-and-evaluation/introduction/
+    - id: part-2
+      label: Part 2 — Escape velocity
+      title: Move the model to the
+      title_highlight: cloud
+      planet: mars
+      body: |
+        When your local machine is no longer enough, move the experiment to the
+        cloud. Push your code to GitHub, store data in an S3 bucket with DVC, and
+        set up a CI/CD pipeline that reproduces the experiment on every push. Then
+        use CML to publish parameter, metric, and plot comparisons in pull requests
+        so the team can review every change.
+      actions:
+        - type: primary
+          text: Next stop
+          icon: lucide/chevron-down
+          anchor: "#section-part-3"
+        - type: secondary
+          text: Go cloud
+          icon: lucide/cloud
+          path: part-2-move-to-the-cloud/introduction/
+    - id: part-3
+      label: Part 3 — In orbit
+      title: Serve &
+      title_highlight: deploy
+      planet: saturn
+      body: |
+        A trained model only creates value when it can serve predictions. Package it
+        with BentoML and expose a local FastAPI endpoint, then containerize it with
+        Docker and push the image to a registry. Wire builds and deployments into
+        your CI/CD pipeline, roll the model out on Kubernetes, and scale training
+        with self-hosted runners that spin up specialized pods on demand.
+      actions:
+        - type: primary
+          text: Next stop
+          icon: lucide/chevron-down
+          anchor: "#section-part-4"
+        - type: secondary
+          text: Deploy
+          icon: lucide/server
+          path: part-3-serve-and-deploy/introduction/
+    - id: part-4
+      label: Part 4 — Sensor array
+      title: Monitor &
+      title_highlight: maintain
+      planet: comet
+      body: |
+        A model in production needs watching. Stream prediction logs to S3, deploy
+        an Evidently AI dashboard on Kubernetes to compare live data against your
+        training reference, and open drift reports as GitHub issues when things
+        shift. Use those signals to trigger retraining workflows or roll back to a
+        previous model version by redeploying its container image, with Git and DVC
+        as the reproducible source of truth.
+      actions:
+        - type: primary
+          text: Next stop
+          icon: lucide/chevron-down
+          anchor: "#section-part-5"
+        - type: secondary
+          text: Observe
+          icon: lucide/activity
+          path: part-4-monitor-and-maintain/introduction/
+    - id: part-5
+      label: Part 5 — Deep space loop
+      title: Label data &
+      title_highlight: retrain
+      planet: haumea
+      body: |
+        Production data changes. Close the feedback loop with Label Studio: let
+        your model suggest labels through the FastAPI endpoint, review and correct
+        edge cases, then merge the refined annotations back and retrain with DVC.
+        A better model makes the next round of labeling faster and more accurate.
+      actions:
+        - type: primary
+          text: Next stop
+          icon: lucide/chevron-down
+          anchor: "#section-reentry"
+        - type: secondary
+          text: Retrain
+          icon: lucide/tags
+          path: part-5-label-data-and-retrain/introduction/
+    - id: reentry
+      label: Reentry & cleanup
+      title: Clean up &
+      title_highlight: conclude
+      planet: capsule
+      reentry: true
+      body: |
+        Finish the journey by cleaning up everything you created. Delete cloud
+        resources, remove the GitHub repository and access tokens, wipe your local
+        environment, and take a moment to review what you have built. A proper
+        cleanup avoids unexpected costs. A safe landing is the final stage of a
+        successful mission.
+      actions:
+        - type: primary
+          text: Launch pad
+          icon: lucide/chevron-down
+          anchor: "#story-finale"
+        - type: secondary
+          text: Clean up
+          icon: lucide/brush
+          path: clean-up/
+  finale:
+    title: Ready for
+    title_highlight: launch?
+    subtitle: |
+      The guide is open source and built to be followed hands-on.
+      Pick a chapter, launch your terminal, and start shipping ML systems.
+    cta:
+      text: Start the journey
+      icon: lucide/rocket
+      path: syllabus/
 ---
-
-Welcome! We are a team of passionate software engineers and data scientists from
-the [Swiss AI Center](https://www.hes-so.ch/swiss-ai-center){:target="\_blank"}.
-With expertise in both Machine Learning (ML) and DevOps, our mission is to
-provide a comprehensive guide for transitioning ML projects from experimentation
-to production.
-
-To achieve this, we have carefully selected the most suitable tools to minimize
-friction within established workflows and teams, with a particular focus on
-SMEs.
-
-This guide is designed to be practical, leading you step-by-step through the
-process of deploying ML models in real-world production environments. You will
-gain valuable knowledge and hands-on experience as you progress through the
-material.
-
-No matter your level of experience in machine learning, we hope this guide will
-support you in achieving greater success in your ML projects!
