@@ -23,7 +23,7 @@ We believe MLOps should be:
   problem well.
 - **Incremental**: adopt one practice at a time, not all at once.
 - **Pragmatic**: prioritize reproducibility first, then automation, then
-  deployment, then feedback loops.
+  deployment, then monitoring, then feedback loops.
 
 That is why we avoid all-in-one MLOps platforms in favor of tools that plug into
 existing workflows. A lightweight stack gives you a pragmatic path from
