@@ -13,17 +13,40 @@ url: https://mlops.swiss-ai-center.ch/presentation/
 footer: '**Swiss AI Center** - A guide to MLOps 2026 - CC BY-SA 4.0'
 style: |
     :root {
-        --color-background: #080809;
-        --color-foreground: #bcbec2;
-        --color-highlight: #4051b5;
-        --color-dimmed: #bcbec2;
-        --color-headings: #4051b5;
+        --color-background: #f7f8fc;
+        --color-foreground: #0a0a0a;
+        --color-highlight: #d97706;
+        --color-dimmed: #525252;
+        --color-headings: #b45309;
+        --color-card: #ffffff;
+        --color-border: #d4d4d4;
+    }
+    section {
+        background: var(--color-background);
+        color: var(--color-foreground);
+    }
+    a:link, a:visited {
+        color: var(--color-highlight);
+    }
+    strong {
+        color: var(--color-highlight);
     }
     blockquote {
         font-style: italic;
+        border-left: 4px solid var(--color-highlight);
+        padding-left: 1rem;
+        color: var(--color-dimmed);
     }
     table {
         width: 100%;
+    }
+    th {
+        background: var(--color-card);
+        color: var(--color-headings);
+        border-bottom: 2px solid var(--color-border);
+    }
+    td {
+        border-bottom: 1px solid var(--color-border);
     }
     th:first-child {
         width: 15%;
@@ -39,9 +62,12 @@ style: |
         text-decoration: none;
     }
     hr {
-        border: 1px solid var(--color-foreground);
+        border: 1px solid var(--color-border);
         margin-top: 50px;
-        margin-bottom: 50px
+        margin-bottom: 50px;
+    }
+    footer {
+        color: var(--color-dimmed);
     }
     .four-columns {
         display: grid;
@@ -51,10 +77,17 @@ style: |
     .center {
         text-align: center;
     }
+    .stars-bg {
+        background-color: var(--color-background);
+        background-image:
+            radial-gradient(circle, var(--color-border) 1.5px, transparent 2px),
+            radial-gradient(circle, var(--color-highlight) 1px, transparent 1.5px);
+        background-size: 120px 120px, 180px 180px;
+        background-position: 0 0, 60px 60px;
+    }
 headingDivider: 4
 -->
 
-[illustration]: ./images/cover.png
 [license]: https://github.com/swiss-ai-center/a-guide-to-mlops/blob/main/LICENSE
 [website]: https://mlops.swiss-ai-center.ch
 [website-qrcode]:
@@ -64,7 +97,7 @@ headingDivider: 4
 # A guide to MLOps
 
 <!--
-_class: lead
+_class: lead stars-bg
 _paginate: false
 -->
 
@@ -74,7 +107,7 @@ _paginate: false
 
 <small>This work is licensed under the [CC BY-SA 4.0][license] license.</small>
 
-![bg opacity:0.5][illustration]
+![bg right:35% w:70%](../docs/assets/images/hero-rocket.svg)
 
 ## About us
 
@@ -368,6 +401,8 @@ state-of-the-art MLOps tools.
 
 You can go from experiment to production on the Cloud, using the best practices
 for ML. 🚀
+
+![bg right:35% w:60%](../docs/assets/images/launchpad.svg)
 
 ## Feedback
 
