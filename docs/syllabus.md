@@ -2,8 +2,12 @@
 
 What you will learn from this guide.
 
+This guide covers five parts: local reproducibility, cloud automation,
+production serving, monitoring and observability, and continuous improvement.
+They are organized as follows:
+
 - Introduction - Learn about the [philosophy](./philosophy.md) of the guide, the
-  [concept](./concept.md) behind MLOps, and [the tools](./tools.md) used in this
+  [concept](./concept.md) behind MLOps, and the [tools](./tools.md) used in this
   guide.
 - [Part 1 - Local training and evaluation](./part-1-local-training-and-evaluation/introduction.md) -
   Learn how to train a model locally and evaluate it using DVC.
