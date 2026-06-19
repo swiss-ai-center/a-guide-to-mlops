@@ -175,7 +175,7 @@ home:
         successful mission.
       actions:
         - type: primary
-          text: Next stop
+          text: Launch pad
           icon: lucide/chevron-down
           anchor: "#story-finale"
         - type: secondary
