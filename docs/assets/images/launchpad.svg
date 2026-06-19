@@ -1,13 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
-  <!-- Mission-patch backing -->
-  <circle cx="200" cy="200" r="190" fill="#0f0f0f" stroke="#333333" stroke-width="2" shape-rendering="crispEdges"/>
-  <g stroke="#525252" stroke-width="2" shape-rendering="crispEdges">
-    <line x1="200" y1="10" x2="200" y2="38"/>
-    <line x1="200" y1="362" x2="200" y2="390"/>
-    <line x1="10" y1="200" x2="38" y2="200"/>
-    <line x1="362" y1="200" x2="390" y2="200"/>
-  </g>
-  <circle cx="200" cy="200" r="172" fill="none" stroke="#525252" stroke-width="1" stroke-dasharray="6 6" opacity="0.6"/>
+  <!-- Neutral backing so the icon reads on both dark and light themes -->
+  <circle cx="200" cy="200" r="190" fill="#333333" opacity="0.65"/>
 
   <!-- Launchpad scene centered on the patch -->
   <g transform="translate(200, 205)">
@@ -35,18 +28,21 @@
     </g>
 
     <!-- Rocket on the pad -->
-    <g>
-      <!-- Fins -->
-      <path d="M -20 -8 L -46 28 L -20 18 Z" fill="#a3a3a3"/>
-      <path d="M 20 -8 L 46 28 L 20 18 Z" fill="#a3a3a3"/>
+    <g transform="translate(0, 16)">
+      <!-- Rocket fins -->
+      <path d="M -28 -20 L -61 15 L -28 5 Z" fill="#a3a3a3"/>
+      <path d="M 28 -20 L 61 15 L 28 5 Z" fill="#a3a3a3"/>
+
       <!-- Main hull -->
-      <path d="M 0 -115 L 24 18 Q 0 36 -24 18 Z" fill="#f8fafc" stroke="#e5e5e5" stroke-width="2"/>
+      <path d="M 0 -125 L 32 5 Q 0 22 -32 5 Z" fill="#f8fafc" stroke="#e5e5e5" stroke-width="2"/>
+
       <!-- Window -->
-      <circle cx="0" cy="-62" r="12" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
-      <circle cx="3" cy="-65" r="3" fill="#ffffff" opacity="0.2"/>
+      <circle cx="0" cy="-65" r="14" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+      <circle cx="4" cy="-69" r="4" fill="#ffffff" opacity="0.2"/>
+
       <!-- Body detail -->
-      <line x1="0" y1="-24" x2="0" y2="2" stroke="#94a3b8" stroke-width="2" opacity="0.5"/>
-      <rect x="-10" y="-38" width="20" height="5" rx="2" fill="#94a3b8" opacity="0.5"/>
+      <line x1="0" y1="-30" x2="0" y2="-5" stroke="#94a3b8" stroke-width="2" opacity="0.5"/>
+      <rect x="-11" y="-42" width="22" height="6" rx="2" fill="#94a3b8" opacity="0.5"/>
     </g>
 
     <!-- Launch platform -->
