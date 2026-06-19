@@ -792,9 +792,11 @@
       <div class="chapter-label">Part 1 — Lift-off</div>
       <h2 class="chapter-title">Local training &amp; <span>model evaluation</span></h2>
       <p>
-        Start on solid ground. Version your data with DVC, track experiments with
-        CML, and build a reproducible training pipeline that you can run on your own
-        machine before you ever think about the cloud.
+        Start on solid ground. Move from a Jupyter notebook experiment to clean
+        Python scripts, then version your data and code with Git and DVC. Build a
+        reproducible prepare-train-evaluate pipeline on your own machine, and use
+        DVC to compare parameters, metrics, and plots so you can see how your
+        model evolves.
       </p>
       <div class="chapter-actions">
         <a href="#section-part-2" class="chapter-link primary next-section">
@@ -815,9 +817,11 @@
       <div class="chapter-label">Part 2 — Escape velocity</div>
       <h2 class="chapter-title">Move the model to the <span>cloud</span></h2>
       <p>
-        When your local machine is no longer enough, move the pipeline to the cloud.
-        Use CML to automate training in CI, store artifacts in S3, and keep every
-        experiment reproducible no matter where it runs.
+        When your local machine is no longer enough, move the experiment to the
+        cloud. Push your code to GitHub, store data in an S3 bucket with DVC, and
+        set up a CI/CD pipeline that reproduces the experiment on every push. Then
+        use CML to publish parameter, metric, and plot comparisons in pull requests
+        so the team can review every change.
       </p>
       <div class="chapter-actions">
         <a href="#section-part-3" class="chapter-link primary next-section">
@@ -839,8 +843,10 @@
       <h2 class="chapter-title">Serve &amp; <span>deploy</span> the model</h2>
       <p>
         A trained model only creates value when it can serve predictions. Package it
-        with BentoML, expose a REST API, deploy behind a reverse proxy, and add
-        monitoring so you know when performance starts to drift.
+        with BentoML and expose a local FastAPI endpoint, then containerize it with
+        Docker and push the image to a registry. Wire builds and deployments into
+        your CI/CD pipeline, roll the model out on Kubernetes, and scale training
+        with self-hosted runners that spin up specialized pods on demand.
       </p>
       <div class="chapter-actions">
         <a href="#section-part-4" class="chapter-link primary next-section">
@@ -861,10 +867,12 @@
       <div class="chapter-label">Part 4 — Sensor array</div>
       <h2 class="chapter-title">Monitor &amp; <span>maintain</span></h2>
       <p>
-        A model in production needs watching. Use Evidently AI to track predictions
-        and performance metrics, spot drift as data changes, and know when the model
-        needs attention. Reliable monitoring gives you the signal to react in time
-        through investigation, retraining, or rollback.
+        A model in production needs watching. Stream prediction logs to S3, deploy
+        an Evidently AI dashboard on Kubernetes to compare live data against your
+        training reference, and open drift reports as GitHub issues when things
+        shift. Use those signals to trigger retraining workflows or roll back to a
+        previous model version by redeploying its container image, with Git and DVC
+        as the reproducible source of truth.
       </p>
       <div class="chapter-actions">
         <a href="#section-part-5" class="chapter-link primary next-section">
@@ -885,9 +893,10 @@
       <div class="chapter-label">Part 5 — Deep space loop</div>
       <h2 class="chapter-title">Label data &amp; <span>retrain</span></h2>
       <p>
-        Production data changes. Set up a labeling workflow with Label Studio, review
-        edge cases, merge new labels back into your dataset, and trigger a new training
-        run without losing reproducibility.
+        Production data changes. Close the feedback loop with Label Studio: let
+        your model suggest labels through the FastAPI endpoint, review and correct
+        edge cases, then merge the refined annotations back and retrain with DVC.
+        A better model makes the next round of labeling faster and more accurate.
       </p>
       <div class="chapter-actions">
         <a href="#section-reentry" class="chapter-link primary next-section">
@@ -906,11 +915,13 @@
   <section class="story-chapter reentry" id="section-reentry" data-planet="capsule">
     <article class="chapter-card reveal">
       <div class="chapter-label">Reentry &amp; cleanup</div>
-      <h2 class="chapter-title">Bring it safely <span>back to Earth</span></h2>
+      <h2 class="chapter-title">Clean up &amp; <span>conclude</span></h2>
       <p>
-        The journey ends with a controlled landing. Tear down cloud resources, remove
-        containers and clusters, archive artifacts, and leave your environment clean.
-        A safe re-entry is the last step of a successful MLOps mission.
+        Finish the journey by cleaning up everything you created. Delete cloud
+        resources, remove the GitHub repository and access tokens, wipe your local
+        environment, and take a moment to review what you have built. A proper
+        cleanup avoids unexpected costs. A safe landing is the final stage of a
+        successful mission.
       </p>
       <div class="chapter-actions">
         <a href="#story-finale" class="chapter-link primary next-section">
