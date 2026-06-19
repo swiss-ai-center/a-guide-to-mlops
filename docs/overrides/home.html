@@ -654,6 +654,7 @@
 {% endblock %}
 
 {% block container %}
+{% set home = page.meta.home %}
 <!-- Starfield -->
 <div class="starfield" id="starfield" aria-hidden="true"></div>
 
@@ -712,17 +713,16 @@
 <!-- Hero -->
 <section class="story-hero" id="story-hero">
   <div class="hero-badge">
-    <span class="twemoji">{% include ".icons/lucide/rocket.svg" %}</span>
-    Mission briefing
+    <span class="twemoji">{% include ".icons/" ~ home.hero.badge.icon ~ ".svg" %}</span>
+    {{ home.hero.badge.text }}
   </div>
-  <h1 class="hero-title">A Guide to MLOps</h1>
+  <h1 class="hero-title">{{ home.hero.title }}</h1>
   <p class="hero-subtitle">
-    Classify celestial bodies using best practices:
-    a hands-on journey through local training, the cloud, serving, monitoring, labeling, and retraining.
+    {{- home.hero.subtitle -}}
   </p>
-  <a href="#story-start" class="hero-cta">
-    <span class="twemoji">{% include ".icons/lucide/compass.svg" %}</span>
-    Chart the course
+  <a href="{{ home.hero.cta.anchor }}" class="hero-cta">
+    <span class="twemoji">{% include ".icons/" ~ home.hero.cta.icon ~ ".svg" %}</span>
+    {{ home.hero.cta.text }}
   </a>
 
   <!-- Hero rocket / MLOps mark -->
@@ -733,220 +733,51 @@
 
 <!-- Story chapters -->
 <main class="story-main" id="story-start">
-  <!-- About this guide -->
-  <section class="story-chapter" id="section-about">
+  {% for chapter in home.chapters %}
+  <section class="story-chapter{% if chapter.reentry %} reentry{% endif %}" id="section-{{ chapter.id }}"{% if chapter.planet %} data-planet="{{ chapter.planet }}"{% endif %}>
     <article class="chapter-card reveal">
-      <div class="chapter-label">Ground control</div>
-      <h2 class="chapter-title">Meet the <span>Crew</span></h2>
+      <div class="chapter-label">{{ chapter.label }}</div>
+      <h2 class="chapter-title">{{ chapter.title }}{% if chapter.title_highlight %} <span>{{ chapter.title_highlight }}</span>{% endif %}</h2>
       <p>
-        Ground control, reporting for duty. We are the
-        <a href="https://www.swiss-ai-center.ch/" class="crew-link" target="_blank" rel="noopener">Swiss AI Center</a>
-        crew, building a practical flight plan from machine-learning experiments to production.
-        We have carefully selected the most suitable tools to minimize friction within established
-        workflows and teams, with a particular focus on SMEs.
+        {{- chapter.body | safe -}}
       </p>
       <div class="chapter-actions">
-        <a href="#section-intro" class="chapter-link primary next-section">
-          <span class="twemoji">{% include ".icons/lucide/chevron-down.svg" %}</span>
-          Next stop
+        {% for action in chapter.actions %}
+        {% if action.type == "pdf" %}
+        <a href="{{ action.url }}" class="pdf-link">
+          <span class="twemoji">{% include ".icons/" ~ action.icon ~ ".svg" %}</span>
+          {{ action.text }}
         </a>
-        <a href="https://mlops.swiss-ai-center.ch/presentation/" class="chapter-link secondary">
-          <span class="twemoji">{% include ".icons/lucide/monitor.svg" %}</span>
-          Presentation
+        {% else %}
+        <a href="
+          {%- if action.anchor -%}
+            {{ action.anchor }}
+          {%- elif action.path -%}
+            {{ action.path | url }}
+          {%- elif action.url -%}
+            {{ action.url }}
+          {%- endif -%}
+        " class="chapter-link {{ action.type }}{% if action.type == 'primary' %} next-section{% endif %}">
+          <span class="twemoji">{% include ".icons/" ~ action.icon ~ ".svg" %}</span>
+          {{ action.text }}
         </a>
-        <a href="https://mlops.swiss-ai-center.ch/presentation/a-guide-to-mlops-presentation.pdf" class="pdf-link">
-          <span class="twemoji">{% include ".icons/lucide/file-text.svg" %}</span>
-          PDF
-        </a>
+        {% endif %}
+        {% endfor %}
       </div>
     </article>
   </section>
-
-  <!-- Intro / Mission -->
-  <section class="story-chapter" id="section-intro" data-planet="moon">
-    <article class="chapter-card reveal">
-      <div class="chapter-label">Mission briefing</div>
-      <h2 class="chapter-title">Why this <span>guide?</span></h2>
-      <p>
-        Building a model is only the beginning. This guide is a step-by-step flight plan
-        that takes you from a notebook experiment to a reproducible, monitored, and
-        continuously-improved ML system. We use concrete tools — DVC, CML, Docker,
-        BentoML, Evidently AI and Label Studio — so you can follow along with real code.
-      </p>
-      <div class="chapter-actions">
-        <a href="#section-part-1" class="chapter-link primary next-section">
-          <span class="twemoji">{% include ".icons/lucide/chevron-down.svg" %}</span>
-          Next stop
-        </a>
-        <a href="{{ 'concept/' | url }}" class="chapter-link secondary">
-          <span class="twemoji">{% include ".icons/lucide/book-open.svg" %}</span>
-          Read the concept
-        </a>
-      </div>
-    </article>
-  </section>
-
-  <!-- Part 1: Local training -->
-  <section class="story-chapter" id="section-part-1" data-planet="earth">
-    <article class="chapter-card reveal">
-      <div class="chapter-label">Part 1 — Lift-off</div>
-      <h2 class="chapter-title">Local training &amp; <span>model evaluation</span></h2>
-      <p>
-        Start on solid ground. Move from a Jupyter notebook experiment to clean
-        Python scripts, then version your data and code with Git and DVC. Build a
-        reproducible prepare-train-evaluate pipeline on your own machine, and use
-        DVC to compare parameters, metrics, and plots so you can see how your
-        model evolves.
-      </p>
-      <div class="chapter-actions">
-        <a href="#section-part-2" class="chapter-link primary next-section">
-          <span class="twemoji">{% include ".icons/lucide/chevron-down.svg" %}</span>
-          Next stop
-        </a>
-        <a href="{{ 'part-1-local-training-and-evaluation/introduction/' | url }}" class="chapter-link secondary">
-          <span class="twemoji">{% include ".icons/lucide/flask-conical.svg" %}</span>
-          Train locally
-        </a>
-      </div>
-    </article>
-  </section>
-
-  <!-- Part 2: Cloud -->
-  <section class="story-chapter" id="section-part-2" data-planet="mars">
-    <article class="chapter-card reveal">
-      <div class="chapter-label">Part 2 — Escape velocity</div>
-      <h2 class="chapter-title">Move the model to the <span>cloud</span></h2>
-      <p>
-        When your local machine is no longer enough, move the experiment to the
-        cloud. Push your code to GitHub, store data in an S3 bucket with DVC, and
-        set up a CI/CD pipeline that reproduces the experiment on every push. Then
-        use CML to publish parameter, metric, and plot comparisons in pull requests
-        so the team can review every change.
-      </p>
-      <div class="chapter-actions">
-        <a href="#section-part-3" class="chapter-link primary next-section">
-          <span class="twemoji">{% include ".icons/lucide/chevron-down.svg" %}</span>
-          Next stop
-        </a>
-        <a href="{{ 'part-2-move-to-the-cloud/introduction/' | url }}" class="chapter-link secondary">
-          <span class="twemoji">{% include ".icons/lucide/cloud.svg" %}</span>
-          Go cloud
-        </a>
-      </div>
-    </article>
-  </section>
-
-  <!-- Part 3: Serve & deploy -->
-  <section class="story-chapter" id="section-part-3" data-planet="saturn">
-    <article class="chapter-card reveal">
-      <div class="chapter-label">Part 3 — In orbit</div>
-      <h2 class="chapter-title">Serve &amp; <span>deploy</span> the model</h2>
-      <p>
-        A trained model only creates value when it can serve predictions. Package it
-        with BentoML and expose a local FastAPI endpoint, then containerize it with
-        Docker and push the image to a registry. Wire builds and deployments into
-        your CI/CD pipeline, roll the model out on Kubernetes, and scale training
-        with self-hosted runners that spin up specialized pods on demand.
-      </p>
-      <div class="chapter-actions">
-        <a href="#section-part-4" class="chapter-link primary next-section">
-          <span class="twemoji">{% include ".icons/lucide/chevron-down.svg" %}</span>
-          Next stop
-        </a>
-        <a href="{{ 'part-3-serve-and-deploy/introduction/' | url }}" class="chapter-link secondary">
-          <span class="twemoji">{% include ".icons/lucide/server.svg" %}</span>
-          Deploy
-        </a>
-      </div>
-    </article>
-  </section>
-
-  <!-- Part 4: Monitor & maintain -->
-  <section class="story-chapter" id="section-part-4" data-planet="comet">
-    <article class="chapter-card reveal">
-      <div class="chapter-label">Part 4 — Sensor array</div>
-      <h2 class="chapter-title">Monitor &amp; <span>maintain</span></h2>
-      <p>
-        A model in production needs watching. Stream prediction logs to S3, deploy
-        an Evidently AI dashboard on Kubernetes to compare live data against your
-        training reference, and open drift reports as GitHub issues when things
-        shift. Use those signals to trigger retraining workflows or roll back to a
-        previous model version by redeploying its container image, with Git and DVC
-        as the reproducible source of truth.
-      </p>
-      <div class="chapter-actions">
-        <a href="#section-part-5" class="chapter-link primary next-section">
-          <span class="twemoji">{% include ".icons/lucide/chevron-down.svg" %}</span>
-          Next stop
-        </a>
-        <a href="{{ 'part-4-monitor-and-maintain/introduction/' | url }}" class="chapter-link secondary">
-          <span class="twemoji">{% include ".icons/lucide/activity.svg" %}</span>
-          Observe
-        </a>
-      </div>
-    </article>
-  </section>
-
-  <!-- Part 5: Label & retrain -->
-  <section class="story-chapter" id="section-part-5" data-planet="haumea">
-    <article class="chapter-card reveal">
-      <div class="chapter-label">Part 5 — Deep space loop</div>
-      <h2 class="chapter-title">Label data &amp; <span>retrain</span></h2>
-      <p>
-        Production data changes. Close the feedback loop with Label Studio: let
-        your model suggest labels through the FastAPI endpoint, review and correct
-        edge cases, then merge the refined annotations back and retrain with DVC.
-        A better model makes the next round of labeling faster and more accurate.
-      </p>
-      <div class="chapter-actions">
-        <a href="#section-reentry" class="chapter-link primary next-section">
-          <span class="twemoji">{% include ".icons/lucide/chevron-down.svg" %}</span>
-          Next stop
-        </a>
-        <a href="{{ 'part-5-label-data-and-retrain/introduction/' | url }}" class="chapter-link secondary">
-          <span class="twemoji">{% include ".icons/lucide/tags.svg" %}</span>
-          Retrain
-        </a>
-      </div>
-    </article>
-  </section>
-
-  <!-- Reentry / Cleanup -->
-  <section class="story-chapter reentry" id="section-reentry" data-planet="capsule">
-    <article class="chapter-card reveal">
-      <div class="chapter-label">Reentry &amp; cleanup</div>
-      <h2 class="chapter-title">Clean up &amp; <span>conclude</span></h2>
-      <p>
-        Finish the journey by cleaning up everything you created. Delete cloud
-        resources, remove the GitHub repository and access tokens, wipe your local
-        environment, and take a moment to review what you have built. A proper
-        cleanup avoids unexpected costs. A safe landing is the final stage of a
-        successful mission.
-      </p>
-      <div class="chapter-actions">
-        <a href="#story-finale" class="chapter-link primary next-section">
-          <span class="twemoji">{% include ".icons/lucide/chevron-down.svg" %}</span>
-          Next stop
-        </a>
-        <a href="{{ 'clean-up/' | url }}" class="chapter-link secondary">
-          <span class="twemoji">{% include ".icons/lucide/brush.svg" %}</span>
-          Clean up
-        </a>
-      </div>
-    </article>
-  </section>
+  {% endfor %}
 </main>
 
 <!-- Finale -->
 <section class="story-finale" id="story-finale">
-  <h2 class="finale-title">Ready for <span>launch?</span></h2>
+  <h2 class="finale-title">{{ home.finale.title }}{% if home.finale.title_highlight %} <span>{{ home.finale.title_highlight }}</span>{% endif %}</h2>
   <p class="finale-subtitle">
-    The guide is open source and built to be followed hands-on.
-    Pick a chapter, launch your terminal, and start shipping ML systems.
+    {{- home.finale.subtitle -}}
   </p>
-  <a href="{{ 'syllabus/' | url }}" class="hero-cta">
-    <span class="twemoji">{% include ".icons/lucide/rocket.svg" %}</span>
-    Start the journey
+  <a href="{{ home.finale.cta.path | url }}" class="hero-cta">
+    <span class="twemoji">{% include ".icons/" ~ home.finale.cta.icon ~ ".svg" %}</span>
+    {{ home.finale.cta.text }}
   </a>
 
   <!-- Launchpad illustration -->
