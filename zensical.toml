@@ -93,6 +93,7 @@ nav = [
       { "Chapter 4.2 - Detect drift locally with Evidently AI" = "part-4-monitor-and-maintain/chapter-42-detect-drift-locally-with-evidently-ai.md" },
       { "Chapter 4.3 - Deploy and access the monitoring on Kubernetes" = "part-4-monitor-and-maintain/chapter-43-deploy-and-access-the-monitoring-on-kubernetes.md" },
       { "Chapter 4.4 - Trigger drift alerts with the CI/CD workflow" = "part-4-monitor-and-maintain/chapter-44-trigger-drift-alerts-with-the-cicd-workflow.md" },
+      { "Chapter 4.5 - Review drift alerts and decide on action" = "part-4-monitor-and-maintain/chapter-45-review-drift-alerts-and-decide-on-action.md" },
       { "Conclusion" = "part-4-monitor-and-maintain/conclusion.md" },
     ] },
   { "🏷️ Label data and retrain" = [
