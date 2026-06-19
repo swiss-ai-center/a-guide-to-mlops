@@ -40,6 +40,7 @@ The five parts are:
   Learn how to keep a model healthy in production using Evidently AI.
     - [Chapter 4.1 - Log predictions and features locally](./part-4-monitor-and-maintain/chapter-41-log-predictions-and-features-locally.md)
     - [Chapter 4.2 - Detect drift locally with Evidently AI](./part-4-monitor-and-maintain/chapter-42-detect-drift-locally-with-evidently-ai.md)
+    - [Chapter 4.3 - Deploy and access the monitoring on Kubernetes](./part-4-monitor-and-maintain/chapter-43-deploy-and-access-the-monitoring-on-kubernetes.md)
 - [Part 5 - Label data and retrain](./part-5-label-data-and-retrain/introduction.md) -
   Learn how to label new data and retrain the model using Label Studio.
     - [Chapter 5.1 - Set up Label Studio](./part-5-label-data-and-retrain/chapter-51-set-up-label-studio.md)
