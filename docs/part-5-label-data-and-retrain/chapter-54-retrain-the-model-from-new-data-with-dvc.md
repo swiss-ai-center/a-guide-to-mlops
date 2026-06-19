@@ -64,7 +64,7 @@ Make sure Label Studio is running at <http://localhost:8080>.
 
 3. Rename the downloaded json file to `annotations.json`.
 
-4. Move the file to your `a-guide-to-mlops` repository under the `extra-data/`
+4. Move the file to your `mlops-guide` repository under the `extra-data/`
    folder.
 
     ```yaml hl_lines="4"

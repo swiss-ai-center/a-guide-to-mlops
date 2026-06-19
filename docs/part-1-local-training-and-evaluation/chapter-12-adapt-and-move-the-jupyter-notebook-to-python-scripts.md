@@ -61,10 +61,10 @@ Next, exit from the current directory and create a new one:
 cd ..
 
 # Create the new working directory
-mkdir a-guide-to-mlops
+mkdir mlops-guide
 
 # Switch to the new working directory
-cd a-guide-to-mlops
+cd mlops-guide
 ```
 
 ### Set up the dataset
@@ -74,7 +74,7 @@ from the previous chapter to your new directory:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Copy the data folder from the previous chapter
-cp -r ../a-guide-to-mlops-jupyter-notebook/data .
+cp -r ../mlops-guide-jupyter-notebook/data .
 ```
 
 ### Set up a Python environment

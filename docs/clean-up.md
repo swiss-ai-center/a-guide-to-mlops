@@ -190,11 +190,11 @@ Then, you can delete the Python virtual environment directory.
 # Move back to the root directory
 cd ..
 
-# Delete the a-guide-to-mlops-jupyter-notebook
-rm -rf a-guide-to-mlops-jupyter-notebook
+# Delete the mlops-guide-jupyter-notebook
+rm -rf mlops-guide-jupyter-notebook
 
-# Delete the a-guide-to-mlops directory
-rm -rf a-guide-to-mlops
+# Delete the mlops-guide directory
+rm -rf mlops-guide
 ```
 
 ### Double-check everything
@@ -217,8 +217,8 @@ Here is a checklist of all the resources and environments you created.
 - [ ] The GitHub or GitLab Personal Access Tokens
 - [ ] The GitHub or GitLab repository
 - [ ] The projects directories
-    - [ ] The `a-guide-to-mlops-jupyter-notebook` directory
-    - [ ] The `a-guide-to-mlops` directory
+    - [ ] The `mlops-guide-jupyter-notebook` directory
+    - [ ] The `mlops-guide` directory
 
 ### Summary
 

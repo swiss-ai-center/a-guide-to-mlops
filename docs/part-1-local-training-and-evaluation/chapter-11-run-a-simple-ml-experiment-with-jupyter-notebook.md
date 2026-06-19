@@ -55,10 +55,10 @@ directory for this first chapter:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Create the working directory
-mkdir a-guide-to-mlops-jupyter-notebook
+mkdir mlops-guide-jupyter-notebook
 
 # Switch to the working directory
-cd a-guide-to-mlops-jupyter-notebook
+cd mlops-guide-jupyter-notebook
 ```
 
 ### Download the notebook
