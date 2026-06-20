@@ -21,5 +21,10 @@
       <path d="M100 250 Q200 230 300 250"/>
     </g>
     <ellipse cx="160" cy="150" rx="50" ry="35" fill="#ffffff" opacity="0.1"/>
+    <!-- Moons -->
+    <g fill="#a8a29e" opacity="0.95">
+      <circle cx="334" cy="86" r="9"/>
+      <circle cx="84" cy="318" r="7"/>
+    </g>
   </g>
 </svg>

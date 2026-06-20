@@ -11,7 +11,8 @@
   <!-- Pluto -->
   <g>
     <circle cx="200" cy="200" r="115" fill="#e0d6cc" stroke="#b8a99c" stroke-width="2"/>
-    <path d="M150 150 Q180 125 210 150 Q240 130 260 170 Q270 210 220 240 Q180 260 140 220 Q110 190 150 150Z" fill="#ffffff"/>
+    <!-- Tombaugh Regio / Pluto's heart -->
+    <path d="M200 245 C170 220 125 190 125 160 C125 125 160 115 195 135 C200 138 200 138 205 135 C240 115 275 125 275 160 C275 190 230 220 200 245Z" fill="#ffffff"/>
     <g fill="#a65e4e" opacity="0.6">
       <ellipse cx="270" cy="190" rx="36" ry="26"/>
       <ellipse cx="130" cy="230" rx="26" ry="20"/>
@@ -22,5 +23,10 @@
       <path d="M95 200 Q200 185 305 200"/>
     </g>
     <ellipse cx="160" cy="155" rx="42" ry="28" fill="#ffffff" opacity="0.25"/>
+    <!-- Charon -->
+    <g>
+      <circle cx="328" cy="246" r="59" fill="#a8a29e" stroke="#78716c" stroke-width="2"/>
+      <ellipse cx="318" cy="236" rx="15" ry="11" fill="#d6d3d1" opacity="0.3"/>
+    </g>
   </g>
 </svg>

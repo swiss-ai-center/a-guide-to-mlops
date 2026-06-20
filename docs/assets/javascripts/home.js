@@ -81,14 +81,22 @@
       });
 
       // Filler planets sit midway between consecutive section centers.
+      // Any extra fillers trail beyond the last section using the average gap.
+      const lastIdx = centers.length - 1;
+      const avgGap = lastIdx > 0 ? (centers[lastIdx] - centers[0]) / lastIdx : 0;
       fillers.forEach((planet, i) => {
-        if (centers[i] !== undefined && centers[i + 1] !== undefined) {
-          const mid = (centers[i] + centers[i + 1]) / 2;
-          const size = planet.offsetHeight || 92;
-          const top = mid - size / 2;
-          planet.style.top = `${top}px`;
-          planet.style.left = `${horizontalPercent(mid, centers)}%`;
+        let centerY;
+        if (i < lastIdx) {
+          centerY = (centers[i] + centers[i + 1]) / 2;
+        } else if (lastIdx >= 0) {
+          centerY = centers[lastIdx] + (i - lastIdx + 1) * avgGap;
+        } else {
+          return;
         }
+        const size = planet.offsetHeight || 92;
+        const top = centerY - size / 2;
+        planet.style.top = `${top}px`;
+        planet.style.left = `${horizontalPercent(centerY, centers)}%`;
       });
 
       const last = belt.lastElementChild;
