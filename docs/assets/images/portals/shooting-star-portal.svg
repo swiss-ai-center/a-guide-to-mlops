@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Brutalist amber square brackets around the star -->
+  <g stroke="#f59e0b" stroke-width="4" fill="none" stroke-linecap="square" shape-rendering="crispEdges">
+    <polyline points="90,120 90,90 120,90"/>
+    <polyline points="280,90 310,90 310,120"/>
+    <polyline points="90,280 90,310 120,310"/>
+    <polyline points="280,310 310,310 310,280"/>
+  </g>
+
+  <!-- Shooting star -->
+  <defs>
+    <linearGradient id="tailGrad" gradientUnits="userSpaceOnUse" x1="367" y1="58" x2="201" y2="202">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0"/>
+      <stop offset="55%" stop-color="#f59e0b" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.95"/>
+    </linearGradient>
+  </defs>
+
+  <g transform="translate(75 -70)">
+    <!-- Tail -->
+    <path d="M134 281 L118 263 L292 128 Z" fill="url(#tailGrad)"/>
+    <!-- Tail core -->
+    <path d="M126 272 L292 128" stroke="#ffffff" stroke-width="2" opacity="0.7" stroke-linecap="round"/>
+
+    <!-- Sparkles along the tail -->
+    <g fill="#ffffff" opacity="0.7">
+      <circle cx="250" cy="158" r="2.5"/>
+      <circle cx="212" cy="190" r="2"/>
+      <circle cx="178" cy="219" r="1.5"/>
+    </g>
+
+    <!-- Star head glow -->
+    <circle cx="115" cy="282" r="18" fill="#f59e0b" opacity="0.25"/>
+
+    <!-- Star head -->
+    <path d="M115 282 L107 273 L126 272 L123 291 Z" fill="#ffffff" stroke="#f59e0b" stroke-width="2"/>
+  </g>
+</svg>
