@@ -229,9 +229,12 @@ The required surrounding infrastructure is vast and complex.
 > I’m not sure my changes really help the model’s performances… I hope it still
 > works in production.
 
+> The model worked fine before, but its predictions look off lately. I have no
+> idea if the data changed or how to check it.
+
 <hr>
 
-**Move to production quickly, efficiently and in a semi-automated way**
+**Move to production efficiently and in a semi-automated way**
 
 > Is your model available in production? Can I use it with my mobile
 > app/website? How can I do so?
@@ -432,6 +435,8 @@ Improvements made to the model are hard to track.
 
 Models are hard to share and deploy in production.
 
+Model drift and degradation go unnoticed.
+
 ### High flexibility for the team...
 
 <!-- _class: lead -->
@@ -552,6 +557,24 @@ Models are hard to share and deploy in production.
 -   Automate the process
 
 ![bg right:40% w:60%](./images/kubernetes-logo.svg)
+
+### Monitoring (1/2)
+
+**Current situation**
+
+-   The model's behavior can drift over time
+-   Degradation in performance is hard to detect
+-   Issues are often discovered too late, after users are impacted
+
+### Monitoring (2/2)
+
+**What we are trying to improve**
+
+-   Track model performance and data drift continuously
+-   Detect anomalies and regressions early
+-   Alert the team when the model needs attention
+
+![bg right:40% w:60%](./images/evidently.svg)
 
 ### Labeling (1/2)
 
