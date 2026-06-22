@@ -796,10 +796,12 @@ On your machine, check out the new branch.
 Update your experiment by editing for example the `params.yaml` file with the
 following parameters:
 
-```yaml title="params.yaml" hl_lines="10"
+```yaml title="params.yaml" hl_lines="12"
 prepare:
   seed: 77
-  split: 0.2
+  train_split: 0.6
+  val_split: 0.2
+  test_split: 0.2
   image_size: [32, 32]
   grayscale: True
 

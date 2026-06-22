@@ -117,10 +117,12 @@ CML.
 Update your experiment with the following parameters by editing the
 `params.yaml` file:
 
-```yaml title="params.yaml" hl_lines="9 11-12"
+```yaml title="params.yaml" hl_lines="11 13-14"
 prepare:
   seed: 77
-  split: 0.2
+  train_split: 0.6
+  val_split: 0.2
+  test_split: 0.2
   image_size: [32, 32]
   grayscale: True
 
