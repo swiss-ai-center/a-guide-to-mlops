@@ -229,7 +229,9 @@ Let's split the parameters to run the ML experiment with in a distinct file:
 ```yaml title="params.yaml"
 prepare:
   seed: 77
-  split: 0.2
+  train_split: 0.6
+  val_split: 0.2
+  test_split: 0.2
   image_size: [32, 32]
   grayscale: True
 
@@ -250,6 +252,7 @@ functions:
 
 ```py title="src/prepare.py"
 import json
+import math
 import sys
 from pathlib import Path
 from typing import List
@@ -286,27 +289,63 @@ def main() -> None:
     raw_dataset_folder = Path(sys.argv[1])
     prepared_dataset_folder = Path(sys.argv[2])
     seed = prepare_params["seed"]
-    split = prepare_params["split"]
+    train_split = prepare_params["train_split"]
+    val_split = prepare_params["val_split"]
+    test_split = prepare_params["test_split"]
     image_size = prepare_params["image_size"]
     grayscale = prepare_params["grayscale"]
 
     # Set seed for reproducibility
     set_seed(seed)
 
-    # Read data
-    ds_train, ds_test = tf.keras.utils.image_dataset_from_directory(
+    # Load the full dataset
+    full_ds = tf.keras.utils.image_dataset_from_directory(
         raw_dataset_folder,
         labels="inferred",
         label_mode="int",
         color_mode="grayscale" if grayscale else "rgb",
-        batch_size=32,
+        batch_size=None,
         image_size=image_size,
-        shuffle=True,
-        seed=seed,
-        validation_split=split,
-        subset="both",
+        shuffle=False,
     )
-    labels = ds_train.class_names
+    labels = full_ds.class_names
+
+    # Cache and count the total number of samples
+    full_ds = full_ds.cache()
+    total = sum(1 for _ in full_ds)
+
+    # Validate that the split fractions sum to 1.0
+    total_split = train_split + val_split + test_split
+    if not math.isclose(total_split, 1.0, rel_tol=1e-5, abs_tol=1e-5):
+        raise ValueError(
+            f"train_split + val_split + test_split must equal 1.0, got {total_split}"
+        )
+
+    # Compute split sizes explicitly from each fraction
+    train_size = int(train_split * total)
+    val_size = int(val_split * total)
+    test_size = int(test_split * total)
+
+    # Deterministically account for rounding remainder
+    remainder = total - (train_size + val_size + test_size)
+    test_size += remainder
+
+    # Shuffle the full dataset once with a fixed seed, then split it
+    full_ds = full_ds.shuffle(
+        buffer_size=total, seed=seed, reshuffle_each_iteration=False
+    )
+
+    ds_train = full_ds.take(train_size)
+    ds_val = full_ds.skip(train_size).take(val_size)
+    ds_test = full_ds.skip(train_size + val_size)
+
+    # Batch the datasets
+    ds_train = ds_train.shuffle(
+        buffer_size=train_size, seed=seed, reshuffle_each_iteration=True
+    )
+    ds_train = ds_train.batch(32)
+    ds_val = ds_val.batch(32)
+    ds_test = ds_test.batch(32)
 
     if not prepared_dataset_folder.exists():
         prepared_dataset_folder.mkdir(parents=True)
@@ -316,16 +355,16 @@ def main() -> None:
     preview_plot.savefig(prepared_dataset_folder / "preview.png")
 
     # Normalize the data
-    normalization_layer = tf.keras.layers.Rescaling(
-        1.0 / 255
-    )
+    normalization_layer = tf.keras.layers.Rescaling(1.0 / 255)
     ds_train = ds_train.map(lambda x, y: (normalization_layer(x), y))
+    ds_val = ds_val.map(lambda x, y: (normalization_layer(x), y))
     ds_test = ds_test.map(lambda x, y: (normalization_layer(x), y))
 
     # Save the prepared dataset
     with open(prepared_dataset_folder / "labels.json", "w") as f:
         json.dump(labels, f)
     tf.data.Dataset.save(ds_train, str(prepared_dataset_folder / "train"))
+    tf.data.Dataset.save(ds_val, str(prepared_dataset_folder / "val"))
     tf.data.Dataset.save(ds_test, str(prepared_dataset_folder / "test"))
 
     print(f"\nDataset saved at {prepared_dataset_folder.absolute()}")
@@ -402,7 +441,7 @@ def main() -> None:
 
     # Load data
     ds_train = tf.data.Dataset.load(str(prepared_dataset_folder / "train"))
-    ds_test = tf.data.Dataset.load(str(prepared_dataset_folder / "test"))
+    ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "val"))
 
     # Define the model
     model = get_model(image_shape, conv_size, dense_size, output_classes)
@@ -417,7 +456,7 @@ def main() -> None:
     model.fit(
         ds_train,
         epochs=epochs,
-        validation_data=ds_test,
+        validation_data=ds_val,
     )
 
     # Save the model
@@ -577,11 +616,11 @@ def main() -> None:
     model_history = np.load(model_folder.absolute() / "history.npy", allow_pickle=True).item()
 
     # Log metrics
-    val_loss, val_acc = model.evaluate(ds_test)
-    print(f"Validation loss: {val_loss:.2f}")
-    print(f"Validation accuracy: {val_acc * 100:.2f}%")
+    test_loss, test_acc = model.evaluate(ds_test)
+    print(f"Test loss: {test_loss:.2f}")
+    print(f"Test accuracy: {test_acc * 100:.2f}%")
     with open(evaluation_folder / "metrics.json", "w") as f:
-        json.dump({"val_loss": val_loss, "val_acc": val_acc}, f)
+        json.dump({"test_loss": test_loss, "test_acc": test_acc}, f)
 
     # Save training history plot
     fig = get_training_plot(model_history)
@@ -730,7 +769,7 @@ results in the `data/prepared`, `model`, and `evaluation` directories.
 
 Your working directory should now be similar to this:
 
-```yaml hl_lines="3-9 13-20"
+```yaml hl_lines="3-11 15-22"
 .
 ├── data
 │   ├── prepared # (1)!
@@ -738,7 +777,9 @@ Your working directory should now be similar to this:
 │   │   ├── preview.png
 │   │   ├── test
 │   │   │   └── ...
-│   │   └── train
+│   │   ├── train
+│   │   │   └── ...
+│   │   └── val
 │   │       └── ...
 │   ├── raw
 │   │   └── ...
@@ -771,7 +812,7 @@ Your working directory should now be similar to this:
 Here, the following should be noted:
 
 - the `prepare.py` script created the `data/prepared` directory and divided the
-  dataset into a training set and a test set
+  dataset into training, validation, and test sets
 - the `train.py` script created the `model` directory and trained the model with
   the prepared data.
 - the `evaluate.py` script created the `evaluation` directory and generated some
