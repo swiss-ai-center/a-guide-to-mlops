@@ -6,22 +6,74 @@ way to a modern approach of working with ML projects. Website available at
 
 ## Overview
 
-The repository is organized into several branches, each fulfilling a specific role:
+The repository is organized into several branches, each fulfilling a specific
+role:
 
 * `main`: the guide that is continuously deployed
-* `code`: the code used to create and train the model referenced in the guide
+* `dataset`: the dataset generator used to create the dataset for the experiment
 * `data`: the dataset used to train and evaluate the model
-* `extra-data`: the supplementary dataset used for inference and labeling before retraining the model
-* `freeze`: a backup of the validated dependencies list which can be used as a fallback in case of breakage in the transitive dependencies tree.
+* `extra-data`: the supplementary dataset used for inference and labeling before
+  retraining the model
+* `freeze`: a backup of the validated dependencies list which can be used as a
+  fallback in case of breakage in the transitive dependencies tree.
 
-Temporary branches may also exist for ongoing issues and improvements to the guide.
+Temporary branches may also exist for ongoing issues and improvements to the
+guide.
 
 ## Development
 
-### Local development with Docker Compose (recommended)
+### Local development with Python
 
-To improve the documentation locally, run
-[Zensical](https://zensical.org/) with the following commands:
+To improve the documentation locally, run [Zensical](https://zensical.org/) with
+the following commands:
+
+#### With standard Python tools
+
+```sh
+# Create the virtual environment
+python3.13 -m venv .venv
+
+# Activate the virtual environment
+source .venv/bin/activate
+
+# Install the Python dependencies
+pip install --requirement requirements-freeze.txt
+
+# Run Zensical
+zensical serve
+```
+
+You can now access the local development server at <http://localhost:8000>.
+
+If you make changes to the documentation, the web page should reload.
+
+#### With uv
+
+If you prefer to use [uv](https://docs.astral.sh/uv/) instead of the standard
+Python tools, run the following commands:
+
+```sh
+# Create the virtual environment
+uv venv --python 3.13
+
+# Activate the virtual environment
+source .venv/bin/activate
+
+# Install the Python dependencies
+uv pip install --requirement requirements-freeze.txt
+
+# Run Zensical
+zensical serve
+```
+
+You can now access the local development server at <http://localhost:8000>.
+
+If you make changes to the documentation, the web page should reload.
+
+#### With Docker Compose
+
+If you prefer to use [Docker Compose](https://docs.docker.com/compose/) instead
+of the standard Python tools, run the following commands:
 
 ```sh
 # Build the Docker container
@@ -35,10 +87,10 @@ You can now access the local development server at <http://localhost:8000>.
 
 If you make changes to the documentation, the web page should reload.
 
-### Local development with Python
+### Format the documentation
 
-To improve the documentation locally, run
-[Zensical](https://zensical.org/) with the following commands:
+To format the Markdown documentation, run
+[mdwrap](https://github.com/swiss-ai-center/mdwrap) with the following commands:
 
 #### With standard Python tools
 
@@ -52,8 +104,8 @@ source .venv/bin/activate
 # Install the Python dependencies
 pip install --requirement requirements-freeze.txt
 
-# Run Zensical
-zensical serve
+# Run mdwrap
+mdwrap --fmt docs
 ```
 
 #### With uv
@@ -71,18 +123,14 @@ source .venv/bin/activate
 # Install the Python dependencies
 uv pip install --requirement requirements-freeze.txt
 
-# Run Zensical
-zensical serve
+# Run mdwrap
+mdwrap --fmt docs
 ```
 
-You can now access the local development server at <http://localhost:8000>.
+#### With Docker Compose
 
-If you make changes to the documentation, the web page should reload.
-
-### Format the documentation with Docker Compose (recommended)
-
-To format the Markdown documentation, run
-[mdwrap](https://github.com/swiss-ai-center/mdwrap) with the following commands:
+If you prefer to use [Docker Compose](https://docs.docker.com/compose/) instead
+of the standard Python tools, run the following commands:
 
 ```sh
 # Build the Docker container
@@ -90,44 +138,4 @@ docker compose build
 
 # Start the Docker container
 docker compose up format
-```
-
-### Format the documentation with Python
-
-To format the Markdown documentation, run
-[mdwrap](https://github.com/swiss-ai-center/mdwrap) with the following commands:
-
-#### With standard Python tools
-
-```sh
-# Create the virtual environment
-python3.13 -m venv .venv
-
-# Activate the virtual environment
-source .venv/bin/activate
-
-# Install the Python dependencies
-pip install --requirement requirements-freeze.txt
-
-# Run mdwrap
-mdwrap --fmt docs
-```
-
-#### With uv
-
-If you prefer to use [uv](https://docs.astral.sh/uv/) instead of the standard
-Python tools, run the following commands:
-
-```sh
-# Create the virtual environment
-uv venv --python 3.13
-
-# Activate the virtual environment
-source .venv/bin/activate
-
-# Install the Python dependencies
-uv pip install --requirement requirements-freeze.txt
-
-# Run mdwrap
-mdwrap --fmt docs
 ```
