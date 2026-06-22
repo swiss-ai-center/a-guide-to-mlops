@@ -252,6 +252,7 @@ functions:
 
 ```py title="src/prepare.py"
 import json
+import math
 import sys
 from pathlib import Path
 from typing import List
@@ -313,10 +314,21 @@ def main() -> None:
     full_ds = full_ds.cache()
     total = sum(1 for _ in full_ds)
 
-    # Compute split sizes
+    # Validate that the split fractions sum to 1.0
+    total_split = train_split + val_split + test_split
+    if not math.isclose(total_split, 1.0, rel_tol=1e-5, abs_tol=1e-5):
+        raise ValueError(
+            f"train_split + val_split + test_split must equal 1.0, got {total_split}"
+        )
+
+    # Compute split sizes explicitly from each fraction
     train_size = int(train_split * total)
     val_size = int(val_split * total)
-    test_size = total - train_size - val_size
+    test_size = int(test_split * total)
+
+    # Deterministically account for rounding remainder
+    remainder = total - (train_size + val_size + test_size)
+    test_size += remainder
 
     # Shuffle the full dataset once with a fixed seed, then split it
     full_ds = full_ds.shuffle(
