@@ -234,7 +234,7 @@ def main() -> None:
 
     # Load data
     ds_train = tf.data.Dataset.load(str(prepared_dataset_folder / "train"))
-    ds_test = tf.data.Dataset.load(str(prepared_dataset_folder / "test"))
+    ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "val"))
 
     labels = None
     with open(prepared_dataset_folder / "labels.json") as f:
@@ -253,7 +253,7 @@ def main() -> None:
     model.fit(
         ds_train,
         epochs=epochs,
-        validation_data=ds_test,
+        validation_data=ds_val,
     )
 
     # Save the model
@@ -349,7 +349,7 @@ index 5c69e2f..b845eb3 100644
 
 @@ -61,6 +64,10 @@ def main() -> None:
      ds_train = tf.data.Dataset.load(str(prepared_dataset_folder / "train"))
-     ds_test = tf.data.Dataset.load(str(prepared_dataset_folder / "test"))
+     ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "val"))
 
 +    labels = None
 +    with open(prepared_dataset_folder / "labels.json") as f:
@@ -553,11 +553,11 @@ def main() -> None:
     model_history = np.load(model_folder.absolute() / "history.npy", allow_pickle=True).item()
 
     # Log metrics
-    val_loss, val_acc = model.evaluate(ds_test)
-    print(f"Validation loss: {val_loss:.2f}")
-    print(f"Validation accuracy: {val_acc * 100:.2f}%")
+    test_loss, test_acc = model.evaluate(ds_test)
+    print(f"Test loss: {test_loss:.2f}")
+    print(f"Test accuracy: {test_acc * 100:.2f}%")
     with open(evaluation_folder / "metrics.json", "w") as f:
-        json.dump({"val_loss": val_loss, "val_acc": val_acc}, f)
+        json.dump({"test_loss": test_loss, "test_acc": test_acc}, f)
 
     # Save training history plot
     fig = get_training_plot(model_history)
