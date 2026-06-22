@@ -6,11 +6,11 @@ Moon, Ceres, Pluto, Eris, Haumea, Makemake.
 
 Output filenames are ``<ClassName>_<N>.jpg``.
 
-Output: dataset/  (14 classes, 150 images each, 128x128 RGB)
+Output: data/raw  (14 classes, 150 images each, 128x128 RGB)
 
 Usage:
     python generate_planet_dataset_simply.py \
-        --output datasets --per-class 150
+        --output data/raw --per-class 150
 """
 
 from __future__ import annotations
@@ -67,7 +67,7 @@ FOV_Y = FOV_X * OUTPUT_HEIGHT / OUTPUT_WIDTH  # 50.0 degrees for 1:1 aspect rati
 # keeping margins small while ensuring the body stays fully inside the frame
 # even with random camera latitude/longitude variations and renderer overshoot.
 # For a sphere of radius R: distance = R / tan(0.78 * fov_y / 2)
-FIT_FACTOR = 0.78
+FIT_FACTOR = 0.85
 BASE_DISTANCE = 1.0 / math.tan(math.radians(FOV_Y * FIT_FACTOR / 2))
 
 # Saturn's rings extend from ~1.2 to ~2.3 Saturn radii. We frame the outer edge.
@@ -477,7 +477,7 @@ def generate_dataset(output_dir: str | Path, images_per_class: int = 150, resume
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate improved SIMply planet dataset.")
-    parser.add_argument("--output", type=str, default="dataset", help="Output directory")
+    parser.add_argument("--output", type=str, default="data/raw", help="Output directory")
     parser.add_argument("--per-class", type=int, default=150, help="Images per class")
     parser.add_argument("--resume", action="store_true", help="Skip images that already exist")
     args = parser.parse_args()

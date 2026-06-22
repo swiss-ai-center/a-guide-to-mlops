@@ -11,7 +11,7 @@ Each class gets a dedicated folder with `150` images named `<ClassName>_<N>.jpg`
 Example folder layout after generation:
 
 ```
-dataset/
+datas/raw/
 ├── Mercury/
 │   ├── Mercury_0.jpg
 │   ├── Mercury_1.jpg
@@ -90,7 +90,7 @@ From the project root:
 
 ```bash
 python generate_planet_dataset_simply.py \
-    --output dataset \
+    --output data/raw \
     --per-class 150
 ```
 
@@ -98,7 +98,7 @@ python generate_planet_dataset_simply.py \
 
 | Option | Default | Description |
 |--------|---------|-------------|
-| `--output` | `dataset` | Output directory for the dataset |
+| `--output` | `data/raw` | Output directory for the dataset |
 | `--per-class` | `150` | Number of images to generate per class |
 | `--resume` | `False` | Skip images that already exist |
 
