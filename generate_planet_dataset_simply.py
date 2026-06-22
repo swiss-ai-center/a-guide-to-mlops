@@ -63,6 +63,19 @@ TEXTURE_HEIGHT = 1024
 FOV_X = 50.0  # degrees, horizontal
 FOV_Y = FOV_X * OUTPUT_HEIGHT / OUTPUT_WIDTH  # 50.0 degrees for 1:1 aspect ratio
 
+# Render-scale for anti-aliasing.  The scene is rendered at
+# OUTPUT_WIDTH*RENDER_SCALE x OUTPUT_HEIGHT*RENDER_SCALE and then downsampled
+# to the final OUTPUT_WIDTH x OUTPUT_HEIGHT with a high-quality resampling
+# filter.  RENDER_SCALE=4 means 16 rays are traced per output pixel, giving
+# very smooth silhouettes against the black background.
+RENDER_SCALE = 4
+
+# Downsample filter used when resizing the high-resolution render to the final
+# output size.  LANCZOS gives the sharpest, highest-quality result.  BILINEAR
+# is slightly softer but cheaper and avoids any faint ringing on very high-
+# contrast edges.
+DOWNSAMPLE_FILTER = Image.Resampling.LANCZOS
+
 # Camera distance chosen so the object fills ~78% of the shorter image axis,
 # keeping margins small while ensuring the body stays fully inside the frame
 # even with random camera latitude/longitude variations and renderer overshoot.
@@ -282,10 +295,32 @@ def random_light_direction(rng: random.Random) -> Vec3:
     return Vec3((x, y, z)).norm
 
 
-def render_scene(scene: RenderableScene, camera: Camera) -> np.ndarray:
-    """Render an RGB image of the scene using only the texture (no shading/shadows)."""
-    tex_img = Renderer.texture(scene, camera, sf=1, nanv=(0, 0, 0), chan='rgb')
-    return np.clip(tex_img, 0, 255).astype(np.uint8)
+def render_scene(
+    scene: RenderableScene,
+    camera: Camera,
+    render_scale: int = RENDER_SCALE,
+    downsample_filter: Image.Resampling = DOWNSAMPLE_FILTER,
+) -> np.ndarray:
+    """Render an RGB image of the scene using only the texture (no shading/shadows).
+
+    The scene is rendered at ``OUTPUT_WIDTH*render_scale`` by
+    ``OUTPUT_HEIGHT*render_scale`` and then downsampled to the final output
+    size using ``downsample_filter``.  Rendering at higher resolution and
+    resampling smooths the jagged silhouette produced by one-ray-per-pixel
+    rendering.
+    """
+    # Create a higher-resolution camera with the same field of view and pose.
+    hires_camera = Camera.pinhole(
+        (math.degrees(camera.fov[0]), math.degrees(camera.fov[1])),
+        OUTPUT_WIDTH * render_scale,
+        OUTPUT_HEIGHT * render_scale,
+    )
+    hires_camera.frame = camera.frame
+
+    tex_img = Renderer.texture(scene, hires_camera, sf=1, nanv=(0, 0, 0), chan='rgb')
+    img = Image.fromarray(np.clip(tex_img, 0, 255).astype(np.uint8), mode='RGB')
+    img = img.resize((OUTPUT_WIDTH, OUTPUT_HEIGHT), downsample_filter)
+    return np.array(img)
 
 
 def build_camera(
@@ -337,19 +372,31 @@ def build_camera(
 # ---------------------------------------------------------------------------
 
 
-def render_normal(texture: np.ndarray, light_dir: Vec3, distance: float,
-                  rng: random.Random) -> np.ndarray:
+def render_normal(
+    texture: np.ndarray,
+    light_dir: Vec3,
+    distance: float,
+    rng: random.Random,
+    render_scale: int = RENDER_SCALE,
+    downsample_filter: Image.Resampling = DOWNSAMPLE_FILTER,
+) -> np.ndarray:
     """Render a textured sphere centred in the frame."""
     sphere = Spheroid(Frame.world(), 1.0, 1.0, 1.0)
     brdf = BRDF.lambert(0.01)
     planet = RenderableObject.renderablePrimitive(sphere, brdf, Texture(texture))
     scene = RenderableScene([planet], Light.sunPointSource(1e3 * light_dir))
     camera = build_camera(distance, rng)
-    return render_scene(scene, camera)
+    return render_scene(scene, camera, render_scale=render_scale, downsample_filter=downsample_filter)
 
 
-def render_haumea(texture: np.ndarray, light_dir: Vec3, distance: float,
-                  rng: random.Random) -> np.ndarray:
+def render_haumea(
+    texture: np.ndarray,
+    light_dir: Vec3,
+    distance: float,
+    rng: random.Random,
+    render_scale: int = RENDER_SCALE,
+    downsample_filter: Image.Resampling = DOWNSAMPLE_FILTER,
+) -> np.ndarray:
     """Render Haumea as a randomly oriented triaxial ellipsoid."""
     ax, ay, az = HAUMEA_AXES
     # Random rotation around the long axis and a random in-plane spin
@@ -363,11 +410,17 @@ def render_haumea(texture: np.ndarray, light_dir: Vec3, distance: float,
     planet = RenderableObject.renderablePrimitive(ellipsoid, brdf, Texture(texture))
     scene = RenderableScene([planet], Light.sunPointSource(1e3 * light_dir))
     camera = build_camera(distance, rng)
-    return render_scene(scene, camera)
+    return render_scene(scene, camera, render_scale=render_scale, downsample_filter=downsample_filter)
 
 
-def render_saturn(texture: np.ndarray, light_dir: Vec3, distance: float,
-                  rng: random.Random) -> np.ndarray:
+def render_saturn(
+    texture: np.ndarray,
+    light_dir: Vec3,
+    distance: float,
+    rng: random.Random,
+    render_scale: int = RENDER_SCALE,
+    downsample_filter: Image.Resampling = DOWNSAMPLE_FILTER,
+) -> np.ndarray:
     """Render Saturn with its rings locked to the equatorial plane.
 
     Saturn's rings lie in its equatorial plane (the world x-y plane). As the
@@ -399,7 +452,7 @@ def render_saturn(texture: np.ndarray, light_dir: Vec3, distance: float,
     ring = RenderableObject.renderableMesh(ring_mesh, BRDF.lambert(0.015), SATURN_RING_TEXTURE)
 
     scene = RenderableScene([planet, ring], Light.sunPointSource(1e3 * light_dir))
-    return render_scene(scene, camera)
+    return render_scene(scene, camera, render_scale=render_scale, downsample_filter=downsample_filter)
 
 
 # ---------------------------------------------------------------------------
@@ -407,7 +460,13 @@ def render_saturn(texture: np.ndarray, light_dir: Vec3, distance: float,
 # ---------------------------------------------------------------------------
 
 
-def generate_dataset(output_dir: str | Path, images_per_class: int = 150, resume: bool = False) -> None:
+def generate_dataset(
+    output_dir: str | Path,
+    images_per_class: int = 150,
+    resume: bool = False,
+    render_scale: int = RENDER_SCALE,
+    downsample_filter: Image.Resampling = DOWNSAMPLE_FILTER,
+) -> None:
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -454,11 +513,20 @@ def generate_dataset(output_dir: str | Path, images_per_class: int = 150, resume
             light_dir = random_light_direction(rng)
 
             if planet_name == "Haumea":
-                img_array = render_haumea(texture, light_dir, dist, rng)
+                img_array = render_haumea(
+                    texture, light_dir, dist, rng,
+                    render_scale=render_scale, downsample_filter=downsample_filter,
+                )
             elif planet_name == "Saturn":
-                img_array = render_saturn(texture, light_dir, dist, rng)
+                img_array = render_saturn(
+                    texture, light_dir, dist, rng,
+                    render_scale=render_scale, downsample_filter=downsample_filter,
+                )
             else:
-                img_array = render_normal(texture, light_dir, dist, rng)
+                img_array = render_normal(
+                    texture, light_dir, dist, rng,
+                    render_scale=render_scale, downsample_filter=downsample_filter,
+                )
 
             img = Image.fromarray(img_array, mode="RGB")
             img.save(out_path, quality=95)
@@ -480,5 +548,31 @@ if __name__ == "__main__":
     parser.add_argument("--output", type=str, default="data/raw", help="Output directory")
     parser.add_argument("--per-class", type=int, default=150, help="Images per class")
     parser.add_argument("--resume", action="store_true", help="Skip images that already exist")
+    parser.add_argument(
+        "--render-scale",
+        type=int,
+        default=RENDER_SCALE,
+        help="Render at OUTPUT_WIDTH*scale x OUTPUT_HEIGHT*scale and downsample. Default 4 (16 rays per output pixel).",
+    )
+    parser.add_argument(
+        "--downsample-filter",
+        type=str,
+        choices=["lanczos", "bilinear", "bicubic", "box", "nearest"],
+        default="lanczos",
+        help="PIL filter used to resize the high-resolution render to the final size.",
+    )
     args = parser.parse_args()
-    generate_dataset(args.output, args.per_class, args.resume)
+    filter_map = {
+        "lanczos": Image.Resampling.LANCZOS,
+        "bilinear": Image.Resampling.BILINEAR,
+        "bicubic": Image.Resampling.BICUBIC,
+        "box": Image.Resampling.BOX,
+        "nearest": Image.Resampling.NEAREST,
+    }
+    generate_dataset(
+        args.output,
+        args.per_class,
+        args.resume,
+        render_scale=args.render_scale,
+        downsample_filter=filter_map[args.downsample_filter],
+    )

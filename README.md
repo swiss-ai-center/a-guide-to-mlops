@@ -2,7 +2,7 @@
 
 This branch is only intended to keep the Python script that generates a synthetic image dataset of planets, dwarf planets, and moons using the **SIMply** ray-tracing library.
 
-The generator renders textured spheres (and Saturn's rings) from randomized camera angles and saves the images as `128 × 128` RGB JPEGs on a black background.
+The generator renders textured spheres (and Saturn's rings) from randomized camera angles and saves the images as `128 × 128` RGB JPEGs on a black background. To reduce aliased outlines, it renders each image at a higher resolution (`OUTPUT_WIDTH × render-scale` by `OUTPUT_HEIGHT × render-scale`) and then downsamples to the final size with a high-quality resampling filter.
 
 ## What is generated
 
@@ -94,6 +94,31 @@ python generate_planet_dataset_simply.py \
     --per-class 150
 ```
 
+### Anti-aliasing options
+
+By default the generator renders at `512 × 512` (4× the output size) and downsamples to `128 × 128` using the Lanczos filter. You can tune this trade-off:
+
+```bash
+# Faster, slightly softer edges (render at 256 × 256)
+python generate_planet_dataset_simply.py \
+    --output data/raw \
+    --per-class 150 \
+    --render-scale 2
+
+# Use a softer, cheaper downsampling filter
+python generate_planet_dataset_simply.py \
+    --output data/raw \
+    --per-class 150 \
+    --downsample-filter bilinear
+
+# Disable anti-aliasing entirely (render directly at 128 × 128)
+python generate_planet_dataset_simply.py \
+    --output data/raw \
+    --per-class 150 \
+    --render-scale 1 \
+    --downsample-filter nearest
+```
+
 ### Options
 
 | Option | Default | Description |
@@ -101,6 +126,8 @@ python generate_planet_dataset_simply.py \
 | `--output` | `data/raw` | Output directory for the dataset |
 | `--per-class` | `150` | Number of images to generate per class |
 | `--resume` | `False` | Skip images that already exist |
+| `--render-scale` | `4` | Render at `OUTPUT_WIDTH × scale` × `OUTPUT_HEIGHT × scale` before downsampling. Higher values reduce aliasing but slow rendering roughly by `scale²`. |
+| `--downsample-filter` | `lanczos` | PIL filter used when resizing the high-resolution render to the final output size. Choices: `lanczos`, `bilinear`, `bicubic`, `box`, `nearest`. |
 
 ## Output
 
