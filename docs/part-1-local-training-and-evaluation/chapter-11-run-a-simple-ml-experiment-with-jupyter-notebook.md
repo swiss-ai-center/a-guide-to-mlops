@@ -247,13 +247,8 @@ In this chapter, you have:
 4. Set up a Python environment to run the experiment
 5. Executed the experiment locally for the first time
 
-However, you may have identified the following areas for improvement:
-
-- [ ] Notebook still needs manual download
-- [ ] Dataset still needs manual download and placement
-- [ ] Steps to run the experiment were not documented
-
-In the next chapters, you will enhance the workflow to fix those issues.
+The notebook runs, but the workflow still relies on manual steps and
+undocumented assumptions.
 
 !!! abstract "Take away"
 
@@ -273,12 +268,17 @@ In the next chapters, you will enhance the workflow to fix those issues.
 
 ## State of the MLOps process
 
+After running the notebook, you may have noticed that it requires manual
+downloads and that the steps are not documented. These are signs of a broader
+set of issues you will address in this part:
+
 - [ ] Notebook can be run but is not adequate for production
 - [ ] Codebase and dataset are not versioned
 - [ ] Model steps rely on verbal communication and may be undocumented
 - [ ] Changes to model are not easily visualized
 
-Continue to the next chapters to address the remaining items.
+The next chapters will turn the notebook into a reproducible, versioned machine
+learning pipeline.
 
 ## Sources
 
