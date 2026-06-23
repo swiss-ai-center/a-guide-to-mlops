@@ -338,20 +338,6 @@ You can now safely continue to the next chapter.
 
 ## State of the MLOps process
 
-- [x] Notebook has been transformed into scripts for production
-- [x] Codebase and dataset are versioned
-- [x] Steps used to create the model are documented and can be re-executed
-- [x] Changes done to a model can be visualized with parameters, metrics and
-      plots to identify differences between iterations
-- [x] Codebase can be shared and improved by multiple developers
-- [x] Dataset can be shared among the developers and is placed in the right
-      directory in order to run the experiment
-- [x] Experiment can be executed on a clean machine with the help of a CI/CD
-      pipeline
-- [x] CI/CD pipeline is triggered on pull requests and reports the results of
-      the experiment
-- [x] Changes to model can be thoroughly reviewed and discussed before
-      integrating them into the codebase
 - [x] Model can be saved and loaded with all required artifacts for future usage
 - [x] Model can be easily used outside of the experiment context
 - [ ] Model requires manual publication to the artifact registry
@@ -360,8 +346,7 @@ You can now safely continue to the next chapter.
 - [ ] Model cannot be trained on hardware other than the local machine
 - [ ] Model cannot be trained on custom hardware for specific use-cases
 
-You will address these issues in the next chapters for improved efficiency and
-collaboration. Continue the guide to learn how.
+Continue to the next chapters to address the remaining items.
 
 ## Sources
 

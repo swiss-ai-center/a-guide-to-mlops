@@ -231,8 +231,10 @@ using DVC. We then evaluated the new model to see if it has improved.
       retraining, making it immediately clear whether the newly labeled data improved
       model performance or introduced new issues that need investigation.
 
-## State of the labeling process
+## State of the MLOps process
 
 - [x] Labeling of supplemental data can be done systematically and uniformly
 - [x] Labeling of supplemental data is accelerated with AI assistance
 - [x] Model is retrained with the supplemental data
+
+Continue to the conclusion to review what you have learned.
