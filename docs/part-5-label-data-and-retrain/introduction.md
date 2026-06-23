@@ -7,7 +7,6 @@ title: "Part 5 - Introduction"
 Learn how to use the model to label new data using Label Studio and retrain the
 model iteratively.
 
-
 ## Environment
 
 This guide has been written with :simple-apple: macOS and :simple-linux: Linux

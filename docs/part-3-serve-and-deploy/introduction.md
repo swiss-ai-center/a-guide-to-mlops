@@ -8,7 +8,6 @@ Learn how to serve and deploy the model using
 [:simple-bentoml: BentoML](../tools.md) and
 [:simple-docker: Docker](../tools.md).
 
-
 ## Environment
 
 This guide has been written with :simple-apple: macOS and :simple-linux: Linux

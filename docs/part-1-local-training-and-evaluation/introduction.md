@@ -7,7 +7,6 @@ title: "Part 1 - Introduction"
 Learn how to train a model locally and evaluate it using
 [:simple-dvc: DVC](../tools.md).
 
-
 ## Environment
 
 This guide has been written with :simple-apple: macOS and :simple-linux: Linux
