@@ -18,18 +18,19 @@
         }
         if (revealElements.length > 0) {
             if ('IntersectionObserver' in window) {
-                revealObserver = new IntersectionObserver((entries) => {
+                const observer = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
                             entry.target.classList.add('visible');
-                            revealObserver.unobserve(entry.target);
+                            observer.unobserve(entry.target);
                         }
                     });
                 }, {
                     threshold: 0.15,
                     rootMargin: '0px 0px -50px 0px'
                 });
-                revealElements.forEach(el => revealObserver.observe(el));
+                revealObserver = observer;
+                revealElements.forEach(el => observer.observe(el));
             } else {
                 // Graceful degradation for browsers without IntersectionObserver
                 // (e.g. terminal browsers that run JS but lack the API).
