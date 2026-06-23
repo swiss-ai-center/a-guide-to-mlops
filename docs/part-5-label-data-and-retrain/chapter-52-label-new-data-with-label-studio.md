@@ -114,8 +114,7 @@ That concludes this chapter.
 - [ ] Labeling of supplemental data is time intensive
 - [ ] Model needs to be retrained using higher-quality data
 
-You will address the remaining items in the next chapters of this part for
-improved efficiency and collaboration. Continue the guide to learn how.
+Continue to the next chapters to address the remaining items.
 
 ## Sources
 

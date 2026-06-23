@@ -424,8 +424,7 @@ You can now safely continue to the next chapter.
 - [x] Steps used to create the model are documented and can be re-executed
 - [ ] Changes to model are not easily visualized
 
-You will address the remaining items in the next chapters of this part for
-improved efficiency and collaboration. Continue the guide to learn how.
+Continue to the next chapters to address the remaining items.
 
 ## Sources
 
