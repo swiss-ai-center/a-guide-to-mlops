@@ -237,5 +237,4 @@ using DVC. We then evaluated the new model to see if it has improved.
 - [x] Labeling of supplemental data is accelerated with AI assistance
 - [x] Model is retrained with the supplemental data
 
-You have completed the objectives of this part. Continue to the conclusion to
-review what you have learned and explore the next steps.
+Continue to the conclusion to review what you have learned.

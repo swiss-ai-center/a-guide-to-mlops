@@ -363,8 +363,7 @@ You can now safely continue to the next chapter.
 - [x] Changes to model can be thoroughly reviewed and discussed before
       integrating them into the codebase
 
-You have completed the objectives of this part. Continue to Part 3 to learn how
-to serve and deploy your model.
+Continue to the conclusion to review what you have learned.
 
 ## Sources
 
