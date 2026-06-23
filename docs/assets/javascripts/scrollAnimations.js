@@ -12,12 +12,14 @@
 
         // Reveal elements when they enter the viewport
         const revealElements = document.querySelectorAll('.reveal');
+        document.documentElement.classList.remove('has-scroll-animations');
         if (revealObserver) {
             revealObserver.disconnect();
             revealObserver = null;
         }
         if (revealElements.length > 0) {
             if ('IntersectionObserver' in window) {
+                document.documentElement.classList.add('has-scroll-animations');
                 const observer = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
