@@ -17,18 +17,24 @@
             revealObserver = null;
         }
         if (revealElements.length > 0) {
-            revealObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        revealObserver.unobserve(entry.target);
-                    }
+            if ('IntersectionObserver' in window) {
+                revealObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            revealObserver.unobserve(entry.target);
+                        }
+                    });
+                }, {
+                    threshold: 0.15,
+                    rootMargin: '0px 0px -50px 0px'
                 });
-            }, {
-                threshold: 0.15,
-                rootMargin: '0px 0px -50px 0px'
-            });
-            revealElements.forEach(el => revealObserver.observe(el));
+                revealElements.forEach(el => revealObserver.observe(el));
+            } else {
+                // Graceful degradation for browsers without IntersectionObserver
+                // (e.g. terminal browsers that run JS but lack the API).
+                revealElements.forEach(el => el.classList.add('visible'));
+            }
         }
     }
 

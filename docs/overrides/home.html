@@ -6,6 +6,7 @@
 
 {% block extrahead %}
 {{ super() }}
+<script>document.documentElement.classList.add('js');</script>
 <style>
   /* Page-wide reset for the landing story */
   .md-header {
@@ -319,11 +320,16 @@
     background: #0f0f0f;
     border: 1px solid #333333;
     box-shadow: none;
-    transform: translateY(28px);
-    opacity: 0;
+    transform: translateY(0);
+    opacity: 1;
     transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.7s ease, border-color 0.2s ease;
   }
-  .chapter-card.visible {
+  /* Progressive enhancement: animate in only when JS runs (e.g. not in chawan) */
+  .js .chapter-card {
+    transform: translateY(28px);
+    opacity: 0;
+  }
+  .js .chapter-card.visible {
     transform: translateY(0);
     opacity: 1;
   }
