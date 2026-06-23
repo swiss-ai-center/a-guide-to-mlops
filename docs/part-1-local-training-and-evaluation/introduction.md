@@ -9,7 +9,8 @@ Learn how to train a model locally and evaluate it using
 
 ## State of the MLOps process
 
-At the beginning of this part, the following issues remain:
+This part starts from a Jupyter notebook experiment. You will address the
+following issues:
 
 - [ ] Notebook can be run but is not adequate for production
 - [ ] Codebase and dataset are not versioned

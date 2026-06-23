@@ -10,7 +10,9 @@ seamless integration with a CI/CD pipeline and visualize reports with
 
 ## State of the MLOps process
 
-At the beginning of this part, the following issues remain:
+Now that the experiment runs locally, the next step is to make it collaborative
+and reproducible in the cloud. In this part, you will address the following
+issues:
 
 - [ ] Codebase requires manual download and setup
 - [ ] Dataset requires manual download and placement

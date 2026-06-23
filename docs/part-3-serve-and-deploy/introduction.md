@@ -10,7 +10,8 @@ Learn how to serve and deploy the model using
 
 ## State of the MLOps process
 
-At the beginning of this part, the following issues remain:
+With the experiment versioned and reproducible, the model is ready to be served
+and deployed. In this part, you will address the following issues:
 
 - [ ] Model may have required artifacts that are forgotten or omitted in
       saved/loaded state

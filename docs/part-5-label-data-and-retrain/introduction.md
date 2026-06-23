@@ -9,7 +9,8 @@ model iteratively.
 
 ## State of the MLOps process
 
-At the beginning of this part, the following issues remain:
+Production feedback and new data require a way to improve the model iteratively.
+In this part, you will address the following issues:
 
 - [ ] Labeling of supplemental data is not systematic or uniform
 - [ ] Labeling of supplemental data is time intensive
