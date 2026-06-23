@@ -315,8 +315,8 @@ You can now safely continue to the next chapter.
 - [x] Changes done to a model can be visualized with parameters, metrics and
       plots to identify differences between iterations
 
-You will address these issues in the next chapters for improved efficiency and
-collaboration. Continue the guide to learn how.
+You have completed the objectives of this part. Continue to Part 2 to learn how
+to move your experiment to the cloud.
 
 ## Sources
 

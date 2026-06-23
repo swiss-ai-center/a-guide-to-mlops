@@ -314,11 +314,14 @@ and imported new data. You are now ready to start labeling your data!
       you to prototype labeling workflows quickly and iterate on the annotation schema
       before scaling to production.
 
-## State of the labeling process
+## State of the MLOps process
 
-- [ ] Labeling of supplemental data needs to be systematic and uniform
+- [ ] Labeling of supplemental data is not systematic or uniform
 - [ ] Labeling of supplemental data is time intensive
 - [ ] Model needs to be retrained using higher-quality data
+
+You will address the remaining items in the next chapters of this part for
+improved efficiency and collaboration. Continue the guide to learn how.
 
 ## Sources
 

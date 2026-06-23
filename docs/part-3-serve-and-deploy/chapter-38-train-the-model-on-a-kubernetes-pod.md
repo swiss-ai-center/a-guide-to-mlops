@@ -920,8 +920,9 @@ gcloud container clusters delete --zone $GCP_K8S_CLUSTER_ZONE $GCP_K8S_CLUSTER_N
 - [x] Model can be trained on a custom infrastructure with custom hardware for
       specific use-cases
 
-You can now safely continue to the next chapter of this guide concluding your
-journey and the next things you could do with your model.
+You have completed the objectives of this part. Continue to Part 4 to learn how
+to monitor and maintain your model, and to Part 5 to learn how to label data and
+retrain it.
 
 ## Sources
 

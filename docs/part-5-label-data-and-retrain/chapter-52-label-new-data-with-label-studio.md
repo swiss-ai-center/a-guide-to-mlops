@@ -108,12 +108,15 @@ That concludes this chapter.
       across the dataset, reducing the noise that can harm model performance when
       different annotators use different standards.
 
-## State of the labeling process
+## State of the MLOps process
 
 - [x] Labeling of supplemental data can be done systematically and uniformly
 - [ ] Labeling of supplemental data is time intensive
 - [ ] Model needs to be retrained using higher-quality data
 
-## Souces
+You will address the remaining items in the next chapters of this part for
+improved efficiency and collaboration. Continue the guide to learn how.
+
+## Sources
 
 - [_Label Studio Labeling Guide_](https://labelstud.io/guide/labeling)

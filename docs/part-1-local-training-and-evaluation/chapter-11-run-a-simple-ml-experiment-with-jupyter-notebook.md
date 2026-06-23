@@ -278,8 +278,8 @@ In the next chapters, you will enhance the workflow to fix those issues.
 - [ ] Model steps rely on verbal communication and may be undocumented
 - [ ] Changes to model are not easily visualized
 
-You will address these issues in the next chapters for improved efficiency and
-collaboration. Continue the guide to learn how.
+You will address the remaining items in the next chapters of this part for
+improved efficiency and collaboration. Continue the guide to learn how.
 
 ## Sources
 

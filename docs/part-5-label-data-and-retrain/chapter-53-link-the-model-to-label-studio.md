@@ -379,11 +379,14 @@ data we have labeled.
       pressure or with large datasets. Implementing cross-labeling and quality checks
       helps mitigate this risk.
 
-## State of the labeling process
+## State of the MLOps process
 
 - [x] Labeling of supplemental data can be done systematically and uniformly
 - [x] Labeling of supplemental data is accelerated with AI assistance
 - [ ] Model needs to be retrained using higher-quality data
+
+You will address the remaining items in the next chapters of this part for
+improved efficiency and collaboration. Continue the guide to learn how.
 
 ## Sources
 
