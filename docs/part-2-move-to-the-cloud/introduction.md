@@ -8,18 +8,6 @@ Learn how to collaborate online using [:simple-git: Git](../tools.md), enable
 seamless integration with a CI/CD pipeline and visualize reports with
 [CML](../tools.md).
 
-## State of the MLOps process
-
-Now that the experiment runs locally, the next step is to make it collaborative
-and reproducible in the cloud. In this part, you will address the following
-issues:
-
-- [ ] Codebase requires manual download and setup
-- [ ] Dataset requires manual download and placement
-- [ ] Experiment may not be reproducible on other machines
-- [ ] CI/CD pipeline does not report the results of the experiment
-- [ ] Changes to model are not thoroughly reviewed and discussed before
-      integration
 
 ## Environment
 
@@ -64,3 +52,16 @@ those described in the
     While the costs associated with this section are **expected to be free**, it is
     recommended to review the pricing details of cloud services before initiating
     this part.
+
+## State of the MLOps process
+
+Now that the experiment runs locally, the next step is to make it collaborative
+and reproducible in the cloud. In this part, you will address the following
+issues:
+
+- [ ] Codebase requires manual download and setup
+- [ ] Dataset requires manual download and placement
+- [ ] Experiment may not be reproducible on other machines
+- [ ] CI/CD pipeline does not report the results of the experiment
+- [ ] Changes to model are not thoroughly reviewed and discussed before
+      integration

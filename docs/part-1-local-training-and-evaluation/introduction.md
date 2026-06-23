@@ -7,15 +7,6 @@ title: "Part 1 - Introduction"
 Learn how to train a model locally and evaluate it using
 [:simple-dvc: DVC](../tools.md).
 
-## State of the MLOps process
-
-This part starts from a Jupyter notebook experiment. You will address the
-following issues:
-
-- [ ] Notebook can be run but is not adequate for production
-- [ ] Codebase and dataset are not versioned
-- [ ] Model steps rely on verbal communication and may be undocumented
-- [ ] Changes to model are not easily visualized
 
 ## Environment
 
@@ -82,3 +73,13 @@ The following requirements are necessary to follow this part:
     Run `cd ~` to navigate to your Linux home directory. Avoid working in `/mnt/*`
     paths, as cross-filesystem operations cause severe performance bottlenecks when
     installing packages with pip.
+
+## State of the MLOps process
+
+This part starts from a Jupyter notebook experiment. You will address the
+following issues:
+
+- [ ] Notebook can be run but is not adequate for production
+- [ ] Codebase and dataset are not versioned
+- [ ] Model steps rely on verbal communication and may be undocumented
+- [ ] Changes to model are not easily visualized
