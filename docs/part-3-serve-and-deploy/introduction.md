@@ -8,6 +8,19 @@ Learn how to serve and deploy the model using
 [:simple-bentoml: BentoML](../tools.md) and
 [:simple-docker: Docker](../tools.md).
 
+## State of the MLOps process
+
+At the beginning of this part, the following issues remain:
+
+- [ ] Model may have required artifacts that are forgotten or omitted in
+      saved/loaded state
+- [ ] Model cannot be easily used from outside of the experiment context
+- [ ] Model requires manual publication to the artifact registry
+- [ ] Model is not accessible on the Internet and cannot be used anywhere
+- [ ] Model requires manual deployment on the cluster
+- [ ] Model cannot be trained on hardware other than the local machine
+- [ ] Model cannot be trained on custom hardware for specific use-cases
+
 ## Environment
 
 This guide has been written with :simple-apple: macOS and :simple-linux: Linux

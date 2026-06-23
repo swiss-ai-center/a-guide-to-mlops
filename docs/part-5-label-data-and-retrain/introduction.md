@@ -7,6 +7,14 @@ title: "Part 5 - Introduction"
 Learn how to use the model to label new data using Label Studio and retrain the
 model iteratively.
 
+## State of the MLOps process
+
+At the beginning of this part, the following issues remain:
+
+- [ ] Labeling of supplemental data is not systematic or uniform
+- [ ] Labeling of supplemental data is time intensive
+- [ ] Model needs to be retrained using higher-quality data
+
 !!! note
 
     This part focuses on labeling data locally so you can experiment without extra

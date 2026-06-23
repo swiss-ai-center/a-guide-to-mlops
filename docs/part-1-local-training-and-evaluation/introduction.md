@@ -7,6 +7,15 @@ title: "Part 1 - Introduction"
 Learn how to train a model locally and evaluate it using
 [:simple-dvc: DVC](../tools.md).
 
+## State of the MLOps process
+
+At the beginning of this part, the following issues remain:
+
+- [ ] Notebook can be run but is not adequate for production
+- [ ] Codebase and dataset are not versioned
+- [ ] Model steps rely on verbal communication and may be undocumented
+- [ ] Changes to model are not easily visualized
+
 ## Environment
 
 This guide has been written with :simple-apple: macOS and :simple-linux: Linux

@@ -8,6 +8,17 @@ Learn how to collaborate online using [:simple-git: Git](../tools.md), enable
 seamless integration with a CI/CD pipeline and visualize reports with
 [CML](../tools.md).
 
+## State of the MLOps process
+
+At the beginning of this part, the following issues remain:
+
+- [ ] Codebase requires manual download and setup
+- [ ] Dataset requires manual download and placement
+- [ ] Experiment may not be reproducible on other machines
+- [ ] CI/CD pipeline does not report the results of the experiment
+- [ ] Changes to model are not thoroughly reviewed and discussed before
+      integration
+
 ## Environment
 
 This guide has been written with :simple-apple: macOS and :simple-linux: Linux
