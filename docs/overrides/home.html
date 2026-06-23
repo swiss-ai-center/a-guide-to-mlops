@@ -182,12 +182,6 @@
   .belt-planet[title="Crew"] { --planet-size: 230px; }
 
   @media (max-width: 1100px) {
-    .story-chapter:nth-of-type(even) .chapter-card {
-      margin-right: 3vw;
-    }
-    .story-chapter:nth-of-type(odd) .chapter-card {
-      margin-left: 3vw;
-    }
     .belt-planet { --planet-scale: 0.85; }
     .belt-planet[title="Sun"] { --planet-size: 200px; }
     .belt-planet[title="Crew"] { --planet-size: 190px; }
@@ -315,9 +309,16 @@
     padding: 6rem 2rem;
   }
 
+  /* Alternate cards left/right using only the section padding as page margin */
+  @media (min-width: 901px) {
+    .story-chapter:nth-of-type(even) {
+      justify-content: flex-end;
+    }
+  }
+
   .chapter-card {
     max-width: 640px;
-    margin-left: 6vw;
+    margin: 0;
     padding: 2rem 2.2rem;
     border-radius: 0;
     background: #0f0f0f;
@@ -326,14 +327,6 @@
     transform: translateY(28px);
     opacity: 0;
     transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.7s ease, border-color 0.2s ease;
-  }
-  .story-chapter:nth-of-type(even) .chapter-card {
-    margin-left: auto;
-    margin-right: 6vw;
-  }
-  .story-chapter:nth-of-type(odd) .chapter-card {
-    margin-left: 6vw;
-    margin-right: auto;
   }
   .chapter-card.visible {
     transform: translateY(0);
