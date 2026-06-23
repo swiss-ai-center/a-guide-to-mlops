@@ -12,23 +12,32 @@
 
         // Reveal elements when they enter the viewport
         const revealElements = document.querySelectorAll('.reveal');
+        document.documentElement.classList.remove('has-scroll-animations');
         if (revealObserver) {
             revealObserver.disconnect();
             revealObserver = null;
         }
         if (revealElements.length > 0) {
-            revealObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        revealObserver.unobserve(entry.target);
-                    }
+            if ('IntersectionObserver' in window) {
+                document.documentElement.classList.add('has-scroll-animations');
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, {
+                    threshold: 0.15,
+                    rootMargin: '0px 0px -50px 0px'
                 });
-            }, {
-                threshold: 0.15,
-                rootMargin: '0px 0px -50px 0px'
-            });
-            revealElements.forEach(el => revealObserver.observe(el));
+                revealObserver = observer;
+                revealElements.forEach(el => observer.observe(el));
+            } else {
+                // Graceful degradation for browsers without IntersectionObserver
+                // (e.g. terminal browsers that run JS but lack the API).
+                revealElements.forEach(el => el.classList.add('visible'));
+            }
         }
     }
 

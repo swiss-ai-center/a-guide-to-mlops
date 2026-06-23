@@ -12,7 +12,7 @@
     background: transparent !important;
     box-shadow: none !important;
     transition: background 0.4s ease, box-shadow 0.4s ease;
-    z-index: 30;
+    z-index: 4;
   }
   .md-banner {
     position: relative;
@@ -23,7 +23,7 @@
   }
   .md-footer {
     position: relative;
-    z-index: 5;
+    z-index: 3;
   }
   .md-header--shadow,
   .md-header[data-md-state="shadow"] {
@@ -124,7 +124,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: 5;
+    z-index: 1;
     pointer-events: none;
     overflow: visible;
   }
@@ -182,23 +182,12 @@
   .belt-planet[title="Crew"] { --planet-size: 230px; }
 
   @media (max-width: 1100px) {
-    .story-chapter:nth-of-type(even) .chapter-card {
-      margin-right: 3vw;
-    }
-    .story-chapter:nth-of-type(odd) .chapter-card {
-      margin-left: 3vw;
-    }
     .belt-planet { --planet-scale: 0.85; }
     .belt-planet[title="Sun"] { --planet-size: 200px; }
     .belt-planet[title="Crew"] { --planet-size: 190px; }
     .belt-planet[title="Reentry capsule"] { --planet-size: 160px; }
   }
   @media (max-width: 900px) {
-    .chapter-card,
-    .story-chapter:nth-of-type(even) .chapter-card,
-    .story-chapter:nth-of-type(odd) .chapter-card {
-      margin: 0 auto;
-    }
     .belt-planet { --planet-scale: 0.65; }
     .belt-planet[title="Sun"] { --planet-size: 160px; }
     .belt-planet[title="Crew"] { --planet-size: 150px; }
@@ -289,7 +278,7 @@
     width: clamp(160px, 22vw, 320px);
     opacity: 0.9;
     pointer-events: none;
-    z-index: 5;
+    z-index: 2;
   }
   .hero-rocket img,
   .hero-rocket svg {
@@ -302,7 +291,7 @@
   /* Story main */
   .story-main {
     position: relative;
-    z-index: 10;
+    z-index: 3;
     counter-reset: chapter;
   }
 
@@ -315,27 +304,31 @@
     padding: 6rem 2rem;
   }
 
+  /* Alternate cards left/right using only the section padding as page margin */
+  @media (min-width: 901px) {
+    .story-chapter:nth-of-type(even) {
+      justify-content: flex-end;
+    }
+  }
+
   .chapter-card {
     max-width: 640px;
-    margin-left: 6vw;
+    margin: 0;
     padding: 2rem 2.2rem;
     border-radius: 0;
     background: #0f0f0f;
     border: 1px solid #333333;
     box-shadow: none;
-    transform: translateY(28px);
-    opacity: 0;
+    transform: translateY(0);
+    opacity: 1;
     transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.7s ease, border-color 0.2s ease;
   }
-  .story-chapter:nth-of-type(even) .chapter-card {
-    margin-left: auto;
-    margin-right: 6vw;
+  /* Progressive enhancement: animate in only when scroll animations are active */
+  .has-scroll-animations .chapter-card {
+    transform: translateY(28px);
+    opacity: 0;
   }
-  .story-chapter:nth-of-type(odd) .chapter-card {
-    margin-left: 6vw;
-    margin-right: auto;
-  }
-  .chapter-card.visible {
+  .has-scroll-animations .chapter-card.visible {
     transform: translateY(0);
     opacity: 1;
   }
@@ -441,10 +434,6 @@
     text-decoration: underline;
   }
 
-  @media (max-width: 900px) {
-    .chapter-card { margin: 0 auto; }
-  }
-
   /* Reentry section */
   .story-chapter.reentry .chapter-title span { color: #ef4444; }
   .story-chapter.reentry .chapter-label {
@@ -512,7 +501,7 @@
     width: clamp(160px, 22vw, 320px);
     opacity: 0.9;
     pointer-events: none;
-    z-index: 5;
+    z-index: 2;
   }
   .finale-launchpad img,
   .finale-launchpad svg {
