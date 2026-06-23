@@ -57,3 +57,17 @@ those described in the
     While the costs associated with this section are **expected to be free**, it is
     recommended to review the pricing details of cloud services before initiating
     this part.
+
+## State of the MLOps process
+
+With the experiment versioned and reproducible, the model is ready to be served
+and deployed. In this part, you will address the following issues:
+
+- [ ] Model may have required artifacts that are forgotten or omitted in
+      saved/loaded state
+- [ ] Model cannot be easily used from outside of the experiment context
+- [ ] Model requires manual publication to the artifact registry
+- [ ] Model is not accessible on the Internet and cannot be used anywhere
+- [ ] Model requires manual deployment on the cluster
+- [ ] Model cannot be trained on hardware other than the local machine
+- [ ] Model cannot be trained on custom hardware for specific use-cases

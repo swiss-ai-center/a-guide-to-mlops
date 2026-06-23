@@ -72,3 +72,9 @@ The following requirements are necessary to follow this part:
     Run `cd ~` to navigate to your Linux home directory. Avoid working in `/mnt/*`
     paths, as cross-filesystem operations cause severe performance bottlenecks when
     installing packages with pip.
+
+## State of the MLOps process
+
+This guide begins with a traditional Jupyter notebook approach. You will first
+explore the notebook, identify its limitations for production use, and then
+progressively turn it into a reproducible, versioned machine learning pipeline.
