@@ -76,10 +76,6 @@ The following requirements are necessary to follow this part:
 
 ## State of the MLOps process
 
-This part starts from a Jupyter notebook experiment. You will address the
-following issues:
-
-- [ ] Notebook can be run but is not adequate for production
-- [ ] Codebase and dataset are not versioned
-- [ ] Model steps rely on verbal communication and may be undocumented
-- [ ] Changes to model are not easily visualized
+This guide begins with a traditional Jupyter notebook approach. You will first
+explore the notebook, identify its limitations for production use, and then
+progressively turn it into a reproducible, versioned machine learning pipeline.
