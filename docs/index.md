@@ -8,8 +8,7 @@ hide:
 home:
   hero:
     badge:
-      text: Mission briefing
-      icon: lucide/rocket
+      text: Hands-on tutorial
     title: A Guide to MLOps
     subtitle: |
       Classify celestial bodies using best practices:
