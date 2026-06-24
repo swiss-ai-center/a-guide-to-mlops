@@ -59,7 +59,7 @@ home:
           anchor: "#section-part-1"
         - type: secondary
           text: Our philosophy
-          icon: lucide/book-open
+          icon: lucide/telescope
           path: philosophy/
     - id: part-1
       label: Part 1 — Lift-off
