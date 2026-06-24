@@ -58,9 +58,9 @@ home:
           icon: lucide/chevron-down
           anchor: "#section-part-1"
         - type: secondary
-          text: Read the concept
+          text: Read the philosophy
           icon: lucide/book-open
-          path: concept/
+          path: philosophy/
     - id: part-1
       label: Part 1 — Lift-off
       title: Local training &
