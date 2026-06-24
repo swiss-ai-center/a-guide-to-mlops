@@ -12,7 +12,7 @@ home:
     title: A Guide to MLOps
     subtitle: |
       Classify celestial bodies using best practices:
-      a hands-on journey through local training, the cloud, serving, monitoring, labeling, and retraining.
+      a practical journey through local training, the cloud, serving, monitoring, labeling, and retraining.
     cta:
       text: Chart the course
       icon: lucide/compass
