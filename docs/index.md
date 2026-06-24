@@ -58,8 +58,8 @@ home:
           icon: lucide/chevron-down
           anchor: "#section-part-1"
         - type: secondary
-          text: Our philosophy
-          icon: lucide/telescope
+          text: Philosophy
+          icon: lucide/lightbulb
           path: philosophy/
     - id: part-1
       label: Part 1 — Lift-off
