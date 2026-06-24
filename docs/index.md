@@ -8,12 +8,11 @@ hide:
 home:
   hero:
     badge:
-      text: Mission briefing
-      icon: lucide/rocket
+      text: Hands-on tutorial
     title: A Guide to MLOps
     subtitle: |
       Classify celestial bodies using best practices:
-      a hands-on journey through local training, the cloud, serving, monitoring, labeling, and retraining.
+      a practical journey through local training, the cloud, serving, monitoring, labeling, and retraining.
     cta:
       text: Chart the course
       icon: lucide/compass
@@ -58,9 +57,9 @@ home:
           icon: lucide/chevron-down
           anchor: "#section-part-1"
         - type: secondary
-          text: Read the concept
-          icon: lucide/book-open
-          path: concept/
+          text: Philosophy
+          icon: lucide/lightbulb
+          path: philosophy/
     - id: part-1
       label: Part 1 — Lift-off
       title: Local training &
@@ -162,7 +161,7 @@ home:
           icon: lucide/tags
           path: part-5-label-data-and-retrain/introduction/
     - id: reentry
-      label: Reentry & cleanup
+      label: Reentry
       title: Clean up &
       title_highlight: conclude
       planet: capsule
