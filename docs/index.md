@@ -58,7 +58,7 @@ home:
           icon: lucide/chevron-down
           anchor: "#section-part-1"
         - type: secondary
-          text: Read the philosophy
+          text: Our philosophy
           icon: lucide/book-open
           path: philosophy/
     - id: part-1
