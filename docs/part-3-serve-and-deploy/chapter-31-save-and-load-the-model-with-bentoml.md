@@ -169,7 +169,7 @@ others.
 
 Update the `src/train.py` file to save the model with BentoML:
 
-```py title="src/train.py" hl_lines="1 9-10 67-69 90-125"
+```py title="src/train.py" hl_lines="1 9-10 66-68 89-124"
 import json
 import sys
 from pathlib import Path
@@ -193,9 +193,8 @@ def get_model(
     """Create a simple CNN model"""
     model = tf.keras.models.Sequential(
         [
-            tf.keras.layers.Conv2D(
-                conv_size, (3, 3), activation="relu", input_shape=image_shape
-            ),
+            tf.keras.layers.Input(shape=image_shape),
+            tf.keras.layers.Conv2D(conv_size, (3, 3), activation="relu"),
             tf.keras.layers.MaxPooling2D((3, 3)),
             tf.keras.layers.Flatten(),
             tf.keras.layers.Dense(dense_size, activation="relu"),
