@@ -162,7 +162,7 @@ home:
           icon: lucide/tags
           path: part-5-label-data-and-retrain/introduction/
     - id: reentry
-      label: Reentry & cleanup
+      label: Reentry
       title: Clean up &
       title_highlight: conclude
       planet: capsule
