@@ -169,7 +169,7 @@ others.
 
 Update the `src/train.py` file to save the model with BentoML:
 
-```py title="src/train.py" hl_lines="1 9-10 67-69 90-125"
+```py title="src/train.py" hl_lines="1 9-10 66-68 88-127"
 import json
 import sys
 from pathlib import Path
@@ -193,9 +193,8 @@ def get_model(
     """Create a simple CNN model"""
     model = tf.keras.models.Sequential(
         [
-            tf.keras.layers.Conv2D(
-                conv_size, (3, 3), activation="relu", input_shape=image_shape
-            ),
+            tf.keras.layers.Input(shape=image_shape),
+            tf.keras.layers.Conv2D(conv_size, (3, 3), activation="relu"),
             tf.keras.layers.MaxPooling2D((3, 3)),
             tf.keras.layers.Flatten(),
             tf.keras.layers.Dense(dense_size, activation="relu"),
@@ -263,8 +262,11 @@ def main() -> None:
         # convert PIL image to tensor
         x = x.convert('L' if grayscale else 'RGB')
         x = x.resize(image_size)
-        x = np.array(x)
+        x = np.array(x, dtype=np.float32)
         x = x / 255.0
+        # add channel dimension for grayscale
+        if x.ndim == 2:
+            x = np.expand_dims(x, axis=-1)
         # add batch dimension
         x = np.expand_dims(x, axis=0)
         return x
@@ -330,7 +332,7 @@ The output should be similar to this:
 
 ```diff
 diff --git a/src/train.py b/src/train.py
-index 5c69e2f..b845eb3 100644
+index 83cf265..0c3194b 100644
 --- a/src/train.py
 +++ b/src/train.py
 @@ -1,3 +1,4 @@
@@ -347,7 +349,7 @@ index 5c69e2f..b845eb3 100644
 
  from utils.seed import set_seed
 
-@@ -61,6 +64,10 @@ def main() -> None:
+@@ -60,6 +63,10 @@ def main() -> None:
      ds_train = tf.data.Dataset.load(str(prepared_dataset_folder / "train"))
      ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "val"))
 
@@ -358,7 +360,7 @@ index 5c69e2f..b845eb3 100644
      # Define the model
      model = get_model(image_shape, conv_size, dense_size, output_classes)
      model.compile(
-@@ -79,8 +86,44 @@ def main() -> None:
+@@ -78,8 +85,47 @@ def main() -> None:
 
      # Save the model
      model_folder.mkdir(parents=True, exist_ok=True)
@@ -369,8 +371,11 @@ index 5c69e2f..b845eb3 100644
 +        # convert PIL image to tensor
 +        x = x.convert('L' if grayscale else 'RGB')
 +        x = x.resize(image_size)
-+        x = np.array(x)
++        x = np.array(x, dtype=np.float32)
 +        x = x / 255.0
++        # add channel dimension for grayscale
++        if x.ndim == 2:
++            x = np.expand_dims(x, axis=-1)
 +        # add batch dimension
 +        x = np.expand_dims(x, axis=0)
 +        return x
@@ -681,7 +686,7 @@ Commit the changes to DVC and Git:
 dvc push
 
 # Commit the changes
-git commit -m "Use BentoML ton save and load the model"
+git commit -m "Use BentoML to save and load the model"
 
 # Push the changes
 git push
