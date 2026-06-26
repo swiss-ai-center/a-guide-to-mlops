@@ -4,58 +4,64 @@ Introduction to MLOps.
 
 ## What is MLOps?
 
-MLOps (short for _"Machine Learning Operations"_) is a set of practices for
-deploying, managing, and monitoring machine learning models in production.
+MLOps, short for _Machine Learning Operations_, is the set of practices that
+turn a machine learning experiment into a system that can be reproduced,
+deployed, monitored, and improved over time. It extends the principles of
+software engineering — version control, automated testing, continuous
+integration, and deployment — to the specific needs of machine learning, where
+code, data, and models all change together.
 
-Similar to DevOps, MLOps combines software development practices with data
-science to automate the ML lifecycle: data preparation, model training,
-deployment, and maintenance. The goal is to build models that are accurate,
-scalable, and secure.
+In practice, MLOps means that a model is never just an artifact produced by a
+single run. It is the result of a pipeline whose inputs, parameters, and
+environment are versioned and whose outputs can be recreated by anyone with
+access to the repository.
 
-Building effective ML systems requires more than just perfecting the model
-itself. In fact, the ML code and model make up only a small fraction of a
-real-world ML system. The surrounding infrastructure needed for deployment and
-operation is much larger and more complex.
+## The scope of an ML system
+
+A common mistake is to treat the model as the product. In reality, the model
+code and trained weights represent only a small part of a production machine
+learning system. The surrounding infrastructure — data pipelines, training
+orchestration, experiment tracking, serving infrastructure, monitoring, and
+feedback loops — is significantly larger.
 
 ![ML system](assets/images/ml_system.svg){ align=center }
 
-MLOps uses tools like version control, continuous integration and deployment
-(CI/CD) pipelines, containers, and monitoring systems to manage this complexity.
-This helps teams deploy models faster with fewer errors and less downtime.
+MLOps provides the tooling and discipline to manage this surrounding
+infrastructure. The goal is not to optimize the model in isolation, but to build
+a reliable system around it.
 
-## What problems does MLOps aim to solve?
+## What MLOps addresses
 
-MLOps addresses common challenges in deploying machine learning models to
-production:
+The following challenges appear as soon as an experiment needs to be shared,
+deployed, or maintained:
 
-- **Scalability**: Managing resources to handle large datasets and growing
-  demands efficiently.
-- **Reproducibility**: Ensuring models can be replicated consistently across
-  different environments with the same training data and configuration.
-- **Data management**: Maintaining clean, properly labeled, high-quality data
-  throughout the ML lifecycle.
-- **Model drift**: Detecting when model performance degrades over time due to
-  changing data patterns and making timely adjustments.
-- **Security**: Protecting models and data from vulnerabilities and ensuring
-  privacy and integrity.
+- **Reproducibility.** The same experiment must produce the same result when run
+  by a different person, on a different machine, or months later. This guide uses
+  version control and data versioning to make that possible.
+- **Automation.** Manual training, evaluation, and reporting steps do not scale
+  across a team. This guide moves these steps into a continuous integration
+  pipeline so that every change is validated automatically.
+- **Deployment.** A trained model is useful only when it can be served and
+  accessed by other systems. This guide packages the model, builds a container,
+  and deploys it to Kubernetes.
+- **Monitoring.** Production data changes, and model performance degrades over
+  time. This guide adds monitoring to detect drift and identify when the model
+  needs attention.
+- **Retraining.** New data closes the loop and improves the model. This guide
+  uses Label Studio to label new data, with AI assistance from the model, and
+  retrains the model so the system keeps improving.
 
-By addressing these challenges, MLOps helps teams deploy models faster while
-maintaining quality and reliability in production.
+## Why this matters
 
-## Why would MLOps be useful for you?
+Without MLOps, a successful experiment often remains a fragile artifact:
+difficult to reproduce, hard to update, and risky to deploy. With MLOps, the
+experiment becomes the starting point of a controlled lifecycle in which results
+can be tracked, compared, deployed, and improved with confidence.
 
-MLOps provides key benefits for anyone developing or deploying machine learning
-models:
+## This guide
 
-- **Efficiency**: Automate repetitive tasks like data preparation, training, and
-  deployment to save time and reduce errors.
-- **Accuracy**: Train models on high-quality data with optimized configurations
-  for better performance in production.
-- **Scalability**: Handle larger datasets and growing workloads as your needs
-  expand.
-- **Speed**: Deploy models faster and get them to production quickly.
-- **Collaboration**: Improve communication and alignment between data
-  scientists, developers, and operations teams.
-
-MLOps makes it easier to build and deploy machine learning models that are
-reliable, maintainable, and ready for production use.
+This guide follows a common path in machine learning: it begins with a Jupyter
+notebook experiment and progressively turns it into a reproducible, deployed,
+and maintainable system. The following chapters walk through that lifecycle step
+by step, beginning with a local notebook and ending with a deployed, monitored,
+and retrainable system.
