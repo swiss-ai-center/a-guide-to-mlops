@@ -102,9 +102,22 @@ _class: lead stars-bg
 _paginate: false
 -->
 
+**Bertil Chapuis · Ludovic Delafontaine · Rémy Marquis · Leonard Cseres**
+
+Swiss AI Center contributors
+
 [Website][website] · [GitHub][github]
 
-<small>Swiss AI Center contributors</small>
+![bg right:35% w:70%](../docs/assets/images/hero-rocket.svg)
+
+---
+
+## By the end of this talk
+
+<!-- _class: lead -->
+
+You will know **how to move an ordinary ML project from a Jupyter Notebook to
+production on the cloud** using a small, composable set of MLOps practices.
 
 ![bg right:35% w:70%](../docs/assets/images/hero-rocket.svg)
 
@@ -202,61 +215,45 @@ The required surrounding infrastructure is vast and complex.
 
 ## Difficulties with ML projects
 
-**Get out of the context of the experience**
+**Reproducibility**
 
-> I ran the experiment but didn’t get the same results, can you check my way of
-> running the experiment?
+> I ran the experiment but didn’t get the same results.
 
-<hr>
+**Buildability**
 
-**Make sure you can build the model at all times**
-
-> I tried to build the model on my machine but it doesn’t work... Are you sure
-> it builds on yours?
+> It builds on my machine — does it build on yours?
 
 ---
 
-**Monitor the evolution of the model over time**
+**Performance tracking**
 
-> I’m not sure my changes really help the model’s performances… I hope it still
-> works in production.
+> I hope my changes help… and that it still works in production.
 
-> The model worked fine before, but its predictions look off lately. I have no
-> idea if the data changed or how to check it.
+**Deployment**
 
-<hr>
+> Can I use your model from my app? How?
 
-**Move to production efficiently and in a semi-automated way**
-
-> Is your model available in production? Can I use it with my mobile
-> app/website? How can I do so?
-
-## Small and medium-sized enterprises (SMEs) face the same problems
+## Who faces these problems?
 
 <!-- _class: lead -->
+
+Big labs get the headlines. **Small teams get the same headaches.**
 
 ## A solution
 
 **MLOps**
 
-➡️ Draw inspiration from Software and DevOps best practices
-
-➡️ Adapting these practices to the world of machine learning
-
-➡️ Improve the management and quality of machine learning projects
+Borrow proven Software and DevOps practices and adapt them to machine learning.
 
 ![bg right:40% 110%](./images/mlops-venn-diagram.svg)
 
 ## Our proposal
 
-**A guide to MLOps**
+**From notebook to production — one practice at a time**
 
-🛠️ Switch from a Jupyter Notebook to production using state-of-the-art MLOps
-tools
+🛠️ Version-controlled, composable, incremental MLOps
 
-🚀 Go from experience to production on the Cloud
-
-📖 Use the best practices for ML
+📖 A practical guide for small teams, not a heavy platform
 
 ![bg right:40% 90%](./images/a-guide-to-mlops.png)
 
@@ -268,11 +265,19 @@ tools
 
 **Incremental.** Adopt one practice at a time.
 
-**Pragmatic.** Reproducibility first, then automation, deployment, monitoring, and feedback loops.
+**Pragmatic.** Reproducibility first, then automation, deployment, monitoring,
+and feedback loops.
 
-<!--
-This is the fence: we explicitly distinguish our lightweight, composable approach from heavy all-in-one platforms.
--->
+---
+
+## What is this not?
+
+<!-- _class: lead -->
+
+This guide is **not** a heavy, all-in-one MLOps platform.
+
+It is a **lightweight, composable path** for small teams who already use Git and
+want to go from notebook to production one step at a time.
 
 ## A guide to MLOps
 
@@ -341,29 +346,17 @@ If you use Git and want practical, incremental steps, this is for you.
 
 ![bg right:40% 80%](../docs/assets/images/rocket-to-planet.svg)
 
-## Prerequisites
+## What you need
 
-♿ Accessible to everyone!
+**Knowledge:** Basic Python and terminal use.
 
-🧠 Basic knowledge of Python and terminal is sufficient
+**Hardware/OS:** macOS, Linux, or Windows with WSL2.
 
-💳 A valid credit card for cloud deployment
+**Accounts:** GitHub and Google Cloud.
 
-🤝 You will be accompanied throughout the guide!
+**Tools:** Python 3.13, pip, git, unzip, Docker, VS Code recommended.
 
 ![bg right:40% 70%](./images/python-logo.svg)
-
-## Technical checks
-
-Before we start:
-
-💻 macOS, Linux, Windows with WSL2
-
-📝 Editor and Terminal (VS Code recommended)
-
-🛠️ Python 3.13, pip, git, unzip, docker
-
-☁️ GitHub account, Google Cloud account
 
 ## Access the guide
 
@@ -376,13 +369,15 @@ difficulties or want to contribute.
 
 ![bg right:40% w:60%][website-qrcode]
 
-## Now it's your turn!
+## Your next step
 
 <!-- _class: lead -->
 
-Feel free to ask questions, share your feedback and contribute to the guide!
+**Pick one practice** from the guide and try it on your own notebook this week.
 
-We are here to help.
+Start small. Version control first. Then reproduce. Then deploy.
+
+[mlops.swiss-ai-center.ch][website]
 
 ## Clean up
 
@@ -393,21 +388,6 @@ This is necessary to avoid:
 
 * unnecessary incurring costs
 * potential security concerns
-
-## Conclusion
-
-Congratulations! You have completed the guide to MLOps!
-
-You have learned how to improve the management and quality of machine learning
-projects.
-
-You are now able to switch from a Jupyter Notebook to production using
-state-of-the-art MLOps tools.
-
-You can go from experiment to production on the Cloud, using the best practices
-for ML. 🚀
-
-![bg right:35% w:60%](../docs/assets/images/launchpad.svg)
 
 ## Feedback
 
@@ -427,174 +407,79 @@ Your feedback helps us improve! 🙏
 
 ### Usual ML workflow
 
-Each member of the team manages their own codebase, their own dataset and their
-own models.
+- Each developer has their own code, data, and models.
+- Experiments are hard to reproduce and improvements are hard to track.
+- Models are hard to deploy; drift goes unnoticed.
 
-The reproducibility of the model creation is difficult and cannot be guaranteed
-over time.
-
-Improvements made to the model are hard to track.
-
-Models are hard to share and deploy in production.
-
-Model drift and degradation go unnoticed.
-
-### High flexibility for the team...
+### We can do better
 
 <!-- _class: lead -->
 
-...but hard to maintain.
+**One practice at a time.**
 
-...hard to reproduce in the future.
+### Codebase
 
-...time consuming.
+**Problem:** Siloed code, hard to share.
 
-**We can do better.**
-
-### Codebase (1/2)
-
-**Current situation**
-
--   Each developer has its own codebase
--   Sharing the code with peers is difficult
-
-### Codebase (2/2)
-
-**What we are trying to improve**
-
--   Allow each developer to improve a common codebase
--   Quickly benefit of the work from others
+**Practice:** One shared, version-controlled codebase.
 
 ![bg right:40% w:60%](./images/git-logo.svg)
 
-### Data (1/2)
+### Data
 
-**Current situation**
+**Problem:** Datasets live on individual machines.
 
--   The dataset must be manually downloaded and put in the right place
--   Different datasets are being used at the same time
--   Datasets are hard to improve
-
-### Data (2/2)
-
-**What we are trying to improve**
-
--   Allow the usage of a common and up-to-date dataset
--   Efficiently share new revisions to train the model
--   Datasets can be stored anywhere
+**Practice:** Version data like code and share revisions centrally.
 
 ![bg right:40% w:60%](./images/dvc-logo.svg)
 
-### Reproduce (1/2)
+### Reproduce
 
-**Current situation**
+**Problem:** Manual steps and hidden hyperparameters.
 
--   Steps to create the model can be complex
--   Intermediate commands should not be skipped
--   Hyperparameters are hard to track from one run to another
-
-### Reproduce (2/2)
-
-**What we are trying to improve**
-
--   Document the steps to reproduce the experiment
--   Ensure it can be run anytime in the future
--   DVC can improve time efficiency
+**Practice:** Document and automate the full experiment pipeline.
 
 ![bg right:40% w:60%](./images/dvc-logo.svg)
 
-### Tracking (1/2)
+### Track
 
-**Current situation**
+**Problem:** Hard to see which change helped or hurt.
 
--   Changes to a model are difficult to track
--   Visualize the differences are hard
--   Cannot guarantee the changes are beneficial
-
-### Tracking (2/2)
-
-**What we are trying to improve**
-
--   Have a visual way to identify the consequences of the changes made to a
-    model
--   Errors/anomalies are easily identified
+**Practice:** Visual metrics and automated experiment reports.
 
 ![bg right:40% w:40% vertical](./images/dvc-logo.svg)
 ![bg right:40% w:40% vertical](./images/cml-logo.svg)
 
-### Serving and publishing (1/2)
+### Serve
 
-**Current situation**
+**Problem:** The model is trapped in the notebook.
 
--   The model is hard to use outside the experiment context
--   The model is hard to deploy in production
--   The model is hard to share with others
-
-### Serving and publishing (2/2)
-
-**What we are trying to improve**
-
--   The model can be used outside the experiment context
--   The model can be deployed in production
--   The model can be shared with others
+**Practice:** Package and expose it through an API.
 
 ![bg right:40% w:40% vertical](./images/bentoml-logo.svg)
 ![bg right:40% w:40% vertical](./images/docker-logo.svg)
 
-### Deployment (1/2)
+### Deploy
 
-**Current situation**
+**Problem:** Works on my machine; no clean way to ship.
 
--   An experiment can run on one machine but can fail on another
--   Models must be prepared to be run outside its experiment context
--   Exposing the model to the outside world is hard
-
-### Deployment (2/2)
-
-**What we are trying to improve**
-
--   Run the experiment in a clean state to ensure it works everywhere
--   Package the model with all its dependencies
--   The model can be used over the Internet by other applications
--   Automate the process
+**Practice:** Containerize and deploy to the cloud automatically.
 
 ![bg right:40% w:60%](./images/kubernetes-logo.svg)
 
-### Monitoring (1/2)
+### Monitor
 
-**Current situation**
+**Problem:** Drift and degradation are discovered too late.
 
--   The model's behavior can drift over time
--   Degradation in performance is hard to detect
--   Issues are often discovered too late, after users are impacted
-
-### Monitoring (2/2)
-
-**What we are trying to improve**
-
--   Track model performance and data drift continuously
--   Detect anomalies and regressions early
--   Alert the team when the model needs attention
+**Practice:** Continuous performance and data-drift checks.
 
 ![bg right:40% w:60%](./images/evidently.svg)
 
-### Labeling (1/2)
+### Label
 
-**Current situation**
+**Problem:** Model quality plateaus on stale data.
 
--   Model code and parameters are optimized
--   Model's performances is as good as the quality of the current data
--   We need new data to improve the model's performances
-
-![bg right:40%](#)
-
-### Labeling (2/2)
-
-**What we are trying to improve**
-
--   Labeling new data to further improve the model's performance
--   Use new data to retrain and improve the model
--   Make use of AI inference to speed up the labeling process
+**Practice:** Label new data and retrain on a schedule.
 
 ![bg right:40% w:60%](./images/label-studio-logo.svg)
 
@@ -603,3 +488,19 @@ Model drift and degradation go unnoticed.
 -   MLOps Venn diagram by Cmbreuel on
     [Wikipedia](https://commons.wikimedia.org/wiki/File:ML_Ops_Venn_Diagram.svg)
 -   ML system diagram by [D. Sculley et. al. NIPS 2015: Hidden technical debt in Machine learning systems](https://dl.acm.org/doi/10.5555/2969442.2969519)
+
+---
+
+## Contributions
+
+**From notebook to production — one practice at a time**
+
+You now know how to:
+
+1. **Version** code, data, and experiments together.
+2. **Reproduce** any experiment at any time.
+3. **Track** model evolution and catch drift early.
+4. **Deploy** a model to the cloud and serve it over the Internet.
+5. **Close the loop** with new labels and retraining.
+
+![bg right:35% w:60%](../docs/assets/images/launchpad.svg)
