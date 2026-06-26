@@ -1,14 +1,17 @@
 # Syllabus
 
-What you will learn from this guide.
+What you will learn.
 
-This guide covers five parts: local reproducibility, cloud automation,
-production serving, monitoring and observability, and continuous improvement.
-They are organized as follows:
+This hands-on tutorial begins with a Jupyter notebook experiment and
+progressively turns it into a reproducible, deployed, and maintainable system.
+The chapters that follow walk through that lifecycle, from a local notebook to a
+deployed, monitored, and retrainable system.
 
-- Introduction - Learn about the [philosophy](./philosophy.md) of the guide, the
-  [concept](./concept.md) behind MLOps, and the [tools](./tools.md) used in this
-  guide.
+The five parts are:
+
+- Introduction - Learn about the [philosophy](./philosophy.md), the
+  [concept](./concept.md) behind MLOps, and the [tools](./tools.md) used
+  throughout.
 - [Part 1 - Local training and evaluation](./part-1-local-training-and-evaluation/introduction.md) -
   Learn how to train a model locally and evaluate it using DVC.
     - [Chapter 1.1 - Run a simple ML experiment with Jupyter Notebook](./part-1-local-training-and-evaluation/chapter-11-run-a-simple-ml-experiment-with-jupyter-notebook.md)

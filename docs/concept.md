@@ -54,10 +54,3 @@ Without MLOps, a successful experiment often remains a fragile artifact:
 difficult to reproduce, hard to update, and risky to deploy. With MLOps, the
 experiment becomes the starting point of a lifecycle in which results can be
 tracked, compared, deployed, and improved.
-
-## This guide
-
-This guide follows a common path in machine learning: it turns a Jupyter
-notebook experiment into a reproducible, deployed, and maintainable system. The
-chapters that follow walk through that lifecycle, from a local notebook to a
-deployed, monitored, and retrainable system.
