@@ -68,6 +68,7 @@ style: |
     }
     footer {
         color: var(--color-dimmed);
+        font-size: 0.5rem;
     }
     .four-columns {
         display: grid;
@@ -104,8 +105,6 @@ _paginate: false
 [Website][website] · [GitHub][github]
 
 <small>Swiss AI Center contributors</small>
-
-<small>Licensed under the [CC BY-SA 4.0][license] license.</small>
 
 ![bg right:35% w:70%](../docs/assets/images/hero-rocket.svg)
 
