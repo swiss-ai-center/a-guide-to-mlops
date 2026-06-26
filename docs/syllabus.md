@@ -34,7 +34,7 @@ They are organized as follows:
     - [Chapter 3.7 - Use a self-hosted runner for the CI/CD pipeline](./part-3-serve-and-deploy/chapter-37-use-a-self-hosted-runner-for-the-cicd-pipeline.md)
     - [Chapter 3.8 - Train the model on a Kubernetes pod](./part-3-serve-and-deploy/chapter-38-train-the-model-on-a-kubernetes-pod.md)
 - [Part 4 - Monitor and maintain](./part-4-monitor-and-maintain/introduction.md) -
-  Learn how to keep a model healthy in production.
+  Learn how to keep a model healthy in production using Evidently AI.
 - [Part 5 - Label data and retrain](./part-5-label-data-and-retrain/introduction.md) -
   Learn how to label new data and retrain the model using Label Studio.
     - [Chapter 5.1 - Set up Label Studio](./part-5-label-data-and-retrain/chapter-51-set-up-label-studio.md)
