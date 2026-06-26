@@ -13,17 +13,40 @@ url: https://mlops.swiss-ai-center.ch/presentation/
 footer: '**Swiss AI Center** - A guide to MLOps 2026 - CC BY-SA 4.0'
 style: |
     :root {
-        --color-background: #080809;
-        --color-foreground: #bcbec2;
-        --color-highlight: #4051b5;
-        --color-dimmed: #bcbec2;
-        --color-headings: #4051b5;
+        --color-background: #f7f8fc;
+        --color-foreground: #0a0a0a;
+        --color-highlight: #d97706;
+        --color-dimmed: #525252;
+        --color-headings: #b45309;
+        --color-card: #ffffff;
+        --color-border: #d4d4d4;
+    }
+    section {
+        background: var(--color-background);
+        color: var(--color-foreground);
+    }
+    a:link, a:visited {
+        color: var(--color-highlight);
+    }
+    strong {
+        color: var(--color-highlight);
     }
     blockquote {
         font-style: italic;
+        border-left: 4px solid var(--color-highlight);
+        padding-left: 1rem;
+        color: var(--color-dimmed);
     }
     table {
         width: 100%;
+    }
+    th {
+        background: var(--color-card);
+        color: var(--color-headings);
+        border-bottom: 2px solid var(--color-border);
+    }
+    td {
+        border-bottom: 1px solid var(--color-border);
     }
     th:first-child {
         width: 15%;
@@ -39,9 +62,13 @@ style: |
         text-decoration: none;
     }
     hr {
-        border: 1px solid var(--color-foreground);
+        border: 1px solid var(--color-border);
         margin-top: 50px;
-        margin-bottom: 50px
+        margin-bottom: 50px;
+    }
+    footer {
+        color: var(--color-dimmed);
+        font-size: 0.5rem;
     }
     .four-columns {
         display: grid;
@@ -51,10 +78,17 @@ style: |
     .center {
         text-align: center;
     }
+    .stars-bg {
+        background-color: var(--color-background);
+        background-image:
+            radial-gradient(circle, var(--color-border) 1.5px, transparent 2px),
+            radial-gradient(circle, var(--color-highlight) 1px, transparent 1.5px);
+        background-size: 120px 120px, 180px 180px;
+        background-position: 0 0, 60px 60px;
+    }
 headingDivider: 4
 -->
 
-[illustration]: ./images/cover.png
 [license]: https://github.com/swiss-ai-center/a-guide-to-mlops/blob/main/LICENSE
 [website]: https://mlops.swiss-ai-center.ch
 [website-qrcode]:
@@ -64,7 +98,7 @@ headingDivider: 4
 # A guide to MLOps
 
 <!--
-_class: lead
+_class: lead stars-bg
 _paginate: false
 -->
 
@@ -72,9 +106,7 @@ _paginate: false
 
 <small>Swiss AI Center contributors</small>
 
-<small>This work is licensed under the [CC BY-SA 4.0][license] license.</small>
-
-![bg opacity:0.5][illustration]
+![bg right:35% w:70%](../docs/assets/images/hero-rocket.svg)
 
 ## About us
 
@@ -83,11 +115,10 @@ _paginate: false
 ## Swiss AI Center
 
 **Five HES from the HES-SO** (HEIG-VD, HEIA-FR, HE-Arc, HEVS and HEPIA) work on
-a project called **Centre Suisse d’Intelligence Artificielle à destination des
-PMEs (CSIA-PME)**, also known as the **Swiss AI Center**.
+a project called **Swiss AI Center**.
 
-The Swiss AI Center’s mission is to **accelerate the adoption of artificial
-intelligence in the digital transition of Swiss SMEs**.
+Its mission is to **accelerate the adoption of artificial intelligence in the
+digital transition of Swiss SMEs**.
 
 **HEIG-VD** is responsible for **setting up tools to manage ML experiments from
 code to production**.
@@ -108,20 +139,18 @@ Chapuis**
 
 ![w:200](./images/bertil-chapuis.png)
 
-[Mail](mailto:bertil.chapuis@heig-vd.ch) ·
-[LinkedIn](https://www.linkedin.com/in/bertilchapuis/)
+[Mail](mailto:bertil.chapuis@heig-vd.ch)
 
 </div>
 <div class="center">
 
 **Ludovic
 Delafontaine**
-<small>aR&D Associate</small>
+<small>Lecturer</small>
 
 ![w:200](./images/ludovic-delafontaine.png)
 
-[Mail](mailto:ludovic.delafontaine@heig-vd.ch) ·
-[LinkedIn](https://www.linkedin.com/in/ludelafo/)
+[Mail](mailto:ludovic.delafontaine@heig-vd.ch)
 
 </div>
 <div class="center">
@@ -132,8 +161,7 @@ Marquis**
 
 ![w:200](./images/remy-marquis.png)
 
-[Mail](mailto:remy.marquis@heig-vd.ch) ·
-[LinkedIn](https://www.linkedin.com/in/remymarquis/)
+[Mail](mailto:remy.marquis@heig-vd.ch)
 
 </div>
 <div class="center">
@@ -144,8 +172,7 @@ Cseres**
 
 ![w:200](./images/leonard-cseres.png)
 
-[Mail](mailto:leonard.cseres@heig-vd.ch) ·
-[LinkedIn](https://www.linkedin.com/in/leonardcsrs/)
+[Mail](mailto:leonard.cseres@heig-vd.ch)
 
 </div>
 </div>
@@ -154,22 +181,20 @@ Cseres**
 
 <!-- _class: lead -->
 
-## Beyond the LLM hype
+## LLMs and agentic AI are everywhere
 
-LLMs and Agentic AI are everywhere.
+But not here.
 
-**Most companies do not have a generative AI problem**
+**Most companies have ordinary data problems**
 
-- Spreadsheets, logs, sensor data.
-- Forecasting from an ERP that barely works.
-- Classification on five years of messy history.
-- The cron jobs that actually keep things running.
-
-**The boring work that matters**
+- Data trapped in spreadsheets, logs, and sensors.
+- Forecasts built on fragile business systems.
+- Classifiers trained on years of messy history.
+- Anomaly detection on manufacturing or server metrics.
 
 ## ML code vs ML system
 
-![bg right:39% 100%](./images/ml_system.svg)
+![bg right:39% 100%](../docs/assets/images/ml_system.svg)
 
 Only a small fraction of real-world ML systems is composed of the ML code.
 
@@ -196,9 +221,12 @@ The required surrounding infrastructure is vast and complex.
 > I’m not sure my changes really help the model’s performances… I hope it still
 > works in production.
 
+> The model worked fine before, but its predictions look off lately. I have no
+> idea if the data changed or how to check it.
+
 <hr>
 
-**Move to production quickly, efficiently and in a semi-automated way**
+**Move to production efficiently and in a semi-automated way**
 
 > Is your model available in production? Can I use it with my mobile
 > app/website? How can I do so?
@@ -231,6 +259,20 @@ tools
 📖 Use the best practices for ML
 
 ![bg right:40% 90%](./images/a-guide-to-mlops.png)
+
+## Our approach
+
+**Version-controlled.** Track code, data, and experiments together.
+
+**Composable.** Use the best open-source tool for each job.
+
+**Incremental.** Adopt one practice at a time.
+
+**Pragmatic.** Reproducibility first, then automation, deployment, monitoring, and feedback loops.
+
+<!--
+This is the fence: we explicitly distinguish our lightweight, composable approach from heavy all-in-one platforms.
+-->
 
 ## A guide to MLOps
 
@@ -293,15 +335,11 @@ using MLOps best practices.
 
 ## Target audience
 
-🤖 You regularly work with machine learning projects
+For **small teams and SMEs** who want to move ML from notebooks to production without a heavy, monolithic platform.
 
-📊 You want to improve processes to ensure quality
+If you use Git and want practical, incremental steps, this is for you.
 
-🏗️ You want to consolidate your current infrastructure
-
-☁️ You want to move to the Cloud
-
-![bg right:40% 80%](./images/target-audiance.svg)
+![bg right:40% 80%](../docs/assets/images/rocket-to-planet.svg)
 
 ## Prerequisites
 
@@ -369,6 +407,8 @@ state-of-the-art MLOps tools.
 You can go from experiment to production on the Cloud, using the best practices
 for ML. 🚀
 
+![bg right:35% w:60%](../docs/assets/images/launchpad.svg)
+
 ## Feedback
 
 Your feedback helps us improve! 🙏
@@ -396,6 +436,8 @@ over time.
 Improvements made to the model are hard to track.
 
 Models are hard to share and deploy in production.
+
+Model drift and degradation go unnoticed.
 
 ### High flexibility for the team...
 
@@ -518,6 +560,24 @@ Models are hard to share and deploy in production.
 
 ![bg right:40% w:60%](./images/kubernetes-logo.svg)
 
+### Monitoring (1/2)
+
+**Current situation**
+
+-   The model's behavior can drift over time
+-   Degradation in performance is hard to detect
+-   Issues are often discovered too late, after users are impacted
+
+### Monitoring (2/2)
+
+**What we are trying to improve**
+
+-   Track model performance and data drift continuously
+-   Detect anomalies and regressions early
+-   Alert the team when the model needs attention
+
+![bg right:40% w:60%](./images/evidently.svg)
+
 ### Labeling (1/2)
 
 **Current situation**
@@ -543,7 +603,3 @@ Models are hard to share and deploy in production.
 -   MLOps Venn diagram by Cmbreuel on
     [Wikipedia](https://commons.wikimedia.org/wiki/File:ML_Ops_Venn_Diagram.svg)
 -   ML system diagram by [D. Sculley et. al. NIPS 2015: Hidden technical debt in Machine learning systems](https://dl.acm.org/doi/10.5555/2969442.2969519)
--   Robot illustation by
-    [OpenClipart-Vectors](https://pixabay.com/users/openclipart-vectors-30363/)
-    on
-    [Pixabay](https://pixabay.com/vectors/cartoon-comic-dance-happy-joy-1295224/)

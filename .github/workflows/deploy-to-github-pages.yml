@@ -36,7 +36,7 @@ jobs:
       - name: Install dependencies
         run: pip install --requirement requirements-freeze.txt
       - name: Lint
-        run: mdwrap --check docs
+        run: mdwrap --check docs presentation
 
   # Build Zensical job
   build-zensical:
