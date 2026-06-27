@@ -10,16 +10,15 @@ process:
 - Code management: [:simple-git: Git](https://git-scm.com/)
 - Package management: [:simple-python: pip](https://pip.pypa.io/) (or
   [:simple-uv: uv](https://docs.astral.sh/uv/) as an alternative)
-- Data management: [:simple-dvc: DVC](https://dvc.org/)
-- Model reproducibility: [:simple-dvc: DVC](https://dvc.org/)
-- Model tracking: [:simple-dvc: DVC](https://dvc.org/) & [CML](https://cml.dev/)
-- Model orchestration:
+- Data and model versioning: [:simple-dvc: DVC](https://dvc.org/)
+- ML experiment reporting: [CML](https://cml.dev/)
+- Pipeline orchestration:
   [:simple-github: GitHub Actions](https://github.com/features/actions)
-- A [:simple-googlecloud: Google Cloud](https://cloud.google.com) account
-- Model serving and distributing:
-  [:simple-bentoml: BentoML](https://bentoml.com/) and
-  [:simple-docker: Docker](https://docker.com/)
-- Model deploying: [:simple-kubernetes: Kubernetes](https://kubernetes.io/)
+- Cloud infrastructure:
+  [:simple-googlecloud: Google Cloud](https://cloud.google.com)
+- Model packaging and serving: [:simple-bentoml: BentoML](https://bentoml.com/)
+  and [:simple-docker: Docker](https://docker.com/)
+- Model deployment: [:simple-kubernetes: Kubernetes](https://kubernetes.io/)
 - Model monitoring: [Evidently AI](https://evidentlyai.com/)
 - Data annotation: [Label Studio](https://labelstud.io/)
 
