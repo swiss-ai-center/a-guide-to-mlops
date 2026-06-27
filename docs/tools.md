@@ -37,12 +37,16 @@ Alternatives to DVC.
 
 ### Experiment tracking
 
-Alternatives to CML for tracking experiments and reporting metrics in CI/CD
-pipelines.
+Alternatives to CML for tracking experiments and visualizing metrics. CML
+reports results inside CI/CD pipelines, these tools track and visualize
+experiments instead.
 
-- [GuildAi](https://guild.ai/) - Open-source experiment tracking toolkit
-- [Aim](https://aimstack.io/) - Open-source, self-hosted ML experiment tracking
-  tool
+- [Guild AI](https://github.com/guildai/guildai) - Open-source toolkit for
+  running, tracking, and optimizing ML experiments
+- [Aim](https://github.com/aimhubio/aim) - Open-source, self-hosted tool for
+  tracking and visualizing ML experiments
+- [TensorBoard](https://github.com/tensorflow/tensorboard) - Open-source toolkit
+  for visualizing ML experiment metrics and model graphs
 
 ### Model monitoring
 
