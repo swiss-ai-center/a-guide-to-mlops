@@ -1,125 +1,127 @@
 # Tools
 
-Introduction to the tools used in this guide.
+The tools used in this guide.
 
-## What are the tools used in this guide?
-
-In this guide, you will use the following tools to demonstrate the MLOps
-process:
+## Core tools
 
 - Code management: [:simple-git: Git](https://git-scm.com/)
 - Package management: [:simple-python: pip](https://pip.pypa.io/) (or
   [:simple-uv: uv](https://docs.astral.sh/uv/) as an alternative)
-- Data management: [:simple-dvc: DVC](https://dvc.org/)
-- Model reproducibility: [:simple-dvc: DVC](https://dvc.org/)
-- Model tracking: [:simple-dvc: DVC](https://dvc.org/) & [CML](https://cml.dev/)
-- Model orchestration:
+- Data and model versioning: [:simple-dvc: DVC](https://dvc.org/)
+- ML experiment reporting: [CML](https://cml.dev/)
+- Pipeline orchestration:
   [:simple-github: GitHub Actions](https://github.com/features/actions)
-- A [:simple-googlecloud: Google Cloud](https://cloud.google.com) account
-- Model serving and distributing:
-  [:simple-bentoml: BentoML](https://bentoml.com/) and
-  [:simple-docker: Docker](https://docker.com/)
-- Model deploying: [:simple-kubernetes: Kubernetes](https://kubernetes.io/)
+- Cloud infrastructure:
+  [:simple-googlecloud: Google Cloud](https://cloud.google.com)
+- Model packaging and serving: [:simple-bentoml: BentoML](https://bentoml.com/)
+  and [:simple-docker: Docker](https://docker.com/)
+- Model deployment: [:simple-kubernetes: Kubernetes](https://kubernetes.io/)
 - Model monitoring: [Evidently AI](https://evidentlyai.com/)
 - Data annotation: [Label Studio](https://labelstud.io/)
 
-You will go into details about each tool in the following parts of this guide.
-
-<!-- TODO: Add an illustration to display the different tools and their
-purposes? -->
+The following chapters explain each tool in detail.
 
 ## Related tools
 
-While this guide concentrates solely on the setup and utilization of the
-mentioned tools, it is worth noting that there are alternative tools available
-for each stage of the workflow.
-
-Here is a list of related tools that can be explored as alternatives.
-Additionally, you can find another valuable compilation of tools at
-[MLOps.toys](https://tools.mlops.community/).
+This guide covers one toolset, but alternatives exist for every stage. For a
+broader compilation, see [MLOps.toys](https://tools.mlops.community/).
 
 ### Data management
 
-These are alternatives to DVC.
+Alternatives to DVC.
 
-- [LakeFS](https://lakefs.io/) - Transform your data lake into a Git-like
-  repository
-- [DagsHub](https://dagshub.com/) - Open Source Data Science Collaboration
-- [DoltHub](https://www.dolthub.com/) - DoltHub is where people collaboratively
-  build, manage, and distribute structured data
-- [Delta Lake](https://delta.io/) - An open-source storage framework that
-  enables building a Lakehouse architecture with compute engines
+- [LakeFS](https://lakefs.io/) - Git-like version control for data lakes
+- [DagsHub](https://dagshub.com/) - Data science collaboration platform
+- [DoltHub](https://www.dolthub.com/) - Collaborative versioned databases
+- [Delta Lake](https://delta.io/) - Open-source storage layer for lakehouses
 
-### Monitoring/tracking
+### Experiment tracking
 
-These are alternatives to CML.
+Alternatives to CML for tracking experiments and visualizing metrics. CML
+reports results inside CI/CD pipelines, these tools track and visualize
+experiments instead.
 
-- [GuildAi](https://guild.ai/) - An open source experiment tracking toolkit. Use
-  it to build better machine learning models faster
-- [Aim](https://aimstack.io/) - An open-source, self-hosted ML experiment
-  tracking tool
+- [Guild AI](https://github.com/guildai/guildai) - Open-source toolkit for
+  running, tracking, and optimizing ML experiments
+- [Aim](https://github.com/aimhubio/aim) - Open-source, self-hosted tool for
+  tracking and visualizing ML experiments
+- [TensorBoard](https://github.com/tensorflow/tensorboard) - Open-source toolkit
+  for visualizing ML experiment metrics and model graphs
+
+### Model monitoring
+
+These are alternatives to Evidently AI for monitoring models in production.
+
+- [NannyML](https://www.nannyml.com/) - Detect model and data drift, including
+  estimated performance degradation, without ground truth labels
+- [Deepchecks](https://deepchecks.com/) - Test and validate ML models and data,
+  with a library or self-hosted UI
+- [Seldon Alibi Detect](https://github.com/SeldonIO/alibi-detect) - Algorithms
+  for outlier, adversarial, and drift detection
 
 ### Data annotation
 
-At the moment, Label Studio is the only solution that allows to annotate many
-kinds of data. Other competitors only allow a certain kind of data. Have a look
-at the
+Label Studio handles many data types, but most competitors specialize in one.
+See the
 [`awesome-data-labeling`](https://github.com/heartexlabs/awesome-data-labeling)
-Git repository for specific alternatives.
+repository for specific alternatives.
 
-### Model orchestration
+### Pipeline orchestration
 
-These are alternatives to GitHub Actions.
+Alternatives to GitHub Actions.
 
-- [GitLab CI](https://about.gitlab.com/topics/ci-cd/) - A complete DevOps platform with built-in CI/CD and container registry
-- [Gitea](https://about.gitea.com/) - A painless self-hosted Git service with
-  built-in CI/CD using GitHub Actions-compatible syntax
-- [Forgejo](https://forgejo.org/) - A self-hosted Git service and soft fork of
+- [GitLab CI](https://about.gitlab.com/topics/ci-cd/) - DevOps platform with
+  built-in CI/CD and container registry
+- [Gitea](https://about.gitea.com/) - Self-hosted Git service with built-in
+  CI/CD using GitHub Actions-compatible syntax
+- [Forgejo](https://forgejo.org/) - Self-hosted Git service and soft fork of
   Gitea with GitHub Actions-compatible workflows
 
-### Model management/deployment
+### Model packaging and serving
 
-These are alternatives to BentoML and Docker.
+Alternatives to BentoML for packaging and serving models.
 
-- [Kubeflow](https://www.kubeflow.org/) - The Kubeflow project is dedicated to
-  making deployments of machine learning (ML) workflows on Kubernetes simple,
-  portable and scalable
-- [MLEM](https://mlem.ai/) - The open-source tool to simplify your ML model
-  deployments
-- [Cog](https://github.com/replicate/cog) - An open-source tool that lets you
-  package machine learning models in a standard, production-ready container
-- [Podman](https://podman.io/) - A daemonless, open source, Linux native tool
-  designed to make it easy to find, run, build, share and deploy applications
-  using Open Container Initiative containers and images
+- [MLEM](https://mlem.ai/) - Open-source tool to simplify ML model deployments
+- [Cog](https://github.com/replicate/cog) - Package machine learning models in
+  standard, production-ready containers
+- [Seldon Core](https://www.seldon.io/seldon-core) - Open-source platform to
+  deploy ML models on Kubernetes
+- [Kubeflow](https://www.kubeflow.org/) - ML workflows on Kubernetes, including
+  training and serving
 
-### Self-hosted / on-premise infrastructure
+### Container tools
 
-These tools are useful if you want to run the MLOps stack on your own
-infrastructure instead of managed cloud services.
+Alternatives to Docker.
 
-- [CNCF Landscape](https://landscape.cncf.io/) - Explore graduated CNCF
-  projects that are generally considered production-ready
+- [Podman](https://podman.io/) - Daemonless, open-source tool for running,
+  building, and sharing OCI containers and images
+
+### Self-hosted infrastructure
+
+Tools for running the MLOps stack on your own hardware instead of managed cloud
+services.
+
+- [CNCF Landscape](https://landscape.cncf.io/) - Graduated CNCF projects
+  considered production-ready
 - [Kubespray](https://kubespray.io/) - Deploy production-ready Kubernetes
   clusters on bare-metal or virtual machines
-- [Argo](https://argoproj.github.io/) - Kubernetes-native continuous
-  delivery (Argo CD) and workflow orchestration (Argo Workflows)
+- [Argo](https://argoproj.github.io/) - Kubernetes-native continuous delivery
+  (Argo CD) and workflow orchestration (Argo Workflows)
 - [Harbor](https://goharbor.io/) - Self-hosted container registry with
   vulnerability scanning and RBAC
 - [Distribution Registry](https://distribution.github.io/distribution/) -
   Lightweight local container registry, also known as Docker Registry
-- [Helm](https://helm.sh/) - Package manager for Kubernetes; commonly used
-  to install and manage Argo, registries, and CI runners
-- [Docker Swarm](https://docs.docker.com/engine/swarm/) - Simpler,
-  built-in container orchestration alternative to Kubernetes
+- [Helm](https://helm.sh/) - Package manager for Kubernetes; commonly used to
+  install and manage Argo, registries, and CI runners
+- [Docker Swarm](https://docs.docker.com/engine/swarm/) - Simpler, built-in
+  container orchestration alternative to Kubernetes
 
-### End-to-end
+### End-to-end platforms
 
-These tools can be used to manage the entire lifecycle of the ML experiment.
-These tools were considered at the beginning of this document redaction. But as
-most of the tools are often opinionated and may lack the flexibility needed for
-the scope of this project, they were omitted.
+Tools that cover the whole ML lifecycle in one platform. They are often
+opinionated, so this guide prefers composable tools.
 
-- [MLFlow](https://mlflow.org/) - An open source platform for the machine
-  learning lifecycle
-- [MLRun](https://www.mlrun.org/) - An open source framework to orchestrate
-  MLOps from the research stage to production-ready AI applications
+- [MLFlow](https://mlflow.org/) - Open-source platform for the machine learning
+  lifecycle
+- [MLRun](https://www.mlrun.org/) - Open-source framework to orchestrate MLOps
+  from research to production

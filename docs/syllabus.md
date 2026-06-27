@@ -2,10 +2,10 @@
 
 What you will learn.
 
-This hands-on tutorial begins with a Jupyter notebook experiment and
-progressively turns it into a reproducible, deployed, and maintainable system.
-The chapters that follow walk through that lifecycle, from a local notebook to a
-deployed, monitored, and retrainable system.
+This hands-on tutorial walks through the full MLOps lifecycle: from a local
+Jupyter notebook experiment to a reproducible pipeline, then to automated
+collaboration in the cloud, and finally to a deployed, monitored, and
+retrainable system.
 
 The five parts are:
 

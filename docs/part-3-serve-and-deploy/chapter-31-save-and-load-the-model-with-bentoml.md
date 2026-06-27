@@ -127,9 +127,9 @@ Install the package and update the freeze file.
     environment is activated to avoid potential conflicts with system-wide Python
     packages.
 
-    To check its status, simply run `pip -V`. If the virtual environment is active,
-    the output will show the path to the virtual environment's Python executable. If
-    it is not, you can activate it with `source .venv/bin/activate`.
+    To check its status, simply run `which python`. If the virtual environment is
+    active, the output will show the path to the virtual environment's Python
+    executable. If it is not, you can activate it with `source .venv/bin/activate`.
 
 === ":simple-python: Using pip"
 
