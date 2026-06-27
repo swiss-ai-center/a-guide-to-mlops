@@ -58,6 +58,17 @@ CI/CD pipelines.
 - [Aim](https://aimstack.io/) - Open-source, self-hosted ML experiment tracking
   tool
 
+### Model monitoring
+
+These are alternatives to Evidently AI for monitoring models in production.
+
+- [NannyML](https://www.nannyml.com/) - Detect model and data drift, including
+  estimated performance degradation, without needing ground truth labels
+- [Deepchecks](https://deepchecks.com/) - Test and validate ML models and data,
+  with a library or self-hosted UI
+- [Seldon Alibi Detect](https://github.com/SeldonIO/alibi-detect) - Algorithms
+  for outlier, adversarial, and drift detection
+
 ### Data annotation
 
 At the moment, Label Studio is the only solution that allows to annotate many
