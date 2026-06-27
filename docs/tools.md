@@ -24,9 +24,6 @@ process:
 
 You will go into details about each tool in the following parts of this guide.
 
-<!-- TODO: Add an illustration to display the different tools and their
-purposes? -->
-
 ## Related tools
 
 While this guide concentrates solely on the setup and utilization of the
@@ -77,59 +74,62 @@ at the
 [`awesome-data-labeling`](https://github.com/heartexlabs/awesome-data-labeling)
 Git repository for specific alternatives.
 
-### Model orchestration
+### Pipeline orchestration
 
 These are alternatives to GitHub Actions.
 
-- [GitLab CI](https://about.gitlab.com/topics/ci-cd/) - A complete DevOps platform with built-in CI/CD and container registry
-- [Gitea](https://about.gitea.com/) - A painless self-hosted Git service with
-  built-in CI/CD using GitHub Actions-compatible syntax
-- [Forgejo](https://forgejo.org/) - A self-hosted Git service and soft fork of
+- [GitLab CI](https://about.gitlab.com/topics/ci-cd/) - DevOps platform with
+  built-in CI/CD and container registry
+- [Gitea](https://about.gitea.com/) - Self-hosted Git service with built-in
+  CI/CD using GitHub Actions-compatible syntax
+- [Forgejo](https://forgejo.org/) - Self-hosted Git service and soft fork of
   Gitea with GitHub Actions-compatible workflows
 
-### Model management/deployment
+### Model packaging and serving
 
-These are alternatives to BentoML and Docker.
+These are alternatives to BentoML for packaging and serving models.
 
-- [Kubeflow](https://www.kubeflow.org/) - The Kubeflow project is dedicated to
-  making deployments of machine learning (ML) workflows on Kubernetes simple,
-  portable and scalable
-- [MLEM](https://mlem.ai/) - The open-source tool to simplify your ML model
-  deployments
-- [Cog](https://github.com/replicate/cog) - An open-source tool that lets you
-  package machine learning models in a standard, production-ready container
-- [Podman](https://podman.io/) - A daemonless, open source, Linux native tool
-  designed to make it easy to find, run, build, share and deploy applications
-  using Open Container Initiative containers and images
+- [MLEM](https://mlem.ai/) - Open-source tool to simplify ML model deployments
+- [Cog](https://github.com/replicate/cog) - Package machine learning models in
+  standard, production-ready containers
+- [Seldon Core](https://www.seldon.io/seldon-core) - Open-source platform to
+  deploy ML models on Kubernetes
+- [Kubeflow](https://www.kubeflow.org/) - ML workflows on Kubernetes, including
+  training and serving
+
+### Container tools
+
+These are alternatives to Docker.
+
+- [Podman](https://podman.io/) - Daemonless, open-source tool for running,
+  building, and sharing OCI containers and images
 
 ### Self-hosted / on-premise infrastructure
 
 These tools are useful if you want to run the MLOps stack on your own
 infrastructure instead of managed cloud services.
 
-- [CNCF Landscape](https://landscape.cncf.io/) - Explore graduated CNCF
-  projects that are generally considered production-ready
+- [CNCF Landscape](https://landscape.cncf.io/) - Explore graduated CNCF projects
+  that are generally considered production-ready
 - [Kubespray](https://kubespray.io/) - Deploy production-ready Kubernetes
   clusters on bare-metal or virtual machines
-- [Argo](https://argoproj.github.io/) - Kubernetes-native continuous
-  delivery (Argo CD) and workflow orchestration (Argo Workflows)
+- [Argo](https://argoproj.github.io/) - Kubernetes-native continuous delivery
+  (Argo CD) and workflow orchestration (Argo Workflows)
 - [Harbor](https://goharbor.io/) - Self-hosted container registry with
   vulnerability scanning and RBAC
 - [Distribution Registry](https://distribution.github.io/distribution/) -
   Lightweight local container registry, also known as Docker Registry
-- [Helm](https://helm.sh/) - Package manager for Kubernetes; commonly used
-  to install and manage Argo, registries, and CI runners
-- [Docker Swarm](https://docs.docker.com/engine/swarm/) - Simpler,
-  built-in container orchestration alternative to Kubernetes
+- [Helm](https://helm.sh/) - Package manager for Kubernetes; commonly used to
+  install and manage Argo, registries, and CI runners
+- [Docker Swarm](https://docs.docker.com/engine/swarm/) - Simpler, built-in
+  container orchestration alternative to Kubernetes
 
-### End-to-end
+### End-to-end platforms
 
-These tools can be used to manage the entire lifecycle of the ML experiment.
-These tools were considered at the beginning of this document redaction. But as
-most of the tools are often opinionated and may lack the flexibility needed for
-the scope of this project, they were omitted.
+These tools cover the whole ML lifecycle in a single platform. They are often
+opinionated, so this guide prefers composable tools instead.
 
-- [MLFlow](https://mlflow.org/) - An open source platform for the machine
-  learning lifecycle
-- [MLRun](https://www.mlrun.org/) - An open source framework to orchestrate
-  MLOps from the research stage to production-ready AI applications
+- [MLFlow](https://mlflow.org/) - Open-source platform for the machine learning
+  lifecycle
+- [MLRun](https://www.mlrun.org/) - Open-source framework to orchestrate MLOps
+  from research to production
