@@ -81,9 +81,10 @@
     stroke: currentcolor;
   }
 
-  /* Decorative inline SVG icons are redundant in text-only / no-JS clients */
+  /* Decorative inline SVG icons and planet belt are redundant in text-only / no-JS clients */
   @media (scripting: none) {
-    .twemoji {
+    .twemoji,
+    .planet-belt {
       display: none;
     }
   }
