@@ -121,6 +121,7 @@
     }
 
     layoutBelt();
+    belt.classList.add('is-ready');
     updateBelt();
 
     function onResize() {

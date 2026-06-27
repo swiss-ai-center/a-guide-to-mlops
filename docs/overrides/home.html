@@ -81,6 +81,14 @@
     stroke: currentcolor;
   }
 
+  /* Decorative inline SVG icons and planet belt are redundant in text-only / no-JS clients */
+  @media (scripting: none) {
+    .twemoji,
+    .planet-belt {
+      display: none;
+    }
+  }
+
   /* Starfield */
   .starfield {
     position: fixed;
@@ -134,6 +142,11 @@
     left: 0;
     width: 100vw;
     will-change: transform;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .belt-track.is-ready {
+    opacity: 1;
   }
   .belt-planet {
     position: absolute;
@@ -291,7 +304,6 @@
   .story-main {
     position: relative;
     z-index: 3;
-    counter-reset: chapter;
   }
 
   /* Chapter sections */
@@ -356,16 +368,17 @@
     text-transform: uppercase;
     letter-spacing: -0.01em;
   }
-  .chapter-title::before {
-    counter-increment: chapter;
-    content: "SEC " counter(chapter, decimal-leading-zero) " — ";
+  .chapter-prefix {
     display: block;
     font-family: var(--tech-mono);
     font-size: 0.45em;
-    color: var(--accent);
     letter-spacing: 0.12em;
     margin-bottom: 0.35rem;
   }
+  .chapter-prefix::after {
+    content: " —";
+  }
+
   .chapter-title span {
     color: var(--accent);
   }
@@ -511,7 +524,8 @@
     .finale-launchpad { display: none; }
   }
 
-  /* Light theme overrides */
+  /* Light theme overrides: skip them for no-JS clients that prefer dark mode */
+  @media not ((scripting: none) and (prefers-color-scheme: dark)) {
   body[data-md-color-scheme="default"] {
     background: #f7f8fc;
   }
@@ -638,6 +652,7 @@
   body[data-md-color-scheme="default"] .story-finale .finale-logo {
     filter: none;
   }
+  }
 </style>
 {% endblock %}
 
@@ -708,7 +723,7 @@
     {{- home.hero.subtitle -}}
   </p>
   <a href="{{ home.hero.cta.anchor }}" class="hero-cta">
-    <span class="twemoji">{% include ".icons/" ~ home.hero.cta.icon ~ ".svg" %}</span>
+    <span class="twemoji" aria-hidden="true">{% include ".icons/" ~ home.hero.cta.icon ~ ".svg" %}</span>
     {{ home.hero.cta.text }}
   </a>
 
@@ -724,7 +739,7 @@
   <section class="story-chapter{% if chapter.reentry %} reentry{% endif %}" id="section-{{ chapter.id }}"{% if chapter.planet %} data-planet="{{ chapter.planet }}"{% endif %}>
     <article class="chapter-card reveal">
       <div class="chapter-label">{{ chapter.label }}</div>
-      <h2 class="chapter-title">{{ chapter.title }}{% if chapter.title_highlight %} <span>{{ chapter.title_highlight }}</span>{% endif %}</h2>
+      <h2 class="chapter-title">{% if chapter.prefix %}<span class="chapter-prefix">{{ chapter.prefix }}</span>{% endif %}{{ chapter.title }}{% if chapter.title_highlight %} <span>{{ chapter.title_highlight }}</span>{% endif %}</h2>
       <p>
         {{- chapter.body | safe -}}
       </p>
@@ -732,7 +747,7 @@
         {% for action in chapter.actions %}
         {% if action.type == "pdf" %}
         <a href="{{ action.url }}" class="pdf-link">
-          <span class="twemoji">{% include ".icons/" ~ action.icon ~ ".svg" %}</span>
+          <span class="twemoji" aria-hidden="true">{% include ".icons/" ~ action.icon ~ ".svg" %}</span>
           {{ action.text }}
         </a>
         {% else %}
@@ -745,7 +760,7 @@
             {{ action.url }}
           {%- endif -%}
         " class="chapter-link {{ action.type }}{% if action.type == 'primary' %} next-section{% endif %}">
-          <span class="twemoji">{% include ".icons/" ~ action.icon ~ ".svg" %}</span>
+          <span class="twemoji" aria-hidden="true">{% include ".icons/" ~ action.icon ~ ".svg" %}</span>
           {{ action.text }}
         </a>
         {% endif %}
@@ -763,7 +778,7 @@
     {{- home.finale.subtitle -}}
   </p>
   <a href="{{ home.finale.cta.path | url }}" class="hero-cta">
-    <span class="twemoji">{% include ".icons/" ~ home.finale.cta.icon ~ ".svg" %}</span>
+    <span class="twemoji" aria-hidden="true">{% include ".icons/" ~ home.finale.cta.icon ~ ".svg" %}</span>
     {{ home.finale.cta.text }}
   </a>
 
