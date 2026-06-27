@@ -1,11 +1,6 @@
 # Tools
 
-Introduction to the tools used in this guide.
-
-## What are the tools used in this guide?
-
-In this guide, you will use the following tools to demonstrate the MLOps
-process:
+This guide uses the following tools:
 
 - Code management: [:simple-git: Git](https://git-scm.com/)
 - Package management: [:simple-python: pip](https://pip.pypa.io/) (or
@@ -22,34 +17,26 @@ process:
 - Model monitoring: [Evidently AI](https://evidentlyai.com/)
 - Data annotation: [Label Studio](https://labelstud.io/)
 
-You will go into details about each tool in the following parts of this guide.
+The following chapters explain each tool in detail.
 
 ## Related tools
 
-While this guide concentrates solely on the setup and utilization of the
-mentioned tools, it is worth noting that there are alternative tools available
-for each stage of the workflow.
-
-Here is a list of related tools that can be explored as alternatives.
-Additionally, you can find another valuable compilation of tools at
-[MLOps.toys](https://tools.mlops.community/).
+This guide covers one toolset, but alternatives exist for every stage. For a
+broader compilation, see [MLOps.toys](https://tools.mlops.community/).
 
 ### Data management
 
-These are alternatives to DVC.
+Alternatives to DVC.
 
-- [LakeFS](https://lakefs.io/) - Transform your data lake into a Git-like
-  repository
-- [DagsHub](https://dagshub.com/) - Open Source Data Science Collaboration
-- [DoltHub](https://www.dolthub.com/) - DoltHub is where people collaboratively
-  build, manage, and distribute structured data
-- [Delta Lake](https://delta.io/) - An open-source storage framework that
-  enables building a Lakehouse architecture with compute engines
+- [LakeFS](https://lakefs.io/) - Git-like version control for data lakes
+- [DagsHub](https://dagshub.com/) - Data science collaboration platform
+- [DoltHub](https://www.dolthub.com/) - Collaborative versioned databases
+- [Delta Lake](https://delta.io/) - Open-source storage layer for lakehouses
 
 ### Experiment tracking
 
-These are alternatives to CML for tracking experiments and reporting metrics in
-CI/CD pipelines.
+Alternatives to CML for tracking experiments and reporting metrics in CI/CD
+pipelines.
 
 - [GuildAi](https://guild.ai/) - Open-source experiment tracking toolkit
 - [Aim](https://aimstack.io/) - Open-source, self-hosted ML experiment tracking
@@ -60,7 +47,7 @@ CI/CD pipelines.
 These are alternatives to Evidently AI for monitoring models in production.
 
 - [NannyML](https://www.nannyml.com/) - Detect model and data drift, including
-  estimated performance degradation, without needing ground truth labels
+  estimated performance degradation, without ground truth labels
 - [Deepchecks](https://deepchecks.com/) - Test and validate ML models and data,
   with a library or self-hosted UI
 - [Seldon Alibi Detect](https://github.com/SeldonIO/alibi-detect) - Algorithms
@@ -68,15 +55,14 @@ These are alternatives to Evidently AI for monitoring models in production.
 
 ### Data annotation
 
-At the moment, Label Studio is the only solution that allows to annotate many
-kinds of data. Other competitors only allow a certain kind of data. Have a look
-at the
+Label Studio handles many data types, but most competitors specialize in one.
+See the
 [`awesome-data-labeling`](https://github.com/heartexlabs/awesome-data-labeling)
-Git repository for specific alternatives.
+repository for specific alternatives.
 
 ### Pipeline orchestration
 
-These are alternatives to GitHub Actions.
+Alternatives to GitHub Actions.
 
 - [GitLab CI](https://about.gitlab.com/topics/ci-cd/) - DevOps platform with
   built-in CI/CD and container registry
@@ -87,7 +73,7 @@ These are alternatives to GitHub Actions.
 
 ### Model packaging and serving
 
-These are alternatives to BentoML for packaging and serving models.
+Alternatives to BentoML for packaging and serving models.
 
 - [MLEM](https://mlem.ai/) - Open-source tool to simplify ML model deployments
 - [Cog](https://github.com/replicate/cog) - Package machine learning models in
@@ -99,18 +85,18 @@ These are alternatives to BentoML for packaging and serving models.
 
 ### Container tools
 
-These are alternatives to Docker.
+Alternatives to Docker.
 
 - [Podman](https://podman.io/) - Daemonless, open-source tool for running,
   building, and sharing OCI containers and images
 
-### Self-hosted / on-premise infrastructure
+### Self-hosted infrastructure
 
-These tools are useful if you want to run the MLOps stack on your own
-infrastructure instead of managed cloud services.
+Tools for running the MLOps stack on your own hardware instead of managed cloud
+services.
 
-- [CNCF Landscape](https://landscape.cncf.io/) - Explore graduated CNCF projects
-  that are generally considered production-ready
+- [CNCF Landscape](https://landscape.cncf.io/) - Graduated CNCF projects
+  considered production-ready
 - [Kubespray](https://kubespray.io/) - Deploy production-ready Kubernetes
   clusters on bare-metal or virtual machines
 - [Argo](https://argoproj.github.io/) - Kubernetes-native continuous delivery
@@ -126,8 +112,8 @@ infrastructure instead of managed cloud services.
 
 ### End-to-end platforms
 
-These tools cover the whole ML lifecycle in a single platform. They are often
-opinionated, so this guide prefers composable tools instead.
+Tools that cover the whole ML lifecycle in one platform. They are often
+opinionated, so this guide prefers composable tools.
 
 - [MLFlow](https://mlflow.org/) - Open-source platform for the machine learning
   lifecycle
