@@ -20,6 +20,7 @@ home:
   chapters:
     - id: about
       label: Ground control
+      prefix: Prologue
       title: Meet the
       title_highlight: Crew
       body: |
@@ -42,6 +43,7 @@ home:
           url: "https://mlops.swiss-ai-center.ch/presentation/a-guide-to-mlops-presentation.pdf"
     - id: intro
       label: Mission briefing
+      prefix: Introduction
       title: Why this
       title_highlight: "guide?"
       planet: moon
@@ -61,6 +63,7 @@ home:
           path: philosophy/
     - id: part-1
       label: Part 1 — Lift-off
+      prefix: Part 1
       title: Local training &
       title_highlight: model evaluation
       planet: earth
@@ -80,6 +83,7 @@ home:
           path: part-1-local-training-and-evaluation/introduction/
     - id: part-2
       label: Part 2 — Escape velocity
+      prefix: Part 2
       title: Move the model to the
       title_highlight: cloud
       planet: mars
@@ -100,6 +104,7 @@ home:
           path: part-2-move-to-the-cloud/introduction/
     - id: part-3
       label: Part 3 — In orbit
+      prefix: Part 3
       title: Serve &
       title_highlight: deploy
       planet: saturn
@@ -120,6 +125,7 @@ home:
           path: part-3-serve-and-deploy/introduction/
     - id: part-4
       label: Part 4 — Sensor array
+      prefix: Part 4
       title: Monitor &
       title_highlight: maintain
       planet: comet
@@ -141,6 +147,7 @@ home:
           path: part-4-monitor-and-maintain/introduction/
     - id: part-5
       label: Part 5 — Deep space loop
+      prefix: Part 5
       title: Label data &
       title_highlight: retrain
       planet: haumea
@@ -160,6 +167,7 @@ home:
           path: part-5-label-data-and-retrain/introduction/
     - id: reentry
       label: Reentry
+      prefix: Conclusion
       title: Clean up &
       title_highlight: conclude
       planet: capsule

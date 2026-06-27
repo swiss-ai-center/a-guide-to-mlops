@@ -363,6 +363,16 @@
     text-transform: uppercase;
     letter-spacing: -0.01em;
   }
+  .chapter-prefix {
+    display: block;
+    font-family: var(--tech-mono);
+    font-size: 0.45em;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.35rem;
+  }
+  .chapter-prefix::after {
+    content: " —";
+  }
 
   .chapter-title span {
     color: var(--accent);
@@ -722,7 +732,7 @@
   <section class="story-chapter{% if chapter.reentry %} reentry{% endif %}" id="section-{{ chapter.id }}"{% if chapter.planet %} data-planet="{{ chapter.planet }}"{% endif %}>
     <article class="chapter-card reveal">
       <div class="chapter-label">{{ chapter.label }}</div>
-      <h2 class="chapter-title">{{ chapter.title }}{% if chapter.title_highlight %} <span>{{ chapter.title_highlight }}</span>{% endif %}</h2>
+      <h2 class="chapter-title">{% if chapter.prefix %}<span class="chapter-prefix">{{ chapter.prefix }}</span>{% endif %}{{ chapter.title }}{% if chapter.title_highlight %} <span>{{ chapter.title_highlight }}</span>{% endif %}</h2>
       <p>
         {{- chapter.body | safe -}}
       </p>
