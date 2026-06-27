@@ -62,7 +62,7 @@ home:
           icon: lucide/lightbulb
           path: philosophy/
     - id: part-1
-      label: Part 1 — Lift-off
+      label: Lift-off
       prefix: Part 1
       title: Local training &
       title_highlight: model evaluation
@@ -82,7 +82,7 @@ home:
           icon: lucide/flask-conical
           path: part-1-local-training-and-evaluation/introduction/
     - id: part-2
-      label: Part 2 — Escape velocity
+      label: Escape velocity
       prefix: Part 2
       title: Move the model to the
       title_highlight: cloud
@@ -103,7 +103,7 @@ home:
           icon: lucide/cloud
           path: part-2-move-to-the-cloud/introduction/
     - id: part-3
-      label: Part 3 — In orbit
+      label: In orbit
       prefix: Part 3
       title: Serve &
       title_highlight: deploy
@@ -124,7 +124,7 @@ home:
           icon: lucide/server
           path: part-3-serve-and-deploy/introduction/
     - id: part-4
-      label: Part 4 — Sensor array
+      label: Sensor array
       prefix: Part 4
       title: Monitor &
       title_highlight: maintain
@@ -146,7 +146,7 @@ home:
           icon: lucide/activity
           path: part-4-monitor-and-maintain/introduction/
     - id: part-5
-      label: Part 5 — Deep space loop
+      label: Deep space loop
       prefix: Part 5
       title: Label data &
       title_highlight: retrain
