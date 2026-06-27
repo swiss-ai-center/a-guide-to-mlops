@@ -27,7 +27,7 @@ home:
         Ground control, reporting for duty. We are the
         <a href="https://www.swiss-ai-center.ch/" class="crew-link" target="_blank" rel="noopener">Swiss AI Center</a>
         crew, building a practical flight plan from machine-learning experiments to production.
-        We selected tools that fit established workflows and teams, with a focus on SMEs.
+        We selected tools that minimize friction for established workflows and teams, with a focus on SMEs.
       actions:
         - type: primary
           text: Next stop
