@@ -1,6 +1,8 @@
 # Tools
 
-This guide uses the following tools:
+The tools used in this guide.
+
+## Core tools
 
 - Code management: [:simple-git: Git](https://git-scm.com/)
 - Package management: [:simple-python: pip](https://pip.pypa.io/) (or
