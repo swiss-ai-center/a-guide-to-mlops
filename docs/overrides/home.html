@@ -81,6 +81,13 @@
     stroke: currentcolor;
   }
 
+  /* Decorative inline SVG icons are redundant in text-only / no-JS clients */
+  @media (scripting: none) {
+    .twemoji {
+      display: none;
+    }
+  }
+
   /* Starfield */
   .starfield {
     position: fixed;
@@ -698,7 +705,7 @@
     {{- home.hero.subtitle -}}
   </p>
   <a href="{{ home.hero.cta.anchor }}" class="hero-cta">
-    <span class="twemoji">{% include ".icons/" ~ home.hero.cta.icon ~ ".svg" %}</span>
+    <span class="twemoji" aria-hidden="true">{% include ".icons/" ~ home.hero.cta.icon ~ ".svg" %}</span>
     {{ home.hero.cta.text }}
   </a>
 
@@ -722,7 +729,7 @@
         {% for action in chapter.actions %}
         {% if action.type == "pdf" %}
         <a href="{{ action.url }}" class="pdf-link">
-          <span class="twemoji">{% include ".icons/" ~ action.icon ~ ".svg" %}</span>
+          <span class="twemoji" aria-hidden="true">{% include ".icons/" ~ action.icon ~ ".svg" %}</span>
           {{ action.text }}
         </a>
         {% else %}
@@ -735,7 +742,7 @@
             {{ action.url }}
           {%- endif -%}
         " class="chapter-link {{ action.type }}{% if action.type == 'primary' %} next-section{% endif %}">
-          <span class="twemoji">{% include ".icons/" ~ action.icon ~ ".svg" %}</span>
+          <span class="twemoji" aria-hidden="true">{% include ".icons/" ~ action.icon ~ ".svg" %}</span>
           {{ action.text }}
         </a>
         {% endif %}
@@ -753,7 +760,7 @@
     {{- home.finale.subtitle -}}
   </p>
   <a href="{{ home.finale.cta.path | url }}" class="hero-cta">
-    <span class="twemoji">{% include ".icons/" ~ home.finale.cta.icon ~ ".svg" %}</span>
+    <span class="twemoji" aria-hidden="true">{% include ".icons/" ~ home.finale.cta.icon ~ ".svg" %}</span>
     {{ home.finale.cta.text }}
   </a>
 
