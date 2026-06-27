@@ -291,7 +291,6 @@
   .story-main {
     position: relative;
     z-index: 3;
-    counter-reset: chapter;
   }
 
   /* Chapter sections */
@@ -356,16 +355,7 @@
     text-transform: uppercase;
     letter-spacing: -0.01em;
   }
-  .chapter-title::before {
-    counter-increment: chapter;
-    content: "SEC " counter(chapter, decimal-leading-zero) " — ";
-    display: block;
-    font-family: var(--tech-mono);
-    font-size: 0.45em;
-    color: var(--accent);
-    letter-spacing: 0.12em;
-    margin-bottom: 0.35rem;
-  }
+
   .chapter-title span {
     color: var(--accent);
   }
