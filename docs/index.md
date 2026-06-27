@@ -1,7 +1,7 @@
 ---
 template: home.html
-title: MLOps Guide - Complete Tutorial on Machine Learning Operations
-description: Complete MLOps guide covering ML operations tools and best practices - from conventional to modern approaches for deploying ML models in production
+title: MLOps Guide — Complete Tutorial on Machine Learning Operations
+description: Complete MLOps tutorial covering tools and best practices for deploying ML models in production
 hide:
   - navigation
   - toc
@@ -11,8 +11,8 @@ home:
       text: Hands-on tutorial
     title: A Guide to MLOps
     subtitle: |
-      Classify celestial bodies using best practices:
-      a practical journey through local training, the cloud, serving, monitoring, labeling, and retraining.
+      Classify celestial bodies with MLOps best practices:
+      a journey through local training, the cloud, serving, monitoring, labeling, and retraining.
     cta:
       text: Chart the course
       icon: lucide/compass
@@ -26,8 +26,7 @@ home:
         Ground control, reporting for duty. We are the
         <a href="https://www.swiss-ai-center.ch/" class="crew-link" target="_blank" rel="noopener">Swiss AI Center</a>
         crew, building a practical flight plan from machine-learning experiments to production.
-        We have carefully selected the most suitable tools to minimize friction within established
-        workflows and teams, with a particular focus on SMEs.
+        We selected tools that fit established workflows and teams, with a focus on SMEs.
       actions:
         - type: primary
           text: Next stop
@@ -48,9 +47,9 @@ home:
       planet: moon
       body: |
         Building a model is only the beginning. This guide is a step-by-step flight plan
-        that takes you from a notebook experiment to a reproducible, monitored, and
-        continuously-improved ML system. We use concrete tools — DVC, CML, Docker,
-        BentoML, Evidently AI and Label Studio — so you can follow along with real code.
+        from a notebook experiment to a reproducible, monitored, and continuously-improved ML system.
+        We use real tools — DVC, CML, Docker, BentoML, Evidently AI, and Label Studio —
+        so you can follow along with real code.
       actions:
         - type: primary
           text: Next stop
@@ -69,8 +68,7 @@ home:
         Start on solid ground. Move from a Jupyter notebook experiment to clean
         Python scripts, then version your data and code with Git and DVC. Build a
         reproducible prepare-train-evaluate pipeline on your own machine, and use
-        DVC to compare parameters, metrics, and plots so you can see how your
-        model evolves.
+        DVC to track parameters, metrics, and plots as your model evolves.
       actions:
         - type: primary
           text: Next stop
@@ -89,8 +87,8 @@ home:
         When your local machine is no longer enough, move the experiment to the
         cloud. Push your code to GitHub, store data in an S3 bucket with DVC, and
         set up a CI/CD pipeline that reproduces the experiment on every push. Then
-        use CML to publish parameter, metric, and plot comparisons in pull requests
-        so the team can review every change.
+        use CML to publish comparisons of parameters, metrics, and plots in pull
+        requests so the team can review every change.
       actions:
         - type: primary
           text: Next stop
@@ -106,7 +104,7 @@ home:
       title_highlight: deploy
       planet: saturn
       body: |
-        A trained model only creates value when it can serve predictions. Package it
+        A trained model creates value only when it serves predictions. Package it
         with BentoML and expose a local FastAPI endpoint, then containerize it with
         Docker and push the image to a registry. Wire builds and deployments into
         your CI/CD pipeline, roll the model out on Kubernetes, and scale training
@@ -128,10 +126,10 @@ home:
       body: |
         A model in production needs watching. Stream prediction logs to S3, deploy
         an Evidently AI dashboard on Kubernetes to compare live data against your
-        training reference, and open drift reports as GitHub issues when things
-        shift. Use those signals to trigger retraining workflows or roll back to a
-        previous model version by redeploying its container image, with Git and DVC
-        as the reproducible source of truth.
+        training reference, and open drift reports as GitHub issues when data drifts.
+        Use those signals to trigger retraining workflows or roll back to a previous
+        model version by redeploying its container image, with Git and DVC as the
+        reproducible source of truth.
       actions:
         - type: primary
           text: Next stop
@@ -149,8 +147,8 @@ home:
       body: |
         Production data changes. Close the feedback loop with Label Studio: let
         your model suggest labels through the FastAPI endpoint, review and correct
-        edge cases, then merge the refined annotations back and retrain with DVC.
-        A better model makes the next round of labeling faster and more accurate.
+        edge cases, then merge the refined annotations and retrain with DVC. A
+        better model makes the next round of labeling faster and more accurate.
       actions:
         - type: primary
           text: Next stop
@@ -169,9 +167,8 @@ home:
       body: |
         Finish the journey by cleaning up everything you created. Delete cloud
         resources, remove the GitHub repository and access tokens, wipe your local
-        environment, and take a moment to review what you have built. A proper
-        cleanup avoids unexpected costs. A safe landing is the final stage of a
-        successful mission.
+        environment, and review what you built. A proper cleanup avoids unexpected
+        costs. A safe landing is the final stage of a successful mission.
       actions:
         - type: primary
           text: Launch pad
@@ -185,7 +182,7 @@ home:
     title: Ready for
     title_highlight: launch?
     subtitle: |
-      The guide is open source and built to be followed hands-on.
+      The guide is open source and designed to be followed hands-on.
       Pick a chapter, launch your terminal, and start shipping ML systems.
     cta:
       text: Start the journey
