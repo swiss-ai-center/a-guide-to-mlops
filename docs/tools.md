@@ -49,14 +49,14 @@ These are alternatives to DVC.
 - [Delta Lake](https://delta.io/) - An open-source storage framework that
   enables building a Lakehouse architecture with compute engines
 
-### Monitoring/tracking
+### Experiment tracking
 
-These are alternatives to CML.
+These are alternatives to CML for tracking experiments and reporting metrics in
+CI/CD pipelines.
 
-- [GuildAi](https://guild.ai/) - An open source experiment tracking toolkit. Use
-  it to build better machine learning models faster
-- [Aim](https://aimstack.io/) - An open-source, self-hosted ML experiment
-  tracking tool
+- [GuildAi](https://guild.ai/) - Open-source experiment tracking toolkit
+- [Aim](https://aimstack.io/) - Open-source, self-hosted ML experiment tracking
+  tool
 
 ### Data annotation
 
