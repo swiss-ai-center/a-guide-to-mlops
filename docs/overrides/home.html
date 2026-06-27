@@ -524,7 +524,8 @@
     .finale-launchpad { display: none; }
   }
 
-  /* Light theme overrides */
+  /* Light theme overrides: skip them for no-JS clients that prefer dark mode */
+  @media not ((scripting: none) and (prefers-color-scheme: dark)) {
   body[data-md-color-scheme="default"] {
     background: #f7f8fc;
   }
@@ -650,6 +651,7 @@
   }
   body[data-md-color-scheme="default"] .story-finale .finale-logo {
     filter: none;
+  }
   }
 </style>
 {% endblock %}
