@@ -86,6 +86,21 @@ style: |
         background-size: 120px 120px, 180px 180px;
         background-position: 0 0, 60px 60px;
     }
+    /* Tighten split-background layouts: Gaia's 70px section padding wastes
+       space beside background images, so reduce the inner padding on the
+       content side and align the background image toward the content. */
+    section[data-marpit-advanced-background="content"][data-marpit-advanced-background-split="right"] {
+        padding-right: 30px !important;
+    }
+    section[data-marpit-advanced-background="content"][data-marpit-advanced-background-split="left"] {
+        padding-left: 30px !important;
+    }
+    section[data-marpit-advanced-background="background"][data-marpit-advanced-background-split="right"] > div[data-marpit-advanced-background-container] > figure {
+        background-position: left center !important;
+    }
+    section[data-marpit-advanced-background="background"][data-marpit-advanced-background-split="left"] > div[data-marpit-advanced-background-container] > figure {
+        background-position: right center !important;
+    }
 headingDivider: 4
 -->
 
@@ -133,8 +148,7 @@ _paginate: false
 
 <div class="center">
 
-**Bertil
-Chapuis**
+**Bertil<br>Chapuis**<br>
 <small>Professor</small>
 
 ![w:200](./images/bertil-chapuis.png)
@@ -144,8 +158,7 @@ Chapuis**
 </div>
 <div class="center">
 
-**Ludovic
-Delafontaine**
+**Ludovic<br>Delafontaine**<br>
 <small>Lecturer</small>
 
 ![w:200](./images/ludovic-delafontaine.png)
@@ -155,8 +168,7 @@ Delafontaine**
 </div>
 <div class="center">
 
-**Rémy
-Marquis**
+**Rémy<br>Marquis**<br>
 <small>aR&D Associate</small>
 
 ![w:200](./images/remy-marquis.png)
@@ -166,8 +178,7 @@ Marquis**
 </div>
 <div class="center">
 
-**Leonard
-Cseres**
+**Leonard<br>Cseres**<br>
 <small>Assistant</small>
 
 ![w:200](./images/leonard-cseres.png)
@@ -183,9 +194,7 @@ Cseres**
 
 ## LLMs and agentic AI are everywhere
 
-But not here.
-
-**Most companies have ordinary data problems**
+**But most companies have ordinary data problems**
 
 - Data trapped in spreadsheets, logs, and sensors.
 - Forecasts built on fragile business systems.
@@ -194,7 +203,7 @@ But not here.
 
 ## ML code vs ML system
 
-![bg right:39% 100%](../docs/assets/images/ml_system.svg)
+![bg right:35% w:90%](../docs/assets/images/ml_system.svg)
 
 Only a small fraction of real-world ML systems is composed of the ML code.
 
@@ -274,6 +283,14 @@ tools
 This is the fence: we explicitly distinguish our lightweight, composable approach from heavy all-in-one platforms.
 -->
 
+## Target audience
+
+For **small teams and SMEs** who want to move ML from notebooks to production without a heavy, monolithic platform.
+
+If you use Git and want practical, incremental steps, this is for you.
+
+![bg right:40% 80%](../docs/assets/images/rocket-to-planet.svg)
+
 ## A guide to MLOps
 
 <!-- _class: lead -->
@@ -333,14 +350,6 @@ using MLOps best practices.
 
 ![bg w:90%](./images/guide-demo-17.png) ![bg w:90%](./images/guide-demo-18.png)
 
-## Target audience
-
-For **small teams and SMEs** who want to move ML from notebooks to production without a heavy, monolithic platform.
-
-If you use Git and want practical, incremental steps, this is for you.
-
-![bg right:40% 80%](../docs/assets/images/rocket-to-planet.svg)
-
 ## Prerequisites
 
 ♿ Accessible to everyone!
@@ -396,16 +405,10 @@ This is necessary to avoid:
 
 ## Conclusion
 
-Congratulations! You have completed the guide to MLOps!
+You have completed the guide to MLOps!
 
-You have learned how to improve the management and quality of machine learning
-projects.
-
-You are now able to switch from a Jupyter Notebook to production using
-state-of-the-art MLOps tools.
-
-You can go from experiment to production on the Cloud, using the best practices
-for ML. 🚀
+You can now move from experiments to production on the Cloud using MLOps best
+practices. 🚀
 
 ![bg right:35% w:60%](../docs/assets/images/launchpad.svg)
 
