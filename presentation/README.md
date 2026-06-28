@@ -148,8 +148,7 @@ _paginate: false
 
 <div class="center">
 
-**Bertil
-Chapuis**
+**Bertil<br>Chapuis**<br>
 <small>Professor</small>
 
 ![w:200](./images/bertil-chapuis.png)
@@ -159,8 +158,7 @@ Chapuis**
 </div>
 <div class="center">
 
-**Ludovic
-Delafontaine**
+**Ludovic<br>Delafontaine**<br>
 <small>Lecturer</small>
 
 ![w:200](./images/ludovic-delafontaine.png)
@@ -170,8 +168,7 @@ Delafontaine**
 </div>
 <div class="center">
 
-**Rémy
-Marquis**
+**Rémy<br>Marquis**<br>
 <small>aR&D Associate</small>
 
 ![w:200](./images/remy-marquis.png)
@@ -181,8 +178,7 @@ Marquis**
 </div>
 <div class="center">
 
-**Leonard
-Cseres**
+**Leonard<br>Cseres**<br>
 <small>Assistant</small>
 
 ![w:200](./images/leonard-cseres.png)
