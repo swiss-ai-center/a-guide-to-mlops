@@ -194,9 +194,7 @@ _paginate: false
 
 ## LLMs and agentic AI are everywhere
 
-But not here.
-
-**Most companies have ordinary data problems**
+**But most companies have ordinary data problems**
 
 - Data trapped in spreadsheets, logs, and sensors.
 - Forecasts built on fragile business systems.
