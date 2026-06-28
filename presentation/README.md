@@ -283,6 +283,14 @@ tools
 This is the fence: we explicitly distinguish our lightweight, composable approach from heavy all-in-one platforms.
 -->
 
+## Target audience
+
+For **small teams and SMEs** who want to move ML from notebooks to production without a heavy, monolithic platform.
+
+If you use Git and want practical, incremental steps, this is for you.
+
+![bg right:40% 80%](../docs/assets/images/rocket-to-planet.svg)
+
 ## A guide to MLOps
 
 <!-- _class: lead -->
@@ -341,14 +349,6 @@ using MLOps best practices.
 ---
 
 ![bg w:90%](./images/guide-demo-17.png) ![bg w:90%](./images/guide-demo-18.png)
-
-## Target audience
-
-For **small teams and SMEs** who want to move ML from notebooks to production without a heavy, monolithic platform.
-
-If you use Git and want practical, incremental steps, this is for you.
-
-![bg right:40% 80%](../docs/assets/images/rocket-to-planet.svg)
 
 ## Prerequisites
 
