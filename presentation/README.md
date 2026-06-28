@@ -405,16 +405,10 @@ This is necessary to avoid:
 
 ## Conclusion
 
-Congratulations! You have completed the guide to MLOps!
+You have completed the guide to MLOps!
 
-You have learned how to improve the management and quality of machine learning
-projects.
-
-You are now able to switch from a Jupyter Notebook to production using
-state-of-the-art MLOps tools.
-
-You can go from experiment to production on the Cloud, using the best practices
-for ML. 🚀
+You can now move from experiments to production on the Cloud using MLOps best
+practices. 🚀
 
 ![bg right:35% w:60%](../docs/assets/images/launchpad.svg)
 
