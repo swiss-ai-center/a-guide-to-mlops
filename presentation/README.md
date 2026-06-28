@@ -86,6 +86,21 @@ style: |
         background-size: 120px 120px, 180px 180px;
         background-position: 0 0, 60px 60px;
     }
+    /* Tighten split-background layouts: Gaia's 70px section padding wastes
+       space beside background images, so reduce the inner padding on the
+       content side and align the background image toward the content. */
+    section[data-marpit-advanced-background="content"][data-marpit-advanced-background-split="right"] {
+        padding-right: 30px !important;
+    }
+    section[data-marpit-advanced-background="content"][data-marpit-advanced-background-split="left"] {
+        padding-left: 30px !important;
+    }
+    section[data-marpit-advanced-background="background"][data-marpit-advanced-background-split="right"] > div[data-marpit-advanced-background-container] > figure {
+        background-position: left center !important;
+    }
+    section[data-marpit-advanced-background="background"][data-marpit-advanced-background-split="left"] > div[data-marpit-advanced-background-container] > figure {
+        background-position: right center !important;
+    }
 headingDivider: 4
 -->
 
@@ -194,7 +209,7 @@ But not here.
 
 ## ML code vs ML system
 
-![bg right:39% 100%](../docs/assets/images/ml_system.svg)
+![bg right:35% w:90%](../docs/assets/images/ml_system.svg)
 
 Only a small fraction of real-world ML systems is composed of the ML code.
 
