@@ -519,6 +519,10 @@ In this chapter, you have successfully:
 4. Ran the service locally and verified that predictions are logged
 5. Committed the changes to Git
 
+You fixed some of the previous issues:
+
+- [x] Model predictions can be monitored in production
+
 !!! abstract "Take away"
 
     - **Production monitoring starts with logging**: Before drift detection or

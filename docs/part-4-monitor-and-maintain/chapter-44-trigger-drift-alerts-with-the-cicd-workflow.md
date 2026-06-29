@@ -6,6 +6,13 @@
 
 ## Summary
 
+In this chapter, you have wired drift alerts into the CI/CD workflow so that
+drift signals can trigger retraining workflows.
+
+You fixed some of the previous issues:
+
+- [x] Drift signals can trigger retraining workflows
+
 ## State of the MLOps process
 
 - [x] Model predictions can be monitored in production

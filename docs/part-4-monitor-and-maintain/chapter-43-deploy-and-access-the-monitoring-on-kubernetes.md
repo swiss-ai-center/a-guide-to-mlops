@@ -6,6 +6,13 @@
 
 ## Summary
 
+In this chapter, you have deployed the monitoring stack on Kubernetes and
+configured automated alerts and dashboards.
+
+You fixed some of the previous issues:
+
+- [x] Automated alerts and dashboards are configured
+
 ## State of the MLOps process
 
 - [x] Model predictions can be monitored in production

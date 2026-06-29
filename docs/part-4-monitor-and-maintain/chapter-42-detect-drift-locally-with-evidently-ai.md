@@ -6,6 +6,13 @@
 
 ## Summary
 
+In this chapter, you have enabled automatic detection of data drift and concept
+drift on the logged predictions.
+
+You fixed some of the previous issues:
+
+- [x] Data drift and concept drift can be detected automatically
+
 ## State of the MLOps process
 
 - [x] Model predictions can be monitored in production
