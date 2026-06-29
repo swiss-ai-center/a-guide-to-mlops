@@ -247,8 +247,8 @@ In this chapter, you have:
 4. Set up a Python environment to run the experiment
 5. Executed the experiment locally for the first time
 
-The notebook runs, but the workflow still relies on manual steps and
-undocumented assumptions.
+After running the notebook, you may have noticed that it requires manual
+downloads and that the steps are not documented.
 
 !!! abstract "Take away"
 
@@ -268,9 +268,9 @@ undocumented assumptions.
 
 ## State of the MLOps process
 
-After running the notebook, you may have noticed that it requires manual
-downloads and that the steps are not documented. These are signs of a broader
-set of issues you will address in this part:
+The notebook runs, but the workflow still relies on manual steps and
+undocumented assumptions. These are signs of a broader set of issues you will
+address in this part:
 
 - [ ] Notebook can be run but is not adequate for production
 - [ ] Codebase and dataset are not versioned

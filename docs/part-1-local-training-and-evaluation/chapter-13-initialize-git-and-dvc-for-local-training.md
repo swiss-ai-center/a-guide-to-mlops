@@ -470,10 +470,9 @@ In this chapter, you have successfully:
 
 You fixed some of the previous issues:
 
-- [x] Data no longer needs manual download and is placed in the right directory.
-- [x] Codebase is versioned
-
-You can now safely continue to the next chapter.
+- [x] Dataset no longer needs manual download and is placed in the right
+      directory.
+- [x] Codebase and dataset are versioned
 
 !!! abstract "Take away"
 

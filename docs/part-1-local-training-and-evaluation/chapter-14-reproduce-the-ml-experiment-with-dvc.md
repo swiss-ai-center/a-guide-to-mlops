@@ -387,16 +387,7 @@ In this chapter, you have successfully:
 
 You fixed some of the previous issues:
 
-- [x] The steps used to create the model are documented and can be reproduced.
-
-However, you might have identified the following areas for improvement:
-
-- [ ] How can I ensure my changes helps to improve the model?
-- [ ] How can I ensure my model still can be run on someone's computer?
-
-In the next chapters, you will enhance the workflow to fix these issues.
-
-You can now safely continue to the next chapter.
+- [x] The steps used to create the model are documented and can be reproduced
 
 !!! abstract "Take away"
 
@@ -421,7 +412,7 @@ You can now safely continue to the next chapter.
 
 - [x] Notebook has been transformed into scripts for production
 - [x] Codebase and dataset are versioned
-- [x] Steps used to create the model are documented and can be re-executed
+- [x] Steps used to create the model are documented and can be reproduced
 - [ ] Changes to model are not easily visualized
 
 Continue to the next chapters to address the remaining items.
