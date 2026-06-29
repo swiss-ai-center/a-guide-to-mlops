@@ -830,17 +830,9 @@ In this chapter, you have:
 2. Adapted the content of the Jupyter Notebook into Python scripts
 3. Launched the experiment locally
 
-However, you may have identified the following areas for improvement:
+You fixed some of the previous issues:
 
-- [ ] Codebase is not versioned
-- [ ] Dataset still needs manual download and placement
-- [ ] Steps to run the experiment were not documented
-- [ ] Codebase is not easily sharable
-- [ ] Dataset is not easily sharable
-
-In the next chapters, you will enhance the workflow to fix those issues.
-
-You can now safely continue to the next chapter.
+- [x] Notebook has been transformed into scripts for production
 
 !!! abstract "Take away"
 

@@ -275,8 +275,6 @@ You fixed some of the previous issues:
 You have a CI/CD pipeline to ensure the whole experiment can still be reproduced
 using the data and the commands to run using DVC over time.
 
-You can now safely continue to the next chapter.
-
 !!! abstract "Take away"
 
     - **CI/CD pipelines eliminate "works on my machine" problems**: By running

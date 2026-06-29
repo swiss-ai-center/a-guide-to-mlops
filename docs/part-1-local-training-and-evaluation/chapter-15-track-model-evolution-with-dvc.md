@@ -286,8 +286,6 @@ You fixed some of the previous issues:
 You have solid metrics to evaluate the changes before integrating your work in
 the code codebase.
 
-You can now safely continue to the next chapter.
-
 !!! abstract "Take away"
 
     - **Comparing experiments is essential for data-driven decisions**: DVC provides
@@ -311,7 +309,7 @@ You can now safely continue to the next chapter.
 
 - [x] Notebook has been transformed into scripts for production
 - [x] Codebase and dataset are versioned
-- [x] Steps used to create the model are documented and can be re-executed
+- [x] Steps used to create the model are documented and can be reproduced
 - [x] Changes done to a model can be visualized with parameters, metrics and
       plots to identify differences between iterations
 

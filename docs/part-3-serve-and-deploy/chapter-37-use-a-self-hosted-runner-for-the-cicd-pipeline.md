@@ -957,6 +957,10 @@ In this chapter, you have successfully:
 2. Published the containerized runner image to the container registry
 3. Deployed the self-hosted runner on Kubernetes
 
+You fixed some of the previous issues:
+
+- [x] Model can be trained on a custom infrastructure
+
 !!! abstract "Take away"
 
     - **Self-hosted runners enable custom infrastructure**: Running CI/CD jobs on

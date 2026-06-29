@@ -86,7 +86,9 @@ annotation process is not only systematic, but also uniform. The organizational
 capabilities of Label Studio contribute to creating high-quality labeled
 datasets.
 
-That concludes this chapter.
+You fixed some of the previous issues:
+
+- [x] Labeling of supplemental data can be done systematically and uniformly
 
 !!! abstract "Take away"
 

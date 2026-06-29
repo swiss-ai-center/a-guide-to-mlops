@@ -363,6 +363,10 @@ In this chapter, you have successfully:
 1. Automated the containerization and publication of the BentoML model artifact
    to the container registry
 
+You fixed some of the previous issues:
+
+- [x] Model publication to the artifact registry is automated
+
 !!! abstract "Take away"
 
     - **Automation prevents deployment drift**: By building and publishing models

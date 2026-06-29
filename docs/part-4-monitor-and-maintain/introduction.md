@@ -55,3 +55,14 @@ those described in the
     While the costs associated with this section are **expected to be free**, it is
     recommended to review the pricing details of cloud services before initiating
     this part.
+
+## State of the MLOps process
+
+Once the model is deployed, it needs to be observed and maintained in
+production. In this part, you will address the following issues:
+
+- [ ] Model predictions cannot be monitored in production
+- [ ] Data drift and concept drift are not automatically detected
+- [ ] No automated alerts or dashboards are configured
+- [ ] Drift signals do not trigger actionable retraining workflows
+- [ ] Model cannot be rolled back to a previous version on degradation

@@ -701,11 +701,9 @@ In this chapter, you have successfully:
 3. Updated and ran the experiment to use BentoML to save and load the model to
    and from the model's store
 
-You did fix some of the previous issues:
+You fixed some of the previous issues:
 
 - [x] Model can be saved and loaded with all required artifacts for future usage
-
-You can now safely continue to the next chapter.
 
 !!! abstract "Take away"
 

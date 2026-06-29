@@ -307,15 +307,13 @@ In this chapter, you have successfully:
 1. Served the model with BentoML and FastAPI
 2. Pushed the changes to Git
 
-You did fix some of the previous issues:
+You fixed some of the previous issues:
 
 - [x] Model can be easily used outside of the experiment context
 
 You could serve this model from anywhere. Additional services could submit
 predictions to your model. The usage of FastAPI creates endpoints that are
 automatically documented to interact with the model.
-
-You can now safely continue to the next chapter.
 
 !!! abstract "Take away"
 

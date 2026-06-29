@@ -419,6 +419,10 @@ cluster automatically with the CI/CD pipeline!
 New versions of the model will be deployed automatically as soon as they are
 pushed to the main branch.
 
+You fixed some of the previous issues:
+
+- [x] Model is continuously deployed with the CI/CD
+
 !!! abstract "Take away"
 
     - **Continuous deployment closes the MLOps loop**: Automatically deploying every
