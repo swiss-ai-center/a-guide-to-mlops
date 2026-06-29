@@ -357,6 +357,10 @@ model to make predictions on the data you have in Label Studio to speed up the
 labeling process. In the next chapter, we will retrain the model using the new
 data we have labeled.
 
+You fixed some of the previous issues:
+
+- [x] Labeling of supplemental data is accelerated with AI assistance
+
 !!! abstract "Take away"
 
     - **AI-assisted labeling creates a virtuous cycle**: Using your model to

@@ -210,6 +210,12 @@ In this chapter, we retrained the model using the new data we labeled in Label
 Studio. We downloaded the annotations, parsed them, and retrained the model
 using DVC. We then evaluated the new model to see if it has improved.
 
+You fixed some of the previous issues:
+
+- [x] Model is retrained with the supplemental data
+
+All the items of the MLOps process for this part are now addressed.
+
 !!! abstract "Take away"
 
     - **Closing the loop from labeling to training is where MLOps delivers value**:
