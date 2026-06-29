@@ -395,7 +395,8 @@ In this chapter, you have successfully:
 
 You fixed some of the previous issues:
 
-- [x] Data no longer needs manual download and is placed in the right directory.
+- [x] Dataset can be shared among the developers and is placed in the right
+      directory in order to run the experiment
 
 When used by another member of the team, they can easily get a copy of the
 experiment data from DVC with the following command:
@@ -412,8 +413,6 @@ to caching, only the required steps will be executed:
 # Execute the pipeline
 dvc repro
 ```
-
-You can now safely continue to the next chapter.
 
 !!! abstract "Take away"
 

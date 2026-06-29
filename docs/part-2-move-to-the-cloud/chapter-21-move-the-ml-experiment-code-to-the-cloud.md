@@ -129,7 +129,7 @@ In this chapter, you have successfully:
 
 You fixed some of the previous issues:
 
-- [x] Codebase no longer needs manual download and is versioned
+- [x] Codebase can be shared and improved by multiple developers
 
 Another member of your team can easily clone the experiment with the following
 command:
@@ -138,8 +138,6 @@ command:
 # Clone the Git repository
 git clone <my_git_repository_url>
 ```
-
-You can now safely continue to the next chapter.
 
 !!! abstract "Take away"
 

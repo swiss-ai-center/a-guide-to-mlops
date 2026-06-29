@@ -343,8 +343,6 @@ You fixed some of the previous issues:
 - [x] CI/CD pipeline is triggered on pull requests and reports the results of
       the experiment
 
-You can now safely continue to the next chapter.
-
 !!! abstract "Take away"
 
     - **CML brings experiment results into code review**: By automatically posting

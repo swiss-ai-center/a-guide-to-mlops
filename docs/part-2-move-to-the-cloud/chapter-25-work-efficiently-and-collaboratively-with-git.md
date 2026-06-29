@@ -328,13 +328,10 @@ In this chapter, you have successfully:
 10. Merged the pull request to the main branch
 11. Switched back to the main branch and pulled latest changes
 
-However, you might have identified the following areas for improvement:
+All the items of the MLOps process for this part are now addressed.
 
-- [ ] How can I serve my model to the rest of the world?
-
-In the next chapters, you will enhance the workflow to fix those issues.
-
-You can now safely continue to the next chapter.
+In the next part, you will learn how to serve your model to the rest of the
+world.
 
 !!! abstract "Take away"
 
