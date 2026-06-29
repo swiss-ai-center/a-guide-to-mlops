@@ -450,6 +450,10 @@ In this chapter, you have successfully:
    artifact on Kubernetes
 2. Accessed the model
 
+You fixed some of the previous issues:
+
+- [x] Model is accessible from the Internet and can be used anywhere
+
 !!! abstract "Take away"
 
     - **Kubernetes provides production-grade model hosting**: By deploying your

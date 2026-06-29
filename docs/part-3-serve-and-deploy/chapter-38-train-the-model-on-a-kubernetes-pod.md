@@ -865,8 +865,15 @@ custom hardware for specific use-cases.
 
 In this chapter, you have successfully:
 
-1. Set up an specialized on-demand runner on a pod in Kubernetes
+1. Set up a specialized on-demand runner on a pod in Kubernetes
 2. Trained the model on the specialized pod on the Kubernetes cluster
+
+You fixed some of the previous issues:
+
+- [x] Model can be trained on a custom infrastructure with custom hardware for
+      specific use-cases
+
+All the items of the MLOps process for this part are now addressed.
 
 !!! abstract "Take away"
 
