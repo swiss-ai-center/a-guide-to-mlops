@@ -233,8 +233,8 @@ In this step you will create `src/build_reference.py`, create
 
 #### Create `src/build_reference.py`
 
-This script loads the prepared training dataset and the saved BentoML model,
-runs every training image through the model, and stores the resulting scalar
+This script loads the prepared training set and the saved BentoML model, runs
+every training image through the model, and stores the resulting scalar
 features, embeddings, and predictions in a Parquet file.
 
 ```py title="src/build_reference.py"
@@ -260,7 +260,7 @@ def main() -> None:
     model_folder = Path(sys.argv[2])
     output_parquet = Path(sys.argv[3])
 
-    # Load training dataset
+    # Load training set
     ds_train = tf.data.Dataset.load(str(prepared_dataset_folder / "train"))
 
     # Import the model to the local BentoML store
