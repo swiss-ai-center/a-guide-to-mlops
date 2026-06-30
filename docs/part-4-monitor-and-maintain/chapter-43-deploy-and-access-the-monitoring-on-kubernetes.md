@@ -2,29 +2,21 @@
 
 ## Introduction
 
-In the previous chapter you built a local prediction log and pushed an Evidently
-snapshot to a local workspace. To make monitoring useful in production, those
-artifacts need to leave your laptop: logs must survive pod restarts, the
-dashboard must be reachable by the team, and drift must be checked automatically
-rather than on demand.
-
-This chapter moves the monitoring stack into the cloud. You will batch
-prediction logs to object storage, deploy the Evidently UI service on Kubernetes
-with an S3-backed workspace, and generate drift reports from a GitHub Actions
-workflow. The same `generate_report` function from Chapter 4.2 is reused; only
-the workspace changes from local to remote.
+In the previous chapters you logged predictions with BentoML's native monitoring
+and generated a local drift report with Evidently AI. This chapter moves that
+stack into the cloud: a Fluent Bit sidecar tails the local monitoring files,
+buffers them, and uploads them to S3 in batches, while a scheduled GitHub
+Actions workflow refreshes the drift report from the logs in S3. Fluent Bit is
+the de facto log shipper in Kubernetes.
 
 In this chapter, you will learn how to:
 
-1. Upload prediction logs from the BentoML service to S3 in batches
-2. Reuse `src/detect_drift.py` so the report generation stays portable
-3. Create a monitoring script that pulls logs and the reference dataset from
-   storage
-4. Push drift snapshots to a remote Evidently workspace
-5. Deploy the Evidently UI service on Kubernetes
-6. Schedule drift reports with a GitHub Actions workflow
-7. Access the dashboard and the JSON drift summary
-8. Commit the changes to Git
+1. Ship BentoML monitoring logs to S3 with a Fluent Bit sidecar
+2. Create a monitoring job that pulls logs from S3 and pushes Evidently
+   snapshots
+3. Deploy the Evidently UI service on Kubernetes
+4. Access the dashboard and the JSON drift summary
+5. Commit the changes to Git
 
 The following diagram illustrates the control flow at the end of this chapter:
 
@@ -45,8 +37,8 @@ flowchart TB
     subgraph workspaceGraph[WORKSPACE]
         dvcGraph --> bento_model[classifier.bentomodel]
         subgraph bentoGraph[bentofile.yaml]
-            serve[serve.py] <--> bento_model
-            monitor[monitor.py] --> serve
+            bento_model --> serve[serve.py]
+            features[features.py] --> serve
         end
         bento_model <-.-> dot_dvc
 
@@ -73,6 +65,10 @@ flowchart TB
             end
             pod_runner[Runner] --> clusterPodGraph
             bento_service_cluster[classifier.bentomodel] --> k8s_fastapi[FastAPI]
+            bento_service_cluster --> cluster_logs["logs/<name>/data/*.log"]
+            fluent_bit[Fluent Bit] --> cluster_logs
+            fluent_bit -->|batch upload| s3_storage
+            evidently_ui[Evidently UI] --> k8s_evidentlyui[Dashboard]
         end
         action --> pod_runner
         pod_train --> s3_storage
@@ -83,6 +79,7 @@ flowchart TB
 
     subgraph browserGraph[BROWSER]
         k8s_fastapi <--> publicURL["public URL"]
+        k8s_evidentlyui <--> monitoringURL["monitoring URL"]
     end
 
     style workspaceGraph opacity:0.4,color:#7f7f7f80
@@ -102,7 +99,7 @@ flowchart TB
     style bentoGraph opacity:0.4,color:#7f7f7f80
     style bento_model opacity:0.4,color:#7f7f7f80
     style serve opacity:0.4,color:#7f7f7f80
-    style monitor opacity:0.4,color:#7f7f7f80
+    style features opacity:0.4,color:#7f7f7f80
     style dot_git opacity:0.4,color:#7f7f7f80
     style dot_dvc opacity:0.4,color:#7f7f7f80
     style repository opacity:0.4,color:#7f7f7f80
@@ -114,6 +111,10 @@ flowchart TB
     style publicURL opacity:0.4,color:#7f7f7f80
     style pod_runner opacity:0.4,color:#7f7f7f80
     style pod_train opacity:0.4,color:#7f7f7f80
+    style cluster_logs opacity:0.4,color:#7f7f7f80
+    style fluent_bit opacity:0.4,color:#7f7f7f80
+    style evidently_ui opacity:0.4,color:#7f7f7f80
+    style k8s_evidentlyui opacity:0.4,color:#7f7f7f80
     linkStyle 0 opacity:0.4,color:#7f7f7f80
     linkStyle 1 opacity:0.4,color:#7f7f7f80
     linkStyle 2 opacity:0.4,color:#7f7f7f80
@@ -136,131 +137,82 @@ flowchart TB
     linkStyle 19 opacity:0.4,color:#7f7f7f80
     linkStyle 20 opacity:0.4,color:#7f7f7f80
     linkStyle 21 opacity:0.4,color:#7f7f7f80
+    linkStyle 22 opacity:0.4,color:#7f7f7f80
+    linkStyle 23 opacity:0.4,color:#7f7f7f80
+    linkStyle 24 opacity:0.4,color:#7f7f7f80
 ```
 
 ## Steps
 
 ### Upload prediction logs to S3 in batches
 
-The BentoML service still writes predictions to a local JSONL file inside the
-pod. To make those logs durable, you will add a small sidecar container to the
-model pod. The sidecar uploads the file to S3 every 15 minutes and then
-truncates it.
+The BentoML service writes monitoring records to local files inside the pod. To
+make those logs durable, you will add a Fluent Bit sidecar to the model pod.
+Fluent Bit tails the local log files, buffers them in memory and on disk, and
+uploads them to S3 when a batch reaches a configured size or age.
 
-A sidecar is a good fit here:
+!!! note "Why a sidecar?"
 
-* It keeps the model service unchanged.
-* It demonstrates batching without adding streaming infrastructure.
-* It shares a local volume with the model container, so no extra network API is
-  needed between them.
+    A sidecar is a helper container that runs alongside the main application
+    container in the same pod. It keeps the model service unchanged, moves network
+    I/O out of the inference path, and shares a local volume with the model
+    container. Fluent Bit also batches small records into larger S3 objects, which
+    is cheaper and faster than per-request uploads.
 
-The sidecar will:
+#### Fluent Bit configuration
 
-1. Read the local `logs/predictions.jsonl` file.
-2. Append its contents to a date-keyed object in S3
-   (`s3://<bucket>/logs/year=YYYY/month=MM/day=DD/predictions.jsonl`).
-3. Truncate the local file so it is not uploaded twice.
+Fluent Bit needs two pieces of configuration: an input that tails the BentoML
+log files, and an output that uploads batches to S3.
 
-#### Create `src/upload_logs.py`
+Create a ConfigMap with a minimal `fluent-bit.conf`:
 
-Create a small upload script. It uses `boto3` and expects the bucket name and
-prefix through environment variables.
+```yaml title="kubernetes/fluent-bit-config.yaml"
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-bit-config
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush        1
+        Log_Level    info
+        Daemon       off
+        HTTP_Server  Off
 
-```py title="src/upload_logs.py"
-import os
-import sys
-import time
-from datetime import datetime, timezone
-from pathlib import Path
+    [INPUT]
+        Name              tail
+        Path              /app/logs/celestial_bodies_classifier/data/*.log
+        Tag               bentoml.logs
+        Parser            json
+        Refresh_Interval  5
+        Mem_Buf_Limit     50MB
 
-import boto3
-
-LOG_PATH = Path(os.environ.get("PREDICTION_LOG_PATH", "logs/predictions.jsonl"))
-S3_BUCKET = os.environ.get("PREDICTION_LOG_BUCKET")
-S3_PREFIX = os.environ.get("PREDICTION_LOG_PREFIX", "logs")
-UPLOAD_INTERVAL_SECONDS = int(os.environ.get("UPLOAD_INTERVAL_SECONDS", "900"))
-
-
-def upload_once() -> None:
-    if not S3_BUCKET:
-        print("PREDICTION_LOG_BUCKET environment variable is required")
-        sys.exit(1)
-
-    if not LOG_PATH.exists() or LOG_PATH.stat().st_size == 0:
-        print("No local log to upload")
-        return
-
-    s3 = boto3.client("s3")
-
-    now = datetime.now(timezone.utc)
-    key = (
-        f"{S3_PREFIX}/"
-        f"year={now.year}/"
-        f"month={now.month:02d}/"
-        f"day={now.day:02d}/"
-        f"predictions-{now.isoformat()}.jsonl"
-    )
-
-    s3.upload_file(str(LOG_PATH), S3_BUCKET, key)
-    print(f"Uploaded {LOG_PATH} to s3://{S3_BUCKET}/{key}")
-
-    # Truncate the local file after a successful upload
-    LOG_PATH.write_text("")
-
-
-def run() -> None:
-    while True:
-        try:
-            upload_once()
-        except Exception as exc:
-            print(f"[upload_logs] Failed to upload logs: {exc}")
-        time.sleep(UPLOAD_INTERVAL_SECONDS)
-
-
-if __name__ == "__main__":
-    run()
+    [OUTPUT]
+        Name              s3
+        Match             bentoml.logs
+        bucket            ${S3_BUCKET}
+        region            ${AWS_REGION}
+        total_file_size   10M
+        upload_timeout    10m
+        s3_key_format     /logs/$TAG[0]/$UUID.log
+        store_dir         /tmp/fluent-bit-s3
 ```
 
-The script is intentionally simple: it does not retry failed uploads or rotate
-files. Those features can be added later when the log volume grows.
+The `s3` output plugin creates S3 objects under `s3://<bucket>/logs/`. The
+`total_file_size` and `upload_timeout` options control batching: Fluent Bit
+flushes a file to S3 when it reaches 10 MB or after 10 minutes, whichever comes
+first. Adjust these values based on your traffic volume.
 
-#### Build the upload-logs sidecar image
-
-The sidecar only needs Python and `boto3`. Create a small Dockerfile for it.
-
-```dockerfile title="monitoring/upload-logs.Dockerfile"
-FROM python:3.13-slim
-
-WORKDIR /app
-
-RUN pip install --no-cache-dir boto3==1.37.38
-
-COPY src/upload_logs.py ./src/upload_logs.py
-
-CMD ["python", "src/upload_logs.py"]
-```
-
-Build and publish the image using the same container registry as the model
-service.
-
-```sh title="Execute the following command(s) in a terminal"
-# Build the sidecar image
-docker build -f monitoring/upload-logs.Dockerfile -t celestial-bodies-upload-logs:latest .
-
-# Tag the image for the remote registry
-docker tag celestial-bodies-upload-logs:latest \
-  $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-upload-logs:latest
-
-# Push the image
-docker push $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-upload-logs:latest
-```
+The `store_dir` path is used for local buffering and upload state. It should be
+on writable local disk; an `emptyDir` volume is fine.
 
 #### Update `kubernetes/deployment.yaml`
 
-Add a shared `emptyDir` volume, the `PREDICTION_LOG_PATH` environment variable,
-and the upload sidecar to the model deployment.
+Add a shared `emptyDir` volume for the logs, mount it into the BentoML
+container, and add the Fluent Bit sidecar with the ConfigMap mounted as its
+configuration.
 
-```yaml title="kubernetes/deployment.yaml" hl_lines="18-23 29-34 36-55"
+```yaml title="kubernetes/deployment.yaml" hl_lines="16-21 24-76"
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -280,26 +232,17 @@ spec:
       containers:
       - name: celestial-bodies-classifier
         image: <docker_image>
-        env:
-        - name: PREDICTION_LOG_PATH
-          value: /app/logs/predictions.jsonl
+        workingDir: /app
         volumeMounts:
         - name: prediction-logs
           mountPath: /app/logs
-      - name: log-upload
-        image: <upload_logs_image>
-        command:
-        - python
-        - src/upload_logs.py
+      - name: fluent-bit
+        image: fluent/fluent-bit:3.2
         env:
-        - name: PREDICTION_LOG_PATH
-          value: /app/logs/predictions.jsonl
-        - name: PREDICTION_LOG_BUCKET
+        - name: S3_BUCKET
           value: "<s3_bucket_name>"
-        - name: PREDICTION_LOG_PREFIX
-          value: "logs"
-        - name: UPLOAD_INTERVAL_SECONDS
-          value: "900"
+        - name: AWS_REGION
+          value: "<s3_region>"
         - name: AWS_ACCESS_KEY_ID
           valueFrom:
             secretKeyRef:
@@ -313,17 +256,31 @@ spec:
         volumeMounts:
         - name: prediction-logs
           mountPath: /app/logs
+          readOnly: true
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc/
+        - name: fluent-bit-tmp
+          mountPath: /tmp/fluent-bit-s3
       volumes:
       - name: prediction-logs
         emptyDir: {}
+      - name: fluent-bit-config
+        configMap:
+          name: fluent-bit-config
+      - name: fluent-bit-tmp
+        emptyDir: {}
 ```
 
-Replace `<upload_logs_image>` with the upload-logs image you built, and
-`<s3_bucket_name>` with the name of the S3 bucket used for monitoring artifacts.
+Replace `<s3_bucket_name>` and `<s3_region>` with the S3 bucket and region used
+for monitoring artifacts.
 
-If your cluster uses workload identity instead of static credentials, remove the
-`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` references and annotate the
-service account instead.
+The BentoML container writes to `logs/` relative to its working directory. By
+setting `workingDir: /app` and mounting the shared volume at `/app/logs`, both
+containers see the same files.
+
+If your cluster uses workload identity (for example, IRSA on EKS or Workload
+Identity on GKE for S3-compatible storage), remove the `AWS_ACCESS_KEY_ID`/
+`AWS_SECRET_ACCESS_KEY` references and annotate the service account instead.
 
 Create the secret for static credentials:
 
@@ -333,26 +290,19 @@ kubectl create secret generic monitoring-s3-credentials \
   --from-literal=aws_secret_access_key="$AWS_SECRET_ACCESS_KEY"
 ```
 
-### Reuse `src/detect_drift.py`
-
-Chapter 4.2 already created `src/detect_drift.py`. The report generation is
-wrapped in a reusable `generate_report` function that returns the Evidently
-snapshot, so the cloud monitoring job can import it without copying the logic.
-
-No changes are needed in this file for the GitHub Actions workflow.
-
 ### Create the monitoring workflow
 
-The monitoring job runs in GitHub Actions instead of the cluster. It downloads
-the latest logs from S3, pulls the reference dataset from the DVC remote,
-generates the Evidently snapshot, pushes it to the remote workspace, and uploads
-a JSON drift summary to S3 for alerting.
+The monitoring job runs in GitHub Actions. It reuses `generate_report` from
+`src/detect_drift.py` to download the latest logs from S3, pulls the reference
+dataset from the DVC remote, generates the Evidently snapshot, pushes it to the
+remote workspace, and uploads a JSON drift summary to S3 for alerting.
 
 #### Update `requirements.txt`
 
-Add `boto3` so the monitoring job can read logs and write the JSON summary.
+Add `boto3` so the monitoring job can read logs and write the JSON summary, and
+`s3fs` so Evidently can write the workspace directly to S3.
 
-```txt title="requirements.txt" hl_lines="7"
+```txt title="requirements.txt" hl_lines="7-8"
 tensorflow==2.21.0
 matplotlib==3.10.9
 pyyaml==6.0.3
@@ -361,6 +311,7 @@ bentoml==1.4.39
 pillow==12.2.0
 evidently==0.7.21
 boto3==1.37.38
+s3fs==2025.1.0
 ```
 
 Freeze the dependencies again after editing `requirements.txt`:
@@ -376,18 +327,20 @@ pip freeze --local --all > requirements-freeze.txt
 #### Create `src/monitor_cloud.py`
 
 This script downloads the inputs from S3 and the DVC remote, calls
-`generate_report` from `src/detect_drift.py`, pushes the snapshot to the remote
-Evidently workspace, and uploads the JSON report to S3.
+`generate_report` from `src/detect_drift.py`, writes the snapshot directly to
+the S3-backed Evidently workspace, and uploads the JSON report to S3.
 
 ```py title="src/monitor_cloud.py"
 import os
 import shutil
+import subprocess
 import sys
 import tempfile
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import boto3
-from evidently.ui.workspace import RemoteWorkspace
+from evidently.ui.workspace import Workspace
 
 import detect_drift
 
@@ -395,18 +348,28 @@ S3_BUCKET = os.environ.get("PREDICTION_LOG_BUCKET")
 S3_PREFIX = os.environ.get("PREDICTION_LOG_PREFIX", "logs")
 REFERENCE_KEY = os.environ.get("REFERENCE_KEY", "data/reference_features.parquet")
 OUTPUT_JSON_KEY = os.environ.get("OUTPUT_JSON_KEY", "monitoring/report.json")
-EVIDENTLY_UI_URL = os.environ.get("EVIDENTLY_UI_URL")
 PROJECT_NAME = os.environ.get("EVIDENTLY_PROJECT_NAME", "celestial-bodies-classifier")
+WORKSPACE_PREFIX = os.environ.get("EVIDENTLY_WORKSPACE_PREFIX", "evidently-workspace")
+LOG_CUTOFF_HOURS = int(os.environ.get("LOG_CUTOFF_HOURS", "24"))
 
 
 def download_latest_logs(bucket: str, prefix: str, dest: Path) -> None:
-    """Download all objects under a prefix and concatenate them into one JSONL file."""
+    """Download log objects from the last N hours into one JSONL file."""
     s3 = boto3.client("s3")
-    response = s3.list_objects_v2(Bucket=bucket, Prefix=prefix)
-    objects = response.get("Contents", [])
+    paginator = s3.get_paginator("list_objects_v2")
+    cutoff = datetime.now(timezone.utc) - timedelta(hours=LOG_CUTOFF_HOURS)
+    objects = [
+        obj
+        for page in paginator.paginate(Bucket=bucket, Prefix=prefix)
+        for obj in page.get("Contents", [])
+        if obj["LastModified"] >= cutoff
+    ]
 
     if not objects:
-        print(f"No log objects found under s3://{bucket}/{prefix}")
+        print(
+            f"No log objects found under s3://{bucket}/{prefix} "
+            f"in the last {LOG_CUTOFF_HOURS} hours"
+        )
         sys.exit(1)
 
     dest.parent.mkdir(parents=True, exist_ok=True)
@@ -418,10 +381,7 @@ def download_latest_logs(bucket: str, prefix: str, dest: Path) -> None:
 def pull_reference_dataset(dest: Path) -> None:
     """Pull the DVC-tracked reference dataset and copy it to a temporary path."""
     dest.parent.mkdir(parents=True, exist_ok=True)
-    exit_code = os.system(f"dvc pull {REFERENCE_KEY}")
-    if exit_code != 0:
-        print(f"dvc pull {REFERENCE_KEY} failed")
-        sys.exit(1)
+    subprocess.run(["dvc", "pull", REFERENCE_KEY], check=True)
     if not Path(REFERENCE_KEY).exists():
         print(f"Reference dataset not found at {REFERENCE_KEY} after dvc pull")
         sys.exit(1)
@@ -450,9 +410,6 @@ def main() -> None:
     if not S3_BUCKET:
         print("PREDICTION_LOG_BUCKET environment variable is required")
         sys.exit(1)
-    if not EVIDENTLY_UI_URL:
-        print("EVIDENTLY_UI_URL environment variable is required")
-        sys.exit(1)
 
     with tempfile.TemporaryDirectory() as tmp:
         tmp_path = Path(tmp)
@@ -466,7 +423,7 @@ def main() -> None:
             reference_path, log_path, tmp_path
         )
 
-        workspace = RemoteWorkspace(EVIDENTLY_UI_URL)
+        workspace = Workspace.create(f"s3://{S3_BUCKET}/{WORKSPACE_PREFIX}")
         project = get_or_create_project(workspace, PROJECT_NAME)
         workspace.add_run(project.id, snapshot, include_data=False)
         print(f"Snapshot added to project {project.name} (ID: {project.id})")
@@ -478,9 +435,17 @@ if __name__ == "__main__":
     main()
 ```
 
-`include_data=False` tells Evidently to store only the aggregated snapshot, not
-the raw reference or current datasets. This keeps the workspace small and avoids
-duplicating data that is already in S3.
+`Workspace.create("s3://...")` uses `fsspec` under the hood, so the snapshot is
+written straight to the same S3 prefix the Evidently UI service reads from. No
+extra HTTP call to the UI pod is needed. `include_data=False` tells Evidently to
+store only the aggregated snapshot, not the raw reference or current datasets.
+This keeps the workspace small and avoids duplicating data that is already in
+S3.
+
+The `download_latest_logs` function downloads every log object under the prefix
+that was modified in the last `LOG_CUTOFF_HOURS` hours. Fluent Bit uploads
+timestamped objects as batches close, so concatenating them in `LastModified`
+order reproduces the original event stream.
 
 #### Create `.github/workflows/monitor.yaml`
 
@@ -515,15 +480,12 @@ jobs:
         uses: google-github-actions/auth@v3
         with:
           credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
-      - name: Pull reference dataset
-        run: dvc pull data/reference_features.parquet
       - name: Run drift report
         env:
           PREDICTION_LOG_BUCKET: ${{ secrets.PREDICTION_LOG_BUCKET }}
           PREDICTION_LOG_PREFIX: ${{ secrets.PREDICTION_LOG_PREFIX }}
-          EVIDENTLY_UI_URL: ${{ secrets.EVIDENTLY_UI_URL }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          FSSPEC_S3_KEY: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          FSSPEC_S3_SECRET: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: python src/monitor_cloud.py
 ```
 
@@ -532,30 +494,29 @@ Store the required secrets in the repository settings under
 
 - `PREDICTION_LOG_BUCKET`: the S3 bucket that receives the prediction logs
 - `PREDICTION_LOG_PREFIX`: the S3 prefix for logs (default `logs`)
-- `EVIDENTLY_UI_URL`: the public URL of the Evidently UI service, for example
-  `http://<load-balancer-ip>:8000`
 - `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`: credentials for the S3 bucket
-  that holds the logs and the JSON report
+  that holds the logs, the JSON report, and the Evidently workspace
 
-The workflow authenticates to Google Cloud so that `dvc pull` can download the
-DVC-tracked reference dataset.
+The workflow maps the AWS credentials to `FSSPEC_S3_KEY` and `FSSPEC_S3_SECRET`
+so Evidently can write the snapshot directly to the S3 workspace. It
+authenticates to Google Cloud so that `dvc pull` can download the DVC-tracked
+reference dataset.
 
 #### Create the Evidently UI image
 
-You only need to build the Evidently UI service image here. The upload-logs
-sidecar image was built earlier, and the report generation runs in GitHub
-Actions, so the monitoring Docker image and CronJob from the previous approach
-are no longer needed.
+You only need to build the Evidently UI service image here. The report
+generation runs in GitHub Actions, so the monitoring Docker image and CronJob
+from the previous approach are no longer needed.
 
 `monitoring/ui.Dockerfile` is minimal because the UI service only needs the
-`evidently` package and S3 credentials.
+`evidently` package, `s3fs` for the S3-backed workspace, and S3 credentials.
 
 ```dockerfile title="monitoring/ui.Dockerfile"
 FROM python:3.13-slim
 
 WORKDIR /app
 
-RUN pip install --no-cache-dir evidently==0.7.21
+RUN pip install --no-cache-dir evidently==0.7.21 s3fs==2025.1.0
 
 EXPOSE 8000
 
@@ -621,8 +582,8 @@ spec:
 ```
 
 If your DVC remote is Google Cloud Storage, the workflow already uses the Google
-Cloud service account. The Evidently UI service and the sidecar still need S3
-credentials for the monitoring bucket.
+Cloud service account. The Evidently UI service and the Fluent Bit sidecar still
+need S3 credentials for the monitoring bucket.
 
 ### Deploy the Evidently UI service
 
@@ -644,11 +605,10 @@ docker push $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-evidently-ui:latest
 Replace the placeholders in the Kubernetes manifests:
 
 ```sh title="Execute the following command(s) in a terminal"
-export UPLOAD_LOGS_IMAGE=$GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-upload-logs:latest
 export EVIDENTLY_UI_IMAGE=$GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-evidently-ui:latest
 export S3_BUCKET=<s3_bucket_name>
 
-sed -i "s|<upload_logs_image>|$UPLOAD_LOGS_IMAGE|g" \
+sed -i "s|<docker_image>|$GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest|g" \
   kubernetes/deployment.yaml
 
 sed -i "s|<evidently_ui_image>|$EVIDENTLY_UI_IMAGE|g" \
@@ -659,16 +619,19 @@ sed -i "s|<s3_bucket_name>|$S3_BUCKET|g" \
   kubernetes/evidently-ui-deployment.yaml
 ```
 
-Apply the UI manifests:
+Apply the model deployment (now with the Fluent Bit sidecar) and the UI
+manifests:
 
 ```sh title="Execute the following command(s) in a terminal"
+kubectl apply -f kubernetes/deployment.yaml
 kubectl apply -f kubernetes/evidently-ui-deployment.yaml
 kubectl apply -f kubernetes/evidently-ui-service.yaml
 ```
 
-Verify that the UI pod is running:
+Verify that the pods are running:
 
 ```sh title="Execute the following command(s) in a terminal"
+kubectl get pods -l app=celestial-bodies-classifier
 kubectl get pods -l app=evidently-ui
 ```
 
@@ -697,8 +660,8 @@ Download the JSON drift summary from S3:
 aws s3 cp s3://<s3_bucket_name>/monitoring/report.json - | python -m json.tool
 ```
 
-You should see the same drift metrics as in the local report from Chapter 4.2,
-now refreshed automatically from production logs.
+You should see the same drift metrics as in the local report from the previous
+chapter, now refreshed automatically from production logs.
 
 ### Check the changes
 
@@ -724,10 +687,9 @@ Changes to be committed:
         new file:   .github/workflows/monitor.yaml
         new file:   kubernetes/evidently-ui-deployment.yaml
         new file:   kubernetes/evidently-ui-service.yaml
+        new file:   kubernetes/fluent-bit-config.yaml
         new file:   monitoring/ui.Dockerfile
-        new file:   monitoring/upload-logs.Dockerfile
         new file:   src/monitor_cloud.py
-        new file:   src/upload_logs.py
 ```
 
 ### Commit the changes to Git
@@ -736,7 +698,7 @@ Commit the changes:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Commit the changes
-git commit -m "Deploy Evidently monitoring UI on Kubernetes and run reports from GitHub Actions"
+git commit -m "Deploy Evidently monitoring UI on Kubernetes and ship logs with Fluent Bit"
 
 # Push the changes
 git push
@@ -746,15 +708,16 @@ git push
 
 In this chapter, you have successfully:
 
-1. Uploaded prediction logs from the BentoML service to S3 in batches
-2. Reused `src/detect_drift.py` so the report generation stays portable
-3. Created a monitoring job that pulls logs and the reference dataset from
+1. Shipped BentoML monitoring logs to S3 with a Fluent Bit sidecar
+2. Configured Fluent Bit to tail local files and batch-upload to S3
+3. Reused `src/detect_drift.py` so the report generation stays portable
+4. Created a monitoring job that pulls logs and the reference dataset from
    storage
-4. Pushed drift snapshots to a remote Evidently workspace
-5. Deployed the Evidently UI service on Kubernetes
-6. Scheduled drift reports with a GitHub Actions workflow
-7. Accessed the dashboard and the JSON drift summary
-8. Committed the changes to Git
+5. Pushed drift snapshots to a remote Evidently workspace
+6. Deployed the Evidently UI service on Kubernetes
+7. Scheduled drift reports with a GitHub Actions workflow
+8. Accessed the dashboard and the JSON drift summary
+9. Committed the changes to Git
 
 You fixed some of the previous issues:
 
@@ -762,9 +725,12 @@ You fixed some of the previous issues:
 
 !!! abstract "Take away"
 
-    - **Batching is cheaper and simpler than streaming for this workload**:
-      Uploading a JSONL file every 15 minutes avoids the operational complexity of a
-      streaming pipeline while still keeping logs durable.
+    - **Let Fluent Bit handle log shipping**: BentoML writes to local files; a
+      Fluent Bit sidecar tails, buffers, and batch-uploads them to S3. This keeps
+      inference fast and resilient to S3 retries or backpressure.
+    - **Batch uploads are cost-effective**: Aggregating many small records into
+      larger S3 objects avoids rate limits and reduces API costs compared to
+      per-request uploads.
     - **The Evidently UI service is the dashboard**: instead of serving a static
       HTML file with a custom web server, you run Evidently's own UI and push
       snapshots to it. This gives history, trending, and the native dashboard
@@ -794,4 +760,5 @@ Continue to the next chapters to address the remaining items.
 Highly inspired by:
 
 - [_Evidently AI Documentation_](https://docs.evidentlyai.com/)
+- [_Fluent Bit Documentation_](https://docs.fluentbit.io/)
 - [_Boto3 S3 upload documentation_](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/s3-uploading-files.html)

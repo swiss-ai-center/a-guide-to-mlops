@@ -843,7 +843,7 @@ You fixed some of the previous issues:
 
 - [x] Model predictions can be monitored in production
 - [x] Data drift and concept drift can be detected automatically
-- [x] Automated alerts and dashboards are configured
+- [ ] No automated alerts or dashboards are configured
 - [ ] Drift signals do not trigger actionable retraining workflows
 - [ ] Model cannot be rolled back to a previous model version on degradation
 
