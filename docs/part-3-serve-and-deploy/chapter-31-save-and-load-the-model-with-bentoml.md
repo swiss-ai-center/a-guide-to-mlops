@@ -233,7 +233,7 @@ def main() -> None:
 
     # Load data
     ds_train = tf.data.Dataset.load(str(prepared_dataset_folder / "train"))
-    ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "test"))
+    ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "val"))
 
     labels = None
     with open(prepared_dataset_folder / "labels.json") as f:
@@ -351,7 +351,7 @@ index 83cf265..0c3194b 100644
 
 @@ -60,6 +63,10 @@ def main() -> None:
      ds_train = tf.data.Dataset.load(str(prepared_dataset_folder / "train"))
-     ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "test"))
+     ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "val"))
 
 +    labels = None
 +    with open(prepared_dataset_folder / "labels.json") as f:
@@ -542,7 +542,7 @@ def main() -> None:
     (evaluation_folder / plots_folder).mkdir(parents=True, exist_ok=True)
 
     # Load files
-    ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "test"))
+    ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "val"))
     labels = None
     with open(prepared_dataset_folder / "labels.json") as f:
         labels = json.load(f)

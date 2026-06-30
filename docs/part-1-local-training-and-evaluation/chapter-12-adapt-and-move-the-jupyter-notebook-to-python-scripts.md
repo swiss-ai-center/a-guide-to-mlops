@@ -326,7 +326,7 @@ def main() -> None:
     with open(prepared_dataset_folder / "labels.json", "w") as f:
         json.dump(labels, f)
     tf.data.Dataset.save(ds_train, str(prepared_dataset_folder / "train"))
-    tf.data.Dataset.save(ds_val, str(prepared_dataset_folder / "test"))
+    tf.data.Dataset.save(ds_val, str(prepared_dataset_folder / "val"))
 
     print(f"\nDataset saved at {prepared_dataset_folder.absolute()}")
 
@@ -401,7 +401,7 @@ def main() -> None:
 
     # Load data
     ds_train = tf.data.Dataset.load(str(prepared_dataset_folder / "train"))
-    ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "test"))
+    ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "val"))
 
     # Define the model
     model = get_model(image_shape, conv_size, dense_size, output_classes)
@@ -565,7 +565,7 @@ def main() -> None:
     (evaluation_folder / plots_folder).mkdir(parents=True, exist_ok=True)
 
     # Load files
-    ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "test"))
+    ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "val"))
     labels = None
     with open(prepared_dataset_folder / "labels.json") as f:
         labels = json.load(f)
@@ -735,9 +735,9 @@ Your working directory should now be similar to this:
 │   ├── prepared # (1)!
 │   │   ├── labels.json
 │   │   ├── preview.png
-│   │   ├── test
+│   │   ├── train
 │   │   │   └── ...
-│   │   └── train
+│   │   └── val
 │   │       └── ...
 │   ├── raw
 │   │   └── ...
