@@ -62,7 +62,7 @@ As a reminder, the current steps to run the experiment are as follow:
 # Prepare the dataset
 python3.13 src/prepare.py data/raw data/prepared
 
-# Train the model with the train dataset and save it
+# Train the model with the training set and save it
 python3.13 src/train.py data/prepared model
 
 # Evaluate the model performances

@@ -445,11 +445,11 @@ def get_training_plot(model_history: dict) -> plt.Figure:
 
 
 def get_pred_preview_plot(
-    model: tf.keras.Model, ds_test: tf.data.Dataset, labels: List[str]
+    model: tf.keras.Model, ds_val: tf.data.Dataset, labels: List[str]
 ) -> plt.Figure:
     """Plot a preview of the predictions"""
     fig = plt.figure(figsize=(10, 5), tight_layout=True)
-    for images, label_idxs in ds_test.take(1):
+    for images, label_idxs in ds_val.take(1):
         preds = model.predict(images)
         for i in range(10):
             plt.subplot(2, 5, i + 1)
@@ -481,14 +481,14 @@ def get_pred_preview_plot(
 
 
 def get_confusion_matrix_plot(
-    model: tf.keras.Model, ds_test: tf.data.Dataset, labels: List[str]
+    model: tf.keras.Model, ds_val: tf.data.Dataset, labels: List[str]
 ) -> plt.Figure:
     """Plot the confusion matrix"""
     fig = plt.figure(figsize=(6, 6), tight_layout=True)
-    preds = model.predict(ds_test)
+    preds = model.predict(ds_val)
 
     conf_matrix = tf.math.confusion_matrix(
-        labels=tf.concat([y for _, y in ds_test], axis=0),
+        labels=tf.concat([y for _, y in ds_val], axis=0),
         predictions=tf.argmax(preds, axis=1),
         num_classes=len(labels),
     )
@@ -542,7 +542,7 @@ def main() -> None:
     (evaluation_folder / plots_folder).mkdir(parents=True, exist_ok=True)
 
     # Load files
-    ds_test = tf.data.Dataset.load(str(prepared_dataset_folder / "test"))
+    ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "val"))
     labels = None
     with open(prepared_dataset_folder / "labels.json") as f:
         labels = json.load(f)
@@ -558,22 +558,22 @@ def main() -> None:
     model_history = np.load(model_folder.absolute() / "history.npy", allow_pickle=True).item()
 
     # Log metrics
-    test_loss, test_acc = model.evaluate(ds_test)
-    print(f"Test loss: {test_loss:.2f}")
-    print(f"Test accuracy: {test_acc * 100:.2f}%")
+    val_loss, val_acc = model.evaluate(ds_val)
+    print(f"Validation loss: {val_loss:.2f}")
+    print(f"Validation accuracy: {val_acc * 100:.2f}%")
     with open(evaluation_folder / "metrics.json", "w") as f:
-        json.dump({"test_loss": test_loss, "test_acc": test_acc}, f)
+        json.dump({"val_loss": val_loss, "val_acc": val_acc}, f)
 
     # Save training history plot
     fig = get_training_plot(model_history)
     fig.savefig(evaluation_folder / plots_folder / "training_history.png")
 
     # Save predictions preview plot
-    fig = get_pred_preview_plot(model, ds_test, labels)
+    fig = get_pred_preview_plot(model, ds_val, labels)
     fig.savefig(evaluation_folder / plots_folder / "pred_preview.png")
 
     # Save confusion matrix plot
-    fig = get_confusion_matrix_plot(model, ds_test, labels)
+    fig = get_confusion_matrix_plot(model, ds_val, labels)
     fig.savefig(evaluation_folder / plots_folder / "confusion_matrix.png")
 
     print(
