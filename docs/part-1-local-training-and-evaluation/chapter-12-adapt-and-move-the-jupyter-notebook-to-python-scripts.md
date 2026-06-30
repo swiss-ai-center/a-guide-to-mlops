@@ -770,7 +770,7 @@ Your working directory should now be similar to this:
 Here, the following should be noted:
 
 - the `prepare.py` script created the `data/prepared` directory and divided the
-  dataset into a training set and a test set
+  dataset into a training set and a validation set
 - the `train.py` script created the `model` directory and trained the model with
   the prepared data.
 - the `evaluate.py` script created the `evaluation` directory and generated some

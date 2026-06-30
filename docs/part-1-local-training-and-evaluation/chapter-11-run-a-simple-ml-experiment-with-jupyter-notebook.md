@@ -15,7 +15,7 @@ a unique angle.
 The training process is as follows:
 
 - Preprocess the dataset
-- Split the celestial bodies into training/testing datasets
+- Split the celestial bodies into training/validation datasets
 - Train a model to classify the celestial bodies using the training dataset
 - Evaluate the model's performance using metrics, training history, predictions
   preview and a confusion matrix.
