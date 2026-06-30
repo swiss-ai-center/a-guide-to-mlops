@@ -24,6 +24,9 @@ source .venv/bin/activate
 
 # Install the Python dependencies
 pip install -r requirements.txt
+pip install torch torchvision \
+  --index-url https://download.pytorch.org/whl/cpu \
+  --extra-index-url https://pypi.org/simple
 
 # Run the Jupyter Notebook
 jupyter-lab notebook.ipynb
@@ -36,13 +39,16 @@ Python tools, run the following commands:
 
 ```bash
 # Create the virtual environment
-uv venv
+uv venv --python 3.13
 
 # Activate the virtual environment
 source .venv/bin/activate
 
 # Install the Python dependencies
 uv pip install -r requirements.txt
+uv pip install torch torchvision \
+  --index-url https://download.pytorch.org/whl/cpu \
+  --default-index https://pypi.org/simple
 
 # Run the Jupyter Notebook
 jupyter-lab notebook.ipynb
@@ -51,7 +57,9 @@ jupyter-lab notebook.ipynb
 ## Update dependencies
 
 In case the dependencies need to be updated, create a new virtual environment,
-install the base dependencies and generate the versioned package list.
+install the base dependencies from `requirements.txt`, install PyTorch from the
+CPU-only PyTorch index, and regenerate the full lock file
+`requirements-freeze.txt`.
 
 ### With standard Python tools
 
@@ -62,11 +70,16 @@ python3 -m venv .venv
 # Activate the virtual environment
 source .venv/bin/activate
 
-# Install the base dependencies
-pip install jupyterlab tensorflow matplotlib pyyaml
+# Install the base dependencies from requirements.txt
+pip install -r requirements.txt
 
-# Generate the versioned package list
-pip freeze --local --all > requirements.txt
+# Install PyTorch from the CPU-only PyTorch index
+pip install torch torchvision \
+  --index-url https://download.pytorch.org/whl/cpu \
+  --extra-index-url https://pypi.org/simple
+
+# Generate the full lock file
+pip freeze --local --all > requirements-freeze.txt
 ```
 
 ### With uv
@@ -76,16 +89,21 @@ Python tools, run the following commands:
 
 ```bash
 # Create the virtual environment
-uv venv
+uv venv --python 3.13
 
 # Activate the virtual environment
 source .venv/bin/activate
 
-# Install the base dependencies
-uv pip install jupyterlab tensorflow matplotlib pyyaml
+# Install the base dependencies from requirements.txt
+uv pip install -r requirements.txt
 
-# Generate the versioned package list
-uv pip freeze > requirements.txt
+# Install PyTorch from the CPU-only PyTorch index
+uv pip install torch torchvision \
+  --index-url https://download.pytorch.org/whl/cpu \
+  --default-index https://pypi.org/simple
+
+# Generate the full lock file
+uv pip freeze > requirements-freeze.txt
 ```
 
 ## References
