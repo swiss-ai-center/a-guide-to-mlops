@@ -10,6 +10,8 @@ The repository is organized into several branches, each fulfilling a specific
 role:
 
 * `main`: the guide that is continuously deployed
+* `jupyter-notebook`: the Jupyter notebook used as a starting point for the
+  guide
 * `dataset`: the dataset generator used to create the dataset for the experiment
 * `data`: the dataset used to train and evaluate the model
 * `extra-data`: the supplementary dataset used for inference and labeling before
