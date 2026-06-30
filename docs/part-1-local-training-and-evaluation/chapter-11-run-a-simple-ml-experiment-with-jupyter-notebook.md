@@ -10,18 +10,15 @@ The data scientists of your team have been actively collaborating on a Jupyter
 Notebook, which they have readily shared with you. The dataset they have
 gathered comprises approximately 1,650 images capturing 11 distinct planets and
 moons. Each celestial body is represented by around 150 images, each taken from
-a unique angle, so the dataset classes are balanced.
+a unique angle.
 
-The notebook follows these main steps:
+The training process is as follows:
 
-1. Load the dataset from `data/raw`.
-2. Explore the data to inspect image shapes, labels, and sample images.
-3. Prepare the data by shuffling, splitting into training/validation/test sets
-   (60/20/20 split), and normalizing pixel values.
-4. Train a Keras model to classify the celestial bodies using the training
-   dataset, validating against the validation set.
-5. Evaluate the model's performance on the test set using metrics, training
-   history, prediction previews, and a confusion matrix.
+- Preprocess the dataset
+- Split the celestial bodies into training/testing datasets
+- Train a model to classify the celestial bodies using the training dataset
+- Evaluate the model's performance using metrics, training history, predictions
+  preview and a confusion matrix.
 
 Your primary objective is to enhance the team's workflow by implementing MLOps
 tools, documenting the procedures, tracking changes, and ensuring the model is
