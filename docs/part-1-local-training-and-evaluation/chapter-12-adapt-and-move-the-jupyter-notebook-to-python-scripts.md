@@ -294,7 +294,7 @@ def main() -> None:
     set_seed(seed)
 
     # Read data
-    ds_train, ds_test = tf.keras.utils.image_dataset_from_directory(
+    ds_train, ds_val = tf.keras.utils.image_dataset_from_directory(
         raw_dataset_folder,
         labels="inferred",
         label_mode="int",
@@ -320,13 +320,13 @@ def main() -> None:
         1.0 / 255
     )
     ds_train = ds_train.map(lambda x, y: (normalization_layer(x), y))
-    ds_test = ds_test.map(lambda x, y: (normalization_layer(x), y))
+    ds_val = ds_val.map(lambda x, y: (normalization_layer(x), y))
 
     # Save the prepared dataset
     with open(prepared_dataset_folder / "labels.json", "w") as f:
         json.dump(labels, f)
     tf.data.Dataset.save(ds_train, str(prepared_dataset_folder / "train"))
-    tf.data.Dataset.save(ds_test, str(prepared_dataset_folder / "test"))
+    tf.data.Dataset.save(ds_val, str(prepared_dataset_folder / "test"))
 
     print(f"\nDataset saved at {prepared_dataset_folder.absolute()}")
 
@@ -401,7 +401,7 @@ def main() -> None:
 
     # Load data
     ds_train = tf.data.Dataset.load(str(prepared_dataset_folder / "train"))
-    ds_test = tf.data.Dataset.load(str(prepared_dataset_folder / "test"))
+    ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "test"))
 
     # Define the model
     model = get_model(image_shape, conv_size, dense_size, output_classes)
@@ -416,7 +416,7 @@ def main() -> None:
     model.fit(
         ds_train,
         epochs=epochs,
-        validation_data=ds_test,
+        validation_data=ds_val,
     )
 
     # Save the model
@@ -468,11 +468,11 @@ def get_training_plot(model_history: dict) -> plt.Figure:
 
 
 def get_pred_preview_plot(
-    model: tf.keras.Model, ds_test: tf.data.Dataset, labels: List[str]
+    model: tf.keras.Model, ds_val: tf.data.Dataset, labels: List[str]
 ) -> plt.Figure:
     """Plot a preview of the predictions"""
     fig = plt.figure(figsize=(10, 5), tight_layout=True)
-    for images, label_idxs in ds_test.take(1):
+    for images, label_idxs in ds_val.take(1):
         preds = model.predict(images)
         for i in range(10):
             plt.subplot(2, 5, i + 1)
@@ -504,14 +504,14 @@ def get_pred_preview_plot(
 
 
 def get_confusion_matrix_plot(
-    model: tf.keras.Model, ds_test: tf.data.Dataset, labels: List[str]
+    model: tf.keras.Model, ds_val: tf.data.Dataset, labels: List[str]
 ) -> plt.Figure:
     """Plot the confusion matrix"""
     fig = plt.figure(figsize=(6, 6), tight_layout=True)
-    preds = model.predict(ds_test)
+    preds = model.predict(ds_val)
 
     conf_matrix = tf.math.confusion_matrix(
-        labels=tf.concat([y for _, y in ds_test], axis=0),
+        labels=tf.concat([y for _, y in ds_val], axis=0),
         predictions=tf.argmax(preds, axis=1),
         num_classes=len(labels),
     )
@@ -565,7 +565,7 @@ def main() -> None:
     (evaluation_folder / plots_folder).mkdir(parents=True, exist_ok=True)
 
     # Load files
-    ds_test = tf.data.Dataset.load(str(prepared_dataset_folder / "test"))
+    ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "test"))
     labels = None
     with open(prepared_dataset_folder / "labels.json") as f:
         labels = json.load(f)
@@ -576,7 +576,7 @@ def main() -> None:
     model_history = np.load(model_folder.absolute() / "history.npy", allow_pickle=True).item()
 
     # Log metrics
-    val_loss, val_acc = model.evaluate(ds_test)
+    val_loss, val_acc = model.evaluate(ds_val)
     print(f"Validation loss: {val_loss:.2f}")
     print(f"Validation accuracy: {val_acc * 100:.2f}%")
     with open(evaluation_folder / "metrics.json", "w") as f:
@@ -587,11 +587,11 @@ def main() -> None:
     fig.savefig(evaluation_folder / plots_folder / "training_history.png")
 
     # Save predictions preview plot
-    fig = get_pred_preview_plot(model, ds_test, labels)
+    fig = get_pred_preview_plot(model, ds_val, labels)
     fig.savefig(evaluation_folder / plots_folder / "pred_preview.png")
 
     # Save confusion matrix plot
-    fig = get_confusion_matrix_plot(model, ds_test, labels)
+    fig = get_confusion_matrix_plot(model, ds_val, labels)
     fig.savefig(evaluation_folder / plots_folder / "confusion_matrix.png")
 
     print(
