@@ -10,7 +10,8 @@ title: "Part 4 - Introduction"
     to keep a model healthy in production by observing its behavior over time and
     reacting to changes.
 
-Learn how to monitor and maintain the model using [Evidently AI](../tools.md).
+Learn how to monitor and maintain the model using
+[:simple-fluentbit: Fluent Bit](../tools.md) and [Evidently AI](../tools.md).
 
 ## Environment
 

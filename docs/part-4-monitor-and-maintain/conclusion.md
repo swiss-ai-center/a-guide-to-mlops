@@ -6,16 +6,16 @@ title: "Part 4 - Conclusion"
 
 Congratulations! You did it!
 
-In this fourth part, you were able to keep the model healthy in production by
-observing its behavior over time and reacting to changes. Predictions and
-features are now logged locally, drift is detected by comparing production logs
-against a reference dataset with Evidently AI, dashboards are accessible on
-Kubernetes, alerts are raised from a GitHub Actions workflow, and the model can
-be rolled back to a previous version when degradation is detected.
+In this fourth part, you made the model observable in production. Predictions
+and features are logged by the BentoML service and shipped to your S3 storage by
+Fluent Bit, drift is detected by comparing these production logs against a
+reference dataset with Evidently AI, and dashboards are accessible on
+Kubernetes. A GitHub Actions workflow refreshes the drift report from production
+logs and raises alerts.
 
-The feedback loop is now closed: production predictions are compared to the
-training distribution, abnormal behavior is surfaced to the team, and the model
-can be recovered quickly if something goes wrong.
+The monitoring feedback loop is now closed: production predictions are compared
+to the training distribution, abnormal behavior is surfaced to the team, and you
+can decide what action to take.
 
 The following diagram illustrates the bricks you set up at the end of this part:
 
@@ -37,9 +37,9 @@ flowchart TB
         dvcGraph --> bento_model[classifier.bentomodel]
         subgraph bentoGraph[bentofile.yaml]
             bento_model --> serve[serve.py]
-            monitor[monitor.py] --> serve
+            features[features.py] --> serve
         end
-        serve --> drift_logs[logs/predictions.jsonl]
+        serve --> drift_logs["logs/…/data/*.log"]
         bento_model <-.-> dot_dvc
 
         data --> prepare
@@ -76,7 +76,7 @@ flowchart TB
                   registry)] --> bento_service_cluster
     end
 
-    drift_logs -.->|upload sidecar| s3_storage
+    drift_logs -.->|Fluent Bit| s3_storage
     s3_storage -->|monitor workflow| action
     action -->|report| evidently_ui
     action -->|alert| issue
@@ -103,7 +103,7 @@ flowchart TB
     style bentoGraph opacity:0.4,color:#7f7f7f80
     style bento_model opacity:0.4,color:#7f7f7f80
     style serve opacity:0.4,color:#7f7f7f80
-    style monitor opacity:0.4,color:#7f7f7f80
+    style features opacity:0.4,color:#7f7f7f80
     style drift_logs opacity:0.4,color:#7f7f7f80
     style reference_features opacity:0.4,color:#7f7f7f80
     style dot_git opacity:0.4,color:#7f7f7f80
@@ -149,11 +149,6 @@ flowchart TB
     linkStyle 25 opacity:0.4,color:#7f7f7f80
     linkStyle 26 opacity:0.4,color:#7f7f7f80
 ```
-
-The main goal of the MLOps process is to ensure that the model is reproducible,
-reliable and can be used in production. With monitoring, alerting and rollback
-in place, this goal is not only achieved: the system is also observable and
-recoverable.
 
 Part 5 is an improvement of the MLOps process. You will learn how to label new
 data and retrain the model using Label Studio.
