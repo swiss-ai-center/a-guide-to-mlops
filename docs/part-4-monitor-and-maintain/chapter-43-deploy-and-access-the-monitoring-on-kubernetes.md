@@ -293,7 +293,7 @@ kubectl create secret generic monitoring-s3-credentials \
 ### Create the monitoring workflow
 
 The monitoring job runs in GitHub Actions. It reuses `generate_report` from
-`src/detect_drift.py` to download the latest logs from S3, pulls the reference
+`src/monitor_drift.py` to download the latest logs from S3, pulls the reference
 dataset from the DVC remote, generates the Evidently snapshot, pushes it to the
 remote workspace, and uploads a JSON drift summary to S3 for alerting.
 
@@ -327,7 +327,7 @@ pip freeze --local --all > requirements-freeze.txt
 #### Create `src/monitor_cloud.py`
 
 This script downloads the inputs from S3 and the DVC remote, calls
-`generate_report` from `src/detect_drift.py`, writes the snapshot directly to
+`generate_report` from `src/monitor_drift.py`, writes the snapshot directly to
 the S3-backed Evidently workspace, and uploads the JSON report to S3.
 
 ```py title="src/monitor_cloud.py"
@@ -342,7 +342,7 @@ from pathlib import Path
 import boto3
 from evidently.ui.workspace import Workspace
 
-import detect_drift
+import monitor_drift
 
 S3_BUCKET = os.environ.get("PREDICTION_LOG_BUCKET")
 S3_PREFIX = os.environ.get("PREDICTION_LOG_PREFIX", "logs")
@@ -420,7 +420,7 @@ def main() -> None:
         download_latest_logs(S3_BUCKET, S3_PREFIX, log_dir)
         pull_reference_dataset(reference_path)
 
-        snapshot = detect_drift.generate_report(
+        snapshot = monitor_drift.generate_report(
             reference_path, log_dir, tmp_path
         )
 
@@ -446,7 +446,7 @@ S3.
 The `download_latest_logs` function downloads every log object under the prefix
 that was modified in the last `LOG_CUTOFF_HOURS` hours into a directory of
 `.log` files. Fluent Bit uploads timestamped objects as batches close, so
-`detect_drift.generate_report` can read them all together.
+`monitor_drift.generate_report` can read them all together.
 
 #### Create `.github/workflows/monitor.yaml`
 
@@ -711,7 +711,7 @@ In this chapter, you have successfully:
 
 1. Shipped BentoML monitoring logs to S3 with a Fluent Bit sidecar
 2. Configured Fluent Bit to tail local files and batch-upload to S3
-3. Reused `src/detect_drift.py` so the report generation stays portable
+3. Reused `src/monitor_drift.py` so the report generation stays portable
 4. Created a monitoring job that pulls logs and the reference dataset from
    storage
 5. Pushed drift snapshots to a remote Evidently workspace
