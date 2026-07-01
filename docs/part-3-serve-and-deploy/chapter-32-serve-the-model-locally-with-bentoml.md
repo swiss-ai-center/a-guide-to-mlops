@@ -115,10 +115,9 @@ class CelestialBodiesClassifierService:
             image: Annotated[Image, ContentType("image/jpeg")] = Field(description="Planet image to analyze"),
     ) -> Annotated[str, ContentType("application/json")]:
         image = self.preprocess(image)
-
         predictions = self.model.predict(image)
-
-        return json.dumps(self.postprocess(predictions))
+        result = self.postprocess(predictions)
+        return json.dumps(result)
 ```
 
 This service will be used to serve the model with FastAPI and will do the
