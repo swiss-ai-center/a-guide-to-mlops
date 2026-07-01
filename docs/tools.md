@@ -5,8 +5,8 @@ The tools used in this guide.
 ## Core tools
 
 - Code management: [:simple-git: Git](https://git-scm.com/)
-- Package management: [:simple-python: pip](https://pip.pypa.io/) (or
-  [:simple-uv: uv](https://docs.astral.sh/uv/) as an alternative)
+- Package management: [:simple-python: pip](https://pip.pypa.io/) or
+  [:simple-uv: uv](https://docs.astral.sh/uv/) as an alternative
 - Data and model versioning: [:simple-dvc: DVC](https://dvc.org/)
 - ML experiment reporting: [CML](https://cml.dev/)
 - Pipeline orchestration:
@@ -16,7 +16,9 @@ The tools used in this guide.
 - Model packaging and serving: [:simple-bentoml: BentoML](https://bentoml.com/)
   and [:simple-docker: Docker](https://docker.com/)
 - Model deployment: [:simple-kubernetes: Kubernetes](https://kubernetes.io/)
-- Model monitoring: [Evidently AI](https://evidentlyai.com/)
+- Model observability and monitoring:
+  [:simple-fluentbit: Fluent Bit](https://fluentbit.io/) and
+  [Evidently AI](https://evidentlyai.com/)
 - Data annotation: [Label Studio](https://labelstud.io/)
 
 The following chapters explain each tool in detail.
@@ -58,6 +60,14 @@ These are alternatives to Evidently AI for monitoring models in production.
   with a library or self-hosted UI
 - [Seldon Alibi Detect](https://github.com/SeldonIO/alibi-detect) - Algorithms
   for outlier, adversarial, and drift detection
+
+### Logging and observability
+
+Alternatives to Fluent Bit for collecting, processing, and forwarding logs and
+observability data.
+
+- [Vector](https://vector.dev/) - High-performance, end-to-end observability
+  data pipeline for logs, metrics, and traces
 
 ### Data annotation
 

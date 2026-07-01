@@ -892,32 +892,6 @@ All the items of the MLOps process for this part are now addressed.
       to optimize for different workload characteristics. Training benefits from GPUs
       while serving prioritizes availability and cost efficiency.
 
-### Destroy the Kubernetes cluster
-
-When you are done with the chapter, you can destroy the Kubernetes cluster.
-
-```sh title="Execute the following command(s) in a terminal"
-# Destroy the Kubernetes cluster
-gcloud container clusters delete --zone $GCP_K8S_CLUSTER_ZONE $GCP_K8S_CLUSTER_NAME
-```
-
-!!! tip
-
-    If you need to quickly recreate the cluster after destroying it, here are the
-    steps involved:
-
-    * Create the Kubernetes cluster.
-    * Deploy the containerized model on Kubernetes.
-    * Identify the specialized node.
-    * Label the nodes.
-    * Create the Kubernetes secret for the base runner registration.
-    * Deploy the base runner.
-    * Retrieve the Kubernetes cluster credentials.
-    * Update the Kubernetes `GCP_K8S_KUBECONFIG` CI/CD secret.
-
-    Refer to the previous chapters for the specific commands. Additionally, ensure
-    that all necessary environment variables are correctly defined.
-
 ## State of the MLOps process
 
 - [x] Model can be saved and loaded with all required artifacts for future usage

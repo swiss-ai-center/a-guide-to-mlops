@@ -51,6 +51,12 @@ server.
 Thanks to a self-hosted runner, the model can be trained on specialized hardware
 on a Kubernetes pod.
 
+- [x] The model can be monitored in production
+
+Thanks to BentoML's native monitoring, Fluent Bit, and Evidently AI, predictions
+and features are logged, shipped to S3, and compared against a reference dataset
+to detect drift.
+
 - [x] The model performance can be improved by retraining with additional data.
 
 Thanks to Label Studio, additional and high-quality training data can be used to
