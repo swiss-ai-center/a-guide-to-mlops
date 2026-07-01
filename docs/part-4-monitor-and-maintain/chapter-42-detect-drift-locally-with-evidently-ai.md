@@ -3,33 +3,25 @@
 ## Introduction
 
 The purpose of this chapter is to detect drift by comparing production
-predictions against a reference dataset built from the training data. In the
-last chapter you collected prediction logs to `logs/predictions.jsonl`; that
-gives you the _current_ distribution of image features, embeddings, and
-predicted labels. To know whether that distribution has drifted, you need a
-_reference_ distribution that represents the data the model was trained on.
+predictions against a reference dataset built from the training data. BentoML's
+native monitoring now gives you the _current_ distribution of image features,
+embeddings, and predicted labels. To know whether that distribution has drifted,
+you need a _reference_ distribution that represents the data the model was
+trained on. The prepared training set is the natural choice because it is the
+exact data the model saw during training.
 
 You will use [Evidently AI](../tools.md) to generate an interactive HTML drift
 report and a machine-readable JSON report.
-
-The prepared training set (`data/prepared/train`) is the right choice for the
-reference because:
-
-* It is the exact data used to fit the model.
-* It already has the same preprocessing (resize, normalization) as production
-  inputs.
-* It contains ground-truth labels, which are useful if you later extend the
-  report with a `ClassificationPreset`.
 
 In this chapter, you will learn how to:
 
 1. Install Evidently AI
 2. Build a reference dataset from the training data, including embeddings
-3. Create a monitoring script that generates an Evidently drift report
-4. Add embedding drift detection to the report
-5. Wire the reference build into the DVC pipeline
-6. Run the pipeline, generate logs, and open the dashboard
-7. Commit the changes to Git
+3. Create a monitoring script that generates an Evidently drift report and
+   dashboard
+4. Wire the reference build into the DVC pipeline
+5. Run the pipeline, generate logs, and open the dashboard
+6. Commit the changes to Git
 
 The following diagram illustrates the control flow at the end of this chapter:
 
@@ -51,7 +43,7 @@ flowchart TB
         dvcGraph --> bento_model[classifier.bentomodel]
         subgraph bentoGraph[bentofile.yaml]
             bento_model --> serve[serve.py]
-            monitor[monitor.py] --> serve
+            features[features.py] --> serve
         end
         bentoGraph <-.-> dot_dvc
 
@@ -65,18 +57,18 @@ flowchart TB
         params -.- train
 
         subgraph monitoringGraph[monitoring]
-            drift_logs[logs/predictions.jsonl]
+            drift_logs["logs/…/data/*.log"]
             drift_report["report.html | .json"]
         end
-        detect_drift[detect_drift.py]
+        monitor_drift[monitor_drift.py]
         serve --> drift_logs
         build_reference --> reference_features[reference_features.parquet]
-        reference_features --> detect_drift
-        drift_logs --> detect_drift
-        detect_drift --> drift_report
+        reference_features --> monitor_drift
+        drift_logs --> monitor_drift
+        monitor_drift --> drift_report
     end
     subgraph browserLocalGraph[BROWSER]
-        detect_drift --> |evidently ui| localhost
+        monitor_drift --> |evidently ui| localhost
     end
 
     subgraph remoteGraph[REMOTE]
@@ -118,7 +110,7 @@ flowchart TB
     style evaluate opacity:0.4,color:#7f7f7f80
     style dvcGraph opacity:0.4,color:#7f7f7f80
     style bento_model opacity:0.4,color:#7f7f7f80
-    style monitor opacity:0.4,color:#7f7f7f80
+    style features opacity:0.4,color:#7f7f7f80
     style serve opacity:0.4,color:#7f7f7f80
     style drift_logs opacity:0.4,color:#7f7f7f80
     style dot_git opacity:0.4,color:#7f7f7f80
@@ -146,14 +138,15 @@ flowchart TB
     linkStyle 11 opacity:0.4,color:#7f7f7f80
     linkStyle 12 opacity:0.4,color:#7f7f7f80
     linkStyle 13 opacity:0.4,color:#7f7f7f80
-    linkStyle 14 opacity:0.4,color:#7f7f7f80
-    linkStyle 15 opacity:0.4,color:#7f7f7f80
-    linkStyle 16 opacity:0.4,color:#7f7f7f80
-    linkStyle 17 opacity:0.4,color:#7f7f7f80
-    linkStyle 18 opacity:0.4,color:#7f7f7f80
     linkStyle 19 opacity:0.4,color:#7f7f7f80
     linkStyle 20 opacity:0.4,color:#7f7f7f80
     linkStyle 21 opacity:0.4,color:#7f7f7f80
+    linkStyle 22 opacity:0.4,color:#7f7f7f80
+    linkStyle 23 opacity:0.4,color:#7f7f7f80
+    linkStyle 24 opacity:0.4,color:#7f7f7f80
+    linkStyle 25 opacity:0.4,color:#7f7f7f80
+    linkStyle 26 opacity:0.4,color:#7f7f7f80
+    linkStyle 27 opacity:0.4,color:#7f7f7f80
 ```
 
 ## Steps
@@ -229,7 +222,7 @@ Install the package and update the freeze file.
 ### Update the experiment
 
 In this step you will create `src/build_reference.py`, create
-`src/detect_drift.py`, and add a new `build_reference` stage to `dvc.yaml`.
+`src/monitor_drift.py`, and add a new `build_reference` stage to `dvc.yaml`.
 
 #### Create `src/build_reference.py`
 
@@ -245,7 +238,7 @@ import bentoml
 import pandas as pd
 import tensorflow as tf
 
-from monitor import build_embedding_extractor, extract_scalar_features, extract_prediction_stats
+from features import build_embedding_extractor, extract_scalar_features, extract_prediction_stats
 
 
 def main() -> None:
@@ -324,7 +317,7 @@ The reference dataset contains one row per training image:
 | `entropy` | float | Prediction entropy |
 | `true_label` | string | Ground-truth label from `data/prepared/train` |
 
-#### Create `src/detect_drift.py`
+#### Create `src/monitor_drift.py`
 
 This script loads the reference dataset and the production prediction log,
 builds an Evidently drift report, and writes:
@@ -333,7 +326,7 @@ builds an Evidently drift report, and writes:
 * `monitoring/report.html` for a quick full report view without starting the UI,
 * `monitoring/report.json` for programmatic drift scores.
 
-```py title="src/detect_drift.py"
+```py title="src/monitor_drift.py"
 import sys
 from pathlib import Path
 
@@ -346,10 +339,18 @@ from evidently.sdk.models import PanelMetric
 from evidently.sdk.panels import counter_panel, line_plot_panel, text_panel
 from evidently.ui.workspace import Workspace
 
-REFERENCE_PATH = Path("data/reference_features.parquet")
-LOG_PATH = Path("logs/predictions.jsonl")
-WORKSPACE_PATH = Path("monitoring/workspace")
-REPORT_PATH = Path("monitoring")
+# Resolve everything against the project root (the directory above src/) so the
+# script works no matter which directory it is launched from. serve.py anchors
+# the monitoring log_path to this same location.
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
+REFERENCE_PATH = PROJECT_ROOT / "data/reference_features.parquet"
+# BentoML native monitoring writes rotating JSONL files to
+# <log_path>/<monitor_name>/data/*.log; log_path is set in serve.py.
+MONITOR_NAME = "celestial_bodies_classifier"
+LOG_DIR = PROJECT_ROOT / "logs" / MONITOR_NAME / "data"
+WORKSPACE_PATH = PROJECT_ROOT / "monitoring/workspace"
+REPORT_PATH = PROJECT_ROOT / "monitoring"
 PROJECT_NAME = "celestial-bodies-classifier"
 
 SCALAR_COLUMNS = [
@@ -398,14 +399,22 @@ def get_or_create_project(workspace: Workspace, name: str):
 
 def generate_report(
     reference_path: Path,
-    log_path: Path,
+    log_dir: Path,
     output_dir: Path,
 ):
-    """Build an Evidently drift report from a reference dataset and a log."""
+    """Build an Evidently drift report from a reference dataset and log files."""
     reference_df = pd.read_parquet(reference_path)
     # Drop any columns that are not part of the drift feature set.
     reference_df = reference_df.drop(columns=["true_label"], errors="ignore")
-    current_df = pd.read_json(log_path, lines=True)
+
+    log_files = sorted(log_dir.glob("*.log"))
+    if not log_files:
+        raise FileNotFoundError(f"No log files found in {log_dir}")
+
+    current_df = pd.concat(
+        [pd.read_json(f, lines=True) for f in log_files],
+        ignore_index=True,
+    )
     current_df = current_df.drop(
         columns=["timestamp", "request_id"], errors="ignore"
     )
@@ -560,14 +569,14 @@ def main() -> None:
         )
         sys.exit(1)
 
-    if not LOG_PATH.exists():
+    if not LOG_DIR.exists():
         print(
-            f"Prediction log not found at {LOG_PATH}. "
+            f"Prediction log directory not found at {LOG_DIR}. "
             "Run the service and make some predictions first."
         )
         sys.exit(1)
 
-    snapshot = generate_report(REFERENCE_PATH, LOG_PATH, REPORT_PATH)
+    snapshot = generate_report(REFERENCE_PATH, LOG_DIR, REPORT_PATH)
 
     WORKSPACE_PATH.mkdir(parents=True, exist_ok=True)
     workspace = Workspace.create(str(WORKSPACE_PATH))
@@ -649,7 +658,7 @@ stages:
     - data/prepared
     - model
     - src/build_reference.py
-    - src/monitor.py
+    - src/features.py
     outs:
     - data/reference_features.parquet
 ```
@@ -699,7 +708,8 @@ First, ensure the prepared data, model, and reference dataset are up to date:
 dvc repro
 ```
 
-Generate production logs by running the service and sending a few images:
+Generate production logs by running the service and sending a few images. The
+monitoring log is written to `logs/celestial_bodies_classifier/data/`.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Start the service (run in a separate terminal)
@@ -715,15 +725,15 @@ for img in extra-data/extra_data/*.jpg; do
   curl -X POST -F "image=@$img" http://localhost:3000/predict
 done
 
-# Inspect the log file
-cat logs/predictions.jsonl
+# Inspect the monitoring records (BentoML writes one file per worker)
+ls logs/celestial_bodies_classifier/data/
 ```
 
 Generate the drift snapshot and push it to the local workspace:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Generate the Evidently snapshot
-python src/detect_drift.py
+python src/monitor_drift.py
 ```
 
 Open `monitoring/report.html` in a browser for a quick view of the full report,
@@ -773,7 +783,8 @@ Changes to be committed:
         modified:   requirements-freeze.txt
         modified:   requirements.txt
         new file:   src/build_reference.py
-        new file:   src/detect_drift.py
+        new file:   src/monitor_drift.py
+        new file:   src/features.py
 ```
 
 ### Commit the changes to Git
@@ -812,10 +823,11 @@ You fixed some of the previous issues:
       cannot tell whether a spike in `image_mean` or `predicted_label` is normal or a
       sign of decay. The training set is the natural reference because it is the
       distribution the model learned from.
-    - **Reuse the same features for reference and production**: The monitoring
-      module from the last chapter is reused in `build_reference.py`, so both datasets
-      share the exact same scalar feature definitions. Embeddings are extracted from
-      the same last hidden layer in both the service and the reference script.
+    - **Reuse the same features for reference and production**: The feature
+      extraction module from the last chapter is reused in `build_reference.py`, so
+      both datasets share the exact same scalar feature definitions. Embeddings are
+      extracted from the same last hidden layer in both the service and the reference
+      script.
     - **Evidently workspaces keep history**: Pushing snapshots to a workspace
       instead of overwriting a single HTML file lets you compare reports over time.
       The local workspace is the same concept you will move to the cloud in the next
