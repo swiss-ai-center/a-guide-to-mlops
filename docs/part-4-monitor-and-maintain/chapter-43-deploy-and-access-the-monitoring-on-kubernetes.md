@@ -354,7 +354,7 @@ LOG_CUTOFF_HOURS = int(os.environ.get("LOG_CUTOFF_HOURS", "24"))
 
 
 def download_latest_logs(bucket: str, prefix: str, dest: Path) -> None:
-    """Download log objects from the last N hours into one JSONL file."""
+    """Download log objects from the last N hours into a directory of log files."""
     s3 = boto3.client("s3")
     paginator = s3.get_paginator("list_objects_v2")
     cutoff = datetime.now(timezone.utc) - timedelta(hours=LOG_CUTOFF_HOURS)
@@ -372,9 +372,10 @@ def download_latest_logs(bucket: str, prefix: str, dest: Path) -> None:
         )
         sys.exit(1)
 
-    dest.parent.mkdir(parents=True, exist_ok=True)
-    with open(dest, "wb") as out:
-        for obj in sorted(objects, key=lambda x: x["LastModified"]):
+    dest.mkdir(parents=True, exist_ok=True)
+    for i, obj in enumerate(sorted(objects, key=lambda x: x["LastModified"])):
+        out_path = dest / f"data.{i + 1}.log"
+        with open(out_path, "wb") as out:
             s3.download_fileobj(bucket, obj["Key"], out)
 
 
@@ -413,14 +414,14 @@ def main() -> None:
 
     with tempfile.TemporaryDirectory() as tmp:
         tmp_path = Path(tmp)
-        log_path = tmp_path / "predictions.jsonl"
+        log_dir = tmp_path / "logs" / "celestial_bodies_classifier" / "data"
         reference_path = tmp_path / "reference_features.parquet"
 
-        download_latest_logs(S3_BUCKET, S3_PREFIX, log_path)
+        download_latest_logs(S3_BUCKET, S3_PREFIX, log_dir)
         pull_reference_dataset(reference_path)
 
         snapshot = detect_drift.generate_report(
-            reference_path, log_path, tmp_path
+            reference_path, log_dir, tmp_path
         )
 
         workspace = Workspace.create(f"s3://{S3_BUCKET}/{WORKSPACE_PREFIX}")
@@ -443,9 +444,9 @@ This keeps the workspace small and avoids duplicating data that is already in
 S3.
 
 The `download_latest_logs` function downloads every log object under the prefix
-that was modified in the last `LOG_CUTOFF_HOURS` hours. Fluent Bit uploads
-timestamped objects as batches close, so concatenating them in `LastModified`
-order reproduces the original event stream.
+that was modified in the last `LOG_CUTOFF_HOURS` hours into a directory of
+`.log` files. Fluent Bit uploads timestamped objects as batches close, so
+`detect_drift.generate_report` can read them all together.
 
 #### Create `.github/workflows/monitor.yaml`
 
