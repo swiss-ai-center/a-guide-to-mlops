@@ -369,7 +369,7 @@ FROM python:3.13-slim
 
 WORKDIR /app
 
-RUN pip install --no-cache-dir evidently==0.7.21 gcsfs==2025.10.0
+RUN pip install --no-cache-dir evidently==0.7.21 gcsfs==2026.6.0
 
 EXPOSE 8000
 
@@ -502,7 +502,7 @@ bentoml==1.4.39
 pillow==12.2.0
 evidently==0.7.21
 google-cloud-storage==3.2.0
-gcsfs==2025.10.0
+gcsfs==2026.6.0
 ```
 
 Freeze the dependencies again after editing `requirements.txt`:
