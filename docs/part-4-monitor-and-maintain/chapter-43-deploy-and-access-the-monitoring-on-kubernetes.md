@@ -214,6 +214,9 @@ Here, the following should be noted:
   volume.
 * The `store_dir` path is used for local buffering and upload state. It should
   be on writable local disk; an `emptyDir` volume is fine.
+* The `${GCP_BUCKET_NAME}` and `${GCP_BUCKET_LOCATION}` variables are expanded
+  by Fluent Bit from the sidecar container's environment, which is configured in
+  `kubernetes/deployment.yaml`. No manual substitution in the ConfigMap is needed.
 
 #### Update `kubernetes/deployment.yaml`
 
