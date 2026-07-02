@@ -529,11 +529,20 @@ from the previous chapter. It downloads the latest logs from the storage bucket,
 pulls the reference dataset from the DVC remote, generates an Evidently
 snapshot, and pushes it to the workspace.
 
+!!! note "Why the snapshot is written by a script, not the UI service"
+
+    The Evidently UI service only reads snapshots from the workspace to display
+    them. Creating a snapshot requires downloading logs, pulling the reference
+    dataset, and running the Evidently report generator. That is a batch job, so it
+    runs in `src/monitor_cloud.py` inside GitHub Actions and writes the snapshot to
+    the same workspace the UI service reads from.
+
 #### Update `requirements.txt`
 
 Add `google-cloud-storage` so the monitoring job can read logs and write the
-JSON summary, and `gcsfs` so Evidently can write the workspace directly to the
-storage bucket.
+HTML and JSON reports, and `gcsfs` so the monitoring script can write Evidently
+snapshots to the storage-bucket-backed workspace. The Evidently UI service uses
+`gcsfs` to read from the same workspace.
 
 ```txt title="requirements.txt" hl_lines="7-8"
 tensorflow==2.21.0
