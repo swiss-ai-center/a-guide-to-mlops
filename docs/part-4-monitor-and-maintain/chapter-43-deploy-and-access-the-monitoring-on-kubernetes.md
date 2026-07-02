@@ -370,6 +370,13 @@ workspace.
 
 #### Create the Evidently UI image
 
+Create a `monitoring/requirements.txt` file with the UI dependencies:
+
+```txt title="monitoring/requirements.txt"
+evidently==0.7.21
+gcsfs==2026.6.0
+```
+
 `monitoring/ui.Dockerfile` is minimal because the UI service only needs the
 `evidently` package, `gcsfs` for the storage-bucket-backed workspace, and Google
 Cloud credentials.
@@ -379,7 +386,8 @@ FROM python:3.13-slim
 
 WORKDIR /app
 
-RUN pip install --no-cache-dir evidently==0.7.21 gcsfs==2026.6.0
+COPY monitoring/requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
 EXPOSE 8000
 
@@ -746,6 +754,7 @@ Changes to be committed:
         new file:   kubernetes/evidently-ui-deployment.yaml
         new file:   kubernetes/evidently-ui-service.yaml
         new file:   kubernetes/fluent-bit-config.yaml
+        new file:   monitoring/requirements.txt
         new file:   monitoring/ui.Dockerfile
         new file:   src/monitor_cloud.py
 ```
