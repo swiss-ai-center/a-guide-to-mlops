@@ -6,15 +6,14 @@ In the previous chapters you logged predictions with BentoML's native monitoring
 and generated a local drift report with Evidently AI. This chapter moves that
 stack into the cloud using Fluent Bit, the de facto log shipper in Kubernetes. A
 Fluent Bit sidecar tails the local monitoring files, buffers them, and uploads
-them to a Google Cloud Storage bucket in batches. A scheduled GitHub Actions
-workflow refreshes the drift report from the logs in the bucket.
+them to a storage bucket in batches. A scheduled GitHub Actions workflow
+refreshes the drift report from the logs in the bucket.
 
 In this chapter, you will learn how to:
 
-1. Ship BentoML monitoring logs to Google Cloud Storage with a Fluent Bit
-   sidecar
+1. Ship BentoML monitoring logs to a storage bucket with a Fluent Bit sidecar
 2. Deploy the Evidently UI service on Kubernetes
-3. Create a monitoring job that pulls logs from Google Cloud Storage and pushes
+3. Create a monitoring job that pulls logs from the storage bucket and pushes
    Evidently snapshots to the UI workspace
 4. Schedule the monitoring job with a GitHub Actions workflow
 5. Access the dashboard and the JSON drift summary
@@ -146,12 +145,12 @@ flowchart TB
 
 ## Steps
 
-### Upload prediction logs to Google Cloud Storage in batches
+### Upload prediction logs to a storage bucket in batches
 
 The BentoML service writes monitoring records to local files inside the pod. To
 make those logs durable, you will add a Fluent Bit sidecar to the model pod.
 Fluent Bit tails the local log files, buffers them in memory and on disk, and
-uploads them to Google Cloud Storage when a batch reaches a configured size or
+uploads them to the storage bucket when a batch reaches a configured size or
 age.
 
 !!! note "Why a sidecar?"
@@ -165,7 +164,7 @@ age.
 #### Fluent Bit configuration
 
 Fluent Bit needs two pieces of configuration: an input that tails the BentoML
-log files, and an output that uploads batches to Google Cloud Storage. Fluent
+log files, and an output that uploads batches to the storage bucket. Fluent
 Bit's S3 output plugin can talk to Google Cloud Storage through its
 S3-compatible API.
 
@@ -206,9 +205,8 @@ data:
 
 The `s3` output plugin creates objects under `gs://<bucket>/logs/`. The
 `total_file_size` and `upload_timeout` options control batching: Fluent Bit
-flushes a file to Google Cloud Storage when it reaches 10 MB or after 10
-minutes, whichever comes first. Adjust these values based on your traffic
-volume.
+flushes a file to the storage bucket when it reaches 10 MB or after 10 minutes,
+whichever comes first. Adjust these values based on your traffic volume.
 
 The `endpoint` points to the Google Cloud Storage S3-compatible API. The
 `region` corresponds to the bucket location (`GCP_BUCKET_LOCATION`).
@@ -281,9 +279,9 @@ spec:
         emptyDir: {}
 ```
 
-Replace `<gcs_bucket_name>` with the Google Cloud Storage bucket used for
-monitoring artifacts, and `<gcs_bucket_location>` with its location (for
-example, `europe-west6`).
+Replace `<gcs_bucket_name>` with the storage bucket used for monitoring
+artifacts, and `<gcs_bucket_location>` with its location (for example,
+`europe-west6`).
 
 The BentoML container writes to `logs/` relative to its working directory. By
 setting `workingDir: /app` and mounting the shared volume at `/app/logs`, both
@@ -292,8 +290,8 @@ containers see the same files.
 !!! note "Why HMAC keys for Fluent Bit?"
 
     Fluent Bit's S3 output plugin requires S3-style credentials, so you must create
-    HMAC keys for the Google Cloud Storage bucket. The Python code and the Evidently
-    UI service use native Google Cloud authentication instead.
+    HMAC keys for the storage bucket. The Python code and the Evidently UI service
+    use native Google Cloud authentication instead.
 
 Create the HMAC keys in the Google Cloud Console under
 **Cloud Storage > Settings > Interoperability**, or with
@@ -355,7 +353,7 @@ generation runs in GitHub Actions, so the monitoring Docker image and CronJob
 from the previous approach are no longer needed.
 
 `monitoring/ui.Dockerfile` is minimal because the UI service only needs the
-`evidently` package, `gcsfs` for the Google Cloud Storage workspace, and Google
+`evidently` package, `gcsfs` for the storage-bucket-backed workspace, and Google
 Cloud credentials.
 
 ```dockerfile title="monitoring/ui.Dockerfile"
@@ -476,17 +474,17 @@ secret in the repository settings.
 
 ### Link logs to the Evidently UI
 
-Now that Fluent Bit ships logs to Google Cloud Storage and the Evidently UI
-service reads from a Google-Cloud-Storage-backed workspace, create the script
-that connects the two. It downloads the latest logs from Google Cloud Storage,
-pulls the reference dataset from the DVC remote, generates an Evidently
-snapshot, and pushes it to the workspace.
+Now that Fluent Bit ships logs to the storage bucket and the Evidently UI
+service reads from a storage-bucket-backed workspace, create the script that
+connects the two. It downloads the latest logs from the storage bucket, pulls
+the reference dataset from the DVC remote, generates an Evidently snapshot, and
+pushes it to the workspace.
 
 #### Update `requirements.txt`
 
 Add `google-cloud-storage` so the monitoring job can read logs and write the
-JSON summary, and `gcsfs` so Evidently can write the workspace directly to
-Google Cloud Storage.
+JSON summary, and `gcsfs` so Evidently can write the workspace directly to the
+storage bucket.
 
 ```txt title="requirements.txt" hl_lines="7-8"
 tensorflow==2.21.0
@@ -512,10 +510,10 @@ pip freeze --local --all > requirements-freeze.txt
 
 #### Create `src/monitor_cloud.py`
 
-This script downloads the inputs from Google Cloud Storage and the DVC remote,
+This script downloads the inputs from the storage bucket and the DVC remote,
 calls `generate_report` from `src/monitor_drift.py`, writes the snapshot
-directly to the Google-Cloud-Storage-backed Evidently workspace, and uploads the
-JSON report to Google Cloud Storage.
+directly to the storage-bucket-backed Evidently workspace, and uploads the JSON
+report to the storage bucket.
 
 ```py title="src/monitor_cloud.py"
 import os
@@ -586,7 +584,7 @@ def get_or_create_project(workspace, name: str):
 
 
 def upload_file(bucket_name: str, key: str, path: Path) -> None:
-    """Upload a local file to Google Cloud Storage."""
+    """Upload a local file to the storage bucket."""
     client = storage.Client()
     bucket = client.bucket(bucket_name)
     blob = bucket.blob(key)
@@ -624,11 +622,11 @@ if __name__ == "__main__":
 ```
 
 `Workspace.create("gs://...")` uses `fsspec` under the hood, so the snapshot is
-written straight to the same Google Cloud Storage prefix the Evidently UI
-service reads from. No extra HTTP call to the UI pod is needed.
-`include_data=False` tells Evidently to store only the aggregated snapshot, not
-the raw reference or current datasets. This keeps the workspace small and avoids
-duplicating data that is already in Google Cloud Storage.
+written straight to the same storage-bucket prefix the Evidently UI service
+reads from. No extra HTTP call to the UI pod is needed. `include_data=False`
+tells Evidently to store only the aggregated snapshot, not the raw reference or
+current datasets. This keeps the workspace small and avoids duplicating data
+that is already in the storage bucket.
 
 The `download_latest_logs` function downloads every log object under the prefix
 that was modified in the last `LOG_CUTOFF_HOURS` hours into a directory of
@@ -678,8 +676,8 @@ jobs:
 Store the required secrets in the repository settings under
 **Secrets and variables > Actions**:
 
-- `GCS_BUCKET_NAME`: the Google Cloud Storage bucket that receives the
-  prediction logs, the JSON report, and the Evidently workspace
+- `GCS_BUCKET_NAME`: the storage bucket that receives the prediction logs, the
+  JSON report, and the Evidently workspace
 - `GCS_LOG_PREFIX`: the prefix for logs (default `logs`)
 
 The workflow authenticates to Google Cloud so that `dvc pull` can download the
@@ -697,7 +695,7 @@ Open `http://<load-balancer-ip>/` in a browser, select the
 `celestial-bodies-classifier` project, and inspect the latest drift report. New
 snapshots appear every time the workflow runs.
 
-Download the JSON drift summary from Google Cloud Storage:
+Download the JSON drift summary from the storage bucket:
 
 ```sh title="Execute the following command(s) in a terminal"
 gcloud storage cat gs://<gcs_bucket_name>/monitoring/report.json | python -m json.tool
@@ -751,10 +749,9 @@ git push
 
 In this chapter, you have successfully:
 
-1. Shipped BentoML monitoring logs to Google Cloud Storage with a Fluent Bit
-   sidecar
-2. Configured Fluent Bit to tail local files and batch-upload to Google Cloud
-   Storage through its S3-compatible API
+1. Shipped BentoML monitoring logs to a storage bucket with a Fluent Bit sidecar
+2. Configured Fluent Bit to tail local files and batch-upload to the storage
+   bucket through the S3-compatible API
 3. Reused `src/monitor_drift.py` so the report generation stays portable
 4. Created a monitoring job that pulls logs and the reference dataset from
    storage
@@ -787,8 +784,8 @@ You fixed some of the previous issues:
     - **The reference dataset stays under DVC**: every report uses the same
       distribution the model was trained on, even when the report runs in a workflow.
     - **Keep a machine-readable summary in object storage**: uploading `report.json`
-      to Google Cloud Storage makes it easy for alerting tools to read the latest
-      drift scores without depending on the UI service.
+      to a storage bucket makes it easy for alerting tools to read the latest drift
+      scores without depending on the UI service.
 
 ## State of the MLOps process
 
