@@ -511,14 +511,14 @@ Verify that the UI pod is running:
 kubectl get pods -l app=evidently-ui
 ```
 
-Get the external IP of the Evidently UI service and save it as a GitHub secret:
+Get the external IP of the Evidently UI service:
 
 ```sh title="Execute the following command(s) in a terminal"
 kubectl get service evidently-ui
 ```
 
-Store the URL (`http://<load-balancer-ip>:8000`) as the `EVIDENTLY_UI_URL`
-secret in the repository settings.
+Save the URL (`http://<load-balancer-ip>:8000`) so you can open the dashboard
+after the first snapshot is pushed.
 
 ### Link logs to the Evidently UI
 
