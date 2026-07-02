@@ -559,10 +559,14 @@ pip freeze --local --all > requirements-freeze.txt
 
 #### Create `src/monitor_cloud.py`
 
-This script downloads the inputs from the storage bucket and the DVC remote,
-calls `generate_report` from `src/monitor_drift.py`, writes the snapshot
-directly to the storage-bucket-backed Evidently workspace, and uploads the JSON
-report to the storage bucket.
+This script:
+
+* Downloads the latest prediction logs from the storage bucket
+* Pulls the reference dataset from the DVC remote
+* Calls `generate_report` from `src/monitor_drift.py` to build the Evidently
+  snapshot
+* Writes the snapshot to the storage-bucket-backed Evidently workspace
+* Uploads the JSON drift summary to the storage bucket
 
 ```py title="src/monitor_cloud.py"
 import os
