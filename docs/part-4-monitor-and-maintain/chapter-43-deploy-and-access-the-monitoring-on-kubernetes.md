@@ -16,7 +16,7 @@ In this chapter, you will learn how to:
 3. Create a monitoring job that pulls logs from the storage bucket and pushes
    Evidently snapshots to the UI workspace
 4. Schedule the monitoring job with a GitHub Actions workflow
-5. Access the dashboard and the JSON drift summary
+5. Access the dashboard and the drift reports
 6. Commit the changes to Git
 
 The following diagram illustrates the control flow at the end of this chapter:
@@ -566,7 +566,7 @@ This script:
 * Calls `generate_report` from `src/monitor_drift.py` to build the Evidently
   snapshot
 * Writes the snapshot to the storage-bucket-backed Evidently workspace
-* Uploads the JSON drift summary to the storage bucket
+* Uploads the HTML and JSON drift reports to the storage bucket
 
 ```py title="src/monitor_cloud.py"
 import os
@@ -585,6 +585,7 @@ import monitor_drift
 GCS_BUCKET = os.environ.get("PREDICTION_LOG_BUCKET")
 GCS_PREFIX = os.environ.get("PREDICTION_LOG_PREFIX", "logs")
 REFERENCE_KEY = os.environ.get("REFERENCE_KEY", "data/reference_features.parquet")
+OUTPUT_HTML_KEY = os.environ.get("OUTPUT_HTML_KEY", "monitoring/report.html")
 OUTPUT_JSON_KEY = os.environ.get("OUTPUT_JSON_KEY", "monitoring/report.json")
 PROJECT_NAME = os.environ.get("EVIDENTLY_PROJECT_NAME", "celestial-bodies-classifier")
 WORKSPACE_PREFIX = os.environ.get("EVIDENTLY_WORKSPACE_PREFIX", "evidently-workspace")
@@ -667,6 +668,7 @@ def main() -> None:
         workspace.add_run(project.id, snapshot, include_data=False)
         print(f"Snapshot added to project {project.name} (ID: {project.id})")
 
+        upload_file(GCS_BUCKET, OUTPUT_HTML_KEY, tmp_path / "report.html")
         upload_file(GCS_BUCKET, OUTPUT_JSON_KEY, tmp_path / "report.json")
 
 
@@ -748,10 +750,14 @@ Open `http://<load-balancer-ip>/` in a browser, select the
 `celestial-bodies-classifier` project, and inspect the latest drift report. New
 snapshots appear every time the workflow runs.
 
-Download the JSON drift summary from the storage bucket:
+Download the drift reports from the storage bucket:
 
 ```sh title="Execute the following command(s) in a terminal"
+# View the JSON summary
 gcloud storage cat gs://<gcp_bucket_name>/monitoring/report.json | python -m json.tool
+
+# Copy the HTML report locally
+gcloud storage cp gs://<gcp_bucket_name>/monitoring/report.html ./report.html
 ```
 
 You should see the same drift metrics as in the local report from the previous
@@ -812,7 +818,7 @@ In this chapter, you have successfully:
 5. Pushed drift snapshots to a remote Evidently workspace
 6. Deployed the Evidently UI service on Kubernetes
 7. Scheduled drift reports with a GitHub Actions workflow
-8. Accessed the dashboard and the JSON drift summary
+8. Accessed the dashboard and the drift reports
 9. Committed the changes to Git
 
 You fixed some of the previous issues:
@@ -837,9 +843,10 @@ You fixed some of the previous issues:
       rest of the CI/CD pipeline.
     - **The reference dataset stays under DVC**: every report uses the same
       distribution the model was trained on, even when the report runs in a workflow.
-    - **Keep a machine-readable summary in object storage**: uploading `report.json`
-      to a storage bucket makes it easy for alerting tools to read the latest drift
-      scores without depending on the UI service.
+    - **Keep machine-readable and human-readable summaries in object storage**:
+      uploading `report.json` and `report.html` to the storage bucket makes it easy
+      for alerting tools and humans to read the latest drift scores without depending
+      on the UI service.
 
 ## State of the MLOps process
 
