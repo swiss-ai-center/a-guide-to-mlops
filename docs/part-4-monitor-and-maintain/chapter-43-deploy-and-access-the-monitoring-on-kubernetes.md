@@ -535,8 +535,7 @@ is a batch job that runs in this script inside GitHub Actions.
 
 Add `gcsfs` so the monitoring script can read logs, write Evidently snapshots
 and reports to the storage-bucket-backed workspace, and so the Evidently UI
-service can read from the same workspace. `gcsfs` brings in
-`google-cloud-storage` transitively, which the script uses directly.
+service can read from the same workspace.
 
 ```txt title="requirements.txt" hl_lines="7"
 tensorflow==2.21.0
