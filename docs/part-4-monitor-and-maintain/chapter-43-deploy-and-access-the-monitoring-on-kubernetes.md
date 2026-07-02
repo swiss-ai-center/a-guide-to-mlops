@@ -524,9 +524,10 @@ after the first snapshot is pushed.
 
 Now that Fluent Bit ships logs to the storage bucket and the Evidently UI
 service reads from a storage-bucket-backed workspace, create the script that
-connects the two. It downloads the latest logs from the storage bucket, pulls
-the reference dataset from the DVC remote, generates an Evidently snapshot, and
-pushes it to the workspace.
+connects the two. This script is the cloud counterpart to `src/monitor_drift.py`
+from the previous chapter. It downloads the latest logs from the storage bucket,
+pulls the reference dataset from the DVC remote, generates an Evidently
+snapshot, and pushes it to the workspace.
 
 #### Update `requirements.txt`
 
