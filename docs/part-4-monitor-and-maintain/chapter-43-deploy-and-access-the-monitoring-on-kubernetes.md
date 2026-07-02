@@ -210,8 +210,8 @@ Here, the following should be noted:
   `bucket` is set to `${GCP_BUCKET_NAME}`, `region` corresponds to the bucket
   location (`${GCP_BUCKET_LOCATION}`), and `endpoint` points to the Google Cloud
   Storage S3-compatible API.
-* The `store_dir` path is used for local buffering and upload state. It should
-  be on writable local disk; an `emptyDir` volume is fine.
+* The `store_dir` path is used for local buffering and upload state. This guide
+  mounts an `emptyDir` volume at `/tmp/fluent-bit-s3` in the Fluent Bit sidecar.
 
 !!! note "Environment variable expansion"
 
