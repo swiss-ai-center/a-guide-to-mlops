@@ -370,10 +370,6 @@ workspace.
 
 #### Create the Evidently UI image
 
-You only need to build the Evidently UI service image here. The report
-generation runs in GitHub Actions, so the monitoring Docker image and CronJob
-from the previous approach are no longer needed.
-
 `monitoring/ui.Dockerfile` is minimal because the UI service only needs the
 `evidently` package, `gcsfs` for the storage-bucket-backed workspace, and Google
 Cloud credentials.
