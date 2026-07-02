@@ -422,10 +422,9 @@ docker push ghcr.io/<my_username>/<my_repository_name>/celestial-bodies-evidentl
 
 !!! tip
 
-    Make sure you are authenticated with the GitHub Container Registry before
-    pushing. See the
-    [GitHub Container Registry authentication documentation](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#authenticating-to-the-container-registry)
-    for details.
+    See
+    [Chapter 3.7 - Authenticate with the GitHub Container Registry](../part-3-serve-and-deploy/chapter-37-use-a-self-hosted-runner-for-the-cicd-pipeline.md#authenticate-with-the-github-container-registry)
+    if you need to authenticate with the GitHub Container Registry.
 
 #### Create Kubernetes manifests
 
