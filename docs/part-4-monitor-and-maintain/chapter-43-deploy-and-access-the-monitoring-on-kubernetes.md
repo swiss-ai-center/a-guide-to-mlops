@@ -397,7 +397,7 @@ CMD ["sh", "-c", "evidently ui --host 0.0.0.0 --workspace gs://${GCP_BUCKET_NAME
 #### Create Kubernetes manifests
 
 Create a deployment and service for the Evidently UI service. The UI reads and
-writes snapshots from `gs://<bucket>/evidently-workspace` using `fsspec`.
+writes snapshots from `gs://$GCP_BUCKET_NAME/evidently-workspace`.
 
 ```yaml title="kubernetes/evidently-ui-deployment.yaml"
 apiVersion: apps/v1
@@ -446,6 +446,14 @@ The Evidently UI service uses Application Default Credentials to access Google
 Cloud Storage. Make sure the cluster nodes or the pod's service account have the
 `roles/storage.objectAdmin` role on the monitoring bucket.
 
+Replace the bucket placeholder in the deployment manifest now, so the manifest
+is ready once the image is built:
+
+```sh title="Execute the following command(s) in a terminal"
+sed -i "s|<gcp_bucket_name>|$GCP_BUCKET_NAME|g" \
+  kubernetes/evidently-ui-deployment.yaml
+```
+
 #### Build and publish the UI image
 
 !!! note
@@ -481,15 +489,13 @@ docker push ghcr.io/<my_username>/<my_repository_name>/celestial-bodies-evidentl
 
 #### Apply the UI manifests
 
-Replace the placeholders in the Kubernetes manifests:
+Replace the image placeholder in the Kubernetes manifest with the GitHub
+Container Registry path you just pushed:
 
 ```sh title="Execute the following command(s) in a terminal"
 export EVIDENTLY_UI_IMAGE=ghcr.io/<my_username>/<my_repository_name>/celestial-bodies-evidently-ui:latest
 
 sed -i "s|<evidently_ui_image>|$EVIDENTLY_UI_IMAGE|g" \
-  kubernetes/evidently-ui-deployment.yaml
-
-sed -i "s|<gcp_bucket_name>|$GCP_BUCKET_NAME|g" \
   kubernetes/evidently-ui-deployment.yaml
 ```
 
