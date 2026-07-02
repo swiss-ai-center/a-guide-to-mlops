@@ -475,8 +475,10 @@ spec:
 ```
 
 The Evidently UI service uses Application Default Credentials to access Google
-Cloud Storage. Make sure the cluster nodes or the pod's service account have the
-`roles/storage.objectAdmin` role on the monitoring bucket.
+Cloud Storage. See
+[Chapter 3.4 - Set up access to the container registry of the cloud provider](../part-3-serve-and-deploy/chapter-34-build-and-publish-the-model-with-bentoml-and-docker-with-the-cicd-pipeline.md#set-up-access-to-the-container-registry-of-the-cloud-provider)
+for the service account permissions. The `roles/storage.admin` role granted
+there is sufficient for the monitoring bucket as well.
 
 #### Apply the UI manifests
 
