@@ -297,13 +297,22 @@ Replace the placeholders in the Kubernetes deployment manifest:
 
 ```sh title="Execute the following command(s) in a terminal"
 export S3_BUCKET=<s3_bucket_name>
-
-sed -i "s|<docker_image>|$GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest|g" \
-  kubernetes/deployment.yaml
+export S3_REGION=<s3_region>
 
 sed -i "s|<s3_bucket_name>|$S3_BUCKET|g" \
   kubernetes/deployment.yaml
+
+sed -i "s|<s3_region>|$S3_REGION|g" \
+  kubernetes/deployment.yaml
 ```
+
+!!! info "Model image placeholder"
+
+    The `<docker_image>` placeholder for the model container is replaced
+    automatically by the CI/CD pipeline from Chapter 3.6 on every deploy. If you are
+    deploying manually instead, replace it with
+    `$GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest` before
+    applying the manifest.
 
 Apply the model deployment (now with the Fluent Bit sidecar):
 
