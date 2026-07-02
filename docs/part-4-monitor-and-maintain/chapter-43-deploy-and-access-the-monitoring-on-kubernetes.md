@@ -523,19 +523,13 @@ after the first snapshot is pushed.
 ### Link logs to the Evidently UI
 
 Now that Fluent Bit ships logs to the storage bucket and the Evidently UI
-service reads from a storage-bucket-backed workspace, create the script that
-connects the two. This script is the cloud counterpart to `src/monitor_drift.py`
-from the previous chapter. It downloads the latest logs from the storage bucket,
-pulls the reference dataset from the DVC remote, generates an Evidently
-snapshot, and pushes it to the workspace.
-
-!!! note "Why the snapshot is written by a script, not the UI service"
-
-    The Evidently UI service only reads snapshots from the workspace to display
-    them. Creating a snapshot requires downloading logs, pulling the reference
-    dataset, and running the Evidently report generator. That is a batch job, so it
-    runs in `src/monitor_cloud.py` inside GitHub Actions and writes the snapshot to
-    the same workspace the UI service reads from.
+service reads snapshots from a storage-bucket-backed workspace, create the
+script that generates those snapshots. This script is the cloud counterpart to
+`src/monitor_drift.py` from the previous chapter. It downloads the latest logs
+from the storage bucket, pulls the reference dataset from the DVC remote, runs
+the Evidently report generator, and writes the resulting snapshot to the
+workspace. The UI service only reads from the workspace; the snapshot generation
+is a batch job that runs in this script inside GitHub Actions.
 
 #### Update `requirements.txt`
 
