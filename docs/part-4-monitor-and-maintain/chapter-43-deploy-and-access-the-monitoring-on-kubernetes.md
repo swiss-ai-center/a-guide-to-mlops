@@ -478,9 +478,11 @@ The Evidently UI service uses Application Default Credentials to access Google
 Cloud Storage. See
 [Chapter 3.4 - Set up access to the container registry of the cloud provider](../part-3-serve-and-deploy/chapter-34-build-and-publish-the-model-with-bentoml-and-docker-with-the-cicd-pipeline.md#set-up-access-to-the-container-registry-of-the-cloud-provider)
 for the service account permissions. The `roles/storage.admin` role granted
-there is sufficient for the monitoring bucket as well. The UI needs write access
-because Evidently updates workspace metadata when new snapshots are added, in
-addition to reading snapshots for display.
+there is sufficient for the monitoring bucket as well.
+
+The Evidently UI service only needs read access to the workspace, because it
+reads snapshots and workspace metadata for display. The snapshots are written by
+the monitoring script (`src/monitor_cloud.py`) that runs in GitHub Actions.
 
 #### Apply the UI manifests
 
