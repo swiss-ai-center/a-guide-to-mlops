@@ -25,7 +25,7 @@ The following diagram illustrates the control flow at the end of this chapter:
 ```mermaid
 flowchart TB
     dot_dvc[(.dvc)] <-->|dvc pull
-                         dvc push| gcs_storage[(GCS Storage)]
+                         dvc push| gcs_storage[(S3 Storage)]
     dot_git[(.git)] <-->|git pull
                          git push| repository[(Repository)]
     workspaceGraph <-....-> dot_git
