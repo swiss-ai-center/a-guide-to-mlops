@@ -294,8 +294,10 @@ containers see the same files.
 !!! note "Why HMAC keys for Fluent Bit?"
 
     Fluent Bit's S3 output plugin requires S3-style credentials, so you must create
-    HMAC keys for the storage bucket. The Python code and the Evidently UI service
-    use native Google Cloud authentication instead.
+    HMAC keys for the storage bucket. The environment variables are named
+    `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` because the S3 plugin expects
+    them, but they hold your GCS HMAC keys. The Python code and the Evidently UI
+    service use native Google Cloud authentication instead.
 
 Create the HMAC keys in the Google Cloud Console under
 **Cloud Storage > Settings > Interoperability**, or with
