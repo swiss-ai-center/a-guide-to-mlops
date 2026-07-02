@@ -249,9 +249,9 @@ spec:
         image: fluent/fluent-bit:5.0.8
         env:
         - name: GCS_BUCKET
-          value: "<gcs_bucket_name>"
+          value: "<gcp_bucket_name>"
         - name: GCS_LOCATION
-          value: "<gcs_bucket_location>"
+          value: "<gcp_bucket_location>"
         - name: AWS_ACCESS_KEY_ID
           valueFrom:
             secretKeyRef:
@@ -280,7 +280,7 @@ spec:
         emptyDir: {}
 ```
 
-Replace `<gcs_bucket_name>` and `<gcs_bucket_location>` with the values of the
+Replace `<gcp_bucket_name>` and `<gcp_bucket_location>` with the values of the
 `$GCP_BUCKET_NAME` and `$GCP_BUCKET_LOCATION` variables you defined earlier.
 
 The BentoML container writes to `logs/` relative to its working directory. By
@@ -309,10 +309,10 @@ kubectl create secret generic monitoring-gcs-credentials \
 Replace the placeholders in the Kubernetes deployment manifest:
 
 ```sh title="Execute the following command(s) in a terminal"
-sed -i "s|<gcs_bucket_name>|$GCP_BUCKET_NAME|g" \
+sed -i "s|<gcp_bucket_name>|$GCP_BUCKET_NAME|g" \
   kubernetes/deployment.yaml
 
-sed -i "s|<gcs_bucket_location>|$GCP_BUCKET_LOCATION|g" \
+sed -i "s|<gcp_bucket_location>|$GCP_BUCKET_LOCATION|g" \
   kubernetes/deployment.yaml
 ```
 
@@ -394,7 +394,7 @@ spec:
         - containerPort: 8000
         env:
         - name: GCS_BUCKET
-          value: "<gcs_bucket_name>"
+          value: "<gcp_bucket_name>"
 ```
 
 ```yaml title="kubernetes/evidently-ui-service.yaml"
@@ -438,12 +438,11 @@ Replace the placeholders in the Kubernetes manifests:
 
 ```sh title="Execute the following command(s) in a terminal"
 export EVIDENTLY_UI_IMAGE=$GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-evidently-ui:latest
-export GCS_BUCKET_NAME=<gcs_bucket_name>
 
 sed -i "s|<evidently_ui_image>|$EVIDENTLY_UI_IMAGE|g" \
   kubernetes/evidently-ui-deployment.yaml
 
-sed -i "s|<gcs_bucket_name>|$GCS_BUCKET_NAME|g" \
+sed -i "s|<gcp_bucket_name>|$GCP_BUCKET_NAME|g" \
   kubernetes/evidently-ui-deployment.yaml
 ```
 
@@ -695,7 +694,7 @@ snapshots appear every time the workflow runs.
 Download the JSON drift summary from the storage bucket:
 
 ```sh title="Execute the following command(s) in a terminal"
-gcloud storage cat gs://<gcs_bucket_name>/monitoring/report.json | python -m json.tool
+gcloud storage cat gs://<gcp_bucket_name>/monitoring/report.json | python -m json.tool
 ```
 
 You should see the same drift metrics as in the local report from the previous
