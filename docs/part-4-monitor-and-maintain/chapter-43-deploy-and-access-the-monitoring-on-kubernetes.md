@@ -225,7 +225,7 @@ Add a shared `emptyDir` volume for the logs, mount it into the BentoML
 container, and add the Fluent Bit sidecar with the ConfigMap mounted as its
 configuration.
 
-```yaml title="kubernetes/deployment.yaml" hl_lines="20-76"
+```yaml title="kubernetes/deployment.yaml" hl_lines="20-56"
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -317,8 +317,15 @@ sed -i "s|<gcp_bucket_location>|$GCP_BUCKET_LOCATION|g" kubernetes/deployment.ya
 
 Create the HMAC keys in the Google Cloud Console under
 **Cloud Storage > Settings > Interoperability**, or with
-`gcloud storage hmac create`. Export the keys as environment variables, then
-create the secret:
+`gcloud storage hmac create`. Export the keys as environment variables
+
+```sh title="Execute the following command(s) in a terminal"
+# Export the GCS HMAC keys
+export GCS_HMAC_ACCESS_KEY_ID=<my_hmac_access_key_id>
+export GCS_HMAC_SECRET_ACCESS_KEY=<my_hmac_secret_key_id>
+```
+
+Then create the secret:
 
 ```sh title="Execute the following command(s) in a terminal"
 kubectl create secret generic monitoring-gcs-credentials \
