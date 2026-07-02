@@ -348,6 +348,18 @@ Verify that the model pod is running:
 kubectl get pods -l app=celestial-bodies-classifier
 ```
 
+The output should show `2/2` under `READY`, because the pod now contains both
+the model container and the Fluent Bit sidecar.
+
+!!! tip "Inspecting Fluent Bit logs"
+
+    If logs are not reaching the storage bucket, check the Fluent Bit sidecar logs
+    with:
+
+    ```sh title="Execute the following command(s) in a terminal"
+    kubectl logs -l app=celestial-bodies-classifier -c fluent-bit
+    ```
+
 ### Deploy the Evidently UI service
 
 The Evidently UI service is a separate pod that reads snapshots from a
