@@ -237,7 +237,7 @@ spec:
         - name: prediction-logs
           mountPath: /app/logs
       - name: fluent-bit
-        image: fluent/fluent-bit:3.2
+        image: fluent/fluent-bit:5.0.8
         env:
         - name: S3_BUCKET
           value: "<s3_bucket_name>"
