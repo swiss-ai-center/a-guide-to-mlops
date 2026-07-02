@@ -210,9 +210,14 @@ Here, the following should be noted:
   `bucket` is set to `${GCP_BUCKET_NAME}`, `region` corresponds to the bucket
   location (`${GCP_BUCKET_LOCATION}`), and `endpoint` points to the Google Cloud
   Storage S3-compatible API.
-* The `${GCP_BUCKET_NAME}` and `${GCP_BUCKET_LOCATION}` variables are expanded
-  by Fluent Bit from the sidecar container's environment, which is configured in
-  `kubernetes/deployment.yaml`. No manual substitution in the ConfigMap is needed.
+* The `store_dir` path is used for local buffering and upload state. It should
+  be on writable local disk; an `emptyDir` volume is fine.
+
+!!! note "Environment variable expansion"
+
+    The `${GCP_BUCKET_NAME}` and `${GCP_BUCKET_LOCATION}` variables are expanded by
+    Fluent Bit from the sidecar container's environment, which is configured in
+    `kubernetes/deployment.yaml`. No manual substitution in the ConfigMap is needed.
 
 #### Update `kubernetes/deployment.yaml`
 
