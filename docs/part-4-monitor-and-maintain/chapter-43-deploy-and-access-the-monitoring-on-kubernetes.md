@@ -203,16 +203,16 @@ data:
         store_dir         /tmp/fluent-bit-s3
 ```
 
-The `s3` output plugin creates objects under `gs://$GCP_BUCKET_NAME/logs/`. The
-`total_file_size` and `upload_timeout` options control batching: Fluent Bit
-flushes a file to the storage bucket when it reaches 10 MB or after 10 minutes,
-whichever comes first. Adjust these values based on your traffic volume.
+Here, the following should be noted:
 
-The `endpoint` points to the Google Cloud Storage S3-compatible API. The
-`region` corresponds to the bucket location (`GCP_BUCKET_LOCATION`).
-
-The `store_dir` path is used for local buffering and upload state. It should be
-on writable local disk; an `emptyDir` volume is fine.
+* The `s3` output plugin creates objects under `gs://$GCP_BUCKET_NAME/logs/`.
+  The `total_file_size` and `upload_timeout` options control batching: Fluent Bit
+  flushes a file to the storage bucket when it reaches 10 MB or after 10 minutes,
+  whichever comes first. Adjust these values based on your traffic volume.
+* The `endpoint` points to the Google Cloud Storage S3-compatible API. The
+  `region` corresponds to the bucket location (`GCP_BUCKET_LOCATION`).
+* The `store_dir` path is used for local buffering and upload state. It should
+  be on writable local disk; an `emptyDir` volume is fine.
 
 #### Update `kubernetes/deployment.yaml`
 
