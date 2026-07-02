@@ -316,7 +316,8 @@ sed -i "s|<gcp_bucket_location>|$GCP_BUCKET_LOCATION|g" kubernetes/deployment.ya
     service use native Google Cloud authentication instead.
 
 Create the HMAC keys in the Google Cloud Console under
-**Cloud Storage > Settings > Interoperability**, or with
+**Cloud Storage > Settings > Interoperability**. Click on
+**Create a key for a service account**, or use the command line with
 `gcloud storage hmac create`. Export the keys as environment variables
 
 ```sh title="Execute the following command(s) in a terminal"
