@@ -481,8 +481,7 @@ for the service account permissions. The `roles/storage.admin` role granted
 there is sufficient for the monitoring bucket as well.
 
 The Evidently UI service only needs read access to the workspace, because it
-reads snapshots and workspace metadata for display. The snapshots are written by
-the monitoring script (`src/monitor_cloud.py`) that runs in GitHub Actions.
+reads snapshots and workspace metadata for display.
 
 #### Apply the UI manifests
 
