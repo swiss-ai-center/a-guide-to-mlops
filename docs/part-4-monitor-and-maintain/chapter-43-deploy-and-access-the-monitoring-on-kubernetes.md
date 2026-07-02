@@ -4,10 +4,10 @@
 
 In the previous chapters you logged predictions with BentoML's native monitoring
 and generated a local drift report with Evidently AI. This chapter moves that
-stack into the cloud: a Fluent Bit sidecar tails the local monitoring files,
-buffers them, and uploads them to S3 in batches, while a scheduled GitHub
-Actions workflow refreshes the drift report from the logs in S3. Fluent Bit is
-the de facto log shipper in Kubernetes.
+stack into the cloud using Fluent Bit, the de facto log shipper in Kubernetes. A
+Fluent Bit sidecar tails the local monitoring files, buffers them, and uploads
+them to S3 in batches. A scheduled GitHub Actions workflow refreshes the drift
+report from the logs in S3.
 
 In this chapter, you will learn how to:
 
