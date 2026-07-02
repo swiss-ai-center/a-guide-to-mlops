@@ -362,10 +362,11 @@ the model container and the Fluent Bit sidecar.
 
 ### Deploy the Evidently UI service
 
-The Evidently UI service is a separate pod that reads snapshots from a
-Google-Cloud-Storage-backed workspace and serves the dashboard. Deploy it after
-the model is shipping logs, because the monitoring script you will write next
-pushes snapshots to the same workspace.
+Fluent Bit is now shipping logs to the storage bucket. Next, deploy the
+Evidently UI service, which reads snapshots from the storage-bucket-backed
+workspace and serves the dashboard. You will also write a monitoring script that
+pulls those logs, generates a drift report, and pushes the snapshot to the same
+workspace.
 
 #### Create the Evidently UI image
 
