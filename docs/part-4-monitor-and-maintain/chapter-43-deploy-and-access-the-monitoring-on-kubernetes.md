@@ -280,9 +280,8 @@ spec:
         emptyDir: {}
 ```
 
-Replace `<gcs_bucket_name>` with the storage bucket used for monitoring
-artifacts, and `<gcs_bucket_location>` with its location (for example,
-`europe-west6`).
+Replace `<gcs_bucket_name>` and `<gcs_bucket_location>` with the values of the
+`$GCP_BUCKET_NAME` and `$GCP_BUCKET_LOCATION` variables you defined earlier.
 
 The BentoML container writes to `logs/` relative to its working directory. By
 setting `workingDir: /app` and mounting the shared volume at `/app/logs`, both
@@ -310,13 +309,10 @@ kubectl create secret generic monitoring-gcs-credentials \
 Replace the placeholders in the Kubernetes deployment manifest:
 
 ```sh title="Execute the following command(s) in a terminal"
-export GCS_BUCKET_NAME=<gcs_bucket_name>
-export GCS_BUCKET_LOCATION=<gcs_bucket_location>
-
-sed -i "s|<gcs_bucket_name>|$GCS_BUCKET_NAME|g" \
+sed -i "s|<gcs_bucket_name>|$GCP_BUCKET_NAME|g" \
   kubernetes/deployment.yaml
 
-sed -i "s|<gcs_bucket_location>|$GCS_BUCKET_LOCATION|g" \
+sed -i "s|<gcs_bucket_location>|$GCP_BUCKET_LOCATION|g" \
   kubernetes/deployment.yaml
 ```
 
