@@ -206,10 +206,10 @@ data:
 Here, the following should be noted:
 
 * The `s3` output plugin creates objects under `gs://$GCP_BUCKET_NAME/logs/`.
-* The `bucket`, `endpoint`, and `region` options point to the storage backend.
-  `bucket` is set to `${GCP_BUCKET_NAME}`, `endpoint` points to the Google Cloud
-  Storage S3-compatible API, and `region` corresponds to the bucket location
-  (`${GCP_BUCKET_LOCATION}`).
+* The `bucket`, `region`, and `endpoint` options point to the storage backend.
+  `bucket` is set to `${GCP_BUCKET_NAME}`, `region` corresponds to the bucket
+  location (`${GCP_BUCKET_LOCATION}`), and `endpoint` points to the Google Cloud
+  Storage S3-compatible API.
 * The `${GCP_BUCKET_NAME}` and `${GCP_BUCKET_LOCATION}` variables are expanded
   by Fluent Bit from the sidecar container's environment, which is configured in
   `kubernetes/deployment.yaml`. No manual substitution in the ConfigMap is needed.
