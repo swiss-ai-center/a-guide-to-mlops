@@ -194,8 +194,8 @@ data:
     [OUTPUT]
         Name              s3
         Match             bentoml.logs
-        bucket            ${GCS_BUCKET}
-        region            ${GCS_LOCATION}
+        bucket            ${GCP_BUCKET_NAME}
+        region            ${GCP_BUCKET_LOCATION}
         endpoint          https://storage.googleapis.com
         total_file_size   10M
         upload_timeout    10m
@@ -248,9 +248,9 @@ spec:
       - name: fluent-bit
         image: fluent/fluent-bit:5.0.8
         env:
-        - name: GCS_BUCKET
+        - name: GCP_BUCKET_NAME
           value: "<gcp_bucket_name>"
-        - name: GCS_LOCATION
+        - name: GCP_BUCKET_LOCATION
           value: "<gcp_bucket_location>"
         - name: AWS_ACCESS_KEY_ID
           valueFrom:
@@ -362,7 +362,7 @@ RUN pip install --no-cache-dir evidently==0.7.21 gcsfs==2025.10.0
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "evidently ui --host 0.0.0.0 --workspace gs://${GCS_BUCKET}/evidently-workspace --port 8000"]
+CMD ["sh", "-c", "evidently ui --host 0.0.0.0 --workspace gs://${GCP_BUCKET_NAME}/evidently-workspace --port 8000"]
 ```
 
 #### Create Kubernetes manifests
@@ -393,7 +393,7 @@ spec:
         ports:
         - containerPort: 8000
         env:
-        - name: GCS_BUCKET
+        - name: GCP_BUCKET_NAME
           value: "<gcp_bucket_name>"
 ```
 
