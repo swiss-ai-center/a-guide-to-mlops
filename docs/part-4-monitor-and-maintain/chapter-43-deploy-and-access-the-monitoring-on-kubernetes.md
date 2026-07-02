@@ -394,6 +394,39 @@ EXPOSE 8000
 CMD ["sh", "-c", "evidently ui --host 0.0.0.0 --workspace gs://${GCP_BUCKET_NAME}/evidently-workspace --port 8000"]
 ```
 
+#### Build and publish the UI image
+
+!!! note
+
+    For the Evidently UI image storage, we use the GitHub Container Registry because
+    of its close integration with our existing GitHub environment. This keeps
+    infrastructure-related images separate from the model images stored in Google
+    Cloud Container Registry. However, you could also use the Google Cloud Container
+    Registry if you prefer.
+
+Build and publish the UI image to the GitHub Container Registry. Since we use
+the GitHub Container Registry, replace `<my_username>` and
+`<my_repository_name>` with your own GitHub username and repository name.
+
+```sh title="Execute the following command(s) in a terminal"
+# Build the UI image
+docker build -f monitoring/ui.Dockerfile -t celestial-bodies-evidently-ui:latest .
+
+# Tag the image for the GitHub Container Registry
+docker tag celestial-bodies-evidently-ui:latest \
+  ghcr.io/<my_username>/<my_repository_name>/celestial-bodies-evidently-ui:latest
+
+# Push the image
+docker push ghcr.io/<my_username>/<my_repository_name>/celestial-bodies-evidently-ui:latest
+```
+
+!!! tip
+
+    Make sure you are authenticated with the GitHub Container Registry before
+    pushing. See the
+    [GitHub Container Registry authentication documentation](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#authenticating-to-the-container-registry)
+    for details.
+
 #### Create Kubernetes manifests
 
 Create a deployment and service for the Evidently UI service. The UI reads and
@@ -446,56 +479,18 @@ The Evidently UI service uses Application Default Credentials to access Google
 Cloud Storage. Make sure the cluster nodes or the pod's service account have the
 `roles/storage.objectAdmin` role on the monitoring bucket.
 
-Replace the bucket placeholder in the deployment manifest now, so the manifest
-is ready once the image is built:
-
-```sh title="Execute the following command(s) in a terminal"
-sed -i "s|<gcp_bucket_name>|$GCP_BUCKET_NAME|g" \
-  kubernetes/evidently-ui-deployment.yaml
-```
-
-#### Build and publish the UI image
-
-!!! note
-
-    For the Evidently UI image storage, we use the GitHub Container Registry because
-    of its close integration with our existing GitHub environment. This keeps
-    infrastructure-related images separate from the model images stored in Google
-    Cloud Container Registry. However, you could also use the Google Cloud Container
-    Registry if you prefer.
-
-Build and publish the UI image to the GitHub Container Registry. Since we use
-the GitHub Container Registry, replace `<my_username>` and
-`<my_repository_name>` with your own GitHub username and repository name.
-
-```sh title="Execute the following command(s) in a terminal"
-# Build the UI image
-docker build -f monitoring/ui.Dockerfile -t celestial-bodies-evidently-ui:latest .
-
-# Tag the image for the GitHub Container Registry
-docker tag celestial-bodies-evidently-ui:latest \
-  ghcr.io/<my_username>/<my_repository_name>/celestial-bodies-evidently-ui:latest
-
-# Push the image
-docker push ghcr.io/<my_username>/<my_repository_name>/celestial-bodies-evidently-ui:latest
-```
-
-!!! tip
-
-    Make sure you are authenticated with the GitHub Container Registry before
-    pushing. See the
-    [GitHub Container Registry authentication documentation](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#authenticating-to-the-container-registry)
-    for details.
-
 #### Apply the UI manifests
 
-Replace the image placeholder in the Kubernetes manifest with the GitHub
-Container Registry path you just pushed:
+Replace the placeholders in the Kubernetes manifest with the GitHub Container
+Registry path and the bucket name:
 
 ```sh title="Execute the following command(s) in a terminal"
 export EVIDENTLY_UI_IMAGE=ghcr.io/<my_username>/<my_repository_name>/celestial-bodies-evidently-ui:latest
 
 sed -i "s|<evidently_ui_image>|$EVIDENTLY_UI_IMAGE|g" \
+  kubernetes/evidently-ui-deployment.yaml
+
+sed -i "s|<gcp_bucket_name>|$GCP_BUCKET_NAME|g" \
   kubernetes/evidently-ui-deployment.yaml
 ```
 
