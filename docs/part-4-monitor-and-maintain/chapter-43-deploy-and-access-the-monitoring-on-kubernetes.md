@@ -290,12 +290,176 @@ kubectl create secret generic monitoring-s3-credentials \
   --from-literal=aws_secret_access_key="$AWS_SECRET_ACCESS_KEY"
 ```
 
-### Create the monitoring workflow
+#### Deploy the model with the Fluent Bit sidecar
 
-The monitoring job runs in GitHub Actions. It reuses `generate_report` from
-`src/monitor_drift.py` to download the latest logs from S3, pulls the reference
-dataset from the DVC remote, generates the Evidently snapshot, pushes it to the
-remote workspace, and uploads a JSON drift summary to S3 for alerting.
+Replace the placeholders in the Kubernetes deployment manifest:
+
+```sh title="Execute the following command(s) in a terminal"
+export S3_BUCKET=<s3_bucket_name>
+
+sed -i "s|<docker_image>|$GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest|g" \
+  kubernetes/deployment.yaml
+
+sed -i "s|<s3_bucket_name>|$S3_BUCKET|g" \
+  kubernetes/deployment.yaml
+```
+
+Apply the model deployment (now with the Fluent Bit sidecar):
+
+```sh title="Execute the following command(s) in a terminal"
+kubectl apply -f kubernetes/deployment.yaml
+```
+
+Verify that the model pod is running:
+
+```sh title="Execute the following command(s) in a terminal"
+kubectl get pods -l app=celestial-bodies-classifier
+```
+
+### Deploy the Evidently UI service
+
+The Evidently UI service is a separate pod that reads snapshots from an
+S3-backed workspace and serves the dashboard. Deploy it after the model is
+shipping logs, because the monitoring script you will write next pushes
+snapshots to the same workspace.
+
+#### Create the Evidently UI image
+
+You only need to build the Evidently UI service image here. The report
+generation runs in GitHub Actions, so the monitoring Docker image and CronJob
+from the previous approach are no longer needed.
+
+`monitoring/ui.Dockerfile` is minimal because the UI service only needs the
+`evidently` package, `s3fs` for the S3-backed workspace, and S3 credentials.
+
+```dockerfile title="monitoring/ui.Dockerfile"
+FROM python:3.13-slim
+
+WORKDIR /app
+
+RUN pip install --no-cache-dir evidently==0.7.21 s3fs==2025.1.0
+
+EXPOSE 8000
+
+CMD ["sh", "-c", "evidently ui --host 0.0.0.0 --workspace s3://${S3_BUCKET}/evidently-workspace --port 8000"]
+```
+
+#### Create Kubernetes manifests
+
+Create a deployment and service for the Evidently UI service. The UI reads and
+writes snapshots from `s3://<bucket>/evidently-workspace` using `fsspec`.
+
+```yaml title="kubernetes/evidently-ui-deployment.yaml"
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: evidently-ui
+  labels:
+    app: evidently-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: evidently-ui
+  template:
+    metadata:
+      labels:
+        app: evidently-ui
+    spec:
+      containers:
+      - name: evidently-ui
+        image: <evidently_ui_image>
+        ports:
+        - containerPort: 8000
+        env:
+        - name: S3_BUCKET
+          value: "<s3_bucket_name>"
+        - name: FSSPEC_S3_KEY
+          valueFrom:
+            secretKeyRef:
+              name: monitoring-s3-credentials
+              key: aws_access_key_id
+        - name: FSSPEC_S3_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: monitoring-s3-credentials
+              key: aws_secret_access_key
+```
+
+```yaml title="kubernetes/evidently-ui-service.yaml"
+apiVersion: v1
+kind: Service
+metadata:
+  name: evidently-ui
+spec:
+  type: LoadBalancer
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8000
+      protocol: TCP
+  selector:
+    app: evidently-ui
+```
+
+#### Build and publish the UI image
+
+Build and publish the UI image using the same container registry as the model
+service.
+
+```sh title="Execute the following command(s) in a terminal"
+# Build the UI image
+docker build -f monitoring/ui.Dockerfile -t celestial-bodies-evidently-ui:latest .
+
+# Tag the image for the remote registry
+docker tag celestial-bodies-evidently-ui:latest \
+  $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-evidently-ui:latest
+
+# Push the image
+docker push $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-evidently-ui:latest
+```
+
+Replace the placeholders in the Kubernetes manifests:
+
+```sh title="Execute the following command(s) in a terminal"
+export EVIDENTLY_UI_IMAGE=$GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-evidently-ui:latest
+export S3_BUCKET=<s3_bucket_name>
+
+sed -i "s|<evidently_ui_image>|$EVIDENTLY_UI_IMAGE|g" \
+  kubernetes/evidently-ui-deployment.yaml
+
+sed -i "s|<s3_bucket_name>|$S3_BUCKET|g" \
+  kubernetes/evidently-ui-deployment.yaml
+```
+
+Apply the UI manifests:
+
+```sh title="Execute the following command(s) in a terminal"
+kubectl apply -f kubernetes/evidently-ui-deployment.yaml
+kubectl apply -f kubernetes/evidently-ui-service.yaml
+```
+
+Verify that the UI pod is running:
+
+```sh title="Execute the following command(s) in a terminal"
+kubectl get pods -l app=evidently-ui
+```
+
+Get the external IP of the Evidently UI service and save it as a GitHub secret:
+
+```sh title="Execute the following command(s) in a terminal"
+kubectl get service evidently-ui
+```
+
+Store the URL (`http://<load-balancer-ip>:8000`) as the `EVIDENTLY_UI_URL`
+secret in the repository settings.
+
+### Link logs to the Evidently UI
+
+Now that Fluent Bit ships logs to S3 and the Evidently UI service reads from an
+S3-backed workspace, create the script that connects the two. It downloads the
+latest logs from S3, pulls the reference dataset from the DVC remote, generates
+an Evidently snapshot, and pushes it to the workspace.
 
 #### Update `requirements.txt`
 
@@ -448,11 +612,11 @@ that was modified in the last `LOG_CUTOFF_HOURS` hours into a directory of
 `.log` files. Fluent Bit uploads timestamped objects as batches close, so
 `monitor_drift.generate_report` can read them all together.
 
-#### Create `.github/workflows/monitor.yaml`
+### Create the monitoring workflow
 
-Create a workflow that runs the monitoring job on a schedule and on demand. It
-reuses the same cloud credentials and Python environment as the main MLOps
-pipeline.
+Create a GitHub Actions workflow that runs `src/monitor_cloud.py` on a schedule
+and on demand. It reuses the same cloud credentials and Python environment as
+the main MLOps pipeline.
 
 ```yaml title=".github/workflows/monitor.yaml"
 name: Monitor drift
@@ -503,147 +667,9 @@ so Evidently can write the snapshot directly to the S3 workspace. It
 authenticates to Google Cloud so that `dvc pull` can download the DVC-tracked
 reference dataset.
 
-#### Create the Evidently UI image
-
-You only need to build the Evidently UI service image here. The report
-generation runs in GitHub Actions, so the monitoring Docker image and CronJob
-from the previous approach are no longer needed.
-
-`monitoring/ui.Dockerfile` is minimal because the UI service only needs the
-`evidently` package, `s3fs` for the S3-backed workspace, and S3 credentials.
-
-```dockerfile title="monitoring/ui.Dockerfile"
-FROM python:3.13-slim
-
-WORKDIR /app
-
-RUN pip install --no-cache-dir evidently==0.7.21 s3fs==2025.1.0
-
-EXPOSE 8000
-
-CMD ["sh", "-c", "evidently ui --host 0.0.0.0 --workspace s3://${S3_BUCKET}/evidently-workspace --port 8000"]
-```
-
-#### Create Kubernetes manifests
-
-Create a deployment and service for the Evidently UI service. The UI reads and
-writes snapshots from `s3://<bucket>/evidently-workspace` using `fsspec`.
-
-```yaml title="kubernetes/evidently-ui-deployment.yaml"
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: evidently-ui
-  labels:
-    app: evidently-ui
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: evidently-ui
-  template:
-    metadata:
-      labels:
-        app: evidently-ui
-    spec:
-      containers:
-      - name: evidently-ui
-        image: <evidently_ui_image>
-        ports:
-        - containerPort: 8000
-        env:
-        - name: S3_BUCKET
-          value: "<s3_bucket_name>"
-        - name: FSSPEC_S3_KEY
-          valueFrom:
-            secretKeyRef:
-              name: monitoring-s3-credentials
-              key: aws_access_key_id
-        - name: FSSPEC_S3_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: monitoring-s3-credentials
-              key: aws_secret_access_key
-```
-
-```yaml title="kubernetes/evidently-ui-service.yaml"
-apiVersion: v1
-kind: Service
-metadata:
-  name: evidently-ui
-spec:
-  type: LoadBalancer
-  ports:
-    - name: http
-      port: 80
-      targetPort: 8000
-      protocol: TCP
-  selector:
-    app: evidently-ui
-```
-
 If your DVC remote is Google Cloud Storage, the workflow already uses the Google
 Cloud service account. The Evidently UI service and the Fluent Bit sidecar still
 need S3 credentials for the monitoring bucket.
-
-### Deploy the Evidently UI service
-
-Build and publish the UI image using the same container registry as the model
-service.
-
-```sh title="Execute the following command(s) in a terminal"
-# Build the UI image
-docker build -f monitoring/ui.Dockerfile -t celestial-bodies-evidently-ui:latest .
-
-# Tag the image for the remote registry
-docker tag celestial-bodies-evidently-ui:latest \
-  $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-evidently-ui:latest
-
-# Push the image
-docker push $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-evidently-ui:latest
-```
-
-Replace the placeholders in the Kubernetes manifests:
-
-```sh title="Execute the following command(s) in a terminal"
-export EVIDENTLY_UI_IMAGE=$GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-evidently-ui:latest
-export S3_BUCKET=<s3_bucket_name>
-
-sed -i "s|<docker_image>|$GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest|g" \
-  kubernetes/deployment.yaml
-
-sed -i "s|<evidently_ui_image>|$EVIDENTLY_UI_IMAGE|g" \
-  kubernetes/evidently-ui-deployment.yaml
-
-sed -i "s|<s3_bucket_name>|$S3_BUCKET|g" \
-  kubernetes/deployment.yaml \
-  kubernetes/evidently-ui-deployment.yaml
-```
-
-Apply the model deployment (now with the Fluent Bit sidecar) and the UI
-manifests:
-
-```sh title="Execute the following command(s) in a terminal"
-kubectl apply -f kubernetes/deployment.yaml
-kubectl apply -f kubernetes/evidently-ui-deployment.yaml
-kubectl apply -f kubernetes/evidently-ui-service.yaml
-```
-
-Verify that the pods are running:
-
-```sh title="Execute the following command(s) in a terminal"
-kubectl get pods -l app=celestial-bodies-classifier
-kubectl get pods -l app=evidently-ui
-```
-
-Get the external IP of the Evidently UI service and save it as a GitHub secret:
-
-```sh title="Execute the following command(s) in a terminal"
-kubectl get service evidently-ui
-```
-
-Store the URL (`http://<load-balancer-ip>:8000`) as the `EVIDENTLY_UI_URL`
-secret in the repository settings.
 
 ### Run the monitoring workflow
 
@@ -704,7 +730,6 @@ git commit -m "Deploy Evidently monitoring UI on Kubernetes and ship logs with F
 # Push the changes
 git push
 ```
-
 ## Summary
 
 In this chapter, you have successfully:
