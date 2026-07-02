@@ -225,7 +225,7 @@ Add a shared `emptyDir` volume for the logs, mount it into the BentoML
 container, and add the Fluent Bit sidecar with the ConfigMap mounted as its
 configuration.
 
-```yaml title="kubernetes/deployment.yaml" hl_lines="16-21 24-76"
+```yaml title="kubernetes/deployment.yaml" hl_lines="20-76"
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -322,11 +322,14 @@ sed -i "s|<gcp_bucket_location>|$GCP_BUCKET_LOCATION|g" \
 
 !!! info "Model image placeholder"
 
-    The `<docker_image>` placeholder for the model container is replaced
-    automatically by the CI/CD pipeline from Chapter 3.6 on every deploy. If you are
-    deploying manually instead, replace it with
-    `$GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest` before
-    applying the manifest.
+    The `<docker_image>` placeholder is replaced automatically by the CI/CD pipeline
+    from Chapter 3.6 on every deploy. If it has not been replaced yet, run the
+    following command before applying the manifest:
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Replace the placeholder with the actual Docker image
+    sed -i "s|<docker_image>|$GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest|g" kubernetes/deployment.yaml
+    ```
 
 Apply the model deployment (now with the Fluent Bit sidecar):
 
