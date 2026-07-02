@@ -533,12 +533,12 @@ is a batch job that runs in this script inside GitHub Actions.
 
 #### Update `requirements.txt`
 
-Add `google-cloud-storage` so the monitoring job can read logs and write the
-HTML and JSON reports, and `gcsfs` so the monitoring script can write Evidently
-snapshots to the storage-bucket-backed workspace. The Evidently UI service uses
-`gcsfs` to read from the same workspace.
+Add `gcsfs` so the monitoring script can read logs, write Evidently snapshots
+and reports to the storage-bucket-backed workspace, and so the Evidently UI
+service can read from the same workspace. `gcsfs` brings in
+`google-cloud-storage` transitively, which the script uses directly.
 
-```txt title="requirements.txt" hl_lines="7-8"
+```txt title="requirements.txt" hl_lines="7"
 tensorflow==2.21.0
 matplotlib==3.10.9
 pyyaml==6.0.3
@@ -546,7 +546,6 @@ dvc[gs]==3.67.1
 bentoml==1.4.39
 pillow==12.2.0
 evidently==0.7.21
-google-cloud-storage==3.2.0
 gcsfs==2026.6.0
 ```
 
