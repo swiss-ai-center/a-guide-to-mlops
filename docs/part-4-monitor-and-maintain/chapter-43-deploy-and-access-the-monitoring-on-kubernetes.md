@@ -463,6 +463,8 @@ docker tag celestial-bodies-evidently-ui:latest \
 docker push $GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-evidently-ui:latest
 ```
 
+#### Apply the UI manifests
+
 Replace the placeholders in the Kubernetes manifests:
 
 ```sh title="Execute the following command(s) in a terminal"
