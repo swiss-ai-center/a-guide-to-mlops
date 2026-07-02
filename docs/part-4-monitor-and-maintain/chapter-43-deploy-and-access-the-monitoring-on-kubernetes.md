@@ -284,12 +284,28 @@ spec:
         emptyDir: {}
 ```
 
-Replace `<gcp_bucket_name>` and `<gcp_bucket_location>` with the values of the
-`$GCP_BUCKET_NAME` and `$GCP_BUCKET_LOCATION` variables you defined earlier.
-
 The BentoML container writes to `logs/` relative to its working directory. By
 setting `workingDir: /app` and mounting the shared volume at `/app/logs`, both
 containers see the same files.
+
+Replace the placeholders in the Kubernetes deployment manifest:
+
+```sh title="Execute the following command(s) in a terminal"
+# Replace the placeholder with the actual bucket name and location
+sed -i "s|<gcp_bucket_name>|$GCP_BUCKET_NAME|g" kubernetes/deployment.yaml
+sed -i "s|<gcp_bucket_location>|$GCP_BUCKET_LOCATION|g" kubernetes/deployment.yaml
+```
+
+!!! info "Model image placeholder"
+
+    The `<docker_image>` placeholder is replaced automatically by the CI/CD pipeline
+    from Chapter 3.6 on every deploy. If it has not been replaced yet, run the
+    following command before applying the manifest:
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Replace the placeholder with the actual Docker image
+    sed -i "s|<docker_image>|$GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest|g" kubernetes/deployment.yaml
+    ```
 
 !!! note "Why HMAC keys for Fluent Bit?"
 
@@ -311,27 +327,6 @@ kubectl create secret generic monitoring-gcs-credentials \
 ```
 
 #### Deploy the model with the Fluent Bit sidecar
-
-Replace the placeholders in the Kubernetes deployment manifest:
-
-```sh title="Execute the following command(s) in a terminal"
-sed -i "s|<gcp_bucket_name>|$GCP_BUCKET_NAME|g" \
-  kubernetes/deployment.yaml
-
-sed -i "s|<gcp_bucket_location>|$GCP_BUCKET_LOCATION|g" \
-  kubernetes/deployment.yaml
-```
-
-!!! info "Model image placeholder"
-
-    The `<docker_image>` placeholder is replaced automatically by the CI/CD pipeline
-    from Chapter 3.6 on every deploy. If it has not been replaced yet, run the
-    following command before applying the manifest:
-
-    ```sh title="Execute the following command(s) in a terminal"
-    # Replace the placeholder with the actual Docker image
-    sed -i "s|<docker_image>|$GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:latest|g" kubernetes/deployment.yaml
-    ```
 
 Apply the model deployment (now with the Fluent Bit sidecar):
 
