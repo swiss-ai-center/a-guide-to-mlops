@@ -12,11 +12,12 @@ report from the logs in S3.
 In this chapter, you will learn how to:
 
 1. Ship BentoML monitoring logs to S3 with a Fluent Bit sidecar
-2. Create a monitoring job that pulls logs from S3 and pushes Evidently
-   snapshots
-3. Deploy the Evidently UI service on Kubernetes
-4. Access the dashboard and the JSON drift summary
-5. Commit the changes to Git
+2. Deploy the Evidently UI service on Kubernetes
+3. Create a monitoring job that pulls logs from S3 and pushes Evidently
+   snapshots to the UI workspace
+4. Schedule the monitoring job with a GitHub Actions workflow
+5. Access the dashboard and the JSON drift summary
+6. Commit the changes to Git
 
 The following diagram illustrates the control flow at the end of this chapter:
 
