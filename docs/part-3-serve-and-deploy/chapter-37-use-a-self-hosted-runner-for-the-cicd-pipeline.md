@@ -62,7 +62,7 @@ flowchart TB
         subgraph clusterGraph[Kubernetes]
             action -->|dvc pull
                        dvc repro| pod_runner["Runner"]
-            bento_service_cluster[classifier.bentomodel] --> k8s_fastapi[FastAPI]
+            bento_service_cluster[classifierService] --> k8s_fastapi[FastAPI]
         end
         pod_runner -->|cml publish| action
         pod_runner -->|dvc push| s3_storage

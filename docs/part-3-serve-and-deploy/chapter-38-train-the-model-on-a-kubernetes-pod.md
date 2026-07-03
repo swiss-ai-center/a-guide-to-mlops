@@ -67,7 +67,7 @@ flowchart TB
                                     cleanup|clusterPodGraph
             action -->|dvc pull
                        dvc repro| pod_train
-            bento_service_cluster[classifier.bentomodel] --> k8s_fastapi[FastAPI]
+            bento_service_cluster[classifierService] --> k8s_fastapi[FastAPI]
         end
         action --> |self-hosted|pod_runner
         pod_train -->|cml publish| action

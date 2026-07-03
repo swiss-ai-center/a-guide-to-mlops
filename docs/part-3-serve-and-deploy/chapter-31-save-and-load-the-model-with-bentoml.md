@@ -50,7 +50,7 @@ flowchart TB
             code
         end
         params[params.yaml] -.- code
-        bento_model[model/classifier.bentomodel]
+        bento_model[classifier.bentomodel]
         bento_model <-.-> dot_dvc
         code --> |save_model
                   export_model|bento_model
