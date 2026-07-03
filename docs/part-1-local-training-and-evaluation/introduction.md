@@ -23,7 +23,8 @@ The following requirements are necessary to follow this part:
   [:material-microsoft-visual-studio-code: Visual Studio Code](https://code.visualstudio.com/)
   to follow this guide.
 - [:simple-python: Python 3.13](https://www.python.org/downloads/)
-- [:simple-python: pip](https://pip.pypa.io/)
+- [:simple-python: pip](https://pip.pypa.io/) or
+  [:simple-uv: uv](https://docs.astral.sh/uv/) as an alternative
 - [:simple-git: Git](https://git-scm.com/)
 - [unzip](https://linux.die.net/man/1/unzip)
 
