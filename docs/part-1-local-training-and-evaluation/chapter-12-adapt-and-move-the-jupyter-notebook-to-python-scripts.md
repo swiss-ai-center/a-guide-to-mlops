@@ -115,14 +115,14 @@ Install the dependencies:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Install the dependencies
-    pip install --requirement requirements.txt
+    pip install -r requirements.txt
     ```
 
 === ":simple-uv: Using uv"
 
     ```sh title="Execute the following command(s) in a terminal"
     # Install the dependencies
-    uv pip install --requirement requirements.txt
+    uv pip install -r requirements.txt
     ```
 
 Create a freeze file to list the dependencies with their versions to ensure that
