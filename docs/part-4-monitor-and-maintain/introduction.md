@@ -23,12 +23,13 @@ might encounter issues. Please use the
 
 ## Requirements
 
-The following requirements are necessary to follow this part in addition to
-those described in the
-[first part](../part-1-local-training-and-evaluation/introduction.md#requirements):
+The following requirements are the same as those described in the
+[third part](../part-3-serve-and-deploy/introduction.md#requirements):
 
 - A [:simple-github: GitHub](https://github.com) account
 - A [:simple-googlecloud: Google Cloud](https://cloud.google.com) account
+- [:simple-docker: Docker](https://www.docker.com/) must be installed to set up
+  and manage the container registry
 
 ??? info "Using different platforms? Read this!"
 

@@ -7,9 +7,9 @@ title: "Part 4 - Conclusion"
 Congratulations! You did it!
 
 In this fourth part, you made the model observable in production. Predictions
-and features are logged by the BentoML service and shipped to your S3 storage by
-Fluent Bit, drift is detected by comparing these production logs against a
-reference dataset with Evidently AI, and a dashboard is accessible on
+and features are logged by the BentoML service and shipped to your storage
+bucket by Fluent Bit, drift is detected by comparing these production logs
+against a reference dataset with Evidently AI, and a dashboard is accessible on
 Kubernetes. A GitHub Actions workflow refreshes the drift report from production
 logs and raises alerts.
 
@@ -34,20 +34,25 @@ flowchart TB
     end
 
     subgraph workspaceGraph[WORKSPACE]
+        drift_logs[/"logs/.../data.1.log"/] <---> serve
         subgraph bentoGraph[bentofile.yaml]
             serve[serve.py] <--> bento_model[classifier.bentomodel]
             features[features.py] --> serve
         end
         bento_model <-.-> dot_dvc
 
-        data --> prepare
+        data --> prepare[prepare.py]
         subgraph dvcGraph["dvc.yaml"]
-            prepare --> train
-            train --> evaluate
+            prepare --> train[train.py]
+            train --> build_reference[build_reference.py]
+            train --> evaluate[evaluate.py]
+            reference_features[/reference_features.parquet/] <---> build_reference
         end
         params -.- train
         params[params.yaml] -.- prepare
-        dvcGraph --> bento_model
+        dvcGraph --> bentoGraph
+        monitor[monitor.py] <--> reference_features
+        monitor <--> drift_logs
     end
 
     subgraph remoteGraph[REMOTE]
@@ -63,7 +68,7 @@ flowchart TB
                     bentoml build
                     bentoml containerize
                     docker push|registry
-        s3_storage -.- |...|request
+        s3_storage ~~~ request
 
         s3_storage --> action
         subgraph clusterGraph[Kubernetes]
@@ -74,7 +79,8 @@ flowchart TB
             bento_service_cluster[classifierService] --> k8s_fastapi[FastAPI]
             bento_service_cluster --> cluster_logs[Logs]
             fluent_bit[Fluent Bit] <--> cluster_logs
-            monitor_cluster[monitor_cluster.py]
+            k8s_evidentlyworkspace[(Evidently
+                                    workspace)]
             k8s_evidentlyui[Evidently UI]
         end
         action --> pod_runner
@@ -84,17 +90,16 @@ flowchart TB
 
         registry[(Container
                   registry)] --> bento_service_cluster
-        s3_storage --> monitor_cluster
-        action_monitor --> monitor_cluster
-        monitor_cluster --> k8s_evidentlyui
+        s3_storage --> |report upload|k8s_evidentlyworkspace
+        action_monitor --> |dvc pull
+                            sync_monitoring|k8s_evidentlyworkspace
+        k8s_evidentlyworkspace --> k8s_evidentlyui
     end
 
     subgraph browserGraph[BROWSER]
         k8s_fastapi <--> publicURL["public URL"]
         k8s_evidentlyui <--> monitoringURL["monitoring URL"]
     end
-
-    linkStyle 17 opacity:0.0
 ```
 
 Part 5 is an improvement of the MLOps process. You will learn how to label new
