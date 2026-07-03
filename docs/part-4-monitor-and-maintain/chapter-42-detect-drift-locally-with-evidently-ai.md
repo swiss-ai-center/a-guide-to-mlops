@@ -40,35 +40,29 @@ flowchart TB
     end
 
     subgraph workspaceGraph[WORKSPACE]
-        dvcGraph --> bento_model[classifier.bentomodel]
+        drift_logs["logs/…/data/*.log"] -.- serve
         subgraph bentoGraph[bentofile.yaml]
-            bento_model --> serve[serve.py]
+            serve[serve.py] <--> bento_model[classifier.bentomodel]
             features[features.py] --> serve
         end
-        bentoGraph <-.-> dot_dvc
+        bento_model <-.-> dot_dvc
 
         data --> prepare
-        params[params.yaml] -.- prepare
         subgraph dvcGraph["dvc.yaml"]
             prepare --> train
-            train --> evaluate
             train --> build_reference
+            train --> evaluate
         end
         params -.- train
-
-        subgraph monitoringGraph[monitoring]
-            drift_logs["logs/…/data/*.log"]
-            drift_report["report.html | .json"]
-        end
-        monitor_drift[monitor_drift.py]
-        serve --> drift_logs
-        build_reference --> reference_features[reference_features.parquet]
-        reference_features --> monitor_drift
-        drift_logs --> monitor_drift
-        monitor_drift --> drift_report
+        params[params.yaml] -.- prepare
+        dvcGraph --> bento_model
+        reference_features[reference_features.parquet] <--> build_reference
+        monitor_drift[monitor_drift.py] <--> reference_features
+        monitor_drift <--> drift_logs
     end
+
     subgraph browserLocalGraph[BROWSER]
-        monitor_drift --> |evidently ui| localhost
+        localhost --> |evidently ui| monitor_drift
     end
 
     subgraph remoteGraph[REMOTE]
@@ -110,9 +104,6 @@ flowchart TB
     style evaluate opacity:0.4,color:#7f7f7f80
     style dvcGraph opacity:0.4,color:#7f7f7f80
     style bento_model opacity:0.4,color:#7f7f7f80
-    style features opacity:0.4,color:#7f7f7f80
-    style serve opacity:0.4,color:#7f7f7f80
-    style drift_logs opacity:0.4,color:#7f7f7f80
     style dot_git opacity:0.4,color:#7f7f7f80
     style dot_dvc opacity:0.4,color:#7f7f7f80
     style repository opacity:0.4,color:#7f7f7f80
@@ -133,11 +124,11 @@ flowchart TB
     linkStyle 6 opacity:0.4,color:#7f7f7f80
     linkStyle 7 opacity:0.4,color:#7f7f7f80
     linkStyle 8 opacity:0.4,color:#7f7f7f80
-    linkStyle 9 opacity:0.4,color:#7f7f7f80
     linkStyle 10 opacity:0.4,color:#7f7f7f80
     linkStyle 11 opacity:0.4,color:#7f7f7f80
     linkStyle 12 opacity:0.4,color:#7f7f7f80
     linkStyle 13 opacity:0.4,color:#7f7f7f80
+    linkStyle 18 opacity:0.4,color:#7f7f7f80
     linkStyle 19 opacity:0.4,color:#7f7f7f80
     linkStyle 20 opacity:0.4,color:#7f7f7f80
     linkStyle 21 opacity:0.4,color:#7f7f7f80
@@ -146,7 +137,6 @@ flowchart TB
     linkStyle 24 opacity:0.4,color:#7f7f7f80
     linkStyle 25 opacity:0.4,color:#7f7f7f80
     linkStyle 26 opacity:0.4,color:#7f7f7f80
-    linkStyle 27 opacity:0.4,color:#7f7f7f80
 ```
 
 ## Steps
