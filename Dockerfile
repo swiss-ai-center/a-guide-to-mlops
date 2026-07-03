@@ -8,4 +8,4 @@ WORKDIR /workspaces/a-guide-to-mlops
 COPY requirements-freeze.txt .
 
 # Install Python dependencies
-RUN pip install --requirement requirements-freeze.txt
+RUN pip install -r requirements-freeze.txt
