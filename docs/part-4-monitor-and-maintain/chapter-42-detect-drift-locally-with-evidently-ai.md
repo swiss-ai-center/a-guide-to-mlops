@@ -604,10 +604,20 @@ column per dimension, so the `embedding` list is unpacked.
 `Workspace.create` opens an existing workspace or creates a new one, so repeated
 runs keep history in the same place.
 
-#### Update `dvc.yaml`
+#### Add the build reference stage
 
 Add a `build_reference` stage after `evaluate` so the reference dataset is
-rebuilt whenever the training data, model, or reference script changes.
+rebuilt whenever the training data, model, or reference script changes:
+
+```sh title="Execute the following command(s) in a terminal"
+dvc stage add -n build_reference \
+    -d data/prepared -d model \
+    -d src/build_reference.py -d src/features.py \
+    -o data/reference_features.parquet \
+    python3.13 src/build_reference.py data/prepared model data/reference_features.parquet
+```
+
+The resulting `dvc.yaml` now contains the new stage:
 
 ```yaml title="dvc.yaml" hl_lines="33-41"
 stages:
