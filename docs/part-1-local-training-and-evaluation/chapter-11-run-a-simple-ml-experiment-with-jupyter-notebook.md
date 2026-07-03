@@ -215,7 +215,7 @@ jupyter-lab notebook.ipynb
 ```
 
 A browser window should open with the Jupyter Notebook at
-<http://localhost:8888/lab/tree/notebook.ipynb>.
+<http://localhost:8888/lab/>.
 
 You may notice all the previous outputs from the notebook might still be
 present. This is because the notebook was not cleared before being shared with
