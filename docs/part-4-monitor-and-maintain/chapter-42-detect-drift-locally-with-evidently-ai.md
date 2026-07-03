@@ -21,7 +21,7 @@ In this chapter, you will learn how to:
    dashboard
 4. Wire the reference build into the DVC pipeline
 5. Run the pipeline, generate logs, and open the dashboard
-6. Commit the changes to Git
+6. Commit the changes to DVC and Git
 
 The following diagram illustrates the control flow at the end of this chapter:
 
@@ -663,10 +663,12 @@ stages:
 
 #### Update the .gitignore file
 
-The reference dataset, the monitoring workspace, and the JSON report are
-generated artifacts. Add them to `.gitignore` so they are not committed:
+The monitoring workspace and JSON report are generated artifacts. Add them to
+`.gitignore` so they are not committed. The reference dataset is a DVC pipeline
+output, so DVC will add it to `data/.gitignore` automatically when you run
+`dvc repro`:
 
-```gitignore title=".gitignore" hl_lines="9-13"
+```gitignore title=".gitignore" hl_lines="8-9"
 ## Python
 .venv/
 
@@ -677,16 +679,13 @@ __pycache__/
 logs/
 monitoring/
 
-## Reference datasets
-data/reference_features.parquet
-
 ## DVC
 
 # DVC plots
 dvc_plots
 
 # DVC will add new files after this line
-/mode
+/model
 ```
 
 ### Run the experiment
@@ -768,6 +767,7 @@ On branch main
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
         modified:   .gitignore
+        modified:   data/.gitignore
         modified:   dvc.lock
         modified:   dvc.yaml
         modified:   requirements-freeze.txt
@@ -777,11 +777,14 @@ Changes to be committed:
         new file:   src/features.py
 ```
 
-### Commit the changes to Git
+### Commit the changes to DVC and Git
 
-Commit the changes:
+Commit the changes to DVC and Git:
 
 ```sh title="Execute the following command(s) in a terminal"
+# Upload the reference features and DVC cache to the remote bucket
+dvc push
+
 # Commit the changes
 git commit -m "Add Evidently drift workspace and local dashboard"
 
@@ -801,7 +804,7 @@ In this chapter, you have successfully:
 6. Ran the Evidently UI locally and inspected the dashboard
 7. Wired the reference build into the DVC pipeline
 8. Run the pipeline, generated logs, and opened the dashboard
-9. Committed the changes to Git
+9. Committed the changes to DVC and Git
 
 You fixed some of the previous issues:
 
