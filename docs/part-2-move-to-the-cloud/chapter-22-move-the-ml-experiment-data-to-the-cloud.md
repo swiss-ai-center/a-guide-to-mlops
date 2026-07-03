@@ -290,7 +290,7 @@ Install the dependencies and update the freeze file:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Install the dependencies
-    pip install --requirement requirements.txt
+    pip install -r requirements.txt
 
     # Freeze the dependencies
     pip freeze --local --all > requirements-freeze.txt
@@ -300,7 +300,7 @@ Install the dependencies and update the freeze file:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Install the dependencies
-    uv pip install --requirement requirements.txt
+    uv pip install -r requirements.txt
 
     # Freeze the dependencies
     uv pip freeze > requirements-freeze.txt

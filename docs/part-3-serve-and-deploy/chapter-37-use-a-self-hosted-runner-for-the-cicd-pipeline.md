@@ -648,7 +648,7 @@ jobs:
           python-version: '3.13'
           cache: pip
       - name: Install dependencies
-        run: pip install --requirement requirements-freeze.txt
+        run: pip install -r requirements-freeze.txt
       - name: Login to Google Cloud
         uses: google-github-actions/auth@v3
         with:
@@ -729,7 +729,7 @@ jobs:
           python-version: '3.13'
           cache: pip
       - name: Install dependencies
-        run: pip install --requirement requirements-freeze.txt
+        run: pip install -r requirements-freeze.txt
       - name: Login to Google Cloud
         uses: google-github-actions/auth@v3
         with:
@@ -850,7 +850,7 @@ index b15a68f..5a8d863 100644
 +          python-version: '3.13'
 +          cache: pip
 +      - name: Install dependencies
-+        run: pip install --requirement requirements-freeze.txt
++        run: pip install -r requirements-freeze.txt
 +      - name: Login to Google Cloud
 +        uses: google-github-actions/auth@v3
 +        with:
