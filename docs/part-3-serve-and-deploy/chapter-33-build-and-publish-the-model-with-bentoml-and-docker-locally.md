@@ -121,8 +121,11 @@ include:
   - serve.py
 python:
   packages:
-    - "tensorflow==2.21.0"
-    - "matplotlib==3.10.9"
+    - "--extra-index-url https://download.pytorch.org/whl/cpu"
+    - "torch==2.12.1+cpu"
+    - "torchvision==0.27.1+cpu"
+    - "keras==3.15.0"
+    - "matplotlib==3.11.0"
     - "pillow==12.2.0"
 docker:
     python_version: "3.13"

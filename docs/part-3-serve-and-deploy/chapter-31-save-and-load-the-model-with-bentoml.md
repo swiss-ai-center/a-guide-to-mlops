@@ -88,10 +88,14 @@ flowchart TB
 Add the `bentoml` package to install BentoML support. `pillow` is also added to
 support image processing:
 
-```txt title="requirements.txt" hl_lines="5-6"
-tensorflow==2.21.0
-matplotlib==3.10.9
+```txt title="requirements.txt" hl_lines="8-9"
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.12.1+cpu
+torchvision==0.27.1+cpu
+keras==3.15.0
+matplotlib==3.11.0
 pyyaml==6.0.3
+scikit-learn==1.9.0
 dvc[gs]==3.67.1
 bentoml==1.4.39
 pillow==12.2.0
@@ -111,10 +115,11 @@ diff --git a/requirements.txt b/requirements.txt
 index 3e4c255..780af47 100644
 --- a/requirements.txt
 +++ b/requirements.txt
-@@ -2,3 +2,5 @@ tensorflow==2.21.0
- matplotlib==3.10.9
+@@ -6,3 +6,5 @@ keras==3.15.0
+ matplotlib==3.11.0
  pyyaml==6.0.3
- dvc[gs]==3.67.1
+ scikit-learn==1.9.0
++dvc[gs]==3.67.1
 +bentoml==1.4.39
 +pillow==12.2.0
 ```
@@ -171,15 +176,20 @@ Update the `src/train.py` file to save the model with BentoML:
 
 ```py title="src/train.py" hl_lines="1 9-10 66-68 88-127"
 import json
+import os
 import sys
 from pathlib import Path
 from typing import Tuple
 
 import numpy as np
-import tensorflow as tf
+import torch
 import yaml
-import bentoml
 from PIL.Image import Image
+from torch.utils.data import DataLoader
+from torchvision import datasets, transforms
+
+import bentoml
+import keras
 
 from utils.seed import set_seed
 
@@ -189,16 +199,18 @@ def get_model(
     conv_size: int,
     dense_size: int,
     output_classes: int,
-) -> tf.keras.Model:
+) -> keras.Model:
     """Create a simple CNN model"""
-    model = tf.keras.models.Sequential(
+    model = keras.Sequential(
         [
-            tf.keras.layers.Input(shape=image_shape),
-            tf.keras.layers.Conv2D(conv_size, (3, 3), activation="relu"),
-            tf.keras.layers.MaxPooling2D((3, 3)),
-            tf.keras.layers.Flatten(),
-            tf.keras.layers.Dense(dense_size, activation="relu"),
-            tf.keras.layers.Dense(output_classes),
+            keras.layers.Input(shape=image_shape),
+            keras.layers.Conv2D(
+                conv_size, (3, 3), activation="relu", data_format="channels_first"
+            ),
+            keras.layers.MaxPooling2D((3, 3), data_format="channels_first"),
+            keras.layers.Flatten(),
+            keras.layers.Dense(dense_size, activation="relu"),
+            keras.layers.Dense(output_classes),
         ]
     )
     return model
@@ -217,9 +229,9 @@ def main() -> None:
     prepared_dataset_folder = Path(sys.argv[1])
     model_folder = Path(sys.argv[2])
 
-    image_size = prepare_params["image_size"]
+    image_size = tuple(prepare_params["image_size"])
     grayscale = prepare_params["grayscale"]
-    image_shape = (*image_size, 1 if grayscale else 3)
+    image_shape = (1 if grayscale else 3, *image_size)
 
     seed = train_params["seed"]
     lr = train_params["lr"]
@@ -232,8 +244,24 @@ def main() -> None:
     set_seed(seed)
 
     # Load data
-    ds_train = tf.data.Dataset.load(str(prepared_dataset_folder / "train"))
-    ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "val"))
+    transform = transforms.Compose(
+        [
+            transforms.Grayscale(num_output_channels=1)
+            if grayscale
+            else transforms.Identity(),
+            transforms.Resize(image_size),
+            transforms.ToTensor(),
+        ]
+    )
+    ds_train = datasets.ImageFolder(
+        prepared_dataset_folder / "train", transform=transform
+    )
+    ds_val = datasets.ImageFolder(
+        prepared_dataset_folder / "val", transform=transform
+    )
+
+    train_loader = DataLoader(ds_train, batch_size=32, shuffle=True)
+    val_loader = DataLoader(ds_val, batch_size=32, shuffle=False)
 
     labels = None
     with open(prepared_dataset_folder / "labels.json") as f:
@@ -242,41 +270,42 @@ def main() -> None:
     # Define the model
     model = get_model(image_shape, conv_size, dense_size, output_classes)
     model.compile(
-        optimizer=tf.keras.optimizers.Adam(lr),
-        loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-        metrics=[tf.keras.metrics.SparseCategoricalAccuracy()],
+        optimizer=keras.optimizers.Adam(lr),
+        loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+        metrics=[keras.metrics.SparseCategoricalAccuracy(name="acc")],
     )
     model.summary()
 
     # Train the model
-    model.fit(
-        ds_train,
+    history = model.fit(
+        train_loader,
         epochs=epochs,
-        validation_data=ds_val,
+        validation_data=val_loader,
     )
 
     # Save the model
     model_folder.mkdir(parents=True, exist_ok=True)
 
     def preprocess(x: Image):
-        # convert PIL image to tensor
-        x = x.convert('L' if grayscale else 'RGB')
+        # Convert PIL image to a channels-first normalized tensor
+        x = x.convert("L" if grayscale else "RGB")
         x = x.resize(image_size)
-        x = np.array(x, dtype=np.float32)
-        x = x / 255.0
-        # add channel dimension for grayscale
+        x = np.array(x, dtype=np.float32) / 255.0
         if x.ndim == 2:
-            x = np.expand_dims(x, axis=-1)
-        # add batch dimension
+            x = np.expand_dims(x, axis=0)
+        else:
+            x = np.transpose(x, (2, 0, 1))
         x = np.expand_dims(x, axis=0)
         return x
 
-    def postprocess(x: Image):
+    def postprocess(x: np.ndarray):
+        logits = x[0]
+        probabilities = np.exp(logits - np.max(logits))
+        probabilities = probabilities / np.sum(probabilities)
         return {
-            "prediction": labels[tf.argmax(x, axis=-1).numpy()[0]],
+            "prediction": labels[int(np.argmax(logits))],
             "probabilities": {
-                labels[i]: prob
-                for i, prob in enumerate(tf.nn.softmax(x).numpy()[0].tolist())
+                labels[i]: float(prob) for i, prob in enumerate(probabilities)
             },
         }
 
@@ -289,7 +318,7 @@ def main() -> None:
         custom_objects={
             "preprocess": preprocess,
             "postprocess": postprocess,
-        }
+        },
     )
 
     # Export the model from the model store to the local model folder
@@ -299,7 +328,7 @@ def main() -> None:
     )
 
     # Save the model history
-    np.save(model_folder.absolute() / "history.npy", model.history.history)
+    np.save(model_folder.absolute() / "history.npy", history.history)
 
     print(f"\nModel saved at {model_folder.absolute()}")
 
@@ -335,32 +364,45 @@ diff --git a/src/train.py b/src/train.py
 index 83cf265..0c3194b 100644
 --- a/src/train.py
 +++ b/src/train.py
-@@ -1,3 +1,4 @@
+@@ -1,7 +1,10 @@
 +import json
++import os
  import sys
  from pathlib import Path
  from typing import Tuple
-@@ -5,6 +6,8 @@ from typing import Tuple
+
  import numpy as np
- import tensorflow as tf
+-import tensorflow as tf
++import torch
  import yaml
 +import bentoml
++import keras
 +from PIL.Image import Image
-
++from torch.utils.data import DataLoader
++from torchvision import datasets, transforms
+ import yaml
  from utils.seed import set_seed
 
-@@ -60,6 +63,10 @@ def main() -> None:
-     ds_train = tf.data.Dataset.load(str(prepared_dataset_folder / "train"))
-     ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "val"))
+@@ -56,8 +59,13 @@ def main() -> None:
+     set_seed(seed)
 
+     # Load data
+-    ds_train = tf.data.Dataset.load(str(prepared_dataset_folder / "train"))
+-    ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "val"))
++    transform = transforms.Compose([...])
++    ds_train = datasets.ImageFolder(prepared_dataset_folder / "train", transform=transform)
++    ds_val = datasets.ImageFolder(prepared_dataset_folder / "val", transform=transform)
++
++    train_loader = DataLoader(ds_train, batch_size=32, shuffle=True)
++    val_loader = DataLoader(ds_val, batch_size=32, shuffle=False)
++
 +    labels = None
 +    with open(prepared_dataset_folder / "labels.json") as f:
 +        labels = json.load(f)
-+
+
      # Define the model
      model = get_model(image_shape, conv_size, dense_size, output_classes)
-     model.compile(
-@@ -78,8 +85,47 @@ def main() -> None:
+@@ -78,8 +86,41 @@ def main() -> None:
 
      # Save the model
      model_folder.mkdir(parents=True, exist_ok=True)
@@ -368,24 +410,25 @@ index 83cf265..0c3194b 100644
 -    model.save(model_path)
 +
 +    def preprocess(x: Image):
-+        # convert PIL image to tensor
-+        x = x.convert('L' if grayscale else 'RGB')
++        # Convert PIL image to a channels-first normalized tensor
++        x = x.convert("L" if grayscale else "RGB")
 +        x = x.resize(image_size)
-+        x = np.array(x, dtype=np.float32)
-+        x = x / 255.0
-+        # add channel dimension for grayscale
++        x = np.array(x, dtype=np.float32) / 255.0
 +        if x.ndim == 2:
-+            x = np.expand_dims(x, axis=-1)
-+        # add batch dimension
++            x = np.expand_dims(x, axis=0)
++        else:
++            x = np.transpose(x, (2, 0, 1))
 +        x = np.expand_dims(x, axis=0)
 +        return x
 +
-+    def postprocess(x: Image):
++    def postprocess(x: np.ndarray):
++        logits = x[0]
++        probabilities = np.exp(logits - np.max(logits))
++        probabilities = probabilities / np.sum(probabilities)
 +        return {
-+            "prediction": labels[tf.argmax(x, axis=-1).numpy()[0]],
++            "prediction": labels[int(np.argmax(logits))],
 +            "probabilities": {
-+                labels[i]: prob
-+                for i, prob in enumerate(tf.nn.softmax(x).numpy()[0].tolist())
++                labels[i]: float(prob) for i, prob in enumerate(probabilities)
 +            },
 +        }
 +
@@ -398,7 +441,7 @@ index 83cf265..0c3194b 100644
 +        custom_objects={
 +            "preprocess": preprocess,
 +            "postprocess": postprocess,
-+        }
++        },
 +    )
 +
 +    # Export the model from the model store to the local model folder
@@ -408,7 +451,8 @@ index 83cf265..0c3194b 100644
 +    )
 +
      # Save the model history
-     np.save(model_folder.absolute() / "history.npy", model.history.history)
+-    np.save(model_folder.absolute() / "history.npy", model.history.history)
++    np.save(model_folder.absolute() / "history.npy", history.history)
 ```
 
 #### Update `src/evaluate.py`
@@ -417,14 +461,28 @@ Update the `src/evaluate.py` file to load the model from BentoML:
 
 ```py title="src/evaluate.py" hl_lines="9 132-137 139"
 import json
+import os
 import sys
 from pathlib import Path
 from typing import List
 
 import matplotlib.pyplot as plt
 import numpy as np
-import tensorflow as tf
+import torch
 import bentoml
+import yaml
+from sklearn.metrics import (
+    accuracy_score,
+    confusion_matrix,
+    f1_score,
+    precision_score,
+    recall_score,
+)
+from torch.utils.data import DataLoader
+from torchvision import datasets, transforms
+
+os.environ["KERAS_BACKEND"] = "torch"
+import keras
 
 
 def get_training_plot(model_history: dict) -> plt.Figure:
@@ -444,64 +502,62 @@ def get_training_plot(model_history: dict) -> plt.Figure:
     return fig
 
 
-def get_pred_preview_plot(
-    model: tf.keras.Model, ds_val: tf.data.Dataset, labels: List[str]
-) -> plt.Figure:
+def get_pred_preview_plot(model: keras.Model, ds_val, labels: List[str]) -> plt.Figure:
     """Plot a preview of the predictions"""
-    fig = plt.figure(figsize=(10, 5), tight_layout=True)
-    for images, label_idxs in ds_val.take(1):
-        preds = model.predict(images)
-        for i in range(10):
-            plt.subplot(2, 5, i + 1)
-            img = (images[i].numpy() * 255).astype("uint8")
-            # Convert image to rgb if grayscale
-            if img.shape[-1] == 1:
-                img = np.squeeze(img, axis=-1)
-                img = np.stack((img,) * 3, axis=-1)
-            true_label = labels[label_idxs[i].numpy()]
-            pred_label = labels[np.argmax(preds[i])]
-            # Add red border if the prediction is wrong else add green border
-            img = np.pad(img, pad_width=((1, 1), (1, 1), (0, 0)))
-            if true_label != pred_label:
-                img[0, :, 0] = 255  # Top border
-                img[-1, :, 0] = 255  # Bottom border
-                img[:, 0, 0] = 255  # Left border
-                img[:, -1, 0] = 255  # Right border
-            else:
-                img[0, :, 1] = 255
-                img[-1, :, 1] = 255
-                img[:, 0, 1] = 255
-                img[:, -1, 1] = 255
+    fig, axes = plt.subplots(2, 5, figsize=(10, 5), tight_layout=True)
 
-            plt.imshow(img)
-            plt.title(f"True: {true_label}\n" f"Pred: {pred_label}")
-            plt.axis("off")
+    sample_size = min(10, len(ds_val))
+    sample_idxs = np.random.choice(len(ds_val), size=sample_size, replace=False)
+    images, label_idxs = zip(*(ds_val[i] for i in sample_idxs))
+    images = torch.stack(images)
+    label_idxs = np.array(label_idxs)
+    pred_idxs = np.argmax(model.predict(images, verbose=0), axis=1)
+
+    for ax, image, true_idx, pred_idx in zip(
+        axes.ravel(), images, label_idxs, pred_idxs
+    ):
+        ax.imshow(image.squeeze(), cmap="gray")
+        ax.set_title(f"True: {labels[true_idx]}\nPred: {labels[pred_idx]}")
+        ax.set_xticks([])
+        ax.set_yticks([])
+
+        border_color = "lime" if true_idx == pred_idx else "red"
+        for spine in ax.spines.values():
+            spine.set_edgecolor(border_color)
+            spine.set_linewidth(4)
+
+    # Hide any unused subplots
+    for i in range(sample_size, 10):
+        axes.ravel()[i].axis("off")
 
     return fig
 
 
 def get_confusion_matrix_plot(
-    model: tf.keras.Model, ds_val: tf.data.Dataset, labels: List[str]
+    model: keras.Model, val_loader, labels: List[str]
 ) -> plt.Figure:
     """Plot the confusion matrix"""
+    y_true = []
+    y_pred = []
+
+    for images, label_idxs in val_loader:
+        logits = model.predict(images, verbose=0)
+        y_true.extend(label_idxs.numpy())
+        y_pred.extend(np.argmax(logits, axis=1))
+
+    y_true = np.array(y_true)
+    y_pred = np.array(y_pred)
+
+    conf_matrix = confusion_matrix(y_true, y_pred, normalize="true")
+
     fig = plt.figure(figsize=(6, 6), tight_layout=True)
-    preds = model.predict(ds_val)
-
-    conf_matrix = tf.math.confusion_matrix(
-        labels=tf.concat([y for _, y in ds_val], axis=0),
-        predictions=tf.argmax(preds, axis=1),
-        num_classes=len(labels),
-    )
-
-    # Plot the confusion matrix
-    conf_matrix = conf_matrix / tf.reduce_sum(conf_matrix, axis=1)
     plt.imshow(conf_matrix, cmap="Blues")
 
     # Plot cell values
     for i in range(len(labels)):
         for j in range(len(labels)):
-            value = conf_matrix[i, j].numpy()
-            if value == 0:
+            value = conf_matrix[i, j]
+            if np.isclose(value, 0.0):
                 color = "lightgray"
             elif value > 0.5:
                 color = "white"
@@ -527,6 +583,19 @@ def get_confusion_matrix_plot(
     return fig
 
 
+def get_predictions(model: keras.Model, val_loader) -> tuple[np.ndarray, np.ndarray]:
+    """Return true and predicted labels for the validation set"""
+    y_true = []
+    y_pred = []
+
+    for images, label_idxs in val_loader:
+        logits = model.predict(images, verbose=0)
+        y_true.extend(label_idxs.numpy())
+        y_pred.extend(np.argmax(logits, axis=1))
+
+    return np.array(y_true), np.array(y_pred)
+
+
 def main() -> None:
     if len(sys.argv) != 3:
         print("Arguments error. Usage:\n")
@@ -541,28 +610,66 @@ def main() -> None:
     # Create folders
     (evaluation_folder / plots_folder).mkdir(parents=True, exist_ok=True)
 
+    # Load parameters
+    prepare_params = yaml.safe_load(open("params.yaml"))["prepare"]
+    image_size = tuple(prepare_params["image_size"])
+    grayscale = prepare_params["grayscale"]
+
     # Load files
-    ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "val"))
+    transform = transforms.Compose(
+        [
+            transforms.Grayscale(num_output_channels=1)
+            if grayscale
+            else transforms.Identity(),
+            transforms.Resize(image_size),
+            transforms.ToTensor(),
+        ]
+    )
+    ds_val = datasets.ImageFolder(prepared_dataset_folder / "val", transform=transform)
+    val_loader = DataLoader(ds_val, batch_size=32, shuffle=False)
+
     labels = None
     with open(prepared_dataset_folder / "labels.json") as f:
         labels = json.load(f)
 
     # Import the model to the model store from a local model folder
     try:
-        bentoml.models.import_model(f"{model_folder.absolute()}/celestial_bodies_classifier_model.bentomodel")
+        bentoml.models.import_model(
+            f"{model_folder.absolute()}/celestial_bodies_classifier_model.bentomodel"
+        )
     except bentoml.exceptions.BentoMLException:
         print("Model already exists in the model store - skipping import.")
 
     # Load model
     model = bentoml.keras.load_model("celestial_bodies_classifier_model")
-    model_history = np.load(model_folder.absolute() / "history.npy", allow_pickle=True).item()
+    model_history = np.load(
+        model_folder.absolute() / "history.npy", allow_pickle=True
+    ).item()
 
     # Log metrics
-    val_loss, val_acc = model.evaluate(ds_val)
-    print(f"Validation loss: {val_loss:.2f}")
-    print(f"Validation accuracy: {val_acc * 100:.2f}%")
+    val_loss, val_acc = model.evaluate(val_loader)
+    y_true, y_pred = get_predictions(model, val_loader)
+
+    metrics = {
+        "val_loss": val_loss,
+        "val_acc": val_acc,
+        "accuracy": accuracy_score(y_true, y_pred),
+        "precision": precision_score(
+            y_true, y_pred, average="macro", zero_division=0
+        ),
+        "recall": recall_score(y_true, y_pred, average="macro", zero_division=0),
+        "f1_score": f1_score(y_true, y_pred, average="macro", zero_division=0),
+    }
+
+    print(f"Validation loss: {metrics['val_loss']:.2f}")
+    print(f"Validation accuracy: {metrics['val_acc'] * 100:.2f}%")
+    print(f"Accuracy:  {metrics['accuracy']:.2f}")
+    print(f"Precision: {metrics['precision']:.2f}")
+    print(f"Recall:    {metrics['recall']:.2f}")
+    print(f"F1 score:  {metrics['f1_score']:.2f}")
+
     with open(evaluation_folder / "metrics.json", "w") as f:
-        json.dump({"val_loss": val_loss, "val_acc": val_acc}, f)
+        json.dump(metrics, f)
 
     # Save training history plot
     fig = get_training_plot(model_history)
@@ -573,7 +680,7 @@ def main() -> None:
     fig.savefig(evaluation_folder / plots_folder / "pred_preview.png")
 
     # Save confusion matrix plot
-    fig = get_confusion_matrix_plot(model, ds_val, labels)
+    fig = get_confusion_matrix_plot(model, val_loader, labels)
     fig.savefig(evaluation_folder / plots_folder / "confusion_matrix.png")
 
     print(
@@ -599,24 +706,52 @@ diff --git a/src/evaluate.py b/src/evaluate.py
 index 3bca979..11322bd 100644
 --- a/src/evaluate.py
 +++ b/src/evaluate.py
-@@ -6,6 +6,7 @@ from typing import List
+@@ -1,11 +1,18 @@
++import os
+ import json
+ import sys
+ from pathlib import Path
+ from typing import List
+
  import matplotlib.pyplot as plt
  import numpy as np
- import tensorflow as tf
-+import bentoml
+-import tensorflow as tf
++import torch
++from sklearn.metrics import (
++    accuracy_score,
++    confusion_matrix,
++    f1_score,
++    precision_score,
++    recall_score,
++)
++from torch.utils.data import DataLoader
++from torchvision import datasets, transforms
+ import bentoml
 
++os.environ["KERAS_BACKEND"] = "torch"
++import keras
 
  def get_training_plot(model_history: dict) -> plt.Figure:
-@@ -128,9 +129,14 @@ def main() -> None:
+@@ -125,12 +132,15 @@ def main() -> None:
+     (evaluation_folder / plots_folder).mkdir(parents=True, exist_ok=True)
+
+     # Load files
+-    ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "val"))
++    ds_val = datasets.ImageFolder(prepared_dataset_folder / "val", transform=transform)
++    val_loader = DataLoader(ds_val, batch_size=32, shuffle=False)
+     labels = None
      with open(prepared_dataset_folder / "labels.json") as f:
          labels = json.load(f)
 
-+    # Import the model to the model store from a local model folder
-+    try:
-+        bentoml.models.import_model(f"{model_folder.absolute()}/celestial_bodies_classifier_model.bentomodel")
-+    except bentoml.exceptions.BentoMLException:
-+        print("Model already exists in the model store - skipping import.")
-+
+     # Import the model to the model store from a local model folder
+     try:
+-        bentoml.models.import_model(f"{model_folder.absolute()}/celestial_bodies_classifier_model.bentomodel")
++        bentoml.models.import_model(
++            f"{model_folder.absolute()}/celestial_bodies_classifier_model.bentomodel"
++        )
+     except bentoml.exceptions.BentoMLException:
+         print("Model already exists in the model store - skipping import.")
+
      # Load model
 -    model_path = model_folder.absolute() / "model.keras"
 -    model = tf.keras.models.load_model(model_path)
@@ -624,6 +759,25 @@ index 3bca979..11322bd 100644
      model_history = np.load(model_folder.absolute() / "history.npy", allow_pickle=True).item()
 
      # Log metrics
+-    val_loss, val_acc = model.evaluate(ds_val)
++    val_loss, val_acc = model.evaluate(val_loader)
++    y_true, y_pred = get_predictions(model, val_loader)
+     print(f"Validation loss: {val_loss:.2f}")
+     print(f"Validation accuracy: {val_acc * 100:.2f}%")
+-    with open(evaluation_folder / "metrics.json", "w") as f:
+-        json.dump({"val_loss": val_loss, "val_acc": val_acc}, f)
++
++    metrics = {
++        "val_loss": val_loss,
++        "val_acc": val_acc,
++        "accuracy": accuracy_score(y_true, y_pred),
++        "precision": precision_score(y_true, y_pred, average="macro", zero_division=0),
++        "recall": recall_score(y_true, y_pred, average="macro", zero_division=0),
++        "f1_score": f1_score(y_true, y_pred, average="macro", zero_division=0),
++    }
++
++    with open(evaluation_folder / "metrics.json", "w") as f:
++        json.dump(metrics, f)
 ```
 
 ### Run the experiment

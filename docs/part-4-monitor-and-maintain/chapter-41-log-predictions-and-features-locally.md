@@ -180,7 +180,8 @@ and prediction-distribution statistics.
 from typing import Any
 
 import numpy as np
-import tensorflow as tf
+
+import keras
 
 
 def extract_scalar_features(preprocessed_image: np.ndarray) -> dict[str, float]:
@@ -198,16 +199,16 @@ def extract_scalar_features(preprocessed_image: np.ndarray) -> dict[str, float]:
     }
 
 
-def build_embedding_extractor(model: tf.keras.Model) -> tf.keras.Model:
+def build_embedding_extractor(model: keras.Model) -> keras.Model:
     """Return a model that outputs the last hidden layer's activations."""
-    return tf.keras.Model(
+    return keras.Model(
         inputs=model.inputs,
         outputs=model.layers[-2].output,
     )
 
 
 def extract_embedding(
-    embedding_extractor: tf.keras.Model,
+    embedding_extractor: keras.Model,
     preprocessed_image: np.ndarray,
 ) -> list[float]:
     """Extract the embedding vector from the model's last hidden layer.
@@ -216,7 +217,7 @@ def extract_embedding(
     the final softmax decision. It is a much stronger drift signal than raw pixel
     statistics.
 
-    The input is the exact 4D (B, H, W, C) tensor returned by preprocess. Errors
+    The input is the exact 4D (B, C, H, W) tensor returned by preprocess. Errors
     are intentionally not caught here: the caller computes every feature up front
     and guards the whole monitoring block, so a failure skips the whole record
     rather than writing a partial one.
@@ -386,8 +387,11 @@ include:
   - features.py
 python:
   packages:
-    - "tensorflow==2.21.0"
-    - "matplotlib==3.10.9"
+    - "--extra-index-url https://download.pytorch.org/whl/cpu"
+    - "torch==2.12.1+cpu"
+    - "torchvision==0.27.1+cpu"
+    - "keras==3.15.0"
+    - "matplotlib==3.11.0"
     - "pillow==12.2.0"
 docker:
     python_version: "3.13"

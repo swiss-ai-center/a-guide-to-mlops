@@ -146,10 +146,14 @@ flowchart TB
 Add `evidently` to the project requirements. `evidently` brings `pyarrow`
 transitively, so Parquet support is available without an extra dependency.
 
-```txt title="requirements.txt" hl_lines="7"
-tensorflow==2.21.0
-matplotlib==3.10.9
+```txt title="requirements.txt" hl_lines="10"
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.12.1+cpu
+torchvision==0.27.1+cpu
+keras==3.15.0
+matplotlib==3.11.0
 pyyaml==6.0.3
+scikit-learn==1.9.0
 dvc[gs]==3.67.1
 bentoml==1.4.39
 pillow==12.2.0
@@ -170,8 +174,7 @@ diff --git a/requirements.txt b/requirements.txt
 index 780af47..5c7ecc3 100644
 --- a/requirements.txt
 +++ b/requirements.txt
-@@ -4,3 +4,4 @@ pyyaml==6.0.3
- dvc[gs]==3.67.1
+@@ -7,3 +7,4 @@ dvc[gs]==3.67.1
  bentoml==1.4.39
  pillow==12.2.0
 +evidently==0.7.21
@@ -225,10 +228,18 @@ import sys
 from pathlib import Path
 
 import bentoml
+import numpy as np
 import pandas as pd
-import tensorflow as tf
+import torch
+import yaml
+from torch.utils.data import DataLoader
+from torchvision import datasets, transforms
 
-from features import build_embedding_extractor, extract_scalar_features, extract_prediction_stats
+from features import (
+    build_embedding_extractor,
+    extract_scalar_features,
+    extract_prediction_stats,
+)
 
 
 def main() -> None:
@@ -243,8 +254,25 @@ def main() -> None:
     model_folder = Path(sys.argv[2])
     output_parquet = Path(sys.argv[3])
 
+    # Load parameters
+    prepare_params = yaml.safe_load(open("params.yaml"))["prepare"]
+    image_size = tuple(prepare_params["image_size"])
+    grayscale = prepare_params["grayscale"]
+
     # Load training set
-    ds_train = tf.data.Dataset.load(str(prepared_dataset_folder / "train"))
+    transform = transforms.Compose(
+        [
+            transforms.Grayscale(num_output_channels=1)
+            if grayscale
+            else transforms.Identity(),
+            transforms.Resize(image_size),
+            transforms.ToTensor(),
+        ]
+    )
+    ds_train = datasets.ImageFolder(
+        prepared_dataset_folder / "train", transform=transform
+    )
+    train_loader = DataLoader(ds_train, batch_size=32, shuffle=False)
 
     # Import the model to the local BentoML store
     try:
@@ -262,7 +290,7 @@ def main() -> None:
     feature_extractor = build_embedding_extractor(model)
 
     records = []
-    for images, labels in ds_train:
+    for images, _ in train_loader:
         # Predict on the whole batch, then process each example individually.
         logits = model.predict(images, verbose=0)
         embeddings = feature_extractor.predict(images, verbose=0)
@@ -272,7 +300,7 @@ def main() -> None:
             embedding = embeddings[i]
             prediction_stats = extract_prediction_stats(result)
             record = {
-                **extract_scalar_features(image_batch),
+                **extract_scalar_features(image_batch.numpy()),
                 "predicted_label": prediction_stats["predicted_label"],
                 "confidence": prediction_stats["confidence"],
                 "entropy": prediction_stats["entropy"],

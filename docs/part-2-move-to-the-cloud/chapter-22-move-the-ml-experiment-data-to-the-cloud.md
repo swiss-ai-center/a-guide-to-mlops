@@ -245,10 +245,14 @@ Install the DVC Storage plugin for the cloud provider:
 Here, the `dvc[gs]` package enables support for Google Cloud Storage. Update the
 `requirements.txt` file:
 
-```txt title="requirements.txt" hl_lines="4"
-tensorflow==2.21.0
-matplotlib==3.10.9
+```txt title="requirements.txt" hl_lines="8"
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.12.1+cpu
+torchvision==0.27.1+cpu
+keras==3.15.0
+matplotlib==3.11.0
 pyyaml==6.0.3
+scikit-learn==1.9.0
 dvc[gs]==3.67.1
 ```
 
@@ -263,13 +267,13 @@ The output should be similar to this:
 
 ```diff
 diff --git a/requirements.txt b/requirements.txt
-index 0b88f4a..4b8d3d9 100644
+index 32b5755..d6ffa15 100644
 --- a/requirements.txt
 +++ b/requirements.txt
-@@ -1,4 +1,4 @@
- tensorflow==2.21.0
- matplotlib==3.10.9
+@@ -5,4 +5,4 @@ keras==3.15.0
+ matplotlib==3.11.0
  pyyaml==6.0.3
+ scikit-learn==1.9.0
 -dvc==3.67.1
 +dvc[gs]==3.67.1
 ```
@@ -334,11 +338,13 @@ The output of the `git status` command should be similar to this:
 
 ```text
 On branch main
+Your branch is up to date with 'origin/main'.
+
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
-    modified:   .dvc/config
-    modified:   requirements-freeze.txt
-    modified:   requirements.txt
+        modified:   .dvc/config
+        modified:   requirements-freeze.txt
+        modified:   requirements.txt
 ```
 
 ### Push the data files to DVC

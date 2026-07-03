@@ -112,10 +112,14 @@ index dee3012..cbfa93b 100644
 Next, we will install Label Studio in our environment. Add the main
 `label-studio` dependency to the `requirements.txt` file:
 
-```txt title="requirements.txt" hl_lines="7"
-tensorflow==2.21.0
-matplotlib==3.10.9
+```txt title="requirements.txt" hl_lines="10"
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.12.1+cpu
+torchvision==0.27.1+cpu
+keras==3.15.0
+matplotlib==3.11.0
 pyyaml==6.0.3
+scikit-learn==1.9.0
 dvc[gs]==3.67.1
 bentoml==1.4.39
 pillow==12.2.0
@@ -136,11 +140,7 @@ diff --git a/requirements.txt b/requirements.txt
 index 12103ec..b32cb3f 100644
 --- a/requirements.txt
 +++ b/requirements.txt
-@@ -1,7 +1,8 @@
- tensorflow==2.21.0
- matplotlib==3.10.9
- pyyaml==6.0.3
- dvc[gs]==3.67.1
+@@ -7,3 +7,4 @@ dvc[gs]==3.67.1
  bentoml==1.4.39
  pillow==12.2.0
 +label-studio==1.23.0
