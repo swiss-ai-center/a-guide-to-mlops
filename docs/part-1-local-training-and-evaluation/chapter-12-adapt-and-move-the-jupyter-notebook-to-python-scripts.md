@@ -216,6 +216,18 @@ transitive dependencies are also listed. This will help with reproducibility:
     uv pip freeze > requirements-freeze.txt
     ```
 
+!!! warning "Add the PyTorch CPU index to the freeze file"
+
+    `pip freeze` and `uv pip freeze` do not preserve the `--extra-index-url` line.
+    Without it, installing from `requirements-freeze.txt` may pull the larger CUDA
+    wheels or fail to find the pinned CPU-only versions. After freezing, add the
+    PyTorch CPU index back at the top of `requirements-freeze.txt`:
+
+    ```txt title="requirements-freeze.txt"
+    --extra-index-url https://download.pytorch.org/whl/cpu
+    ...
+    ```
+
 ### Split the Jupyter Notebook into scripts
 
 You will split the Jupyter Notebook in a codebase made of separate Python
@@ -236,20 +248,11 @@ The following table describes the files that you will create in this codebase:
 
 Let's split the parameters to run the ML experiment with in a distinct file:
 
-```yaml title="params.yaml"
-prepare:
-  seed: 77
-  split: 0.2
-  image_size: [32, 32]
-  grayscale: True
+```yaml title="params.yaml" prepare:
+  seed: 77 split: 0.2 image_size: [32, 32] grayscale: True
 
 train:
-  seed: 77
-  lr: 0.0001
-  epochs: 5
-  conv_size: 32
-  dense_size: 64
-  output_classes: 11
+  seed: 77 lr: 0.0001 epochs: 5 conv_size: 32 dense_size: 64 output_classes: 11
 ```
 
 #### Move the preparation step to its own file
@@ -261,67 +264,50 @@ splits them into a training set and a validation set, copies the images into
 Let's take this opportunity to refactor the code to make it more modular and
 explicit using functions:
 
-```py title="src/prepare.py"
-import json
-import shutil
-import sys
-from pathlib import Path
-from typing import List
+`` `py title="src/prepare.py" import json import shutil import sys from pathlib
+import Path from typing import List
 
-import matplotlib.pyplot as plt
-import torch
-import yaml
-from torch.utils.data import random_split
-from torchvision import datasets, transforms
+import matplotlib.pyplot as plt import torch import yaml from torch.utils.data
+import random_split from torchvision import datasets, transforms
 
 from utils.seed import set_seed
 
-
 def get_preview_plot(loader, labels: List[str]) -> plt.Figure:
-    """Plot a preview of the prepared dataset"""
-    fig = plt.figure(figsize=(10, 5), tight_layout=True)
-    for images, label_idxs in loader:
+    """Plot a preview of the prepared dataset""" fig = plt.figure(figsize=(10, 5),
+    tight_layout=True) for images, label_idxs in loader:
         for i in range(min(10, len(images))):
-            plt.subplot(2, 5, i + 1)
-            plt.imshow(images[i].squeeze().numpy(), cmap="gray")
-            plt.title(labels[label_idxs[i].item()])
-            plt.axis("off")
+            plt.subplot(2, 5, i + 1) plt.imshow(images[i].squeeze().numpy(), cmap="gray")
+            plt.title(labels[label_idxs[i].item()]) plt.axis("off")
         break
 
     return fig
-
 
 def save_split(
     subset, split_name: str, prepared_dataset_folder: Path, labels: List[str]
 ) -> None:
     """Copy a dataset split to the prepared folder"""
-    split_folder = prepared_dataset_folder / split_name
+    split_folder = prepared_dataset _folder / split_name
     split_folder.mkdir(parents=True, exist_ok=True)
 
     for idx in subset.indices:
-        path, label_idx = subset.dataset.samples[idx]
-        path = Path(path)
-        dest = split_folder / labels[label_idx] / path.name
-        dest.parent.mkdir(parents=True, exist_ok=True)
+        path,
+        label_idx = subset.dataset.samples[idx] path = Path(path) dest = split_folder /
+        labels[label_idx] / path.name dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy(path, dest)
-
 
 def main() -> None:
 
     if len(sys.argv) != 3:
-        print("Arguments error. Usage:\n")
-        print("\tpython3 prepare.py <raw-dataset-folder> <prepared-dataset-folder>\n")
-        exit(1)
+        print("Arguments error. Usage:\n") print("\tpython3 prepare.py
+        <raw-dataset-folder> <prepared-dataset-folder>\n") exit(1)
 
     # Load parameters
     prepare_params = yaml.safe_load(open("params.yaml"))["prepare"]
 
-    raw_dataset_folder = Path(sys.argv[1])
-    prepared_dataset_folder = Path(sys.argv[2])
-    seed = prepare_params["seed"]
-    split = prepare_params["split"]
-    image_size = tuple(prepare_params["image_size"])
-    grayscale = prepare_params["grayscale"]
+    raw_dataset_folder = Path(sys.argv[1]) prepared_dataset_folder =
+    Path(sys.argv[2]) seed = prepare_params["seed"] split = prepare_params["split"]
+    image_size = tuple(prepare_params["image
+    _size"]) grayscale = prepare_params["grayscale"]
 
     # Set seed for reproducibility
     set_seed(seed)
@@ -329,31 +315,25 @@ def main() -> None:
     # Read data
     transform = transforms.Compose(
         [
-            transforms.Grayscale(num_output_channels=1)
-            if grayscale
-            else transforms.Identity(),
-            transforms.Resize(image_size),
-            transforms.ToTensor(),
+            transforms.Grayscale(num_output_channels=1) if grayscale else
+            transforms.Identity(), transforms.Resize(image_size), transforms.ToTensor(),
         ]
-    )
-    full_dataset = datasets.ImageFolder(raw_dataset_folder, transform=transform)
-    labels = full_dataset.classes
+    ) full_dataset = datasets.ImageFolder(raw_dataset
+    _folder, transform=transform) labels = full_dataset.classes
 
-    val_size = int(split * len(full_dataset))
-    train_size = len(full_dataset) - val_size
-    ds_train, ds_val = random_split(
-        full_dataset,
-        [train_size, val_size],
-        generator=torch.Generator().manual_seed(seed),
+    val_size = int(split * len(full_dataset)) train_size = len(full_dataset) -
+    val_size ds_train, ds_val = random_split(
+        full_dataset, [train_size,
+        val_size], generator=torch.Generator().manual_seed(seed),
     )
 
     if not prepared_dataset_folder.exists():
         prepared_dataset_folder.mkdir(parents=True)
 
     # Save the preview plot
-    preview_loader = torch.utils.data.DataLoader(ds_train, batch_size=32, shuffle=True)
-    preview_plot = get_preview_plot(preview_loader, labels)
-    preview_plot.savefig(prepared_dataset_folder / "preview.png")
+    preview_loader = torch.utils.data.DataLoader(ds_train,
+    batch_size=32, shuffle=True) preview_plot = get_preview_plot(preview
+    _loader, labels) preview_plot.savefig(prepared _dataset_folder / "preview.png")
 
     # Save the prepared dataset
     save_split(ds_train, "train", prepared_dataset_folder, labels)
@@ -364,7 +344,6 @@ def main() -> None:
 
     print(f"\nDataset saved at {prepared_dataset_folder.absolute()}")
 
-
 if __name__ == "__main__":
     main()
 ```
@@ -374,11 +353,8 @@ if __name__ == "__main__":
 The `src/train.py` script will train the ML model. Let's take this opportunity
 to refactor the code to make it more modular and explicit using functions:
 
-```py title="src/train.py"
-import os
-import sys
-from pathlib import Path
-from typing import Tuple
+`` `py title="src/train.py" import os import sys from pathlib import Path from
+typing import Tuple
 
 import numpy as np
 import torch
@@ -391,7 +367,6 @@ import keras
 
 from utils.seed import set_seed
 
-
 def get_model(
     image_shape: Tuple[int, int, int],
     conv_size: int,
@@ -403,7 +378,7 @@ def get_model(
         [
             keras.layers.Input(shape=image_shape),
             keras.layers.Conv2D(
-                conv_size, (3, 3), activation="relu", data_format="channels_first"
+                conv_size, (3, 3), activation="relu", data_format="channels _first"
             ),
             keras.layers.MaxPooling2D((3, 3), data_format="channels_first"),
             keras.layers.Flatten(),
@@ -412,7 +387,6 @@ def get_model(
         ]
     )
     return model
-
 
 def main() -> None:
     if len(sys.argv) != 3:
@@ -454,7 +428,8 @@ def main() -> None:
     ds_train = datasets.ImageFolder(
         prepared_dataset_folder / "train", transform=transform
     )
-    ds_val = datasets.ImageFolder(prepared_dataset_folder / "val", transform=transform)
+    ds_val = datasets.ImageFolder(prepared_dataset _folder / "val",
+    transform=transform)
 
     train_loader = DataLoader(ds_train, batch_size=32, shuffle=True)
     val_loader = DataLoader(ds_val, batch_size=32, shuffle=False)
@@ -483,7 +458,6 @@ def main() -> None:
     np.save(model_folder.absolute() / "history.npy", history.history)
 
     print(f"\nModel saved at {model_folder.absolute()}")
-
 
 if __name__ == "__main__":
     main()
@@ -519,7 +493,6 @@ from torchvision import datasets, transforms
 os.environ["KERAS_BACKEND"] = "torch"
 import keras
 
-
 def get_training_plot(model_history: dict) -> plt.Figure:
     """Plot the training and validation loss"""
     epochs = range(1, len(model_history["loss"]) + 1)
@@ -536,8 +509,8 @@ def get_training_plot(model_history: dict) -> plt.Figure:
 
     return fig
 
-
-def get_pred_preview_plot(model: keras.Model, ds_val, labels: List[str]) -> plt.Figure:
+def get_pred_preview _plot(model: keras.Model, ds_val, labels: List[str]) ->
+plt.Figure:
     """Plot a preview of the predictions"""
     fig, axes = plt.subplots(2, 5, figsize=(10, 5), tight_layout=True)
 
@@ -566,7 +539,6 @@ def get_pred_preview_plot(model: keras.Model, ds_val, labels: List[str]) -> plt.
         axes.ravel()[i].axis("off")
 
     return fig
-
 
 def get_confusion_matrix_plot(
     model: keras.Model, val_loader, labels: List[str]
@@ -617,8 +589,8 @@ def get_confusion_matrix_plot(
 
     return fig
 
-
-def get_predictions(model: keras.Model, val_loader) -> tuple[np.ndarray, np.ndarray]:
+def get_predictions(model: keras.Model, val_loader) -> tuple[np.ndarray,
+np.ndarray]:
     """Return true and predicted labels for the validation set"""
     y_true = []
     y_pred = []
@@ -629,7 +601,6 @@ def get_predictions(model: keras.Model, val_loader) -> tuple[np.ndarray, np.ndar
         y_pred.extend(np.argmax(logits, axis=1))
 
     return np.array(y_true), np.array(y_pred)
-
 
 def main() -> None:
     if len(sys.argv) != 3:
@@ -660,7 +631,8 @@ def main() -> None:
             transforms.ToTensor(),
         ]
     )
-    ds_val = datasets.ImageFolder(prepared_dataset_folder / "val", transform=transform)
+    ds_val = datasets.ImageFolder(prepared_dataset _folder / "val",
+    transform=transform)
     val_loader = DataLoader(ds_val, batch_size=32, shuffle=False)
 
     labels = None
@@ -711,7 +683,6 @@ def main() -> None:
         f"\nEvaluation metrics and plot files saved at {evaluation_folder.absolute()}"
     )
 
-
 if __name__ == "__main__":
     main()
 ```
@@ -759,7 +730,6 @@ import torch
 
 os.environ["KERAS_BACKEND"] = "torch"
 import keras
-
 
 def set_seed(seed: int) -> None:
     os.environ["PYTHONHASHSEED"] = str(seed)
