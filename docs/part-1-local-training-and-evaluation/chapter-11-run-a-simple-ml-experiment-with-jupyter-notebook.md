@@ -168,7 +168,11 @@ working directory:
     source .venv/bin/activate
 
     # Install the dependencies
-    pip install --requirement requirements.txt
+    pip install -r requirements.txt
+
+    # Install the CPU-only version of PyTorch
+    pip install torch torchvision \
+        --index-url https://download.pytorch.org/whl/cpu
     ```
 
 === ":simple-uv: Using uv"
@@ -181,8 +185,21 @@ working directory:
     source .venv/bin/activate
 
     # Install the dependencies
-    uv pip install --requirement requirements.txt
+    uv pip install -r requirements.txt
+
+    # Install the CPU-only version of PyTorch
+    uv pip install torch torchvision \
+        --index-url https://download.pytorch.org/whl/cpu
     ```
+
+!!! info "CPU-only PyTorch"
+
+    The notebook uses Keras with a PyTorch backend. The experiment in this tutorial
+    is small and runs fine on a CPU, so the instructions above install the smaller
+    CPU-only wheel of PyTorch.
+
+    In a real-world experiment, you would likely want to install the GPU-enabled
+    version of PyTorch with CUDA acceleration to speed up training.
 
 ### Run the experiment
 
