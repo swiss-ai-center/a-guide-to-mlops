@@ -23,10 +23,9 @@ python3 -m venv .venv
 source .venv/bin/activate
 
 # Install the Python dependencies
-pip install -r requirements.txt
+pip install -r requirements-freeze.txt
 pip install torch torchvision \
-  --index-url https://download.pytorch.org/whl/cpu \
-  --extra-index-url https://pypi.org/simple
+  --index-url https://download.pytorch.org/whl/cpu
 
 # Run the Jupyter Notebook
 jupyter-lab notebook.ipynb
@@ -45,10 +44,9 @@ uv venv --python 3.13
 source .venv/bin/activate
 
 # Install the Python dependencies
-uv pip install -r requirements.txt
+uv pip install -r requirements-freeze.txt
 uv pip install torch torchvision \
-  --index-url https://download.pytorch.org/whl/cpu \
-  --default-index https://pypi.org/simple
+  --index-url https://download.pytorch.org/whl/cpu
 
 # Run the Jupyter Notebook
 jupyter-lab notebook.ipynb
@@ -75,8 +73,7 @@ pip install -r requirements.txt
 
 # Install PyTorch from the CPU-only PyTorch index
 pip install torch torchvision \
-  --index-url https://download.pytorch.org/whl/cpu \
-  --extra-index-url https://pypi.org/simple
+  --index-url https://download.pytorch.org/whl/cpu
 
 # Generate the full lock file
 pip freeze --local --all > requirements-freeze.txt
@@ -99,13 +96,9 @@ uv pip install -r requirements.txt
 
 # Install PyTorch from the CPU-only PyTorch index
 uv pip install torch torchvision \
-  --index-url https://download.pytorch.org/whl/cpu \
-  --default-index https://pypi.org/simple
+  --index-url https://download.pytorch.org/whl/cpu
 
 # Generate the full lock file
 uv pip freeze > requirements-freeze.txt
 ```
 
-## References
-
-- Grad Cam with Keras: https://keras.io/examples/vision/grad_cam/

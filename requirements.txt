@@ -2,4 +2,3 @@ jupyterlab
 keras
 matplotlib
 scikit-learn
-pyyaml
