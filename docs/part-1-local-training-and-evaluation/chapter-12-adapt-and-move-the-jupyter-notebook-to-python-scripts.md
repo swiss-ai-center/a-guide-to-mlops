@@ -104,10 +104,20 @@ Firstly, create the virtual environment:
 Create a `requirements.txt` file to list the dependencies:
 
 ```txt title="requirements.txt"
-tensorflow==2.21.0
-matplotlib==3.10.9
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.12.1+cpu
+torchvision==0.27.1+cpu
+keras==3.15.0
+matplotlib==3.11.0
 pyyaml==6.0.3
+scikit-learn==1.9.0
 ```
+
+The first line adds the PyTorch CPU-only package index as an extra source. This
+tells `pip` and `uv` to look at PyPI first, but to also check the PyTorch index
+for packages that are not available on PyPI. Because `torch` and `torchvision`
+are published as CPU-specific wheels on that index, they resolve to the smaller
+CPU-only versions (`+cpu`) instead of the default CUDA wheels.
 
 Install the dependencies:
 
@@ -244,37 +254,60 @@ train:
 
 #### Move the preparation step to its own file
 
-The `src/prepare.py` script will prepare the dataset. Let's take this
-opportunity to refactor the code to make it more modular and explicit using
-functions:
+The `src/prepare.py` script will prepare the dataset. It loads the raw images,
+splits them into a training set and a validation set, copies the images into
+`data/prepared`, and saves a preview plot and the class labels.
+
+Let's take this opportunity to refactor the code to make it more modular and
+explicit using functions:
 
 ```py title="src/prepare.py"
 import json
+import shutil
 import sys
 from pathlib import Path
 from typing import List
 
 import matplotlib.pyplot as plt
-import tensorflow as tf
+import torch
 import yaml
+from torch.utils.data import random_split
+from torchvision import datasets, transforms
 
 from utils.seed import set_seed
 
 
-def get_preview_plot(ds: tf.data.Dataset, labels: List[str]) -> plt.Figure:
+def get_preview_plot(loader, labels: List[str]) -> plt.Figure:
     """Plot a preview of the prepared dataset"""
     fig = plt.figure(figsize=(10, 5), tight_layout=True)
-    for images, label_idxs in ds.take(1):
-        for i in range(10):
+    for images, label_idxs in loader:
+        for i in range(min(10, len(images))):
             plt.subplot(2, 5, i + 1)
-            plt.imshow(images[i].numpy().astype("uint8"), cmap="gray")
-            plt.title(labels[label_idxs[i].numpy()])
+            plt.imshow(images[i].squeeze().numpy(), cmap="gray")
+            plt.title(labels[label_idxs[i].item()])
             plt.axis("off")
+        break
 
     return fig
 
 
+def save_split(
+    subset, split_name: str, prepared_dataset_folder: Path, labels: List[str]
+) -> None:
+    """Copy a dataset split to the prepared folder"""
+    split_folder = prepared_dataset_folder / split_name
+    split_folder.mkdir(parents=True, exist_ok=True)
+
+    for idx in subset.indices:
+        path, label_idx = subset.dataset.samples[idx]
+        path = Path(path)
+        dest = split_folder / labels[label_idx] / path.name
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy(path, dest)
+
+
 def main() -> None:
+
     if len(sys.argv) != 3:
         print("Arguments error. Usage:\n")
         print("\tpython3 prepare.py <raw-dataset-folder> <prepared-dataset-folder>\n")
@@ -287,46 +320,47 @@ def main() -> None:
     prepared_dataset_folder = Path(sys.argv[2])
     seed = prepare_params["seed"]
     split = prepare_params["split"]
-    image_size = prepare_params["image_size"]
+    image_size = tuple(prepare_params["image_size"])
     grayscale = prepare_params["grayscale"]
 
     # Set seed for reproducibility
     set_seed(seed)
 
     # Read data
-    ds_train, ds_val = tf.keras.utils.image_dataset_from_directory(
-        raw_dataset_folder,
-        labels="inferred",
-        label_mode="int",
-        color_mode="grayscale" if grayscale else "rgb",
-        batch_size=32,
-        image_size=image_size,
-        shuffle=True,
-        seed=seed,
-        validation_split=split,
-        subset="both",
+    transform = transforms.Compose(
+        [
+            transforms.Grayscale(num_output_channels=1)
+            if grayscale
+            else transforms.Identity(),
+            transforms.Resize(image_size),
+            transforms.ToTensor(),
+        ]
     )
-    labels = ds_train.class_names
+    full_dataset = datasets.ImageFolder(raw_dataset_folder, transform=transform)
+    labels = full_dataset.classes
+
+    val_size = int(split * len(full_dataset))
+    train_size = len(full_dataset) - val_size
+    ds_train, ds_val = random_split(
+        full_dataset,
+        [train_size, val_size],
+        generator=torch.Generator().manual_seed(seed),
+    )
 
     if not prepared_dataset_folder.exists():
         prepared_dataset_folder.mkdir(parents=True)
 
     # Save the preview plot
-    preview_plot = get_preview_plot(ds_train, labels)
+    preview_loader = torch.utils.data.DataLoader(ds_train, batch_size=32, shuffle=True)
+    preview_plot = get_preview_plot(preview_loader, labels)
     preview_plot.savefig(prepared_dataset_folder / "preview.png")
 
-    # Normalize the data
-    normalization_layer = tf.keras.layers.Rescaling(
-        1.0 / 255
-    )
-    ds_train = ds_train.map(lambda x, y: (normalization_layer(x), y))
-    ds_val = ds_val.map(lambda x, y: (normalization_layer(x), y))
-
     # Save the prepared dataset
+    save_split(ds_train, "train", prepared_dataset_folder, labels)
+    save_split(ds_val, "val", prepared_dataset_folder, labels)
+
     with open(prepared_dataset_folder / "labels.json", "w") as f:
         json.dump(labels, f)
-    tf.data.Dataset.save(ds_train, str(prepared_dataset_folder / "train"))
-    tf.data.Dataset.save(ds_val, str(prepared_dataset_folder / "val"))
 
     print(f"\nDataset saved at {prepared_dataset_folder.absolute()}")
 
@@ -341,13 +375,19 @@ The `src/train.py` script will train the ML model. Let's take this opportunity
 to refactor the code to make it more modular and explicit using functions:
 
 ```py title="src/train.py"
+import os
 import sys
 from pathlib import Path
 from typing import Tuple
 
 import numpy as np
-import tensorflow as tf
+import torch
 import yaml
+from torch.utils.data import DataLoader
+from torchvision import datasets, transforms
+
+os.environ["KERAS_BACKEND"] = "torch"
+import keras
 
 from utils.seed import set_seed
 
@@ -357,16 +397,18 @@ def get_model(
     conv_size: int,
     dense_size: int,
     output_classes: int,
-) -> tf.keras.Model:
+) -> keras.Model:
     """Create a simple CNN model"""
-    model = tf.keras.models.Sequential(
+    model = keras.Sequential(
         [
-            tf.keras.layers.Input(shape=image_shape),
-            tf.keras.layers.Conv2D(conv_size, (3, 3), activation="relu"),
-            tf.keras.layers.MaxPooling2D((3, 3)),
-            tf.keras.layers.Flatten(),
-            tf.keras.layers.Dense(dense_size, activation="relu"),
-            tf.keras.layers.Dense(output_classes),
+            keras.layers.Input(shape=image_shape),
+            keras.layers.Conv2D(
+                conv_size, (3, 3), activation="relu", data_format="channels_first"
+            ),
+            keras.layers.MaxPooling2D((3, 3), data_format="channels_first"),
+            keras.layers.Flatten(),
+            keras.layers.Dense(dense_size, activation="relu"),
+            keras.layers.Dense(output_classes),
         ]
     )
     return model
@@ -385,9 +427,9 @@ def main() -> None:
     prepared_dataset_folder = Path(sys.argv[1])
     model_folder = Path(sys.argv[2])
 
-    image_size = prepare_params["image_size"]
+    image_size = tuple(prepare_params["image_size"])
     grayscale = prepare_params["grayscale"]
-    image_shape = (*image_size, 1 if grayscale else 3)
+    image_shape = (1 if grayscale else 3, *image_size)
 
     seed = train_params["seed"]
     lr = train_params["lr"]
@@ -400,23 +442,37 @@ def main() -> None:
     set_seed(seed)
 
     # Load data
-    ds_train = tf.data.Dataset.load(str(prepared_dataset_folder / "train"))
-    ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "val"))
+    transform = transforms.Compose(
+        [
+            transforms.Grayscale(num_output_channels=1)
+            if grayscale
+            else transforms.Identity(),
+            transforms.Resize(image_size),
+            transforms.ToTensor(),
+        ]
+    )
+    ds_train = datasets.ImageFolder(
+        prepared_dataset_folder / "train", transform=transform
+    )
+    ds_val = datasets.ImageFolder(prepared_dataset_folder / "val", transform=transform)
+
+    train_loader = DataLoader(ds_train, batch_size=32, shuffle=True)
+    val_loader = DataLoader(ds_val, batch_size=32, shuffle=False)
 
     # Define the model
     model = get_model(image_shape, conv_size, dense_size, output_classes)
     model.compile(
-        optimizer=tf.keras.optimizers.Adam(lr),
-        loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-        metrics=[tf.keras.metrics.SparseCategoricalAccuracy()],
+        optimizer=keras.optimizers.Adam(lr),
+        loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+        metrics=[keras.metrics.SparseCategoricalAccuracy(name="acc")],
     )
     model.summary()
 
     # Train the model
-    model.fit(
-        ds_train,
+    history = model.fit(
+        train_loader,
         epochs=epochs,
-        validation_data=ds_val,
+        validation_data=val_loader,
     )
 
     # Save the model
@@ -424,7 +480,7 @@ def main() -> None:
     model_path = model_folder.absolute() / "model.keras"
     model.save(model_path)
     # Save the model history
-    np.save(model_folder.absolute() / "history.npy", model.history.history)
+    np.save(model_folder.absolute() / "history.npy", history.history)
 
     print(f"\nModel saved at {model_folder.absolute()}")
 
@@ -435,19 +491,33 @@ if __name__ == "__main__":
 
 #### Move the evaluate step to its own file
 
-The `src/evaluate.py` script will evaluate the ML model using DVC. Let's take
-this opportunity to refactor the code to make it more modular and explicit using
-functions:
+The `src/evaluate.py` script will evaluate the ML model using scikit-learn.
+Let's take this opportunity to refactor the code to make it more modular and
+explicit using functions:
 
 ```py title="src/evaluate.py"
 import json
+import os
 import sys
 from pathlib import Path
 from typing import List
 
 import matplotlib.pyplot as plt
 import numpy as np
-import tensorflow as tf
+import torch
+import yaml
+from sklearn.metrics import (
+    accuracy_score,
+    confusion_matrix,
+    f1_score,
+    precision_score,
+    recall_score,
+)
+from torch.utils.data import DataLoader
+from torchvision import datasets, transforms
+
+os.environ["KERAS_BACKEND"] = "torch"
+import keras
 
 
 def get_training_plot(model_history: dict) -> plt.Figure:
@@ -467,64 +537,62 @@ def get_training_plot(model_history: dict) -> plt.Figure:
     return fig
 
 
-def get_pred_preview_plot(
-    model: tf.keras.Model, ds_val: tf.data.Dataset, labels: List[str]
-) -> plt.Figure:
+def get_pred_preview_plot(model: keras.Model, ds_val, labels: List[str]) -> plt.Figure:
     """Plot a preview of the predictions"""
-    fig = plt.figure(figsize=(10, 5), tight_layout=True)
-    for images, label_idxs in ds_val.take(1):
-        preds = model.predict(images)
-        for i in range(10):
-            plt.subplot(2, 5, i + 1)
-            img = (images[i].numpy() * 255).astype("uint8")
-            # Convert image to rgb if grayscale
-            if img.shape[-1] == 1:
-                img = np.squeeze(img, axis=-1)
-                img = np.stack((img,) * 3, axis=-1)
-            true_label = labels[label_idxs[i].numpy()]
-            pred_label = labels[np.argmax(preds[i])]
-            # Add red border if the prediction is wrong else add green border
-            img = np.pad(img, pad_width=((1, 1), (1, 1), (0, 0)))
-            if true_label != pred_label:
-                img[0, :, 0] = 255  # Top border
-                img[-1, :, 0] = 255  # Bottom border
-                img[:, 0, 0] = 255  # Left border
-                img[:, -1, 0] = 255  # Right border
-            else:
-                img[0, :, 1] = 255
-                img[-1, :, 1] = 255
-                img[:, 0, 1] = 255
-                img[:, -1, 1] = 255
+    fig, axes = plt.subplots(2, 5, figsize=(10, 5), tight_layout=True)
 
-            plt.imshow(img)
-            plt.title(f"True: {true_label}\n" f"Pred: {pred_label}")
-            plt.axis("off")
+    sample_size = min(10, len(ds_val))
+    sample_idxs = np.random.choice(len(ds_val), size=sample_size, replace=False)
+    images, label_idxs = zip(*(ds_val[i] for i in sample_idxs))
+    images = torch.stack(images)
+    label_idxs = np.array(label_idxs)
+    pred_idxs = np.argmax(model.predict(images, verbose=0), axis=1)
+
+    for ax, image, true_idx, pred_idx in zip(
+        axes.ravel(), images, label_idxs, pred_idxs
+    ):
+        ax.imshow(image.squeeze(), cmap="gray")
+        ax.set_title(f"True: {labels[true_idx]}\nPred: {labels[pred_idx]}")
+        ax.set_xticks([])
+        ax.set_yticks([])
+
+        border_color = "lime" if true_idx == pred_idx else "red"
+        for spine in ax.spines.values():
+            spine.set_edgecolor(border_color)
+            spine.set_linewidth(4)
+
+    # Hide any unused subplots
+    for i in range(sample_size, 10):
+        axes.ravel()[i].axis("off")
 
     return fig
 
 
 def get_confusion_matrix_plot(
-    model: tf.keras.Model, ds_val: tf.data.Dataset, labels: List[str]
+    model: keras.Model, val_loader, labels: List[str]
 ) -> plt.Figure:
     """Plot the confusion matrix"""
+    y_true = []
+    y_pred = []
+
+    for images, label_idxs in val_loader:
+        logits = model.predict(images, verbose=0)
+        y_true.extend(label_idxs.numpy())
+        y_pred.extend(np.argmax(logits, axis=1))
+
+    y_true = np.array(y_true)
+    y_pred = np.array(y_pred)
+
+    conf_matrix = confusion_matrix(y_true, y_pred, normalize="true")
+
     fig = plt.figure(figsize=(6, 6), tight_layout=True)
-    preds = model.predict(ds_val)
-
-    conf_matrix = tf.math.confusion_matrix(
-        labels=tf.concat([y for _, y in ds_val], axis=0),
-        predictions=tf.argmax(preds, axis=1),
-        num_classes=len(labels),
-    )
-
-    # Plot the confusion matrix
-    conf_matrix = conf_matrix / tf.reduce_sum(conf_matrix, axis=1)
     plt.imshow(conf_matrix, cmap="Blues")
 
     # Plot cell values
     for i in range(len(labels)):
         for j in range(len(labels)):
-            value = conf_matrix[i, j].numpy()
-            if value == 0:
+            value = conf_matrix[i, j]
+            if np.isclose(value, 0.0):
                 color = "lightgray"
             elif value > 0.5:
                 color = "white"
@@ -550,6 +618,19 @@ def get_confusion_matrix_plot(
     return fig
 
 
+def get_predictions(model: keras.Model, val_loader) -> tuple[np.ndarray, np.ndarray]:
+    """Return true and predicted labels for the validation set"""
+    y_true = []
+    y_pred = []
+
+    for images, label_idxs in val_loader:
+        logits = model.predict(images, verbose=0)
+        y_true.extend(label_idxs.numpy())
+        y_pred.extend(np.argmax(logits, axis=1))
+
+    return np.array(y_true), np.array(y_pred)
+
+
 def main() -> None:
     if len(sys.argv) != 3:
         print("Arguments error. Usage:\n")
@@ -564,23 +645,55 @@ def main() -> None:
     # Create folders
     (evaluation_folder / plots_folder).mkdir(parents=True, exist_ok=True)
 
+    # Load parameters
+    prepare_params = yaml.safe_load(open("params.yaml"))["prepare"]
+    image_size = tuple(prepare_params["image_size"])
+    grayscale = prepare_params["grayscale"]
+
     # Load files
-    ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "val"))
+    transform = transforms.Compose(
+        [
+            transforms.Grayscale(num_output_channels=1)
+            if grayscale
+            else transforms.Identity(),
+            transforms.Resize(image_size),
+            transforms.ToTensor(),
+        ]
+    )
+    ds_val = datasets.ImageFolder(prepared_dataset_folder / "val", transform=transform)
+    val_loader = DataLoader(ds_val, batch_size=32, shuffle=False)
+
     labels = None
     with open(prepared_dataset_folder / "labels.json") as f:
         labels = json.load(f)
 
     # Load model
     model_path = model_folder.absolute() / "model.keras"
-    model = tf.keras.models.load_model(model_path)
-    model_history = np.load(model_folder.absolute() / "history.npy", allow_pickle=True).item()
+    model = keras.models.load_model(model_path)
+    model_history = np.load(
+        model_folder.absolute() / "history.npy", allow_pickle=True
+    ).item()
 
     # Log metrics
-    val_loss, val_acc = model.evaluate(ds_val)
-    print(f"Validation loss: {val_loss:.2f}")
-    print(f"Validation accuracy: {val_acc * 100:.2f}%")
+    val_loss, val_acc = model.evaluate(val_loader)
+    y_true, y_pred = get_predictions(model, val_loader)
+
+    metrics = {
+        "val_loss": val_loss,
+        "val_acc": val_acc,
+        "precision": precision_score(y_true, y_pred, average="macro", zero_division=0),
+        "recall": recall_score(y_true, y_pred, average="macro", zero_division=0),
+        "f1_score": f1_score(y_true, y_pred, average="macro", zero_division=0),
+    }
+
+    print(f"Validation loss: {metrics['val_loss']:.2f}")
+    print(f"Validation accuracy: {metrics['val_acc'] * 100:.2f}%")
+    print(f"Precision: {metrics['precision']:.2f}")
+    print(f"Recall:    {metrics['recall']:.2f}")
+    print(f"F1 score:  {metrics['f1_score']:.2f}")
+
     with open(evaluation_folder / "metrics.json", "w") as f:
-        json.dump({"val_loss": val_loss, "val_acc": val_acc}, f)
+        json.dump(metrics, f)
 
     # Save training history plot
     fig = get_training_plot(model_history)
@@ -591,7 +704,7 @@ def main() -> None:
     fig.savefig(evaluation_folder / plots_folder / "pred_preview.png")
 
     # Save confusion matrix plot
-    fig = get_confusion_matrix_plot(model, ds_val, labels)
+    fig = get_confusion_matrix_plot(model, val_loader, labels)
     fig.savefig(evaluation_folder / plots_folder / "confusion_matrix.png")
 
     print(
@@ -642,20 +755,22 @@ import os
 import random
 
 import numpy as np
-import tensorflow as tf
+import torch
+
+os.environ["KERAS_BACKEND"] = "torch"
+import keras
 
 
 def set_seed(seed: int) -> None:
     os.environ["PYTHONHASHSEED"] = str(seed)
     random.seed(seed)
     np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
 
-    os.environ["TF_DETERMINISTIC_OPS"] = "1"
-    os.environ["TF_CUDNN_DETERMINISTIC"] = "1"
-
-    tf.random.set_seed(seed)
-    tf.config.threading.set_inter_op_parallelism_threads(1)
-    tf.config.threading.set_intra_op_parallelism_threads(1)
+    keras.utils.set_random_seed(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
 ```
 
 ### Create a `README.md` file
@@ -689,12 +804,12 @@ Your working directory should now look like this:
 ├── requirements-freeze.txt # (3)!
 ├── requirements.txt # (4)!
 └── src # (5)!
-    ├── utils
-    │   ├── __init__.py
-    │   └── seed.py
-    ├── evaluate.py
-    ├── prepare.py
-    └── train.py
+    ├── evaluate.py
+    ├── prepare.py
+    ├── train.py
+    └── utils
+        ├── __init__.py
+        └── seed.py
 ```
 
 1. This is new.
@@ -729,7 +844,7 @@ results in the `data/prepared`, `model`, and `evaluation` directories.
 
 Your working directory should now be similar to this:
 
-```yaml hl_lines="3-9 13-20"
+```yaml hl_lines="3-9 13-21"
 .
 ├── data
 │   ├── prepared # (1)!
@@ -749,7 +864,8 @@ Your working directory should now be similar to this:
 │       ├── pred_preview.png
 │       └── training_history.png
 ├── model # (3)!
-│   └── ...
+│   ├── history.npy
+│   └── model.keras
 ├── params.yaml
 ├── README.md
 ├── requirements-freeze.txt
@@ -758,8 +874,8 @@ Your working directory should now be similar to this:
     ├── evaluate.py
     ├── prepare.py
     ├── train.py
-    └── utils
-        ├── __init__.py
+    └── utils
+        ├── __init__.py
         └── seed.py
 ```
 
@@ -826,4 +942,3 @@ Continue to the next chapters to address the remaining items.
 Highly inspired by:
 
 - [_Get Started: Data Pipelines_ - dvc.org](https://dvc.org/doc/start/data-management/data-pipelines)
-- [_How to get stable results with TensorFlow, setting random seed_ - stackoverflow.com](https://stackoverflow.com/questions/36288235/how-to-get-stable-results-with-tensorflow-setting-random-seed)

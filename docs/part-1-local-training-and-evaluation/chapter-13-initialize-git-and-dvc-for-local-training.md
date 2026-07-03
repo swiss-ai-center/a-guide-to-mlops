@@ -221,10 +221,14 @@ git commit -m "Use Git to version my ML experiment"
 
 Add the main `dvc` dependency to the `requirements.txt` file:
 
-```txt title="requirements.txt" hl_lines="4"
-tensorflow==2.21.0
-matplotlib==3.10.9
+```txt title="requirements.txt" hl_lines="8"
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.12.1+cpu
+torchvision==0.27.1+cpu
+keras==3.15.0
+matplotlib==3.11.0
 pyyaml==6.0.3
+scikit-learn==1.9.0
 dvc==3.67.1
 ```
 
@@ -242,10 +246,10 @@ diff --git a/requirements.txt b/requirements.txt
 index 250f32c..152b868 100644
 --- a/requirements.txt
 +++ b/requirements.txt
-@@ -1,3 +1,4 @@
- tensorflow==2.21.0
- matplotlib==3.10.9
+@@ -5,3 +5,4 @@ keras==3.15.0
+ matplotlib==3.11.0
  pyyaml==6.0.3
+ scikit-learn==1.9.0
 +dvc==3.67.1
 ```
 
@@ -384,7 +388,7 @@ You can now add the experiment data to DVC without complain:
 dvc add data/raw/
 ```
 
-The output should be similar to this. You can safely ignore the message:
+The output should be similar to this. You can **safely ignore** the message:
 
 ```text
 To track the changes with git, run:
