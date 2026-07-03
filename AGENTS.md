@@ -84,7 +84,7 @@ dependencies are listed in `requirements.txt`.
 ```sh
 python3.13 -m venv .venv
 source .venv/bin/activate
-pip install --requirement requirements-freeze.txt
+pip install -r requirements-freeze.txt
 zensical serve
 ```
 
@@ -95,7 +95,7 @@ Open <http://localhost:8000>. The server reloads on documentation changes.
 ```sh
 uv venv --python 3.13
 source .venv/bin/activate
-uv pip install --requirement requirements-freeze.txt
+uv pip install -r requirements-freeze.txt
 zensical serve
 ```
 
