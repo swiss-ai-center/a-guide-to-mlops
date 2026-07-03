@@ -77,7 +77,7 @@ flowchart TB
                 pod_train[Train model]
             end
             pod_runner[Runner] --> clusterPodGraph
-            bento_service_cluster[classifier.bentomodel] --> k8s_fastapi[FastAPI]
+            bento_service_cluster[classifierService] --> k8s_fastapi[FastAPI]
         end
         action --> pod_runner
         pod_train --> s3_storage

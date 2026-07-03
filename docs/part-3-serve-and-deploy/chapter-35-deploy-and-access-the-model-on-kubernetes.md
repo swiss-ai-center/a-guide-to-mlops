@@ -65,7 +65,7 @@ flowchart TB
                     bentoml containerize
                     docker push|registry
         subgraph clusterGraph[Kubernetes]
-            bento_service_cluster[classifier.bentomodel] --> k8s_fastapi[FastAPI]
+            bento_service_cluster[classifierService] --> k8s_fastapi[FastAPI]
         end
         registry --> |kubectl apply|bento_service_cluster
     end
