@@ -248,11 +248,20 @@ The following table describes the files that you will create in this codebase:
 
 Let's split the parameters to run the ML experiment with in a distinct file:
 
-```yaml title="params.yaml" prepare:
-  seed: 77 split: 0.2 image_size: [32, 32] grayscale: True
+```yaml title="params.yaml"
+prepare:
+  seed: 77
+  split: 0.2
+  image_size: [32, 32]
+  grayscale: True
 
 train:
-  seed: 77 lr: 0.0001 epochs: 5 conv_size: 32 dense_size: 64 output_classes: 11
+  seed: 77
+  lr: 0.0001
+  epochs: 5
+  conv_size: 32
+  dense_size: 64
+  output_classes: 11
 ```
 
 #### Move the preparation step to its own file
@@ -264,8 +273,12 @@ splits them into a training set and a validation set, copies the images into
 Let's take this opportunity to refactor the code to make it more modular and
 explicit using functions:
 
-`` `py title="src/prepare.py" import json import shutil import sys from pathlib
-import Path from typing import List
+```py title="src/prepare.py"
+import json
+import shutil
+import sys
+from pathlib import Path
+from typing import List
 
 import matplotlib.pyplot as plt import torch import yaml from torch.utils.data
 import random_split from torchvision import datasets, transforms
@@ -353,8 +366,11 @@ if __name__ == "__main__":
 The `src/train.py` script will train the ML model. Let's take this opportunity
 to refactor the code to make it more modular and explicit using functions:
 
-`` `py title="src/train.py" import os import sys from pathlib import Path from
-typing import Tuple
+```py title="src/train.py"
+import os
+import sys
+from pathlib import Path
+from typing import Tuple
 
 import numpy as np
 import torch
