@@ -34,32 +34,37 @@ flowchart TB
     end
 
     subgraph workspaceGraph[WORKSPACE]
-        dvcGraph --> bento_model[classifier.bentomodel]
         subgraph bentoGraph[bentofile.yaml]
-            bento_model --> serve[serve.py]
+            serve[serve.py] <--> bento_model[classifier.bentomodel]
             features[features.py] --> serve
         end
-        serve --> drift_logs["logs/…/data/*.log"]
         bento_model <-.-> dot_dvc
 
         data --> prepare
-        params[params.yaml] -.- prepare
         subgraph dvcGraph["dvc.yaml"]
             prepare --> train
             train --> evaluate
-            train --> build_reference
         end
         params -.- train
-        build_reference --> reference_features[reference_features.parquet]
+        params[params.yaml] -.- prepare
+        dvcGraph --> bento_model
     end
 
     subgraph remoteGraph[REMOTE]
         s3_storage
         subgraph gitGraph[Git Remote]
+            request[PR] --> |merge|repository
+            issue[Issue] <--> |open| action_monitor
             repository[(Repository)] <--> action[Action]
-            issue[Drift alert issue] --> repository
+            repository <--> action_monitor[Monitor]
         end
-        action --> registry
+        action --> |dvc pull
+                    dvc repro
+                    bentoml build
+                    bentoml containerize
+                    docker push|registry
+        s3_storage -.- |...|request
+
         s3_storage --> action
         subgraph clusterGraph[Kubernetes]
             subgraph clusterPodGraph[Pod]
@@ -67,87 +72,29 @@ flowchart TB
             end
             pod_runner[Runner] --> clusterPodGraph
             bento_service_cluster[classifierService] --> k8s_fastapi[FastAPI]
-            evidently_ui[Evidently UI] --> dashboard[Dashboard]
+            bento_service_cluster --> cluster_logs[Logs]
+            fluent_bit[Fluent Bit] <--> cluster_logs
+            monitor_cluster[monitor_cluster.py]
+            k8s_evidentlyui[Evidently UI]
         end
         action --> pod_runner
-        pod_train --> s3_storage
+        pod_train -->|cml publish| request
+        pod_train -->|dvc push| s3_storage
+        s3_storage <--> |batch upload| fluent_bit
 
         registry[(Container
                   registry)] --> bento_service_cluster
+        s3_storage --> monitor_cluster
+        action_monitor --> monitor_cluster
+        monitor_cluster --> k8s_evidentlyui
     end
-
-    drift_logs -.->|Fluent Bit| s3_storage
-    s3_storage -->|monitor workflow| action
-    action -->|report| evidently_ui
-    action -->|alert| issue
 
     subgraph browserGraph[BROWSER]
         k8s_fastapi <--> publicURL["public URL"]
-        dashboard <--> dashboardURL["dashboard URL"]
+        k8s_evidentlyui <--> monitoringURL["monitoring URL"]
     end
 
-    style workspaceGraph opacity:0.4,color:#7f7f7f80
-    style cacheGraph opacity:0.4,color:#7f7f7f80
-    style remoteGraph opacity:0.4,color:#7f7f7f80
-    style gitGraph opacity:0.4,color:#7f7f7f80
-    style clusterGraph opacity:0.4,color:#7f7f7f80
-    style clusterPodGraph opacity:0.4,color:#7f7f7f80
-    style browserGraph opacity:0.4,color:#7f7f7f80
-    style params opacity:0.4,color:#7f7f7f80
-    style data opacity:0.4,color:#7f7f7f80
-    style prepare opacity:0.4,color:#7f7f7f80
-    style train opacity:0.4,color:#7f7f7f80
-    style evaluate opacity:0.4,color:#7f7f7f80
-    style build_reference opacity:0.4,color:#7f7f7f80
-    style dvcGraph opacity:0.4,color:#7f7f7f80
-    style bentoGraph opacity:0.4,color:#7f7f7f80
-    style bento_model opacity:0.4,color:#7f7f7f80
-    style serve opacity:0.4,color:#7f7f7f80
-    style features opacity:0.4,color:#7f7f7f80
-    style drift_logs opacity:0.4,color:#7f7f7f80
-    style reference_features opacity:0.4,color:#7f7f7f80
-    style dot_git opacity:0.4,color:#7f7f7f80
-    style dot_dvc opacity:0.4,color:#7f7f7f80
-    style repository opacity:0.4,color:#7f7f7f80
-    style s3_storage opacity:0.4,color:#7f7f7f80
-    style action opacity:0.4,color:#7f7f7f80
-    style registry opacity:0.4,color:#7f7f7f80
-    style bento_service_cluster opacity:0.4,color:#7f7f7f80
-    style k8s_fastapi opacity:0.4,color:#7f7f7f80
-    style publicURL opacity:0.4,color:#7f7f7f80
-    style dashboard opacity:0.4,color:#7f7f7f80
-    style dashboardURL opacity:0.4,color:#7f7f7f80
-    style evidently_ui opacity:0.4,color:#7f7f7f80
-    style issue opacity:0.4,color:#7f7f7f80
-    style pod_runner opacity:0.4,color:#7f7f7f80
-    style pod_train opacity:0.4,color:#7f7f7f80
-    linkStyle 0 opacity:0.4,color:#7f7f7f80
-    linkStyle 1 opacity:0.4,color:#7f7f7f80
-    linkStyle 2 opacity:0.4,color:#7f7f7f80
-    linkStyle 3 opacity:0.4,color:#7f7f7f80
-    linkStyle 4 opacity:0.4,color:#7f7f7f80
-    linkStyle 5 opacity:0.4,color:#7f7f7f80
-    linkStyle 6 opacity:0.4,color:#7f7f7f80
-    linkStyle 7 opacity:0.4,color:#7f7f7f80
-    linkStyle 8 opacity:0.4,color:#7f7f7f80
-    linkStyle 9 opacity:0.4,color:#7f7f7f80
-    linkStyle 10 opacity:0.4,color:#7f7f7f80
-    linkStyle 11 opacity:0.4,color:#7f7f7f80
-    linkStyle 12 opacity:0.4,color:#7f7f7f80
-    linkStyle 13 opacity:0.4,color:#7f7f7f80
-    linkStyle 14 opacity:0.4,color:#7f7f7f80
-    linkStyle 15 opacity:0.4,color:#7f7f7f80
-    linkStyle 16 opacity:0.4,color:#7f7f7f80
-    linkStyle 17 opacity:0.4,color:#7f7f7f80
-    linkStyle 18 opacity:0.4,color:#7f7f7f80
-    linkStyle 19 opacity:0.4,color:#7f7f7f80
-    linkStyle 20 opacity:0.4,color:#7f7f7f80
-    linkStyle 21 opacity:0.4,color:#7f7f7f80
-    linkStyle 22 opacity:0.4,color:#7f7f7f80
-    linkStyle 23 opacity:0.4,color:#7f7f7f80
-    linkStyle 24 opacity:0.4,color:#7f7f7f80
-    linkStyle 25 opacity:0.4,color:#7f7f7f80
-    linkStyle 26 opacity:0.4,color:#7f7f7f80
+    linkStyle 17 opacity:0.0
 ```
 
 Part 5 is an improvement of the MLOps process. You will learn how to label new
