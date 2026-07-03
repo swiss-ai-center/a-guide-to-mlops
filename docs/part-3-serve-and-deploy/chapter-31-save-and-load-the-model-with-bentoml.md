@@ -88,7 +88,7 @@ flowchart TB
 Add the `bentoml` package to install BentoML support. `pillow` is also added to
 support image processing:
 
-```txt title="requirements.txt" hl_lines="8-9"
+```txt title="requirements.txt" hl_lines="9-10"
 --extra-index-url https://download.pytorch.org/whl/cpu
 torch==2.12.1+cpu
 torchvision==0.27.1+cpu
@@ -119,7 +119,7 @@ index 3e4c255..780af47 100644
  matplotlib==3.11.0
  pyyaml==6.0.3
  scikit-learn==1.9.0
-+dvc[gs]==3.67.1
+ dvc[gs]==3.67.1
 +bentoml==1.4.39
 +pillow==12.2.0
 ```
@@ -174,7 +174,7 @@ others.
 
 Update the `src/train.py` file to save the model with BentoML:
 
-```py title="src/train.py" hl_lines="1 9-10 66-68 88-127"
+```py title="src/train.py" hl_lines="1 9 87-90 110-151"
 import json
 import os
 import sys
@@ -182,12 +182,12 @@ from pathlib import Path
 from typing import Tuple
 
 import numpy as np
-import torch
 import yaml
 from PIL.Image import Image
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 
+os.environ["KERAS_BACKEND"] = "torch"
 import bentoml
 import keras
 
@@ -256,9 +256,7 @@ def main() -> None:
     ds_train = datasets.ImageFolder(
         prepared_dataset_folder / "train", transform=transform
     )
-    ds_val = datasets.ImageFolder(
-        prepared_dataset_folder / "val", transform=transform
-    )
+    ds_val = datasets.ImageFolder(prepared_dataset_folder / "val", transform=transform)
 
     train_loader = DataLoader(ds_train, batch_size=32, shuffle=True)
     val_loader = DataLoader(ds_val, batch_size=32, shuffle=False)
@@ -291,10 +289,12 @@ def main() -> None:
         x = x.convert("L" if grayscale else "RGB")
         x = x.resize(image_size)
         x = np.array(x, dtype=np.float32) / 255.0
+        # Add channel dimension for grayscale
         if x.ndim == 2:
-            x = np.expand_dims(x, axis=0)
+            x = np.expand_dims(x, axis=-1)
         else:
             x = np.transpose(x, (2, 0, 1))
+        # Add batch dimension
         x = np.expand_dims(x, axis=0)
         return x
 
@@ -310,7 +310,6 @@ def main() -> None:
         }
 
     # Save the model using BentoML to its model store
-    # https://docs.bentoml.com/en/latest/reference/frameworks/keras.html#bentoml.keras.save_model
     bentoml.keras.save_model(
         "celestial_bodies_classifier_model",
         model,
@@ -361,48 +360,39 @@ The output should be similar to this:
 
 ```diff
 diff --git a/src/train.py b/src/train.py
-index 83cf265..0c3194b 100644
+index a63ba12..c0b9e62 100644
 --- a/src/train.py
 +++ b/src/train.py
-@@ -1,7 +1,10 @@
+@@ -1,15 +1,17 @@
 +import json
-+import os
+ import os
  import sys
  from pathlib import Path
  from typing import Tuple
 
  import numpy as np
--import tensorflow as tf
-+import torch
  import yaml
-+import bentoml
-+import keras
 +from PIL.Image import Image
-+from torch.utils.data import DataLoader
-+from torchvision import datasets, transforms
- import yaml
+ from torch.utils.data import DataLoader
+ from torchvision import datasets, transforms
+
+ os.environ["KERAS_BACKEND"] = "torch"
++import bentoml
+ import keras
+
  from utils.seed import set_seed
+@@ -82,6 +84,10 @@ def main() -> None:
+     train_loader = DataLoader(ds_train, batch_size=32, shuffle=True)
+     val_loader = DataLoader(ds_val, batch_size=32, shuffle=False)
 
-@@ -56,8 +59,13 @@ def main() -> None:
-     set_seed(seed)
-
-     # Load data
--    ds_train = tf.data.Dataset.load(str(prepared_dataset_folder / "train"))
--    ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "val"))
-+    transform = transforms.Compose([...])
-+    ds_train = datasets.ImageFolder(prepared_dataset_folder / "train", transform=transform)
-+    ds_val = datasets.ImageFolder(prepared_dataset_folder / "val", transform=transform)
-+
-+    train_loader = DataLoader(ds_train, batch_size=32, shuffle=True)
-+    val_loader = DataLoader(ds_val, batch_size=32, shuffle=False)
-+
 +    labels = None
 +    with open(prepared_dataset_folder / "labels.json") as f:
 +        labels = json.load(f)
-
++
      # Define the model
      model = get_model(image_shape, conv_size, dense_size, output_classes)
-@@ -78,8 +86,41 @@ def main() -> None:
+     model.compile(
+@@ -100,8 +106,49 @@ def main() -> None:
 
      # Save the model
      model_folder.mkdir(parents=True, exist_ok=True)
@@ -414,10 +404,12 @@ index 83cf265..0c3194b 100644
 +        x = x.convert("L" if grayscale else "RGB")
 +        x = x.resize(image_size)
 +        x = np.array(x, dtype=np.float32) / 255.0
++        # Add channel dimension for grayscale
 +        if x.ndim == 2:
-+            x = np.expand_dims(x, axis=0)
++            x = np.expand_dims(x, axis=-1)
 +        else:
 +            x = np.transpose(x, (2, 0, 1))
++        # Add batch dimension
 +        x = np.expand_dims(x, axis=0)
 +        return x
 +
@@ -433,7 +425,6 @@ index 83cf265..0c3194b 100644
 +        }
 +
 +    # Save the model using BentoML to its model store
-+    # https://docs.bentoml.com/en/latest/reference/frameworks/keras.html#bentoml.keras.save_model
 +    bentoml.keras.save_model(
 +        "celestial_bodies_classifier_model",
 +        model,
@@ -451,15 +442,14 @@ index 83cf265..0c3194b 100644
 +    )
 +
      # Save the model history
--    np.save(model_folder.absolute() / "history.npy", model.history.history)
-+    np.save(model_folder.absolute() / "history.npy", history.history)
+     np.save(model_folder.absolute() / "history.npy", history.history)
 ```
 
 #### Update `src/evaluate.py`
 
 Update the `src/evaluate.py` file to load the model from BentoML:
 
-```py title="src/evaluate.py" hl_lines="9 132-137 139"
+```py title="src/evaluate.py" hl_lines="9 172-179 181"
 import json
 import os
 import sys
@@ -468,11 +458,10 @@ from typing import List
 
 import matplotlib.pyplot as plt
 import numpy as np
-import torch
 import bentoml
+import torch
 import yaml
 from sklearn.metrics import (
-    accuracy_score,
     confusion_matrix,
     f1_score,
     precision_score,
@@ -653,17 +642,13 @@ def main() -> None:
     metrics = {
         "val_loss": val_loss,
         "val_acc": val_acc,
-        "accuracy": accuracy_score(y_true, y_pred),
-        "precision": precision_score(
-            y_true, y_pred, average="macro", zero_division=0
-        ),
+        "precision": precision_score(y_true, y_pred, average="macro", zero_division=0),
         "recall": recall_score(y_true, y_pred, average="macro", zero_division=0),
         "f1_score": f1_score(y_true, y_pred, average="macro", zero_division=0),
     }
 
     print(f"Validation loss: {metrics['val_loss']:.2f}")
     print(f"Validation accuracy: {metrics['val_acc'] * 100:.2f}%")
-    print(f"Accuracy:  {metrics['accuracy']:.2f}")
     print(f"Precision: {metrics['precision']:.2f}")
     print(f"Recall:    {metrics['recall']:.2f}")
     print(f"F1 score:  {metrics['f1_score']:.2f}")
@@ -703,81 +688,39 @@ The output should be similar to this:
 
 ```diff
 diff --git a/src/evaluate.py b/src/evaluate.py
-index 3bca979..11322bd 100644
+index d6e23dc..06aaa3d 100644
 --- a/src/evaluate.py
 +++ b/src/evaluate.py
-@@ -1,11 +1,18 @@
-+import os
- import json
- import sys
- from pathlib import Path
- from typing import List
+@@ -6,10 +6,10 @@ from typing import List
 
  import matplotlib.pyplot as plt
  import numpy as np
--import tensorflow as tf
-+import torch
-+from sklearn.metrics import (
-+    accuracy_score,
-+    confusion_matrix,
-+    f1_score,
-+    precision_score,
-+    recall_score,
-+)
-+from torch.utils.data import DataLoader
-+from torchvision import datasets, transforms
- import bentoml
-
-+os.environ["KERAS_BACKEND"] = "torch"
-+import keras
-
- def get_training_plot(model_history: dict) -> plt.Figure:
-@@ -125,12 +132,15 @@ def main() -> None:
-     (evaluation_folder / plots_folder).mkdir(parents=True, exist_ok=True)
-
-     # Load files
--    ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "val"))
-+    ds_val = datasets.ImageFolder(prepared_dataset_folder / "val", transform=transform)
-+    val_loader = DataLoader(ds_val, batch_size=32, shuffle=False)
-     labels = None
++import bentoml
+ import torch
+ import yaml
+ from sklearn.metrics import (
+     confusion_matrix,
+     f1_score,
+     precision_score,
+@@ -169,9 +169,16 @@ def main() -> None:
      with open(prepared_dataset_folder / "labels.json") as f:
          labels = json.load(f)
 
-     # Import the model to the model store from a local model folder
-     try:
--        bentoml.models.import_model(f"{model_folder.absolute()}/celestial_bodies_classifier_model.bentomodel")
++    # Import the model to the model store from a local model folder
++    try:
 +        bentoml.models.import_model(
 +            f"{model_folder.absolute()}/celestial_bodies_classifier_model.bentomodel"
 +        )
-     except bentoml.exceptions.BentoMLException:
-         print("Model already exists in the model store - skipping import.")
-
++    except bentoml.exceptions.BentoMLException:
++        print("Model already exists in the model store - skipping import.")
++
      # Load model
 -    model_path = model_folder.absolute() / "model.keras"
--    model = tf.keras.models.load_model(model_path)
+-    model = keras.models.load_model(model_path)
 +    model = bentoml.keras.load_model("celestial_bodies_classifier_model")
-     model_history = np.load(model_folder.absolute() / "history.npy", allow_pickle=True).item()
-
-     # Log metrics
--    val_loss, val_acc = model.evaluate(ds_val)
-+    val_loss, val_acc = model.evaluate(val_loader)
-+    y_true, y_pred = get_predictions(model, val_loader)
-     print(f"Validation loss: {val_loss:.2f}")
-     print(f"Validation accuracy: {val_acc * 100:.2f}%")
--    with open(evaluation_folder / "metrics.json", "w") as f:
--        json.dump({"val_loss": val_loss, "val_acc": val_acc}, f)
-+
-+    metrics = {
-+        "val_loss": val_loss,
-+        "val_acc": val_acc,
-+        "accuracy": accuracy_score(y_true, y_pred),
-+        "precision": precision_score(y_true, y_pred, average="macro", zero_division=0),
-+        "recall": recall_score(y_true, y_pred, average="macro", zero_division=0),
-+        "f1_score": f1_score(y_true, y_pred, average="macro", zero_division=0),
-+    }
-+
-+    with open(evaluation_folder / "metrics.json", "w") as f:
-+        json.dump(metrics, f)
+     model_history = np.load(
+         model_folder.absolute() / "history.npy", allow_pickle=True
+     ).item()
 ```
 
 ### Run the experiment
