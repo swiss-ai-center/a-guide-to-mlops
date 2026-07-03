@@ -243,8 +243,8 @@ The Jupyter notebook serves as a valuable tool for consolidating an entire
 experiment into a single file, facilitating data visualization, and enabling the
 presentation of results. However, it does have severe limitations such as being
 challenging to share with others due to a lack of versioning capabilities,
-difficulty in reproducing the experiment, and the potential for data leaks and
-confusion from previous outputs.
+difficulty in reproducing the experiment, and the potential for stale outputs
+and hidden state to mislead readers and make the experiment harder to reproduce.
 
 In the next chapter you will see how to address these issues.
 
