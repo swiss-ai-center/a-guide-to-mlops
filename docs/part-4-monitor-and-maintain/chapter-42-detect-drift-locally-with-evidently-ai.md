@@ -842,10 +842,10 @@ You fixed some of the previous issues:
 ## State of the MLOps process
 
 - [x] Model predictions can be monitored in production
-- [x] Data drift and concept drift can be detected automatically
-- [x] Automated alerts and dashboards are configured
-- [ ] Drift signals do not trigger actionable retraining workflows
-- [ ] Model cannot be rolled back to a previous model version on degradation
+- [x] Data drift and concept drift are monitored
+- [ ] No automated reports or dashboard are configured
+- [ ] Drift signals do not trigger actionable alerts
+- [ ] Drift alerts do not lead to a reviewed decision
 
 Continue to the next chapters to address the remaining items.
 

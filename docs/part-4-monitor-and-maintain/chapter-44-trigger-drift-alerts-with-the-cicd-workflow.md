@@ -7,19 +7,19 @@
 ## Summary
 
 In this chapter, you have wired drift alerts into the CI/CD workflow so that
-drift signals can trigger retraining workflows.
+drift signals trigger actionable alerts.
 
 You fixed some of the previous issues:
 
-- [x] Drift signals can trigger retraining workflows
+- [x] Drift signals trigger actionable alerts
 
 ## State of the MLOps process
 
 - [x] Model predictions can be monitored in production
-- [x] Data drift and concept drift can be detected automatically
-- [x] Automated alerts and dashboards are configured
-- [x] Drift signals can trigger retraining workflows
-- [ ] Model cannot be rolled back to a previous version on degradation
+- [x] Data drift and concept drift are monitored
+- [x] Automated reports and dashboard are configured
+- [x] Drift signals trigger actionable alerts
+- [ ] Drift alerts do not lead to a reviewed decision
 
 Continue to the next chapters to address the remaining items.
 

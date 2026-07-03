@@ -9,7 +9,7 @@ Congratulations! You did it!
 In this fourth part, you made the model observable in production. Predictions
 and features are logged by the BentoML service and shipped to your S3 storage by
 Fluent Bit, drift is detected by comparing these production logs against a
-reference dataset with Evidently AI, and dashboards are accessible on
+reference dataset with Evidently AI, and a dashboard is accessible on
 Kubernetes. A GitHub Actions workflow refreshes the drift report from production
 logs and raises alerts.
 
