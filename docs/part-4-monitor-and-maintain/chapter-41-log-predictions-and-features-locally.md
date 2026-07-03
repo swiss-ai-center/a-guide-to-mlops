@@ -34,12 +34,11 @@ flowchart TB
     end
 
     subgraph workspaceGraph[WORKSPACE]
-        dvcGraph --> bento_model[classifier.bentomodel]
+        drift_logs["logs/…/data/*.log"] <--> serve
         subgraph bentoGraph[bentofile.yaml]
-            serve[serve.py] <--> bento_model
+            serve[serve.py] <--> bento_model[classifier.bentomodel]
             features[features.py] --> serve
         end
-        serve --> drift_logs["logs/…/data/*.log"]
         bento_model <-.-> dot_dvc
 
         data --> prepare
@@ -49,6 +48,7 @@ flowchart TB
         end
         params -.- train
         params[params.yaml] -.- prepare
+        dvcGraph --> bento_model
     end
 
     subgraph remoteGraph[REMOTE]
@@ -104,9 +104,7 @@ flowchart TB
     linkStyle 0 opacity:0.4,color:#7f7f7f80
     linkStyle 1 opacity:0.4,color:#7f7f7f80
     linkStyle 2 opacity:0.4,color:#7f7f7f80
-    linkStyle 3 opacity:0.4,color:#7f7f7f80
     linkStyle 4 opacity:0.4,color:#7f7f7f80
-    linkStyle 5 opacity:0.4,color:#7f7f7f80
     linkStyle 6 opacity:0.4,color:#7f7f7f80
     linkStyle 7 opacity:0.4,color:#7f7f7f80
     linkStyle 8 opacity:0.4,color:#7f7f7f80
@@ -526,10 +524,10 @@ You fixed some of the previous issues:
 ## State of the MLOps process
 
 - [x] Model predictions can be monitored in production
-- [ ] Data drift and concept drift are not automatically detected
-- [ ] No automated alerts or dashboards are configured
-- [ ] Drift signals do not trigger actionable retraining workflows
-- [ ] Model cannot be rolled back to a previous version on degradation
+- [ ] Data drift and concept drift are not monitored
+- [ ] No automated reports or dashboard are configured
+- [ ] Drift signals do not trigger actionable alerts
+- [ ] Drift alerts do not lead to a reviewed decision
 
 Continue to the next chapters to address the remaining items.
 

@@ -21,7 +21,7 @@ In this chapter, you will learn how to:
    dashboard
 4. Wire the reference build into the DVC pipeline
 5. Run the pipeline, generate logs, and open the dashboard
-6. Commit the changes to Git
+6. Commit the changes to DVC and Git
 
 The following diagram illustrates the control flow at the end of this chapter:
 
@@ -40,35 +40,29 @@ flowchart TB
     end
 
     subgraph workspaceGraph[WORKSPACE]
-        dvcGraph --> bento_model[classifier.bentomodel]
+        drift_logs["logs/…/data/*.log"] -.- serve
         subgraph bentoGraph[bentofile.yaml]
-            bento_model --> serve[serve.py]
+            serve[serve.py] <--> bento_model[classifier.bentomodel]
             features[features.py] --> serve
         end
-        bentoGraph <-.-> dot_dvc
+        bento_model <-.-> dot_dvc
 
         data --> prepare
-        params[params.yaml] -.- prepare
         subgraph dvcGraph["dvc.yaml"]
             prepare --> train
-            train --> evaluate
             train --> build_reference
+            train --> evaluate
         end
         params -.- train
-
-        subgraph monitoringGraph[monitoring]
-            drift_logs["logs/…/data/*.log"]
-            drift_report["report.html | .json"]
-        end
-        monitor_drift[monitor_drift.py]
-        serve --> drift_logs
-        build_reference --> reference_features[reference_features.parquet]
-        reference_features --> monitor_drift
-        drift_logs --> monitor_drift
-        monitor_drift --> drift_report
+        params[params.yaml] -.- prepare
+        dvcGraph --> bento_model
+        reference_features[reference_features.parquet] <--> build_reference
+        monitor_drift[monitor_drift.py] <--> reference_features
+        monitor_drift <--> drift_logs
     end
+
     subgraph browserLocalGraph[BROWSER]
-        monitor_drift --> |evidently ui| localhost
+        localhost --> |evidently ui| monitor_drift
     end
 
     subgraph remoteGraph[REMOTE]
@@ -110,9 +104,6 @@ flowchart TB
     style evaluate opacity:0.4,color:#7f7f7f80
     style dvcGraph opacity:0.4,color:#7f7f7f80
     style bento_model opacity:0.4,color:#7f7f7f80
-    style features opacity:0.4,color:#7f7f7f80
-    style serve opacity:0.4,color:#7f7f7f80
-    style drift_logs opacity:0.4,color:#7f7f7f80
     style dot_git opacity:0.4,color:#7f7f7f80
     style dot_dvc opacity:0.4,color:#7f7f7f80
     style repository opacity:0.4,color:#7f7f7f80
@@ -133,11 +124,11 @@ flowchart TB
     linkStyle 6 opacity:0.4,color:#7f7f7f80
     linkStyle 7 opacity:0.4,color:#7f7f7f80
     linkStyle 8 opacity:0.4,color:#7f7f7f80
-    linkStyle 9 opacity:0.4,color:#7f7f7f80
     linkStyle 10 opacity:0.4,color:#7f7f7f80
     linkStyle 11 opacity:0.4,color:#7f7f7f80
     linkStyle 12 opacity:0.4,color:#7f7f7f80
     linkStyle 13 opacity:0.4,color:#7f7f7f80
+    linkStyle 18 opacity:0.4,color:#7f7f7f80
     linkStyle 19 opacity:0.4,color:#7f7f7f80
     linkStyle 20 opacity:0.4,color:#7f7f7f80
     linkStyle 21 opacity:0.4,color:#7f7f7f80
@@ -146,7 +137,6 @@ flowchart TB
     linkStyle 24 opacity:0.4,color:#7f7f7f80
     linkStyle 25 opacity:0.4,color:#7f7f7f80
     linkStyle 26 opacity:0.4,color:#7f7f7f80
-    linkStyle 27 opacity:0.4,color:#7f7f7f80
 ```
 
 ## Steps
@@ -614,10 +604,20 @@ column per dimension, so the `embedding` list is unpacked.
 `Workspace.create` opens an existing workspace or creates a new one, so repeated
 runs keep history in the same place.
 
-#### Update `dvc.yaml`
+#### Add the build reference stage
 
 Add a `build_reference` stage after `evaluate` so the reference dataset is
-rebuilt whenever the training data, model, or reference script changes.
+rebuilt whenever the training data, model, or reference script changes:
+
+```sh title="Execute the following command(s) in a terminal"
+dvc stage add -n build_reference \
+    -d data/prepared -d model \
+    -d src/build_reference.py -d src/features.py \
+    -o data/reference_features.parquet \
+    python3.13 src/build_reference.py data/prepared model data/reference_features.parquet
+```
+
+The resulting `dvc.yaml` now contains the new stage:
 
 ```yaml title="dvc.yaml" hl_lines="33-41"
 stages:
@@ -673,10 +673,12 @@ stages:
 
 #### Update the .gitignore file
 
-The reference dataset, the monitoring workspace, and the JSON report are
-generated artifacts. Add them to `.gitignore` so they are not committed:
+The monitoring workspace and JSON report are generated artifacts. Add them to
+`.gitignore` so they are not committed. The reference dataset is a DVC pipeline
+output, so DVC will add it to `data/.gitignore` automatically when you run
+`dvc repro`:
 
-```gitignore title=".gitignore" hl_lines="9-13"
+```gitignore title=".gitignore" hl_lines="8-9"
 ## Python
 .venv/
 
@@ -687,16 +689,13 @@ __pycache__/
 logs/
 monitoring/
 
-## Reference datasets
-data/reference_features.parquet
-
 ## DVC
 
 # DVC plots
 dvc_plots
 
 # DVC will add new files after this line
-/mode
+/model
 ```
 
 ### Run the experiment
@@ -778,6 +777,7 @@ On branch main
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
         modified:   .gitignore
+        modified:   data/.gitignore
         modified:   dvc.lock
         modified:   dvc.yaml
         modified:   requirements-freeze.txt
@@ -787,11 +787,14 @@ Changes to be committed:
         new file:   src/features.py
 ```
 
-### Commit the changes to Git
+### Commit the changes to DVC and Git
 
-Commit the changes:
+Commit the changes to DVC and Git:
 
 ```sh title="Execute the following command(s) in a terminal"
+# Upload the reference features and DVC cache to the remote bucket
+dvc push
+
 # Commit the changes
 git commit -m "Add Evidently drift workspace and local dashboard"
 
@@ -811,7 +814,7 @@ In this chapter, you have successfully:
 6. Ran the Evidently UI locally and inspected the dashboard
 7. Wired the reference build into the DVC pipeline
 8. Run the pipeline, generated logs, and opened the dashboard
-9. Committed the changes to Git
+9. Committed the changes to DVC and Git
 
 You fixed some of the previous issues:
 
@@ -842,10 +845,10 @@ You fixed some of the previous issues:
 ## State of the MLOps process
 
 - [x] Model predictions can be monitored in production
-- [x] Data drift and concept drift can be detected automatically
-- [x] Automated alerts and dashboards are configured
-- [ ] Drift signals do not trigger actionable retraining workflows
-- [ ] Model cannot be rolled back to a previous model version on degradation
+- [x] Data drift and concept drift are monitored
+- [ ] No automated reports or dashboard are configured
+- [ ] Drift signals do not trigger actionable alerts
+- [ ] Drift alerts do not lead to a reviewed decision
 
 Continue to the next chapters to address the remaining items.
 
