@@ -23,7 +23,7 @@ python3 -m venv .venv
 source .venv/bin/activate
 
 # Install the Python dependencies
-pip install -r requirements.txt
+pip install -r requirements-freeze.txt
 
 # Run the Jupyter Notebook
 jupyter-lab notebook.ipynb
@@ -42,7 +42,7 @@ uv venv
 source .venv/bin/activate
 
 # Install the Python dependencies
-uv pip install -r requirements.txt
+uv pip install -r requirements-freeze.txt
 
 # Run the Jupyter Notebook
 jupyter-lab notebook.ipynb
@@ -63,10 +63,10 @@ python3 -m venv .venv
 source .venv/bin/activate
 
 # Install the base dependencies
-pip install jupyterlab tensorflow matplotlib pyyaml
+pip install -r requirements.txt
 
 # Generate the versioned package list
-pip freeze --local --all > requirements.txt
+pip freeze --local --all > requirements-freeze.txt
 ```
 
 ### With uv
@@ -82,12 +82,9 @@ uv venv
 source .venv/bin/activate
 
 # Install the base dependencies
-uv pip install jupyterlab tensorflow matplotlib pyyaml
+uv pip install -r requirements.txt
 
 # Generate the versioned package list
-uv pip freeze > requirements.txt
+uv pip freeze > requirements-freeze.txt
 ```
 
-## References
-
-- Grad Cam with Keras: https://keras.io/examples/vision/grad_cam/
