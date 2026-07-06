@@ -24,10 +24,11 @@ home:
       title: Meet the
       title_highlight: Crew
       body: |
-        Ground control, reporting for duty. We are the
+        We are the
         <a href="https://www.swiss-ai-center.ch/" class="crew-link" target="_blank" rel="noopener">Swiss AI Center</a>
-        crew, building a practical flight plan from machine-learning experiments to production.
-        We selected tools that minimize friction for established workflows and teams, with a focus on SMEs.
+        team. This guide is a practical path from notebook experiments to production,
+        built for engineers and small teams. We selected tools that minimize friction for
+        established workflows, with a focus on SMEs.
       actions:
         - type: primary
           text: Next stop
@@ -48,10 +49,9 @@ home:
       title_highlight: "guide?"
       planet: moon
       body: |
-        Building a model is only the beginning. This guide is a step-by-step flight plan
-        from a notebook experiment to a reproducible, monitored, and continuously-improved ML system.
-        We use real tools — DVC, CML, Docker, BentoML, Fluent Bit, Evidently AI, and Label Studio —
-        so you can follow along with real code.
+        A step-by-step path from a notebook experiment to a reproducible, monitored,
+        continuously-improved ML system. You will use the same tools used in production:
+        DVC, Git, GitHub Actions, CML, Docker, BentoML, Fluent Bit, Evidently AI, and Label Studio.
       actions:
         - type: primary
           text: Next stop
@@ -68,10 +68,9 @@ home:
       title_highlight: model evaluation
       planet: earth
       body: |
-        Start on solid ground. Move from a Jupyter notebook experiment to clean
-        Python scripts, then version your data and code with Git and DVC. Build a
-        reproducible prepare-train-evaluate pipeline on your own machine, and use
-        DVC to track parameters, metrics, and plots as your model evolves.
+        Move from a notebook to clean, versioned Python scripts. Build a reproducible
+        prepare-train-evaluate pipeline on your own machine, and use Git and DVC to track
+        data, parameters, metrics, and plots as the model evolves.
       actions:
         - type: primary
           text: Next stop
@@ -88,11 +87,9 @@ home:
       title_highlight: cloud
       planet: mars
       body: |
-        When your local machine is no longer enough, move the experiment to the
-        cloud. Push your code to GitHub, store data in an S3 bucket with DVC, and
-        set up a CI/CD pipeline that reproduces the experiment on every push. Then
-        use CML to publish comparisons of parameters, metrics, and plots in pull
-        requests so the team can review every change.
+        Push the experiment to GitHub, store data in an S3 bucket with DVC, and set up a
+        CI/CD pipeline that reproduces the run on every push. Use CML to publish parameter,
+        metric, and plot comparisons directly in pull requests for team review.
       actions:
         - type: primary
           text: Next stop
@@ -109,11 +106,10 @@ home:
       title_highlight: deploy
       planet: saturn
       body: |
-        A trained model creates value only when it serves predictions. Package it
-        with BentoML and expose a local FastAPI endpoint, then containerize it with
-        Docker and push the image to a registry. Wire builds and deployments into
-        your CI/CD pipeline, roll the model out on Kubernetes, and scale training
-        with self-hosted runners that spin up specialized pods on demand.
+        Package the model with BentoML, expose a FastAPI endpoint, and containerize it
+        with Docker. Push the image to a registry, wire builds and deployments into your
+        CI/CD pipeline, and roll the model out on Kubernetes with self-hosted runners for
+        specialized training pods.
       actions:
         - type: primary
           text: Next stop
@@ -130,12 +126,10 @@ home:
       title_highlight: maintain
       planet: comet
       body: |
-        A model in production needs watching. Stream prediction logs to S3 with Fluent Bit, deploy
-        an Evidently AI dashboard on Kubernetes to compare live data against your
-        training reference, and open drift reports as GitHub issues when data drifts.
-        Use those signals to trigger retraining workflows or roll back to a previous
-        model version by redeploying its container image, with Git and DVC as the
-        reproducible source of truth.
+        Stream prediction logs to S3 with Fluent Bit and deploy an Evidently AI dashboard
+        on Kubernetes to compare live data against the training reference. Open drift reports
+        as GitHub issues so the team can decide whether to retrain or roll back by redeploying
+        a previous container image tracked in Git and DVC.
       actions:
         - type: primary
           text: Next stop
@@ -152,10 +146,10 @@ home:
       title_highlight: retrain
       planet: haumea
       body: |
-        Production data changes. Close the feedback loop with Label Studio: let
-        your model suggest labels through the FastAPI endpoint, review and correct
-        edge cases, then merge the refined annotations and retrain with DVC. A
-        better model makes the next round of labeling faster and more accurate.
+        Close the feedback loop with Label Studio. Let the model suggest labels through
+        the FastAPI endpoint, review and correct edge cases, then merge the refined
+        annotations and retrain with DVC. A better model makes the next round of labeling
+        faster and more accurate.
       actions:
         - type: primary
           text: Next stop
@@ -173,10 +167,9 @@ home:
       planet: capsule
       reentry: true
       body: |
-        Finish the journey by cleaning up everything you created. Delete cloud
-        resources, remove the GitHub repository and access tokens, wipe your local
-        environment, and review what you built. A proper cleanup avoids unexpected
-        costs. A safe landing is the final stage of a successful mission.
+        Delete cloud resources, remove the GitHub repository and access tokens, and wipe
+        the local environment. A proper cleanup avoids unexpected costs and is the final
+        stage of a successful mission.
       actions:
         - type: primary
           text: Launch pad
@@ -191,7 +184,7 @@ home:
     title_highlight: launch?
     subtitle: |
       The guide is open source and designed to be followed hands-on.
-      Pick a chapter, launch your terminal, and start shipping ML systems.
+      Pick a part, open your terminal, and ship a complete ML system.
     cta:
       text: Launch mission
       icon: lucide/rocket
