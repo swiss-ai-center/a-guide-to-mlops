@@ -264,8 +264,8 @@
     gap: 0.6rem;
     padding: 0.8rem 1.5rem;
     border-radius: 0;
-    background: transparent;
-    color: var(--accent);
+    background: var(--accent);
+    color: #0a0a0a;
     border: 1px solid var(--accent);
     font-family: var(--tech-mono);
     font-weight: 700;
@@ -273,10 +273,11 @@
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    transition: background 0.2s ease, color 0.2s ease;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   }
   .hero-cta:hover {
-    background: var(--accent);
+    background: var(--accent-dark);
+    border-color: var(--accent-dark);
     color: #0a0a0a;
   }
   .hero-cta .twemoji {
@@ -309,10 +310,10 @@
   /* Chapter sections */
   .story-chapter {
     position: relative;
-    min-height: 100vh;
+    min-height: auto;
     display: flex;
     align-items: center;
-    padding: 6rem 2rem;
+    padding: 3rem 2rem;
   }
 
   /* Alternate cards left/right using only the section padding as page margin */
@@ -325,7 +326,7 @@
   .chapter-card {
     max-width: 640px;
     margin: 0;
-    padding: 2rem 2.2rem;
+    padding: 1.75rem 2rem;
     border-radius: 0;
     background: #0f0f0f;
     border: 1px solid #333333;
@@ -446,23 +447,6 @@
     text-decoration: underline;
   }
 
-  /* Reentry section */
-  .story-chapter.reentry .chapter-title span { color: #ef4444; }
-  .story-chapter.reentry .chapter-label {
-    background: transparent;
-    border-color: #ef4444;
-    color: #ef4444;
-  }
-  .story-chapter.reentry .chapter-link.primary {
-    background: #ef4444;
-    border-color: #ef4444;
-    color: #0a0a0a;
-  }
-  .story-chapter.reentry .chapter-link.primary:hover {
-    background: #b91c1c;
-    border-color: #b91c1c;
-  }
-
   /* Finale */
   .story-finale {
     position: relative;
@@ -492,9 +476,10 @@
   }
   .finale-subtitle {
     color: #a3a3a3;
-    max-width: 620px;
-    margin: 0 0 2rem;
-    font-size: 1.1rem;
+    max-width: 700px;
+    margin: 0 0 2.5rem;
+    font-size: clamp(1rem, 2vw, 1.35rem);
+    line-height: 1.6;
     text-align: left;
   }
   .finale-logo {
@@ -567,11 +552,13 @@
     color: #525252;
   }
   body[data-md-color-scheme="default"] .hero-cta {
-    border-color: #b45309;
-    color: #b45309;
+    background: #d97706;
+    border-color: #d97706;
+    color: #0a0a0a;
   }
   body[data-md-color-scheme="default"] .hero-cta:hover {
     background: #b45309;
+    border-color: #b45309;
     color: #ffffff;
   }
   body[data-md-color-scheme="default"] .chapter-card {
@@ -622,19 +609,6 @@
   body[data-md-color-scheme="default"] .chapter-link.primary:hover {
     background: #b45309;
     border-color: #b45309;
-    color: #ffffff;
-  }
-  body[data-md-color-scheme="default"] .story-chapter.reentry .chapter-title span {
-    color: #b91c1c;
-  }
-  body[data-md-color-scheme="default"] .story-chapter.reentry .chapter-label {
-    background: transparent;
-    border-color: #ef4444;
-    color: #b91c1c;
-  }
-  body[data-md-color-scheme="default"] .story-chapter.reentry .chapter-link.primary {
-    background: #ef4444;
-    border-color: #ef4444;
     color: #ffffff;
   }
   body[data-md-color-scheme="default"] .story-finale {
@@ -736,7 +710,7 @@
 <!-- Story chapters -->
 <main class="story-main" id="story-start">
   {% for chapter in home.chapters %}
-  <section class="story-chapter{% if chapter.reentry %} reentry{% endif %}" id="section-{{ chapter.id }}"{% if chapter.planet %} data-planet="{{ chapter.planet }}"{% endif %}>
+  <section class="story-chapter" id="section-{{ chapter.id }}"{% if chapter.planet %} data-planet="{{ chapter.planet }}"{% endif %}>
     <article class="chapter-card reveal">
       <div class="chapter-label">{{ chapter.label }}</div>
       <h2 class="chapter-title">{% if chapter.prefix %}<span class="chapter-prefix">{{ chapter.prefix }}</span>{% endif %}{{ chapter.title }}{% if chapter.title_highlight %} <span>{{ chapter.title_highlight }}</span>{% endif %}</h2>
