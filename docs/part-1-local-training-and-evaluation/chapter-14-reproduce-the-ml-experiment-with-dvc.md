@@ -302,7 +302,7 @@ dvc dag
   +----------+
 ```
 
-If any dependencies/outputs change, the affected stages will be re-executed.
+If any dependencies or outputs change, the affected stages will be re-executed.
 
 ### Execute the pipeline
 

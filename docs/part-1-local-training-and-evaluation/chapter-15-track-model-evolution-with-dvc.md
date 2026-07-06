@@ -125,9 +125,12 @@ dvc metrics diff
 The output should look like this:
 
 ```text
-Path                     Metric    HEAD     workspace    Change
-evaluation/metrics.json  val_acc   0.4891   0.68536      0.19626
-evaluation/metrics.json  val_loss  1.89673  1.32753      -0.5692
+Path                     Metric     HEAD     workspace    Change
+evaluation/metrics.json  f1_score   0.44005  0.64049      0.20044
+evaluation/metrics.json  precision  0.43002  0.70356      0.27353
+evaluation/metrics.json  recall     0.51023  0.66861      0.15839
+evaluation/metrics.json  val_acc    0.4891   0.68536      0.19626
+evaluation/metrics.json  val_loss   1.89673  1.32753      -0.5692
 ```
 
 Again, DVC shows you the differences, so you can easily compare the two

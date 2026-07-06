@@ -106,6 +106,7 @@ Create a `requirements.txt` file to list the dependencies:
 ```txt title="requirements.txt"
 tensorflow==2.21.0
 matplotlib==3.10.9
+scikit-learn==1.9.0
 pyyaml==6.0.3
 ```
 
@@ -218,9 +219,12 @@ The following table describes the files that you will create in this codebase:
 | ----------------------- | ------------------------------------------------- | ----------------------------------------------- | --------------------------------------------------------------- |
 | `params.yaml`           | The parameters to run the ML experiment           | -                                               | -                                                               |
 | `src/prepare.py`        | Prepare the dataset to run the ML experiment      | The dataset to prepare in `data/raw` directory  | The prepared data in `data/prepared` directory                  |
-| `src/train.py`          | Train the ML model                                | The prepared dataset                            | The model trained with the dataset                              |
+| `src/train.py`          | Train the ML model                                | The prepared dataset                            | The trained model in the `model` directory                      |
 | `src/evaluate.py`       | Evaluate the ML model using scikit-learn          | The model to evaluate                           | The results of the model evaluation in `evaluation` directory   |
 | `src/utils/seed.py`     | Util function to fix the seed                     | -                                               | -                                                               |
+
+We will refactor the notebook code into modular functions as we move each step
+to its own script.
 
 #### Move the parameters to its own file
 
@@ -244,9 +248,9 @@ train:
 
 #### Move the preparation step to its own file
 
-The `src/prepare.py` script will prepare the dataset. Let's take this
-opportunity to refactor the code to make it more modular and explicit using
-functions:
+The `src/prepare.py` script prepares the dataset. It loads the raw images,
+splits them into a training set and a validation set, copies the images into
+`data/prepared`, and saves the preview plot and the class labels there.
 
 ```py title="src/prepare.py"
 import json
@@ -263,13 +267,13 @@ from utils.seed import set_seed
 
 def get_preview_plot(ds: tf.data.Dataset, labels: List[str]) -> plt.Figure:
     """Plot a preview of the prepared dataset"""
-    fig = plt.figure(figsize=(10, 5), tight_layout=True)
+    fig, axes = plt.subplots(2, 5, figsize=(10, 5), tight_layout=True)
     for images, label_idxs in ds.take(1):
-        for i in range(10):
-            plt.subplot(2, 5, i + 1)
-            plt.imshow(images[i].numpy().astype("uint8"), cmap="gray")
-            plt.title(labels[label_idxs[i].numpy()])
-            plt.axis("off")
+        for ax, image, label_idx in zip(axes.ravel(), images, label_idxs):
+            ax.imshow(image.numpy().astype("uint8"), cmap="gray")
+            ax.set_title(labels[label_idx.numpy()])
+            ax.set_xticks([])
+            ax.set_yticks([])
 
     return fig
 
@@ -308,17 +312,14 @@ def main() -> None:
     )
     labels = ds_train.class_names
 
-    if not prepared_dataset_folder.exists():
-        prepared_dataset_folder.mkdir(parents=True)
+    prepared_dataset_folder.mkdir(parents=True, exist_ok=True)
 
     # Save the preview plot
     preview_plot = get_preview_plot(ds_train, labels)
     preview_plot.savefig(prepared_dataset_folder / "preview.png")
 
     # Normalize the data
-    normalization_layer = tf.keras.layers.Rescaling(
-        1.0 / 255
-    )
+    normalization_layer = tf.keras.layers.Rescaling(1.0 / 255)
     ds_train = ds_train.map(lambda x, y: (normalization_layer(x), y))
     ds_val = ds_val.map(lambda x, y: (normalization_layer(x), y))
 
@@ -337,8 +338,8 @@ if __name__ == "__main__":
 
 #### Move the train step to its own file
 
-The `src/train.py` script will train the ML model. Let's take this opportunity
-to refactor the code to make it more modular and explicit using functions:
+The `src/train.py` script trains the ML model and saves it in the `model`
+directory.
 
 ```py title="src/train.py"
 import sys
@@ -379,8 +380,9 @@ def main() -> None:
         exit(1)
 
     # Load parameters
-    prepare_params = yaml.safe_load(open("params.yaml"))["prepare"]
-    train_params = yaml.safe_load(open("params.yaml"))["train"]
+    params = yaml.safe_load(open("params.yaml"))
+    prepare_params = params["prepare"]
+    train_params = params["train"]
 
     prepared_dataset_folder = Path(sys.argv[1])
     model_folder = Path(sys.argv[2])
@@ -423,6 +425,7 @@ def main() -> None:
     model_folder.mkdir(parents=True, exist_ok=True)
     model_path = model_folder.absolute() / "model.keras"
     model.save(model_path)
+
     # Save the model history
     np.save(model_folder.absolute() / "history.npy", model.history.history)
 
@@ -435,9 +438,8 @@ if __name__ == "__main__":
 
 #### Move the evaluate step to its own file
 
-The `src/evaluate.py` script will evaluate the ML model using DVC. Let's take
-this opportunity to refactor the code to make it more modular and explicit using
-functions:
+The `src/evaluate.py` script evaluates the ML model and saves the metrics and
+graphs in the `evaluation` directory.
 
 ```py title="src/evaluate.py"
 import json
@@ -448,6 +450,12 @@ from typing import List
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
+from sklearn.metrics import (
+    ConfusionMatrixDisplay,
+    f1_score,
+    precision_score,
+    recall_score,
+)
 
 
 def get_training_plot(model_history: dict) -> plt.Figure:
@@ -471,81 +479,50 @@ def get_pred_preview_plot(
     model: tf.keras.Model, ds_val: tf.data.Dataset, labels: List[str]
 ) -> plt.Figure:
     """Plot a preview of the predictions"""
-    fig = plt.figure(figsize=(10, 5), tight_layout=True)
+    fig, axes = plt.subplots(2, 5, figsize=(10, 5), tight_layout=True)
     for images, label_idxs in ds_val.take(1):
-        preds = model.predict(images)
-        for i in range(10):
-            plt.subplot(2, 5, i + 1)
-            img = (images[i].numpy() * 255).astype("uint8")
-            # Convert image to rgb if grayscale
-            if img.shape[-1] == 1:
-                img = np.squeeze(img, axis=-1)
-                img = np.stack((img,) * 3, axis=-1)
-            true_label = labels[label_idxs[i].numpy()]
-            pred_label = labels[np.argmax(preds[i])]
-            # Add red border if the prediction is wrong else add green border
-            img = np.pad(img, pad_width=((1, 1), (1, 1), (0, 0)))
-            if true_label != pred_label:
-                img[0, :, 0] = 255  # Top border
-                img[-1, :, 0] = 255  # Bottom border
-                img[:, 0, 0] = 255  # Left border
-                img[:, -1, 0] = 255  # Right border
-            else:
-                img[0, :, 1] = 255
-                img[-1, :, 1] = 255
-                img[:, 0, 1] = 255
-                img[:, -1, 1] = 255
+        pred_idxs = np.argmax(model.predict(images, verbose=0), axis=1)
+        for ax, image, true_idx, pred_idx in zip(
+            axes.ravel(), images, label_idxs, pred_idxs
+        ):
+            true_label = labels[true_idx.numpy()]
+            pred_label = labels[pred_idx]
+            ax.imshow(image.numpy().squeeze(), cmap="gray")
+            ax.set_title(f"True: {true_label}\nPred: {pred_label}")
+            ax.set_xticks([])
+            ax.set_yticks([])
 
-            plt.imshow(img)
-            plt.title(f"True: {true_label}\n" f"Pred: {pred_label}")
-            plt.axis("off")
+            border_color = "lime" if true_idx.numpy() == pred_idx else "red"
+            for spine in ax.spines.values():
+                spine.set_edgecolor(border_color)
+                spine.set_linewidth(4)
 
     return fig
 
 
 def get_confusion_matrix_plot(
-    model: tf.keras.Model, ds_val: tf.data.Dataset, labels: List[str]
+    y_true: np.ndarray, y_pred: np.ndarray, labels: List[str]
 ) -> plt.Figure:
     """Plot the confusion matrix"""
-    fig = plt.figure(figsize=(6, 6), tight_layout=True)
-    preds = model.predict(ds_val)
-
-    conf_matrix = tf.math.confusion_matrix(
-        labels=tf.concat([y for _, y in ds_val], axis=0),
-        predictions=tf.argmax(preds, axis=1),
-        num_classes=len(labels),
+    fig, ax = plt.subplots(figsize=(6, 6), tight_layout=True)
+    display = ConfusionMatrixDisplay.from_predictions(
+        y_true,
+        y_pred,
+        display_labels=labels,
+        normalize="true",
+        cmap="Blues",
+        values_format=".2f",
+        ax=ax,
+        colorbar=True,
     )
 
-    # Plot the confusion matrix
-    conf_matrix = conf_matrix / tf.reduce_sum(conf_matrix, axis=1)
-    plt.imshow(conf_matrix, cmap="Blues")
+    for value, text in zip(display.confusion_matrix.ravel(), display.text_.ravel()):
+        text.set_fontsize(7)
+        if np.isclose(value, 0.0):
+            text.set_color("lightgray")
 
-    # Plot cell values
-    for i in range(len(labels)):
-        for j in range(len(labels)):
-            value = conf_matrix[i, j].numpy()
-            if value == 0:
-                color = "lightgray"
-            elif value > 0.5:
-                color = "white"
-            else:
-                color = "black"
-            plt.text(
-                j,
-                i,
-                f"{value:.2f}",
-                ha="center",
-                va="center",
-                color=color,
-                fontsize=8,
-            )
-
-    plt.colorbar()
-    plt.xticks(range(len(labels)), labels, rotation=90)
-    plt.yticks(range(len(labels)), labels)
-    plt.xlabel("Predicted label")
-    plt.ylabel("True label")
-    plt.title("Confusion matrix")
+    ax.set_xticklabels(labels, rotation=90)
+    ax.set_title("Validation confusion matrix")
 
     return fig
 
@@ -566,21 +543,38 @@ def main() -> None:
 
     # Load files
     ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "val"))
-    labels = None
     with open(prepared_dataset_folder / "labels.json") as f:
         labels = json.load(f)
 
     # Load model
     model_path = model_folder.absolute() / "model.keras"
     model = tf.keras.models.load_model(model_path)
-    model_history = np.load(model_folder.absolute() / "history.npy", allow_pickle=True).item()
+    model_history = np.load(
+        model_folder.absolute() / "history.npy", allow_pickle=True
+    ).item()
 
     # Log metrics
     val_loss, val_acc = model.evaluate(ds_val)
-    print(f"Validation loss: {val_loss:.2f}")
-    print(f"Validation accuracy: {val_acc * 100:.2f}%")
+    preds = model.predict(ds_val)
+    y_true = tf.concat([y for _, y in ds_val], axis=0).numpy()
+    y_pred = np.argmax(preds, axis=1)
+
+    metrics = {
+        "val_loss": val_loss,
+        "val_acc": val_acc,
+        "precision": precision_score(y_true, y_pred, average="macro", zero_division=0),
+        "recall": recall_score(y_true, y_pred, average="macro", zero_division=0),
+        "f1_score": f1_score(y_true, y_pred, average="macro", zero_division=0),
+    }
+
+    print(f"Validation loss: {metrics['val_loss']:.2f}")
+    print(f"Validation accuracy: {metrics['val_acc'] * 100:.2f}%")
+    print(f"Precision: {metrics['precision']:.2f}")
+    print(f"Recall:    {metrics['recall']:.2f}")
+    print(f"F1 score:  {metrics['f1_score']:.2f}")
+
     with open(evaluation_folder / "metrics.json", "w") as f:
-        json.dump({"val_loss": val_loss, "val_acc": val_acc}, f)
+        json.dump(metrics, f)
 
     # Save training history plot
     fig = get_training_plot(model_history)
@@ -591,7 +585,7 @@ def main() -> None:
     fig.savefig(evaluation_folder / plots_folder / "pred_preview.png")
 
     # Save confusion matrix plot
-    fig = get_confusion_matrix_plot(model, ds_val, labels)
+    fig = get_confusion_matrix_plot(y_true, y_pred, labels)
     fig.savefig(evaluation_folder / plots_folder / "confusion_matrix.png")
 
     print(
@@ -618,25 +612,6 @@ touch src/utils/__init__.py
 In this module, include `src/utils/seed.py` to handle the fixing of the seed
 parameters. This ensure the results are reproducible:
 
-??? tip "Understanding when to fix random seeds"
-
-    Fixed seeds enable **reproducibility** by eliminating randomness, making them
-    essential for comparing model changes fairly during development. However, they
-    can hide **variance** in model performance.
-
-    **When to fix seeds**: Development iterations, CI/CD pipelines, and debugging
-    require fixed seeds to ensure performance differences reflect your changes, not
-    random variation.
-
-    **When NOT to fix seeds**: Final model evaluation should reflect real-world
-    variability. Consider training with multiple seeds and reporting mean/std of
-    metrics to assess model stability. Production training may or may not use fixed
-    seeds depending on requirements.
-
-    **Best practice**: Keep seeds as configurable parameters (as in `params.yaml`)
-    rather than hardcoding them. This guide uses fixed seeds for reproducible
-    experiments, but final evaluation should quantify variance across multiple runs.
-
 ```py title="src/utils/seed.py"
 import os
 import random
@@ -657,6 +632,17 @@ def set_seed(seed: int) -> None:
     tf.config.threading.set_inter_op_parallelism_threads(1)
     tf.config.threading.set_intra_op_parallelism_threads(1)
 ```
+
+??? tip "Understanding when to fix random seeds"
+
+    Fixed seeds make experiments reproducible, which helps compare changes fairly.
+    They also hide natural variance in model performance.
+
+    - **Fix seeds** during development, CI/CD runs, and debugging so differences
+      come from your changes, not randomness.
+    - **Avoid a single fixed seed** for final evaluation. Train with multiple
+      seeds and report mean and standard deviation to measure stability.
+    - **Keep seeds configurable** (as in `params.yaml`) instead of hardcoding them.
 
 ### Create a `README.md` file
 
@@ -689,12 +675,12 @@ Your working directory should now look like this:
 ├── requirements-freeze.txt # (3)!
 ├── requirements.txt # (4)!
 └── src # (5)!
-    ├── utils
-    │   ├── __init__.py
-    │   └── seed.py
-    ├── evaluate.py
-    ├── prepare.py
-    └── train.py
+    ├── evaluate.py
+    ├── prepare.py
+    ├── train.py
+    └── utils
+        ├── __init__.py
+        └── seed.py
 ```
 
 1. This is new.
@@ -729,27 +715,28 @@ results in the `data/prepared`, `model`, and `evaluation` directories.
 
 Your working directory should now be similar to this:
 
-```yaml hl_lines="3-9 13-20"
+```yaml hl_lines="3-9 13-21"
 .
 ├── data
-│   ├── prepared # (1)!
-│   │   ├── labels.json
-│   │   ├── preview.png
-│   │   ├── train
-│   │   │   └── ...
-│   │   └── val
-│   │       └── ...
+│   ├── prepared # (1)!
+│   │   ├── labels.json
+│   │   ├── preview.png
+│   │   ├── train
+│   │   │   └── ...
+│   │   └── val
+│   │       └── ...
 │   ├── raw
 │   │   └── ...
-│   └── README.md
+│   └── README.md
 ├── evaluation # (2)!
-│   ├── metrics.json
-│   └── plots
-│       ├── confusion_matrix.png
-│       ├── pred_preview.png
-│       └── training_history.png
+│   ├── metrics.json
+│   └── plots
+│       ├── confusion_matrix.png
+│       ├── pred_preview.png
+│       └── training_history.png
 ├── model # (3)!
-│   └── ...
+│   ├── history.npy
+│   └── model.keras
 ├── params.yaml
 ├── README.md
 ├── requirements-freeze.txt
@@ -758,8 +745,8 @@ Your working directory should now be similar to this:
     ├── evaluate.py
     ├── prepare.py
     ├── train.py
-    └── utils
-        ├── __init__.py
+    └── utils
+        ├── __init__.py
         └── seed.py
 ```
 
