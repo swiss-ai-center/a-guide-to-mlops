@@ -447,23 +447,6 @@
     text-decoration: underline;
   }
 
-  /* Reentry section */
-  .story-chapter.reentry .chapter-title span { color: #ef4444; }
-  .story-chapter.reentry .chapter-label {
-    background: transparent;
-    border-color: #ef4444;
-    color: #ef4444;
-  }
-  .story-chapter.reentry .chapter-link.primary {
-    background: #ef4444;
-    border-color: #ef4444;
-    color: #0a0a0a;
-  }
-  .story-chapter.reentry .chapter-link.primary:hover {
-    background: #b91c1c;
-    border-color: #b91c1c;
-  }
-
   /* Finale */
   .story-finale {
     position: relative;
@@ -628,19 +611,6 @@
     border-color: #b45309;
     color: #ffffff;
   }
-  body[data-md-color-scheme="default"] .story-chapter.reentry .chapter-title span {
-    color: #b91c1c;
-  }
-  body[data-md-color-scheme="default"] .story-chapter.reentry .chapter-label {
-    background: transparent;
-    border-color: #ef4444;
-    color: #b91c1c;
-  }
-  body[data-md-color-scheme="default"] .story-chapter.reentry .chapter-link.primary {
-    background: #ef4444;
-    border-color: #ef4444;
-    color: #ffffff;
-  }
   body[data-md-color-scheme="default"] .story-finale {
     border-top-color: #d4d4d4;
   }
@@ -740,7 +710,7 @@
 <!-- Story chapters -->
 <main class="story-main" id="story-start">
   {% for chapter in home.chapters %}
-  <section class="story-chapter{% if chapter.reentry %} reentry{% endif %}" id="section-{{ chapter.id }}"{% if chapter.planet %} data-planet="{{ chapter.planet }}"{% endif %}>
+  <section class="story-chapter" id="section-{{ chapter.id }}"{% if chapter.planet %} data-planet="{{ chapter.planet }}"{% endif %}>
     <article class="chapter-card reveal">
       <div class="chapter-label">{{ chapter.label }}</div>
       <h2 class="chapter-title">{% if chapter.prefix %}<span class="chapter-prefix">{{ chapter.prefix }}</span>{% endif %}{{ chapter.title }}{% if chapter.title_highlight %} <span>{{ chapter.title_highlight }}</span>{% endif %}</h2>

@@ -165,7 +165,6 @@ home:
       title: Clean up &
       title_highlight: conclude
       planet: capsule
-      reentry: true
       body: |
         Delete cloud resources, remove the GitHub repository and access tokens, and wipe
         the local environment. A proper cleanup avoids unexpected costs and is the final
