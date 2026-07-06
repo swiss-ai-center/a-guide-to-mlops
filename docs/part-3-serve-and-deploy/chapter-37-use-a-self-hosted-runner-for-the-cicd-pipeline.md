@@ -304,29 +304,29 @@ docker build --platform=linux/amd64 --tag ghcr.io/<my_username>/<my_repository_n
 The output should be similar to this:
 
 ```
-[+] Building 57.3s (14/14) FINISHED                                                                      docker:default
+[+] Building 142.9s (14/14) FINISHED                                                                     docker:default
  => [internal] load build definition from Dockerfile                                                               0.1s
  => => transferring dockerfile: 920B                                                                               0.0s
- => [internal] load metadata for docker.io/library/ubuntu:22.04                                                    1.8s
+ => [internal] load metadata for docker.io/library/ubuntu:26.04                                                    1.8s
  => [internal] load .dockerignore                                                                                  0.0s
  => => transferring context: 2B                                                                                    0.0s
- => [1/9] FROM docker.io/library/ubuntu:22.04@sha256:8a37d68f4f73ebf3d4efafbcf66379bf3728902a8038616808f04e34a9ab  2.5s
- => => resolve docker.io/library/ubuntu:22.04@sha256:8a37d68f4f73ebf3d4efafbcf66379bf3728902a8038616808f04e34a9ab  0.0s
+ => [1/9] FROM docker.io/library/ubuntu:26.04@sha256:8a37d68f4f73ebf3d4efafbcf66379bf3728902a8038616808f04e34a9ab  2.5s
+ => => resolve docker.io/library/ubuntu:26.04@sha256:8a37d68f4f73ebf3d4efafbcf66379bf3728902a8038616808f04e34a9ab  0.0s
  => => sha256:8a37d68f4f73ebf3d4efafbcf66379bf3728902a8038616808f04e34a9ab63ee 1.34kB / 1.34kB                     0.0s
  => => sha256:d35dfc2fe3ef66bcc085ca00d3152b482e6cafb23cdda1864154caf3b19094ba 424B / 424B                         0.0s
  => => sha256:edbfe74c41f8a3501ce542e137cf28ea04dd03e6df8c9d66519b6ad761c2598a 2.30kB / 2.30kB                     0.0s
  => => sha256:31e907dcc94a592a57796786399eb004dcbba714389fa615f5efa05a91316356 29.71MB / 29.71MB                   1.1s
  => => extracting sha256:31e907dcc94a592a57796786399eb004dcbba714389fa615f5efa05a91316356                          1.2s
  => [internal] load build context                                                                                  0.0s
- => => transferring context: 862B                                                                                  0.0s
+ => => transferring context: 885B                                                                                  0.0s
  => [2/9] RUN apt-get update -y && apt-get install -y     build-essential lsb-release     python3 python3-pip     26.6s
- => [3/9] RUN useradd -m runner                                                                                    0.3s
- => [4/9] WORKDIR /home/actions-runner                                                                             0.1s
- => [5/9] RUN curl -o actions-runner-linux-x64-2.312.0.tar.gz -L https://github.com/actions/runner/releases/downl  7.3s
- => [6/9] RUN tar xzf ./actions-runner-linux-x64-2.21.0.tar.gz                                                    4.2s
- => [7/9] RUN ./bin/installdependencies.sh                                                                        12.3s
- => [8/9] COPY startup.sh .                                                                                        0.2s
- => [9/9] RUN chmod +x startup.sh                                                                                  0.3s
+ => [3/9] WORKDIR /home/ubuntu                                                                                     0.3s
+ => [4/9] RUN curl -o actions-runner-linux-x64-2.334.0.tar.gz -L https://github.com/actions/runner/releases/downl  7.3s
+ => [5/9] RUN tar xzf ./actions-runner-linux-x64-2.21.0.tar.gz                                                    4.2s
+ => [6/9] RUN ./bin/installdependencies.sh                                                                        12.3s
+ => [7/9] COPY startup.sh .                                                                                        0.2s
+ => [8/9] RUN chmod +x startup.sh                                                                                  0.3s
+ => [9/9] RUN chown -R ubuntu:ubuntu /home/ubuntu &&     chmod -R u+rwX /home/ubuntu                              33.5s
  => exporting to image                                                                                             1.5s
  => => exporting layers                                                                                            1.4s
  => => writing image sha256:91b6c9cbfd267d995f2701bcbc45181b78413b8b3d580f9ac6333f25ca2903c4                       0.0s
@@ -497,7 +497,7 @@ token with the `read:packages` scope. Run the following command and replace
 kubectl create secret docker-registry ghcr-pull-secret \
   --docker-server=ghcr.io \
   --docker-username=<my_username> \
-  --docker-password=<my_personal_access_token>
+  --docker-password=$GHCR_PAT
 ```
 
 This secret is used by Kubernetes to authenticate with the registry before

@@ -88,9 +88,10 @@ flowchart TB
 Add the `bentoml` package to install BentoML support. `pillow` is also added to
 support image processing:
 
-```txt title="requirements.txt" hl_lines="5-6"
-tensorflow==2.21.0
+```txt title="requirements.txt" hl_lines="6-7"
 matplotlib==3.10.9
+scikit-learn==1.9.0
+tensorflow==2.21.0
 pyyaml==6.0.3
 dvc[gs]==3.67.1
 bentoml==1.4.39
@@ -108,11 +109,11 @@ The output should be similar to this:
 
 ```diff
 diff --git a/requirements.txt b/requirements.txt
-index 3e4c255..780af47 100644
+index 5f775da..39ed63e 100644
 --- a/requirements.txt
 +++ b/requirements.txt
-@@ -2,3 +2,5 @@ tensorflow==2.21.0
- matplotlib==3.10.9
+@@ -3,3 +3,5 @@ scikit-learn==1.9.0
+ tensorflow==2.21.0
  pyyaml==6.0.3
  dvc[gs]==3.67.1
 +bentoml==1.4.39
@@ -169,7 +170,7 @@ others.
 
 Update the `src/train.py` file to save the model with BentoML:
 
-```py title="src/train.py" hl_lines="1 9-10 66-68 88-127"
+```py title="src/train.py" hl_lines="1 9-10 67-69 88-125"
 import json
 import sys
 from pathlib import Path
@@ -211,8 +212,9 @@ def main() -> None:
         exit(1)
 
     # Load parameters
-    prepare_params = yaml.safe_load(open("params.yaml"))["prepare"]
-    train_params = yaml.safe_load(open("params.yaml"))["train"]
+    params = yaml.safe_load(open("params.yaml"))
+    prepare_params = params["prepare"]
+    train_params = params["train"]
 
     prepared_dataset_folder = Path(sys.argv[1])
     model_folder = Path(sys.argv[2])
@@ -235,7 +237,6 @@ def main() -> None:
     ds_train = tf.data.Dataset.load(str(prepared_dataset_folder / "train"))
     ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "val"))
 
-    labels = None
     with open(prepared_dataset_folder / "labels.json") as f:
         labels = json.load(f)
 
@@ -260,10 +261,9 @@ def main() -> None:
 
     def preprocess(x: Image):
         # convert PIL image to tensor
-        x = x.convert('L' if grayscale else 'RGB')
+        x = x.convert("L" if grayscale else "RGB")
         x = x.resize(image_size)
-        x = np.array(x, dtype=np.float32)
-        x = x / 255.0
+        x = np.array(x, dtype=np.float32) / 255.0
         # add channel dimension for grayscale
         if x.ndim == 2:
             x = np.expand_dims(x, axis=-1)
@@ -281,7 +281,6 @@ def main() -> None:
         }
 
     # Save the model using BentoML to its model store
-    # https://docs.bentoml.com/en/latest/reference/frameworks/keras.html#bentoml.keras.save_model
     bentoml.keras.save_model(
         "celestial_bodies_classifier_model",
         model,
@@ -289,7 +288,7 @@ def main() -> None:
         custom_objects={
             "preprocess": preprocess,
             "postprocess": postprocess,
-        }
+        },
     )
 
     # Export the model from the model store to the local model folder
@@ -332,7 +331,7 @@ The output should be similar to this:
 
 ```diff
 diff --git a/src/train.py b/src/train.py
-index 83cf265..0c3194b 100644
+index efbb6a0..0bc4749 100644
 --- a/src/train.py
 +++ b/src/train.py
 @@ -1,3 +1,4 @@
@@ -349,18 +348,17 @@ index 83cf265..0c3194b 100644
 
  from utils.seed import set_seed
 
-@@ -60,6 +63,10 @@ def main() -> None:
+@@ -61,6 +64,9 @@ def main() -> None:
      ds_train = tf.data.Dataset.load(str(prepared_dataset_folder / "train"))
      ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "val"))
 
-+    labels = None
 +    with open(prepared_dataset_folder / "labels.json") as f:
 +        labels = json.load(f)
 +
      # Define the model
      model = get_model(image_shape, conv_size, dense_size, output_classes)
      model.compile(
-@@ -78,8 +85,47 @@ def main() -> None:
+@@ -79,8 +85,44 @@ def main() -> None:
 
      # Save the model
      model_folder.mkdir(parents=True, exist_ok=True)
@@ -369,10 +367,9 @@ index 83cf265..0c3194b 100644
 +
 +    def preprocess(x: Image):
 +        # convert PIL image to tensor
-+        x = x.convert('L' if grayscale else 'RGB')
++        x = x.convert("L" if grayscale else "RGB")
 +        x = x.resize(image_size)
-+        x = np.array(x, dtype=np.float32)
-+        x = x / 255.0
++        x = np.array(x, dtype=np.float32) / 255.0
 +        # add channel dimension for grayscale
 +        if x.ndim == 2:
 +            x = np.expand_dims(x, axis=-1)
@@ -390,7 +387,6 @@ index 83cf265..0c3194b 100644
 +        }
 +
 +    # Save the model using BentoML to its model store
-+    # https://docs.bentoml.com/en/latest/reference/frameworks/keras.html#bentoml.keras.save_model
 +    bentoml.keras.save_model(
 +        "celestial_bodies_classifier_model",
 +        model,
@@ -398,7 +394,7 @@ index 83cf265..0c3194b 100644
 +        custom_objects={
 +            "preprocess": preprocess,
 +            "postprocess": postprocess,
-+        }
++        },
 +    )
 +
 +    # Export the model from the model store to the local model folder
@@ -406,7 +402,7 @@ index 83cf265..0c3194b 100644
 +        "celestial_bodies_classifier_model:latest",
 +        f"{model_folder.absolute()}/celestial_bodies_classifier_model.bentomodel",
 +    )
-+
+
      # Save the model history
      np.save(model_folder.absolute() / "history.npy", model.history.history)
 ```
@@ -415,7 +411,7 @@ index 83cf265..0c3194b 100644
 
 Update the `src/evaluate.py` file to load the model from BentoML:
 
-```py title="src/evaluate.py" hl_lines="9 132-137 139"
+```py title="src/evaluate.py" hl_lines="15 106-113 115"
 import json
 import sys
 from pathlib import Path
@@ -424,6 +420,12 @@ from typing import List
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
+from sklearn.metrics import (
+    ConfusionMatrixDisplay,
+    f1_score,
+    precision_score,
+    recall_score,
+)
 import bentoml
 
 
@@ -448,81 +450,50 @@ def get_pred_preview_plot(
     model: tf.keras.Model, ds_val: tf.data.Dataset, labels: List[str]
 ) -> plt.Figure:
     """Plot a preview of the predictions"""
-    fig = plt.figure(figsize=(10, 5), tight_layout=True)
+    fig, axes = plt.subplots(2, 5, figsize=(10, 5), tight_layout=True)
     for images, label_idxs in ds_val.take(1):
-        preds = model.predict(images)
-        for i in range(10):
-            plt.subplot(2, 5, i + 1)
-            img = (images[i].numpy() * 255).astype("uint8")
-            # Convert image to rgb if grayscale
-            if img.shape[-1] == 1:
-                img = np.squeeze(img, axis=-1)
-                img = np.stack((img,) * 3, axis=-1)
-            true_label = labels[label_idxs[i].numpy()]
-            pred_label = labels[np.argmax(preds[i])]
-            # Add red border if the prediction is wrong else add green border
-            img = np.pad(img, pad_width=((1, 1), (1, 1), (0, 0)))
-            if true_label != pred_label:
-                img[0, :, 0] = 255  # Top border
-                img[-1, :, 0] = 255  # Bottom border
-                img[:, 0, 0] = 255  # Left border
-                img[:, -1, 0] = 255  # Right border
-            else:
-                img[0, :, 1] = 255
-                img[-1, :, 1] = 255
-                img[:, 0, 1] = 255
-                img[:, -1, 1] = 255
+        pred_idxs = np.argmax(model.predict(images, verbose=0), axis=1)
+        for ax, image, true_idx, pred_idx in zip(
+            axes.ravel(), images, label_idxs, pred_idxs
+        ):
+            true_label = labels[true_idx.numpy()]
+            pred_label = labels[pred_idx]
+            ax.imshow(image.numpy().squeeze(), cmap="gray")
+            ax.set_title(f"True: {true_label}\nPred: {pred_label}")
+            ax.set_xticks([])
+            ax.set_yticks([])
 
-            plt.imshow(img)
-            plt.title(f"True: {true_label}\n" f"Pred: {pred_label}")
-            plt.axis("off")
+            border_color = "lime" if true_idx.numpy() == pred_idx else "red"
+            for spine in ax.spines.values():
+                spine.set_edgecolor(border_color)
+                spine.set_linewidth(4)
 
     return fig
 
 
 def get_confusion_matrix_plot(
-    model: tf.keras.Model, ds_val: tf.data.Dataset, labels: List[str]
+    y_true: np.ndarray, y_pred: np.ndarray, labels: List[str]
 ) -> plt.Figure:
     """Plot the confusion matrix"""
-    fig = plt.figure(figsize=(6, 6), tight_layout=True)
-    preds = model.predict(ds_val)
-
-    conf_matrix = tf.math.confusion_matrix(
-        labels=tf.concat([y for _, y in ds_val], axis=0),
-        predictions=tf.argmax(preds, axis=1),
-        num_classes=len(labels),
+    fig, ax = plt.subplots(figsize=(6, 6), tight_layout=True)
+    display = ConfusionMatrixDisplay.from_predictions(
+        y_true,
+        y_pred,
+        display_labels=labels,
+        normalize="true",
+        cmap="Blues",
+        values_format=".2f",
+        ax=ax,
+        colorbar=True,
     )
 
-    # Plot the confusion matrix
-    conf_matrix = conf_matrix / tf.reduce_sum(conf_matrix, axis=1)
-    plt.imshow(conf_matrix, cmap="Blues")
+    for value, text in zip(display.confusion_matrix.ravel(), display.text_.ravel()):
+        text.set_fontsize(7)
+        if np.isclose(value, 0.0):
+            text.set_color("lightgray")
 
-    # Plot cell values
-    for i in range(len(labels)):
-        for j in range(len(labels)):
-            value = conf_matrix[i, j].numpy()
-            if value == 0:
-                color = "lightgray"
-            elif value > 0.5:
-                color = "white"
-            else:
-                color = "black"
-            plt.text(
-                j,
-                i,
-                f"{value:.2f}",
-                ha="center",
-                va="center",
-                color=color,
-                fontsize=8,
-            )
-
-    plt.colorbar()
-    plt.xticks(range(len(labels)), labels, rotation=90)
-    plt.yticks(range(len(labels)), labels)
-    plt.xlabel("Predicted label")
-    plt.ylabel("True label")
-    plt.title("Confusion matrix")
+    ax.set_xticklabels(labels, rotation=90)
+    ax.set_title("Validation confusion matrix")
 
     return fig
 
@@ -543,26 +514,45 @@ def main() -> None:
 
     # Load files
     ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "val"))
-    labels = None
     with open(prepared_dataset_folder / "labels.json") as f:
         labels = json.load(f)
 
     # Import the model to the model store from a local model folder
     try:
-        bentoml.models.import_model(f"{model_folder.absolute()}/celestial_bodies_classifier_model.bentomodel")
+        bentoml.models.import_model(
+            f"{model_folder.absolute()}/celestial_bodies_classifier_model.bentomodel"
+        )
     except bentoml.exceptions.BentoMLException:
         print("Model already exists in the model store - skipping import.")
 
     # Load model
     model = bentoml.keras.load_model("celestial_bodies_classifier_model")
-    model_history = np.load(model_folder.absolute() / "history.npy", allow_pickle=True).item()
+    model_history = np.load(
+        model_folder.absolute() / "history.npy", allow_pickle=True
+    ).item()
 
     # Log metrics
     val_loss, val_acc = model.evaluate(ds_val)
-    print(f"Validation loss: {val_loss:.2f}")
-    print(f"Validation accuracy: {val_acc * 100:.2f}%")
+    preds = model.predict(ds_val)
+    y_true = tf.concat([y for _, y in ds_val], axis=0).numpy()
+    y_pred = np.argmax(preds, axis=1)
+
+    metrics = {
+        "val_loss": val_loss,
+        "val_acc": val_acc,
+        "precision": precision_score(y_true, y_pred, average="macro", zero_division=0),
+        "recall": recall_score(y_true, y_pred, average="macro", zero_division=0),
+        "f1_score": f1_score(y_true, y_pred, average="macro", zero_division=0),
+    }
+
+    print(f"Validation loss: {metrics['val_loss']:.2f}")
+    print(f"Validation accuracy: {metrics['val_acc'] * 100:.2f}%")
+    print(f"Precision: {metrics['precision']:.2f}")
+    print(f"Recall:    {metrics['recall']:.2f}")
+    print(f"F1 score:  {metrics['f1_score']:.2f}")
+
     with open(evaluation_folder / "metrics.json", "w") as f:
-        json.dump({"val_loss": val_loss, "val_acc": val_acc}, f)
+        json.dump(metrics, f)
 
     # Save training history plot
     fig = get_training_plot(model_history)
@@ -573,7 +563,7 @@ def main() -> None:
     fig.savefig(evaluation_folder / plots_folder / "pred_preview.png")
 
     # Save confusion matrix plot
-    fig = get_confusion_matrix_plot(model, ds_val, labels)
+    fig = get_confusion_matrix_plot(y_true, y_pred, labels)
     fig.savefig(evaluation_folder / plots_folder / "confusion_matrix.png")
 
     print(
@@ -596,24 +586,26 @@ The output should be similar to this:
 
 ```diff
 diff --git a/src/evaluate.py b/src/evaluate.py
-index 3bca979..11322bd 100644
+index 5e62d83..0a006a1 100644
 --- a/src/evaluate.py
 +++ b/src/evaluate.py
-@@ -6,6 +6,7 @@ from typing import List
- import matplotlib.pyplot as plt
- import numpy as np
- import tensorflow as tf
+@@ -12,6 +12,7 @@ from sklearn.metrics import (
+     precision_score,
+     recall_score,
+ )
 +import bentoml
 
 
  def get_training_plot(model_history: dict) -> plt.Figure:
-@@ -128,9 +129,14 @@ def main() -> None:
+@@ -102,9 +103,16 @@ def main() -> None:
      with open(prepared_dataset_folder / "labels.json") as f:
          labels = json.load(f)
 
 +    # Import the model to the model store from a local model folder
 +    try:
-+        bentoml.models.import_model(f"{model_folder.absolute()}/celestial_bodies_classifier_model.bentomodel")
++        bentoml.models.import_model(
++            f"{model_folder.absolute()}/celestial_bodies_classifier_model.bentomodel"
++        )
 +    except bentoml.exceptions.BentoMLException:
 +        print("Model already exists in the model store - skipping import.")
 +
@@ -621,9 +613,9 @@ index 3bca979..11322bd 100644
 -    model_path = model_folder.absolute() / "model.keras"
 -    model = tf.keras.models.load_model(model_path)
 +    model = bentoml.keras.load_model("celestial_bodies_classifier_model")
-     model_history = np.load(model_folder.absolute() / "history.npy", allow_pickle=True).item()
-
-     # Log metrics
+     model_history = np.load(
+         model_folder.absolute() / "history.npy", allow_pickle=True
+     ).item()
 ```
 
 ### Run the experiment

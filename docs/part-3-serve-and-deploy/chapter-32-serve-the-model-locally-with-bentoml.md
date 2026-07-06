@@ -111,8 +111,10 @@ class CelestialBodiesClassifierService:
 
     @bentoml.api()
     def predict(
-            self,
-            image: Annotated[Image, ContentType("image/jpeg")] = Field(description="Planet image to analyze"),
+        self,
+        image: Annotated[Image, ContentType("image/jpeg")] = Field(
+            description="Planet image to analyze"
+        ),
     ) -> Annotated[str, ContentType("application/json")]:
         image = self.preprocess(image)
         predictions = self.model.predict(image)
