@@ -74,7 +74,7 @@ from the previous chapter to your new directory:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Copy the data folder from the previous chapter
-cp -r ../mlops-guide-jupyter-notebook/data .
+cp -r ../mlops-guide-notebook/data .
 ```
 
 ### Set up a Python environment

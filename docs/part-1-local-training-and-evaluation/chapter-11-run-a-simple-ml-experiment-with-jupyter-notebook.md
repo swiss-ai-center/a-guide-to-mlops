@@ -55,10 +55,10 @@ directory for this first chapter:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Create the working directory
-mkdir mlops-guide-jupyter-notebook
+mkdir mlops-guide-notebook
 
 # Switch to the working directory
-cd mlops-guide-jupyter-notebook
+cd mlops-guide-notebook
 ```
 
 ### Download the notebook
@@ -68,20 +68,20 @@ the Jupyter Notebook for this machine learning experiment:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Download the archive containing the Jupyter Notebook
-curl -L -o jupyter-notebook.zip https://github.com/swiss-ai-center/a-guide-to-mlops/archive/refs/heads/jupyter-notebook.zip
+curl -L -o notebook.zip https://github.com/swiss-ai-center/a-guide-to-mlops/archive/refs/heads/notebook.zip
 ```
 
 Unzip the Jupyter Notebook into your working directory:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Extract the Jupyter Notebook
-unzip jupyter-notebook.zip
+unzip notebook.zip
 
 # Move the subdirectory files to the working directory
-mv a-guide-to-mlops-jupyter-notebook/* .
+mv a-guide-to-mlops-notebook/* .
 
 # Remove the archive and the directory
-rm -r jupyter-notebook.zip a-guide-to-mlops-jupyter-notebook
+rm -r notebook.zip a-guide-to-mlops-notebook
 ```
 
 ### Download and set up the dataset
