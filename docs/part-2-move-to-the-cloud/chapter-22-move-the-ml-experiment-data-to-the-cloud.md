@@ -245,9 +245,10 @@ Install the DVC Storage plugin for the cloud provider:
 Here, the `dvc[gs]` package enables support for Google Cloud Storage. Update the
 `requirements.txt` file:
 
-```txt title="requirements.txt" hl_lines="4"
-tensorflow==2.21.0
+```txt title="requirements.txt" hl_lines="5"
 matplotlib==3.10.9
+scikit-learn==1.9.0
+tensorflow==2.21.0
 pyyaml==6.0.3
 dvc[gs]==3.67.1
 ```
@@ -263,12 +264,12 @@ The output should be similar to this:
 
 ```diff
 diff --git a/requirements.txt b/requirements.txt
-index 0b88f4a..4b8d3d9 100644
+index 116c388..5f775da 100644
 --- a/requirements.txt
 +++ b/requirements.txt
-@@ -1,4 +1,4 @@
+@@ -2,4 +2,4 @@ matplotlib==3.10.9
+ scikit-learn==1.9.0
  tensorflow==2.21.0
- matplotlib==3.10.9
  pyyaml==6.0.3
 -dvc==3.67.1
 +dvc[gs]==3.67.1
