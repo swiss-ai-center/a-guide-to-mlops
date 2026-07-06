@@ -122,7 +122,6 @@ include:
 python:
   packages:
     - "tensorflow==2.21.0"
-    - "matplotlib==3.10.9"
     - "pillow==12.2.0"
 docker:
     python_version: "3.13"
@@ -162,7 +161,7 @@ bentoml build src
 The output should be similar to this:
 
 ```text
-INFO: Adding current BentoML version to requirements.txt: bentoml==1.4.28
+INFO: Adding current BentoML version to requirements.txt: bentoml==1.4.29
 INFO: Locking PyPI package versions.
 
 ██████╗ ███████╗███╗   ██╗████████╗ ██████╗ ███╗   ███╗██╗
@@ -172,21 +171,21 @@ INFO: Locking PyPI package versions.
 ██████╔╝███████╗██║ ╚████║   ██║   ╚██████╔╝██║ ╚═╝ ██║███████╗
 ╚═════╝ ╚══════╝╚═╝  ╚═══╝   ╚═╝    ╚═════╝ ╚═╝     ╚═╝╚══════╝
 
-Successfully built Bento(tag="celestial_bodies_classifier:v5rlmavw4kahqaav").
+Successfully built Bento(tag="celestial_bodies_classifier:l6s3zhdzjgaptp35").
 
 Next steps:
 
 * Deploy to BentoCloud:
-    $ bentoml deploy celestial_bodies_classifier:v5rlmavw4kahqaav -n ${DEPLOYMENT_NAME}
+    $ bentoml deploy celestial_bodies_classifier:l6s3zhdzjgaptp35 -n ${DEPLOYMENT_NAME}
 
 * Update an existing deployment on BentoCloud:
-    $ bentoml deployment update --bento celestial_bodies_classifier:v5rlmavw4kahqaav ${DEPLOYMENT_NAME}
+    $ bentoml deployment update --bento celestial_bodies_classifier:l6s3zhdzjgaptp35 ${DEPLOYMENT_NAME}
 
 * Containerize your Bento with `bentoml containerize`:
-    $ bentoml containerize celestial_bodies_classifier:v5rlmavw4kahqaav
+    $ bentoml containerize celestial_bodies_classifier:l6s3zhdzjgaptp35
 
 * Push to BentoCloud with `bentoml push`:
-    $ bentoml push celestial_bodies_classifier:v5rlmavw4kahqaav
+    $ bentoml push celestial_bodies_classifier:l6s3zhdzjgaptp35
 ```
 
 All Bentos can be listed with the following command:
@@ -200,7 +199,7 @@ The output should be similar to this:
 
 ```text
  Tag                                           Size       Model Size  Creation Time
- celestial_bodies_classifier:y44i6os766cdrgjl  19.48 KiB  9.43 MiB    2026-06-04 11:28:43
+ celestial_bodies_classifier:l6s3zhdzjgaptp35  19.27 KiB  9.43 MiB    2026-07-06 16:45:47
 ```
 
 ### Containerize the BentoML model artifact with Docker
@@ -219,47 +218,32 @@ the latest version of the BentoML model artifact.
 The output should be similar to this:
 
 ```text
-INFO: Building OCI-compliant image for celestial_bodies_classifier:v5rlmavw4kahqaav with docker
+INFO: Building OCI-compliant image for celestial_bodies_classifier:l6s3zhdzjgaptp35 with docker
 
-[+] Building 57.1s (17/17) FINISHED                                                                      docker:default
- => [internal] load build definition from Dockerfile                                                               0.1s
- => => transferring dockerfile: 1.92kB                                                                             0.0s
- => [internal] load metadata for docker.io/library/python:3.13-slim                                                2.3s
- => [internal] load .dockerignore                                                                                  0.0s
- => => transferring context: 2B                                                                                    0.0s
- => [base-container  1/12] FROM docker.io/library/python:3.13-slim@sha256:2b0079146a74e23bf4ae8f6a28e1b484c6292f6  3.6s
- => => resolve docker.io/library/python:3.13-slim@sha256:2b0079146a74e23bf4ae8f6a28e1b484c6292f6fb904cbb51825b4a1  0.0s
- => => sha256:bc0965b23a04fe7f2d9fb20f597008fcf89891de1c705ffc1c80483a1f098e4f 28.23MB / 28.23MB                   1.2s
- => => sha256:9b871d410cbf35a95adbe8c061f6d60e2e129bd2fd9b60485a8dd397ee3fcf61 3.32MB / 3.32MB                     1.1s
- => => sha256:8bfa778b5b231c44fb4d35b4783fe69f55f2b3f59dad4c8205661c3f752494a6 13.65MB / 13.65MB                   1.6s
- => => sha256:2b0079146a74e23bf4ae8f6a28e1b484c6292f63.134cbb51825b4a19812fcd8 9.12kB / 9.12kB                     0.0s
- => => sha256:027e90762c20461da8dc5f530b0ca8604b38c382dadacb4471ea47377c7cf951 1.75kB / 1.75kB                     0.0s
- => => sha256:3ebf71e888419589c6cda9e15384dc2bff81338fb591f54af96ca5529df597c2 5.17kB / 5.17kB                     0.0s
- => => sha256:258b25b9265525eaafd659e18f862525eea9e6379dce2ef29defd91ba0b8868c 249B / 249B                         1.4s
- => => extracting sha256:bc0965b23a04fe7f2d9fb20f597008fcf89891de1c705ffc1c80483a1f098e4f                          1.3s
- => => extracting sha256:9b871d410cbf35a95adbe8c061f6d60e2e129bd2fd9b60485a8dd397ee3fcf61                          0.1s
- => => extracting sha256:8bfa778b5b231c44fb4d35b4783fe69f55f2b3f59dad4c8205661c3f752494a6                          0.6s
- => => extracting sha256:258b25b9265525eaafd659e18f862525eea9e6379dce2ef29defd91ba0b8868c                          0.0s
- => [internal] load build context                                                                                  0.1s
- => => transferring context: 9.91MB                                                                                0.0s
- => [base-container  2/12] RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Pa  0.5s
- => [base-container  3/12] RUN --mount=type=cache,target=/var/lib/apt --mount=type=cache,target=/var/cache/apt s  11.6s
- => [base-container  4/12] RUN curl -LO https://astral.sh/uv/install.sh &&     sh install.sh && rm install.sh &&   2.8s
- => [base-container  5/12] RUN groupadd -g 1034 -o bentoml && useradd -m -u 1034 -g 1034 -o -r bentoml             0.5s
- => [base-container  6/12] RUN mkdir /home/bentoml/bento && chown bentoml:bentoml /home/bentoml/bento -R           0.5s
- => [base-container  7/12] WORKDIR /home/bentoml/bento                                                             0.1s
- => [base-container  8/12] COPY --chown=bentoml:bentoml ./env/python ./env/python/                                 0.2s
- => [base-container  9/12] RUN --mount=type=cache,target=/root/.cache/uv bash -euxo pipefail /home/bentoml/bento  29.7s
- => [base-container 10/12] COPY --chown=bentoml:bentoml . ./                                                       0.1s
- => [base-container 11/12] RUN rm -rf /var/lib/{apt,cache,log}                                                     0.2s
- => [base-container 12/12] RUN chmod +x /home/bentoml/bento/env/docker/entrypoint.sh                               0.7s
- => exporting to image                                                                                             4.1s
- => => exporting layers                                                                                            4.1s
- => => writing image sha256:09a34e0dd539e44331537b8ddb316e8b02e0a2c01d1d760ac225bed9ee1af6b0                       0.0s
- => => naming to docker.io/library/celestial-bodies-classifier:latest                                              0.0s
-
- 1 warning found (use docker --debug to expand):
- - FromAsCasing: 'as' and 'FROM' keywords' casing do not match (line 6)
+[+] Building 1.2s (17/17) FINISHED                                                        docker:default
+ => [internal] load build definition from Dockerfile                                                0.0s
+ => => transferring dockerfile: 2.04kB                                                              0.0s
+ => [internal] load metadata for docker.io/library/python:3.13-slim                                 0.8s
+ => [internal] load .dockerignore                                                                   0.1s
+ => => transferring context: 2B                                                                     0.0s
+ => [base-container  1/12] FROM docker.io/library/python:3.13-slim@sha256:eb43ff125d8d58d7449dcba7  0.0s
+ => [internal] load build context                                                                   0.1s
+ => => transferring context: 9.91MB                                                                 0.1s
+ => CACHED [base-container  2/12] RUN if command -v groupadd &>/dev/null; then     groupadd -g 103  0.0s
+ => CACHED [base-container  3/12] RUN mkdir /home/bentoml/bento && chown bentoml:bentoml /home/ben  0.0s
+ => CACHED [base-container  4/12] WORKDIR /home/bentoml/bento                                       0.0s
+ => CACHED [base-container  5/12] COPY --chown=bentoml:bentoml ./env/docker ./env/docker/           0.0s
+ => CACHED [base-container  6/12] RUN  apt-get update && apt-get install -q -y --no-install-recomm  0.0s
+ => CACHED [base-container  7/12] RUN  command -v uv >/dev/null || pip install uv                   0.0s
+ => CACHED [base-container  8/12] RUN  UV_PYTHON_INSTALL_DIR=/app/python/ uv venv --python 3.13 /a  0.0s
+ => CACHED [base-container  9/12] COPY --chown=bentoml:bentoml ./env/python ./env/python/           0.0s
+ => CACHED [base-container 10/12] RUN  --mount=type=cache,sharing=locked,target=/root/.cache/ if [  0.0s
+ => CACHED [base-container 11/12] COPY --chown=bentoml:bentoml . ./                                 0.0s
+ => CACHED [base-container 12/12] RUN chmod +x /home/bentoml/bento/env/docker/entrypoint.sh         0.0s
+ => exporting to image                                                                              0.0s
+ => => exporting layers                                                                             0.0s
+ => => writing image sha256:a2bff6f059d438224a79209daeea2d9a4db7a35c5b29c2d71e2d649986e336aa        0.0s
+ => => naming to docker.io/library/celestial-bodies-classifier:latest                               0.0s
 Successfully built Bento container for "celestial_bodies_classifier:latest" with tag(s)
 "celestial-bodies-classifier:latest"
 To run your newly built Bento container, run:
@@ -269,8 +253,7 @@ To run your newly built Bento container, run:
 !!! note "BentoML uses uv internally"
 
     You might have noticed that BentoML uses `uv` internally during the
-    containerization process (see the `RUN curl -LO https://astral.sh/uv/install.sh`
-    line in the build output). This is because BentoML uses `uv` for fast package
+    containerization process. This is because BentoML uses `uv` for fast package
     installation inside the Docker image. This is independent of whether you use
     `uv` or `pip` on your local machine.
 
@@ -385,8 +368,6 @@ helper.
 # Authenticate with the Google Container Registry
 gcloud auth configure-docker ${GCP_CONTAINER_REGISTRY_LOCATION}-docker.pkg.dev
 ```
-
-Press ++y++ to validate the changes.
 
 Ensure your `GCP_PROJECT_ID` variable is still correctly exported:
 

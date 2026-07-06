@@ -6,14 +6,24 @@ Introduction to MLOps.
 
 MLOps, short for _Machine Learning Operations_, is the set of practices that
 turns a machine learning experiment into a system that can be reproduced,
-deployed, monitored, and improved over time. It applies the principles of
-software engineering (version control, automated testing, continuous
-integration, and deployment) to machine learning, where code, data, and models
-change together.
+deployed, monitored, and improved over time.
 
-A model in MLOps is more than an artifact from a single run. It is the result of
-a pipeline that versions its inputs, parameters, and environment and lets anyone
-with access to the repository recreate its outputs.
+It sits at the intersection of machine learning, DevOps, and data engineering:
+
+```mermaid
+venn-beta
+    set A["Machine Learning"]
+    set B["DevOps"]
+    set C["Data Engineering"]
+    union A,B,C["MLOps"]
+```
+
+MLOps draws on the practices of these three fields. It applies version control,
+automated testing, continuous integration, and continuous deployment to machine
+learning. A model becomes the result of a pipeline that versions code, data,
+parameters, and environment so anyone can recreate its outputs. Teams can then
+share experiments, deploy confidently, monitor performance, and retrain when
+production data drifts.
 
 ## The scope of an ML system
 
@@ -48,9 +58,5 @@ maintained:
 - **Retraining.** New data closes the loop. Labeling it with AI assistance and
   retraining the model improves the system over time.
 
-## Why this matters
-
-Without MLOps, a successful experiment often remains a fragile artifact:
-difficult to reproduce, hard to update, and risky to deploy. With MLOps, the
-experiment becomes the starting point of a lifecycle in which results can be
-tracked, compared, deployed, and improved.
+MLOps turns experiments into systems that teams can reproduce, deploy, and
+improve.

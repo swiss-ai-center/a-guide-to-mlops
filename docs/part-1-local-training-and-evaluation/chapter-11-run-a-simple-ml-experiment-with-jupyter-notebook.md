@@ -55,10 +55,10 @@ directory for this first chapter:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Create the working directory
-mkdir mlops-guide-jupyter-notebook
+mkdir mlops-guide-notebook
 
 # Switch to the working directory
-cd mlops-guide-jupyter-notebook
+cd mlops-guide-notebook
 ```
 
 ### Download the notebook
@@ -68,20 +68,20 @@ the Jupyter Notebook for this machine learning experiment:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Download the archive containing the Jupyter Notebook
-curl -L -o jupyter-notebook.zip https://github.com/swiss-ai-center/a-guide-to-mlops/archive/refs/heads/jupyter-notebook.zip
+curl -L -o notebook.zip https://github.com/swiss-ai-center/a-guide-to-mlops/archive/refs/heads/notebook.zip
 ```
 
 Unzip the Jupyter Notebook into your working directory:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Extract the Jupyter Notebook
-unzip jupyter-notebook.zip
+unzip notebook.zip
 
 # Move the subdirectory files to the working directory
-mv a-guide-to-mlops-jupyter-notebook/* .
+mv a-guide-to-mlops-notebook/* .
 
 # Remove the archive and the directory
-rm -r jupyter-notebook.zip a-guide-to-mlops-jupyter-notebook
+rm -r notebook.zip a-guide-to-mlops-notebook
 ```
 
 ### Download and set up the dataset
@@ -198,7 +198,7 @@ jupyter-lab notebook.ipynb
 ```
 
 A browser window should open with the Jupyter Notebook at
-<http://localhost:8888/lab/tree/notebook.ipynb>.
+<http://localhost:8888/lab/>.
 
 You may notice all the previous outputs from the notebook might still be
 present. This is because the notebook was not cleared before being shared with
@@ -222,14 +222,12 @@ Exit the virtual environment with the following command:
 deactivate
 ```
 
-The Jupyter notebook serves as a valuable tool for consolidating an entire
-experiment into a single file, facilitating data visualization, and enabling the
-presentation of results. However, it does have severe limitations such as being
-challenging to share with others due to a lack of versioning capabilities,
-difficulty in reproducing the experiment, and the potential for data leaks and
-confusion from previous outputs.
-
-In the next chapter you will see how to address these issues.
+The Jupyter notebook is a valuable tool for consolidating an entire experiment
+into a single file, facilitating data visualization, and enabling the
+presentation of results. However, it also has severe limitations: it is
+challenging to share with others because it lacks versioning, it can be
+difficult to reproduce the experiment, and stale outputs or hidden state can
+mislead readers.
 
 ## Summary
 
@@ -245,14 +243,15 @@ In this chapter, you have:
 5. Executed the experiment locally for the first time
 
 After running the notebook, you may have noticed that it requires manual
-downloads and that the steps are not documented.
+downloads and that these steps are not documented. The next chapters address
+these issues.
 
 !!! abstract "Take away"
 
     - **Jupyter Notebooks are great for exploration but limited for production**:
       While notebooks combine code, visualization, and documentation in one place,
-      they lack proper versioning, can be difficult to share cleanly, and may leak
-      data through cached outputs.
+      they lack proper versioning, can be difficult to share cleanly, and stale
+      outputs or hidden state can mislead readers.
     - **Manual setup processes don't scale**: Downloading datasets and notebooks
       manually, along with undocumented setup steps, creates barriers to collaboration
       and reproducibility.

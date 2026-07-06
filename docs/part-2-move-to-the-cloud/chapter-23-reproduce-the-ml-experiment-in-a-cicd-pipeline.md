@@ -187,7 +187,7 @@ jobs:
           python-version: '3.13'
           cache: pip
       - name: Install dependencies
-        run: pip install --requirement requirements-freeze.txt
+        run: pip install -r requirements-freeze.txt
       - name: Login to Google Cloud
         uses: google-github-actions/auth@v3
         with:
@@ -205,8 +205,8 @@ jobs:
       dependency installation, you can replace the `Setup Python` and
       `Install dependencies` steps with the
       [astral-sh/setup-uv](https://github.com/astral-sh/setup-uv) action and run
-      `uv pip install --requirement requirements-freeze.txt`. For simplicity, the rest
-      of this guide continues to use the default Python tools (`pip` and `venv`).
+      `uv pip install -r requirements-freeze.txt`. For simplicity, the rest of this
+      guide continues to use the default Python tools (`pip` and `venv`).
 
 ### Push the CI/CD pipeline configuration file to Git
 

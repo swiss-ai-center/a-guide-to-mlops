@@ -11,8 +11,7 @@ The repository is organized into several branches, each fulfilling a specific
 role:
 
 * `main`: the guide that is continuously deployed
-* `jupyter-notebook`: the Jupyter notebook used as a starting point for the
-  guide
+* `notebook`: the Jupyter notebook used as a starting point for the guide
 * `dataset`: the dataset generator used to create the dataset for the experiment
 * `data`: the dataset used to train and evaluate the model
 * `extra-data`: the supplementary dataset used for inference and labeling before
@@ -41,7 +40,7 @@ python3.13 -m venv .venv
 source .venv/bin/activate
 
 # Install the Python dependencies
-pip install --requirement requirements-freeze.txt
+pip install -r requirements-freeze.txt
 
 # Run Zensical
 zensical serve
@@ -60,7 +59,7 @@ uv venv --python 3.13
 source .venv/bin/activate
 
 # Install the Python dependencies
-uv pip install --requirement requirements-freeze.txt
+uv pip install -r requirements-freeze.txt
 
 # Run Zensical
 zensical serve
@@ -98,7 +97,7 @@ python3.13 -m venv .venv
 source .venv/bin/activate
 
 # Install the Python dependencies
-pip install --requirement requirements-freeze.txt
+pip install -r requirements-freeze.txt
 
 # Run mdwrap
 mdwrap --fmt docs
@@ -117,7 +116,7 @@ uv venv --python 3.13
 source .venv/bin/activate
 
 # Install the Python dependencies
-uv pip install --requirement requirements-freeze.txt
+uv pip install -r requirements-freeze.txt
 
 # Run mdwrap
 mdwrap --fmt docs

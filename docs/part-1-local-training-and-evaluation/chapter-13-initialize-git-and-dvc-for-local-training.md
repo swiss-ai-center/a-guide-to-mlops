@@ -128,13 +128,19 @@ Untracked files:
   (use "git add <file>..." to include in what will be committed)
     .venv/
     README.md
-    data/
-    evaluation/
-    model/
+    data/...
+    evaluation/...
+    model/...
     params.yaml
     requirements-freeze.txt
     requirements.txt
-    src/
+    src/__pycache__/...
+    src/evaluate.py
+    src/prepare.py
+    src/train.py
+    src/utils/__init__.py
+    src/utils/__pycache__/...
+    src/utils/seed.py
 
 nothing added to commit but untracked files present (use "git add" to track)
 ```
@@ -221,9 +227,10 @@ git commit -m "Use Git to version my ML experiment"
 
 Add the main `dvc` dependency to the `requirements.txt` file:
 
-```txt title="requirements.txt" hl_lines="4"
-tensorflow==2.21.0
+```txt title="requirements.txt" hl_lines="5"
 matplotlib==3.10.9
+scikit-learn==1.9.0
+tensorflow==2.21.0
 pyyaml==6.0.3
 dvc==3.67.1
 ```
@@ -239,12 +246,12 @@ The output should be similar to this:
 
 ```diff
 diff --git a/requirements.txt b/requirements.txt
-index 250f32c..152b868 100644
+index bf56600..116c388 100644
 --- a/requirements.txt
 +++ b/requirements.txt
-@@ -1,3 +1,4 @@
+@@ -2,3 +2,4 @@ matplotlib==3.10.9
+ scikit-learn==1.9.0
  tensorflow==2.21.0
- matplotlib==3.10.9
  pyyaml==6.0.3
 +dvc==3.67.1
 ```
@@ -265,7 +272,7 @@ Install the dependencies and update the freeze file:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Install the dependencies
-    pip install --requirement requirements.txt
+    pip install -r requirements.txt
 
     # Freeze the dependencies
     pip freeze --local --all > requirements-freeze.txt
@@ -275,7 +282,7 @@ Install the dependencies and update the freeze file:
 
     ```sh title="Execute the following command(s) in a terminal"
     # Install the dependencies
-    uv pip install --requirement requirements.txt
+    uv pip install -r requirements.txt
 
     # Freeze the dependencies
     uv pip freeze > requirements-freeze.txt
@@ -384,7 +391,7 @@ You can now add the experiment data to DVC without complain:
 dvc add data/raw/
 ```
 
-The output should be similar to this. You can safely ignore the message:
+The output should be similar to this. You can **safely ignore** the message:
 
 ```text
 To track the changes with git, run:
