@@ -50,7 +50,7 @@ home:
       body: |
         Building a model is only the beginning. This guide is a step-by-step flight plan
         from a notebook experiment to a reproducible, monitored, and continuously-improved ML system.
-        We use real tools — DVC, CML, Docker, BentoML, Evidently AI, and Label Studio —
+        We use real tools — DVC, CML, Docker, BentoML, Fluent Bit, Evidently AI, and Label Studio —
         so you can follow along with real code.
       actions:
         - type: primary
@@ -130,7 +130,7 @@ home:
       title_highlight: maintain
       planet: comet
       body: |
-        A model in production needs watching. Stream prediction logs to S3, deploy
+        A model in production needs watching. Stream prediction logs to S3 with Fluent Bit, deploy
         an Evidently AI dashboard on Kubernetes to compare live data against your
         training reference, and open drift reports as GitHub issues when data drifts.
         Use those signals to trigger retraining workflows or roll back to a previous
