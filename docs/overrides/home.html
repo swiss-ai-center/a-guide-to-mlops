@@ -264,8 +264,8 @@
     gap: 0.6rem;
     padding: 0.8rem 1.5rem;
     border-radius: 0;
-    background: transparent;
-    color: var(--accent);
+    background: var(--accent);
+    color: #0a0a0a;
     border: 1px solid var(--accent);
     font-family: var(--tech-mono);
     font-weight: 700;
@@ -273,10 +273,11 @@
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    transition: background 0.2s ease, color 0.2s ease;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   }
   .hero-cta:hover {
-    background: var(--accent);
+    background: var(--accent-dark);
+    border-color: var(--accent-dark);
     color: #0a0a0a;
   }
   .hero-cta .twemoji {
@@ -567,12 +568,14 @@
     color: #525252;
   }
   body[data-md-color-scheme="default"] .hero-cta {
-    border-color: #b45309;
-    color: #b45309;
+    background: #d97706;
+    border-color: #d97706;
+    color: #0a0a0a;
   }
   body[data-md-color-scheme="default"] .hero-cta:hover {
     background: #b45309;
-    color: #ffffff;
+    border-color: #b45309;
+    color: #0a0a0a;
   }
   body[data-md-color-scheme="default"] .chapter-card {
     background: #ffffff;
