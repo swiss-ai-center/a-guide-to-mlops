@@ -50,7 +50,7 @@ home:
       planet: moon
       body: |
         A step-by-step path from a notebook experiment to a reproducible, monitored,
-        continuously-improved ML system. You will use the same tools used in production:
+        continuously-improved ML system. You will use the same tools as in production:
         DVC, Git, GitHub Actions, CML, Docker, BentoML, Fluent Bit, Evidently AI, and Label Studio.
       actions:
         - type: primary
