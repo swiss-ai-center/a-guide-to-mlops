@@ -193,7 +193,7 @@ home:
       The guide is open source and designed to be followed hands-on.
       Pick a chapter, launch your terminal, and start shipping ML systems.
     cta:
-      text: Start the journey
+      text: Launch mission
       icon: lucide/rocket
       path: syllabus/
 ---
