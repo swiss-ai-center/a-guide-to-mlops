@@ -229,11 +229,11 @@ data:
 
 A few notes on this configuration:
 
-* The `json` parser referenced in the `[INPUT]` block is defined in
-  `parsers.conf` and registered through `Parsers_File` in the `[SERVICE]` block.
-  Fluent Bit does not ship with a built-in parser named `json`, so without this
-  registration the sidecar will fail to parse the log records and will not ship
-  any data to the storage bucket.
+* The `json` parser is defined in our custom `parsers.conf` and registered
+  through `Parsers_File` in the `[SERVICE]` block. We provide our own parser
+  because the ConfigMap is mounted at `/fluent-bit/etc/`, replacing the image's
+  default parsers file, and because we use the `timestamp` field from BentoML
+  records as the log time.
 * The `s3` output plugin creates objects under `gs://$GCP_BUCKET_NAME/logs/`.
 * The `total_file_size` and `upload_timeout` options control when Fluent Bit
   uploads a batch. A new object is created when the buffer reaches 10 MB or after
