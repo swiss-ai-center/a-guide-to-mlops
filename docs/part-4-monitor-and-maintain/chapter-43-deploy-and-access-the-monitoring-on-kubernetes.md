@@ -512,8 +512,8 @@ docker push ghcr.io/<my_username>/<my_repository_name>/celestial-bodies-evidentl
 
 #### Create Kubernetes manifests
 
-Create a deployment and service for the Evidently UI service. The UI reads and
-writes snapshots from `gs://$GCP_BUCKET_NAME/evidently-workspace`.
+Create a deployment and service for the Evidently UI service. The UI reads
+snapshots from `gs://$GCP_BUCKET_NAME/evidently-workspace`.
 
 ```yaml title="kubernetes/evidently-ui-deployment.yaml"
 apiVersion: apps/v1
