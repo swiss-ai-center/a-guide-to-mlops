@@ -229,11 +229,11 @@ data:
 
 A few notes on this configuration:
 
-* The `json` parser referenced in the `[INPUT]` block is defined in
-  `parsers.conf` and registered through `Parsers_File` in the `[SERVICE]` block.
-  Fluent Bit does not ship with a built-in parser named `json`, so without this
-  registration the sidecar will fail to parse the log records and will not ship
-  any data to the storage bucket.
+* The `json` parser is defined in our custom `parsers.conf` and registered
+  through `Parsers_File` in the `[SERVICE]` block. We provide our own parser
+  because the ConfigMap is mounted at `/fluent-bit/etc/`, replacing the image's
+  default parsers file, and because we use the `timestamp` field from BentoML
+  records as the log time.
 * The `s3` output plugin creates objects under `gs://$GCP_BUCKET_NAME/logs/`.
 * The `total_file_size` and `upload_timeout` options control when Fluent Bit
   uploads a batch. A new object is created when the buffer reaches 10 MB or after
@@ -512,8 +512,8 @@ docker push ghcr.io/<my_username>/<my_repository_name>/celestial-bodies-evidentl
 
 #### Create Kubernetes manifests
 
-Create a deployment and service for the Evidently UI service. The UI reads and
-writes snapshots from `gs://$GCP_BUCKET_NAME/evidently-workspace`.
+Create a deployment and service for the Evidently UI service. The UI reads
+snapshots from `gs://$GCP_BUCKET_NAME/evidently-workspace`.
 
 ```yaml title="kubernetes/evidently-ui-deployment.yaml"
 apiVersion: apps/v1
@@ -703,7 +703,7 @@ from evidently.ui.workspace import Workspace
 from monitor import build_dashboard, generate_report, get_or_create_project
 
 BUCKET_NAME = os.environ.get("GCP_BUCKET_NAME")
-LOG_PREFIX = "logs"
+LOG_PREFIX = "logs/bentoml"
 PROJECT_NAME = os.environ.get("EVIDENTLY_PROJECT_NAME", "celestial-bodies-classifier")
 WORKSPACE_PREFIX = os.environ.get("EVIDENTLY_WORKSPACE_PREFIX", "evidently-workspace")
 LOG_CUTOFF_HOURS = int(os.environ.get("LOG_CUTOFF_HOURS", "24"))
@@ -882,7 +882,7 @@ Changes to be committed:
         modified:   requirements-freeze.txt
         modified:   requirements.txt
         new file:   .github/workflows/monitor.yaml
-        new file:   docker/requirements.txt
+        new file:   docker/ui.requirements.txt
         new file:   docker/ui.Dockerfile
         new file:   kubernetes/evidently-ui-deployment.yaml
         new file:   kubernetes/evidently-ui-service.yaml
