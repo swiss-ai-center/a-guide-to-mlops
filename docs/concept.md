@@ -10,13 +10,7 @@ deployed, monitored, and improved over time.
 
 It sits at the intersection of machine learning, DevOps, and data engineering:
 
-```mermaid
-venn-beta
-    set A["Machine Learning"]
-    set B["DevOps"]
-    set C["Data Engineering"]
-    union A,B,C["MLOps"]
-```
+![MLOps Venn diagram](assets/images/mlops-venn-diagram.svg){ align=center }
 
 MLOps draws on the practices of these three fields. It applies version control,
 automated testing, continuous integration, and continuous deployment to machine
