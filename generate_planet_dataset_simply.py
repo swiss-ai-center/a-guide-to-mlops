@@ -92,8 +92,10 @@ HAUMEA_AXES = (1.0, 852 / 1161, 513 / 1161)
 
 # Camera angle diversity: view from the equator (0 degrees) up to this latitude
 # toward either pole. A small longitudinal offset is also applied for perspective
-# variety while keeping the planet front-lit.
-CAMERA_MAX_LAT = math.radians(35.0)
+# variety while keeping the planet front-lit. Values near 90 degrees give a polar
+# view; 80 degrees keeps strong polar diversity without making every sample a
+# top-down view.
+CAMERA_MAX_LAT = math.radians(80.0)
 CAMERA_MAX_LON = math.radians(30.0)
 
 # Realistic Saturn ring opening angle range (degrees). Saturn's ring plane is
@@ -358,8 +360,13 @@ def build_camera(
 
     # Keep the planet's north pole (+z) pointing toward the top of the image.
     # Image top is -v, so v points toward the projection of -z onto the image plane.
+    # Near the poles the projection vanishes, so fall back to the world y-axis to
+    # keep the camera frame well-defined.
     z_world = Vec3((0, 0, 1))
-    north_proj = (z_world - z_world.dot(w) * w).norm
+    north_proj = z_world - z_world.dot(w) * w
+    if north_proj.dot(north_proj) < 1e-12:
+        north_proj = Vec3((0, 1, 0)) - Vec3((0, 1, 0)).dot(w) * w
+    north_proj = north_proj.norm
     v = -north_proj
     u = v.cross(w).norm
 
