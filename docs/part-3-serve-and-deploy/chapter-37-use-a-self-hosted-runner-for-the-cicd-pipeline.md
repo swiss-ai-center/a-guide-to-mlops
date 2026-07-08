@@ -58,7 +58,7 @@ flowchart TB
                     bentoml build
                     bentoml containerize
                     docker push|registry
-        s3_storage -.- |...|repository
+        s3_storage ~~~ repository
         subgraph clusterGraph[Kubernetes]
             action -->|dvc pull
                        dvc repro| pod_runner["Runner"]
@@ -106,7 +106,6 @@ flowchart TB
     linkStyle 7 opacity:0.4,color:#7f7f7f80
     linkStyle 8 opacity:0.4,color:#7f7f7f80
     linkStyle 9 opacity:0.4,color:#7f7f7f80
-    linkStyle 10 opacity:0.0
     linkStyle 12 opacity:0.4,color:#7f7f7f80
     linkStyle 15 opacity:0.4,color:#7f7f7f80
     linkStyle 16 opacity:0.4,color:#7f7f7f80
