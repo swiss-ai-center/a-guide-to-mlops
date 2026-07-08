@@ -1,11 +1,11 @@
-click==8.4.1
-deepmerge==2.0
+click==8.4.2
+deepmerge==2.1.0
 jinja2==3.1.6
 markdown==3.10.2
 markupsafe==3.0.3
 mdwrap @ git+https://github.com/swiss-ai-center/mdwrap.git@0.2.5
 pygments==2.20.0
-pymdown-extensions==10.21.3
+pymdown-extensions==11.0.1
 pyyaml==6.0.3
 tomli==2.4.1
-zensical==0.0.45
+zensical==0.0.47
