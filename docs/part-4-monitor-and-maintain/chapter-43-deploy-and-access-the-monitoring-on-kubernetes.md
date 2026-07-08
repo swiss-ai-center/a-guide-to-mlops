@@ -703,7 +703,7 @@ from evidently.ui.workspace import Workspace
 from monitor import build_dashboard, generate_report, get_or_create_project
 
 BUCKET_NAME = os.environ.get("GCP_BUCKET_NAME")
-LOG_PREFIX = "logs"
+LOG_PREFIX = "logs/bentoml"
 PROJECT_NAME = os.environ.get("EVIDENTLY_PROJECT_NAME", "celestial-bodies-classifier")
 WORKSPACE_PREFIX = os.environ.get("EVIDENTLY_WORKSPACE_PREFIX", "evidently-workspace")
 LOG_CUTOFF_HOURS = int(os.environ.get("LOG_CUTOFF_HOURS", "24"))
