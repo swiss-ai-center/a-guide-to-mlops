@@ -316,7 +316,7 @@ spec:
         command:
         - sh
         - -c
-        - mkdir -p /home/bentoml/bento/logs/celestial_bodies_classifier
+        - mkdir -p /home/bentoml/bento/logs/celestial_bodies_classifier && chgrp 2000 /home/bentoml/bento/logs/celestial_bodies_classifier && chmod 0775 /home/bentoml/bento/logs/celestial_bodies_classifier
         volumeMounts:
         - name: prediction-logs
           mountPath: /home/bentoml/bento/logs
@@ -371,9 +371,9 @@ The YAML above makes three things happen:
   `2000`. This lets the classifier container, which runs as the `bentoml` user,
   share the log directory with the Fluent Bit sidecar, which runs as the `fluent`
   user. The `init-log-dir` init container pre-creates
-  `/home/bentoml/bento/logs/celestial_bodies_classifier/` so it exists before
-  Fluent Bit starts. BentoML only creates the `data/` subdirectory on the first
-  prediction.
+  `/home/bentoml/bento/logs/celestial_bodies_classifier/`, sets its group to
+  `2000`, and makes it group-writable (`chmod 0775`) so the `bentoml` user can
+  create the `data/` subdirectory on the first prediction.
 * The classifier writes monitoring logs to
   `/home/bentoml/bento/logs/celestial_bodies_classifier/data/`.
 
