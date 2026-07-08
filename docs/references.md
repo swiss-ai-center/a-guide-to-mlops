@@ -21,9 +21,12 @@ into MLOps.
 ## Courses
 
 * [Machine Learning in Production](https://www.deeplearning.ai/courses/machine-learning-in-production/)
-  by Andrew Ng, DeeplLarning.AI.
+  by Andrew Ng, DeepLearning.AI.
 * [Machine Learning in Production @ CMU](https://mlip-cmu.github.io/) by
   Carnegie Mellon University.
+* [Made With ML](https://madewithml.com/) by Goku Mohandas.
+* [MLOps Zoomcamp](https://github.com/DataTalksClub/mlops-zoomcamp) by
+  DataTalks.Club.
 
 ## Others
 
