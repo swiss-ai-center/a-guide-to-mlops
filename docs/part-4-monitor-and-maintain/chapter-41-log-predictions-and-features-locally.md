@@ -34,17 +34,17 @@ flowchart TB
     end
 
     subgraph workspaceGraph[WORKSPACE]
-        drift_logs["logs/…/data/*.log"] <--> serve
+        drift_logs[/"logs/.../data.1.log"/] <---> serve
         subgraph bentoGraph[bentofile.yaml]
             serve[serve.py] <--> bento_model[classifier.bentomodel]
             features[features.py] --> serve
         end
         bento_model <-.-> dot_dvc
 
-        data --> prepare
+        data --> prepare[prepare.py]
         subgraph dvcGraph["dvc.yaml"]
-            prepare --> train
-            train --> evaluate
+            prepare --> train[train.py]
+            train --> evaluate[evaluate.py]
         end
         params -.- train
         params[params.yaml] -.- prepare
@@ -301,7 +301,7 @@ the feature extractors from `features.py`, build the embedding extractor in the
 constructor, and add a `monitor` method that logs the extracted features after
 each prediction with `bentoml.monitor`.
 
-```py title="src/serve.py" hl_lines="10-28 36 47 50-70"
+```py title="src/serve.py" hl_lines="3 10-28 36 47 51-91"
 from __future__ import annotations
 from bentoml.validators import ContentType
 from pathlib import Path
@@ -341,11 +341,12 @@ class CelestialBodiesClassifierService:
 
     @bentoml.api()
     def predict(
-            self,
-            image: Annotated[Image, ContentType("image/jpeg")] = Field(description="Planet image to analyze"),
+        self,
+        image: Annotated[Image, ContentType("image/jpeg")] = Field(
+            description="Planet image to analyze"
+        ),
     ) -> Annotated[str, ContentType("application/json")]:
         image = self.preprocess(image)
-
         predictions = self.model.predict(image)
         result = self.postprocess(predictions)
         self.monitor(image, result)
@@ -366,10 +367,30 @@ class CelestialBodiesClassifierService:
             with bentoml.monitor("celestial_bodies_classifier") as mon:
                 for name, value in scalar_features.items():
                     mon.log(value, name=name, role="feature", data_type="numerical")
-                mon.log(stats["confidence"], name="confidence", role="feature", data_type="numerical")
-                mon.log(stats["entropy"], name="entropy", role="feature", data_type="numerical")
-                mon.log(embedding, name="embedding", role="feature", data_type="numerical_sequence")
-                mon.log(stats["predicted_label"], name="predicted_label", role="prediction", data_type="categorical")
+                mon.log(
+                    stats["confidence"],
+                    name="confidence",
+                    role="feature",
+                    data_type="numerical",
+                )
+                mon.log(
+                    stats["entropy"],
+                    name="entropy",
+                    role="feature",
+                    data_type="numerical",
+                )
+                mon.log(
+                    embedding,
+                    name="embedding",
+                    role="feature",
+                    data_type="numerical_sequence",
+                )
+                mon.log(
+                    stats["predicted_label"],
+                    name="predicted_label",
+                    role="prediction",
+                    data_type="categorical",
+                )
         except Exception as exc:
             print(f"[monitoring] Failed to log prediction: {exc}")
 ```
@@ -387,7 +408,6 @@ include:
 python:
   packages:
     - "tensorflow==2.21.0"
-    - "matplotlib==3.10.9"
     - "pillow==12.2.0"
 docker:
     python_version: "3.13"

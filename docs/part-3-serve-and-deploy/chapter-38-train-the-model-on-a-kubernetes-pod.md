@@ -58,9 +58,9 @@ flowchart TB
                     bentoml build
                     bentoml containerize
                     docker push|registry
-        s3_storage -.- |...|repository
+        s3_storage ~~~ repository
         subgraph clusterGraph[Kubernetes]
-            subgraph clusterPodGraph[Kubernetes Pod]
+            subgraph clusterPodGraph[Pod]
                 pod_train[Train model] <-.-> k8s_gpu[GPUs]
             end
             pod_runner[Runner] --> |setup
@@ -112,7 +112,6 @@ flowchart TB
     linkStyle 7 opacity:0.4,color:#7f7f7f80
     linkStyle 8 opacity:0.4,color:#7f7f7f80
     linkStyle 9 opacity:0.4,color:#7f7f7f80
-    linkStyle 10 opacity:0.0
     linkStyle 14 opacity:0.4,color:#7f7f7f80
     linkStyle 18 opacity:0.4,color:#7f7f7f80
     linkStyle 19 opacity:0.4,color:#7f7f7f80

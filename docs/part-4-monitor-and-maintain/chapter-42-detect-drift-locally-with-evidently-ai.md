@@ -40,29 +40,29 @@ flowchart TB
     end
 
     subgraph workspaceGraph[WORKSPACE]
-        drift_logs["logs/…/data/*.log"] -.- serve
+        drift_logs[/"logs/.../data.1.log"/] <---> serve
         subgraph bentoGraph[bentofile.yaml]
             serve[serve.py] <--> bento_model[classifier.bentomodel]
             features[features.py] --> serve
         end
         bento_model <-.-> dot_dvc
 
-        data --> prepare
+        data --> prepare[prepare.py]
         subgraph dvcGraph["dvc.yaml"]
-            prepare --> train
-            train --> build_reference
-            train --> evaluate
+            prepare --> train[train.py]
+            train --> build_reference[build_reference.py]
+            train --> evaluate[evaluate.py]
+            reference_features[/reference_features.parquet/] <---> build_reference
         end
         params -.- train
         params[params.yaml] -.- prepare
-        dvcGraph --> bento_model
-        reference_features[reference_features.parquet] <--> build_reference
-        monitor_drift[monitor_drift.py] <--> reference_features
-        monitor_drift <--> drift_logs
+        dvcGraph --> bentoGraph
+        monitor[monitor.py] <--> reference_features
+        monitor <--> drift_logs
     end
 
     subgraph browserLocalGraph[BROWSER]
-        localhost --> |evidently ui| monitor_drift
+        localhost --> |evidently ui| monitor
     end
 
     subgraph remoteGraph[REMOTE]
@@ -125,9 +125,7 @@ flowchart TB
     linkStyle 7 opacity:0.4,color:#7f7f7f80
     linkStyle 8 opacity:0.4,color:#7f7f7f80
     linkStyle 10 opacity:0.4,color:#7f7f7f80
-    linkStyle 11 opacity:0.4,color:#7f7f7f80
-    linkStyle 12 opacity:0.4,color:#7f7f7f80
-    linkStyle 13 opacity:0.4,color:#7f7f7f80
+    linkStyle 14 opacity:0.4,color:#7f7f7f80
     linkStyle 18 opacity:0.4,color:#7f7f7f80
     linkStyle 19 opacity:0.4,color:#7f7f7f80
     linkStyle 20 opacity:0.4,color:#7f7f7f80
@@ -146,9 +144,10 @@ flowchart TB
 Add `evidently` to the project requirements. `evidently` brings `pyarrow`
 transitively, so Parquet support is available without an extra dependency.
 
-```txt title="requirements.txt" hl_lines="7"
-tensorflow==2.21.0
+```txt title="requirements.txt" hl_lines="8"
 matplotlib==3.10.9
+scikit-learn==1.9.0
+tensorflow==2.21.0
 pyyaml==6.0.3
 dvc[gs]==3.67.1
 bentoml==1.4.39
@@ -167,10 +166,10 @@ The output should be similar to this:
 
 ```diff
 diff --git a/requirements.txt b/requirements.txt
-index 780af47..5c7ecc3 100644
+index 39ed63e..203f440 100644
 --- a/requirements.txt
 +++ b/requirements.txt
-@@ -4,3 +4,4 @@ pyyaml==6.0.3
+@@ -5,3 +5,4 @@ pyyaml==6.0.3
  dvc[gs]==3.67.1
  bentoml==1.4.39
  pillow==12.2.0
@@ -211,8 +210,8 @@ Install the package and update the freeze file.
 
 ### Update the experiment
 
-In this step you will create `src/build_reference.py`, create
-`src/monitor_drift.py`, and add a new `build_reference` stage to `dvc.yaml`.
+In this step you will create `src/build_reference.py`, create `src/monitor.py`,
+and add a new `build_reference` stage to `dvc.yaml`.
 
 #### Create `src/build_reference.py`
 
@@ -228,7 +227,11 @@ import bentoml
 import pandas as pd
 import tensorflow as tf
 
-from features import build_embedding_extractor, extract_scalar_features, extract_prediction_stats
+from features import (
+    build_embedding_extractor,
+    extract_scalar_features,
+    extract_prediction_stats,
+)
 
 
 def main() -> None:
@@ -307,7 +310,7 @@ The reference dataset contains one row per training image:
 | `entropy` | float | Prediction entropy |
 | `true_label` | string | Ground-truth label from `data/prepared/train` |
 
-#### Create `src/monitor_drift.py`
+#### Create `src/monitor.py`
 
 This script loads the reference dataset and the production prediction log,
 builds an Evidently drift report, and writes:
@@ -316,7 +319,7 @@ builds an Evidently drift report, and writes:
 * `monitoring/report.html` for a quick full report view without starting the UI,
 * `monitoring/report.json` for programmatic drift scores.
 
-```py title="src/monitor_drift.py"
+```py title="src/monitor.py"
 import sys
 from pathlib import Path
 
@@ -370,9 +373,7 @@ def expand_embedding_column(df: pd.DataFrame) -> pd.DataFrame:
 
     embedding_dim = len(df["embedding"].iloc[0])
     emb_columns = [f"emb_{i}" for i in range(embedding_dim)]
-    emb_df = pd.DataFrame(
-        df["embedding"].tolist(), columns=emb_columns, index=df.index
-    )
+    emb_df = pd.DataFrame(df["embedding"].tolist(), columns=emb_columns, index=df.index)
     return pd.concat([df.drop(columns=["embedding"]), emb_df], axis=1)
 
 
@@ -385,6 +386,41 @@ def get_or_create_project(workspace: Workspace, name: str):
         name=name,
         description="Drift monitoring for the celestial bodies classifier",
     )
+
+
+def drop_constant_embedding_columns(
+    reference_df: pd.DataFrame,
+    current_df: pd.DataFrame,
+    emb_columns: list[str],
+) -> list[str]:
+    """Drop embedding dimensions that are constant in both reference and current.
+
+    ReLU activations often produce exact zeros for some neurons, which gives
+    those embedding columns zero variance. Evidently's internal correlation
+    calculations divide by the standard deviation and emit noisy
+    ``RuntimeWarning`` messages for constant columns. Since a constant column
+    carries no information, dropping it is safe and does not change the drift
+    signal.
+    """
+    constant = [
+        col
+        for col in emb_columns
+        if col in reference_df.columns
+        and col in current_df.columns
+        and reference_df[col].std() == 0
+        and current_df[col].std() == 0
+    ]
+
+    if constant:
+        print(
+            f"[info] Dropping {len(constant)} embedding dimension(s) that are "
+            "constant zero in both reference and current data: "
+            f"{', '.join(constant[:5])}{'...' if len(constant) > 5 else ''}."
+        )
+        reference_df.drop(columns=constant, inplace=True)
+        current_df.drop(columns=constant, inplace=True)
+
+    return [c for c in emb_columns if c not in constant]
 
 
 def generate_report(
@@ -405,12 +441,25 @@ def generate_report(
         [pd.read_json(f, lines=True) for f in log_files],
         ignore_index=True,
     )
+    if current_df.empty:
+        raise ValueError(
+            f"Log files in {log_dir} contain no rows. "
+            "Run the service and make some predictions first."
+        )
+
     current_df = current_df.drop(
-        columns=["timestamp", "request_id"], errors="ignore"
+        columns=["timestamp", "request_id", "date", "trace_id"],
+        errors="ignore",
     )
     current_df = expand_embedding_column(current_df)
 
+    if current_df.empty:
+        raise ValueError(
+            "Current prediction data is empty after dropping missing embeddings."
+        )
+
     emb_columns = [c for c in reference_df.columns if c.startswith("emb_")]
+    emb_columns = drop_constant_embedding_columns(reference_df, current_df, emb_columns)
 
     data_definition = DataDefinition(
         numerical_columns=SCALAR_COLUMNS,
@@ -418,12 +467,8 @@ def generate_report(
         embeddings={EMBEDDING_NAME: emb_columns},
     )
 
-    reference_data = Dataset.from_pandas(
-        reference_df, data_definition=data_definition
-    )
-    current_data = Dataset.from_pandas(
-        current_df, data_definition=data_definition
-    )
+    reference_data = Dataset.from_pandas(reference_df, data_definition=data_definition)
+    current_data = Dataset.from_pandas(current_df, data_definition=data_definition)
 
     report = Report(
         [
@@ -443,7 +488,7 @@ def generate_report(
     return snapshot
 
 
-def _drift_summary(snapshot) -> str:
+def drift_summary(snapshot) -> str:
     """Return a short human-readable drift summary from the snapshot."""
     for metric in snapshot.dict().get("metrics", []):
         if metric.get("metric_name", "").startswith("DriftedColumnsCount"):
@@ -472,7 +517,7 @@ def build_dashboard(project, snapshot) -> None:
     project.dashboard.add_panel(
         text_panel(
             title="Data Drift Summary",
-            description=_drift_summary(snapshot),
+            description=drift_summary(snapshot),
         ),
         tab=tab,
     )
@@ -566,6 +611,13 @@ def main() -> None:
         )
         sys.exit(1)
 
+    if not list(LOG_DIR.glob("*.log")):
+        print(
+            f"Prediction log directory {LOG_DIR} exists but contains no *.log files. "
+            "Run the service and make some predictions first."
+        )
+        sys.exit(1)
+
     snapshot = generate_report(REFERENCE_PATH, LOG_DIR, REPORT_PATH)
 
     WORKSPACE_PATH.mkdir(parents=True, exist_ok=True)
@@ -653,7 +705,8 @@ stages:
     - evaluation/plots/pred_preview.png
     - evaluation/plots/training_history.png
   build_reference:
-    cmd: python3.13 src/build_reference.py data/prepared model data/reference_features.parquet
+    cmd: python3.13 src/build_reference.py data/prepared model
+      data/reference_features.parquet
     deps:
     - data/prepared
     - model
@@ -707,24 +760,59 @@ First, ensure the prepared data, model, and reference dataset are up to date:
 dvc repro
 ```
 
-Generate production logs by running the service and sending a few images. The
-monitoring log is written to `logs/celestial_bodies_classifier/data/`.
+Generate production logs by running the service and sending a few images.
+
+#### Download additional inference data
+
+Download the archive containing the additional images used for inference:
+
+```sh title="Execute the following command(s) in a terminal"
+# Download the archive containing the extra data
+curl -L -o extra-data.zip https://github.com/swiss-ai-center/a-guide-to-mlops/archive/refs/heads/extra-data.zip
+```
+
+Extract the archive and rename the folder:
+
+```sh title="Execute the following command(s) in a terminal"
+# Extract the dataset
+unzip extra-data.zip
+
+# Rename to the folder to `extra-data`
+mv a-guide-to-mlops-extra-data/ extra-data/
+
+# Remove the archive and the directory
+rm extra-data.zip
+```
+
+Finally, add the `extra-data` folder to the `.gitignore` file so the downloaded
+images are not committed:
+
+```sh title="Execute the following command(s) in a terminal"
+# Add the `extra-data` folder to the `.gitignore` file
+echo -e "\n# Test data\nextra-data/" >> .gitignore
+```
+
+#### Send images to the local service
+
+Start the BentoML service locally and send the downloaded test images to the
+`/predict` endpoint. The service writes JSONL monitoring log files to
+`logs/celestial_bodies_classifier/data/`. These logs act as the production data
+that `monitor.py` will compare against the reference dataset.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Start the service (run in a separate terminal)
 bentoml serve --working-dir ./src serve:CelestialBodiesClassifierService
 ```
 
-!!! bug
-    Insert extra-data download instructions.
-
 ```sh title="Execute the following command(s) in a second terminal"
 # Send a few test images
 for img in extra-data/extra_data/*.jpg; do
   curl -X POST -F "image=@$img" http://localhost:3000/predict
 done
+```
 
-# Inspect the monitoring records (BentoML writes one file per worker)
+```sh title="Execute the following command(s) in a second terminal"
+# Inspect the monitoring records
 ls logs/celestial_bodies_classifier/data/
 ```
 
@@ -732,7 +820,7 @@ Generate the drift snapshot and push it to the local workspace:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Generate the Evidently snapshot
-python src/monitor_drift.py
+python src/monitor.py
 ```
 
 Open `monitoring/report.html` in a browser for a quick view of the full report,
@@ -783,8 +871,7 @@ Changes to be committed:
         modified:   requirements-freeze.txt
         modified:   requirements.txt
         new file:   src/build_reference.py
-        new file:   src/monitor_drift.py
-        new file:   src/features.py
+        new file:   src/monitor.py
 ```
 
 ### Commit the changes to DVC and Git

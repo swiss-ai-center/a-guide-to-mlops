@@ -63,9 +63,9 @@ flowchart TB
                     bentoml build
                     bentoml containerize
                     docker push|registry
-        s3_storage -.- |...|request
+        s3_storage ~~~ request
         subgraph clusterGraph[Kubernetes]
-            subgraph clusterPodGraph[Kubernetes Pod]
+            subgraph clusterPodGraph[Pod]
                 pod_train[Train model] <-.-> k8s_gpu[GPUs]
             end
             pod_runner[Runner] --> |create
@@ -86,15 +86,7 @@ flowchart TB
     subgraph browserGraph[BROWSER]
         k8s_fastapi <--> publicURL["public URL"]
     end
-
-    linkStyle 19 opacity:0.0
 ```
-
-The main goal of the MLOps process is to ensure that the model is reproducible,
-reliable and can be used in production. This goal is now achieved.
-
-Part 4 adds the monitoring feedback loop. You will learn how to keep the model
-healthy in production by monitoring predictions and performance metrics.
 
 ## Next steps
 
