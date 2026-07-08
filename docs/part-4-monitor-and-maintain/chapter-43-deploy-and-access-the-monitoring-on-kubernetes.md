@@ -882,7 +882,7 @@ Changes to be committed:
         modified:   requirements-freeze.txt
         modified:   requirements.txt
         new file:   .github/workflows/monitor.yaml
-        new file:   docker/requirements.txt
+        new file:   docker/ui.requirements.txt
         new file:   docker/ui.Dockerfile
         new file:   kubernetes/evidently-ui-deployment.yaml
         new file:   kubernetes/evidently-ui-service.yaml
