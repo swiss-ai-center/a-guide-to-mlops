@@ -1,2 +1,2 @@
 mdwrap @ git+https://github.com/swiss-ai-center/mdwrap.git@0.2.5
-zensical==0.0.45
+zensical==0.0.47
