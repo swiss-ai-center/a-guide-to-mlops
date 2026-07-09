@@ -422,13 +422,13 @@ Find the external IP of the exposed model service:
 kubectl get service celestial-bodies-classifier-service
 ```
 
-Then send new images to the `/predict` endpoint. Replace `<url>` with the value
-from the previous command:
+Then send new images to the `/predict` endpoint. Replace `<EXTERNAL-IP>` with
+the value from the previous command:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Send new images to the deployed model
 for img in extra-data/extra_data/*.jpg; do
-    curl -X POST -F "image=@$img" http://<url>:80/predict
+    curl -X POST -F "image=@$img" http://<EXTERNAL-IP>:80/predict
 done
 ```
 
@@ -611,7 +611,7 @@ NAME           TYPE           CLUSTER-IP       EXTERNAL-IP     PORT(S)        AG
 evidently-ui   LoadBalancer   34.118.234.235   34.158.20.138   80:31710/TCP   7m58s
 ```
 
-Save the URL (`http://<external-ip>`) so you can open the dashboard after the
+Save the URL (`http://<EXTERNAL-IP>`) so you can open the dashboard after the
 first snapshot is pushed.
 
 !!! note "Evidently UI reads the workspace at startup"
@@ -674,13 +674,25 @@ gcsfs==2026.6.0
 
 Freeze the dependencies again after editing `requirements.txt`:
 
-```sh title="Execute the following command(s) in a terminal"
-# Install the dependencies
-pip install -r requirements.txt
+=== ":simple-python: Using pip"
 
-# Freeze the dependencies
-pip freeze --local --all > requirements-freeze.txt
-```
+    ```sh title="Execute the following command(s) in a terminal"
+    # Install the dependencies
+    pip install -r requirements.txt
+
+    # Freeze the dependencies
+    pip freeze --local --all > requirements-freeze.txt
+    ```
+
+=== ":simple-uv: Using uv"
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Install the dependencies
+    uv pip install -r requirements.txt
+
+    # Freeze the dependencies
+    uv pip freeze > requirements-freeze.txt
+    ```
 
 #### Create `src/sync_monitoring.py`
 
