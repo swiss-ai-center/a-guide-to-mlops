@@ -90,6 +90,12 @@ SATURN_RING_OUTER = 2.35
 # a:b:c = 1161:852:513
 HAUMEA_AXES = (1.0, 852 / 1161, 513 / 1161)
 
+# Mesh resolution for the Haumea triaxial ellipsoid.  A denser mesh gives a
+# smoother silhouette but slows rendering; 128x256 is a good trade-off for a
+# 128x128 output with 4x supersampling.
+HAUMEA_MESH_LAT = 128
+HAUMEA_MESH_LON = 256
+
 # Camera angle diversity: view from the equator (0 degrees) up to this latitude
 # toward either pole. A small longitudinal offset is also applied for perspective
 # variety while keeping the planet front-lit. Values near 90 degrees give a polar
@@ -283,6 +289,71 @@ SATURN_RING_ALPHA_TEXTURE = Texture(SATURN_RING_ALPHA)
 
 
 # ---------------------------------------------------------------------------
+# Haumea triaxial ellipsoid mesh
+# ---------------------------------------------------------------------------
+
+
+def create_haumea_mesh(
+    a: float = HAUMEA_AXES[0],
+    b: float = HAUMEA_AXES[1],
+    c: float = HAUMEA_AXES[2],
+    n_lat: int = HAUMEA_MESH_LAT,
+    n_lon: int = HAUMEA_MESH_LON,
+    frame: Frame | None = None,
+) -> Mesh:
+    """Create a triaxial ellipsoid mesh with equirectangular UV mapping.
+
+    The mesh is parametrised by latitude ``phi`` (-pi/2 at the south pole,
+    +pi/2 at the north pole) and longitude ``theta`` (0 at +x, increasing
+    toward +y).  Texture coordinates match SIMply's planetocentric convention:
+    ``u = theta / (2*pi)`` and ``v = 0.5 - phi/pi`` so that the texture's top
+    row maps to the north pole (+z).
+
+    Using a mesh instead of SIMply's analytic ``Spheroid`` gives full control
+    over the UV parametrisation and lets Haumea be rotated to any 3-D
+    orientation while the texture follows the surface correctly.
+    """
+    phis = np.linspace(-math.pi / 2, math.pi / 2, n_lat)
+    thetas = np.linspace(0, 2 * math.pi, n_lon, endpoint=False)
+
+    verts = []
+    uvs = []
+    for phi in phis:
+        cos_phi = math.cos(phi)
+        sin_phi = math.sin(phi)
+        for theta in thetas:
+            cos_theta = math.cos(theta)
+            sin_theta = math.sin(theta)
+            x = a * cos_phi * cos_theta
+            y = b * cos_phi * sin_theta
+            z = c * sin_phi
+            verts.append([x, y, z])
+            u = theta / (2 * math.pi)
+            v = 0.5 - phi / math.pi
+            uvs.append([u, v])
+
+    verts = np.array(verts, dtype=np.float32)
+    uvs = np.array(uvs, dtype=np.float32)
+
+    tris = []
+    for i in range(n_lat - 1):
+        for j in range(n_lon):
+            j_next = (j + 1) % n_lon
+            v0 = i * n_lon + j
+            v1 = i * n_lon + j_next
+            v2 = (i + 1) * n_lon + j_next
+            v3 = (i + 1) * n_lon + j
+            tris.append([v0, v1, v2])
+            tris.append([v0, v2, v3])
+
+    tris = np.array(tris, dtype=np.int32)
+    mesh = Mesh(verts, tris, frame=frame)
+    mesh.textureCoordArray = uvs
+    mesh.triTexIndices = tris
+    return mesh
+
+
+# ---------------------------------------------------------------------------
 # Rendering helpers
 # ---------------------------------------------------------------------------
 
@@ -329,14 +400,16 @@ def build_camera(
     distance: float,
     rng: random.Random | None = None,
     max_lat: float | None = None,
+    max_lon: float | None = None,
     force_lon_zero: bool = False,
 ) -> Camera:
     """Build a camera looking at the origin with north (+z) at the image top.
 
     If ``rng`` is supplied, the camera is placed at a random latitude up to
     ``max_lat`` (default ``CAMERA_MAX_LAT``) and a random longitude up to
-    ``CAMERA_MAX_LON`` so the dataset includes more polar and perspective
-    diversity. Set ``force_lon_zero`` to keep the camera in the x-z plane.
+    ``max_lon`` (default ``CAMERA_MAX_LON``) so the dataset includes more polar
+    and perspective diversity. Set ``force_lon_zero`` to keep the camera in the
+    x-z plane.
     """
     camera = Camera.pinhole((FOV_X, FOV_Y), OUTPUT_WIDTH, OUTPUT_HEIGHT)
 
@@ -345,7 +418,7 @@ def build_camera(
         lon = 0.0
     else:
         lat = rng.uniform(-(max_lat or CAMERA_MAX_LAT), (max_lat or CAMERA_MAX_LAT))
-        lon = 0.0 if force_lon_zero else rng.uniform(-CAMERA_MAX_LON, CAMERA_MAX_LON)
+        lon = 0.0 if force_lon_zero else rng.uniform(-(max_lon or CAMERA_MAX_LON), (max_lon or CAMERA_MAX_LON))
 
     # Spherical camera position (origin is at the planet centre).
     cos_lat = math.cos(lat)
@@ -404,19 +477,32 @@ def render_haumea(
     render_scale: int = RENDER_SCALE,
     downsample_filter: Image.Resampling = DOWNSAMPLE_FILTER,
 ) -> np.ndarray:
-    """Render Haumea as a randomly oriented triaxial ellipsoid."""
-    ax, ay, az = HAUMEA_AXES
-    # Random rotation around the long axis and a random in-plane spin
-    spin = rng.uniform(0, 2 * math.pi)
-    tilt = rng.uniform(-0.3, 0.3)
-    frame = Frame.world().rotated(Vec3.zero(), Vec3((1, 0, 0)), tilt)
-    frame = frame.rotated(Vec3.zero(), Vec3((0, 0, 1)), spin)
+    """Render Haumea as a randomly oriented triaxial ellipsoid.
 
-    ellipsoid = Spheroid(frame, ax, ay, az)
+    Instead of SIMply's analytic ``Spheroid`` primitive, a triaxial ellipsoid
+    mesh is built with equirectangular UVs and rotated to a uniformly random
+    3-D orientation.  The camera is allowed to orbit a full 360 degrees in
+    longitude, so the silhouette changes realistically with viewing angle: the
+    long axis can be seen side-on (very elongated), end-on (more compact), or
+    anywhere in between.
+    """
+    # Random 3-D orientation: pick a uniformly distributed rotation axis and
+    # a random rotation angle.  This lets the long, medium and short axes point
+    # toward the camera in any combination.
+    u1, u2 = rng.random(), rng.random()
+    theta = 2 * math.pi * u1
+    phi = math.acos(2 * u2 - 1)
+    axis = Vec3((math.sin(phi) * math.cos(theta), math.sin(phi) * math.sin(theta), math.cos(phi)))
+    angle = rng.uniform(0, 2 * math.pi)
+    frame = Frame.world().rotated(Vec3.zero(), axis, angle)
+
+    mesh = create_haumea_mesh(frame=frame)
     brdf = BRDF.lambert(0.01)
-    planet = RenderableObject.renderablePrimitive(ellipsoid, brdf, Texture(texture))
+    planet = RenderableObject.renderableMesh(mesh, brdf, Texture(texture))
     scene = RenderableScene([planet], Light.sunPointSource(1e3 * light_dir))
-    camera = build_camera(distance, rng)
+    # Allow the camera to orbit all the way around Haumea so the changing
+    # projected shape is visible.
+    camera = build_camera(distance, rng, max_lon=math.pi)
     return render_scene(scene, camera, render_scale=render_scale, downsample_filter=downsample_filter)
 
 
@@ -510,9 +596,14 @@ def generate_dataset(
             seed = _seed_int(f"{planet_name}_simply13_{i}")
             rng = random.Random(seed)
 
-            # Spin the planet around its north-south axis for variation
-            shift = rng.randint(0, TEXTURE_WIDTH - 1)
-            texture = np.roll(base_texture, shift, axis=1)
+            # Spin spherical planets around their north-south axis for variation.
+            # Haumea uses the mesh's 3-D rotation instead, so its texture is kept
+            # fixed relative to the body.
+            if planet_name == "Haumea":
+                texture = base_texture
+            else:
+                shift = rng.randint(0, TEXTURE_WIDTH - 1)
+                texture = np.roll(base_texture, shift, axis=1)
 
             # Keep the camera distance fixed so the body stays centered and
             # consistently framed; only spin and lighting vary per image.
