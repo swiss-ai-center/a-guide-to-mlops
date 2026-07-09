@@ -759,8 +759,8 @@ rm extra-data.zip
 
 #### Send images to the local service
 
-Start the BentoML service locally and send the downloaded test images to the
-`/predict` endpoint.
+Start the BentoML service locally and send the new images to the `/predict`
+endpoint.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Start the service (run in a separate terminal)
@@ -827,10 +827,10 @@ cat monitoring/report.json | python -m json.tool
 
 ### Update the .gitignore file
 
-The monitoring workspace, JSON report, and downloaded test images are generated
-artifacts. Add `monitoring/` and `extra-data/` to `.gitignore` so they are not
-committed. The reference dataset is a DVC pipeline output, so DVC will add it to
-`data/.gitignore` automatically when you run `dvc repro`:
+The monitoring workspace, JSON report, and downloaded inference data are
+generated artifacts. Add `monitoring/` and `extra-data/` to `.gitignore` so they
+are not committed. The reference dataset is a DVC pipeline output, so DVC will
+add it to `data/.gitignore` automatically when you run `dvc repro`:
 
 ```gitignore title=".gitignore" hl_lines="9-12"
 ## Python
