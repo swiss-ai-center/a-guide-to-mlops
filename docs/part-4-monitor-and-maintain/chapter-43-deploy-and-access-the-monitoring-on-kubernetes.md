@@ -422,8 +422,8 @@ Find the external IP of the exposed model service:
 kubectl get service celestial-bodies-classifier-service
 ```
 
-Then send a few test images to the `/predict` endpoint. Replace `<url>` with the
-value from the previous command:
+Then send new images to the `/predict` endpoint. Replace `<url>` with the value
+from the previous command:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Send test images to the deployed model

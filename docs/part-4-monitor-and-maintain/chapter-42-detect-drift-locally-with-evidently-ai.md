@@ -724,33 +724,6 @@ stages:
     dataset must represent the distribution the model was trained on, regardless of
     whether the evaluation metrics have been computed.
 
-#### Update the .gitignore file
-
-The monitoring workspace and JSON report are generated artifacts. Add them to
-`.gitignore` so they are not committed. The reference dataset is a DVC pipeline
-output, so DVC will add it to `data/.gitignore` automatically when you run
-`dvc repro`:
-
-```gitignore title=".gitignore" hl_lines="9"
-## Python
-.venv/
-
-# Byte-compiled / optimized / DLL files
-__pycache__/
-
-## Monitoring
-logs/
-monitoring/
-
-## DVC
-
-# DVC plots
-dvc_plots
-
-# DVC will add new files after this line
-/model
-```
-
 ### Run the experiment
 
 First, ensure the prepared data, model, and reference dataset are up to date:
@@ -782,14 +755,6 @@ mv a-guide-to-mlops-extra-data/ extra-data/
 
 # Remove the archive and the directory
 rm extra-data.zip
-```
-
-Finally, add the `extra-data` folder to the `.gitignore` file so the downloaded
-images are not committed:
-
-```sh title="Execute the following command(s) in a terminal"
-# Add the `extra-data` folder to the `.gitignore` file
-echo -e "\n# Test data\nextra-data/" >> .gitignore
 ```
 
 #### Send images to the local service
@@ -858,6 +823,36 @@ Inspect the JSON metrics:
 ```sh title="Execute the following command(s) in a terminal"
 # Pretty-print the JSON report
 cat monitoring/report.json | python -m json.tool
+```
+
+### Update the .gitignore file
+
+The monitoring workspace, JSON report, and downloaded test images are generated
+artifacts. Add `monitoring/` and `extra-data/` to `.gitignore` so they are not
+committed. The reference dataset is a DVC pipeline output, so DVC will add it to
+`data/.gitignore` automatically when you run `dvc repro`:
+
+```gitignore title=".gitignore" hl_lines="9-12"
+## Python
+.venv/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+## Monitoring
+logs/
+monitoring/
+
+# Test data
+extra-data/
+
+## DVC
+
+# DVC plots
+dvc_plots
+
+# DVC will add new files after this line
+/model
 ```
 
 ### Check the changes

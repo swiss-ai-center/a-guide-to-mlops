@@ -301,7 +301,7 @@ the feature extractors from `features.py`, build the embedding extractor in the
 constructor, and add a `monitor` method that logs the extracted features after
 each prediction with `bentoml.monitor`.
 
-```py title="src/serve.py" hl_lines="3 10-28 36 47 51-91"
+```py title="src/serve.py" hl_lines="3 10-28 36 48 51-91"
 from __future__ import annotations
 from bentoml.validators import ContentType
 from pathlib import Path
@@ -425,7 +425,7 @@ Monitoring buffers are runtime artifacts, not source code. Add `logs/` to
 # Byte-compiled / optimized / DLL files
 __pycache__/
 
-## Monitoring buffers
+## Monitoring
 logs/
 
 ## DVC
