@@ -671,7 +671,7 @@ dvc stage add -n build_reference \
 
 The resulting `dvc.yaml` now contains the new stage:
 
-```yaml title="dvc.yaml" hl_lines="33-41"
+```yaml title="dvc.yaml" hl_lines="33-42"
 stages:
   prepare:
     cmd: python3.13 src/prepare.py data/raw data/prepared
@@ -724,33 +724,6 @@ stages:
     dataset must represent the distribution the model was trained on, regardless of
     whether the evaluation metrics have been computed.
 
-#### Update the .gitignore file
-
-The monitoring workspace and JSON report are generated artifacts. Add them to
-`.gitignore` so they are not committed. The reference dataset is a DVC pipeline
-output, so DVC will add it to `data/.gitignore` automatically when you run
-`dvc repro`:
-
-```gitignore title=".gitignore" hl_lines="8-9"
-## Python
-.venv/
-
-# Byte-compiled / optimized / DLL files
-__pycache__/
-
-## Monitoring buffers
-logs/
-monitoring/
-
-## DVC
-
-# DVC plots
-dvc_plots
-
-# DVC will add new files after this line
-/model
-```
-
 ### Run the experiment
 
 First, ensure the prepared data, model, and reference dataset are up to date:
@@ -784,20 +757,10 @@ mv a-guide-to-mlops-extra-data/ extra-data/
 rm extra-data.zip
 ```
 
-Finally, add the `extra-data` folder to the `.gitignore` file so the downloaded
-images are not committed:
-
-```sh title="Execute the following command(s) in a terminal"
-# Add the `extra-data` folder to the `.gitignore` file
-echo -e "\n# Test data\nextra-data/" >> .gitignore
-```
-
 #### Send images to the local service
 
-Start the BentoML service locally and send the downloaded test images to the
-`/predict` endpoint. The service writes JSONL monitoring log files to
-`logs/celestial_bodies_classifier/data/`. These logs act as the production data
-that `monitor.py` will compare against the reference dataset.
+Start the BentoML service locally and send the new images to the `/predict`
+endpoint.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Start the service (run in a separate terminal)
@@ -805,15 +768,19 @@ bentoml serve --working-dir ./src serve:CelestialBodiesClassifierService
 ```
 
 ```sh title="Execute the following command(s) in a second terminal"
-# Send a few test images
+# Send new images
 for img in extra-data/extra_data/*.jpg; do
   curl -X POST -F "image=@$img" http://localhost:3000/predict
 done
 ```
 
+The service writes JSONL monitoring log files to
+`logs/celestial_bodies_classifier/data/`. These logs act as the production data
+that `monitor.py` will compare against the reference dataset.
+
 ```sh title="Execute the following command(s) in a second terminal"
 # Inspect the monitoring records
-ls logs/celestial_bodies_classifier/data/
+cat logs/celestial_bodies_classifier/data/data.1.log
 ```
 
 Generate the drift snapshot and push it to the local workspace:
@@ -839,11 +806,53 @@ Open `http://localhost:8000` in a browser, select the
 !!! bug
     Insert Evidently UI screenshots
 
+In the Evidently UI, you can navigate between different tabs:
+
+- **Project Overview**: the landing page that lists all projects in the
+  workspace. Select the `celestial-bodies-classifier` project to open its
+  dashboard.
+- **Dashboard**: shows the monitoring panels you configured, including the data
+  drift summary and trends across the snapshots you pushed.
+- **Reports**: lists the saved HTML reports. You can open them in the browser or
+  download them for offline sharing.
+- **Datasets**, **Traces**, and **Prompts**: these tabs are used for LLM and
+  tracing workflows. They are unused in this image-classifier project.
+
 Inspect the JSON metrics:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Pretty-print the JSON report
 cat monitoring/report.json | python -m json.tool
+```
+
+### Update the .gitignore file
+
+The monitoring workspace, JSON report, and downloaded inference data are
+generated artifacts. Add `monitoring/` and `extra-data/` to `.gitignore` so they
+are not committed. The reference dataset is a DVC pipeline output, so DVC will
+add it to `data/.gitignore` automatically when you run `dvc repro`:
+
+```gitignore title=".gitignore" hl_lines="9-12"
+## Python
+.venv/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+## Monitoring
+logs/
+monitoring/
+
+# Test data
+extra-data/
+
+## DVC
+
+# DVC plots
+dvc_plots
+
+# DVC will add new files after this line
+/model
 ```
 
 ### Check the changes
