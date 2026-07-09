@@ -396,6 +396,40 @@ def render_scene(
     return np.array(img)
 
 
+def center_body_in_image(img_array: np.ndarray, threshold: int = 10) -> np.ndarray:
+    """Translate the image so the body's bounding box is centred in the frame.
+
+    For perspective views of a non-spherical body the silhouette can be
+    slightly off-centre even though the 3-D body is at the origin.  This
+    function shifts the rendered image so the bounding box of non-background
+    pixels is centred, matching the framing of the spherical planets.
+    """
+    img = Image.fromarray(img_array, mode="RGB")
+    gray = np.array(img.convert("L"))
+    mask = gray > threshold
+    ys, xs = np.where(mask)
+    if len(xs) == 0:
+        return img_array
+
+    cx = (xs.min() + xs.max()) // 2
+    cy = (ys.min() + ys.max()) // 2
+    dx = (img.width // 2) - cx
+    dy = (img.height // 2) - cy
+
+    # Pure integer translation: nearest-neighbour resampling is exact.
+    # Note the minus signs: PIL's AFFINE maps output coordinates to source
+    # coordinates, so the translation in the matrix is the negative of the
+    # desired image shift.
+    centered = img.transform(
+        img.size,
+        Image.Transform.AFFINE,
+        (1, 0, -dx, 0, 1, -dy),
+        resample=Image.Resampling.NEAREST,
+        fill=0,
+    )
+    return np.array(centered)
+
+
 def build_camera(
     distance: float,
     rng: random.Random | None = None,
@@ -503,7 +537,11 @@ def render_haumea(
     # Allow the camera to orbit all the way around Haumea so the changing
     # projected shape is visible.
     camera = build_camera(distance, rng, max_lon=math.pi)
-    return render_scene(scene, camera, render_scale=render_scale, downsample_filter=downsample_filter)
+    img = render_scene(scene, camera, render_scale=render_scale, downsample_filter=downsample_filter)
+    # Perspective views of the triaxial ellipsoid can shift the silhouette off
+    # centre even though the 3-D body is at the origin.  Re-centre to match the
+    # framing of the spherical planets.
+    return center_body_in_image(img)
 
 
 def render_saturn(
