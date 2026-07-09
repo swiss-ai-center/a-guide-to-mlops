@@ -671,7 +671,7 @@ dvc stage add -n build_reference \
 
 The resulting `dvc.yaml` now contains the new stage:
 
-```yaml title="dvc.yaml" hl_lines="33-41"
+```yaml title="dvc.yaml" hl_lines="33-42"
 stages:
   prepare:
     cmd: python3.13 src/prepare.py data/raw data/prepared
@@ -731,14 +731,14 @@ The monitoring workspace and JSON report are generated artifacts. Add them to
 output, so DVC will add it to `data/.gitignore` automatically when you run
 `dvc repro`:
 
-```gitignore title=".gitignore" hl_lines="8-9"
+```gitignore title=".gitignore" hl_lines="9"
 ## Python
 .venv/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
 
-## Monitoring buffers
+## Monitoring
 logs/
 monitoring/
 
@@ -795,9 +795,7 @@ echo -e "\n# Test data\nextra-data/" >> .gitignore
 #### Send images to the local service
 
 Start the BentoML service locally and send the downloaded test images to the
-`/predict` endpoint. The service writes JSONL monitoring log files to
-`logs/celestial_bodies_classifier/data/`. These logs act as the production data
-that `monitor.py` will compare against the reference dataset.
+`/predict` endpoint.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Start the service (run in a separate terminal)
@@ -805,15 +803,19 @@ bentoml serve --working-dir ./src serve:CelestialBodiesClassifierService
 ```
 
 ```sh title="Execute the following command(s) in a second terminal"
-# Send a few test images
+# Send new images
 for img in extra-data/extra_data/*.jpg; do
   curl -X POST -F "image=@$img" http://localhost:3000/predict
 done
 ```
 
+The service writes JSONL monitoring log files to
+`logs/celestial_bodies_classifier/data/`. These logs act as the production data
+that `monitor.py` will compare against the reference dataset.
+
 ```sh title="Execute the following command(s) in a second terminal"
 # Inspect the monitoring records
-ls logs/celestial_bodies_classifier/data/
+cat logs/celestial_bodies_classifier/data/data.1.log
 ```
 
 Generate the drift snapshot and push it to the local workspace:
@@ -838,6 +840,18 @@ Open `http://localhost:8000` in a browser, select the
 
 !!! bug
     Insert Evidently UI screenshots
+
+In the Evidently UI, you can navigate between different tabs:
+
+- **Project Overview**: the landing page that lists all projects in the
+  workspace. Select the `celestial-bodies-classifier` project to open its
+  dashboard.
+- **Dashboard**: shows the monitoring panels you configured, including the data
+  drift summary and trends across the snapshots you pushed.
+- **Reports**: lists the saved HTML reports. You can open them in the browser or
+  download them for offline sharing.
+- **Datasets**, **Traces**, and **Prompts**: these tabs are used for LLM and
+  tracing workflows. They are unused in this image-classifier project.
 
 Inspect the JSON metrics:
 
