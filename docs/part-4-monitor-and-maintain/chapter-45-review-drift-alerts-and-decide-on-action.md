@@ -3,10 +3,10 @@
 ## Introduction
 
 A drift alert is not a decision: it is a ticket that asks the team to review the
-signal and decide what to do. The previous chapter wired the monitoring workflow
-to open a GitHub issue whenever drift exceeds the thresholds defined in
-`src/monitor.py`. The issue contains the drift scores, a link to the Evidently
-dashboard, and a short list of next steps.
+signal and decide what to do. The monitoring workflow opens a GitHub issue
+whenever drift exceeds the thresholds defined in `src/monitor.py`. The issue
+contains the drift scores, a link to the Evidently dashboard, and a short list
+of next steps.
 
 This chapter shows how to review that issue and choose one of three actions:
 
@@ -30,7 +30,7 @@ In this chapter, you will learn how to:
 4. Adjust drift thresholds in `src/monitor.py`
 5. Roll back the Kubernetes deployment quickly with `kubectl rollout undo`
 6. Roll back the canonical source of truth with Git and DVC
-7. Route new production data to the labeling workflow in Part 5
+7. Route new production data to the labeling workflow
 8. Verify the chosen action and close the issue
 
 The following diagram illustrates the decision flow at the end of this chapter:
@@ -60,7 +60,7 @@ flowchart TB
         old_model
     end
 
-    subgraph labelGraph[Part 5]
+    subgraph labelGraph[Labeling workflow]
         label
         retrain
         new_reference
@@ -85,16 +85,15 @@ flowchart TB
 
 ### Open the drift-alert issue
 
-The monitoring workflow from the previous chapter labels every drift alert with
-`drift-alert`. Open your repository in the GitHub interface, go to the
-**Issues** tab, and filter by the `drift-alert` label to find the open alert.
+The monitoring workflow labels every drift alert with `drift-alert`. Open your
+repository in the GitHub interface, go to the **Issues** tab, and filter by the
+`drift-alert` label to find the open alert.
 
 Click the issue to open it. The issue body contains:
 
 * The metrics that crossed their thresholds, for example
   `image_mean: 0.2341 > 0.1500`.
-* A link to the public Evidently dashboard, if `DASHBOARD_URL` was configured in
-  the previous chapter.
+* A link to the public Evidently dashboard, if `DASHBOARD_URL` was configured.
 * A **Next steps** reminder to roll back, label new data, or dismiss the alert.
 
 If this was a test alert or the drift has already been handled, click the
@@ -131,7 +130,7 @@ valid distribution, prepare to label and retrain.
 ### Option 1: Dismiss and tune the thresholds
 
 When the alert is a false positive or the thresholds are too tight, adjust the
-constants at the top of `src/monitor.py` from Chapter 4.2:
+constants at the top of `src/monitor.py`:
 
 ```py title="src/monitor.py"
 # Drift detection thresholds and methods.
@@ -178,9 +177,9 @@ Git/DVC path to keep the source of truth consistent.
 
 #### Find the previous known-good version
 
-The CI/CD pipeline from Chapter 3.6 pushes a Docker image for every commit to
-`main`. Each image is tagged with the Git commit SHA, so the registry is a
-history of deployed model versions.
+The CI/CD pipeline pushes a Docker image for every commit to `main`. Each image
+is tagged with the Git commit SHA, so the registry is a history of deployed
+model versions.
 
 List the available image tags in the container registry:
 
@@ -303,9 +302,8 @@ git reset --hard $PREVIOUS_SHA
 git push --force-with-lease origin main
 ```
 
-After the push, the CI/CD pipeline from Chapter 3.6 will build and deploy the
-rolled-back version automatically, bringing the container registry back into
-sync with Git.
+After the push, the CI/CD pipeline will build and deploy the rolled-back version
+automatically, bringing the container registry back into sync with Git.
 
 After the rollback succeeds, close the drift-alert issue from the GitHub
 interface and add a comment that records the action taken, for example "Rolled
@@ -317,20 +315,15 @@ Rolling back is the wrong choice when the drift reflects a real new distribution
 that the previous model never saw. In that case the model needs to learn from
 the new data.
 
-Follow the workflow from Part 5:
+Follow the labeling and retraining workflow:
 
 1. Collect the production images or logs that drifted. The BentoML monitoring
    logs in `logs/celestial_bodies_classifier/data/` and the storage bucket copy are
    the natural source.
-2. Import the new samples into Label Studio as described in
-   [Chapter 5.1 - Set up Label Studio](../part-5-label-data-and-retrain/chapter-51-set-up-label-studio.md)
-   and
-   [Chapter 5.2 - Label new data with Label Studio](../part-5-label-data-and-retrain/chapter-52-label-new-data-with-label-studio.md).
+2. Import the new samples into Label Studio and label them.
 3. Export the labels, add the new images to `data/raw/<class>/`, and run the DVC
-   pipeline again as described in
-   [Chapter 5.4 - Retrain the model from new data with DVC](../part-5-label-data-and-retrain/chapter-54-retrain-the-model-from-new-data-with-dvc.md).
-   The `build_reference` stage added in Chapter 4.2 will rebuild the reference
-   dataset automatically, so the new model is compared against its own training
+   pipeline again. The `build_reference` stage will rebuild the reference dataset
+   automatically, so the new model is compared against its own training
    distribution.
 4. Verify that the new evaluation metrics and drift report improve, then close
    the drift-alert issue from the GitHub interface.
@@ -401,10 +394,10 @@ cat monitoring/report.json | python -m json.tool
 
 This chapter does not require manual code edits, but the rollback commands above
 do change the Git history on `main`. If you chose to adjust drift thresholds
-after reviewing the alert, update `src/monitor.py` from Chapter 4.2 and commit
-those changes separately. If you labeled new data and retrained, the `dvc repro`
-output is the commit. In all cases, close the drift-alert issue from the GitHub
-interface once the action is verified.
+after reviewing the alert, update `src/monitor.py` and commit those changes
+separately. If you labeled new data and retrained, the `dvc repro` output is the
+commit. In all cases, close the drift-alert issue from the GitHub interface once
+the action is verified.
 
 ## Summary
 
@@ -417,7 +410,7 @@ In this chapter, you have successfully:
 4. Adjusted drift thresholds in `src/monitor.py`
 5. Rolled back the Kubernetes deployment with `kubectl rollout undo`
 6. Rolled back the canonical source of truth with Git and DVC
-7. Routed new production data to the labeling and retraining workflow in Part 5
+7. Routed new production data to the labeling and retraining workflow
 8. Verified the chosen action and closed the issue
 
 You fixed some of the previous issues:
@@ -444,7 +437,7 @@ All the items of the MLOps process for this part are now addressed.
       of truth and lets the CI/CD pipeline redeploy the old version cleanly.
     - **Real new distributions need retraining, not rollback**: when drift is a
       signal of legitimate new data, the right action is to label it and retrain the
-      model in Part 5.
+      model with the new data.
     - **Close the issue when the decision is executed**: the alerting script
       skips creation while an open drift-alert issue exists, so a stale issue blocks
       future alerts.
