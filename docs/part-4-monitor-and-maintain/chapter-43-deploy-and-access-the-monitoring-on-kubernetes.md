@@ -291,7 +291,7 @@ Add a shared `emptyDir` volume for the logs, mount it into the BentoML
 container, and add the Fluent Bit sidecar with the ConfigMap mounted as its
 configuration.
 
-```yaml title="kubernetes/deployment.yaml" hl_lines="17-26 30-65"
+```yaml title="kubernetes/deployment.yaml" hl_lines="17-28 32-67"
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -308,13 +308,15 @@ spec:
       labels:
         app: celestial-bodies-classifier
     spec:
+      securityContext:
+        fsGroup: 2000
       initContainers:
       - name: init-log-dir
         image: busybox:1.36
         command:
         - sh
         - -c
-        - mkdir -p /home/bentoml/bento/logs/celestial_bodies_classifier && chmod 777 /home/bentoml/bento/logs/celestial_bodies_classifier
+        - mkdir -p /home/bentoml/bento/logs/celestial_bodies_classifier && chgrp 2000 /home/bentoml/bento/logs/celestial_bodies_classifier && chmod 0775 /home/bentoml/bento/logs/celestial_bodies_classifier
         volumeMounts:
         - name: prediction-logs
           mountPath: /home/bentoml/bento/logs
@@ -364,11 +366,14 @@ The YAML above makes three things happen:
 * A shared `emptyDir` volume named `prediction-logs` is mounted at
   `/home/bentoml/bento/logs` in both the classifier and Fluent Bit containers, so
   both see the same files.
-* The `init-log-dir` init container pre-creates
-  `/home/bentoml/bento/logs/celestial_bodies_classifier/` and makes it
-  world-writable (`chmod 777`). BentoML only creates the `data/` subdirectory on
-  the first prediction, and the classifier and Fluent Bit containers run as
-  different users.
+* The pod-level `securityContext.fsGroup: 2000` adds the group ID (GID) `2000`
+  to every container process and makes the shared volume group-owned by GID
+  `2000`. This lets the classifier container, which runs as the `bentoml` user,
+  share the log directory with the Fluent Bit sidecar, which runs as the `fluent`
+  user. The `init-log-dir` init container pre-creates
+  `/home/bentoml/bento/logs/celestial_bodies_classifier/`, sets its group to
+  `2000`, and makes it group-writable (`chmod 0775`) so the `bentoml` user can
+  create the `data/` subdirectory on the first prediction.
 * The classifier writes monitoring logs to
   `/home/bentoml/bento/logs/celestial_bodies_classifier/data/`.
 
