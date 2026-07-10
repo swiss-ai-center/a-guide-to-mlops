@@ -198,6 +198,13 @@ If your team creates Git tags for releases, use those instead. A tag such as
 git tag --sort=-creatordate | head -10
 ```
 
+Set the rollback target once so the following commands can reuse it:
+
+```sh title="Execute the following command(s) in a terminal"
+# Replace with the SHA you picked above
+export PREVIOUS_SHA=a1b2c3d4e5f6789012345678901234567890abcd
+```
+
 #### Fast rollback with Kubernetes
 
 If the previous pod revision is still available in Kubernetes,
@@ -227,8 +234,6 @@ If the previous ReplicaSet is no longer available, you can still redeploy a
 specific image from the registry with `kubectl set image`:
 
 ```sh title="Execute the following command(s) in a terminal"
-export PREVIOUS_SHA=a1b2c3d4e5f6789012345678901234567890abcd
-
 kubectl set image deployment/celestial-bodies-classifier-deployment \
   celestial-bodies-classifier=$GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:$PREVIOUS_SHA
 
@@ -244,8 +249,6 @@ keeps the repository consistent and lets the CI/CD pipeline redeploy cleanly.
 Using the same commit SHA as the previous step:
 
 ```sh title="Execute the following command(s) in a terminal"
-export PREVIOUS_SHA=a1b2c3d4e5f6789012345678901234567890abcd
-
 # Checkout the previous known-good version
 git checkout $PREVIOUS_SHA
 
