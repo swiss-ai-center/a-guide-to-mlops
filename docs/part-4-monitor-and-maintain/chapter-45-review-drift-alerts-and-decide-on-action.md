@@ -357,12 +357,12 @@ Find the external IP of the deployed model service:
 kubectl get service celestial-bodies-classifier-service
 ```
 
-Then send a test image to the `/predict` endpoint. Replace
-`\u003cEXTERNAL-IP\u003e` with the value from the previous command:
+Then send a test image to the `/predict` endpoint. Replace `<EXTERNAL-IP>` with
+the value from the previous command:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Send a test image to the deployed model
-curl -X POST -F "image=@data/raw/Mercury/0001.jpg" http://\u003cEXTERNAL-IP\u003e:80/predict
+curl -X POST -F "image=@data/raw/Mercury/Mercury_1.jpg" http://<EXTERNAL-IP>:80/predict
 ```
 
 If the prediction distribution and confidence look like they did before the bad
