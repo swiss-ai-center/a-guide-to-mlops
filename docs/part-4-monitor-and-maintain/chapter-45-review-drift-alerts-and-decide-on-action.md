@@ -17,9 +17,10 @@ This chapter shows how to review that issue and choose one of three actions:
 3. **Label new data and retrain** when the drift reflects a real new
    distribution that the model must learn.
 
-Because the model, data, and deployment configuration are versioned with Git and
-DVC, rollback and retraining are reproducible operational procedures rather than
-ad-hoc fixes.
+Because the drift thresholds live in `src/monitor.py` and the model, data, and
+deployment configuration are all versioned with Git and DVC, every decision from
+a threshold tweak to a full rollback or retrain is a reproducible operational
+procedure rather than an ad-hoc fix.
 
 In this chapter, you will learn how to:
 
