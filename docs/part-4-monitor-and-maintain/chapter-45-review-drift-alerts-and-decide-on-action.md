@@ -281,8 +281,9 @@ options to put that state back on `main`:
 
 **Option A: revert commit (safest)**
 
-Create a new commit on `main` that undoes the bad deployment. This preserves
-history and works well when the bad change is a single commit.
+Create a new commit on `main` that reverts the bad commits since the last
+known-good version. This preserves history and works well when the problematic
+change is contained in a small number of recent commits.
 
 ```sh title="Execute the following command(s) in a terminal"
 git checkout main
