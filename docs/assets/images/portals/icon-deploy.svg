@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Ring -->
+  <ellipse cx="200" cy="200" rx="150" ry="45" fill="none" stroke="#94a3b8" stroke-width="10" opacity="0.6" transform="rotate(-20 200 200)"/>
+
+  <!-- Planet -->
+  <circle cx="200" cy="200" r="70" fill="#d4b996" stroke="#a89f81" stroke-width="4"/>
+
+  <!-- Rocket in orbit -->
+  <g transform="translate(310, 115) rotate(-25)">
+    <polygon points="-18,16 -40,-8 -18,-2" fill="#a3a3a3"/>
+    <polygon points="18,16 40,-8 18,-2" fill="#a3a3a3"/>
+    <path d="M 0,80 L 22,-4 Q 0,-16 -22,-4 Z" fill="#f8fafc" stroke="#e5e5e5" stroke-width="3"/>
+    <circle cx="0" cy="40" r="10" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+    <path d="M -10,-6 Q -5,-24 0,-32 Q 5,-24 10,-6 Q 0,-14 -10,-6" fill="#f59e0b"/>
+  </g>
+</svg>

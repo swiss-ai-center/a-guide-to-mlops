@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Jupiter -->
+  <circle cx="200" cy="200" r="120" fill="#d97706" stroke="#b45309" stroke-width="4"/>
+  <g fill="none" stroke="#92400e" stroke-width="10" opacity="0.45">
+    <ellipse cx="200" cy="155" rx="105" ry="20"/>
+    <ellipse cx="200" cy="200" rx="115" ry="26"/>
+    <ellipse cx="200" cy="250" rx="100" ry="22"/>
+  </g>
+  <circle cx="160" cy="170" r="28" fill="#fbbf24" opacity="0.25"/>
+
+  <!-- Rocket -->
+  <g transform="translate(260, 115) rotate(-30)">
+    <polygon points="-20,18 -44,-8 -20,-2" fill="#a3a3a3"/>
+    <polygon points="20,18 44,-8 20,-2" fill="#a3a3a3"/>
+    <path d="M 0,90 L 24,-4 Q 0,-14 -24,-4 Z" fill="#f8fafc" stroke="#e5e5e5" stroke-width="3"/>
+    <circle cx="0" cy="45" r="10" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+    <path d="M -11,-6 Q -6,-26 0,-34 Q 6,-26 11,-6 Q 0,-12 -11,-6" fill="#f59e0b"/>
+  </g>
+</svg>

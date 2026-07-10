@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Helmet -->
+  <circle cx="200" cy="170" r="110" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="6"/>
+  <!-- Visor -->
+  <rect x="115" y="150" width="170" height="90" rx="40" fill="#0f172a" stroke="#475569" stroke-width="4"/>
+  <ellipse cx="155" cy="180" rx="22" ry="14" fill="#ffffff" opacity="0.15"/>
+  <!-- Neck ring -->
+  <rect x="130" y="265" width="140" height="30" rx="8" fill="#94a3b8"/>
+  <!-- Shoulders -->
+  <path d="M 90 330 Q 90 290 140 295 L 260 295 Q 310 290 310 330 L 310 360 L 90 360 Z" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="6"/>
+</svg>

@@ -81,10 +81,9 @@
     stroke: currentcolor;
   }
 
-  /* Decorative inline SVG icons and planet belt are redundant in text-only / no-JS clients */
+  /* Decorative inline SVG icons are redundant in text-only / no-JS clients */
   @media (scripting: none) {
-    .twemoji,
-    .planet-belt {
+    .twemoji {
       display: none;
     }
   }
@@ -123,91 +122,6 @@
     display: block;
     width: 100%;
     height: 100%;
-  }
-
-  /* Scrolling planet belt */
-  .planet-belt {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 1;
-    pointer-events: none;
-    overflow: visible;
-  }
-  .belt-track {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    will-change: transform;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-  .belt-track.is-ready {
-    opacity: 1;
-  }
-  .belt-planet {
-    position: absolute;
-    width: calc(var(--planet-size, 132px) * var(--planet-scale, 1));
-    height: calc(var(--planet-size, 132px) * var(--planet-scale, 1));
-    transform: translateX(-50%);
-    opacity: 0.75;
-    filter: none;
-    transition: opacity 0.4s ease, transform 0.4s ease;
-  }
-  .belt-planet img,
-  .belt-planet svg {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-  .belt-planet.active {
-    opacity: 1;
-    transform: translateX(-50%) scale(1.2);
-    filter: drop-shadow(0 0 0 1px rgba(245, 158, 11, 0.5));
-  }
-  .belt-planet.filler {
-    --planet-size: 92px;
-    opacity: 0.55;
-  }
-  .belt-planet.filler.active {
-    opacity: 0.95;
-    transform: translateX(-50%) scale(1.12);
-  }
-
-  /* Relative planet sizes (Jupiter/Saturn are the biggest) */
-  .belt-planet[title="Mercury"] { --planet-size: 80px; }
-  .belt-planet[title="Venus"] { --planet-size: 110px; }
-  .belt-planet[title="Earth"] { --planet-size: 120px; }
-  .belt-planet[title="Mars"] { --planet-size: 90px; }
-  .belt-planet[title="Jupiter"] { --planet-size: 190px; }
-  .belt-planet[title="Saturn"] { --planet-size: 170px; }
-  .belt-planet[title="Neptune"] { --planet-size: 130px; }
-  .belt-planet[title="Uranus"] { --planet-size: 130px; }
-  .belt-planet[title="Pluto"] { --planet-size: 70px; }
-  .belt-planet[title="Haumea"] { --planet-size: 85px; }
-  .belt-planet[title="Makemake"] { --planet-size: 60px; }
-  .belt-planet[title="Comet"] { --planet-size: 150px; }
-  .belt-planet[title="Reentry capsule"] { --planet-size: 190px; }
-  .belt-planet[title="Sun"] { --planet-size: 260px; }
-  .belt-planet[title="Crew"] { --planet-size: 230px; }
-
-  @media (max-width: 1100px) {
-    .belt-planet { --planet-scale: 0.85; }
-    .belt-planet[title="Sun"] { --planet-size: 200px; }
-    .belt-planet[title="Crew"] { --planet-size: 190px; }
-    .belt-planet[title="Reentry capsule"] { --planet-size: 160px; }
-  }
-  @media (max-width: 900px) {
-    .belt-planet { --planet-scale: 0.65; }
-    .belt-planet[title="Sun"] { --planet-size: 160px; }
-    .belt-planet[title="Crew"] { --planet-size: 150px; }
-    .belt-planet[title="Reentry capsule"] { --planet-size: 130px; }
-  }
-  @media (max-width: 600px) {
-    .planet-belt { display: none; }
   }
 
   /* Hero */
@@ -305,47 +219,47 @@
   .story-main {
     position: relative;
     z-index: 3;
+    padding: 4rem 6vw;
   }
 
-  /* Chapter sections */
-  .story-chapter {
-    position: relative;
-    min-height: auto;
-    display: flex;
-    align-items: center;
-    padding: 3rem 2rem;
+  /* Chapter grid */
+  .chapter-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 
-  /* Alternate cards left/right using only the section padding as page margin */
-  @media (min-width: 901px) {
-    .story-chapter:nth-of-type(even) {
-      justify-content: flex-end;
+  @media (min-width: 900px) {
+    .chapter-grid {
+      grid-template-columns: repeat(3, 1fr);
     }
   }
 
   .chapter-card {
-    max-width: 640px;
-    margin: 0;
+    display: flex;
+    flex-direction: column;
     padding: 1.75rem 2rem;
     border-radius: 0;
     background: #0f0f0f;
     border: 1px solid #333333;
     box-shadow: none;
-    transform: translateY(0);
-    opacity: 1;
-    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.7s ease, border-color 0.2s ease;
-  }
-  /* Progressive enhancement: animate in only when scroll animations are active */
-  .has-scroll-animations .chapter-card {
-    transform: translateY(28px);
-    opacity: 0;
-  }
-  .has-scroll-animations .chapter-card.visible {
-    transform: translateY(0);
-    opacity: 1;
+    transition: border-color 0.2s ease;
   }
   .chapter-card:hover {
     border-color: #555555;
+  }
+  .landing-rocket {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.75rem 2rem;
+  }
+  .landing-rocket img,
+  .landing-rocket svg {
+    width: 100%;
+    max-width: 220px;
+    height: auto;
+    opacity: 0.9;
   }
   .chapter-label {
     display: inline-block;
@@ -360,6 +274,15 @@
     letter-spacing: 0.12em;
     text-transform: uppercase;
     margin-bottom: 1rem;
+  }
+  .chapter-icon {
+    margin-bottom: 0.75rem;
+  }
+  .chapter-icon img,
+  .chapter-icon svg {
+    display: block;
+    width: 56px;
+    height: auto;
   }
   .chapter-title {
     font-size: clamp(1.8rem, 3.6vw, 2.6rem);
@@ -392,7 +315,8 @@
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
-    margin-top: 1.6rem;
+    margin-top: auto;
+    padding-top: 1.6rem;
   }
   .chapter-link {
     display: inline-flex;
@@ -635,58 +559,6 @@
 <!-- Starfield -->
 <div class="starfield" id="starfield" aria-hidden="true"></div>
 
-<!-- Scrolling planet belt -->
-<aside class="planet-belt" aria-hidden="true">
-  <div class="belt-track" id="belt-track">
-    <!-- Category planets (aligned with story sections) -->
-    <div class="belt-planet" data-section="about" title="Crew">
-      <img src="{{ 'assets/images/portals/astronaut-portal.svg' | url }}" alt="">
-    </div>
-    <div class="belt-planet filler" title="Sun">
-      <img src="{{ 'assets/images/portals/sun-portal.svg' | url }}" alt="">
-    </div>
-    <div class="belt-planet" data-section="intro" title="Mercury">
-      <img src="{{ 'assets/images/portals/mercury-portal.svg' | url }}" alt="">
-    </div>
-    <div class="belt-planet filler" title="Venus">
-      <img src="{{ 'assets/images/portals/venus-portal.svg' | url }}" alt="">
-    </div>
-    <div class="belt-planet" data-section="part-1" title="Earth">
-      <img src="{{ 'assets/images/portals/earth-portal.svg' | url }}" alt="">
-    </div>
-    <div class="belt-planet filler" title="Mars">
-      <img src="{{ 'assets/images/portals/mars-portal.svg' | url }}" alt="">
-    </div>
-    <div class="belt-planet" data-section="part-2" title="Jupiter">
-      <img src="{{ 'assets/images/portals/jupiter-portal.svg' | url }}" alt="">
-    </div>
-    <div class="belt-planet filler" title="Saturn">
-      <img src="{{ 'assets/images/portals/saturn-portal.svg' | url }}" alt="">
-    </div>
-    <div class="belt-planet" data-section="part-3" title="Uranus">
-      <img src="{{ 'assets/images/portals/uranus-portal.svg' | url }}" alt="">
-    </div>
-    <div class="belt-planet filler" title="Neptune">
-      <img src="{{ 'assets/images/portals/neptune-portal.svg' | url }}" alt="">
-    </div>
-    <div class="belt-planet" data-section="part-4" title="Comet">
-      <img src="{{ 'assets/images/portals/comet-portal.svg' | url }}" alt="">
-    </div>
-    <div class="belt-planet filler" title="Pluto">
-      <img src="{{ 'assets/images/portals/pluto-portal.svg' | url }}" alt="">
-    </div>
-    <div class="belt-planet" data-section="part-5" title="Haumea">
-      <img src="{{ 'assets/images/portals/haumea-portal.svg' | url }}" alt="">
-    </div>
-    <div class="belt-planet filler" title="Makemake">
-      <img src="{{ 'assets/images/portals/makemake-portal.svg' | url }}" alt="">
-    </div>
-    <div class="belt-planet" data-section="reentry" title="Reentry capsule">
-      <img src="{{ 'assets/images/portals/reentry-capsule.svg' | url }}" alt="">
-    </div>
-  </div>
-</aside>
-
 <!-- Hero -->
 <section class="story-hero" id="story-hero">
   <div class="hero-badge">
@@ -703,46 +575,55 @@
 
   <!-- Hero rocket / MLOps mark -->
   <div class="hero-rocket" aria-hidden="true">
-    <img src="{{ 'assets/images/hero-rocket.svg' | url }}" alt="">
+    <img src="{{ 'assets/images/portals/hero-rocket.svg' | url }}" alt="">
   </div>
 </section>
 
 <!-- Story chapters -->
 <main class="story-main" id="story-start">
-  {% for chapter in home.chapters %}
-  <section class="story-chapter" id="section-{{ chapter.id }}"{% if chapter.planet %} data-planet="{{ chapter.planet }}"{% endif %}>
-    <article class="chapter-card reveal">
-      <div class="chapter-label">{{ chapter.label }}</div>
-      <h2 class="chapter-title">{% if chapter.prefix %}<span class="chapter-prefix">{{ chapter.prefix }}</span>{% endif %}{{ chapter.title }}{% if chapter.title_highlight %} <span>{{ chapter.title_highlight }}</span>{% endif %}</h2>
-      <p>
-        {{- chapter.body | safe -}}
-      </p>
-      <div class="chapter-actions">
-        {% for action in chapter.actions %}
-        {% if action.type == "pdf" %}
-        <a href="{{ action.url }}" class="pdf-link">
-          <span class="twemoji" aria-hidden="true">{% include ".icons/" ~ action.icon ~ ".svg" %}</span>
-          {{ action.text }}
-        </a>
-        {% else %}
-        <a href="
-          {%- if action.anchor -%}
-            {{ action.anchor }}
-          {%- elif action.path -%}
-            {{ action.path | url }}
-          {%- elif action.url -%}
-            {{ action.url }}
-          {%- endif -%}
-        " class="chapter-link {{ action.type }}{% if action.type == 'primary' %} next-section{% endif %}">
-          <span class="twemoji" aria-hidden="true">{% include ".icons/" ~ action.icon ~ ".svg" %}</span>
-          {{ action.text }}
-        </a>
+  {%- macro chapter_card(chapter) -%}
+  <article class="chapter-card" id="section-{{ chapter.id }}">
+    {% if chapter.icon %}
+    <div class="chapter-icon">
+      <img src="{{ chapter.icon | url }}" alt="">
+    </div>
+    {% endif %}
+    <div class="chapter-label">{{ chapter.label }}</div>
+    <h2 class="chapter-title">{% if chapter.prefix %}<span class="chapter-prefix">{{ chapter.prefix }}</span>{% endif %}{{ chapter.title }}{% if chapter.title_highlight %} <span>{{ chapter.title_highlight }}</span>{% endif %}</h2>
+    <p>
+      {{- chapter.body | safe -}}
+    </p>
+    <div class="chapter-actions">
+      {% for action in chapter.actions %}
+      <a href="
+        {%- if action.anchor -%}
+          {{ action.anchor }}
+        {%- elif action.path -%}
+          {{ action.path | url }}
+        {%- elif action.url -%}
+          {{ action.url }}
+        {%- endif -%}
+      " class="chapter-link {{ action.type }}">
+        <span class="twemoji" aria-hidden="true">{% include ".icons/" ~ action.icon ~ ".svg" %}</span>
+        {{ action.text }}
+      </a>
+      {% endfor %}
+    </div>
+  </article>
+  {%- endmacro -%}
+
+  <div class="chapter-grid">
+    {% if home.chapters %}
+      {% for chapter in home.chapters %}
+        {% if loop.last %}
+          <div class="landing-rocket" aria-hidden="true">
+            <img src="{{ 'assets/images/portals/reentry-capsule.svg' | url }}" alt="">
+          </div>
         {% endif %}
-        {% endfor %}
-      </div>
-    </article>
-  </section>
-  {% endfor %}
+        {{ chapter_card(chapter) }}
+      {% endfor %}
+    {% endif %}
+  </div>
 </main>
 
 <!-- Finale -->
@@ -758,7 +639,7 @@
 
   <!-- Launchpad illustration -->
   <div class="finale-launchpad" aria-hidden="true">
-    <img src="{{ 'assets/images/launchpad.svg' | url }}" alt="">
+    <img src="{{ 'assets/images/portals/launchpad.svg' | url }}" alt="">
   </div>
 
   <img

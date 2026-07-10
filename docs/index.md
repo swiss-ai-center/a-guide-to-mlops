@@ -21,6 +21,7 @@ home:
     - id: about
       label: Ground control
       prefix: Prologue
+      icon: assets/images/portals/icon-crew.svg
       title: Meet the
       title_highlight: Crew
       body: |
@@ -31,20 +32,17 @@ home:
         established workflows, with a focus on SMEs.
       actions:
         - type: primary
-          text: Next stop
-          icon: lucide/chevron-down
-          anchor: "#section-intro"
-        - type: secondary
           text: Presentation
           icon: lucide/monitor
           url: "https://mlops.swiss-ai-center.ch/presentation/"
-        - type: pdf
+        - type: secondary
           text: PDF
           icon: lucide/file-text
           url: "https://mlops.swiss-ai-center.ch/presentation/a-guide-to-mlops-presentation.pdf"
     - id: intro
       label: Mission briefing
       prefix: Introduction
+      icon: assets/images/portals/icon-mission-briefing.svg
       title: Why this
       title_highlight: "guide?"
       planet: moon
@@ -54,16 +52,13 @@ home:
         DVC, Git, GitHub Actions, CML, Docker, BentoML, Fluent Bit, Evidently AI, and Label Studio.
       actions:
         - type: primary
-          text: Next stop
-          icon: lucide/chevron-down
-          anchor: "#section-part-1"
-        - type: secondary
           text: Philosophy
           icon: lucide/lightbulb
           path: philosophy/
     - id: part-1
       label: Lift-off
       prefix: Part 1
+      icon: assets/images/portals/icon-local-training.svg
       title: Local training &
       title_highlight: model evaluation
       planet: earth
@@ -73,16 +68,13 @@ home:
         data, parameters, metrics, and plots as the model evolves.
       actions:
         - type: primary
-          text: Next stop
-          icon: lucide/chevron-down
-          anchor: "#section-part-2"
-        - type: secondary
           text: Train locally
           icon: lucide/flask-conical
           path: part-1-local-training-and-evaluation/introduction/
     - id: part-2
       label: Escape velocity
       prefix: Part 2
+      icon: assets/images/portals/icon-cloud.svg
       title: Move the model to the
       title_highlight: cloud
       planet: mars
@@ -92,16 +84,13 @@ home:
         metric, and plot comparisons directly in pull requests for team review.
       actions:
         - type: primary
-          text: Next stop
-          icon: lucide/chevron-down
-          anchor: "#section-part-3"
-        - type: secondary
           text: Go cloud
           icon: lucide/cloud
           path: part-2-move-to-the-cloud/introduction/
     - id: part-3
       label: In orbit
       prefix: Part 3
+      icon: assets/images/portals/icon-deploy.svg
       title: Serve &
       title_highlight: deploy
       planet: saturn
@@ -112,16 +101,13 @@ home:
         specialized training pods.
       actions:
         - type: primary
-          text: Next stop
-          icon: lucide/chevron-down
-          anchor: "#section-part-4"
-        - type: secondary
           text: Deploy
           icon: lucide/server
           path: part-3-serve-and-deploy/introduction/
     - id: part-4
       label: Sensor array
       prefix: Part 4
+      icon: assets/images/portals/icon-monitor.svg
       title: Monitor &
       title_highlight: maintain
       planet: comet
@@ -132,16 +118,13 @@ home:
         a previous container image tracked in Git and DVC.
       actions:
         - type: primary
-          text: Next stop
-          icon: lucide/chevron-down
-          anchor: "#section-part-5"
-        - type: secondary
           text: Observe
           icon: lucide/activity
           path: part-4-monitor-and-maintain/introduction/
     - id: part-5
       label: Deep space loop
       prefix: Part 5
+      icon: assets/images/portals/icon-retrain.svg
       title: Label data &
       title_highlight: retrain
       planet: haumea
@@ -152,16 +135,13 @@ home:
         faster and more accurate.
       actions:
         - type: primary
-          text: Next stop
-          icon: lucide/chevron-down
-          anchor: "#section-reentry"
-        - type: secondary
           text: Retrain
           icon: lucide/tags
           path: part-5-label-data-and-retrain/introduction/
     - id: reentry
       label: Reentry
       prefix: Conclusion
+      icon: assets/images/portals/icon-cleanup.svg
       title: Clean up &
       title_highlight: conclude
       planet: capsule
@@ -171,10 +151,6 @@ home:
         stage of a successful mission.
       actions:
         - type: primary
-          text: Launch pad
-          icon: lucide/chevron-down
-          anchor: "#story-finale"
-        - type: secondary
           text: Clean up
           icon: lucide/brush
           path: clean-up/

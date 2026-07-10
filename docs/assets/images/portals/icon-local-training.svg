@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Earth -->
+  <circle cx="130" cy="270" r="85" fill="#1d4ed8" stroke="#3b82f6" stroke-width="4"/>
+  <g fill="#14a085">
+    <path d="M 80 245 Q 120 215 170 245 T230 285 Q 200 320 140 320 Q 90 310 80 245Z"/>
+    <path d="M 170 210 Q 210 205 225 240 T200 285 Q 170 285 160 250 T170 210Z"/>
+  </g>
+
+  <!-- Rocket -->
+  <g transform="translate(285, 145) rotate(-35)">
+    <polygon points="-28,25 -62,-12 -28,-2" fill="#a3a3a3"/>
+    <polygon points="28,25 62,-12 28,-2" fill="#a3a3a3"/>
+    <path d="M 0,125 L 34,-5 Q 0,-24 -34,-5 Z" fill="#f8fafc" stroke="#e5e5e5" stroke-width="4"/>
+    <circle cx="0" cy="62" r="15" fill="#0f172a" stroke="#94a3b8" stroke-width="4"/>
+    <path d="M -16,-8 Q -8,-38 0,-50 Q 8,-38 16,-8 Q 0,-22 -16,-8" fill="#f59e0b"/>
+  </g>
+</svg>
