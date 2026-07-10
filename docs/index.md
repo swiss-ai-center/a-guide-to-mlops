@@ -21,6 +21,7 @@ home:
     - id: about
       label: Ground control
       prefix: Prologue
+      icon: assets/images/portals/icon-crew.svg
       title: Meet the
       title_highlight: Crew
       body: |
@@ -41,6 +42,7 @@ home:
     - id: intro
       label: Mission briefing
       prefix: Introduction
+      icon: assets/images/portals/icon-mission-briefing.svg
       title: Why this
       title_highlight: "guide?"
       planet: moon
@@ -56,6 +58,7 @@ home:
     - id: part-1
       label: Lift-off
       prefix: Part 1
+      icon: assets/images/portals/icon-local-training.svg
       title: Local training &
       title_highlight: model evaluation
       planet: earth
@@ -71,6 +74,7 @@ home:
     - id: part-2
       label: Escape velocity
       prefix: Part 2
+      icon: assets/images/portals/icon-cloud.svg
       title: Move the model to the
       title_highlight: cloud
       planet: mars
@@ -86,6 +90,7 @@ home:
     - id: part-3
       label: In orbit
       prefix: Part 3
+      icon: assets/images/portals/icon-deploy.svg
       title: Serve &
       title_highlight: deploy
       planet: saturn
@@ -102,6 +107,7 @@ home:
     - id: part-4
       label: Sensor array
       prefix: Part 4
+      icon: assets/images/portals/icon-monitor.svg
       title: Monitor &
       title_highlight: maintain
       planet: comet
@@ -118,6 +124,7 @@ home:
     - id: part-5
       label: Deep space loop
       prefix: Part 5
+      icon: assets/images/portals/icon-retrain.svg
       title: Label data &
       title_highlight: retrain
       planet: haumea
@@ -134,6 +141,7 @@ home:
     - id: reentry
       label: Reentry
       prefix: Conclusion
+      icon: assets/images/portals/icon-cleanup.svg
       title: Clean up &
       title_highlight: conclude
       planet: capsule

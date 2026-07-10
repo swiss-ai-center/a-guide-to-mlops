@@ -275,6 +275,15 @@
     text-transform: uppercase;
     margin-bottom: 1rem;
   }
+  .chapter-icon {
+    margin-bottom: 0.75rem;
+  }
+  .chapter-icon img,
+  .chapter-icon svg {
+    display: block;
+    width: 56px;
+    height: auto;
+  }
   .chapter-title {
     font-size: clamp(1.8rem, 3.6vw, 2.6rem);
     font-weight: 800;
@@ -574,6 +583,11 @@
 <main class="story-main" id="story-start">
   {%- macro chapter_card(chapter) -%}
   <article class="chapter-card" id="section-{{ chapter.id }}">
+    {% if chapter.icon %}
+    <div class="chapter-icon">
+      <img src="{{ chapter.icon | url }}" alt="">
+    </div>
+    {% endif %}
     <div class="chapter-label">{{ chapter.label }}</div>
     <h2 class="chapter-title">{% if chapter.prefix %}<span class="chapter-prefix">{{ chapter.prefix }}</span>{% endif %}{{ chapter.title }}{% if chapter.title_highlight %} <span>{{ chapter.title_highlight }}</span>{% endif %}</h2>
     <p>

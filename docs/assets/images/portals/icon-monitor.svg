@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Uranus -->
+  <circle cx="110" cy="260" r="70" fill="#06b6d4" stroke="#0891b2" stroke-width="4"/>
+  <g fill="none" stroke="#22d3ee" stroke-width="5" opacity="0.4">
+    <ellipse cx="110" cy="260" rx="58" ry="14"/>
+    <ellipse cx="110" cy="260" rx="58" ry="28"/>
+  </g>
+
+  <!-- Satellite -->
+  <g transform="translate(260, 165)">
+    <!-- Solar panels -->
+    <rect x="-95" y="-18" width="72" height="36" rx="4" fill="#334155" stroke="#475569" stroke-width="5"/>
+    <rect x="23" y="-18" width="72" height="36" rx="4" fill="#334155" stroke="#475569" stroke-width="5"/>
+
+    <!-- Body -->
+    <rect x="-22" y="-26" width="44" height="52" rx="8" fill="#f8fafc" stroke="#e5e5e5" stroke-width="4"/>
+    <circle cx="0" cy="0" r="11" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+    <circle cx="4" cy="-4" r="3" fill="#ffffff" opacity="0.25"/>
+
+    <!-- Antenna -->
+    <line x1="0" y1="-26" x2="0" y2="-72" stroke="#94a3b8" stroke-width="5"/>
+    <circle cx="0" cy="-80" r="9" fill="#f59e0b"/>
+  </g>
+
+  <!-- Signal dot -->
+  <circle cx="260" cy="50" r="7" fill="#f59e0b" opacity="0.5"/>
+</svg>
