@@ -358,6 +358,12 @@ CATEGORICAL_COLUMNS = ["predicted_label"]
 EMBEDDING_NAME = "image_embedding"
 DRIFT_COLUMNS = SCALAR_COLUMNS + CATEGORICAL_COLUMNS
 
+# Drift detection thresholds and methods.
+VALUE_DRIFT_THRESHOLD = 0.15
+EMBEDDING_DRIFT_THRESHOLD = 0.6
+NUM_DRIFT_METHOD = "wasserstein"
+CAT_DRIFT_METHOD = "jensenshannon"
+
 
 def expand_embedding_column(df: pd.DataFrame) -> pd.DataFrame:
     """Unpack a list-valued embedding column into one column per dimension.
@@ -472,10 +478,16 @@ def generate_report(
 
     report = Report(
         [
-            DataDriftPreset(columns=DRIFT_COLUMNS),
+            DataDriftPreset(
+                columns=DRIFT_COLUMNS,
+                num_method=NUM_DRIFT_METHOD,
+                num_threshold=VALUE_DRIFT_THRESHOLD,
+                cat_method=CAT_DRIFT_METHOD,
+                cat_threshold=VALUE_DRIFT_THRESHOLD,
+            ),
             EmbeddingsDrift(
                 embeddings_name=EMBEDDING_NAME,
-                drift_method=ModelDriftMethod(),
+                drift_method=ModelDriftMethod(threshold=EMBEDDING_DRIFT_THRESHOLD),
             ),
         ]
     )
@@ -642,19 +654,24 @@ if __name__ == "__main__":
     main()
 ```
 
-Scalar image features and prediction statistics are mapped as numerical columns,
-`predicted_label` as categorical, and the embedding dimensions as the
-`image_embedding` group. `DataDriftPreset` tests each scalar and categorical
-column for drift, and `EmbeddingsDrift` runs Evidently's model-based detector on
-the embedding group.
+The script does the following:
 
-Columns that only exist in one of the datasets are dropped before the report is
-built: `true_label` exists only in the reference data, while `timestamp` and
-`request_id` exist only in production logs. Evidently expects embeddings as one
-column per dimension, so the `embedding` list is unpacked.
+* Prepare the datasets: drop columns that are not part of the drift feature set
+  (`true_label` from the reference, `timestamp`, `request_id`, `date`, and
+  `trace_id` from the current data) and unpack the `embedding` list into one
+  column per dimension.
 
-`Workspace.create` opens an existing workspace or creates a new one, so repeated
-runs keep history in the same place.
+* Map column roles: scalar features and prediction statistics are numerical,
+  `predicted_label` is categorical, and the embedding dimensions form the
+  `image_embedding` group.
+
+* Configure drift detection: `DataDriftPreset` checks scalar and categorical
+  columns, and `EmbeddingsDrift` checks the embedding group. Thresholds and
+  methods are constants at the top of the script and are written into
+  `monitoring/report.json`.
+
+* Persist snapshots: `Workspace.create` opens the existing workspace or creates
+  a new one, so every run keeps its history in `monitoring/workspace`.
 
 #### Add the build reference stage
 

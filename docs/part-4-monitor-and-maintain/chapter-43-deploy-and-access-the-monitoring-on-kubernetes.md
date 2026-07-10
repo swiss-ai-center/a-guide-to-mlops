@@ -422,13 +422,13 @@ Find the external IP of the exposed model service:
 kubectl get service celestial-bodies-classifier-service
 ```
 
-Then send new images to the `/predict` endpoint. Replace `<url>` with the value
-from the previous command:
+Then send new images to the `/predict` endpoint. Replace `<EXTERNAL-IP>` with
+the value from the previous command:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Send new images to the deployed model
 for img in extra-data/extra_data/*.jpg; do
-    curl -X POST -F "image=@$img" http://<url>:80/predict
+    curl -X POST -F "image=@$img" http://<EXTERNAL-IP>:80/predict
 done
 ```
 
@@ -458,14 +458,7 @@ storage-bucket-backed workspace.
 
 #### Create the Evidently UI image
 
-Create a `docker/ui.requirements.txt` file with the UI dependencies:
-
-```txt title="docker/ui.requirements.txt"
-evidently==0.7.21
-gcsfs==2026.6.0
-```
-
-`monitoring/ui.Dockerfile` is minimal because the UI service only needs the
+`docker/ui.Dockerfile` is minimal because the UI service only needs the
 `evidently` package, `gcsfs` for the storage-bucket-backed workspace, and Google
 Cloud credentials.
 
@@ -474,8 +467,7 @@ FROM python:3.13-slim
 
 WORKDIR /app
 
-COPY docker/ui.requirements.txt /tmp/requirements.txt
-RUN pip install --no-cache-dir -r /tmp/requirements.txt
+RUN pip install --no-cache-dir evidently==0.7.21 gcsfs==2026.6.0
 
 EXPOSE 8000
 
@@ -611,7 +603,7 @@ NAME           TYPE           CLUSTER-IP       EXTERNAL-IP     PORT(S)        AG
 evidently-ui   LoadBalancer   34.118.234.235   34.158.20.138   80:31710/TCP   7m58s
 ```
 
-Save the URL (`http://<external-ip>`) so you can open the dashboard after the
+Save the URL (`http://<EXTERNAL-IP>`) so you can open the dashboard after the
 first snapshot is pushed.
 
 !!! note "Evidently UI reads the workspace at startup"
@@ -674,13 +666,25 @@ gcsfs==2026.6.0
 
 Freeze the dependencies again after editing `requirements.txt`:
 
-```sh title="Execute the following command(s) in a terminal"
-# Install the dependencies
-pip install -r requirements.txt
+=== ":simple-python: Using pip"
 
-# Freeze the dependencies
-pip freeze --local --all > requirements-freeze.txt
-```
+    ```sh title="Execute the following command(s) in a terminal"
+    # Install the dependencies
+    pip install -r requirements.txt
+
+    # Freeze the dependencies
+    pip freeze --local --all > requirements-freeze.txt
+    ```
+
+=== ":simple-uv: Using uv"
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Install the dependencies
+    uv pip install -r requirements.txt
+
+    # Freeze the dependencies
+    uv pip freeze > requirements-freeze.txt
+    ```
 
 #### Create `src/sync_monitoring.py`
 
@@ -877,16 +881,15 @@ The output should look similar to this:
 ```text
 On branch main
 Changes to be committed:
-  (use "git restore --staged <file>..." to unstage)
-        modified:   kubernetes/deployment.yaml
-        modified:   requirements-freeze.txt
-        modified:   requirements.txt
+    (use "git restore --staged <file>..." to unstage)
         new file:   .github/workflows/monitor.yaml
-        new file:   docker/ui.requirements.txt
         new file:   docker/ui.Dockerfile
+        modified:   kubernetes/deployment.yaml
         new file:   kubernetes/evidently-ui-deployment.yaml
         new file:   kubernetes/evidently-ui-service.yaml
         new file:   kubernetes/fluent-bit-config.yaml
+        modified:   requirements-freeze.txt
+        modified:   requirements.txt
         new file:   src/sync_monitoring.py
 ```
 
