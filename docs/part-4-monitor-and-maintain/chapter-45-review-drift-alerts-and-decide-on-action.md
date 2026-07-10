@@ -37,36 +37,16 @@ The following diagram illustrates the decision flow at the end of this chapter:
 
 ```mermaid
 flowchart TB
-    monitor[Monitoring workflow] -->|drift detected| issue[Drift-alert issue]
-    issue -->|review| decision{Decision}
+    issue[Drift-alert issue] -->|review| decision{Decision}
     decision -->|false positive| tune[Adjust thresholds]
-    decision -->|model degraded| rollback{Rollback path}
-    rollback -->|fast| k8s_rollback[kubectl rollout undo]
-    k8s_rollback -->|immediate| previous_deployment[Previous pod revision]
-    rollback -->|canonical| git_rollback[Checkout previous Git tag]
+    decision -->|model degraded| rollback[Roll back with Git and DVC]
+    rollback -->|checkout| git_rollback[Checkout previous Git tag]
     git_rollback -->|dvc checkout| old_model[Previous model artifact]
     old_model -->|CI/CD| redeploy[Redeploy via pipeline]
     decision -->|new distribution| label[Label new data]
     label --> retrain[Retrain with DVC]
     retrain --> new_reference[Rebuild reference dataset]
 
-    subgraph clusterGraph[Kubernetes cluster]
-        monitor
-        previous_deployment
-    end
-
-    subgraph gitGraph[Git / DVC]
-        git_rollback
-        old_model
-    end
-
-    subgraph labelGraph[Labeling workflow]
-        label
-        retrain
-        new_reference
-    end
-
-    style monitor opacity:0.4,color:#7f7f7f80
     style issue opacity:0.4,color:#7f7f7f80
     style decision opacity:0.4,color:#7f7f7f80
     style tune opacity:0.4,color:#7f7f7f80
@@ -74,8 +54,6 @@ flowchart TB
     style git_rollback opacity:0.4,color:#7f7f7f80
     style old_model opacity:0.4,color:#7f7f7f80
     style redeploy opacity:0.4,color:#7f7f7f80
-    style k8s_rollback opacity:0.4,color:#7f7f7f80
-    style previous_deployment opacity:0.4,color:#7f7f7f80
     style label opacity:0.4,color:#7f7f7f80
     style retrain opacity:0.4,color:#7f7f7f80
     style new_reference opacity:0.4,color:#7f7f7f80
