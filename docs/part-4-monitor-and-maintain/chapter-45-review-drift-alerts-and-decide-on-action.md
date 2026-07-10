@@ -399,10 +399,12 @@ cat monitoring/report.json | python -m json.tool
 
 ### Commit the changes
 
-This chapter may modify `src/monitor.py` when tuning thresholds, or may trigger
-a full retraining commit when labeling new data. If you only rolled back, the
-Git history change is the commit. In all cases, close the drift-alert issue from
-the GitHub interface once the action is verified.
+This chapter does not require manual code edits, but the rollback commands above
+do change the Git history on `main`. If you chose to adjust drift thresholds
+after reviewing the alert, update `src/monitor.py` from Chapter 4.2 and commit
+those changes separately. If you labeled new data and retrained, the `dvc repro`
+output is the commit. In all cases, close the drift-alert issue from the GitHub
+interface once the action is verified.
 
 ## Summary
 
