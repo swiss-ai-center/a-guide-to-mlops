@@ -613,13 +613,16 @@
   {%- endmacro -%}
 
   <div class="chapter-grid">
-    {% for chapter in home.chapters[:-1] %}
-      {{ chapter_card(chapter) }}
-    {% endfor %}
-    <div class="landing-rocket" aria-hidden="true">
-      <img src="{{ 'assets/images/portals/reentry-capsule.svg' | url }}" alt="">
-    </div>
-    {{ chapter_card(home.chapters[-1]) }}
+    {% if home.chapters %}
+      {% for chapter in home.chapters %}
+        {% if loop.last %}
+          <div class="landing-rocket" aria-hidden="true">
+            <img src="{{ 'assets/images/portals/reentry-capsule.svg' | url }}" alt="">
+          </div>
+        {% endif %}
+        {{ chapter_card(chapter) }}
+      {% endfor %}
+    {% endif %}
   </div>
 </main>
 
