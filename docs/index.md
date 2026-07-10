@@ -31,14 +31,10 @@ home:
         established workflows, with a focus on SMEs.
       actions:
         - type: primary
-          text: Next stop
-          icon: lucide/chevron-down
-          anchor: "#section-intro"
-        - type: secondary
           text: Presentation
           icon: lucide/monitor
           url: "https://mlops.swiss-ai-center.ch/presentation/"
-        - type: pdf
+        - type: secondary
           text: PDF
           icon: lucide/file-text
           url: "https://mlops.swiss-ai-center.ch/presentation/a-guide-to-mlops-presentation.pdf"
@@ -54,10 +50,6 @@ home:
         DVC, Git, GitHub Actions, CML, Docker, BentoML, Fluent Bit, Evidently AI, and Label Studio.
       actions:
         - type: primary
-          text: Next stop
-          icon: lucide/chevron-down
-          anchor: "#section-part-1"
-        - type: secondary
           text: Philosophy
           icon: lucide/lightbulb
           path: philosophy/
@@ -73,10 +65,6 @@ home:
         data, parameters, metrics, and plots as the model evolves.
       actions:
         - type: primary
-          text: Next stop
-          icon: lucide/chevron-down
-          anchor: "#section-part-2"
-        - type: secondary
           text: Train locally
           icon: lucide/flask-conical
           path: part-1-local-training-and-evaluation/introduction/
@@ -92,10 +80,6 @@ home:
         metric, and plot comparisons directly in pull requests for team review.
       actions:
         - type: primary
-          text: Next stop
-          icon: lucide/chevron-down
-          anchor: "#section-part-3"
-        - type: secondary
           text: Go cloud
           icon: lucide/cloud
           path: part-2-move-to-the-cloud/introduction/
@@ -112,10 +96,6 @@ home:
         specialized training pods.
       actions:
         - type: primary
-          text: Next stop
-          icon: lucide/chevron-down
-          anchor: "#section-part-4"
-        - type: secondary
           text: Deploy
           icon: lucide/server
           path: part-3-serve-and-deploy/introduction/
@@ -132,10 +112,6 @@ home:
         a previous container image tracked in Git and DVC.
       actions:
         - type: primary
-          text: Next stop
-          icon: lucide/chevron-down
-          anchor: "#section-part-5"
-        - type: secondary
           text: Observe
           icon: lucide/activity
           path: part-4-monitor-and-maintain/introduction/
@@ -152,10 +128,6 @@ home:
         faster and more accurate.
       actions:
         - type: primary
-          text: Next stop
-          icon: lucide/chevron-down
-          anchor: "#section-reentry"
-        - type: secondary
           text: Retrain
           icon: lucide/tags
           path: part-5-label-data-and-retrain/introduction/
@@ -171,10 +143,6 @@ home:
         stage of a successful mission.
       actions:
         - type: primary
-          text: Launch pad
-          icon: lucide/chevron-down
-          anchor: "#story-finale"
-        - type: secondary
           text: Clean up
           icon: lucide/brush
           path: clean-up/
