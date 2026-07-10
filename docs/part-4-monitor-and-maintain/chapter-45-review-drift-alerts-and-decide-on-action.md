@@ -345,13 +345,21 @@ The output should contain the rollback SHA, for example:
 europe-west6-docker.pkg.dev/mlops-surname-project/mlops-surname-registry/celestial-bodies-classifier:a1b2c3d4e5f6789012345678901234567890abcd
 ```
 
-Send a test prediction and inspect the response:
+Send a test prediction and inspect the response.
+
+Find the external IP of the deployed model service:
 
 ```sh title="Execute the following command(s) in a terminal"
-export SERVICE_IP=$(kubectl get service celestial-bodies-classifier-service \
-  -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+# Get the external IP of the model service
+kubectl get service celestial-bodies-classifier-service
+```
 
-curl -X POST -F "image=@data/raw/Mercury/0001.jpg" http://$SERVICE_IP/predict
+Then send a test image to the `/predict` endpoint. Replace
+`\u003cEXTERNAL-IP\u003e` with the value from the previous command:
+
+```sh title="Execute the following command(s) in a terminal"
+# Send a test image to the deployed model
+curl -X POST -F "image=@data/raw/Mercury/0001.jpg" http://\u003cEXTERNAL-IP\u003e:80/predict
 ```
 
 If the prediction distribution and confidence look like they did before the bad
