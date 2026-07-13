@@ -8,14 +8,19 @@ might require a GPU. This GPU could be shared among multiple teams for different
 purposes, so it is important to avoid monopolizing its use.
 
 In such situation, you can use a specialized Kubernetes pod for on-demand model
-training.
+training. Because the cluster is now available, you can also run DVC experiments
+on it and share the live metrics through a persistent TensorBoard dashboard
+accessible to the whole team.
 
 In this chapter, you will learn how to:
 
 1. Adjust the self-hosted runner to create a specialized on-demand pod within
    the Kubernetes cluster
-2. Start the model training from your CI/CD pipeline using the specialized pod
-   in the Kubernetes cluster
+2. Run DVC experiments from your CI/CD pipeline using the specialized pod
+3. Log live metrics with DVClive to cloud storage
+4. Deploy a TensorBoard pod on Kubernetes to visualize shared experiment metrics
+5. Have CML report experiment results on the pull request
+6. Promote the best experiment to the PR branch and merge it manually
 
 The following diagram illustrates the control flow of the experiment at the end
 of this chapter:
@@ -52,13 +57,15 @@ flowchart TB
         s3_storage
         subgraph gitGraph[Git Remote]
             repository[(Repository)] <--> action[Action]
+            request[PR] --> |merge|repository
         end
         action --> |dvc pull
-                    dvc repro
+                    dvc exp run
+                    dvc exp push
                     bentoml build
                     bentoml containerize
                     docker push|registry
-        s3_storage ~~~ repository
+        s3_storage ~~~ request
         subgraph clusterGraph[Kubernetes]
             subgraph clusterPodGraph[Pod]
                 pod_train[Train model] <-.-> k8s_gpu[GPUs]
@@ -66,20 +73,24 @@ flowchart TB
             pod_runner[Runner] --> |setup
                                     cleanup|clusterPodGraph
             action -->|dvc pull
-                       dvc repro| pod_train
+                       dvc exp run| pod_train
+            pod_train -->|DVClive logs| s3_storage
+            pod_tensorboard[TensorBoard] -->|read| s3_storage
             bento_service_cluster[classifierService] --> k8s_fastapi[FastAPI]
         end
         action --> |self-hosted|pod_runner
-        pod_train -->|cml publish| action
+        pod_train -->|cml publish| request
         pod_train -->|dvc push| s3_storage
 
         registry[(Container
                   registry)] --> bento_service_cluster
         action --> |kubectl apply|bento_service_cluster
+        action --> |kubectl apply|pod_tensorboard
     end
 
     subgraph browserGraph[BROWSER]
         k8s_fastapi <--> publicURL["public URL"]
+        pod_tensorboard <--> tensorboardURL["TensorBoard URL"]
     end
 
     style workspaceGraph opacity:0.4,color:#7f7f7f80
@@ -102,6 +113,8 @@ flowchart TB
     style k8s_fastapi opacity:0.4,color:#7f7f7f80
     style browserGraph opacity:0.4,color:#7f7f7f80
     style publicURL opacity:0.4,color:#7f7f7f80
+    style pod_tensorboard opacity:0.4,color:#7f7f7f80
+    style tensorboardURL opacity:0.4,color:#7f7f7f80
     linkStyle 0 opacity:0.4,color:#7f7f7f80
     linkStyle 1 opacity:0.4,color:#7f7f7f80
     linkStyle 2 opacity:0.4,color:#7f7f7f80
@@ -119,6 +132,45 @@ flowchart TB
 ```
 
 ## Steps
+
+### Update the project dependencies and training script
+
+Before running experiments on the cluster, make sure `dvclive` and
+`tensorboard` are installed in the environment that will run on the GPU pod.
+
+Add them to `requirements.txt`:
+
+```txt title="requirements.txt" hl_lines="6-7"
+matplotlib==3.10.9
+scikit-learn==1.9.0
+tensorflow==2.21.0
+pyyaml==6.0.3
+dvc==3.67.1
+dvclive==3.48.1
+tensorboard==2.21.0
+```
+
+If you already added them in
+[Chapter 1.7](../part-1-local-training-and-evaluation/chapter-17-visualize-live-metrics-with-dvclive-and-tensorboard.md),
+no change is needed.
+
+Next, update `src/train.py` so DVClive can write to a configurable directory.
+This lets the training pod write logs to a cloud storage path while keeping the
+local `dvclive/` default for development.
+
+```py title="src/train.py" hl_lines="1 5"
+import os
+from dvclive import Live
+
+# ... existing imports ...
+
+live_dir = os.environ.get("DVCLIVE_DIR", "dvclive")
+live = Live(dir=live_dir)
+```
+
+For the full training loop, refer to
+[Chapter 1.7](../part-1-local-training-and-evaluation/chapter-17-visualize-live-metrics-with-dvclive-and-tensorboard.md).
+The only change for the cloud is the `DVCLIVE_DIR` environment variable.
 
 ### Identify the specialized node
 
@@ -407,6 +459,90 @@ and select **New repository secret**:
 
 Save the variables by selecting **Add secret**.
 
+### Deploy a TensorBoard pod on Kubernetes
+
+Create a Kubernetes manifest for a persistent TensorBoard pod. The pod reads
+DVClive logs from the same cloud storage bucket used by DVC, so the team can
+open a single URL to visualize every experiment run on the cluster.
+
+Create `kubernetes/tensorboard.yaml` with the following content. Replace
+`<my_bucket>` with the name of your cloud storage bucket:
+
+```txt title="kubernetes/tensorboard.yaml"
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tensorboard
+  labels:
+    app: tensorboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tensorboard
+  template:
+    metadata:
+      labels:
+        app: tensorboard
+    spec:
+      containers:
+        - name: tensorboard
+          image: tensorflow/tensorflow:2.21.0
+          command:
+            - /bin/sh
+            - -c
+            - |
+              mkdir -p /logs &&
+              gsutil -m rsync -r gs://<my_bucket>/tensorboard /logs &&
+              tensorboard --logdir /logs --host 0.0.0.0 --port 6006
+          ports:
+            - containerPort: 6006
+          resources:
+            limits:
+              cpu: "1"
+              memory: "4Gi"
+            requests:
+              cpu: "0.5"
+              memory: "2Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tensorboard
+spec:
+  selector:
+    app: tensorboard
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 6006
+  type: LoadBalancer
+```
+
+!!! info
+
+    The manifest above uses `gsutil` because the guide uses Google Cloud
+    Storage. If you use another S3-compatible storage, replace `gsutil` with the
+    appropriate sync command and ensure the pod has the necessary credentials.
+
+Apply the manifest:
+
+```sh title="Execute the following command(s) in a terminal"
+# Deploy TensorBoard on the cluster
+kubectl apply -f kubernetes/tensorboard.yaml
+```
+
+Retrieve the external IP:
+
+```sh title="Execute the following command(s) in a terminal"
+# Wait for the LoadBalancer IP
+kubectl get service tensorboard --watch
+```
+
+Once the `EXTERNAL-IP` field shows an address, open `http://<EXTERNAL-IP>` in
+your browser. The dashboard will be empty until the first training run uploads
+DVClive logs.
+
 ### Update the CI/CD configuration file
 
 You'll now update the CI/CD configuration file to start a runner on the
@@ -436,6 +572,9 @@ on:
 permissions:
   contents: read
   id-token: write
+
+env:
+  DVCLIVE_BASE_DIR: gs://${{ secrets.GCP_STORAGE_BUCKET }}/tensorboard/pr-${{ github.event.number }}
 
 jobs:
   setup-runner:
@@ -494,8 +633,17 @@ jobs:
         uses: google-github-actions/auth@v3
         with:
           credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
-      - name: Train model
-        run: dvc repro --pull
+      - name: Run experiments
+        env:
+          DVCLIVE_DIR: ${{ env.DVCLIVE_BASE_DIR }}/run-${{ github.run_id }}
+        run: |
+          dvc exp run --pull -S train.lr=0.001
+          dvc exp run --pull -S train.lr=0.01
+      - name: Push experiment refs
+        run: dvc exp push origin
+      - name: Push DVClive logs to cloud storage
+        run: |
+          gsutil -m cp -r dvclive/* ${{ env.DVCLIVE_BASE_DIR }}/run-${{ github.run_id }}/
       - name: Push the outcomes to DVC remote storage
         run: dvc push
       - name: Commit changes in dvc.lock
@@ -514,9 +662,10 @@ jobs:
       - name: Create CML report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TENSORBOARD_URL: http://${{ secrets.GCP_TENSORBOARD_IP }}
         run: |
-          # Fetch all other Git branches
-          git fetch --depth=1 origin main:main
+          # Fetch experiment refs
+          git fetch origin 'refs/exps/*:refs/exps/*'
 
           # Add title to the report
           echo "# Experiment Report (${{ github.sha }})" >> report.md
@@ -528,6 +677,10 @@ jobs:
           # Compare metrics to main branch
           echo "## Metrics workflow vs. main" >> report.md
           dvc metrics diff main --md >> report.md
+
+          # List experiments sorted by best metric
+          echo "## Experiments" >> report.md
+          dvc exp show --sort-by metrics.json:f1_score --sort-order desc --md >> report.md
 
           # Compare plots (images) to main branch
           dvc plots diff main
@@ -555,6 +708,10 @@ jobs:
           echo '![](./dvc_plots/static/main_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
           echo "#### workspace" >> report.md
           echo '![](./dvc_plots/static/workspace_evaluation_plots_confusion_matrix.png "Confusion Matrix")' >> report.md
+
+          # Link to the shared TensorBoard dashboard
+          echo "## Live dashboard" >> report.md
+          echo "[Open TensorBoard]($TENSORBOARD_URL)" >> report.md
 
           # Publish the CML report
           cml comment update --target=pr --publish report.md
@@ -641,16 +798,29 @@ Here, the following should be noted:
 When creating pull requests:
 
 * the `setup-runner` job creates a self-hosted GPU runner.
-* the `train-and-report` job runs on the self-hosted GPU runner. It trains the
-  model and pushes the trained model to the remote bucket with DVC.
+* the `train-and-report` job runs on the self-hosted GPU runner. It runs two
+  DVC experiments with different learning rates, pushes the experiment refs to
+  GitHub, uploads DVClive logs to cloud storage, and pushes the trained model to
+  the remote bucket with DVC.
 * the `cleanup-runner` job destroys the self-hosted GPU runner that was created.
   It also guarantees that the GPU runner pod is removed, even when if the previous
   step failed or was manually cancelled.
+
+The TensorBoard pod was deployed separately and reads DVClive logs from the same
+cloud storage bucket. The CML report includes a link to the TensorBoard dashboard
+so reviewers can explore the live metrics.
 
 When merging pull requests:
 
 * the `publish-and-deploy` runs on the main runner when merging pull requests.
   It retrieves the model with DVC, containerizes then deploys the model artifact.
+
+!!! info
+
+    The workflow uses `dvc exp run` to create experiments on the cluster. The
+    experiments are pushed back to the repository as Git refs. After the run, the
+    best experiment must be promoted manually into the PR branch before merging.
+    This is explained in the next section.
 
 Check the differences with Git to validate the changes.
 
@@ -666,87 +836,38 @@ diff --git a/.github/workflows/mlops.yaml b/.github/workflows/mlops.yaml
 index 5a8d863..ad093ef 100644
 --- a/.github/workflows/mlops.yaml
 +++ b/.github/workflows/mlops.yaml
-@@ -18,9 +18,47 @@ permissions:
+@@ -15,6 +15,9 @@ on:
+ permissions:
+   contents: read
    id-token: write
++
++env:
++  DVCLIVE_BASE_DIR: gs://${{ secrets.GCP_STORAGE_BUCKET }}/tensorboard/pr-${{ github.event.number }}
 
  jobs:
-+  setup-runner:
-+    runs-on: [self-hosted, base-runner]
-+    if: github.event_name == 'pull_request'
-+    steps:
-+      - name: Checkout repository
-+        uses: actions/checkout@v5
-+      - name: Login to Google Cloud
-+        uses: google-github-actions/auth@v3
-+        with:
-+          credentials_json: '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}'
-+      - name: Get Google Cloud's Kubernetes credentials
-+        uses: google-github-actions/get-gke-credentials@v3
-+        with:
-+          cluster_name: ${{ secrets.GCP_K8S_CLUSTER_NAME }}
-+          location: ${{ secrets.GCP_K8S_CLUSTER_ZONE }}
-+      - name: Set up GCloud SDK
-+        uses: google-github-actions/setup-gcloud@v3
-+        with:
-+          version: '>= 568.0.0'
-+      - name: Install kubectl
-+        run: |
-+          gcloud components install kubectl
-+      - name: Install gke-gcloud-auth-plugin
-+        run: |
-+          gcloud components install gke-gcloud-auth-plugin
-+      - name: Initialize runner on Kubernetes
+   setup-runner:
+@@ -49,8 +52,15 @@ jobs:
+       - name: Install dependencies
+         run: pip install -r requirements-freeze.txt
+-      - name: Train model
+-        run: dvc repro --pull
++      - name: Run experiments
 +        env:
-+          KUBECONFIG_DATA: ${{ secrets.GCP_K8S_KUBECONFIG }}
-+        # We use envsubst to replace variables in runner-gpu.yaml
-+        # in order to create a unique runner name with the
-+        # GitHub run ID. This prevents conflicts when multiple
-+        # runners are created at the same time.
++          DVCLIVE_DIR: ${{ env.DVCLIVE_BASE_DIR }}/run-${{ github.run_id }}
 +        run: |
-+          echo "$KUBECONFIG_DATA" > kubeconfig
-+          export KUBECONFIG=kubeconfig
-+          # We use run_id to make the runner name unique
-+          export GITHUB_RUN_ID="${{ github.run_id }}"
-+          envsubst < kubernetes/runner-gpu.yaml | kubectl apply -f -
-   train-and-report:
-     permissions: write-all
--    runs-on: [self-hosted]
-+    needs: setup-runner
-+    runs-on: [self-hosted, gpu-runner]
-     if: github.event_name == 'pull_request'
-     steps:
-       - name: Checkout repository
-@@ -150,4 +186,30 @@ jobs:
-           kubectl apply \
-             -f kubernetes/deployment.yaml \
-             -f kubernetes/service.yaml
-+  cleanup-runner:
-+    needs: train-and-report
-+    runs-on: [self-hosted, base-runner]
-+    # Run this job if the event is a pull request and regardless of whether the previous job failed or was canceled
-+    if: github.event_name == 'pull_request' && (success() || failure() || cancelled())
-+    steps:
-+      - name: Checkout repository
-+        uses: actions/checkout@v5
-+      - name: Set up GCloud SDK
-+        uses: google-github-actions/setup-gcloud@v3
-+        with:
-+          version: '>= 568.0.0'
-+      - name: Install kubectl
++          dvc exp run --pull -S train.lr=0.001
++          dvc exp run --pull -S train.lr=0.01
++      - name: Push experiment refs
++        run: dvc exp push origin
++      - name: Push DVClive logs to cloud storage
 +        run: |
-+          gcloud components install kubectl
-+      - name: Install gke-gcloud-auth-plugin
-+        run: |
-+          gcloud components install gke-gcloud-auth-plugin
-+      - name: Cleanup runner on Kubernetes
-+        env:
-+          KUBECONFIG_DATA: ${{ secrets.GCP_K8S_KUBECONFIG }}
-+        run: |
-+          echo "$KUBECONFIG_DATA" > kubeconfig
-+          export KUBECONFIG=kubeconfig
-+          export GITHUB_RUN_ID="${{ github.run_id }}"
-+          envsubst < kubernetes/runner-gpu.yaml | kubectl delete --wait=false -f -
++          gsutil -m cp -r dvclive/* ${{ env.DVCLIVE_BASE_DIR }}/run-${{ github.run_id }}/
+       - name: Push the outcomes to DVC remote storage
+         run: dvc push
 ```
+
+The diff above highlights the most important changes. The full diff also
+includes the CML report updates (experiment table and TensorBoard link).
 
 Take some time to understand the changes made to the file.
 
@@ -770,6 +891,7 @@ Changes to be committed:
         modified:   .github/workflows/mlops.yaml
         new file:   kubernetes/runner-gpu.yaml
         modified:   kubernetes/runner.yaml
+        new file:   kubernetes/tensorboard.yaml
 ```
 
 ### Push the CI/CD pipeline configuration file to Git
@@ -786,18 +908,18 @@ git push
 
 ### Try it out one final time
 
-Finally, try to update some parameters of your model to test the training on the
-kubernetes specilized pod.
+Finally, try to run experiments on the Kubernetes specialized pod.
 
 Similarly to what you have done in
 [Chapter 2.5: Work efficiently and collaboratively with Git](../part-2-move-to-the-cloud/chapter-25-work-efficiently-and-collaboratively-with-git.md),
 create an issue **Demonstrate model training on kubernetes pod** and a new
-branch for the issue.
+branch for the issue. Use a branch name like `experiment/tune-lr`.
 
 On your machine, check out the new branch.
 
-Update your experiment by editing for example the `params.yaml` file with the
-following parameters:
+You do **not** need to commit a specific parameter guess. The CI/CD pipeline
+will run experiments with the learning rates defined in the workflow. However,
+you can still edit `params.yaml` if you want to set a baseline. For example:
 
 ```yaml title="params.yaml" hl_lines="11"
 prepare:
@@ -816,11 +938,11 @@ train:
   output_classes: 10
 ```
 
-You can now commit and push the above changes to trigger a change on the remote
-repository.
+You can now commit and push the above changes to trigger the pipeline on the
+remote repository.
 
-This time, **do not** execute `dvc repro` locally but let the cluster pod handle
-the job for you. Push the changes to the remote repository.
+This time, **do not** execute `dvc repro` or `dvc exp run` locally. Let the
+cluster pod handle the experiments for you.
 
 ```sh title="Execute the following command(s) in a terminal"
 # Add all the files
@@ -830,48 +952,102 @@ git add .
 git status
 
 # Commit the changes
-git commit -m "Make some changes to the model"
+git commit -m "Tune learning rate on Kubernetes"
 
 # Push the changes
-git push
+git push -u origin experiment/tune-lr
 ```
+
+### Promote the best experiment
+
+After the CI/CD pipeline finishes, the CML report on the pull request lists the
+experiments sorted by `f1_score`. Suppose the best experiment is named
+`exp-ghi56`. Promote it into the PR branch with a fast-forward merge:
+
+```sh title="Execute the following command(s) in a terminal"
+# Fetch experiment refs from the remote
+git fetch origin 'refs/exps/*:refs/exps/*'
+
+# Show the experiments and confirm the best one
+dvc exp show
+
+# Create a branch from the best experiment
+dvc exp branch exp-ghi56 experiment/tune-lr-best
+
+# Fast-forward the PR branch to the promoted experiment
+git checkout experiment/tune-lr
+git merge --ff-only experiment/tune-lr-best
+
+# Push the updated PR branch
+git push origin experiment/tune-lr
+```
+
+!!! warning
+
+    Pushing the promoted experiment updates the PR branch tip. To avoid
+    re-running the expensive GPU training workflow, add `[skip ci]` to the merge
+    commit before pushing, or configure the workflow to skip on promoted
+    experiment commits.
+
+    ```sh
+    git merge --ff-only experiment/tune-lr-best
+    git commit --amend -m "Promote best experiment [skip ci]"
+    git push --force-with-lease origin experiment/tune-lr
+    ```
+
+    The `--amend` rewrites the experiment commit hash, which is acceptable
+    because the experiment was ephemeral until you promoted it.
 
 ### Check the results
 
 Go back to your GitHub repository.
 
-* Create a pull request and visualize the execution of the CI/CD pipeline on the
-  **Actions** page. The `train-and-report` job will run on a pod created by the
-  self-hosted runner on the Kubernetes Cluster. It trains the model and DVC pushes
-  the trained model to the remote bucket.
-* Merge the pull request, and switch back to the main branch and pull the latest
-  changes. The `publish-and-deploy` will run on the main runner. It retrieves the
-  model with DVC, containerizes then deploys the model artifact.
+* Create a pull request from `experiment/tune-lr` and visualize the execution of
+  the CI/CD pipeline on the **Actions** page. The `train-and-report` job will run
+  on a pod created by the self-hosted runner on the Kubernetes cluster. It runs
+  DVC experiments, uploads DVClive logs to cloud storage, and pushes the trained
+  model to the remote bucket with DVC.
+* Open the CML report on the pull request. It contains a metrics comparison, an
+  experiments table sorted by `f1_score`, static plots, and a link to the
+  TensorBoard dashboard.
+* Open the TensorBoard URL. After the training pods finish, you should see the
+  experiment curves in the dashboard.
+* Once you have identified the best experiment, promote it into the PR branch as
+  shown above, then merge the pull request.
+* Switch back to the `main` branch and pull the latest changes. The
+  `publish-and-deploy` job will run on the main runner, retrieve the model with
+  DVC, containerize it, and deploy the model artifact.
 
-On Google Cloud Console, you can see the pod that has been created on the
+On Google Cloud Console, you can see the pods that have been created on the
 [Kubernetes Engine Workloads](https://console.cloud.google.com/kubernetes/workload/)
-page. Open the pod and go to the **YAML** tab to see the configuration of the
-pod. You should notice that the pod has been created with the node selector
-`gpu=true` and that it has been created on the right node.
+page. Open the GPU training pod and go to the **YAML** tab to see the
+configuration of the pod. You should notice that the pod has been created with
+the node selector `gpu=true` and that it has been created on the right node.
 
 This chapter is done, you can check the summary.
 
 ## Summary
 
 Congratulations! You now can train your model on a custom infrastructure with
-custom hardware for specific use-cases.
+custom hardware, run DVC experiments on the cluster, visualize live metrics on a
+shared TensorBoard dashboard, and promote the best experiment before merging.
 
 In this chapter, you have successfully:
 
 1. Set up a specialized on-demand runner on a pod in Kubernetes
-2. Trained the model on the specialized pod on the Kubernetes cluster
+2. Deployed a persistent TensorBoard pod on Kubernetes
+3. Run DVC experiments from the CI/CD pipeline using the specialized GPU pod
+4. Uploaded DVClive logs to cloud storage for shared visualization
+5. Enriched the CML report with an experiments table and a TensorBoard link
+6. Promoted the best experiment to the PR branch and merged it manually
 
 You fixed some of the previous issues:
 
 - [x] Model can be trained on a custom infrastructure with custom hardware for
       specific use-cases
-
-All the items of the MLOps process for this part are now addressed.
+- [x] Experiments can be run on shared hardware and visualized on a shared
+      TensorBoard dashboard
+- [x] The best experiment can be selected and promoted before merging to `main`
 
 !!! abstract "Take away"
 
@@ -883,14 +1059,15 @@ All the items of the MLOps process for this part are now addressed.
       training pods only when needed (and cleaning them up afterwards) prevents
       monopolizing shared GPU resources and reduces costs compared to always-running
       infrastructure.
-    - **Workflow orchestration coordinates complex jobs**: Using job dependencies
-      (`needs` in GitHub Actions) ensures proper sequencing. Setup runs first,
-      training runs on the created infrastructure, and cleanup happens regardless of
-      success/failure, preventing resource leaks.
-    - **Separation of training and serving infrastructure makes sense**: Training
-      models on specialized GPU runners while serving on standard instances allows you
-      to optimize for different workload characteristics. Training benefits from GPUs
-      while serving prioritizes availability and cost efficiency.
+    - **The cluster is the right place for heavy experimentation**: Running DVC
+      experiments on Kubernetes lets you use shared hardware while keeping the
+      experiment versioning and promotion workflow unchanged.
+    - **Shared dashboards require shared storage**: Writing DVClive logs to the
+      same cloud storage bucket used by DVC lets a persistent TensorBoard pod
+      display every experiment run by every team member.
+    - **Promotion keeps humans in the loop**: The CI/CD pipeline produces
+      experiments and reports, but a person decides which experiment is merged.
+      This balances automation with accountability.
 
 ## State of the MLOps process
 
@@ -902,6 +1079,9 @@ All the items of the MLOps process for this part are now addressed.
 - [x] Model can be trained on a custom infrastructure
 - [x] Model can be trained on a custom infrastructure with custom hardware for
       specific use-cases
+- [x] Experiments can be run on shared hardware and visualized on a shared
+      TensorBoard dashboard
+- [x] The best experiment can be selected and promoted before merging to `main`
 
 Continue to the conclusion to review what you have learned.
 
