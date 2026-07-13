@@ -783,6 +783,9 @@ Here, the following should be noted:
 
 * the `train-report` job runs on the self-hosted runner on pull requests. It
   trains the model and DVC pushes the trained model to the remote bucket.
+* the updated `dvc.lock` file is automatically committed back to the pull
+  request branch, so contributors do not need to run `dvc repro` locally before
+  pushing model changes.
 * the `publish-and-deploy` runs on the main runner when merging pull requests.
   It retrieves the model with DVC, containerizes then deploys the model artifact.
 
