@@ -94,10 +94,15 @@ but each has its own parameter set and metrics.
     all:
 
     ```sh title="Execute the following command(s) in a terminal"
-    # Queue experiments, then run them all
-    for lr in 0.0001 0.001 0.01; do
+    # Define the values to try
+    LEARNING_RATES=(0.0001 0.001 0.01)
+
+    # Queue one experiment per value
+    for lr in "${LEARNING_RATES[@]}"; do
         dvc exp run --queue -S train.lr=$lr
     done
+
+    # Run all queued experiments
     dvc exp run --run-all
     ```
 
