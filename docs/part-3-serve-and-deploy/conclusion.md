@@ -9,7 +9,9 @@ Congratulations! You did it!
 In this third part, you were able to move the model outside of the experiment
 context. The model is now saved and loaded with BentoML. You can serve the model
 locally and deploy it on Kubernetes. The model is also retrained on a Kubernetes
-pod.
+pod, where DVC experiments run on shared hardware, live metrics are visualized
+on a shared TensorBoard dashboard, and the best experiment is promoted manually
+before merging.
 
 The model is now ready to be used in production.
 
@@ -39,7 +41,7 @@ flowchart TB
                          load_model|evaluate
         train --> |save_model
                    export_model|bento_model
-        subgraph dvcGraph["dvc.yaml (dvc repro)"]
+        subgraph dvcGraph["dvc.yaml (dvc exp run)"]
             prepare --> train
             train --> evaluate
         end
@@ -59,7 +61,8 @@ flowchart TB
             request[PR] --> |merge|repository
         end
         action --> |dvc pull
-                    dvc repro
+                    dvc exp run
+                    dvc exp push
                     bentoml build
                     bentoml containerize
                     docker push|registry
@@ -71,7 +74,9 @@ flowchart TB
             pod_runner[Runner] --> |create
                                     destroy|clusterPodGraph
             action -->|dvc pull
-                       dvc repro| pod_train
+                       dvc exp run| pod_train
+            pod_train -->|DVClive logs| s3_storage
+            pod_tensorboard[TensorBoard] -->|read| s3_storage
             bento_service_cluster[classifierService] --> k8s_fastapi[FastAPI]
         end
         action --> |self-hosted|pod_runner
@@ -81,10 +86,12 @@ flowchart TB
         registry[(Container
                   registry)] --> bento_service_cluster
         action --> |kubectl apply|bento_service_cluster
+        action --> |kubectl apply|pod_tensorboard
     end
 
     subgraph browserGraph[BROWSER]
         k8s_fastapi <--> publicURL["public URL"]
+        pod_tensorboard <--> tensorboardURL["TensorBoard URL"]
     end
 ```
 
