@@ -777,7 +777,7 @@ jobs:
 
 Here, the following should be noted:
 
-* the `train-report` job runs on the self-hosted runner on pull requests. It
+* the `train-and-report` job runs on the self-hosted runner on pull requests. It
   trains the model and DVC pushes the trained model to the remote bucket.
 * the updated `dvc.lock` file is automatically committed back to the pull
   request branch with `[skip ci]` in the commit message to prevent the workflow
