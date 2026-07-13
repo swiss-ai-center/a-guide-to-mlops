@@ -4,14 +4,20 @@ Who this guide is for, and how we chose the tools.
 
 ## Target audience
 
-This guide is written for **small and medium-sized enterprises (SMEs)** that
-want to bring machine learning projects from notebooks to production without
-adopting a heavy, monolithic platform.
+This guide is for **SMEs** and small teams with **limited dedicated MLOps
+infrastructure** who want to bring ML projects from notebooks to production
+without a heavy, monolithic platform.
 
-If you are a data scientist, ML engineer, or software engineer in a small team,
-you likely already use Git and are looking for practical, incremental steps to
-add reproducibility, automation, deployment, and monitoring. This guide is for
-you.
+It is especially aimed at two profiles:
+
+- **Data scientists** who train models in notebooks, save artifacts manually,
+  and deploy with ad-hoc scripts. The guide gives you practical, incremental
+  steps toward reproducibility, automation, deployment, monitoring, and
+  retraining.
+
+- **Software engineers** moving into ML engineering who already know DevOps
+  practices. The guide shows how to extend those practices to ML concerns
+  such as data versioning, experiment reporting, and drift detection.
 
 ## Our approach
 
