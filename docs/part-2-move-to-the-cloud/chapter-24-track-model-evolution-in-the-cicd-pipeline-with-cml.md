@@ -206,6 +206,27 @@ the model evaluation and comparing it with the main branch. Some steps in this
 job are triggered only on pull requests. The job checks out the repository, sets
 up DVC and CML, creates and publishes the report as a pull request comment.
 
+!!! info "Using DVC experiments in pull requests"
+
+    If the PR branch contains promoted DVC experiments, you can enrich the CML
+    report with an experiment comparison table:
+
+    ```sh
+    echo "## Experiments" >> report.md
+    dvc exp show --md >> report.md
+    ```
+
+    This is optional at this stage. The next chapter focuses on Git collaboration;
+    the shared TensorBoard dashboard for live experiment visualization is added in
+    [Part 3 - Serve and deploy](../part-3-serve-and-deploy/introduction.md) once
+    the Kubernetes cluster is available.
+
+!!! note
+
+    There is no shared TensorBoard dashboard in this part. The infrastructure is
+    limited to GitHub, GitHub Actions, and cloud storage. Visualization happens
+    through the static plots published by CML in the PR comment.
+
 Check the differences with Git to validate the changes:
 
 ```sh title="Execute the following command(s) in a terminal"
