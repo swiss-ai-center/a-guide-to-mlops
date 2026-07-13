@@ -8,8 +8,9 @@ Congratulations! You did it!
 
 In this first part, you were able to run a simple ML experiment with Jupyter
 Notebook, adapt and move the Jupyter Notebook to Python scripts, initialize Git
-and DVC for local training, reproduce the ML experiment with DVC and track model
-evolution with DVC.
+and DVC for local training, reproduce the ML experiment with DVC, track model
+evolution with DVC, run and compare experiments with DVC experiments, and
+visualize live metrics with DVClive and TensorBoard.
 
 The following diagram illustrates the bricks you set up at the end of this part.
 
@@ -28,13 +29,15 @@ flowchart TB
         train[train.py] <-.-> dot_dvc
         evaluate[evaluate.py] <-.-> dot_dvc
         data --> prepare
-        subgraph dvcGraph["dvc.yaml (dvc repro)"]
+        subgraph dvcGraph["dvc.yaml (dvc repro / dvc exp run)"]
             prepare --> train
             train --> evaluate
         end
         params[params.yaml] -.- prepare
         params -.- train
         params <-.-> dot_dvc
+        dvclive[dvclive/] --> tensorboard[TensorBoard]
+        train -.-> dvclive
     end
 ```
 
