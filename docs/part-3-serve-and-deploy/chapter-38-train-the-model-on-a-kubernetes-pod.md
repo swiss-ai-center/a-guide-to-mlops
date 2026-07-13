@@ -135,8 +135,8 @@ flowchart TB
 
 ### Update the project dependencies and training script
 
-Before running experiments on the cluster, make sure `dvclive` and
-`tensorboard` are installed in the environment that will run on the GPU pod.
+Before running experiments on the cluster, make sure `dvclive` and `tensorboard`
+are installed in the environment that will run on the GPU pod.
 
 Add them to `requirements.txt`:
 
@@ -521,9 +521,9 @@ spec:
 
 !!! info
 
-    The manifest above uses `gsutil` because the guide uses Google Cloud
-    Storage. If you use another S3-compatible storage, replace `gsutil` with the
-    appropriate sync command and ensure the pod has the necessary credentials.
+    The manifest above uses `gsutil` because the guide uses Google Cloud Storage. If
+    you use another S3-compatible storage, replace `gsutil` with the appropriate
+    sync command and ensure the pod has the necessary credentials.
 
 Apply the manifest:
 
@@ -798,17 +798,17 @@ Here, the following should be noted:
 When creating pull requests:
 
 * the `setup-runner` job creates a self-hosted GPU runner.
-* the `train-and-report` job runs on the self-hosted GPU runner. It runs two
-  DVC experiments with different learning rates, pushes the experiment refs to
-  GitHub, uploads DVClive logs to cloud storage, and pushes the trained model to
-  the remote bucket with DVC.
+* the `train-and-report` job runs on the self-hosted GPU runner. It runs two DVC
+  experiments with different learning rates, pushes the experiment refs to GitHub,
+  uploads DVClive logs to cloud storage, and pushes the trained model to the
+  remote bucket with DVC.
 * the `cleanup-runner` job destroys the self-hosted GPU runner that was created.
   It also guarantees that the GPU runner pod is removed, even when if the previous
   step failed or was manually cancelled.
 
 The TensorBoard pod was deployed separately and reads DVClive logs from the same
-cloud storage bucket. The CML report includes a link to the TensorBoard dashboard
-so reviewers can explore the live metrics.
+cloud storage bucket. The CML report includes a link to the TensorBoard
+dashboard so reviewers can explore the live metrics.
 
 When merging pull requests:
 
@@ -984,10 +984,9 @@ git push origin experiment/tune-lr
 
 !!! warning
 
-    Pushing the promoted experiment updates the PR branch tip. To avoid
-    re-running the expensive GPU training workflow, add `[skip ci]` to the merge
-    commit before pushing, or configure the workflow to skip on promoted
-    experiment commits.
+    Pushing the promoted experiment updates the PR branch tip. To avoid re-running
+    the expensive GPU training workflow, add `[skip ci]` to the merge commit before
+    pushing, or configure the workflow to skip on promoted experiment commits.
 
     ```sh
     git merge --ff-only experiment/tune-lr-best
@@ -995,8 +994,8 @@ git push origin experiment/tune-lr
     git push --force-with-lease origin experiment/tune-lr
     ```
 
-    The `--amend` rewrites the experiment commit hash, which is acceptable
-    because the experiment was ephemeral until you promoted it.
+    The `--amend` rewrites the experiment commit hash, which is acceptable because
+    the experiment was ephemeral until you promoted it.
 
 ### Check the results
 
@@ -1063,11 +1062,11 @@ You fixed some of the previous issues:
       experiments on Kubernetes lets you use shared hardware while keeping the
       experiment versioning and promotion workflow unchanged.
     - **Shared dashboards require shared storage**: Writing DVClive logs to the
-      same cloud storage bucket used by DVC lets a persistent TensorBoard pod
-      display every experiment run by every team member.
+      same cloud storage bucket used by DVC lets a persistent TensorBoard pod display
+      every experiment run by every team member.
     - **Promotion keeps humans in the loop**: The CI/CD pipeline produces
-      experiments and reports, but a person decides which experiment is merged.
-      This balances automation with accountability.
+      experiments and reports, but a person decides which experiment is merged. This
+      balances automation with accountability.
 
 ## State of the MLOps process
 

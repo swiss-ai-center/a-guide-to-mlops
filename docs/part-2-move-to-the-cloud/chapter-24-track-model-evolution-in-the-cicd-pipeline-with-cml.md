@@ -218,8 +218,8 @@ up DVC and CML, creates and publishes the report as a pull request comment.
 
     This is optional at this stage. The next chapter focuses on Git collaboration;
     the shared TensorBoard dashboard for live experiment visualization is added in
-    [Part 3 - Serve and deploy](../part-3-serve-and-deploy/introduction.md) once
-    the Kubernetes cluster is available.
+    [Part 3 - Serve and deploy](../part-3-serve-and-deploy/introduction.md) once the
+    Kubernetes cluster is available.
 
 !!! note
 

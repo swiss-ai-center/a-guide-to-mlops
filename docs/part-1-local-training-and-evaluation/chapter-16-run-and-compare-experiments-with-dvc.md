@@ -251,14 +251,14 @@ You fixed some of the previous issues:
 !!! abstract "Take away"
 
     - **Experiments are temporary by design**: DVC experiments let you try
-      parameter values quickly. Only the experiments you promote become Git
-      branches, so your repository stays clean.
+      parameter values quickly. Only the experiments you promote become Git branches,
+      so your repository stays clean.
     - **Comparison is the goal**: `dvc exp show` and `dvc exp diff` turn
-      parameter tuning into a data-driven decision. You choose the best
-      experiment based on metrics, not guesswork.
+      parameter tuning into a data-driven decision. You choose the best experiment
+      based on metrics, not guesswork.
     - **Promotion preserves reproducibility**: When you promote an experiment
-      with `dvc exp branch`, you get a normal Git branch that contains the exact
-      code, parameters, and lock file needed to reproduce the result.
+      with `dvc exp branch`, you get a normal Git branch that contains the exact code,
+      parameters, and lock file needed to reproduce the result.
     - **Cleanup is part of the workflow**: Removing discarded experiments keeps
       the DVC cache and experiment list manageable.
 
