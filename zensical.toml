@@ -51,8 +51,8 @@ Copyright &copy; 2022 - 2026 Swiss AI Center
 nav = [
   { "🧭 Introduction" = [
       { "Syllabus" = "syllabus.md" },
-      { "Philosophy" = "philosophy.md" },
       { "Concept" = "concept.md" },
+      { "Philosophy" = "philosophy.md" },
       { "Tools" = "tools.md" },
       { "References" = "references.md" },
       { "Cheatsheet" = "cheatsheet.md" },
