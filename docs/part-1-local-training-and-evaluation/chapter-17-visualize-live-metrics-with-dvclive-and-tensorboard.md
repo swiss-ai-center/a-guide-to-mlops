@@ -361,7 +361,6 @@ In this chapter, you have successfully:
 You fixed some of the previous issues:
 
 - [x] Training metrics can be visualized live during the experiment
-- [x] Multiple experiments can be compared visually in TensorBoard
 
 !!! abstract "Take away"
 
@@ -385,10 +384,8 @@ You fixed some of the previous issues:
 - [x] Steps used to create the model are documented and can be reproduced
 - [x] Changes done to a model can be visualized with parameters, metrics and
       plots to identify differences between iterations
-- [x] Parameter explorations can be tested without polluting the Git history
 - [x] Multiple experiments can be compared before choosing one to keep
 - [x] Training metrics can be visualized live during the experiment
-- [x] Multiple experiments can be compared visually in TensorBoard
 
 Continue to the conclusion to review what you have learned.
 

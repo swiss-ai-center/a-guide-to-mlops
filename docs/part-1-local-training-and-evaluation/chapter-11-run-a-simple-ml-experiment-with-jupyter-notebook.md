@@ -280,6 +280,8 @@ address in this part:
 - [ ] Codebase and dataset are not versioned
 - [ ] Model steps rely on verbal communication and may be undocumented
 - [ ] Changes to model are not easily visualized
+- [ ] Multiple experiments cannot be compared before choosing one to keep
+- [ ] Training metrics cannot be visualized live during the experiment
 
 The next chapters will turn the notebook into a reproducible, versioned machine
 learning pipeline.

@@ -809,6 +809,8 @@ You fixed some of the previous issues:
 - [ ] Codebase and dataset are not versioned
 - [ ] Model steps rely on verbal communication and may be undocumented
 - [ ] Changes to model are not easily visualized
+- [ ] Multiple experiments cannot be compared before choosing one to keep
+- [ ] Training metrics cannot be visualized live during the experiment
 
 Continue to the next chapters to address the remaining items.
 
