@@ -88,6 +88,29 @@ dvc exp run -S train.lr=0.01
 Each command creates a new experiment. They all share the same parent commit,
 but each has its own parameter set and metrics.
 
+!!! tip "Running experiments programmatically"
+
+    If you want to try more values, you can run experiments in a loop instead of
+    typing each command manually:
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Run experiments for several learning rates
+    for lr in 0.0001 0.001 0.01; do
+        dvc exp run -S train.lr=$lr
+    done
+    ```
+
+    For larger sweeps, use the DVC queue so DVC can manage and optionally run
+    experiments in parallel:
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Queue experiments, then run them all
+    for lr in 0.0001 0.001 0.01; do
+        dvc exp run --queue -S train.lr=$lr
+    done
+    dvc exp run --run-all
+    ```
+
 List them again:
 
 ```sh title="Execute the following command(s) in a terminal"
