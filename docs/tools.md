@@ -8,10 +8,12 @@ The tools used in this guide.
 - Package management: [:simple-python: pip](https://pip.pypa.io/) or
   [:simple-uv: uv](https://docs.astral.sh/uv/) as an alternative
 - Data and model versioning: [:simple-dvc: DVC](https://dvc.org/)
-- ML experiment versioning and branching: [:simple-dvc: DVC experiments](https://dvc.org/doc/start/experiments)
+- ML experiment versioning and branching:
+  [:simple-dvc: DVC experiments](https://dvc.org/doc/start/experiments)
 - Live ML metrics logging: [DVClive](https://dvc.org/doc/dvclive)
 - ML experiment reporting: [CML](https://cml.dev/)
-- ML experiment visualization: [TensorBoard](https://github.com/tensorflow/tensorboard)
+- ML experiment visualization:
+  [TensorBoard](https://github.com/tensorflow/tensorboard)
 - Pipeline orchestration:
   [:simple-github: GitHub Actions](https://github.com/features/actions)
 - Cloud infrastructure:

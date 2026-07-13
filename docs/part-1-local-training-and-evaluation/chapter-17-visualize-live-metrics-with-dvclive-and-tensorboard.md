@@ -9,9 +9,9 @@ spot overfitting, instability, or slow convergence early.
 
 [DVClive](https://dvc.org/doc/dvclive) logs metrics during training, and
 [TensorBoard](https://github.com/tensorflow/tensorboard) visualizes them in a
-browser. Both are lightweight and fit the guide’s composable approach:
-DVClive writes logs to local files, and TensorBoard reads those files. No
-separate tracking server is required.
+browser. Both are lightweight and fit the guide’s composable approach: DVClive
+writes logs to local files, and TensorBoard reads those files. No separate
+tracking server is required.
 
 In this chapter, you will learn how to:
 
@@ -245,8 +245,8 @@ should see the training and validation metrics plotted against epochs.
 
 !!! tip
 
-    TensorBoard watches the log directory. If you leave it running and start a
-    new experiment, the dashboard updates automatically.
+    TensorBoard watches the log directory. If you leave it running and start a new
+    experiment, the dashboard updates automatically.
 
 ### Run a second experiment and compare
 
@@ -257,8 +257,8 @@ Leave TensorBoard running and start a second experiment in another terminal:
 dvc exp run -S train.lr=0.001 -S train.epochs=10
 ```
 
-Switch back to the TensorBoard tab. The new experiment appears as a second
-curve on the same plots, making it easy to compare learning rates visually.
+Switch back to the TensorBoard tab. The new experiment appears as a second curve
+on the same plots, making it easy to compare learning rates visually.
 
 ### Ignore DVClive logs in Git
 
@@ -369,14 +369,14 @@ You fixed some of the previous issues:
       a model improved; live curves tell you why. TensorBoard makes overfitting,
       instability, and slow convergence visible.
     - **DVClive is a file-based logger**: It writes metrics to local files, so
-      it works offline and integrates with any storage backend. No tracking
-      server is required.
+      it works offline and integrates with any storage backend. No tracking server is
+      required.
     - **TensorBoard reads DVClive output directly**: Because DVClive uses the
       same summary format as TensorBoard, you can launch TensorBoard against the
       `dvclive/` directory without extra conversion.
     - **Visualization logs are ephemeral**: `dvclive/` is ignored by Git. The
-      authoritative experiment record remains `metrics.json`, `dvc.lock`, and
-      the Git history.
+      authoritative experiment record remains `metrics.json`, `dvc.lock`, and the Git
+      history.
 
 ## State of the MLOps process
 
