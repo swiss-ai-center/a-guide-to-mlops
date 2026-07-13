@@ -12,12 +12,15 @@ The five parts are:
 - Introduction - Learn about the [concept](./concept.md) behind MLOps, the
   [philosophy](./philosophy.md), and the [tools](./tools.md) used throughout.
 - [Part 1 - Local training and evaluation](./part-1-local-training-and-evaluation/introduction.md) -
-  Learn how to train a model locally and evaluate it using DVC.
+  Learn how to train a model locally, evaluate it, and track experiments using
+  DVC.
     - [Chapter 1.1 - Run a simple ML experiment with Jupyter Notebook](./part-1-local-training-and-evaluation/chapter-11-run-a-simple-ml-experiment-with-jupyter-notebook.md)
     - [Chapter 1.2 - Adapt and move the Jupyter Notebook to Python scripts](./part-1-local-training-and-evaluation/chapter-12-adapt-and-move-the-jupyter-notebook-to-python-scripts.md)
     - [Chapter 1.3 - Initialize Git and DVC for local training](./part-1-local-training-and-evaluation/chapter-13-initialize-git-and-dvc-for-local-training.md)
     - [Chapter 1.4 - Reproduce the ML experiment with DVC](./part-1-local-training-and-evaluation/chapter-14-reproduce-the-ml-experiment-with-dvc.md)
     - [Chapter 1.5 - Track model evolution with DVC](./part-1-local-training-and-evaluation/chapter-15-track-model-evolution-with-dvc.md)
+    - [Chapter 1.6 - Run and compare experiments with DVC](./part-1-local-training-and-evaluation/chapter-16-run-and-compare-experiments-with-dvc.md)
+    - [Chapter 1.7 - Visualize live metrics with DVClive and TensorBoard](./part-1-local-training-and-evaluation/chapter-17-visualize-live-metrics-with-dvclive-and-tensorboard.md)
 - [Part 2 - Move to the cloud](./part-2-move-to-the-cloud/introduction.md) -
   Learn how to collaborate online using Git, a CI/CD pipeline and CML.
     - [Chapter 2.1 - Move the ML experiment data to the cloud](./part-2-move-to-the-cloud/chapter-21-move-the-ml-experiment-code-to-the-cloud.md)
