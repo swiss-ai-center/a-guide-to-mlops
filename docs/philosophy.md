@@ -34,3 +34,9 @@ That is why we avoid all-in-one MLOps platforms that require dedicated
 infrastructure or databases. A lightweight, Git-native stack gives you a
 pragmatic path from notebooks to production while staying in control of your
 tooling.
+
+This choice is visible in how we track experiments. Instead of adopting a
+monolithic experiment platform, we use DVC experiments to version experiments as
+Git refs, DVClive to emit live metrics without a separate server, and
+TensorBoard to visualize them. Each tool solves one problem well, and together
+they keep experiments version-controlled alongside code and data.
