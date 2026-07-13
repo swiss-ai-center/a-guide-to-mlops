@@ -315,7 +315,11 @@ the code codebase.
 - [x] Changes done to a model can be visualized with parameters, metrics and
       plots to identify differences between iterations
 
-Continue to the conclusion to review what you have learned.
+Continue to
+[Chapter 1.6 - Run and compare experiments with DVC](./chapter-16-run-and-compare-experiments-with-dvc.md)
+to learn how to try parameter changes without polluting `main`, and then to
+[Chapter 1.7 - Visualize live metrics with DVClive and TensorBoard](./chapter-17-visualize-live-metrics-with-dvclive-and-tensorboard.md)
+for interactive training dashboards.
 
 ## Sources
 
