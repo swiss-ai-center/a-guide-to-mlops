@@ -10,9 +10,9 @@ In this second part, you were able to share your experiment on the cloud and
 with your peers. A new team member can easily clone the repository and reproduce
 the experiment locally. The experiment is also reproducible on the cloud and
 ensures it still works in a different environment. Once the experiment is
-reproduced, the results are published and shared with the team. You can also
-compare the results with the previous ones and decide if you want to merge the
-new model or not.
+reproduced, the results are published and shared with the team through CML
+reports on pull requests. You can also compare the results with the previous
+ones and decide if you want to merge the new model or not.
 
 The following diagram illustrates the bricks you set up at the end of this part:
 
@@ -60,7 +60,8 @@ flowchart TB
 
 Proceed to
 [Part 3 - Serve and deploy](../part-3-serve-and-deploy/introduction.md) to learn
-how to serve your model in production and deploy it to Kubernetes.
+how to serve your model in production, deploy it to Kubernetes, and run
+experiments on a shared TensorBoard dashboard in the cloud.
 
 **Stopping here?**
 
