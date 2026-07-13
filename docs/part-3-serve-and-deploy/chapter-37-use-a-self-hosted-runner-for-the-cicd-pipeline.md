@@ -770,22 +770,18 @@ jobs:
 
 !!! tip "Prevent the auto-commit from re-triggering the workflow"
 
-    The commit message for the automatically committed `dvc.lock` file includes
-    `[skip ci]`. This tells GitHub Actions to skip the workflow run for that
-    specific commit, so pushing the updated `dvc.lock` back to the pull request
-    branch does not start a new `train-and-report` run on the self-hosted runner.
-
-    Without this, the auto-commit would create a new `pull_request` event and re-run
-    the whole workflow, wasting compute resources on a result that has already been
-    validated.
+    Without `[skip ci]`, pushing the updated `dvc.lock` back to the pull request
+    branch would create a new `pull_request` event and re-run the whole
+    `train-and-report` job on the self-hosted runner, wasting compute resources on a
+    result that has already been validated.
 
 Here, the following should be noted:
 
 * the `train-report` job runs on the self-hosted runner on pull requests. It
   trains the model and DVC pushes the trained model to the remote bucket.
 * the updated `dvc.lock` file is automatically committed back to the pull
-  request branch, so contributors do not need to run `dvc repro` locally before
-  pushing model changes.
+  request branch with `[skip ci]` in the commit message to prevent the workflow
+  from re-running.
 * the `publish-and-deploy` runs on the main runner when merging pull requests.
   It retrieves the model with DVC, containerizes then deploys the model artifact.
 
