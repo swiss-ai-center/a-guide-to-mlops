@@ -8,7 +8,10 @@ The tools used in this guide.
 - Package management: [:simple-python: pip](https://pip.pypa.io/) or
   [:simple-uv: uv](https://docs.astral.sh/uv/) as an alternative
 - Data and model versioning: [:simple-dvc: DVC](https://dvc.org/)
+- ML experiment versioning and branching: [:simple-dvc: DVC experiments](https://dvc.org/doc/start/experiments)
+- Live ML metrics logging: [DVClive](https://dvc.org/doc/dvclive)
 - ML experiment reporting: [CML](https://cml.dev/)
+- ML experiment visualization: [TensorBoard](https://github.com/tensorflow/tensorboard)
 - Pipeline orchestration:
   [:simple-github: GitHub Actions](https://github.com/features/actions)
 - Cloud infrastructure:
@@ -39,16 +42,13 @@ Alternatives to DVC.
 
 ### Experiment tracking
 
-Alternatives to CML for tracking experiments and visualizing metrics. CML
-reports results inside CI/CD pipelines, these tools track and visualize
-experiments instead.
+Alternatives to the composable DVC experiments + DVClive + TensorBoard stack.
+End-to-end platforms are listed at the end of this page.
 
 - [Guild AI](https://github.com/guildai/guildai) - Open-source toolkit for
   running, tracking, and optimizing ML experiments
 - [Aim](https://github.com/aimhubio/aim) - Open-source, self-hosted tool for
   tracking and visualizing ML experiments
-- [TensorBoard](https://github.com/tensorflow/tensorboard) - Open-source toolkit
-  for visualizing ML experiment metrics and model graphs
 
 ### Model monitoring
 
