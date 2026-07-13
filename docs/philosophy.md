@@ -18,7 +18,7 @@ It is especially aimed at two profiles:
   practices. The guide shows how to extend those practices to ML concerns such as
   data versioning, experiment reporting, and drift detection.
 
-## Our approach
+## Our principles
 
 We believe MLOps should be:
 
