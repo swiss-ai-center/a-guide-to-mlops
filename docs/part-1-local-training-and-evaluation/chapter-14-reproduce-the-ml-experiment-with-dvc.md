@@ -414,6 +414,8 @@ You fixed some of the previous issues:
 - [x] Codebase and dataset are versioned
 - [x] Steps used to create the model are documented and can be reproduced
 - [ ] Changes to model are not easily visualized
+- [ ] Multiple experiments cannot be compared before choosing one to keep
+- [ ] Training metrics cannot be visualized live during the experiment
 
 Continue to the next chapters to address the remaining items.
 

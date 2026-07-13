@@ -314,6 +314,8 @@ the code codebase.
 - [x] Steps used to create the model are documented and can be reproduced
 - [x] Changes done to a model can be visualized with parameters, metrics and
       plots to identify differences between iterations
+- [ ] Multiple experiments cannot be compared before choosing one to keep
+- [ ] Training metrics cannot be visualized live during the experiment
 
 Continue to
 [Chapter 1.6 - Run and compare experiments with DVC](./chapter-16-run-and-compare-experiments-with-dvc.md)

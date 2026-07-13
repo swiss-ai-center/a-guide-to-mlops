@@ -245,7 +245,6 @@ In this chapter, you have successfully:
 
 You fixed some of the previous issues:
 
-- [x] Parameter explorations can be tested without polluting the Git history
 - [x] Multiple experiments can be compared before choosing one to keep
 
 !!! abstract "Take away"
@@ -269,8 +268,8 @@ You fixed some of the previous issues:
 - [x] Steps used to create the model are documented and can be reproduced
 - [x] Changes done to a model can be visualized with parameters, metrics and
       plots to identify differences between iterations
-- [x] Parameter explorations can be tested without polluting the Git history
 - [x] Multiple experiments can be compared before choosing one to keep
+- [ ] Training metrics cannot be visualized live during the experiment
 
 Continue to
 [Chapter 1.7 - Visualize live metrics with DVClive and TensorBoard](./chapter-17-visualize-live-metrics-with-dvclive-and-tensorboard.md)
