@@ -501,7 +501,7 @@ jobs:
       - name: Commit changes in dvc.lock
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
-          commit_message: Commit changes in dvc.lock
+          commit_message: Commit changes in dvc.lock [skip ci]
           file_pattern: dvc.lock
       - name: Setup Node
         uses: actions/setup-node@v6

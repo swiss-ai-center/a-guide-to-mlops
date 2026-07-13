@@ -659,7 +659,7 @@ jobs:
       - name: Commit changes in dvc.lock
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
-          commit_message: Commit changes in dvc.lock
+          commit_message: Commit changes in dvc.lock [skip ci]
           file_pattern: dvc.lock
       - name: Setup Node
         uses: actions/setup-node@v6
@@ -768,10 +768,20 @@ jobs:
             -f kubernetes/service.yaml
 ```
 
+!!! tip "Prevent the auto-commit from re-triggering the workflow"
+
+    Without `[skip ci]` in the commit message, pushing the updated `dvc.lock` back
+    to the pull request branch would create a new `pull_request` event and re-run
+    the whole `train-and-report` job on the self-hosted runner, wasting compute
+    resources on a result that has already been validated.
+
 Here, the following should be noted:
 
-* the `train-report` job runs on the self-hosted runner on pull requests. It
+* the `train-and-report` job runs on the self-hosted runner on pull requests. It
   trains the model and DVC pushes the trained model to the remote bucket.
+* the updated `dvc.lock` file is automatically committed back to the pull
+  request branch with `[skip ci]` in the commit message to prevent the workflow
+  from re-running.
 * the `publish-and-deploy` runs on the main runner when merging pull requests.
   It retrieves the model with DVC, containerizes then deploys the model artifact.
 
@@ -817,7 +827,7 @@ index b15a68f..5a8d863 100644
 +      - name: Commit changes in dvc.lock
 +        uses: stefanzweifel/git-auto-commit-action@v7
 +        with:
-+          commit_message: Commit changes in dvc.lock
++          commit_message: Commit changes in dvc.lock [skip ci]
 +          file_pattern: dvc.lock
 +      - name: Setup Node
 +        uses: actions/setup-node@v6
@@ -997,6 +1007,7 @@ Highly inspired by:
 - [_Adding self-hosted runners_ - GitHub docs](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners)
 - [_GitHub Actions self-hosted runners on Google Cloud_ - github.blog](https://github.blog/news-insights/product-news/github-actions-self-hosted-runners-on-google-cloud/)
 - [_Self-hosted runner security_ - GitHubdocs](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners#self-hosted-runner-security)
+- [_Skip workflow runs_ - GitHub docs](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/skip-workflow-runs)
 - [_Security for self-managed runners_ - GitLab docs](https://docs.gitlab.com/runner/security/)
 - [_Install kubectl and configure cluster access_ - cloud.google.com](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl)
 - [_Deploying to Google Kubernetes Engine_ - GitHub docs](https://docs.github.com/en/actions/use-cases-and-examples/deploying/deploying-to-google-kubernetes-engine)
