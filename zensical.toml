@@ -64,6 +64,8 @@ nav = [
       { "Chapter 1.3 - Initialize Git and DVC for local training" = "part-1-local-training-and-evaluation/chapter-13-initialize-git-and-dvc-for-local-training.md" },
       { "Chapter 1.4 - Reproduce the ML experiment with DVC" = "part-1-local-training-and-evaluation/chapter-14-reproduce-the-ml-experiment-with-dvc.md" },
       { "Chapter 1.5 - Track model evolution with DVC" = "part-1-local-training-and-evaluation/chapter-15-track-model-evolution-with-dvc.md" },
+      { "Chapter 1.6 - Run and compare experiments with DVC" = "part-1-local-training-and-evaluation/chapter-16-run-and-compare-experiments-with-dvc.md" },
+      { "Chapter 1.7 - Visualize live metrics with DVClive and TensorBoard" = "part-1-local-training-and-evaluation/chapter-17-visualize-live-metrics-with-dvclive-and-tensorboard.md" },
       { "Conclusion" = "part-1-local-training-and-evaluation/conclusion.md" },
     ] },
   { "☁️ Move to the cloud" = [
