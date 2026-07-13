@@ -6,11 +6,11 @@ Moon, Ceres, Pluto, Eris, Haumea, Makemake.
 
 Output filenames are ``<ClassName>_<N>.jpg``.
 
-Output: data/raw  (14 classes, 150 images each, 128x128 RGB)
+Output: dataset  (14 classes, 150 images each, 128x128 RGB)
 
 Usage:
     python generate_planet_dataset_simply.py \
-        --output data/raw --per-class 150
+        --output dataset --per-class 150
 """
 
 from __future__ import annotations
@@ -681,7 +681,7 @@ def generate_dataset(
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate improved SIMply planet dataset.")
-    parser.add_argument("--output", type=str, default="data/raw", help="Output directory")
+    parser.add_argument("--output", type=str, default="dataset", help="Output directory")
     parser.add_argument("--per-class", type=int, default=150, help="Images per class")
     parser.add_argument("--resume", action="store_true", help="Skip images that already exist")
     parser.add_argument(

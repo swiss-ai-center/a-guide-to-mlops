@@ -1,6 +1,6 @@
 # Dataset
 
-This branch is only intended to keep the Python script that generates a synthetic image dataset of planets, dwarf planets, and moons using the **SIMply** ray-tracing library.
+This branch is only intended to keep the Python script that generates a synthetic image dataset of planets, dwarf planets, and moons using the **[SIMply](https://github.com/gbrydon/SIMply)** ray-tracing library.
 
 The generator renders textured spheres (and Saturn's rings) from randomized camera angles and saves the images as `128 × 128` RGB JPEGs on a black background. To reduce aliased outlines, it renders each image at a higher resolution (`OUTPUT_WIDTH × render-scale` by `OUTPUT_HEIGHT × render-scale`) and then downsamples to the final size with a high-quality resampling filter.
 
@@ -11,7 +11,7 @@ Each class gets a dedicated folder with `150` images named `<ClassName>_<N>.jpg`
 Example folder layout after generation:
 
 ```
-datas/raw/
+dataset/
 ├── Mercury/
 │   ├── Mercury_0.jpg
 │   ├── Mercury_1.jpg
@@ -45,7 +45,7 @@ a-guide-to-mlops/
 ### 2. Create a virtual environment
 
 ```bash
-python venv .venv
+uv venv --python 3.11
 ```
 
 ### 3. Install Python packages
@@ -53,7 +53,8 @@ python venv .venv
 The generator assumes the required packages are already installed in the active environment. You can install them with:
 
 ```bash
-pip install numpy pillow opencv-python scipy astropy open3d pandas matplotlib
+source .venv/bin/activate
+uv pip install numpy pillow opencv-python scipy astropy open3d pandas matplotlib
 ```
 
 SIMply itself is imported directly from the cloned `simply/` directory, so no additional `pip install simply` is required.
@@ -90,7 +91,7 @@ From the project root:
 
 ```bash
 python generate_planet_dataset_simply.py \
-    --output data/raw \
+    --output dataset \
     --per-class 150
 ```
 
@@ -101,19 +102,19 @@ By default the generator renders at `512 × 512` (4× the output size) and downs
 ```bash
 # Faster, slightly softer edges (render at 256 × 256)
 python generate_planet_dataset_simply.py \
-    --output data/raw \
+    --output dataset \
     --per-class 150 \
     --render-scale 2
 
 # Use a softer, cheaper downsampling filter
 python generate_planet_dataset_simply.py \
-    --output data/raw \
+    --output dataset \
     --per-class 150 \
     --downsample-filter bilinear
 
 # Disable anti-aliasing entirely (render directly at 128 × 128)
 python generate_planet_dataset_simply.py \
-    --output data/raw \
+    --output dataset \
     --per-class 150 \
     --render-scale 1 \
     --downsample-filter nearest
@@ -123,11 +124,77 @@ python generate_planet_dataset_simply.py \
 
 | Option | Default | Description |
 |--------|---------|-------------|
-| `--output` | `data/raw` | Output directory for the dataset |
+| `--output` | `dataset` | Output directory for the dataset |
 | `--per-class` | `150` | Number of images to generate per class |
 | `--resume` | `False` | Skip images that already exist |
 | `--render-scale` | `4` | Render at `OUTPUT_WIDTH × scale` × `OUTPUT_HEIGHT × scale` before downsampling. Higher values reduce aliasing but slow rendering roughly by `scale²`. |
 | `--downsample-filter` | `lanczos` | PIL filter used when resizing the high-resolution render to the final output size. Choices: `lanczos`, `bilinear`, `bicubic`, `box`, `nearest`. |
+
+## Splitting the dataset
+
+Use `split_dataset.py` to carve out a balanced set of images from a chosen set of classes and place them in per-class folders under `data/raw/`. The remaining images (unused images from the selected classes plus any withheld classes) go into `extra-data/extra/` for inference-time drift evaluation.
+
+By default, inference filenames are kept as `<Class>_<N>.jpg` so you can inspect the split. Pass `--encode` to obfuscate them with reversed URL-safe base64:
+
+```bash
+python split_dataset.py \
+    --input dataset \
+    --output-data data/raw \
+    --output-extra extra-data/extra \
+    --train-classes Mercury Venus Earth Mars Jupiter Saturn Uranus Neptune Moon Pluto \
+    --images-per-class 80 \
+    --seed 42 \
+    --encode
+```
+
+This produces:
+
+```
+dataset/
+├── Mercury/
+├── Venus/
+├── Earth/
+└── ... (14 classes, 150 images each)
+data/
+└── raw/
+    ├── Earth/
+    │   ├── Earth_3.jpg
+    │   └── ... (80 images)
+    ├── Mars/
+    │   └── ... (80 images)
+    └── ... (10 classes total)
+extra-data/
+└── extra/
+    ├── <encoded>.jpg
+    ├── <encoded>.jpg
+    └── ...
+```
+
+Inference filenames are encoded with reversed URL-safe base64 (no padding). Reversing the encoded string moves the high-entropy part of the name to the front, so adjacent files in a sorted directory listing come from random categories and do not reveal the class.
+
+To restore the original inference filenames, run:
+
+```bash
+python split_dataset.py --decode --decode-dir extra-data/extra
+```
+
+This renames files in place inside `extra-data/extra/` without moving them into subfolders or re-running the split.
+
+### `split_dataset.py` options
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `--input` | `dataset` | Full generated dataset directory |
+| `--output-data` | `data` | Root directory for the per-class data folders (example: `data/raw`) |
+| `--output-extra` | `extra-data/extra` | Directory for the obfuscated inference set |
+| `--train-classes` | 8 planets + Moon + Pluto | Space-separated list of classes placed in `--output-data` |
+| `--images-per-class` | `80` | Number of images sampled per class |
+| `--seed` | `42` | Random seed for reproducible sampling |
+| `--move` | `False` | Move inference images to `extra-data/extra/` instead of copying |
+| `--overwrite` | `False` | Replace existing output directories |
+| `--encode` | `False` | Encode inference filenames in `extra-data/extra/` with reversed base64 |
+| `--decode` | `False` | Decode obfuscated inference filenames back to originals |
+| `--decode-dir` | `extra-data/extra` | Directory to decode when `--decode` is used |
 
 ## Output
 
