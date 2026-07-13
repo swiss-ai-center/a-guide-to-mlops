@@ -770,10 +770,10 @@ jobs:
 
 !!! tip "Prevent the auto-commit from re-triggering the workflow"
 
-    Without `[skip ci]`, pushing the updated `dvc.lock` back to the pull request
-    branch would create a new `pull_request` event and re-run the whole
-    `train-and-report` job on the self-hosted runner, wasting compute resources on a
-    result that has already been validated.
+    Without `[skip ci]` in the commit message, pushing the updated `dvc.lock` back
+    to the pull request branch would create a new `pull_request` event and re-run
+    the whole `train-and-report` job on the self-hosted runner, wasting compute
+    resources on a result that has already been validated.
 
 Here, the following should be noted:
 
