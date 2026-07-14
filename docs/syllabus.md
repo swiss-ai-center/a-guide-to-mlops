@@ -50,8 +50,3 @@ The five parts are:
     - [Chapter 5.4 - Retrain the model from new data with DVC](./part-5-label-data-and-retrain/chapter-54-retrain-the-model-from-new-data-with-dvc.md)
 - [Conclusion](./conclusion.md) - Summary of what you have done and what is left
   to be done.
-
-You can find this guide on
-[GitHub](https://github.com/swiss-ai-center/a-guide-to-mlops). Don't hesitate to
-show your support by giving us a star or opening an issue if you encounter any
-difficulties. :)
