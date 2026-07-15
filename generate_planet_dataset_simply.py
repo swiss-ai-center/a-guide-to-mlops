@@ -98,10 +98,9 @@ HAUMEA_MESH_LON = 256
 
 # Camera angle diversity: view from the equator (0 degrees) up to this latitude
 # toward either pole. A small longitudinal offset is also applied for perspective
-# variety while keeping the planet front-lit. Values near 90 degrees give a polar
-# view; 80 degrees keeps strong polar diversity without making every sample a
-# top-down view.
-CAMERA_MAX_LAT = math.radians(80.0)
+# variety while keeping the planet front-lit. Limiting latitude to 45 degrees
+# reduces extreme polar views and keeps the dataset more consistent.
+CAMERA_MAX_LAT = math.radians(45.0)
 CAMERA_MAX_LON = math.radians(30.0)
 
 # Realistic Saturn ring opening angle range (degrees). Saturn's ring plane is
