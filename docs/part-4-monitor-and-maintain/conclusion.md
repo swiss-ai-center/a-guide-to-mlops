@@ -59,7 +59,7 @@ flowchart TB
         s3_storage
         subgraph gitGraph[Git Remote]
             request[PR] --> |merge|repository
-            issue[Issue] <--> |open| action_monitor
+            issue[Issue] <--> |drift_alert| action_monitor
             repository[(Repository)] <--> action[Action]
             repository <--> action_monitor[Monitor]
         end
@@ -101,9 +101,6 @@ flowchart TB
         k8s_evidentlyui <--> monitoringURL["monitoring URL"]
     end
 ```
-
-Part 5 is an improvement of the MLOps process. You will learn how to label new
-data and retrain the model using Label Studio.
 
 ## Next steps
 

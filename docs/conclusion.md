@@ -1,113 +1,55 @@
 # Conclusion
 
-**Congratulations on completing the entire guide!**
-
-You did it! You were able to convert a ML experiment with a traditional approach
-to a well-defined, well-documented workflow that can scale and serve a model to
-the outside world! You also learned how to improve the performance of your model
-with additional and high-quality data in an iterative manner.
+Congratulations on completing the guide. You started with a notebook experiment
+and built a complete MLOps workflow: reproducible training, automated
+deployment, production monitoring, and iterative retraining with high-quality
+data.
 
 Let's take the time to make a summary of what you have done.
 
 ## Summary of what you have done
 
-- [x] The codebase can be shared among the developers
+You built a closed-loop MLOps workflow that takes a model from experimentation
+to production and back to retraining.
 
-Thanks to Git, the codebase can be shared and improved collectively among the
-developers.
-
-- [x] The dataset can be shared among the developers
-
-Thanks to DVC, the dataset can be shared and improved collectively among the
-developers.
-
-- [x] The model can be reproduced
-
-Thanks to DVC, the steps to create the model are documented and can be executed
-in order to reproduce the model.
-
-- [x] The experiment can be executed on a clean machine
-
-Thanks to the CI/CD pipeline, the experiment can be executed on a clean machine.
-Erasing the "but it works on my machine" issue.
-
-- [x]  The changes done to a model can be tracked
-
-Thanks to DVC and CML, the changes done to a model can be tracked, discussed and
-visualized before merging them.
-
-- [x] The model can be used outside of the experiment context
-
-Thanks to BentoML, the model can be served and be used outside of the experiment
-context.
-
-- [x] The model can be deployed and accessed on Kubernetes
-
-Thanks to BentoML, the model can be deployed and be accessed on a Kubernetes
-server.
-
-- [x] The model can be trained on a Kubernetes pod
-
-Thanks to a self-hosted runner, the model can be trained on specialized hardware
-on a Kubernetes pod.
-
-- [x] The model can be monitored in production
-
-Thanks to BentoML's native monitoring, Fluent Bit, and Evidently AI, predictions
-and features are logged, shipped to S3, and compared against a reference dataset
-to detect drift.
-
-- [x] The model performance can be improved by retraining with additional data.
-
-Thanks to Label Studio, additional and high-quality training data can be used to
-retrain the model.
+- [x] **Reproduce experiments locally**: Version-control code with Git, data
+    with DVC, and reproduce the full training pipeline end-to-end.
+- [x] **Collaborate in the cloud**: Run experiments on clean machines with
+    CI/CD and review model changes with CML before merging.
+- [x] **Serve and deploy**: Package the model with BentoML and Docker, deploy
+    it on Kubernetes, and run training workloads on the cluster.
+- [x] **Monitor and maintain**: Log predictions and features, ship them to
+    storage with Fluent Bit, detect drift with Evidently AI, and review alerts to
+    decide on action.
+- [x] **Label and retrain**: Collect new data with Label Studio and feed it
+    back into the pipeline to improve the model.
 
 !!! abstract "Take away"
 
-    - **MLOps is about connecting the pieces, not perfecting each one**: The true
-      value of MLOps doesn't come from mastering any single tool like Git, DVC, or
-      Kubernetes. It comes from building automated pipelines that connect version
-      control, data management, training, deployment, and monitoring into a cohesive
-      workflow where changes flow smoothly from experimentation to production.
-    - **Automation enables iteration, iteration enables improvement**: By automating
-      repetitive tasks like model training, containerization, and deployment through
-      CI/CD pipelines, you free up time and mental energy to focus on what actually
-      improves models (better features, more data, architectural experiments) creating
-      a flywheel where each iteration becomes easier and faster than the last.
-    - **Reproducibility is a prerequisite for collaboration and debugging**: When
-      models fail in production or performance degrades, the ability to trace back to
-      exact code versions, data snapshots, hyperparameters, and dependencies (through
-      Git, DVC, and containerization) transforms debugging from guesswork into
-      systematic investigation, and enables teams to work together without stepping on
-      each other's toes.
-    - **Production readiness requires thinking beyond accuracy metrics**: A model
-      that achieves 95% accuracy in a notebook but lacks proper serving
-      infrastructure, monitoring, rollback capabilities, and retraining workflows is
-      less valuable than an 85% accurate model deployed in a robust MLOps system,
-      because the latter can be continuously improved while reliably serving users,
-      while the former remains stuck in development limbo.
+    - **MLOps is about connecting the pieces**: The value is not in mastering any
+      single tool, but in building pipelines that move changes smoothly from
+      experimentation to production.
+    - **Automation enables iteration**: Automating training, containerization,
+      and deployment frees you to focus on what actually improves models.
+    - **Reproducibility enables collaboration and debugging**: Tracing code,
+      data, parameters, and dependencies transforms failures from guesswork into
+      systematic investigation.
+    - **Production readiness is more than accuracy**: A robust, monitored, and
+      retrainable model in production is more valuable than a high-accuracy model
+      stuck in a notebook.
+    - **Monitoring closes the loop**: Production predictions become the raw
+      material for the next training round, so drift detection and alerts let you
+      decide when new data is worth labeling and retraining on.
 
 ## End of your journey
 
-You've built a complete MLOps workflow from local experimentation to production
-deployment on Kubernetes, with continuous improvement through systematic data
-labeling. You now have the skills to:
+You now have a reusable workflow you can apply to your own projects. The same
+patterns (version control, automated pipelines, monitored serving, and iterative
+retraining) scale from a single experiment to a team-wide MLOps practice.
 
-- Version control code, data, and models
-- Automate training and deployment with CI/CD
-- Serve models in production with monitoring
-- Continuously improve models with new labeled data
-
-We trust that you found this guide both enjoyable and informative. We encourage
-you to explore the [additional MLOps-related resources](references.md) that we
-believe might further enhance your understanding and skills in this rapidly
-evolving and increasingly important field.
-
-If you encounter any difficulties, please don't hesitate to reach out to us on
-[GitHub](https://github.com/swiss-ai-center/a-guide-to-mlops).
-
-Additionally, if you found our MLOps guide valuable, we would be grateful if you
-could take a moment to star our GitHub repository. Your support helps us improve
-and expand our offerings for the community. Thank you!
+Explore the additional [resources](references.md) to go further, and reach out
+on [GitHub](https://github.com/swiss-ai-center/a-guide-to-mlops) if you have
+questions. If you found this guide valuable, please consider starring the
+repository. Your support helps us improve it.
 
 Happy learning! :)

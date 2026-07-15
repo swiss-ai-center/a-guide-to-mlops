@@ -4,9 +4,10 @@ Introduction to MLOps.
 
 ## What is MLOps?
 
-MLOps (Machine Learning Operations) is the set of practices that turns a machine
-learning experiment into a system that can be reproduced, deployed, monitored,
-and improved over time.
+MLOps (Machine Learning Operations) is the set of practices that bridges the gap
+between machine learning development and production operations. It turns a
+machine learning experiment into a system that can be reproduced, deployed,
+monitored, and improved over time.[^1]
 
 It sits at the intersection of machine learning, DevOps, and data engineering:
 
@@ -23,7 +24,7 @@ A common mistake is to treat the model as the product. The model code and
 trained weights are only a small part of a production machine learning system.
 The surrounding infrastructure is far larger: data pipelines, training
 orchestration, experiment tracking, serving infrastructure, monitoring, and
-feedback loops.
+feedback loops.[^2]
 
 ![ML system](assets/images/ml_system.svg){ align=center }
 
@@ -52,3 +53,9 @@ maintained:
 
 MLOps turns experiments into systems that teams can reproduce, deploy, and
 improve.
+
+[^1]: [MLOps - Wikipedia](https://en.wikipedia.org/wiki/MLOps)
+
+[^2]: D. Sculley et al., “Hidden Technical Debt in Machine Learning Systems,”
+    NIPS 2015.
+    [https://dl.acm.org/doi/10.5555/2969442.2969519](https://dl.acm.org/doi/10.5555/2969442.2969519)
