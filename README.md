@@ -2,11 +2,11 @@
 
 This branch is only intended to keep the Python script that generates a synthetic image dataset of planets, dwarf planets, and moons using the **[SIMply](https://github.com/gbrydon/SIMply)** ray-tracing library.
 
-The generator renders textured spheres (and Saturn's rings) from randomized camera angles and saves the images as `128 × 128` RGB JPEGs on a black background. To reduce aliased outlines, it renders each image at a higher resolution (`OUTPUT_WIDTH × render-scale` by `OUTPUT_HEIGHT × render-scale`) and then downsamples to the final size with a high-quality resampling filter.
+The generator renders textured spheres (and Saturn's rings) from randomized camera angles and saves the images as `128 × 128` RGB JPEGs on a black background. Each planet is centered and consistently framed, viewed from a camera latitude between `-45°` and `+45°` of the equator with a small extra perspective and lighting offset. To reduce aliased outlines, it renders each image at `512 × 512` (4× the output size) using a Lambertian BRDF under a randomized front/upper-left light direction, then downsamples to `128 × 128` with the Lanczos filter.
 
 ## What is generated
 
-Each class gets a dedicated folder with `150` images named `<ClassName>_<N>.jpg`.
+Each class gets a dedicated folder with `n` images named `<ClassName>_<N>.jpg`, where `n` is set by `--per-class`.
 
 Example folder layout after generation:
 
@@ -92,7 +92,7 @@ From the project root:
 ```bash
 python generate_planet_dataset_simply.py \
     --output dataset \
-    --per-class 150
+    --per-class 250
 ```
 
 ### Anti-aliasing options
@@ -103,19 +103,19 @@ By default the generator renders at `512 × 512` (4× the output size) and downs
 # Faster, slightly softer edges (render at 256 × 256)
 python generate_planet_dataset_simply.py \
     --output dataset \
-    --per-class 150 \
+    --per-class 250 \
     --render-scale 2
 
 # Use a softer, cheaper downsampling filter
 python generate_planet_dataset_simply.py \
     --output dataset \
-    --per-class 150 \
+    --per-class 250 \
     --downsample-filter bilinear
 
 # Disable anti-aliasing entirely (render directly at 128 × 128)
 python generate_planet_dataset_simply.py \
     --output dataset \
-    --per-class 150 \
+    --per-class 250 \
     --render-scale 1 \
     --downsample-filter nearest
 ```
@@ -125,7 +125,7 @@ python generate_planet_dataset_simply.py \
 | Option | Default | Description |
 |--------|---------|-------------|
 | `--output` | `dataset` | Output directory for the dataset |
-| `--per-class` | `150` | Number of images to generate per class |
+| `--per-class` | `250` | Number of images to generate per class |
 | `--resume` | `False` | Skip images that already exist |
 | `--render-scale` | `4` | Render at `OUTPUT_WIDTH × scale` × `OUTPUT_HEIGHT × scale` before downsampling. Higher values reduce aliasing but slow rendering roughly by `scale²`. |
 | `--downsample-filter` | `lanczos` | PIL filter used when resizing the high-resolution render to the final output size. Choices: `lanczos`, `bilinear`, `bicubic`, `box`, `nearest`. |
@@ -142,7 +142,7 @@ python split_dataset.py \
     --output-data data/raw \
     --output-extra extra-data/extra \
     --train-classes Mercury Venus Earth Mars Jupiter Saturn Uranus Neptune Moon Pluto \
-    --images-per-class 80 \
+    --images-per-class 150 \
     --seed 42 \
     --encode
 ```
@@ -159,9 +159,9 @@ data/
 └── raw/
     ├── Earth/
     │   ├── Earth_3.jpg
-    │   └── ... (80 images)
+    │   └── ... (150 images)
     ├── Mars/
-    │   └── ... (80 images)
+    │   └── ... (150 images)
     └── ... (10 classes total)
 extra-data/
 └── extra/
@@ -188,7 +188,7 @@ This renames files in place inside `extra-data/extra/` without moving them into 
 | `--output-data` | `data` | Root directory for the per-class data folders (example: `data/raw`) |
 | `--output-extra` | `extra-data/extra` | Directory for the obfuscated inference set |
 | `--train-classes` | 8 planets + Moon + Pluto | Space-separated list of classes placed in `--output-data` |
-| `--images-per-class` | `80` | Number of images sampled per class |
+| `--images-per-class` | `150` | Number of images sampled per class |
 | `--seed` | `42` | Random seed for reproducible sampling |
 | `--move` | `False` | Move inference images to `extra-data/extra/` instead of copying |
 | `--overwrite` | `False` | Replace existing output directories |
@@ -245,4 +245,7 @@ The texture maps used by the generators come from several public sources. When r
 
 - **Celestia Motherlode**  
   <http://celestiamotherlode.net/catalog/solarsystem.html>
+
+- **Planets and Moons Dataset — AI in Space**  
+  <https://www.kaggle.com/datasets/emirhanai/planets-and-moons-dataset-ai-in-space>
 
