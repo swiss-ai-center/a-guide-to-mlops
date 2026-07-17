@@ -12,6 +12,14 @@ gathered comprises approximately 1,500 images capturing 10 distinct planets and
 moons. Each celestial body is represented by around 150 images, each taken from
 a unique angle.
 
+| Mercury  | Venus | Earth | Moon | Mars |
+| ------------- | ------------- | ------------- | ------------- | ------------- |
+| ![Mercury](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/data/raw/Mercury/Mercury_1.jpg) | ![Venus](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/data/raw/Venus/Venus_1.jpg) | ![Earth](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/data/raw/Earth/Earth_25.jpg) | ![Moon](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/data/raw/Moon/Moon_2.jpg) | ![Mars](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/data/raw/Mars/Mars_2.jpg) |
+
+| Jupiter  | Saturn | Uranus | Neptune | Pluto |
+| ------------- | ------------- | ------------- | ------------- | ------------- |
+| ![Jupiter](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/data/raw/Jupiter/Jupiter_1.jpg) | ![Saturn](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/data/raw/Saturn/Saturn_19.jpg) | ![Uranus](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/data/raw/Uranus/Uranus_2.jpg) | ![Neptune](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/data/raw/Neptune/Neptune_2.jpg) | ![Pluto](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/data/raw/Pluto/Pluto_2.jpg) |
+
 The training process is as follows:
 
 - Preprocess the dataset

@@ -458,8 +458,13 @@ done
 ```
 
 Wait for the Fluent Bit sidecar to upload the new logs to the storage bucket.
-This can take up to 15 minutes, depending on the batch size and upload timeout
-configured in the previous chapter.
+
+!!! info "Logs are not uploaded instantly"
+
+    Fluent Bit buffers the monitoring logs and uploads them in batches. With the
+    configuration from the previous chapter, a new batch is sent when it reaches 10
+    MB or after 10 minutes, whichever comes first. It can therefore take a few
+    minutes before the logs are visible in the storage bucket.
 
 ### Run the monitoring workflow
 

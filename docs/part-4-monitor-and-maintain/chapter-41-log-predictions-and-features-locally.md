@@ -301,15 +301,17 @@ the feature extractors from `features.py`, build the embedding extractor in the
 constructor, and add a `monitor` method that logs the extracted features after
 each prediction with `bentoml.monitor`.
 
-```py title="src/serve.py" hl_lines="3 10-28 36 48 51-91"
+```py title="src/serve.py" hl_lines="4 12-30 38 50 52-93"
 from __future__ import annotations
-from bentoml.validators import ContentType
+
+import json
 from pathlib import Path
 from typing import Annotated
+
+import bentoml
+from bentoml.validators import ContentType
 from PIL.Image import Image
 from pydantic import Field
-import bentoml
-import json
 
 from features import (
     build_embedding_extractor,
@@ -408,7 +410,7 @@ include:
 python:
   packages:
     - "tensorflow==2.21.0"
-    - "pillow==12.2.0"
+    - "pillow==12.3.0"
 docker:
     python_version: "3.13"
 ```
