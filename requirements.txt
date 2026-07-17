@@ -2,4 +2,3 @@ jupyterlab
 matplotlib
 scikit-learn
 tensorflow
-

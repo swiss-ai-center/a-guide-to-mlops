@@ -1,9 +1,9 @@
 absl-py==2.5.0
-anyio==4.14.1
+anyio==4.14.2
 argon2-cffi==25.1.0
 argon2-cffi-bindings==25.1.0
 arrow==1.4.0
-asttokens==3.0.1
+asttokens==3.0.2
 astunparse==1.6.3
 async-lru==2.3.0
 attrs==26.1.0
@@ -11,8 +11,8 @@ babel==2.18.0
 beautifulsoup4==4.15.0
 bleach==6.4.0
 certifi==2026.6.17
-cffi==2.0.0
-charset-normalizer==3.4.7
+cffi==2.1.0
+charset-normalizer==3.4.9
 comm==0.2.3
 contourpy==1.3.3
 cycler==0.12.1
@@ -26,7 +26,7 @@ fonttools==4.63.0
 fqdn==1.5.1
 gast==0.7.0
 google-pasta==0.2.0
-grpcio==1.81.1
+grpcio==1.82.1
 h11==0.16.0
 h5py==3.14.0
 httpcore==1.0.9
@@ -43,7 +43,7 @@ json5==0.15.0
 jsonpointer==3.1.1
 jsonschema==4.26.0
 jsonschema-specifications==2025.9.1
-jupyter-builder==1.0.2
+jupyter-builder==1.1.0
 jupyter-client==8.9.1
 jupyter-core==5.9.1
 jupyter-events==0.12.1
@@ -62,10 +62,10 @@ markupsafe==3.0.3
 matplotlib==3.11.0
 matplotlib-inline==0.2.2
 mdurl==0.1.2
-mistune==3.3.2
+mistune==3.3.3
 ml-dtypes==0.5.4
 namex==0.1.0
-narwhals==2.23.0
+narwhals==2.24.0
 nbclient==0.11.0
 nbconvert==7.17.1
 nbformat==5.10.4
@@ -115,7 +115,7 @@ tinycss2==1.5.1
 tornado==6.5.7
 traitlets==5.15.1
 typing-extensions==4.16.0
-tzdata==2026.2
+tzdata==2026.3
 uri-template==1.3.0
 urllib3==2.7.0
 wcwidth==0.8.2
