@@ -49,6 +49,7 @@ from rendering.meshes import Mesh  # noqa: E402
 from rendering.renderables import RenderableObject, RenderableScene  # noqa: E402
 from rendering.renderer import Renderer  # noqa: E402
 from rendering.textures import Texture  # noqa: E402
+from simply_utils.constants import au as AU_METERS  # noqa: E402
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 
@@ -102,6 +103,11 @@ HAUMEA_MESH_LON = 256
 # with --max-lat and --max-lon on the command line.
 CAMERA_MAX_LAT = math.radians(45.0)
 CAMERA_MAX_LON = math.radians(30.0)
+
+# Light source distance.  The sun is placed 1 AU away along the randomly chosen
+# light direction.  This only matters when physical radiance rendering is used
+# (the texture-only path ignores the light entirely).
+LIGHT_DISTANCE = AU_METERS
 
 # Realistic Saturn ring opening angle range (degrees). Saturn's ring plane is
 # inclined ~26.7 degrees to its orbital plane; the apparent opening angle
@@ -372,8 +378,15 @@ def render_scene(
     camera: Camera,
     render_scale: int = RENDER_SCALE,
     downsample_filter: Image.Resampling = DOWNSAMPLE_FILTER,
+    shade_scene: RenderableScene | None = None,
 ) -> np.ndarray:
-    """Render an RGB image of the scene using only the texture (no shading/shadows).
+    """Render an RGB image of the scene.
+
+    By default the scene is rendered using only the texture (no shading or
+    shadows).  If ``shade_scene`` is provided, a physically-based radiance
+    render of that white-material scene is used as a shading mask, giving
+    Lambertian diffuse shading and self-shadowing (e.g. Saturn's rings casting
+    shadows on the planet).
 
     The scene is rendered at ``OUTPUT_WIDTH*render_scale`` by
     ``OUTPUT_HEIGHT*render_scale`` and then downsampled to the final output
@@ -390,6 +403,22 @@ def render_scene(
     hires_camera.frame = camera.frame
 
     tex_img = Renderer.texture(scene, hires_camera, sf=1, nanv=(0, 0, 0), chan='rgb')
+
+    if shade_scene is not None:
+        # Render a white-Lambertian radiance image to obtain the diffuse shading
+        # and shadow pattern.  The mask is normalised by its brightest non-zero
+        # value so each image is auto-exposed.
+        shade_img = Renderer.radiance(
+            shade_scene, hires_camera, (400, 700), sf=1, n_shad=1
+        )
+        shade_img = np.nan_to_num(shade_img, nan=0.0, posinf=0.0, neginf=0.0)
+        shade_max = shade_img.max()
+        if shade_max > 0:
+            shade_mask = np.clip(shade_img / shade_max, 0.0, 1.0)
+        else:
+            shade_mask = shade_img
+        tex_img = tex_img * shade_mask[..., None]
+
     img = Image.fromarray(np.clip(tex_img, 0, 255).astype(np.uint8), mode='RGB')
     img = img.resize((OUTPUT_WIDTH, OUTPUT_HEIGHT), downsample_filter)
     return np.array(img)
@@ -496,14 +525,25 @@ def render_normal(
     downsample_filter: Image.Resampling = DOWNSAMPLE_FILTER,
     max_lat: float | None = None,
     max_lon: float | None = None,
+    shaded: bool = False,
 ) -> np.ndarray:
     """Render a textured sphere centred in the frame."""
     sphere = Spheroid(Frame.world(), 1.0, 1.0, 1.0)
     brdf = BRDF.lambert(0.01)
     planet = RenderableObject.renderablePrimitive(sphere, brdf, Texture(texture))
-    scene = RenderableScene([planet], Light.sunPointSource(1e3 * light_dir))
+    scene = RenderableScene([planet], Light.sunPointSource(LIGHT_DISTANCE * light_dir))
     camera = build_camera(distance, rng, max_lat=max_lat, max_lon=max_lon)
-    return render_scene(scene, camera, render_scale=render_scale, downsample_filter=downsample_filter)
+
+    shade_scene = None
+    if shaded:
+        white_planet = RenderableObject.renderablePrimitive(sphere, BRDF.lambert(1.0))
+        shade_scene = RenderableScene([white_planet], Light.sunPointSource(LIGHT_DISTANCE * light_dir))
+
+    return render_scene(
+        scene, camera,
+        render_scale=render_scale, downsample_filter=downsample_filter,
+        shade_scene=shade_scene,
+    )
 
 
 def render_haumea(
@@ -515,6 +555,7 @@ def render_haumea(
     downsample_filter: Image.Resampling = DOWNSAMPLE_FILTER,
     max_lat: float | None = None,
     max_lon: float | None = None,
+    shaded: bool = False,
 ) -> np.ndarray:
     """Render Haumea as a randomly oriented triaxial ellipsoid.
 
@@ -538,12 +579,22 @@ def render_haumea(
     mesh = create_haumea_mesh(frame=frame)
     brdf = BRDF.lambert(0.01)
     planet = RenderableObject.renderableMesh(mesh, brdf, Texture(texture))
-    scene = RenderableScene([planet], Light.sunPointSource(1e3 * light_dir))
+    scene = RenderableScene([planet], Light.sunPointSource(LIGHT_DISTANCE * light_dir))
     # Allow the camera to orbit all the way around Haumea so the changing
     # projected shape is visible.  Latitude is still configurable; longitude is
     # always full 360° for this body.
     camera = build_camera(distance, rng, max_lat=max_lat, max_lon=math.pi)
-    img = render_scene(scene, camera, render_scale=render_scale, downsample_filter=downsample_filter)
+
+    shade_scene = None
+    if shaded:
+        white_planet = RenderableObject.renderableMesh(mesh, BRDF.lambert(1.0))
+        shade_scene = RenderableScene([white_planet], Light.sunPointSource(LIGHT_DISTANCE * light_dir))
+
+    img = render_scene(
+        scene, camera,
+        render_scale=render_scale, downsample_filter=downsample_filter,
+        shade_scene=shade_scene,
+    )
     # Perspective views of the triaxial ellipsoid can shift the silhouette off
     # centre even though the 3-D body is at the origin.  Re-centre to match the
     # framing of the spherical planets.
@@ -559,6 +610,7 @@ def render_saturn(
     downsample_filter: Image.Resampling = DOWNSAMPLE_FILTER,
     max_lat: float | None = None,
     max_lon: float | None = None,
+    shaded: bool = False,
 ) -> np.ndarray:
     """Render Saturn with its rings locked to the equatorial plane.
 
@@ -590,8 +642,24 @@ def render_saturn(
     )
     ring = RenderableObject.renderableMesh(ring_mesh, BRDF.lambert(0.015), SATURN_RING_TEXTURE)
 
-    scene = RenderableScene([planet, ring], Light.sunPointSource(1e3 * light_dir))
-    return render_scene(scene, camera, render_scale=render_scale, downsample_filter=downsample_filter)
+    scene = RenderableScene([planet, ring], Light.sunPointSource(LIGHT_DISTANCE * light_dir))
+
+    shade_scene = None
+    if shaded:
+        white_planet = RenderableObject.renderablePrimitive(sphere, BRDF.lambert(1.0))
+        # Re-use the same ring geometry (alpha culling) with a white BRDF so
+        # the mask captures ring shadows on the planet.
+        white_ring = RenderableObject.renderableMesh(ring_mesh, BRDF.lambert(1.0), SATURN_RING_TEXTURE)
+        shade_scene = RenderableScene(
+            [white_planet, white_ring],
+            Light.sunPointSource(LIGHT_DISTANCE * light_dir),
+        )
+
+    return render_scene(
+        scene, camera,
+        render_scale=render_scale, downsample_filter=downsample_filter,
+        shade_scene=shade_scene,
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -607,6 +675,7 @@ def generate_dataset(
     downsample_filter: Image.Resampling = DOWNSAMPLE_FILTER,
     max_lat: float | None = None,
     max_lon: float | None = None,
+    shaded: bool = False,
 ) -> None:
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -662,19 +731,19 @@ def generate_dataset(
                 img_array = render_haumea(
                     texture, light_dir, dist, rng,
                     render_scale=render_scale, downsample_filter=downsample_filter,
-                    max_lat=max_lat, max_lon=max_lon,
+                    max_lat=max_lat, max_lon=max_lon, shaded=shaded,
                 )
             elif planet_name == "Saturn":
                 img_array = render_saturn(
                     texture, light_dir, dist, rng,
                     render_scale=render_scale, downsample_filter=downsample_filter,
-                    max_lat=max_lat, max_lon=max_lon,
+                    max_lat=max_lat, max_lon=max_lon, shaded=shaded,
                 )
             else:
                 img_array = render_normal(
                     texture, light_dir, dist, rng,
                     render_scale=render_scale, downsample_filter=downsample_filter,
-                    max_lat=max_lat, max_lon=max_lon,
+                    max_lat=max_lat, max_lon=max_lon, shaded=shaded,
                 )
 
             img = Image.fromarray(img_array, mode="RGB")
@@ -722,6 +791,11 @@ if __name__ == "__main__":
         default=30.0,
         help="Maximum camera longitude offset in degrees (default: 30).",
     )
+    parser.add_argument(
+        "--shaded",
+        action="store_true",
+        help="Apply Lambertian diffuse shading and self-shadowing via a radiance render.",
+    )
     args = parser.parse_args()
     filter_map = {
         "lanczos": Image.Resampling.LANCZOS,
@@ -738,4 +812,5 @@ if __name__ == "__main__":
         downsample_filter=filter_map[args.downsample_filter],
         max_lat=math.radians(args.max_lat),
         max_lon=math.radians(args.max_lon),
+        shaded=args.shaded,
     )

@@ -2,7 +2,7 @@
 
 This branch is only intended to keep the Python script that generates a synthetic image dataset of planets, dwarf planets, and moons using the **[SIMply](https://github.com/gbrydon/SIMply)** ray-tracing library.
 
-The generator renders textured spheres (and Saturn's rings) from randomized camera angles and saves the images as `128 × 128` RGB JPEGs on a black background. Each planet is centered and consistently framed, viewed from a camera latitude between `-45°` and `+45°` of the equator with a small extra perspective offset. To reduce aliased outlines, it renders each image at `512 × 512` (4× the output size) and then downsamples to `128 × 128` with the Lanczos filter.
+The generator renders textured spheres (and Saturn's rings) from randomized camera angles and saves the images as `128 × 128` RGB JPEGs on a black background. Each planet is centered and consistently framed, viewed from a camera latitude between `-45°` and `+45°` of the equator with a small extra perspective offset. To reduce aliased outlines, it renders each image at `512 × 512` (4× the output size) and then downsamples to `128 × 128` with the Lanczos filter. By default it renders the texture directly; pass `--shaded` to apply Lambertian diffuse shading and self-shadowing.
 
 ## What is generated
 
@@ -131,6 +131,7 @@ python generate_planet_dataset_simply.py \
 | `--downsample-filter` | `lanczos` | PIL filter used when resizing the high-resolution render to the final output size. Choices: `lanczos`, `bilinear`, `bicubic`, `box`, `nearest`. |
 | `--max-lat` | `45.0` | Maximum camera latitude variation from the equator, in degrees. |
 | `--max-lon` | `30.0` | Maximum camera longitude offset around the planet's axis, in degrees. |
+| `--shaded` | `False` | Apply Lambertian diffuse shading and self-shadowing via a radiance render. Slower, but produces a day/night terminator and ring shadows. |
 
 ## Splitting the dataset
 
