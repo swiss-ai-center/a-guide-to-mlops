@@ -640,7 +640,7 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
@@ -662,7 +662,7 @@ jobs:
           commit_message: Commit changes in dvc.lock [skip ci]
           file_pattern: dvc.lock
       - name: Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: 24
       - name: Setup CML
@@ -721,7 +721,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
@@ -830,7 +830,7 @@ index b15a68f..5a8d863 100644
 +          commit_message: Commit changes in dvc.lock [skip ci]
 +          file_pattern: dvc.lock
 +      - name: Setup Node
-+        uses: actions/setup-node@v6
++        uses: actions/setup-node@v7
 +        with:
 +          node-version: 24
        - name: Setup CML

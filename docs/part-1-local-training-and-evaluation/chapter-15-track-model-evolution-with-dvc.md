@@ -24,20 +24,21 @@ Let's get started!
 Update your experiment with the following parameters by editing the
 `params.yaml` file:
 
-```yaml title="params.yaml" hl_lines="10"
+```yaml title="params.yaml" hl_lines="11"
 prepare:
-  seed: 77
+  seed: 5241
   split: 0.2
   image_size: [32, 32]
   grayscale: True
+  batch_size: 32
 
 train:
-  seed: 77
+  seed: 5241
   lr: 0.0001
   epochs: 10
   conv_size: 32
   dense_size: 64
-  output_classes: 11
+  output_classes: 10
 ```
 
 Check the differences with Git to validate the changes:
@@ -51,18 +52,18 @@ The output should be similar to this:
 
 ```diff
 diff --git a/params.yaml b/params.yaml
-index 5bb698e..6a6ff45 100644
+index 0ddcde1..511198f 100644
 --- a/params.yaml
 +++ b/params.yaml
-@@ -7,7 +7,7 @@ prepare:
+@@ -8,7 +8,7 @@ prepare:
  train:
-   seed: 77
+   seed: 5241
    lr: 0.0001
 -  epochs: 5
 +  epochs: 10
    conv_size: 32
    dense_size: 64
-   output_classes: 11
+   output_classes: 10
 ```
 
 Here, you simply changed the `epochs` parameter of the Train stage, which should
@@ -126,11 +127,11 @@ The output should look like this:
 
 ```text
 Path                     Metric     HEAD     workspace    Change
-evaluation/metrics.json  f1_score   0.44005  0.64049      0.20044
-evaluation/metrics.json  precision  0.43002  0.70356      0.27353
-evaluation/metrics.json  recall     0.51023  0.66861      0.15839
-evaluation/metrics.json  val_acc    0.4891   0.68536      0.19626
-evaluation/metrics.json  val_loss   1.89673  1.32753      -0.5692
+evaluation/metrics.json  f1_score   0.35362  0.45354      0.09992
+evaluation/metrics.json  precision  0.31327  0.46571      0.15245
+evaluation/metrics.json  recall     0.46431  0.55249      0.08818
+evaluation/metrics.json  val_acc    0.44333  0.57333      0.13
+evaluation/metrics.json  val_loss   1.77228  1.33433      -0.43795
 ```
 
 Again, DVC shows you the differences, so you can easily compare the two

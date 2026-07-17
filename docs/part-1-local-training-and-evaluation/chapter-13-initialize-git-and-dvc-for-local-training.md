@@ -228,9 +228,9 @@ git commit -m "Use Git to version my ML experiment"
 Add the main `dvc` dependency to the `requirements.txt` file:
 
 ```txt title="requirements.txt" hl_lines="5"
-matplotlib==3.10.9
-scikit-learn==1.9.0
 tensorflow==2.21.0
+matplotlib==3.11.0
+scikit-learn==1.9.0
 pyyaml==6.0.3
 dvc==3.67.1
 ```
@@ -249,9 +249,9 @@ diff --git a/requirements.txt b/requirements.txt
 index bf56600..116c388 100644
 --- a/requirements.txt
 +++ b/requirements.txt
-@@ -2,3 +2,4 @@ matplotlib==3.10.9
+@@ -2,3 +2,4 @@ tensorflow==2.21.0
+ matplotlib==3.11.0
  scikit-learn==1.9.0
- tensorflow==2.21.0
  pyyaml==6.0.3
 +dvc==3.67.1
 ```

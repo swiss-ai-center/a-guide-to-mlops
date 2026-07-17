@@ -8,7 +8,7 @@ within our solar system from images.
 
 The data scientists of your team have been actively collaborating on a Jupyter
 Notebook, which they have readily shared with you. The dataset they have
-gathered comprises approximately 1,650 images capturing 11 distinct planets and
+gathered comprises approximately 1,500 images capturing 10 distinct planets and
 moons. Each celestial body is represented by around 150 images, each taken from
 a unique angle.
 
@@ -168,7 +168,7 @@ working directory:
     source .venv/bin/activate
 
     # Install the dependencies
-    pip install --requirement requirements.txt
+    pip install -r requirements.txt
     ```
 
 === ":simple-uv: Using uv"
@@ -181,7 +181,7 @@ working directory:
     source .venv/bin/activate
 
     # Install the dependencies
-    uv pip install --requirement requirements.txt
+    uv pip install -r requirements.txt
     ```
 
 ### Run the experiment

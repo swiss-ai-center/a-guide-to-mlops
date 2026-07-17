@@ -117,20 +117,21 @@ CML.
 Update your experiment with the following parameters by editing the
 `params.yaml` file:
 
-```yaml title="params.yaml" hl_lines="9 11-12"
+```yaml title="params.yaml" hl_lines="10 12-13"
 prepare:
-  seed: 77
+  seed: 5241
   split: 0.2
   image_size: [32, 32]
   grayscale: True
+  batch_size: 32
 
 train:
-  seed: 77
+  seed: 5241
   lr: 0.001
   epochs: 10
   conv_size: 64
   dense_size: 128
-  output_classes: 11
+  output_classes: 10
 ```
 
 Check the differences with Git to validate the changes:
@@ -144,13 +145,13 @@ The output should be similar to this:
 
 ```diff
 diff --git a/params.yaml b/params.yaml
-index 6a6ff45..4572100 100644
+index 511198f..8ec870f 100644
 --- a/params.yaml
 +++ b/params.yaml
-@@ -6,8 +6,8 @@ prepare:
+@@ -7,8 +7,8 @@ prepare:
 
  train:
-   seed: 77
+   seed: 5241
 -  lr: 0.0001
 +  lr: 0.001
    epochs: 10
@@ -158,7 +159,7 @@ index 6a6ff45..4572100 100644
 -  dense_size: 64
 +  conv_size: 64
 +  dense_size: 128
-   output_classes: 11
+   output_classes: 10
 ```
 
 Here, you simply changed the `lr` (learning rate), `conv_size` and `dense_size`

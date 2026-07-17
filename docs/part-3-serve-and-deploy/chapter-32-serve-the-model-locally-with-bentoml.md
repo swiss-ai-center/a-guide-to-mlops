@@ -92,12 +92,14 @@ Create a new file `src/serve.py` and add the following code:
 
 ```py title="src/serve.py"
 from __future__ import annotations
-from bentoml.validators import ContentType
+
+import json
 from typing import Annotated
+
+import bentoml
+from bentoml.validators import ContentType
 from PIL.Image import Image
 from pydantic import Field
-import bentoml
-import json
 
 
 @bentoml.service(name="celestial_bodies_classifier")
@@ -157,23 +159,20 @@ REST API!
 
 ### Try out the prediction endpoint
 
-The following images are available in the `extra-data` repository that you will
-use in a future chapter:
-<https://github.com/swiss-ai-center/a-guide-to-mlops/tree/extra-data/extra_data>.
-
 Here are some example you can use.
 
-!!! warning
+!!! note
 
-    Please be aware that this model is for demonstration purposes. Some inputs may
-    be incorrectly predicted.
+    These images come from the
+    [`extra-data`](https://github.com/swiss-ai-center/a-guide-to-mlops/tree/extra-data/extra)
+    branch and were not used during training. They are genuine inference examples.
 
-#### Moon example
+#### Pluto example
 
-Download the following image of the moon on your computer.
+Download the following image of Pluto on your computer.
 
 <figure markdown>
-  ![Moon](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/extra-data/extra_data/ZjhlZGU0MzNfTW9vbl8xNDU.jpg)
+  ![Pluto](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/extra-data/extra/0ETMf9Gd1xGU.jpg)
 </figure>
 
 Upload it to the `/predict` endpoint and check the prediction.
@@ -182,29 +181,28 @@ The output should be similar to this:
 
 ```json
 {
-  "prediction": "Moon",
+  "prediction": "Pluto",
   "probabilities": {
-    "Earth": 1.5809072800854196e-12,
-    "Jupiter": 0.00019006800721399486,
-    "MakeMake": 0.025988487526774406,
-    "Mars": 0.05602957680821419,
-    "Mercury": 0.06992407888174057,
-    "Moon": 0.8260593414306641,
-    "Neptune": 0.000008633615834696684,
-    "Pluto": 0.014808151870965958,
-    "Saturn": 6.161330126652764e-13,
-    "Uranus": 9.311889357377368e-7,
-    "Venus": 0.006990684662014246
+    "Earth": 3.9665835060986865e-8,
+    "Jupiter": 0.000007319120868487516,
+    "Mars": 0.000011797979823313653,
+    "Mercury": 0.003945174627006054,
+    "Moon": 0.18518146872520447,
+    "Neptune": 4.69246620726782e-11,
+    "Pluto": 0.8090870976448059,
+    "Saturn": 1.059590566329649e-12,
+    "Uranus": 9.789555832639962e-10,
+    "Venus": 0.001767155365087092
   }
 }
 ```
 
-#### Makemake example
+#### Venus example
 
-Download the following image of Makemake on your computer.
+Download the following image of Venus on your computer.
 
 <figure markdown>
-  ![Makemake](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/extra-data/extra_data/Y2NjYzMzMTlfTWFrZW1ha2VfMTQ2.jpg)
+  ![Venus](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/extra-data/extra/0AjMfNXduVmV.jpg)
 </figure>
 
 Upload it to the `/predict` endpoint and check the prediction.
@@ -213,51 +211,49 @@ The output should be similar to this:
 
 ```json
 {
-  "prediction": "MakeMake",
+  "prediction": "Venus",
   "probabilities": {
-    "Earth": 3.275762878729438e-7,
-    "Jupiter": 0.07843036204576492,
-    "MakeMake": 0.5988457798957825,
-    "Mars": 0.0052123647183179855,
-    "Mercury": 0.173521026968956,
-    "Moon": 0.12065114825963974,
-    "Neptune": 0.009154518134891987,
-    "Pluto": 0.006169575732201338,
-    "Saturn": 7.211715455923695e-7,
-    "Uranus": 0.0000155931556946598,
-    "Venus": 0.007998582907021046
+    "Earth": 1.6945933255466798e-18,
+    "Jupiter": 0.000021891426513320766,
+    "Mars": 3.007734848941429e-13,
+    "Mercury": 0.000006280910838540876,
+    "Moon": 0.03219161927700043,
+    "Neptune": 3.6837984330747675e-16,
+    "Pluto": 0.0001897746551549062,
+    "Saturn": 2.616885428368629e-21,
+    "Uranus": 0.016079600900411606,
+    "Venus": 0.9515108466148376
   }
 }
 ```
 
-#### Neptune example
+#### Earth example
 
-Download the following image of Neptune on your computer.
+Download the following image of the Earth on your computer.
 
 <figure markdown>
-  ![Neptune](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/extra-data/extra_data/MTZlNmRkOTBfTmVwdHVuZV8xNDc.jpg)
+  ![Earth](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/extra-data/extra/0AjMfhGdyFWR.jpg)
 </figure>
 
 Upload it to the `/predict` endpoint and check the prediction.
 
 The output should be similar to this: You may notice the model got it wrong and
-predicted Uranus instead!
+predicted Mars instead!
 
 ```json
 {
-  "prediction": "Uranus",
+  "prediction": "Mars",
   "probabilities": {
-    "Earth": 5.58305268683057e-9,
-    "Jupiter": 0.044645022600889206,
-    "MakeMake": 0.0007660466944798827,
-    "Mars": 0.002677031559869647,
-    "Mercury": 0.0006953442352823913,
-    "Moon": 0.0018753453623503447,
-    "Neptune": 0.3948681056499481,
-    "Pluto": 0.004337918013334274,
-    "Saturn": 0.0000032214618386205984,
-    "Uranus": 0.5497848987579346,
-    "Venus": 0.0003470888768788427
+    "Earth": 0.180137038230896,
+    "Jupiter": 0.0011938593816012144,
+    "Mars": 0.6449322700500488,
+    "Mercury": 0.0004260640707798302,
+    "Moon": 0.0007392166880890727,
+    "Neptune": 0.1704942286014557,
+    "Pluto": 0.000048285317461704835,
+    "Saturn": 0.002029117662459612,
+    "Uranus": 1.8419001133335167e-12,
+    "Venus": 1.9787622651534775e-9
   }
 }
 ```

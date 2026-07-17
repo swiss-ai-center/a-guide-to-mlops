@@ -105,7 +105,7 @@ Create a `requirements.txt` file to list the dependencies:
 
 ```txt title="requirements.txt"
 tensorflow==2.21.0
-matplotlib==3.10.9
+matplotlib==3.11.0
 scikit-learn==1.9.0
 pyyaml==6.0.3
 ```
@@ -232,18 +232,19 @@ Let's split the parameters to run the ML experiment with in a distinct file:
 
 ```yaml title="params.yaml"
 prepare:
-  seed: 77
+  seed: 5241
   split: 0.2
   image_size: [32, 32]
   grayscale: True
+  batch_size: 32
 
 train:
-  seed: 77
+  seed: 5241
   lr: 0.0001
   epochs: 5
   conv_size: 32
   dense_size: 64
-  output_classes: 11
+  output_classes: 10
 ```
 
 #### Move the preparation step to its own file
@@ -258,10 +259,10 @@ import sys
 from pathlib import Path
 from typing import List
 
+import keras
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import yaml
-
 from utils.seed import set_seed
 
 
@@ -293,17 +294,18 @@ def main() -> None:
     split = prepare_params["split"]
     image_size = prepare_params["image_size"]
     grayscale = prepare_params["grayscale"]
+    batch_size = prepare_params["batch_size"]
 
     # Set seed for reproducibility
     set_seed(seed)
 
     # Read data
-    ds_train, ds_val = tf.keras.utils.image_dataset_from_directory(
+    ds_train, ds_val = keras.utils.image_dataset_from_directory(
         raw_dataset_folder,
         labels="inferred",
         label_mode="int",
         color_mode="grayscale" if grayscale else "rgb",
-        batch_size=32,
+        batch_size=batch_size,
         image_size=image_size,
         shuffle=True,
         seed=seed,
@@ -319,7 +321,7 @@ def main() -> None:
     preview_plot.savefig(prepared_dataset_folder / "preview.png")
 
     # Normalize the data
-    normalization_layer = tf.keras.layers.Rescaling(1.0 / 255)
+    normalization_layer = keras.layers.Rescaling(1.0 / 255)
     ds_train = ds_train.map(lambda x, y: (normalization_layer(x), y))
     ds_val = ds_val.map(lambda x, y: (normalization_layer(x), y))
 
@@ -346,6 +348,7 @@ import sys
 from pathlib import Path
 from typing import Tuple
 
+import keras
 import numpy as np
 import tensorflow as tf
 import yaml
@@ -358,16 +361,16 @@ def get_model(
     conv_size: int,
     dense_size: int,
     output_classes: int,
-) -> tf.keras.Model:
+) -> keras.Model:
     """Create a simple CNN model"""
-    model = tf.keras.models.Sequential(
+    model = keras.models.Sequential(
         [
-            tf.keras.layers.Input(shape=image_shape),
-            tf.keras.layers.Conv2D(conv_size, (3, 3), activation="relu"),
-            tf.keras.layers.MaxPooling2D((3, 3)),
-            tf.keras.layers.Flatten(),
-            tf.keras.layers.Dense(dense_size, activation="relu"),
-            tf.keras.layers.Dense(output_classes),
+            keras.layers.Input(shape=image_shape),
+            keras.layers.Conv2D(conv_size, (3, 3), activation="relu"),
+            keras.layers.MaxPooling2D((3, 3)),
+            keras.layers.Flatten(),
+            keras.layers.Dense(dense_size, activation="relu"),
+            keras.layers.Dense(output_classes),
         ]
     )
     return model
@@ -401,16 +404,19 @@ def main() -> None:
     # Set seed for reproducibility
     set_seed(seed)
 
-    # Load data
+    # Load the prepared datasets and shuffle the training set at each epoch
     ds_train = tf.data.Dataset.load(str(prepared_dataset_folder / "train"))
+    ds_train = ds_train.shuffle(
+        buffer_size=ds_train.cardinality(), seed=seed, reshuffle_each_iteration=True
+    )
     ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "val"))
 
     # Define the model
     model = get_model(image_shape, conv_size, dense_size, output_classes)
     model.compile(
-        optimizer=tf.keras.optimizers.Adam(lr),
-        loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-        metrics=[tf.keras.metrics.SparseCategoricalAccuracy()],
+        optimizer=keras.optimizers.Adam(lr),
+        loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+        metrics=[keras.metrics.SparseCategoricalAccuracy()],
     )
     model.summary()
 
@@ -447,6 +453,7 @@ import sys
 from pathlib import Path
 from typing import List
 
+import keras
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
@@ -476,7 +483,7 @@ def get_training_plot(model_history: dict) -> plt.Figure:
 
 
 def get_pred_preview_plot(
-    model: tf.keras.Model, ds_val: tf.data.Dataset, labels: List[str]
+    model: keras.Model, ds_val: tf.data.Dataset, labels: List[str]
 ) -> plt.Figure:
     """Plot a preview of the predictions"""
     fig, axes = plt.subplots(2, 5, figsize=(10, 5), tight_layout=True)
@@ -548,7 +555,7 @@ def main() -> None:
 
     # Load model
     model_path = model_folder.absolute() / "model.keras"
-    model = tf.keras.models.load_model(model_path)
+    model = keras.models.load_model(model_path)
     model_history = np.load(
         model_folder.absolute() / "history.npy", allow_pickle=True
     ).item()
@@ -614,21 +621,18 @@ parameters. This ensure the results are reproducible:
 
 ```py title="src/utils/seed.py"
 import os
-import random
 
-import numpy as np
+import keras
 import tensorflow as tf
 
 
 def set_seed(seed: int) -> None:
+    """Set all random seeds and enable deterministic operations"""
     os.environ["PYTHONHASHSEED"] = str(seed)
-    random.seed(seed)
-    np.random.seed(seed)
 
-    os.environ["TF_DETERMINISTIC_OPS"] = "1"
-    os.environ["TF_CUDNN_DETERMINISTIC"] = "1"
+    keras.utils.set_random_seed(seed)
+    tf.config.experimental.enable_op_determinism()
 
-    tf.random.set_seed(seed)
     tf.config.threading.set_inter_op_parallelism_threads(1)
     tf.config.threading.set_intra_op_parallelism_threads(1)
 ```
@@ -813,4 +817,5 @@ Continue to the next chapters to address the remaining items.
 Highly inspired by:
 
 - [_Get Started: Data Pipelines_ - dvc.org](https://dvc.org/doc/start/data-management/data-pipelines)
-- [_How to get stable results with TensorFlow, setting random seed_ - stackoverflow.com](https://stackoverflow.com/questions/36288235/how-to-get-stable-results-with-tensorflow-setting-random-seed)
+- [_tf.config.experimental.enable_op_determinism_ - tensorflow.org](https://www.tensorflow.org/api_docs/python/tf/config/experimental/enable_op_determinism)
+- [_Reproducibility in machine learning workflows_ - keras.io](https://keras.io/examples/keras_recipes/reproducibility_recipes/)
