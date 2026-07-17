@@ -1,3 +1,3 @@
 # Extra Data
 
-This branch contains addition data from the original `data` branch. Please refer to the original branch for more information.
+This branch is only intended to keep a backup of the extra-data images. Please refer to the dataset branch for more information.
