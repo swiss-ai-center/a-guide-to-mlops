@@ -96,10 +96,10 @@ HAUMEA_AXES = (1.0, 852 / 1161, 513 / 1161)
 HAUMEA_MESH_LAT = 128
 HAUMEA_MESH_LON = 256
 
-# Camera angle diversity: view from the equator (0 degrees) up to this latitude
-# toward either pole. A small longitudinal offset is also applied for perspective
-# variety while keeping the planet front-lit. Limiting latitude to 45 degrees
-# reduces extreme polar views and keeps the dataset more consistent.
+# Camera angle diversity defaults.  Latitude is the vertical tilt from the
+# equator toward either pole; longitude is the azimuthal offset around the
+# planet's axis, which adds subtle perspective variety.  Both can be overridden
+# with --max-lat and --max-lon on the command line.
 CAMERA_MAX_LAT = math.radians(45.0)
 CAMERA_MAX_LON = math.radians(30.0)
 
@@ -450,8 +450,10 @@ def build_camera(
         lat = 0.0
         lon = 0.0
     else:
-        lat = rng.uniform(-(max_lat or CAMERA_MAX_LAT), (max_lat or CAMERA_MAX_LAT))
-        lon = 0.0 if force_lon_zero else rng.uniform(-(max_lon or CAMERA_MAX_LON), (max_lon or CAMERA_MAX_LON))
+        lat_max = CAMERA_MAX_LAT if max_lat is None else max_lat
+        lon_max = CAMERA_MAX_LON if max_lon is None else max_lon
+        lat = rng.uniform(-lat_max, lat_max)
+        lon = 0.0 if force_lon_zero else rng.uniform(-lon_max, lon_max)
 
     # Spherical camera position (origin is at the planet centre).
     cos_lat = math.cos(lat)
@@ -492,13 +494,15 @@ def render_normal(
     rng: random.Random,
     render_scale: int = RENDER_SCALE,
     downsample_filter: Image.Resampling = DOWNSAMPLE_FILTER,
+    max_lat: float | None = None,
+    max_lon: float | None = None,
 ) -> np.ndarray:
     """Render a textured sphere centred in the frame."""
     sphere = Spheroid(Frame.world(), 1.0, 1.0, 1.0)
     brdf = BRDF.lambert(0.01)
     planet = RenderableObject.renderablePrimitive(sphere, brdf, Texture(texture))
     scene = RenderableScene([planet], Light.sunPointSource(1e3 * light_dir))
-    camera = build_camera(distance, rng)
+    camera = build_camera(distance, rng, max_lat=max_lat, max_lon=max_lon)
     return render_scene(scene, camera, render_scale=render_scale, downsample_filter=downsample_filter)
 
 
@@ -509,6 +513,8 @@ def render_haumea(
     rng: random.Random,
     render_scale: int = RENDER_SCALE,
     downsample_filter: Image.Resampling = DOWNSAMPLE_FILTER,
+    max_lat: float | None = None,
+    max_lon: float | None = None,
 ) -> np.ndarray:
     """Render Haumea as a randomly oriented triaxial ellipsoid.
 
@@ -534,8 +540,9 @@ def render_haumea(
     planet = RenderableObject.renderableMesh(mesh, brdf, Texture(texture))
     scene = RenderableScene([planet], Light.sunPointSource(1e3 * light_dir))
     # Allow the camera to orbit all the way around Haumea so the changing
-    # projected shape is visible.
-    camera = build_camera(distance, rng, max_lon=math.pi)
+    # projected shape is visible.  Latitude is still configurable; longitude is
+    # always full 360° for this body.
+    camera = build_camera(distance, rng, max_lat=max_lat, max_lon=math.pi)
     img = render_scene(scene, camera, render_scale=render_scale, downsample_filter=downsample_filter)
     # Perspective views of the triaxial ellipsoid can shift the silhouette off
     # centre even though the 3-D body is at the origin.  Re-centre to match the
@@ -550,6 +557,8 @@ def render_saturn(
     rng: random.Random,
     render_scale: int = RENDER_SCALE,
     downsample_filter: Image.Resampling = DOWNSAMPLE_FILTER,
+    max_lat: float | None = None,
+    max_lon: float | None = None,
 ) -> np.ndarray:
     """Render Saturn with its rings locked to the equatorial plane.
 
@@ -565,7 +574,7 @@ def render_saturn(
     planet = RenderableObject.renderablePrimitive(sphere, brdf, Texture(texture))
 
     # Use the same camera variation as the other planets.
-    camera = build_camera(distance, rng)
+    camera = build_camera(distance, rng, max_lat=max_lat, max_lon=max_lon)
 
     # Ring mesh is built in the local y-z plane (normal local x). Lock that
     # plane to the world x-y plane (Saturn's equator):
@@ -596,6 +605,8 @@ def generate_dataset(
     resume: bool = False,
     render_scale: int = RENDER_SCALE,
     downsample_filter: Image.Resampling = DOWNSAMPLE_FILTER,
+    max_lat: float | None = None,
+    max_lon: float | None = None,
 ) -> None:
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -651,16 +662,19 @@ def generate_dataset(
                 img_array = render_haumea(
                     texture, light_dir, dist, rng,
                     render_scale=render_scale, downsample_filter=downsample_filter,
+                    max_lat=max_lat, max_lon=max_lon,
                 )
             elif planet_name == "Saturn":
                 img_array = render_saturn(
                     texture, light_dir, dist, rng,
                     render_scale=render_scale, downsample_filter=downsample_filter,
+                    max_lat=max_lat, max_lon=max_lon,
                 )
             else:
                 img_array = render_normal(
                     texture, light_dir, dist, rng,
                     render_scale=render_scale, downsample_filter=downsample_filter,
+                    max_lat=max_lat, max_lon=max_lon,
                 )
 
             img = Image.fromarray(img_array, mode="RGB")
@@ -696,6 +710,18 @@ if __name__ == "__main__":
         default="lanczos",
         help="PIL filter used to resize the high-resolution render to the final size.",
     )
+    parser.add_argument(
+        "--max-lat",
+        type=float,
+        default=45.0,
+        help="Maximum camera latitude variation in degrees (default: 45).",
+    )
+    parser.add_argument(
+        "--max-lon",
+        type=float,
+        default=30.0,
+        help="Maximum camera longitude offset in degrees (default: 30).",
+    )
     args = parser.parse_args()
     filter_map = {
         "lanczos": Image.Resampling.LANCZOS,
@@ -710,4 +736,6 @@ if __name__ == "__main__":
         args.resume,
         render_scale=args.render_scale,
         downsample_filter=filter_map[args.downsample_filter],
+        max_lat=math.radians(args.max_lat),
+        max_lon=math.radians(args.max_lon),
     )
