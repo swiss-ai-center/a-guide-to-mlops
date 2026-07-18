@@ -135,7 +135,10 @@ python generate_planet_dataset_simply.py \
 
 ## Splitting the dataset
 
-Use `split_dataset.py` to carve out a balanced set of images from a chosen set of classes and place them in per-class folders under `data/raw/`. The remaining images (unused images from the selected classes plus any withheld classes) go into `extra-data/extra/` for inference-time drift evaluation.
+Use `split_dataset.py` to carve out a balanced set of images from a chosen set of classes and place them in per-class folders under `data/raw/`. The script produces two inference sets:
+
+* `extra-data/extra/` — unused images from the selected `--train-classes`.
+* `extra-data/extra-classes/` — all images from classes that are **not** in `--train-classes`.
 
 By default, inference filenames are kept as `<Class>_<N>.jpg` so you can inspect the split. Pass `--encode` to obfuscate them with reversed URL-safe base64:
 
@@ -144,6 +147,7 @@ python split_dataset.py \
     --input dataset \
     --output-data data/raw \
     --output-extra extra-data/extra \
+    --output-extra-classes extra-data/extra-classes \
     --train-classes Mercury Venus Earth Mars Jupiter Saturn Uranus Neptune Moon Pluto \
     --images-per-class 150 \
     --seed 42 \
@@ -167,7 +171,11 @@ data/
     │   └── ... (150 images)
     └── ... (10 classes total)
 extra-data/
-└── extra/
+├── extra/
+│   ├── <encoded>.jpg
+│   ├── <encoded>.jpg
+│   └── ...
+└── extra-classes/
     ├── <encoded>.jpg
     ├── <encoded>.jpg
     └── ...
@@ -179,9 +187,10 @@ To restore the original inference filenames, run:
 
 ```bash
 python split_dataset.py --decode --decode-dir extra-data/extra
+python split_dataset.py --decode --decode-dir extra-data/extra-classes
 ```
 
-This renames files in place inside `extra-data/extra/` without moving them into subfolders or re-running the split.
+This renames files in place inside the given directory without moving them into subfolders or re-running the split.
 
 ### `split_dataset.py` options
 
@@ -189,15 +198,16 @@ This renames files in place inside `extra-data/extra/` without moving them into 
 |--------|---------|-------------|
 | `--input` | `dataset` | Full generated dataset directory |
 | `--output-data` | `data` | Root directory for the per-class data folders (example: `data/raw`) |
-| `--output-extra` | `extra-data/extra` | Directory for the obfuscated inference set |
+| `--output-extra` | `extra-data/extra` | Directory for extra images from `--train-classes` |
+| `--output-extra-classes` | `extra-data/extra-classes` | Directory for images from classes not in `--train-classes` |
 | `--train-classes` | 8 planets + Moon + Pluto | Space-separated list of classes placed in `--output-data` |
 | `--images-per-class` | `150` | Number of images sampled per class |
 | `--seed` | `42` | Random seed for reproducible sampling |
-| `--move` | `False` | Move inference images to `extra-data/extra/` instead of copying |
+| `--move` | `False` | Move inference images to extra folders instead of copying |
 | `--overwrite` | `False` | Replace existing output directories |
-| `--encode` | `False` | Encode inference filenames in `extra-data/extra/` with reversed base64 |
+| `--encode` | `False` | Encode inference filenames in both extra folders with reversed base64 |
 | `--decode` | `False` | Decode obfuscated inference filenames back to originals |
-| `--decode-dir` | `extra-data/extra` | Directory to decode when `--decode` is used |
+| `--decode-dir` | `extra-data/extra` and `extra-data/extra-classes` | Directory to decode when `--decode` is used |
 
 ## Output
 

@@ -1,15 +1,18 @@
-"""Split the generated planet dataset into per-class data and an optional obfuscated inference set.
+"""Split the generated planet dataset into per-class data and inference sets.
 
 The script takes the output of ``generate_planet_dataset_simply.py`` (``dataset/``)
 and creates:
 
 * ``data/<class>/`` — a balanced set of sampled images for each configured
-  class.
-* ``extra-data/extra/`` — all remaining images (unused images from the selected
-  classes plus all images from the withheld classes). Pass ``--encode`` to
-  obfuscate filenames with a reversible, reversed base64 encoding so the
-  filename no longer reveals the class and adjacent files in the directory
-  listing come from random categories.
+  class (used for training and validation).
+* ``extra-data/extra/`` — the remaining images from the configured data
+  classes that were not selected for ``data/``.
+* ``extra-data/extra-classes/`` — all images from classes that were not
+  configured as data classes.
+
+Pass ``--encode`` to obfuscate filenames in both extra directories with a
+reversible, reversed base64 encoding so the filename no longer reveals the
+class and adjacent files in the directory listing come from random categories.
 
 The encoding is reversible from the filename alone; no separate mapping file is
 required. Use ``--decode`` to restore the original names.
@@ -19,6 +22,7 @@ Usage:
         --input dataset \
         --output-data data \
         --output-extra extra-data/extra \
+        --output-extra-classes extra-data/extra-classes \
         --train-classes Mercury Venus Earth Mars Jupiter Saturn Uranus Neptune Moon Pluto \
         --images-per-class 80 \
         --seed 42 \
@@ -26,6 +30,7 @@ Usage:
 
 Decode obfuscated inference names back to their originals:
     python split_dataset.py --decode --decode-dir extra-data/extra
+    python split_dataset.py --decode --decode-dir extra-data/extra-classes
 """
 
 from __future__ import annotations
@@ -79,6 +84,7 @@ def split_dataset(
     input_dir: Path,
     output_data_dir: Path,
     output_extra_dir: Path,
+    output_extra_classes_dir: Path,
     train_classes: list[str],
     images_per_class: int,
     seed: int,
@@ -86,7 +92,7 @@ def split_dataset(
     overwrite: bool = False,
     encode_extra: bool = False,
 ) -> None:
-    """Split a raw planet dataset into per-class data and optional obfuscated inference set."""
+    """Split a raw planet dataset into per-class data and two inference sets."""
     rng = random.Random(seed)
 
     if not input_dir.is_dir():
@@ -106,21 +112,22 @@ def split_dataset(
     if not drift_classes:
         print("Warning: no drift classes found; all classes are in --train-classes.")
 
-    if output_extra_dir.exists() and any(output_extra_dir.iterdir()):
-        if not overwrite:
-            raise FileExistsError(
-                f"{output_extra_dir} already exists and is not empty. "
-                "Pass --overwrite to replace its contents."
-            )
-        for item in output_extra_dir.iterdir():
-            if item.is_dir():
-                shutil.rmtree(item)
-            else:
-                item.unlink()
+    for output_dir in (output_extra_dir, output_extra_classes_dir):
+        if output_dir.exists() and any(output_dir.iterdir()):
+            if not overwrite:
+                raise FileExistsError(
+                    f"{output_dir} already exists and is not empty. "
+                    "Pass --overwrite to replace its contents."
+                )
+            for item in output_dir.iterdir():
+                if item.is_dir():
+                    shutil.rmtree(item)
+                else:
+                    item.unlink()
+        output_dir.mkdir(parents=True, exist_ok=True)
 
-    output_extra_dir.mkdir(parents=True, exist_ok=True)
-
-    all_extra_images: list[Path] = []
+    selected_class_extra_images: list[Path] = []
+    drift_class_images: list[Path] = []
     selected_by_class: dict[str, list[Path]] = {}
 
     # ------------------------------------------------------------------
@@ -143,26 +150,32 @@ def split_dataset(
         extra_images = [img for img in images if img not in set(selected)]
 
         selected_by_class[class_name] = selected
-        all_extra_images.extend(extra_images)
+        selected_class_extra_images.extend(extra_images)
 
         print(f"{class_name}: {len(selected)} data, {len(extra_images)} extra")
 
     # ------------------------------------------------------------------
-    # All images from the withheld/drift classes go to extra-data.
+    # All images from the withheld/drift classes go to extra-classes.
     # ------------------------------------------------------------------
     for class_name in drift_classes:
         class_dir = input_dir / class_name
         images = sorted(class_dir.glob("*.jpg"))
-        all_extra_images.extend(images)
-        print(f"{class_name}: {len(images)} extra (drift class)")
+        drift_class_images.extend(images)
+        print(f"{class_name}: {len(images)} extra-classes (drift class)")
 
     # ------------------------------------------------------------------
     # Copy/move all inference images to extra-data first, before altering the
     # output class directories. This ensures in-place reorganisation does not
     # delete extras before they have been copied.
     # ------------------------------------------------------------------
-    rng.shuffle(all_extra_images)
-    _move_or_copy_extra(all_extra_images, output_extra_dir, move_extra, encode_extra)
+    rng.shuffle(selected_class_extra_images)
+    rng.shuffle(drift_class_images)
+    _move_or_copy_extra(
+        selected_class_extra_images, output_extra_dir, move_extra, encode_extra
+    )
+    _move_or_copy_extra(
+        drift_class_images, output_extra_classes_dir, move_extra, encode_extra
+    )
 
     # ------------------------------------------------------------------
     # Populate the output class directories with the selected samples.
@@ -193,11 +206,15 @@ def split_dataset(
     total_data = sum(
         len(list((output_data_dir / c).glob("*.jpg"))) for c in train_classes
     )
-    total_extra = len(all_extra_images)
+    total_extra = len(selected_class_extra_images)
+    total_extra_classes = len(drift_class_images)
 
     print("\nDataset split complete:")
-    print(f"  Data:       {total_data} images in {output_data_dir}")
-    print(f"  Inference:  {total_extra} images in {output_extra_dir}")
+    print(f"  Data:             {total_data} images in {output_data_dir}")
+    print(f"  Extra:            {total_extra} images in {output_extra_dir}")
+    print(
+        f"  Extra classes:    {total_extra_classes} images in {output_extra_classes_dir}"
+    )
 
 
 def _move_or_copy_extra(
@@ -206,7 +223,7 @@ def _move_or_copy_extra(
     move: bool,
     encode: bool,
 ) -> None:
-    """Copy or move inference images to extra-data, optionally encoding their names."""
+    """Copy or move inference images to an extra directory, optionally encoding their names."""
     used_names: set[str] = set()
 
     for img in images:
@@ -273,9 +290,9 @@ def decode_directory(directory: Path) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Split a generated planet dataset into per-class data and an "
-                    "optional obfuscated inference set, or decode obfuscated "
-                    "inference filenames back to their originals."
+        description="Split a generated planet dataset into per-class data and "
+                    "two optional obfuscated inference sets, or decode "
+                    "obfuscated inference filenames back to their originals."
     )
     parser.add_argument(
         "--input",
@@ -293,7 +310,13 @@ def main() -> None:
         "--output-extra",
         type=Path,
         default=Path("extra-data/extra"),
-        help="Directory for the obfuscated inference set (default: extra-data/extra).",
+        help="Directory for extra images from data classes (default: extra-data/extra).",
+    )
+    parser.add_argument(
+        "--output-extra-classes",
+        type=Path,
+        default=Path("extra-data/extra-classes"),
+        help="Directory for images from non-data classes (default: extra-data/extra-classes).",
     )
     parser.add_argument(
         "--train-classes",
@@ -329,7 +352,7 @@ def main() -> None:
     parser.add_argument(
         "--encode",
         action="store_true",
-        help="Encode inference filenames in extra-data with reversed base64.",
+        help="Encode inference filenames in both extra directories with reversed base64.",
     )
     parser.add_argument(
         "--decode",
@@ -340,19 +363,23 @@ def main() -> None:
         "--decode-dir",
         type=Path,
         default=None,
-        help="Directory to decode (default: the value of --output-extra).",
+        help="Directory to decode (default: both --output-extra and --output-extra-classes).",
     )
     args = parser.parse_args()
 
     if args.decode:
-        decode_dir = args.decode_dir or args.output_extra
-        decode_directory(decode_dir)
+        if args.decode_dir:
+            decode_directory(args.decode_dir)
+        else:
+            decode_directory(args.output_extra)
+            decode_directory(args.output_extra_classes)
         return
 
     split_dataset(
         input_dir=args.input,
         output_data_dir=args.output_data,
         output_extra_dir=args.output_extra,
+        output_extra_classes_dir=args.output_extra_classes,
         train_classes=args.train_classes,
         images_per_class=args.images_per_class,
         seed=args.seed,
