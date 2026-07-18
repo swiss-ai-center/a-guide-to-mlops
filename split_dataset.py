@@ -23,7 +23,7 @@ Usage:
         --output-data data \
         --output-extra extra-data/extra \
         --output-extra-classes extra-data/extra-classes \
-        --train-classes Mercury Venus Earth Mars Jupiter Saturn Uranus Neptune Moon Pluto \
+        --data-classes Mercury Venus Earth Mars Jupiter Saturn Uranus Neptune Moon Pluto \
         --images-per-class 80 \
         --seed 42 \
         --encode
@@ -85,7 +85,7 @@ def split_dataset(
     output_data_dir: Path,
     output_extra_dir: Path,
     output_extra_classes_dir: Path,
-    train_classes: list[str],
+    data_classes: list[str],
     images_per_class: int,
     seed: int,
     move_extra: bool = False,
@@ -98,7 +98,7 @@ def split_dataset(
     if not input_dir.is_dir():
         raise FileNotFoundError(f"Input directory does not exist: {input_dir}")
 
-    missing = [c for c in train_classes if not (input_dir / c).is_dir()]
+    missing = [c for c in data_classes if not (input_dir / c).is_dir()]
     if missing:
         raise FileNotFoundError(
             f"Missing class directories in {input_dir}: {', '.join(missing)}"
@@ -108,9 +108,9 @@ def split_dataset(
     all_classes = sorted(
         p.name for p in input_dir.iterdir() if p.is_dir() and not p.name.startswith(".")
     )
-    drift_classes = sorted(set(all_classes) - set(train_classes))
+    drift_classes = sorted(set(all_classes) - set(data_classes))
     if not drift_classes:
-        print("Warning: no drift classes found; all classes are in --train-classes.")
+        print("Warning: no drift classes found; all classes are in --data-classes.")
 
     for output_dir in (output_extra_dir, output_extra_classes_dir):
         if output_dir.exists() and any(output_dir.iterdir()):
@@ -135,7 +135,7 @@ def split_dataset(
     # If the output dir is the same as the input dir, this reorganises the
     # raw data in place by removing the unselected images.
     # ------------------------------------------------------------------
-    for class_name in train_classes:
+    for class_name in data_classes:
         class_dir = input_dir / class_name
         images = sorted(class_dir.glob("*.jpg"))
         if not images:
@@ -204,7 +204,7 @@ def split_dataset(
                 shutil.rmtree(drift_dir)
 
     total_data = sum(
-        len(list((output_data_dir / c).glob("*.jpg"))) for c in train_classes
+        len(list((output_data_dir / c).glob("*.jpg"))) for c in data_classes
     )
     total_extra = len(selected_class_extra_images)
     total_extra_classes = len(drift_class_images)
@@ -319,7 +319,7 @@ def main() -> None:
         help="Directory for images from non-data classes (default: extra-data/extra-classes).",
     )
     parser.add_argument(
-        "--train-classes",
+        "--data-classes",
         nargs="+",
         default=[
             "Mercury", "Venus", "Earth", "Mars", "Jupiter",
@@ -380,7 +380,7 @@ def main() -> None:
         output_data_dir=args.output_data,
         output_extra_dir=args.output_extra,
         output_extra_classes_dir=args.output_extra_classes,
-        train_classes=args.train_classes,
+        data_classes=args.data_classes,
         images_per_class=args.images_per_class,
         seed=args.seed,
         move_extra=args.move,

@@ -137,8 +137,8 @@ python generate_planet_dataset_simply.py \
 
 Use `split_dataset.py` to carve out a balanced set of images from a chosen set of classes and place them in per-class folders under `data/raw/`. The script produces two inference sets:
 
-* `extra-data/extra/` — unused images from the selected `--train-classes`.
-* `extra-data/extra-classes/` — all images from classes that are **not** in `--train-classes`.
+* `extra-data/extra/` — unused images from the selected `--data-classes`.
+* `extra-data/extra-classes/` — all images from classes that are **not** in `--data-classes`.
 
 By default, inference filenames are kept as `<Class>_<N>.jpg` so you can inspect the split. Pass `--encode` to obfuscate them with reversed URL-safe base64:
 
@@ -148,7 +148,7 @@ python split_dataset.py \
     --output-data data/raw \
     --output-extra extra-data/extra \
     --output-extra-classes extra-data/extra-classes \
-    --train-classes Mercury Venus Earth Mars Jupiter Saturn Uranus Neptune Moon Pluto \
+    --data-classes Mercury Venus Earth Mars Jupiter Saturn Uranus Neptune Moon Pluto \
     --images-per-class 150 \
     --seed 42 \
     --encode
@@ -198,9 +198,9 @@ This renames files in place inside the given directory without moving them into 
 |--------|---------|-------------|
 | `--input` | `dataset` | Full generated dataset directory |
 | `--output-data` | `data` | Root directory for the per-class data folders (example: `data/raw`) |
-| `--output-extra` | `extra-data/extra` | Directory for extra images from `--train-classes` |
-| `--output-extra-classes` | `extra-data/extra-classes` | Directory for images from classes not in `--train-classes` |
-| `--train-classes` | 8 planets + Moon + Pluto | Space-separated list of classes placed in `--output-data` |
+| `--output-extra` | `extra-data/extra` | Directory for extra images from `--data-classes` |
+| `--output-extra-classes` | `extra-data/extra-classes` | Directory for images from classes not in `--data-classes` |
+| `--data-classes` | 8 planets + Moon + Pluto | Space-separated list of classes placed in `--output-data` |
 | `--images-per-class` | `150` | Number of images sampled per class |
 | `--seed` | `42` | Random seed for reproducible sampling |
 | `--move` | `False` | Move inference images to extra folders instead of copying |
