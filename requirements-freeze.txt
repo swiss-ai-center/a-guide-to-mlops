@@ -8,4 +8,4 @@ pygments==2.20.0
 pymdown-extensions==11.0.1
 pyyaml==6.0.3
 tomli==2.4.1
-zensical==0.0.47
+zensical==0.0.51
