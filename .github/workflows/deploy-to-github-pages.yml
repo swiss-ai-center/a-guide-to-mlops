@@ -28,7 +28,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v6
         with:
           python-version: 3.13
@@ -43,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: lint
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v6
         with:
           python-version: 3.13
@@ -66,13 +66,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: lint
     steps:
-      - uses: actions/checkout@v6
-      - uses: docker://marpteam/marp-cli:v4.2.3
+      - uses: actions/checkout@v7
+      - uses: docker://marpteam/marp-cli:v4.4.1
         with:
           args: --config .github/workflows/marp.config.js --html --output "presentation/index.html" "presentation/README.md"
         env:
           MARP_USER: root:root
-      - uses: docker://marpteam/marp-cli:v4.2.3
+      - uses: docker://marpteam/marp-cli:v4.4.1
         with:
           args: --config .github/workflows/marp.config.js --html --allow-local-files --jpeg-quality 100 --pdf --output "presentation/a-guide-to-mlops-presentation.pdf" "presentation/README.md"
         env:
