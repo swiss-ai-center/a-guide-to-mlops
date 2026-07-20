@@ -543,6 +543,21 @@ Once the `EXTERNAL-IP` field shows an address, open `http://<EXTERNAL-IP>` in
 your browser. The dashboard will be empty until the first training run uploads
 DVClive logs.
 
+### Save the TensorBoard IP as a GitHub secret
+
+The CI/CD pipeline needs the TensorBoard URL to include it in CML reports. Save
+the external IP as a GitHub secret:
+
+Create the following variable by going to the **Settings** section from the top
+header of your GitHub repository. Select **Secrets and variables > Actions** and
+select **New repository secret**:
+
+- `GCP_TENSORBOARD_IP`: The `EXTERNAL-IP` value displayed by the previous
+  command (for example, `34.65.23.10`).
+
+Save the variable by selecting **Add secret**. The workflow constructs the
+dashboard link as `http://${{ secrets.GCP_TENSORBOARD_IP }}`.
+
 ### Update the CI/CD configuration file
 
 You'll now update the CI/CD configuration file to start a runner on the
@@ -574,7 +589,7 @@ permissions:
   id-token: write
 
 env:
-  DVCLIVE_BASE_DIR: gs://${{ secrets.GCP_STORAGE_BUCKET }}/tensorboard/pr-${{ github.event.number }}
+  DVCLIVE_BASE_DIR: gs://${{ secrets.GCP_BUCKET_NAME }}/tensorboard/pr-${{ github.event.number }}
 
 jobs:
   setup-runner:
@@ -842,7 +857,7 @@ index 5a8d863..ad093ef 100644
    id-token: write
 +
 +env:
-+  DVCLIVE_BASE_DIR: gs://${{ secrets.GCP_STORAGE_BUCKET }}/tensorboard/pr-${{ github.event.number }}
++  DVCLIVE_BASE_DIR: gs://${{ secrets.GCP_BUCKET_NAME }}/tensorboard/pr-${{ github.event.number }}
 
  jobs:
    setup-runner:
