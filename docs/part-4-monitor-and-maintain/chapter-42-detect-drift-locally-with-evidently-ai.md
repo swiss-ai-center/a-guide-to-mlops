@@ -20,8 +20,9 @@ In this chapter, you will learn how to:
 3. Create a monitoring script that generates an Evidently drift report and
    dashboard
 4. Wire the reference build into the DVC pipeline
-5. Run the pipeline, generate logs, and open the dashboard
+5. Run the pipeline and generate the reference dataset
 6. Commit the changes to DVC and Git
+7. Generate production logs and inspect the drift dashboard
 
 The following diagram illustrates the control flow at the end of this chapter:
 
@@ -145,13 +146,13 @@ Add `evidently` to the project requirements. `evidently` brings `pyarrow`
 transitively, so Parquet support is available without an extra dependency.
 
 ```txt title="requirements.txt" hl_lines="8"
-matplotlib==3.10.9
-scikit-learn==1.9.0
 tensorflow==2.21.0
+matplotlib==3.11.0
+scikit-learn==1.9.0
 pyyaml==6.0.3
 dvc[gs]==3.67.1
 bentoml==1.4.39
-pillow==12.2.0
+pillow==12.3.0
 evidently==0.7.21
 ```
 
@@ -166,13 +167,13 @@ The output should be similar to this:
 
 ```diff
 diff --git a/requirements.txt b/requirements.txt
-index 39ed63e..203f440 100644
+index 71d9e04..6501b50 100644
 --- a/requirements.txt
 +++ b/requirements.txt
 @@ -5,3 +5,4 @@ pyyaml==6.0.3
  dvc[gs]==3.67.1
  bentoml==1.4.39
- pillow==12.2.0
+ pillow==12.3.0
 +evidently==0.7.21
 ```
 
@@ -229,8 +230,8 @@ import tensorflow as tf
 
 from features import (
     build_embedding_extractor,
-    extract_scalar_features,
     extract_prediction_stats,
+    extract_scalar_features,
 )
 
 
@@ -294,6 +295,7 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
 ```
 
 The reference dataset contains one row per training image:
@@ -346,10 +348,11 @@ WORKSPACE_PATH = PROJECT_ROOT / "monitoring/workspace"
 REPORT_PATH = PROJECT_ROOT / "monitoring"
 PROJECT_NAME = "celestial-bodies-classifier"
 
+# Features monitored for drift.
+# image_min is excluded: black background makes it zero-variance (no drift signal)
 SCALAR_COLUMNS = [
     "image_mean",
     "image_std",
-    "image_min",
     "image_max",
     "confidence",
     "entropy",
@@ -359,10 +362,12 @@ EMBEDDING_NAME = "image_embedding"
 DRIFT_COLUMNS = SCALAR_COLUMNS + CATEGORICAL_COLUMNS
 
 # Drift detection thresholds and methods.
-VALUE_DRIFT_THRESHOLD = 0.15
-EMBEDDING_DRIFT_THRESHOLD = 0.6
+DRIFT_SHARE_THRESHOLD = 0.5
 NUM_DRIFT_METHOD = "wasserstein"
+NUM_DRIFT_THRESHOLD = 0.3
 CAT_DRIFT_METHOD = "jensenshannon"
+CAT_DRIFT_THRESHOLD = 0.1
+EMBEDDING_DRIFT_THRESHOLD = 0.7
 
 
 def expand_embedding_column(df: pd.DataFrame) -> pd.DataFrame:
@@ -480,10 +485,11 @@ def generate_report(
         [
             DataDriftPreset(
                 columns=DRIFT_COLUMNS,
+                drift_share=DRIFT_SHARE_THRESHOLD,
                 num_method=NUM_DRIFT_METHOD,
-                num_threshold=VALUE_DRIFT_THRESHOLD,
+                num_threshold=NUM_DRIFT_THRESHOLD,
                 cat_method=CAT_DRIFT_METHOD,
-                cat_threshold=VALUE_DRIFT_THRESHOLD,
+                cat_threshold=CAT_DRIFT_THRESHOLD,
             ),
             EmbeddingsDrift(
                 embeddings_name=EMBEDDING_NAME,
@@ -733,123 +739,65 @@ stages:
     - data/reference_features.parquet
 ```
 
-!!! tip "Check the pipeline graph"
+### Visualize the pipeline
 
-    After updating `dvc.yaml`, run `dvc dag` to inspect the pipeline. You will see
-    that `build_reference` depends on the prepared training data and the saved
-    model, but not on the `evaluate` stage. This is intentional: the reference
-    dataset must represent the distribution the model was trained on, regardless of
-    whether the evaluation metrics have been computed.
+After updating `dvc.yaml`, run `dvc dag` to inspect the pipeline.
 
-### Run the experiment
+```sh title="Execute the following command(s) in a terminal"
+# Display the Directed Acyclic Graph of the pipeline
+dvc dag
+```
 
-First, ensure the prepared data, model, and reference dataset are up to date:
+```text
+          +--------------+
+          | data/raw.dvc |
+          +--------------+
+                  *
+                  *
+                  *
+             +---------+
+             | prepare |
+             +---------+
+           ***         ***
+          *               *
+        **                 ***
+  +-------+                   *
+  | train |**                 *
+  +-------+  ***              *
+      *         *****         *
+      *              ***      *
+      *                 ***   *
++----------+         +-----------------+
+| evaluate |         | build_reference |
++----------+         +-----------------+
+```
+
+You can see that `build_reference` depends on the prepared training data and the
+saved model, but not on the `evaluate` stage. This is intentional: the reference
+dataset must represent the distribution the model was trained on, regardless of
+whether the evaluation metrics have been computed.
+
+### Generate the reference dataset
+
+Run the DVC pipeline to produce the reference dataset from the prepared training
+data and the saved model:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Run all experiment stages (including build_reference)
 dvc repro
 ```
 
-Generate production logs by running the service and sending a few images.
-
-#### Download additional inference data
-
-Download the archive containing the additional images used for inference:
-
-```sh title="Execute the following command(s) in a terminal"
-# Download the archive containing the extra data
-curl -L -o extra-data.zip https://github.com/swiss-ai-center/a-guide-to-mlops/archive/refs/heads/extra-data.zip
-```
-
-Extract the archive and rename the folder:
-
-```sh title="Execute the following command(s) in a terminal"
-# Extract the dataset
-unzip extra-data.zip
-
-# Rename to the folder to `extra-data`
-mv a-guide-to-mlops-extra-data/ extra-data/
-
-# Remove the archive and the directory
-rm extra-data.zip
-```
-
-#### Send images to the local service
-
-Start the BentoML service locally and send the new images to the `/predict`
-endpoint.
-
-```sh title="Execute the following command(s) in a terminal"
-# Start the service (run in a separate terminal)
-bentoml serve --working-dir ./src serve:CelestialBodiesClassifierService
-```
-
-```sh title="Execute the following command(s) in a second terminal"
-# Send new images
-for img in extra-data/extra_data/*.jpg; do
-  curl -X POST -F "image=@$img" http://localhost:3000/predict
-done
-```
-
-The service writes JSONL monitoring log files to
-`logs/celestial_bodies_classifier/data/`. These logs act as the production data
-that `monitor.py` will compare against the reference dataset.
-
-```sh title="Execute the following command(s) in a second terminal"
-# Inspect the monitoring records
-cat logs/celestial_bodies_classifier/data/data.1.log
-```
-
-Generate the drift snapshot and push it to the local workspace:
-
-```sh title="Execute the following command(s) in a terminal"
-# Generate the Evidently snapshot
-python src/monitor.py
-```
-
-Open `monitoring/report.html` in a browser for a quick view of the full report,
-or inspect the JSON metrics below.
-
-Start the Evidently UI service over the workspace:
-
-```sh title="Execute the following command(s) in a terminal"
-# Serve the local workspace on http://localhost:8000
-evidently ui --workspace monitoring/workspace --port 8000
-```
-
-Open `http://localhost:8000` in a browser, select the
-`celestial-bodies-classifier` project, and inspect the drift report.
-
-!!! bug
-    Insert Evidently UI screenshots
-
-In the Evidently UI, you can navigate between different tabs:
-
-- **Project Overview**: the landing page that lists all projects in the
-  workspace. Select the `celestial-bodies-classifier` project to open its
-  dashboard.
-- **Dashboard**: shows the monitoring panels you configured, including the data
-  drift summary and trends across the snapshots you pushed.
-- **Reports**: lists the saved HTML reports. You can open them in the browser or
-  download them for offline sharing.
-- **Datasets**, **Traces**, and **Prompts**: these tabs are used for LLM and
-  tracing workflows. They are unused in this image-classifier project.
-
-Inspect the JSON metrics:
-
-```sh title="Execute the following command(s) in a terminal"
-# Pretty-print the JSON report
-cat monitoring/report.json | python -m json.tool
-```
+This creates `data/reference_features.parquet`, which is tracked by DVC and
+represents the exact distribution the model was trained on.
 
 ### Update the .gitignore file
 
-The monitoring workspace, JSON report, and downloaded inference data are
-generated artifacts. Add `monitoring/` and `extra-data/` to `.gitignore` so they
-are not committed. The reference dataset is a DVC pipeline output, so DVC will
-add it to `data/.gitignore` automatically when you run `dvc repro`:
+The monitoring workspace, JSON report, and logs are generated artifacts. Add
+`logs/` and `monitoring/` to `.gitignore` so they are not committed. The
+reference dataset is a DVC pipeline output, so DVC will add it to
+`data/.gitignore` automatically when you run `dvc repro`:
 
-```gitignore title=".gitignore" hl_lines="9-12"
+```gitignore title=".gitignore" hl_lines="9"
 ## Python
 .venv/
 
@@ -859,9 +807,6 @@ __pycache__/
 ## Monitoring
 logs/
 monitoring/
-
-# Test data
-extra-data/
 
 ## DVC
 
@@ -909,11 +854,179 @@ Commit the changes to DVC and Git:
 dvc push
 
 # Commit the changes
-git commit -m "Add Evidently drift workspace and local dashboard"
+git commit -m "Add Evidently drift reference dataset and monitoring script"
 
 # Push the changes
 git push
 ```
+
+### Run the experiment
+
+Generate production logs by running the service and sending images in two
+phases. The first phase uses in-distribution images; the second phase uses
+images from classes the model has never seen.
+
+#### Download additional inference data
+
+Download the archive containing the additional images used for inference:
+
+!!! note
+
+    These images were not used during training. They are genuine inference examples.
+
+```sh title="Execute the following command(s) in a terminal"
+# Download the archive containing the extra data
+curl -L -o extra-data.zip https://github.com/swiss-ai-center/a-guide-to-mlops/archive/refs/heads/extra-data.zip
+```
+
+Extract the archive and rename the folder:
+
+```sh title="Execute the following command(s) in a terminal"
+# Extract the dataset
+unzip extra-data.zip
+
+# Rename to the folder to `extra-data`
+mv a-guide-to-mlops-extra-data/ extra-data/
+
+# Remove the archive and the directory
+rm extra-data.zip
+```
+
+The extracted `extra-data/` folder contains two sub-folders:
+
+- `extra/`: 1000 in-distribution images, 100 for each existing class
+- `extra-classes/`: 1000 images of 4 additional dwarf planets from classes the
+  model has never seen. Ceres, Eris, and Makemake look similar to the Moon and
+  Mercury, while Haumea is ellipsoid-shaped but shares their texture and aspect.
+  As a result, the model will misclassify them into known classes rather than
+  signal that it does not recognize them, making this a realistic drift scenario
+  rather than an obvious outlier.
+
+| Ceres  | Eris | Haumea | Makemake |
+| ------------- | ------------- | ------------- | ------------- |
+| ![Ceres](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/extra-data/extra-classes/0AjMfNXZyV2Q.jpg) | ![Eris](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/extra-data/extra-classes/081cpJXR.jpg) | ![Haumea](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/extra-data/extra-classes/0EzXhVWb1FGS.jpg) | ![Makemake](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/extra-data/extra-classes/0AjMfV2ah1WZrFWT.jpg) |
+
+The folder also contains its own `.gitignore`, so its content is ignored
+automatically.
+
+#### Start the local service
+
+Start the BentoML service locally. It will serve the `/predict` endpoint and
+write monitoring logs for every request.
+
+```sh title="Execute the following command(s) in a separate terminal"
+# Start the service (run in a separate terminal)
+bentoml serve --working-dir ./src serve:CelestialBodiesClassifierService
+```
+
+#### Phase 1 - In-distribution images
+
+Send the images from `extra-data/extra/*.jpg`. These images belong to the same
+classes as the training data and should not trigger a drift alert.
+
+```sh title="Execute the following command(s) in a terminal"
+# Send in-distribution images
+for img in extra-data/extra/*.jpg; do
+  curl -X POST -F "image=@$img" http://localhost:3000/predict
+done
+```
+
+The service writes JSONL monitoring log files to
+`logs/celestial_bodies_classifier/data/`. These logs act as the production data
+that `monitor.py` will compare against the reference dataset.
+
+```sh title="Execute the following command(s) in a terminal"
+# Inspect the monitoring records
+cat logs/celestial_bodies_classifier/data/data.1.log
+```
+
+Generate the first drift snapshot and push it to the local workspace:
+
+```sh title="Execute the following command(s) in a terminal"
+# Generate the first Evidently snapshot
+python src/monitor.py
+```
+
+`python src/monitor.py` writes two files: `monitoring/report.html` for the
+interactive, human-readable report and `monitoring/report.json` for the
+machine-readable metrics.
+
+Open the HTML report in a browser: the scalar, categorical, and embedding drift
+scores should generally stay below the configured thresholds, because these
+images come from the same distribution the model was trained on.
+
+![Evidently Report 1](../assets/images/evidently-report-1.png){ loading=lazy }
+
+#### Phase 2 - Out-of-distribution images
+
+Send the images from `extra-data/extra-classes/*.jpg`. These images come from
+classes the model has never seen, so they should produce a stronger drift
+signal.
+
+```sh title="Execute the following command(s) in a terminal"
+# Send out-of-distribution images
+for img in extra-data/extra-classes/*.jpg; do
+  curl -X POST -F "image=@$img" http://localhost:3000/predict
+done
+```
+
+Generate the second drift snapshot:
+
+```sh title="Execute the following command(s) in a terminal"
+# Generate the second Evidently snapshot
+python src/monitor.py
+```
+
+The second snapshot also writes `monitoring/report.html` and
+`monitoring/report.json`. In the HTML report, the embedding drift,
+predicted-label distribution, `confidence`, and `entropy` should all show a
+stronger signal than in phase 1. The embedding plot shows the high-dimensional
+image embeddings projected onto a 2-D plane, so you can see how the
+out-of-distribution images cluster away from the reference data.
+
+![Evidently Report 2](../assets/images/evidently-report-2.png){ loading=lazy }
+
+!!! note "Confidence and entropy"
+
+    The drift report includes two statistics derived from the softmax output:
+
+    - **Confidence**: the maximum softmax probability. It tells you how strongly
+      the model favors its top prediction. A value near 1 means the model is very sure
+      of one class, while a lower value means the probability mass is spread across
+      several classes.
+    - **Entropy**: how spread out the full probability distribution is. Low
+      entropy means a peaked distribution, while high entropy means the model is
+      unsure among many classes.
+
+    For in-distribution images the model usually assigns high probability to the
+    correct class, so confidence is high and entropy is low. For the dwarf-planet
+    images the model has no correct class, but because they resemble Mercury and the
+    Moon it may still assign high probability to one of those classes. This means
+    the model can be confidently wrong, which is why monitoring only confidence is
+    risky.
+
+    Confidence and entropy are related but not identical. Combining them with
+    predicted labels and embeddings gives a much more robust drift signal than any
+    single metric.
+
+#### Open the Evidently UI
+
+Start the Evidently UI service over the workspace:
+
+```sh title="Execute the following command(s) in a terminal"
+# Serve the local workspace
+evidently ui --workspace monitoring/workspace --port 8000
+```
+
+Open `http://localhost:8000` in a browser and select the
+`celestial-bodies-classifier` project.
+
+![Evidently Dashboard](../assets/images/evidently-dashboard.png){ loading=lazy }
+
+The **Dashboard** tab shows the monitoring panels and the trend across the two
+snapshots: the first should show low drift, and the second should show higher
+drift after the out-of-distribution images arrived. You can also open individual
+HTML reports from the **Reports** tab.
 
 ## Summary
 
@@ -923,11 +1036,12 @@ In this chapter, you have successfully:
 2. Built a reference dataset from the training data, including embeddings
 3. Created a monitoring script that generates an Evidently drift snapshot
 4. Added embedding drift detection with a model-based detector
-5. Pushed the snapshot to a local Evidently workspace
-6. Ran the Evidently UI locally and inspected the dashboard
-7. Wired the reference build into the DVC pipeline
-8. Run the pipeline, generated logs, and opened the dashboard
-9. Committed the changes to DVC and Git
+5. Wired the reference build into the DVC pipeline
+6. Run the pipeline and generated the reference dataset
+7. Committed the changes to DVC and Git
+8. Generated production logs for in-distribution and out-of-distribution images
+   and pushed snapshots to a local Evidently workspace
+9. Ran the Evidently UI locally and inspected the dashboard
 
 You fixed some of the previous issues:
 
@@ -966,3 +1080,8 @@ You fixed some of the previous issues:
 Continue to the next chapters to address the remaining items.
 
 ## Sources
+
+Highly inspired by:
+
+- [_Embedding drift detection_](https://www.evidentlyai.com/blog/embedding-drift-detection)
+- [_Customize data drift metrics_ - docs.evidentlyai.com](https://docs.evidentlyai.com/metrics/customize_data_drift)

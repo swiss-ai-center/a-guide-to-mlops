@@ -89,13 +89,13 @@ Add the `bentoml` package to install BentoML support. `pillow` is also added to
 support image processing:
 
 ```txt title="requirements.txt" hl_lines="6-7"
-matplotlib==3.10.9
-scikit-learn==1.9.0
 tensorflow==2.21.0
+matplotlib==3.11.0
+scikit-learn==1.9.0
 pyyaml==6.0.3
 dvc[gs]==3.67.1
 bentoml==1.4.39
-pillow==12.2.0
+pillow==12.3.0
 ```
 
 Check the differences with Git to validate the changes:
@@ -109,15 +109,15 @@ The output should be similar to this:
 
 ```diff
 diff --git a/requirements.txt b/requirements.txt
-index 5f775da..39ed63e 100644
+index 8353703..71d9e04 100644
 --- a/requirements.txt
 +++ b/requirements.txt
-@@ -3,3 +3,5 @@ scikit-learn==1.9.0
- tensorflow==2.21.0
+@@ -3,3 +3,5 @@ matplotlib==3.11.0
+ scikit-learn==1.9.0
  pyyaml==6.0.3
  dvc[gs]==3.67.1
 +bentoml==1.4.39
-+pillow==12.2.0
++pillow==12.3.0
 ```
 
 Install the package and update the freeze file.
@@ -170,16 +170,17 @@ others.
 
 Update the `src/train.py` file to save the model with BentoML:
 
-```py title="src/train.py" hl_lines="1 9-10 67-69 88-125"
+```py title="src/train.py" hl_lines="1 6 11 71-73 92-129"
 import json
 import sys
 from pathlib import Path
 from typing import Tuple
 
+import bentoml
+import keras
 import numpy as np
 import tensorflow as tf
 import yaml
-import bentoml
 from PIL.Image import Image
 
 from utils.seed import set_seed
@@ -190,16 +191,16 @@ def get_model(
     conv_size: int,
     dense_size: int,
     output_classes: int,
-) -> tf.keras.Model:
+) -> keras.Model:
     """Create a simple CNN model"""
-    model = tf.keras.models.Sequential(
+    model = keras.models.Sequential(
         [
-            tf.keras.layers.Input(shape=image_shape),
-            tf.keras.layers.Conv2D(conv_size, (3, 3), activation="relu"),
-            tf.keras.layers.MaxPooling2D((3, 3)),
-            tf.keras.layers.Flatten(),
-            tf.keras.layers.Dense(dense_size, activation="relu"),
-            tf.keras.layers.Dense(output_classes),
+            keras.layers.Input(shape=image_shape),
+            keras.layers.Conv2D(conv_size, (3, 3), activation="relu"),
+            keras.layers.MaxPooling2D((3, 3)),
+            keras.layers.Flatten(),
+            keras.layers.Dense(dense_size, activation="relu"),
+            keras.layers.Dense(output_classes),
         ]
     )
     return model
@@ -233,8 +234,11 @@ def main() -> None:
     # Set seed for reproducibility
     set_seed(seed)
 
-    # Load data
+    # Load the prepared datasets and shuffle the training set at each epoch
     ds_train = tf.data.Dataset.load(str(prepared_dataset_folder / "train"))
+    ds_train = ds_train.shuffle(
+        buffer_size=ds_train.cardinality(), seed=seed, reshuffle_each_iteration=True
+    )
     ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "val"))
 
     with open(prepared_dataset_folder / "labels.json") as f:
@@ -243,9 +247,9 @@ def main() -> None:
     # Define the model
     model = get_model(image_shape, conv_size, dense_size, output_classes)
     model.compile(
-        optimizer=tf.keras.optimizers.Adam(lr),
-        loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-        metrics=[tf.keras.metrics.SparseCategoricalAccuracy()],
+        optimizer=keras.optimizers.Adam(lr),
+        loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+        metrics=[keras.metrics.SparseCategoricalAccuracy()],
     )
     model.summary()
 
@@ -330,35 +334,12 @@ git diff src/train.py
 The output should be similar to this:
 
 ```diff
-diff --git a/src/train.py b/src/train.py
-index efbb6a0..0bc4749 100644
---- a/src/train.py
-+++ b/src/train.py
-@@ -1,3 +1,4 @@
-+import json
- import sys
- from pathlib import Path
- from typing import Tuple
-@@ -5,6 +6,8 @@ from typing import Tuple
- import numpy as np
- import tensorflow as tf
- import yaml
-+import bentoml
-+from PIL.Image import Image
-
- from utils.seed import set_seed
-
-@@ -61,6 +64,9 @@ def main() -> None:
-     ds_train = tf.data.Dataset.load(str(prepared_dataset_folder / "train"))
-     ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "val"))
-
-+    with open(prepared_dataset_folder / "labels.json") as f:
 +        labels = json.load(f)
 +
      # Define the model
      model = get_model(image_shape, conv_size, dense_size, output_classes)
      model.compile(
-@@ -79,8 +85,44 @@ def main() -> None:
+@@ -83,8 +89,44 @@ def main() -> None:
 
      # Save the model
      model_folder.mkdir(parents=True, exist_ok=True)
@@ -411,12 +392,14 @@ index efbb6a0..0bc4749 100644
 
 Update the `src/evaluate.py` file to load the model from BentoML:
 
-```py title="src/evaluate.py" hl_lines="15 106-113 115"
+```py title="src/evaluate.py" hl_lines="6 107-114 116"
 import json
 import sys
 from pathlib import Path
 from typing import List
 
+import bentoml
+import keras
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
@@ -426,7 +409,6 @@ from sklearn.metrics import (
     precision_score,
     recall_score,
 )
-import bentoml
 
 
 def get_training_plot(model_history: dict) -> plt.Figure:
@@ -447,7 +429,7 @@ def get_training_plot(model_history: dict) -> plt.Figure:
 
 
 def get_pred_preview_plot(
-    model: tf.keras.Model, ds_val: tf.data.Dataset, labels: List[str]
+    model: keras.Model, ds_val: tf.data.Dataset, labels: List[str]
 ) -> plt.Figure:
     """Plot a preview of the predictions"""
     fig, axes = plt.subplots(2, 5, figsize=(10, 5), tight_layout=True)
@@ -586,18 +568,18 @@ The output should be similar to this:
 
 ```diff
 diff --git a/src/evaluate.py b/src/evaluate.py
-index 5e62d83..0a006a1 100644
+index c0ec5e7..e7c3bd5 100644
 --- a/src/evaluate.py
 +++ b/src/evaluate.py
-@@ -12,6 +12,7 @@ from sklearn.metrics import (
-     precision_score,
-     recall_score,
- )
+@@ -3,6 +3,7 @@ import sys
+ from pathlib import Path
+ from typing import List
+
 +import bentoml
-
-
- def get_training_plot(model_history: dict) -> plt.Figure:
-@@ -102,9 +103,16 @@ def main() -> None:
+ import keras
+ import matplotlib.pyplot as plt
+ import numpy as np
+@@ -103,9 +104,16 @@ def main() -> None:
      with open(prepared_dataset_folder / "labels.json") as f:
          labels = json.load(f)
 
@@ -611,7 +593,7 @@ index 5e62d83..0a006a1 100644
 +
      # Load model
 -    model_path = model_folder.absolute() / "model.keras"
--    model = tf.keras.models.load_model(model_path)
+-    model = keras.models.load_model(model_path)
 +    model = bentoml.keras.load_model("celestial_bodies_classifier_model")
      model_history = np.load(
          model_folder.absolute() / "history.npy", allow_pickle=True

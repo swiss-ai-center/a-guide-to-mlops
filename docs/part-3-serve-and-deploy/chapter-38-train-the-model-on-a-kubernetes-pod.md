@@ -443,7 +443,7 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Login to Google Cloud
         uses: google-github-actions/auth@v3
         with:
@@ -482,7 +482,7 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
@@ -504,7 +504,7 @@ jobs:
           commit_message: Commit changes in dvc.lock [skip ci]
           file_pattern: dvc.lock
       - name: Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: 24
       - name: Setup CML
@@ -563,7 +563,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
@@ -615,7 +615,7 @@ jobs:
     if: github.event_name == 'pull_request' && (success() || failure() || cancelled())
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Set up GCloud SDK
         uses: google-github-actions/setup-gcloud@v3
         with:
@@ -799,20 +799,21 @@ On your machine, check out the new branch.
 Update your experiment by editing for example the `params.yaml` file with the
 following parameters:
 
-```yaml title="params.yaml" hl_lines="10"
+```yaml title="params.yaml" hl_lines="11"
 prepare:
-  seed: 77
+  seed: 5241
   split: 0.2
   image_size: [32, 32]
   grayscale: True
+  batch_size: 32
 
 train:
-  seed: 77
+  seed: 5241
   lr: 0.001
   epochs: 20
   conv_size: 64
   dense_size: 128
-  output_classes: 11
+  output_classes: 10
 ```
 
 You can now commit and push the above changes to trigger a change on the remote

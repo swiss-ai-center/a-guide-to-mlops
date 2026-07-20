@@ -8,9 +8,17 @@ within our solar system from images.
 
 The data scientists of your team have been actively collaborating on a Jupyter
 Notebook, which they have readily shared with you. The dataset they have
-gathered comprises approximately 1,650 images capturing 11 distinct planets and
+gathered comprises approximately 1,500 images capturing 10 distinct planets and
 moons. Each celestial body is represented by around 150 images, each taken from
 a unique angle.
+
+| Mercury  | Venus | Earth | Moon | Mars |
+| ------------- | ------------- | ------------- | ------------- | ------------- |
+| ![Mercury](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/data/raw/Mercury/Mercury_1.jpg) | ![Venus](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/data/raw/Venus/Venus_1.jpg) | ![Earth](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/data/raw/Earth/Earth_25.jpg) | ![Moon](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/data/raw/Moon/Moon_2.jpg) | ![Mars](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/data/raw/Mars/Mars_2.jpg) |
+
+| Jupiter  | Saturn | Uranus | Neptune | Pluto |
+| ------------- | ------------- | ------------- | ------------- | ------------- |
+| ![Jupiter](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/data/raw/Jupiter/Jupiter_1.jpg) | ![Saturn](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/data/raw/Saturn/Saturn_19.jpg) | ![Uranus](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/data/raw/Uranus/Uranus_2.jpg) | ![Neptune](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/data/raw/Neptune/Neptune_2.jpg) | ![Pluto](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/data/raw/Pluto/Pluto_2.jpg) |
 
 The training process is as follows:
 
@@ -168,7 +176,7 @@ working directory:
     source .venv/bin/activate
 
     # Install the dependencies
-    pip install --requirement requirements.txt
+    pip install -r requirements.txt
     ```
 
 === ":simple-uv: Using uv"
@@ -181,7 +189,7 @@ working directory:
     source .venv/bin/activate
 
     # Install the dependencies
-    uv pip install --requirement requirements.txt
+    uv pip install -r requirements.txt
     ```
 
 ### Run the experiment

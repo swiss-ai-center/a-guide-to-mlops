@@ -122,7 +122,7 @@ include:
 python:
   packages:
     - "tensorflow==2.21.0"
-    - "pillow==12.2.0"
+    - "pillow==12.3.0"
 docker:
     python_version: "3.13"
 ```

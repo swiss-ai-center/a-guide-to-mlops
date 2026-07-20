@@ -595,22 +595,6 @@ Verify that the UI pod is running:
 kubectl get pods -l app=evidently-ui
 ```
 
-Get the external IP of the Evidently UI service:
-
-```sh title="Execute the following command(s) in a terminal"
-kubectl get service evidently-ui
-```
-
-The output should be similar to:
-
-```text
-NAME           TYPE           CLUSTER-IP       EXTERNAL-IP     PORT(S)        AGE
-evidently-ui   LoadBalancer   34.118.234.235   34.158.20.138   80:31710/TCP   7m58s
-```
-
-Save the URL (`http://<EXTERNAL-IP>`) so you can open the dashboard after the
-first snapshot is pushed.
-
 !!! note "Evidently UI reads the workspace at startup"
 
     The Evidently UI service loads the workspace metadata when it starts and does
@@ -690,6 +674,74 @@ Freeze the dependencies again after editing `requirements.txt`:
     # Freeze the dependencies
     uv pip freeze > requirements-freeze.txt
     ```
+
+#### Work around an Evidently 0.7.21 bug with GCS workspaces
+
+!!! danger "Temporary workaround for Evidently 0.7.21"
+
+    Evidently 0.7.21 has a bug that breaks `Workspace.list_projects()` on
+    fsspec-backed workspaces such as Google Cloud Storage. The `search_project()`
+    helper used by `get_or_create_project()` in `src/monitor.py` relies on that list
+    and therefore fails to find an existing project on GCS, which makes the
+    monitoring job fail with a duplicate-project error. The issue is tracked at
+    [evidentlyai/evidently#1848](https://github.com/evidentlyai/evidently/issues/1848).
+    A fix has already been merged into the Evidently `main` branch, but it is not
+    yet available in the latest stable release.
+
+Until a release newer than 0.7.21 is available, patch `src/monitor.py`:
+
+1. Add `import re` at the top of the file.
+2. Add the following constant after the imports:
+
+```py title="src/monitor.py"
+UUID_REGEX = re.compile(
+    r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+)
+```
+
+3. Replace `get_or_create_project` with this version:
+
+```py title="src/monitor.py"
+def get_or_create_project(workspace: Workspace, name: str):
+    """Return an existing project by name or create a new one.
+
+    The SDK's ``search_project`` works fine for local filesystems, but for
+    object-store backends (S3, GCS) ``Workspace.list_projects`` passes ``.`` to
+    ``listdir`` and/or receives directory names with trailing slashes, which
+    breaks UUID matching. As a fallback we list the workspace location with an
+    empty path, strip trailing slashes, and load each candidate by ID.
+
+    TODO: Remove this workaround once evidently > 0.7.21 is released and
+    upgraded in both requirements-freeze.txt and docker/ui.Dockerfile.
+
+    References:
+        https://github.com/evidentlyai/evidently/issues/1848
+    """
+    for project in workspace.search_project(name):
+        if project.name == name:
+            return project
+
+    try:
+        location = workspace.state.location
+    except AttributeError:
+        location = None
+
+    if location is not None:
+        for entry in location.listdir(""):
+            candidate = entry.rstrip("/")
+            if not UUID_REGEX.match(candidate):
+                continue
+            project = workspace.get_project(candidate)
+            if project is not None and project.name == name:
+                return project
+
+    return workspace.create_project(
+        name=name,
+        description="Drift monitoring for the celestial bodies classifier",
+    )
+```
+
+You can remove this patch once you upgrade Evidently past 0.7.21.
 
 #### Create `src/sync_monitoring.py`
 
@@ -799,7 +851,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
@@ -851,24 +903,6 @@ DVC-tracked reference dataset and so that `google-cloud-storage` and `gcsfs` can
 read and write the monitoring bucket. The Fluent Bit sidecar still needs HMAC
 keys for the same bucket, because it uses the S3-compatible API.
 
-### Run the monitoring workflow
-
-Trigger the workflow manually from the **Actions** tab by selecting the
-**Monitor drift** workflow and clicking **Run workflow**. This avoids waiting
-for the daily schedule.
-
-Open `http://<load-balancer-ip>/` in a browser, select the
-`celestial-bodies-classifier` project, and inspect the latest drift report. The
-workflow restarts the Evidently UI deployment after each run so that new
-snapshots are loaded automatically.
-
-Open the [Cloud Storage](https://console.cloud.google.com/storage/browser) on
-the Google cloud interface and click on your bucket to view the generated
-`monitoring/report.html` and `monitoring/report.json` files.
-
-You should see the same drift metrics as in the local report from the previous
-chapter, now refreshed automatically from production logs.
-
 ### Check the changes
 
 Check the changes with Git to ensure that all the necessary files are tracked:
@@ -909,6 +943,37 @@ git commit -m "Deploy Evidently UI and Fluent Bit log shipping on Kubernetes"
 # Push the changes
 git push
 ```
+
+### Run the monitoring workflow
+
+Trigger the workflow manually from the **Actions** tab by selecting the
+**Monitor drift** workflow and clicking **Run workflow**. This avoids waiting
+for the daily schedule.
+
+Get the external IP of the Evidently UI service:
+
+```sh title="Execute the following command(s) in a terminal"
+kubectl get service evidently-ui
+```
+
+The output should be similar to:
+
+```text
+NAME           TYPE           CLUSTER-IP       EXTERNAL-IP     PORT(S)        AGE
+evidently-ui   LoadBalancer   34.118.234.235   34.158.20.138   80:31710/TCP   7m58s
+```
+
+Save the URL (`http://<EXTERNAL-IP>`) and open it in a browser, select the
+`celestial-bodies-classifier` project, and inspect the latest drift report. The
+workflow restarts the Evidently UI deployment after each run so that new
+snapshots are loaded automatically.
+
+Open the [Cloud Storage](https://console.cloud.google.com/storage/browser) on
+the Google cloud interface and click on your bucket to view the generated
+`monitoring/report.html` and `monitoring/report.json` files.
+
+You should see the same drift metrics as in the local report from the previous
+chapter, now refreshed automatically from production logs.
 
 ## Summary
 
