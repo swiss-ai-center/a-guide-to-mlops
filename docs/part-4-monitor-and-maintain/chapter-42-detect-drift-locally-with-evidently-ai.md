@@ -894,7 +894,7 @@ The extracted `extra-data/` folder contains two sub-folders:
   images were not used during training but are genuine inference examples.
 - `extra-classes/`: 1000 images of 4 additional dwarf planets from classes the
   model has never seen. Because the classifier has no unknown class, it can only
-  misclassify them to known classes.
+  misclassify them into known classes.
 
 | Ceres  | Eris | Haumea | Makemake |
 | ------------- | ------------- | ------------- | ------------- |
@@ -902,7 +902,7 @@ The extracted `extra-data/` folder contains two sub-folders:
 
 Ceres, Eris, and Makemake look similar to the Moon and Mercury, and even the
 more ellipsoid-shaped Haumea shares their texture and aspect. None of them are
-obvious outliers and as such this makes them a realistic drift scenario.
+obvious outliers, making them a realistic drift scenario.
 
 The folder also contains its own `.gitignore`, so its content is ignored
 automatically.
