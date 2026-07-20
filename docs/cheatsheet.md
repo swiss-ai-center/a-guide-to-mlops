@@ -45,6 +45,36 @@ cat <file>
 less <file>
 ```
 
+## Experiment tracking commands
+
+Common commands when running and comparing experiments:
+
+```sh
+# Run a DVC experiment with a parameter override
+dvc exp run -S train.lr=0.001
+
+# Queue an experiment to run later
+dvc exp run --queue -S train.lr=0.001
+
+# Run all queued experiments
+dvc exp run --run-all
+
+# Show all experiments on the current branch
+dvc exp show
+
+# Compare two experiments
+dvc exp diff exp-abc12 exp-def34
+
+# Promote an experiment to a Git branch
+dvc exp branch exp-abc12 tune-lr
+
+# Remove discarded experiments
+dvc exp remove exp-abc12 exp-def34
+
+# Launch TensorBoard on DVClive logs
+tensorboard --logdir dvclive
+```
+
 ## Common terminal shortcut
 
 Some of the most useful shortcut to know:
