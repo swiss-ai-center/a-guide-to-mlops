@@ -119,11 +119,11 @@ created:
 
 - Local Git repository and DVC cache
 - Python virtual environment
-- Cloud storage bucket (S3/GCS)
+- Cloud storage bucket
 - Container registry and Docker images
 - Kubernetes cluster and deployments
 - CI/CD pipeline configurations
-- Self-hosted runners (if configured)
+- Self-hosted runners
 
 ### Destroy the Kubernetes cluster
 

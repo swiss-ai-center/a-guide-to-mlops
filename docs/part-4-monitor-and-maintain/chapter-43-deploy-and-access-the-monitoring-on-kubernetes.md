@@ -675,7 +675,7 @@ Freeze the dependencies again after editing `requirements.txt`:
     uv pip freeze > requirements-freeze.txt
     ```
 
-#### Work around an Evidently 0.7.21 bug with GCS workspaces
+#### Work around an Evidently bug with GCS workspaces
 
 !!! danger "Temporary workaround for Evidently 0.7.21"
 
