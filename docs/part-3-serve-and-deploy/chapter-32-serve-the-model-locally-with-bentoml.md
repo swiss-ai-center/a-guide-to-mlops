@@ -159,7 +159,7 @@ REST API!
 
 ### Try out the prediction endpoint
 
-Here are some example you can use.
+Here are some examples you can use.
 
 !!! note
 
