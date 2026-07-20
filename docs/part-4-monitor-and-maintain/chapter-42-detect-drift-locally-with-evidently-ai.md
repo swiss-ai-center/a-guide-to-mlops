@@ -955,9 +955,9 @@ images come from the same distribution the model was trained on.
 
 ![Evidently Report 1](../assets/images/evidently-report-1.png){ loading=lazy }
 
-The embedding plot shows the high-dimensional
-image embeddings projected onto a 2-D plane, so you can see how the
-out-of-distribution images cluster away from the reference data.
+The embedding plot projects the high-dimensional image embeddings onto a 2-D
+plane. Because these images are in-distribution, their points should sit within
+or close to the reference clusters, with no clear separation.
 
 #### Phase 2 - Out-of-distribution images
 
@@ -982,9 +982,9 @@ python src/monitor.py
 The second snapshot also writes `monitoring/report.html` and
 `monitoring/report.json`. In the HTML report, the embedding drift,
 predicted-label distribution, `confidence`, and `entropy` should all show a
-stronger signal than in phase 1. The embedding plot shows the high-dimensional
-image embeddings projected onto a 2-D plane, so you can see how the
-out-of-distribution images cluster away from the reference data.
+stronger signal than in phase 1. The embedding plot now shows a clearer picture:
+the out-of-distribution images form clusters that sit away from the reference
+data, making the drift visible in 2-D.
 
 ![Evidently Report 2](../assets/images/evidently-report-2.png){ loading=lazy }
 
