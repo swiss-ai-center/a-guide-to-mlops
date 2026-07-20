@@ -82,7 +82,8 @@ which branch of the decision tree applies:
 
 * **Noise or expected variation**: tune the thresholds.
 * **Real degradation of the deployed model**: roll back.
-* **A new but valid distribution**: label new data and retrain.
+* **A new but valid distribution**: label new data and retrain (the workflow is
+  covered in Part 5).
 
 ### Option 1: Dismiss and tune the thresholds
 
@@ -267,8 +268,7 @@ that the previous model never saw. In that case the model needs to learn from
 the new data.
 
 The full labeling and retraining workflow is covered in Part 5. Close the
-drift-alert issue once you have routed the new production samples to that
-workflow.
+drift-alert issue once you have decided to send the new samples there.
 
 ### Verify the chosen action
 
@@ -314,16 +314,14 @@ curl -X POST -F "image=@data/raw/Mercury/Mercury_1.jpg" http://<EXTERNAL-IP>:80/
 If the prediction distribution and confidence look like they did before the bad
 deployment, the rollback succeeded.
 
-For a **retrain**, verify the new evaluation metrics and drift report once the
-retraining workflow (covered in Part 5) is complete.
+For a **retrain**, verify the outcome once the Part 5 workflow is complete.
 
 ### Commit the changes
 
 This chapter does not require manual code edits, but the rollback commands above
 do change the Git history on `main`. If you chose to adjust drift thresholds
 after reviewing the alert, update `src/monitor.py` and commit those changes
-separately. If you routed new data to Part 5, the commits will come from that
-workflow. In all cases, close the drift-alert issue from the GitHub interface
+separately. If you sent new data to Part 5, the commits will come from that workflow. In all cases, close the drift-alert issue from the GitHub interface
 once the action is verified.
 
 ## Summary
@@ -360,8 +358,8 @@ All the items of the MLOps process for this part are now addressed.
       keep the source of truth consistent.
     - **The Git/DVC rollback is the canonical recovery**: it restores the source
       of truth and lets the CI/CD pipeline redeploy the old version cleanly.
-    - **Real new distributions need retraining, not rollback**: route those
-      samples to the Part 5 labeling workflow.
+    - **Real new distributions need retraining, not rollback**: Part 5 covers
+      the labeling workflow.
     - **Close the issue when the decision is executed**: the alerting script
       skips creation while an open drift-alert issue exists, so a stale issue blocks
       future alerts.
