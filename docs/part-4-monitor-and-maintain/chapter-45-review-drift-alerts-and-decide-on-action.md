@@ -2,11 +2,11 @@
 
 ## Introduction
 
-A drift alert is not a decision: it is a ticket that asks the team to review the
-signal and decide what to do. The monitoring workflow opens a GitHub issue
-whenever drift exceeds the thresholds defined in `src/monitor.py`. The issue
-contains the drift scores, a link to the Evidently dashboard, and a short list
-of next steps.
+Now that the drift alert system is in place, the monitoring workflow opens a
+GitHub issue whenever drift exceeds the thresholds defined in `src/monitor.py`.
+The issue records the drift score, links to the Evidently dashboard, and lists
+the next steps. It flags that something changed; the team still has to decide
+what to do about it.
 
 This chapter shows how to review that issue and choose one of three actions:
 
