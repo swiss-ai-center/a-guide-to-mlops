@@ -321,7 +321,8 @@ For a **retrain**, verify the outcome once the Part 5 workflow is complete.
 This chapter does not require manual code edits, but the rollback commands above
 do change the Git history on `main`. If you chose to adjust drift thresholds
 after reviewing the alert, update `src/monitor.py` and commit those changes
-separately. If you sent new data to Part 5, the commits will come from that workflow. In all cases, close the drift-alert issue from the GitHub interface
+separately. If you sent new data to Part 5, the commits will come from that
+workflow. In all cases, close the drift-alert issue from the GitHub interface
 once the action is verified.
 
 ## Summary

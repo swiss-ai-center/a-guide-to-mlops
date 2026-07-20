@@ -4,12 +4,6 @@ title: "Part 4 - Introduction"
 
 # Introduction
 
-!!! warning
-
-    This part of the guide is a work in progress. Once completed, it will cover how
-    to keep a model healthy in production by observing its behavior over time and
-    reacting to changes.
-
 Learn how to monitor and maintain the model using
 [:simple-fluentbit: Fluent Bit](../tools.md) and [Evidently AI](../tools.md).
 
