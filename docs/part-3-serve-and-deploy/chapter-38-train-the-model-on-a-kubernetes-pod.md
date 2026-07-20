@@ -817,6 +817,17 @@ When creating pull requests:
   experiments with different learning rates, pushes the experiment refs to GitHub,
   uploads DVClive logs to cloud storage, and pushes the trained model to the
   remote bucket with DVC.
+
+    !!! warning "TODO"
+
+        Review the workspace isolation between the two `dvc exp run` calls. The second
+        experiment currently runs on top of the first experiment's workspace, so it is
+        not derived from the same PR branch baseline. Decide whether to switch to the
+        experiments queue (`--queue` / `dvc queue start`), add explicit workspace resets
+        between runs, or keep the current simplified behaviour. Also confirm how to
+        collect DVClive logs from every experiment so that the shared TensorBoard
+        dashboard compares all curves, not only the last run.
+
 * the `cleanup-runner` job destroys the self-hosted GPU runner that was created.
   It also guarantees that the GPU runner pod is removed, even when if the previous
   step failed or was manually cancelled.
