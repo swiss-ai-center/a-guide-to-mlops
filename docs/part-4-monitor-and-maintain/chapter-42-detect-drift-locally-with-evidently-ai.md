@@ -870,10 +870,6 @@ images from classes the model has never seen.
 
 Download the archive containing the additional images used for inference:
 
-!!! note
-
-    These images were not used during training. They are genuine inference examples.
-
 ```sh title="Execute the following command(s) in a terminal"
 # Download the archive containing the extra data
 curl -L -o extra-data.zip https://github.com/swiss-ai-center/a-guide-to-mlops/archive/refs/heads/extra-data.zip
@@ -894,17 +890,19 @@ rm extra-data.zip
 
 The extracted `extra-data/` folder contains two sub-folders:
 
-- `extra/`: 1000 in-distribution images, 100 for each existing class
+- `extra/`: 1000 in-distribution images, 100 for each existing class. These
+  images were not used during training but are genuine inference examples.
 - `extra-classes/`: 1000 images of 4 additional dwarf planets from classes the
-  model has never seen. Ceres, Eris, and Makemake look similar to the Moon and
-  Mercury, while Haumea is ellipsoid-shaped but shares their texture and aspect.
-  As a result, the model will misclassify them into known classes rather than
-  signal that it does not recognize them, making this a realistic drift scenario
-  rather than an obvious outlier.
+  model has never seen. Because the classifier has no unknown class, it can only
+  misclassify them to known classes.
 
 | Ceres  | Eris | Haumea | Makemake |
 | ------------- | ------------- | ------------- | ------------- |
 | ![Ceres](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/extra-data/extra-classes/0AjMfNXZyV2Q.jpg) | ![Eris](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/extra-data/extra-classes/081cpJXR.jpg) | ![Haumea](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/extra-data/extra-classes/0EzXhVWb1FGS.jpg) | ![Makemake](https://raw.githubusercontent.com/swiss-ai-center/a-guide-to-mlops/extra-data/extra-classes/0AjMfV2ah1WZrFWT.jpg) |
+
+Ceres, Eris, and Makemake look similar to the Moon and Mercury, and even the
+more ellipsoid-shaped Haumea shares their texture and aspect. None of them are
+obvious outliers and as such this makes them a realistic drift scenario.
 
 The folder also contains its own `.gitignore`, so its content is ignored
 automatically.
@@ -956,6 +954,10 @@ scores should generally stay below the configured thresholds, because these
 images come from the same distribution the model was trained on.
 
 ![Evidently Report 1](../assets/images/evidently-report-1.png){ loading=lazy }
+
+The embedding plot shows the high-dimensional
+image embeddings projected onto a 2-D plane, so you can see how the
+out-of-distribution images cluster away from the reference data.
 
 #### Phase 2 - Out-of-distribution images
 
