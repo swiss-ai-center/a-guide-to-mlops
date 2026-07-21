@@ -74,10 +74,10 @@ The downloaded archive must be decompressed and renamed:
 # Extract the dataset
 unzip extra-data.zip
 
-# Rename to the folder to `extra-data`
+# Rename the extracted folder to `extra-data`
 mv a-guide-to-mlops-extra-data/ extra-data/
 
-# Remove the archive and the directory
+# Remove the archive
 rm extra-data.zip
 ```
 

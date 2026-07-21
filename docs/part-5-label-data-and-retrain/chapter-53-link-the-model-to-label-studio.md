@@ -44,7 +44,7 @@ flowchart TB
 
 Before adding the model to Label Studio, we need to create an API for the model.
 Python has many packages for building web frameworks. In this guide we will use
-[FastAPI](https://fastapi.tiangolo.com) for it's simplicity. Add the main
+[FastAPI](https://fastapi.tiangolo.com) for its simplicity. Add the main
 `fastapi[standard]` dependency to the `requirements.txt` file:
 
 ```txt title="requirements.txt" hl_lines="10"

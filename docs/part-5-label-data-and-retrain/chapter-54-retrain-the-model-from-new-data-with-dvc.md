@@ -19,13 +19,13 @@ flowchart TB
     fastapi --> labelStudioPredictions
     labelStudioPredictions -->|submit| labelStudioAnnotations
     labelStudioAnnotations -->|download| extra_annotations
-    extra_annotations --> |load| parse_annotations
+    extra_annotations -->|load| parse_annotations
     parse_annotations -->|copy| data_raw
     data_raw -->|dvc repro| bento_model
 
     subgraph workspaceGraph[WORKSPACE]
         extra[extra-data/extra]
-        extra_annotations[extra-data/extra/annotations.json]
+        extra_annotations[extra-data/annotations.json]
         bento_model[model/classifier.bentomodel]
         fastapi[src/serve_labelstudio.py]
         parse_annotations[scripts/parse_annotations.py]
