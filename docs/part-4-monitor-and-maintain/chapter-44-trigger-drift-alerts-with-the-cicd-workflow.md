@@ -256,7 +256,7 @@ def create_issue(body: str) -> None:
             "issue",
             "create",
             "--title",
-            "Drift alert detected",
+            "Drift detected",
             "--body",
             body,
             "--label",
@@ -452,7 +452,7 @@ with the value from the previous command:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Send new images to the deployed model
-for img in extra-data/extra_data/*.jpg; do
+for img in extra-data/extra/*.jpg; do
     curl -X POST -F "image=@$img" http://<EXTERNAL-IP>:80/predict
 done
 ```
