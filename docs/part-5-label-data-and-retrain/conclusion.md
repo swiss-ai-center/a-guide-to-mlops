@@ -19,22 +19,22 @@ The following diagram illustrates the bricks you set up at the end of this part:
 
 ```mermaid
 flowchart TB
-    extra_data -->|upload| labelStudioTasks
+    extra -->|upload| labelStudioTasks
     labelStudioTasks -->|label| labelStudioAnnotations
     bento_model -->|load| fastapi
     labelStudioTasks -->|POST /predict| fastapi
     fastapi --> labelStudioPredictions
     labelStudioPredictions -->|submit| labelStudioAnnotations
-    labelStudioAnnotations -->|download| extra_data_annotations
-    extra_data_annotations --> |load| parse_annotations
+    labelStudioAnnotations -->|download| extra_annotations
+    extra_annotations --> |load| parse_annotations
     parse_annotations -->|copy| data_raw
     data_raw -->|dvc repro| bento_model
 
     subgraph workspaceGraph[WORKSPACE]
-        extra_data[extra-data/extra_data]
-        extra_data_annotations[extra-data/extra_data/annotations.json]
+        extra[extra-data/extra]
+        extra_annotations[extra-data/extra/annotations.json]
         bento_model[model/classifier.bentomodel]
-        fastapi[src/serve_label_studio.py]
+        fastapi[src/serve_labelstudio.py]
         parse_annotations[scripts/parse_annotations.py]
         data_raw[data/raw]
     end
@@ -72,11 +72,11 @@ for comprehensive instructions on removing all resources you created:
 
 - Local Git repository and DVC cache
 - Python virtual environment
-- Cloud storage bucket (S3/GCS)
+- Cloud storage bucket
 - Container registry and Docker images
 - Kubernetes cluster and deployments
 - CI/CD pipeline configurations
-- Self-hosted runners (if configured)
+- Self-hosted runners
 - Label Studio installation and data
 
 This is necessary to return to a clean state on your computer, avoid unnecessary
