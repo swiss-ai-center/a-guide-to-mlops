@@ -10,11 +10,11 @@ of this chapter:
 
 ```mermaid
 flowchart TB
-    extra_data -->|upload| labelStudioTasks
+    extra -->|upload| labelStudioTasks
     labelStudioTasks -->|label| labelStudioAnnotations
 
     subgraph workspaceGraph[WORKSPACE]
-        extra_data[extra-data/extra_data]
+        extra[extra-data/extra]
     end
 
     subgraph labelStudioGraph[LABEL STUDIO]
@@ -23,7 +23,7 @@ flowchart TB
     end
 
     style workspaceGraph opacity:0.4,color:#7f7f7f80
-    style extra_data opacity:0.4,color:#7f7f7f80
+    style extra opacity:0.4,color:#7f7f7f80
     style labelStudioTasks opacity:0.4,color:#7f7f7f80
     linkStyle 0 opacity:0.4,color:#7f7f7f80
 ```

@@ -41,10 +41,10 @@ of this chapter:
 
 ```mermaid
 flowchart TB
-    extra_data -->|upload| labelStudioTasks
+    extra -->|upload| labelStudioTasks
 
     subgraph workspaceGraph[WORKSPACE]
-        extra_data[extra-data/extra_data]
+        extra[extra-data/extra]
     end
 
     subgraph labelStudioGraph[LABEL STUDIO]
@@ -56,8 +56,12 @@ flowchart TB
 
 ### Download the Data
 
-Before configuring Label Studio, you will need to download additional data used
-for labeling.
+Before configuring Label Studio, you will need the additional data used for
+labeling. This is the same `extra-data` archive you downloaded in
+[Chapter 4.2 - Detect drift locally with Evidently AI](../part-4-monitor-and-maintain/chapter-42-detect-drift-locally-with-evidently-ai.md#download-additional-inference-data)
+to generate inference logs.
+
+If you do not have the folder yet, download the archive:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Download the archive containing the extra data
@@ -70,55 +74,30 @@ The downloaded archive must be decompressed and renamed:
 # Extract the dataset
 unzip extra-data.zip
 
-# Rename to the folder to `extra-data`
+# Rename the extracted folder to `extra-data`
 mv a-guide-to-mlops-extra-data/ extra-data/
 
-# Remove the archive and the directory
+# Remove the archive
 rm extra-data.zip
 ```
 
-Finally, add the `extra-data` folder to the `.gitignore` file:
-
-```sh title="Execute the following command(s) in a terminal"
-# Add the `extra-data` folder to the `.gitignore` file
-echo -e "\n# Label Studio\nextra-data/" >> .gitignore
-```
-
-Check the differences with Git to validate the changes:
-
-```sh title="Execute the following command(s) in a terminal"
-# Show the differences with Git
-git diff .gitignore
-```
-
-The output should be similar to this:
-
-```diff
-diff --git a/.gitignore b/.gitignore
-index dee3012..cbfa93b 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -11,6 +11,3 @@ dvc_plots
-
- # DVC will add new files after this line
- /model
-+
-+# Label Studio
-+extra-data/
-```
+The folder also contains its own `.gitignore`, so its content is ignored
+automatically.
 
 ### Install Label Studio
 
 Next, we will install Label Studio in our environment. Add the main
 `label-studio` dependency to the `requirements.txt` file:
 
-```txt title="requirements.txt" hl_lines="7"
+```txt title="requirements.txt" hl_lines="9"
 tensorflow==2.21.0
-matplotlib==3.10.9
+matplotlib==3.11.0
+scikit-learn==1.9.0
 pyyaml==6.0.3
 dvc[gs]==3.67.1
 bentoml==1.4.39
-pillow==12.2.0
+pillow==12.3.0
+evidently==0.7.21
 label-studio==1.23.0
 ```
 
@@ -133,16 +112,13 @@ The output should be similar to this:
 
 ```diff
 diff --git a/requirements.txt b/requirements.txt
-index 12103ec..b32cb3f 100644
+index 6501b50..e5f490c 100644
 --- a/requirements.txt
 +++ b/requirements.txt
-@@ -1,7 +1,8 @@
- tensorflow==2.21.0
- matplotlib==3.10.9
- pyyaml==6.0.3
- dvc[gs]==3.67.1
+@@ -6,3 +6,4 @@ dvc[gs]==3.67.1
  bentoml==1.4.39
- pillow==12.2.0
+ pillow==12.3.0
+ evidently==0.7.21
 +label-studio==1.23.0
 ```
 
@@ -196,7 +172,6 @@ The output should look like this:
 On branch main
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
-        modified:   .gitignore
         modified:   requirements-freeze.txt
         modified:   requirements.txt
 ```
@@ -216,7 +191,7 @@ You can now start label studio with the following command:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Start Label Studio
-label-studio start
+DATA_UPLOAD_MAX_NUMBER_FILES=1000 label-studio
 ```
 
 Label Studio will start on <http://localhost:8080>. Open the URL in your browser
@@ -237,9 +212,8 @@ Once you have signed up, you can create a new project in Label Studio:
 
     ![Label Studio Create Project](../assets/images/label-studio-project-name.png)
 
-3. Select the **Data Import** tab and click on the **Upload File** button.
-   Select all the images from the `extra-data/extra_data` folder you downloaded
-   earlier.
+3. Select the **Data Import** tab and click on the **Upload Files** button.
+   Select all the images from the `extra-data/extra` folder you downloaded earlier.
 
     !!! tip "Tip for WSL2 users"
 

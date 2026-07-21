@@ -13,7 +13,7 @@ of this chapter:
 
 ```mermaid
 flowchart TB
-    extra_data -->|upload| labelStudioTasks
+    extra -->|upload| labelStudioTasks
     labelStudioTasks -->|label| labelStudioAnnotations
     bento_model -->|load| fastapi
     labelStudioTasks -->|POST /predict| fastapi
@@ -21,9 +21,9 @@ flowchart TB
     labelStudioPredictions -->|submit| labelStudioAnnotations
 
     subgraph workspaceGraph[WORKSPACE]
-        extra_data[extra-data/extra_data]
+        extra[extra-data/extra]
         bento_model[model/classifier.bentomodel]
-        fastapi[src/serve_label_studio.py]
+        fastapi[src/serve_labelstudio.py]
     end
 
     subgraph labelStudioGraph[LABEL STUDIO]
@@ -32,7 +32,7 @@ flowchart TB
         labelStudioPredictions[Predictions]
     end
 
-    style extra_data opacity:0.4,color:#7f7f7f80
+    style extra opacity:0.4,color:#7f7f7f80
     style labelStudioTasks opacity:0.4,color:#7f7f7f80
     linkStyle 0 opacity:0.4,color:#7f7f7f80
     linkStyle 1 opacity:0.4,color:#7f7f7f80
@@ -44,18 +44,20 @@ flowchart TB
 
 Before adding the model to Label Studio, we need to create an API for the model.
 Python has many packages for building web frameworks. In this guide we will use
-[FastAPI](https://fastapi.tiangolo.com) for it's simplicity. Add the main
+[FastAPI](https://fastapi.tiangolo.com) for its simplicity. Add the main
 `fastapi[standard]` dependency to the `requirements.txt` file:
 
-```txt title="requirements.txt" hl_lines="8"
+```txt title="requirements.txt" hl_lines="10"
 tensorflow==2.21.0
-matplotlib==3.10.9
+matplotlib==3.11.0
+scikit-learn==1.9.0
 pyyaml==6.0.3
 dvc[gs]==3.67.1
 bentoml==1.4.39
-pillow==12.2.0
+pillow==12.3.0
+evidently==0.7.21
 label-studio==1.23.0
-fastapi[standard]==0.136.3
+fastapi[standard]==0.139.2
 ```
 
 Check the differences with Git to validate the changes:
@@ -69,14 +71,14 @@ The output should be similar to this:
 
 ```diff
 diff --git a/requirements.txt b/requirements.txt
-index 160d09c..1721a7f 100644
+index e5f490c..5735e62 100644
 --- a/requirements.txt
 +++ b/requirements.txt
-@@ -5,3 +5,4 @@ dvc[gs]==3.67.1
- bentoml==1.4.39
- pillow==12.2.0
+@@ -7,3 +7,4 @@ bentoml==1.4.39
+ pillow==12.3.0
+ evidently==0.7.21
  label-studio==1.23.0
-+fastapi[standard]==0.136.3
++fastapi[standard]==0.139.2
 ```
 
 Install the package and update the freeze file.
@@ -125,9 +127,9 @@ model. Label Studio expects the following API endpoints:
 
 Let's implement these endpoints.
 
-Create a new file `src/serve_label_studio.py` and add the following code:
+Create a new file `src/serve_labelstudio.py` and add the following code:
 
-```py title="src/serve_label_studio.py"
+```py title="src/serve_labelstudio.py"
 from __future__ import annotations
 
 import uuid
@@ -140,7 +142,7 @@ from PIL import Image
 
 # 1. Define constants
 MODEL_VERSION = "v0.0.1"
-DATA_FOLDER_PATH = Path("extra-data/extra_data")
+DATA_FOLDER_PATH = Path("extra-data/extra")
 
 # 2. Initialize FastAPI app
 app = FastAPI()
@@ -245,7 +247,7 @@ Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
         modified:   requirements-freeze.txt
         modified:   requirements.txt
-        new file:   src/server_label_studio.py
+        new file:   src/serve_labelstudio.py
 ```
 
 ### Commit the changes to Git
@@ -262,7 +264,7 @@ git commit -m "Add FastAPI integration to Label Studio"
 Run the model API by executing the following command:
 
 ```sh title="Execute the following command(s) in a terminal"
-fastapi run src/serve_label_studio.py
+fastapi run src/serve_labelstudio.py
 ```
 
 The FastAPI server will start at <http://localhost:8000> and you can view the
@@ -314,29 +316,32 @@ Now that the model is connected, you can start labeling the data.
 
 4. Click on the **Submit** button to save the annotation.
 
-5. Continue labeling the data until you have labeled all the images.
+Labeling every image by hand does not scale. The next section shows how to label
+the remaining data more efficiently with active learning.
 
-And that's it! You can view the annotations in the project view:
+### Label the rest with active learning
 
-![Label Studio Annotations](../assets/images/label-studio-annotations.png)
+Instead of labeling images one by one, you can retrieve predictions for all
+remaining tasks at once and focus your review on the samples the model is least
+certain about. This is a simple form of uncertainty sampling, a common
+active-learning strategy.
 
-!!! info "Retrieve predictions in batch and show the prediction score"
+1. In the project view, select all tasks by checking the **ID** box at the top
+   of the task list.
+2. Open the batch actions dropdown and select **Retrieve Predictions** then
+   click **OK**. The prediction process can take a few minutes.
+3. Go to **Settings > Annotation Settings**, and in the **Prelabeling** section,
+   select the **predictions** set created by the batch (by default
+   `v0.0.1 (1000 predictions)`) as opposed to the connected model.
+4. Once the predictions have been fetched, click on **Columns** and add the
+   **Prediction Score** column to the view.
+5. Sort the tasks by **Prediction Score** in ascending order so the
+   lowest-confidence predictions appear at the top of the list.
 
-    Instead of labeling images one by one, you can retrieve predictions for all
-    tasks at once directly from the project view.
+With the lowest-confidence predictions at the top of the list, review and
+correct them first. Those are the labels that help the model improve fastest.
 
-    1. In the project view, select all tasks by checking the box at the top of
-       the task list.
-    2. Open the batch actions dropdown and select **Retrieve Predictions**.
-    3. Go to **Settings > Annotation Settings**, and in the **Prelabeling**
-       section, select the **predictions** set created by the batch (by default
-       `v0.0.1`) as opposed to the connected model.
-    4. Once the predictions have been fetched, click on **Columns** and add the
-       **Prediction Score** column to the view.
-
-    The prediction score for each task will now be visible in the project view,
-    allowing you to quickly identify which images the model is most or least
-    confident about before reviewing them.
+![Label Studio Labeled Image](../assets/images/label-studio-active-labeling-view.png)
 
 !!! warning
 

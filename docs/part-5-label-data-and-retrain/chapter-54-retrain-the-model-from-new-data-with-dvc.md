@@ -12,22 +12,22 @@ of this chapter:
 
 ```mermaid
 flowchart TB
-    extra_data -->|upload| labelStudioTasks
+    extra -->|upload| labelStudioTasks
     labelStudioTasks -->|label| labelStudioAnnotations
     bento_model -->|load| fastapi
     labelStudioTasks -->|POST /predict| fastapi
     fastapi --> labelStudioPredictions
     labelStudioPredictions -->|submit| labelStudioAnnotations
-    labelStudioAnnotations -->|download| extra_data_annotations
-    extra_data_annotations --> |load| parse_annotations
+    labelStudioAnnotations -->|download| extra_annotations
+    extra_annotations -->|load| parse_annotations
     parse_annotations -->|copy| data_raw
     data_raw -->|dvc repro| bento_model
 
     subgraph workspaceGraph[WORKSPACE]
-        extra_data[extra-data/extra_data]
-        extra_data_annotations[extra-data/extra_data/annotations.json]
+        extra[extra-data/extra]
+        extra_annotations[extra-data/annotations.json]
         bento_model[model/classifier.bentomodel]
-        fastapi[src/serve_label_studio.py]
+        fastapi[src/serve_labelstudio.py]
         parse_annotations[scripts/parse_annotations.py]
         data_raw[data/raw]
     end
@@ -38,7 +38,7 @@ flowchart TB
         labelStudioPredictions[Predictions]
     end
 
-    style extra_data opacity:0.4,color:#7f7f7f80
+    style extra opacity:0.4,color:#7f7f7f80
     style labelStudioTasks opacity:0.4,color:#7f7f7f80
     style fastapi opacity:0.4,color:#7f7f7f80
     style labelStudioPredictions opacity:0.4,color:#7f7f7f80
@@ -64,16 +64,15 @@ Make sure Label Studio is running at <http://localhost:8080>.
 
 3. Rename the downloaded json file to `annotations.json`.
 
-4. Move the file to your `mlops-guide` repository under the `extra-data/`
-   folder.
+4. Move the file under the `extra-data/` folder.
 
-    ```yaml hl_lines="4"
+    ```yaml hl_lines="3"
     .
     ├── extra-data/
-    │   ├── README.md
     │   ├── annotations.json # (1)!
-    │   ├── encode_decode.py
-    │   └── extra_data/
+    │   ├── extra/
+    │   ├── extra-classes/
+    │   └── README.md
     └── ...
     ```
 
@@ -93,7 +92,7 @@ import shutil
 from pathlib import Path
 
 # Constants
-EXTRA_DATA_FOLDER_PATH = Path("extra-data/extra_data")
+EXTRA_DATA_FOLDER_PATH = Path("extra-data/extra")
 NEW_DATA_FOLDER_PATH = Path("data/raw")
 
 # Read annotations and copy images to annotated folders
@@ -101,7 +100,7 @@ with open("extra-data/annotations.json") as f:
     annotations = json.load(f)
 
 for annotation in annotations:
-    # Here we perform the same manipulation as `src/serve_label_studio.py`
+    # Here we perform the same manipulation as `src/serve_labelstudio.py`
     # to retrieve the correct filename
     filename = "".join(annotation["image"].split("-")[1:])
     choice = annotation["choice"]
@@ -113,7 +112,6 @@ for annotation in annotations:
 
     print(f"Copying {source_path} -> {dest_path}")
     shutil.copy(source_path, dest_path)
-
 ```
 
 The script reads the annotations from the `annotations.json` file and copies the
@@ -129,11 +127,12 @@ The annotated images will be copied to the `data/raw` directory. The output
 should look like this:
 
 ```text
-Copying extra-data/extra_data/M2M2YTk0MTFfTmVwdHVuZV8xNDg.jpg -> data/raw/Neptune/M2M2YTk0MTFfTmVwdHVuZV8xNDg.jpg
-Copying extra-data/extra_data/MDdlOWU5ZWRfVXJhbnVzXzE0Ng.jpg -> data/raw/Uranus/MDdlOWU5ZWRfVXJhbnVzXzE0Ng.jpg
-Copying extra-data/extra_data/MDJjZDE4NzRfSnVwaXRlcl8xNDc.jpg -> data/raw/Jupiter/MDJjZDE4NzRfSnVwaXRlcl8xNDc.jpg
-Copying extra-data/extra_data/MDViZjc2ZGRfTmVwdHVuZV8xNDY.jpg -> data/raw/Neptune/MDViZjc2ZGRfTmVwdHVuZV8xNDY.jpg
-Copying extra-data/extra_data/MGFlN2U3YWRfVXJhbnVzXzE0OA.jpg -> data/raw/Uranus/MGFlN2U3YWRfVXJhbnVzXzE0OA.jpg
+Copying extra-data/extra/0AjMfhGdyFWR.jpg -> data/raw/Earth/0AjMfhGdyFWR.jpg
+Copying extra-data/extra/0AjMfNXduVmV.jpg -> data/raw/Venus/0AjMfNXduVmV.jpg
+Copying extra-data/extra/0ATMfhGdyFWR.jpg -> data/raw/Earth/0ATMfhGdyFWR.jpg
+Copying extra-data/extra/0ATMfNXduVmV.jpg -> data/raw/Venus/0ATMfNXduVmV.jpg
+Copying extra-data/extra/0cTMfhGdyFWR.jpg -> data/raw/Earth/0cTMfhGdyFWR.jpg
+Copying extra-data/extra/0czXuJXd0F2U.jpg -> data/raw/Saturn/0czXuJXd0F2U.jpg
 ...
 ```
 
