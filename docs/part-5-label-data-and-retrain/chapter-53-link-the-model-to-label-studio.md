@@ -316,34 +316,32 @@ Now that the model is connected, you can start labeling the data.
 
 4. Click on the **Submit** button to save the annotation.
 
-5. Continue labeling the data until you have labeled all the images.
+Labeling every image by hand does not scale. The next section shows how to label
+the remaining data more efficiently with active learning.
 
-And that's it! You can view the annotations in the project view:
+### Label the rest with active learning
 
-![Label Studio Annotations](../assets/images/label-studio-annotations.png)
+Instead of labeling images one by one, you can retrieve predictions for all
+remaining tasks at once and focus your review on the samples the model is least
+certain about. This is a simple form of uncertainty sampling, a common
+active-learning strategy.
 
-!!! info "Retrieve predictions in batch and show the prediction score"
+1. In the project view, select all tasks by checking the **ID** box at the top
+   of the task list.
+2. Open the batch actions dropdown and select **Retrieve Predictions** then
+   click **OK**. The prediction process can take a few minutes.
+3. Go to **Settings > Annotation Settings**, and in the **Prelabeling** section,
+   select the **predictions** set created by the batch (by default
+   `v0.0.1 (1000 predictions)`) as opposed to the connected model.
+4. Once the predictions have been fetched, click on **Columns** and add the
+   **Prediction Score** column to the view.
+5. Sort the tasks by **Prediction Score** in ascending order so the
+   lowest-confidence predictions appear at the top of the list.
 
-    Instead of labeling images one by one, you can retrieve predictions for all
-    tasks at once directly from the project view.
+With the lowest-confidence predictions at the top of the list, review and
+correct them first. Those are the labels that help the model improve fastest.
 
-    1. In the project view, select all tasks by checking the **ID** box at the top
-       of the task list.
-    2. Open the batch actions dropdown and select **Retrieve Predictions** then
-       click **OK**. The prediction process can take a few minutes.
-    3. Go to **Settings > Annotation Settings**, and in the **Prelabeling**
-       section, select the **predictions** set created by the batch (by default
-       `v0.0.1 (1000 predictions)`) as opposed to the connected model.
-    4. Once the predictions have been fetched, click on **Columns** and add the
-       **Prediction Score** column to the view.
-
-    The prediction score for each task will now be visible in the project view,
-    allowing you to quickly identify which images the model is most or least
-    confident about before reviewing them.
-
-    This is a simple form of uncertainty sampling, a common active-learning
-    strategy. By focusing on the lowest-certainty samples first, you label the data
-    that helps the model improve fastest.
+![Label Studio Labeled Image](../assets/images/label-studio-active-labeling-view.png)
 
 !!! warning
 
