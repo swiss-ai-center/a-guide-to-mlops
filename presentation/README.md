@@ -121,7 +121,7 @@ _paginate: false
 
 <small>Swiss AI Center contributors</small>
 
-![bg right:35% w:70%](../docs/assets/images/hero-rocket.svg)
+![bg right:35% w:70%](./images/portals/hero-rocket.svg)
 
 ## About us
 
@@ -203,7 +203,7 @@ _paginate: false
 
 ## ML code vs ML system
 
-![bg right:35% w:90%](../docs/assets/images/ml_system.svg)
+![bg right:35% w:90%](./images/ml_system.svg)
 
 Only a small fraction of real-world ML systems is composed of the ML code.
 
@@ -289,7 +289,7 @@ For **small teams and SMEs** who want to move ML from notebooks to production wi
 
 If you use Git and want practical, incremental steps, this is for you.
 
-![bg right:40% 80%](../docs/assets/images/rocket-to-planet.svg)
+![bg right:40% 80%](./assets/images/portals/rocket-to-planet.svg)
 
 ## A guide to MLOps
 
@@ -579,7 +579,8 @@ Model drift and degradation go unnoticed.
 -   Detect anomalies and regressions early
 -   Alert the team when the model needs attention
 
-![bg right:40% w:60%](./images/evidently.svg)
+![bg right:40% w:40% vertical](./images/fluentbit-logo.svg)
+![bg right:40% w:40% vertical](./images/evidently.svg)
 
 ### Labeling (1/2)
 

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Planet -->
+  <g transform="translate(285, 115)">
+    <!-- Planet ring -->
+    <ellipse cx="0" cy="0" rx="70" ry="18" fill="none" stroke="#94a3b8" stroke-width="4" opacity="0.6" transform="rotate(-20)"/>
+    <!-- Planet body -->
+    <circle cx="0" cy="0" r="45" fill="#3b82f6"/>
+    <circle cx="-12" cy="-12" r="10" fill="#60a5fa" opacity="0.5"/>
+    <circle cx="18" cy="8" r="6" fill="#1d4ed8" opacity="0.4"/>
+  </g>
+
+  <!-- Dotted trail from rocket to planet -->
+  <path d="M 120 280 Q 180 220 250 150" fill="none" stroke="#f59e0b" stroke-width="4" stroke-dasharray="8 8" stroke-linecap="round" opacity="0.7"/>
+
+  <!-- Rocket, rotated to point toward the planet -->
+  <g transform="translate(90, 310) rotate(45)">
+    <!-- Rocket fins -->
+    <path d="M -28 -20 L -61 15 L -28 5 Z" fill="#a3a3a3"/>
+    <path d="M 28 -20 L 61 15 L 28 5 Z" fill="#a3a3a3"/>
+
+    <!-- Main hull -->
+    <path d="M 0 -125 L 32 5 Q 0 22 -32 5 Z" fill="#f8fafc" stroke="#e5e5e5" stroke-width="2"/>
+
+    <!-- Window -->
+    <circle cx="0" cy="-65" r="14" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+    <circle cx="4" cy="-69" r="4" fill="#ffffff" opacity="0.2"/>
+
+    <!-- Body detail -->
+    <line x1="0" y1="-30" x2="0" y2="-5" stroke="#94a3b8" stroke-width="2" opacity="0.5"/>
+    <rect x="-11" y="-42" width="22" height="6" rx="2" fill="#94a3b8" opacity="0.5"/>
+
+    <!-- Exhaust plume -->
+    <path d="M -15 8 Q -8 34 0 44 Q 8 34 15 8 Q 0 22 -15 8" fill="#f59e0b"/>
+  </g>
+</svg>
