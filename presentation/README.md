@@ -351,34 +351,18 @@ Add new data to close the loop and improve the model.
 
 -   Basic Python and terminal knowledge
 -   macOS, Linux, or Windows with WSL2
--   Python 3.13, pip, git, unzip, Docker
 -   Valid credit card, GitHub account, and Google Cloud account
--   Terminal and Editor (VS Code recommended)
+-   Python 3.13, pip, git, unzip, Docker
 
 ![bg right:40% 70%](./images/python-logo.svg)
 
 ## Access the guide
 
-👉 Access the guide at [mlops.swiss-ai-center.ch][website].
-
-💪 Feel free to open an issue on [GitHub][github] if you encounter any
-difficulties or want to contribute.
-
-🙏 Leave us a star if you like the guide!
+-   Open the guide at [mlops.swiss-ai-center.ch][website]
+-   Feedback and contributions welcome on [GitHub][github]
+-   Your input shapes future versions of this workshop
 
 ![bg right:40% w:60%][website-qrcode]
-
-## Feedback
-
-Your feedback helps us improve! 🙏
-
-💬 Share your thoughts on what worked well and what could be better.
-
-🐛 Report issues or suggest improvements on [GitHub][github].
-
-⭐ Leave us a star if you found this guide helpful!
-
-🤝 Your input directly shapes future versions of this workshop.
 
 ## Contributions
 
