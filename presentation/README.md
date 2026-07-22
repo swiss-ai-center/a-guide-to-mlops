@@ -125,6 +125,15 @@ _paginate: false
 
 ![bg right:35% w:70%](./images/portals/hero-rocket.svg)
 
+## The promise
+
+<!-- _class: lead -->
+
+## A promise
+
+By the end of this workshop, you will know how to turn a **messy notebook**
+into a **reproducible, cloud-deployed, monitored ML system**.
+
 ## About us
 
 <!-- _class: lead -->
@@ -189,15 +198,6 @@ _paginate: false
 
 </div>
 </div>
-
-## The promise
-
-<!-- _class: lead -->
-
-## A promise
-
-By the end of this workshop, you will know how to turn a **messy notebook**
-into a **reproducible, cloud-deployed, monitored ML system**.
 
 ## The trap
 
