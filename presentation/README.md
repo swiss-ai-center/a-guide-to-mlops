@@ -188,13 +188,22 @@ _paginate: false
 </div>
 </div>
 
-## Introduction
+## The promise
+
+<!-- _class: lead -->
+
+## A promise
+
+By the end of this workshop, you will know how to turn a **messy notebook**
+into a **reproducible, cloud-deployed, monitored ML system**.
+
+## The trap
 
 <!-- _class: lead -->
 
 ## LLMs and agentic AI are everywhere
 
-**But most companies have ordinary data problems**
+But most companies have **ordinary data problems**
 
 - Data trapped in spreadsheets, logs, and sensors.
 - Forecasts built on fragile business systems.
@@ -205,44 +214,26 @@ _paginate: false
 
 ![bg right:35% w:90%](./images/ml_system.svg)
 
-Only a small fraction of real-world ML systems is composed of the ML code.
+Only a **small fraction** of real-world ML systems is composed of the ML code.
 
 The required surrounding infrastructure is vast and complex.
 
 ## Difficulties with ML projects
 
-**Get out of the context of the experience**
+Have you ever heard or said any of these?
 
-> I ran the experiment but didn’t get the same results, can you check my way of
-> running the experiment?
+> I ran the experiment but didn't get the same results
 
-<hr>
+> I tried to build the model on my machine but it doesn't work...
 
-**Make sure you can build the model at all times**
+> The model worked fine before, but not anymore. Did the data change?
 
-> I tried to build the model on my machine but it doesn’t work... Are you sure
-> it builds on yours?
+> Can I use your model with my mobile app/website?
 
----
+## Who faces these problems?
 
-**Monitor the evolution of the model over time**
-
-> I’m not sure my changes really help the model’s performances… I hope it still
-> works in production.
-
-> The model worked fine before, but its predictions look off lately. I have no
-> idea if the data changed or how to check it.
-
-<hr>
-
-**Move to production efficiently and in a semi-automated way**
-
-> Is your model available in production? Can I use it with my mobile
-> app/website? How can I do so?
-
-## Small and medium-sized enterprises (SMEs) face the same problems
-
-<!-- _class: lead -->
+**Small teams** and **SMEs** without the dedicated MLOps teams that big tech
+can afford.
 
 ## A solution
 
