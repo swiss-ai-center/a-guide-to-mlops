@@ -194,6 +194,13 @@ You can now start label studio with the following command:
 DATA_UPLOAD_MAX_NUMBER_FILES=1000 label-studio
 ```
 
+!!! info
+
+    This raises Label Studio's per-upload file limit so you can import all the
+    `extra-data/extra` images at once. The default limit (100 files) is lower than
+    the number of images in this chapter, which would force you to upload them in
+    multiple batches.
+
 Label Studio will start on <http://localhost:8080>. Open the URL in your browser
 and sign up for an account.
 
@@ -237,7 +244,6 @@ Once you have signed up, you can create a new project in Label Studio:
         <Choices name="choice" toName="image">
             <Choice value="Earth" />
             <Choice value="Jupiter" />
-            <Choice value="MakeMake" />
             <Choice value="Mars" />
             <Choice value="Mercury" />
             <Choice value="Moon" />

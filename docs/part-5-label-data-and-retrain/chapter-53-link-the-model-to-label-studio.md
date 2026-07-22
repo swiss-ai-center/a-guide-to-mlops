@@ -337,9 +337,11 @@ active-learning strategy.
    **Prediction Score** column to the view.
 5. Sort the tasks by **Prediction Score** in ascending order so the
    lowest-confidence predictions appear at the top of the list.
+6. Open the dropdown menu and select **Label Tasks As Displayed**.
 
-With the lowest-confidence predictions at the top of the list, review and
-correct them first. Those are the labels that help the model improve fastest.
+With the lowest-confidence predictions at the top of the labeling queue, review
+and correct them first. Those are the labels that help the model improve
+fastest.
 
 ![Label Studio Labeled Image](../assets/images/label-studio-active-labeling-view.png)
 
