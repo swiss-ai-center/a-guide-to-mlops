@@ -17,6 +17,10 @@ home:
       text: Chart the course
       icon: lucide/compass
       anchor: "#story-start"
+    cta_secondary:
+      text: View syllabus
+      icon: lucide/book-open
+      path: syllabus/
   chapters:
     - id: about
       label: Ground control

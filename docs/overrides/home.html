@@ -197,6 +197,21 @@
   .hero-cta .twemoji {
     --md-icon-size: 1.35em;
   }
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .hero-cta.secondary {
+    background: transparent;
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .hero-cta.secondary:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0a0a0a;
+  }
   .hero-rocket {
     position: absolute;
     right: 6vw;
@@ -478,6 +493,16 @@
     border-color: #b45309;
     color: #ffffff;
   }
+  body[data-md-color-scheme="default"] .hero-cta.secondary {
+    background: transparent;
+    color: #b45309;
+    border-color: #b45309;
+  }
+  body[data-md-color-scheme="default"] .hero-cta.secondary:hover {
+    background: #d97706;
+    border-color: #d97706;
+    color: #0a0a0a;
+  }
   body[data-md-color-scheme="default"] .chapter-card {
     background: #ffffff;
     border-color: #d4d4d4;
@@ -561,10 +586,18 @@
   <p class="hero-subtitle">
     {{- home.hero.subtitle -}}
   </p>
-  <a href="{{ home.hero.cta.anchor }}" class="hero-cta">
-    <span class="twemoji" aria-hidden="true">{% include ".icons/" ~ home.hero.cta.icon ~ ".svg" %}</span>
-    {{ home.hero.cta.text }}
-  </a>
+  <div class="hero-actions">
+    <a href="{{ home.hero.cta.anchor }}" class="hero-cta">
+      <span class="twemoji" aria-hidden="true">{% include ".icons/" ~ home.hero.cta.icon ~ ".svg" %}</span>
+      {{ home.hero.cta.text }}
+    </a>
+    {% if home.hero.cta_secondary %}
+    <a href="{{ home.hero.cta_secondary.path | url }}" class="hero-cta secondary">
+      <span class="twemoji" aria-hidden="true">{% include ".icons/" ~ home.hero.cta_secondary.icon ~ ".svg" %}</span>
+      {{ home.hero.cta_secondary.text }}
+    </a>
+    {% endif %}
+  </div>
 
   <!-- Hero rocket / MLOps mark -->
   <div class="hero-rocket" aria-hidden="true">
