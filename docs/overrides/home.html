@@ -50,6 +50,9 @@
   html, body {
     background: #0a0a0a;
   }
+  html {
+    scroll-behavior: smooth;
+  }
 
   /* Brutalist / Expanse technical tokens */
   :root {
@@ -358,6 +361,26 @@
     border-color: #555555;
     color: #e5e5e5;
   }
+  .chapter-scroll {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    margin-left: auto;
+    border: 1px solid transparent;
+    color: #a3a3a3;
+    background: transparent;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .chapter-scroll:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0a0a0a;
+  }
+  .chapter-scroll .twemoji {
+    --md-icon-size: 1em;
+  }
   .pdf-link {
     display: inline-flex;
     align-items: center;
@@ -534,6 +557,15 @@
     border-color: #a3a3a3;
     color: #0a0a0a;
   }
+  body[data-md-color-scheme="default"] .chapter-scroll {
+    color: #525252;
+    border-color: transparent;
+  }
+  body[data-md-color-scheme="default"] .chapter-scroll:hover {
+    background: #d97706;
+    border-color: #d97706;
+    color: #0a0a0a;
+  }
   body[data-md-color-scheme="default"] .crew-link {
     color: #b45309;
   }
@@ -604,7 +636,7 @@
 
 <!-- Story chapters -->
 <main class="story-main" id="story-start">
-  {%- macro chapter_card(chapter) -%}
+  {%- macro chapter_card(chapter, next_href) -%}
   <article class="chapter-card" id="section-{{ chapter.id }}">
     {% if chapter.icon %}
     <div class="chapter-icon">
@@ -631,6 +663,11 @@
         {{ action.text }}
       </a>
       {% endfor %}
+      {% if next_href %}
+      <a href="{{ next_href }}" class="chapter-scroll" aria-label="Next">
+        <span class="twemoji" aria-hidden="true">{% include ".icons/lucide/chevron-down.svg" %}</span>
+      </a>
+      {% endif %}
     </div>
   </article>
   {%- endmacro -%}
@@ -638,7 +675,7 @@
   <div class="chapter-grid">
     {% if home.chapters %}
       {% for chapter in home.chapters %}
-        {{ chapter_card(chapter) }}
+        {{ chapter_card(chapter, ('#section-' ~ loop.nextitem.id) if not loop.last else '#story-finale') }}
       {% endfor %}
     {% endif %}
   </div>
