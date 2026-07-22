@@ -322,41 +322,35 @@ Their problem: the model lives in a Jupyter Notebook, and they cannot ship it.
 
 ![bg](./images/the-big-picture.svg)
 
----
+## 1. Track experiments with DVC
 
-![bg w:90%](./images/guide-demo-01.png) ![bg w:90%](./images/guide-demo-02.png)
+![bg right:55% w:95%](./images/a-guide-to-mlops.png)
 
----
+Every run is versioned and reproducible.
 
-![bg w:90%](./images/guide-demo-03.png) ![bg w:90%](./images/guide-demo-04.png)
+## 2. Review results with CML
 
----
+![bg right:55% w:95%](./images/a-guide-to-mlops.png)
 
-![bg w:90%](./images/guide-demo-05.png) ![bg w:90%](./images/guide-demo-06.png)
+Metrics and plots arrive directly in the pull request.
 
----
+## 3. Serve and deploy the model
 
-![bg w:90%](./images/guide-demo-07.png) ![bg w:90%](./images/guide-demo-08.png)
+![bg right:55% w:95%](./images/a-guide-to-mlops.png)
 
----
+The model becomes an API that any application can call.
 
-![bg w:90%](./images/guide-demo-09.png) ![bg w:90%](./images/guide-demo-10.png)
+## 4. Monitor and maintain the model
 
----
+![bg right:55% w:95%](./images/a-guide-to-mlops.png)
 
-![bg w:90%](./images/guide-demo-11.png) ![bg w:90%](./images/guide-demo-12.png)
+Observe the model predictions for data drift.
 
----
+## 5. Label and retrain
 
-![bg w:90%](./images/guide-demo-13.png) ![bg w:90%](./images/guide-demo-14.png)
+![bg right:55% w:95%](./images/a-guide-to-mlops.png)
 
----
-
-![bg w:90%](./images/guide-demo-15.png) ![bg w:90%](./images/guide-demo-16.png)
-
----
-
-![bg w:90%](./images/guide-demo-17.png) ![bg w:90%](./images/guide-demo-18.png)
+Add new data to close the loop and improve the model.
 
 ## Prerequisites
 
