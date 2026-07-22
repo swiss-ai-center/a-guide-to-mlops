@@ -16,8 +16,8 @@ home:
       icon: lucide/compass
       anchor: "#story-start"
     cta_secondary:
-      text: View syllabus
-      icon: lucide/book-open
+      text: Launch mission
+      icon: lucide/rocket
       path: syllabus/
   chapters:
     - id: about
