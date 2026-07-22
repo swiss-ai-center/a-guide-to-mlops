@@ -345,7 +345,7 @@ Observe the model predictions for data drift.
 
 ![bg right:55% w:95%](./images/a-guide-to-mlops.png)
 
-Add new data to close the loop and improve the model.
+Use AI-assisted labeling to add new data, then retrain and improve the model.
 
 ## What you need
 
@@ -358,9 +358,10 @@ Add new data to close the loop and improve the model.
 
 ## Access the guide
 
--   Open the guide at [mlops.swiss-ai-center.ch][website]
--   Feedback and contributions welcome on [GitHub][github]
--   Your input shapes future versions of this workshop
+-   Open [mlops.swiss-ai-center.ch][website]
+-   Feedback and contributions on [GitHub][github]
+-   Even minor feedback improves the guide
+-   [Leave a star ⭐][github]
 
 ![bg right:40% w:60%][website-qrcode]
 
