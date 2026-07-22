@@ -235,6 +235,30 @@ Have you ever heard or said any of these?
 **Small teams** and **SMEs** without the dedicated MLOps teams that big tech
 can afford.
 
+## The fence
+
+<!-- _class: lead -->
+
+## What this guide is / is not
+
+**This guide is**
+
+-   lightweight and composable
+-   a path from notebook to production
+-   incremental, one step at a time
+-   built for small teams and SMEs
+
+**This guide is not**
+
+-   a heavy all-in-one MLOps platform
+-   a course on machine learning theory
+-   a big-bang transformation
+-   enterprise infrastructure advice
+
+## The path
+
+<!-- _class: lead -->
+
 ## A solution
 
 **MLOps**
@@ -260,7 +284,7 @@ tools
 
 ![bg right:40% 90%](./images/a-guide-to-mlops.png)
 
-## Our approach
+## Our principles
 
 **Version-controlled.** Track code, data, and experiments together.
 
@@ -270,15 +294,12 @@ tools
 
 **Pragmatic.** Reproducibility first, then automation, deployment, monitoring, and feedback loops.
 
-<!--
-This is the fence: we explicitly distinguish our lightweight, composable approach from heavy all-in-one platforms.
--->
+## Our audience
 
-## Target audience
+For **small teams and SMEs** moving ML from notebooks to production.
 
-For **small teams and SMEs** who want to move ML from notebooks to production without a heavy, monolithic platform.
-
-If you use Git and want practical, incremental steps, this is for you.
+-   **Data scientists** ready to leave ad-hoc notebooks and scripts behind
+-   **Software engineers** extending DevOps practices to ML
 
 ![bg right:40% 80%](./assets/images/portals/rocket-to-planet.svg)
 
