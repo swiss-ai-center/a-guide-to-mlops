@@ -36,4 +36,9 @@ In this part, you will address the following issues:
 !!! note
 
     This part focuses on labeling data locally so you can experiment without extra
-    infrastructure.
+    infrastructure. For the same reason, we will run `dvc repro` on your local
+    machine.
+
+    In a production setup, you should push the new labeled data to a branch and let
+    your CI/CD pipeline retrain the model on the Kubernetes cluster, as set up in
+    [Part 3 - Serve and deploy](./part-3-serve-and-deploy/introduction.md).

@@ -5,14 +5,14 @@ title: "Part 5 - Conclusion"
 # Conclusion
 
 Congratulations! You have successfully completed the fifth part of the guide. In
-this part, you learned how to annotate the data using Label Studio using AI
-assisted labeling. You finally retrained the model using the newly labeled data.
+this part, you learned how to annotate the data in Label Studio with AI-assisted
+labeling. You finally retrained the model using the newly labeled data.
 
 As you work with your data and model, you may find that certain labels need
 refinement or that additional data points require annotation. You can
 continuously improve the quality of your labeled dataset, to improve your model
 accuracy and effectiveness over time. Based on the model performance feedback,
-you can revisite and update the annotations to create a broader and more robust
+you can revisit and update the annotations to create a broader and more robust
 training set that better meets the needs of your project.
 
 The following diagram illustrates the bricks you set up at the end of this part:
@@ -48,20 +48,16 @@ flowchart TB
 
 ## Going further
 
-!!! info "Scaling to cloud annotation"
+!!! info
 
-    The workflow you just completed runs Label Studio locally. The same approach
-    also works for collaborative team annotation in the cloud. Only three things
-    change:
-
-    - **Instance**: deploy Label Studio on a shared server, in a container, or use
-      [Label Studio Cloud](https://labelstud.io/guide/label_studio_cloud).
-    - **Data import**: upload from S3/GCS instead of your local disk.
-    - **Model backend**: use a reachable URL for the FastAPI backend instead of
-      `http://localhost:8000`.
-
-    The XML labeling interface, export format, and DVC retraining steps stay the
-    same.
+    - **Retrain on the cluster**: In this part you ran `dvc repro` locally to keep
+      the tutorial simple. In production, push only the new labeled data with
+      `dvc add data/raw` and `dvc push`, then let your CI/CD pipeline retrain the
+      model on the Kubernetes cluster
+      ([Part 3 - Serve and deploy](./part-3-serve-and-deploy/introduction.md)).
+    - **Scale annotation to the cloud**: Deploy Label Studio on a shared server,
+      in a container. The XML labeling interface, export format, and DVC retraining
+      steps stay the same.
 
 ## Next steps
 
