@@ -382,33 +382,6 @@ difficulties or want to contribute.
 
 ![bg right:40% w:60%][website-qrcode]
 
-## Now it's your turn!
-
-<!-- _class: lead -->
-
-Feel free to ask questions, share your feedback and contribute to the guide!
-
-We are here to help.
-
-## Clean up
-
-Now that you have completed the guide, it is important to properly manage and
-remove the resources and environments you have created.
-
-This is necessary to avoid:
-
-* unnecessary incurring costs
-* potential security concerns
-
-## Conclusion
-
-You have completed the guide to MLOps!
-
-You can now move from experiments to production on the Cloud using MLOps best
-practices. 🚀
-
-![bg right:35% w:60%](../docs/assets/images/launchpad.svg)
-
 ## Feedback
 
 Your feedback helps us improve! 🙏
@@ -420,6 +393,15 @@ Your feedback helps us improve! 🙏
 ⭐ Leave us a star if you found this guide helpful!
 
 🤝 Your input directly shapes future versions of this workshop.
+
+## Contributions
+
+1. **A mental model** — an ML system is mostly surrounding infrastructure, not
+   just model code.
+2. **A reproducible path** — from notebook to cloud using DVC, CML, BentoML,
+   Kubernetes, Evidently AI, and Label Studio.
+3. **A pragmatic method** — version-controlled, composable, incremental, and
+   adequate for your context.
 
 ## Bonus slides
 
@@ -599,8 +581,3 @@ Model drift and degradation go unnoticed.
 
 ![bg right:40% w:60%](./images/label-studio-logo.svg)
 
-## Sources
-
--   MLOps Venn diagram by Cmbreuel on
-    [Wikipedia](https://commons.wikimedia.org/wiki/File:ML_Ops_Venn_Diagram.svg)
--   ML system diagram by [D. Sculley et. al. NIPS 2015: Hidden technical debt in Machine learning systems](https://dl.acm.org/doi/10.5555/2969442.2969519)
