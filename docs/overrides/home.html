@@ -669,7 +669,7 @@
       </a>
       {% endfor %}
       {% if next_href %}
-      <a href="{{ next_href }}" class="chapter-scroll" aria-label="Next">
+      <a href="{{ next_href }}" class="chapter-scroll" aria-label="Next after {{ chapter.label }}">
         <span class="twemoji" aria-hidden="true">{% include ".icons/lucide/chevron-down.svg" %}</span>
       </a>
       {% endif %}
