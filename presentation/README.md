@@ -345,7 +345,7 @@ Observe the model predictions for data drift.
 
 ![bg right:55% w:95%](./images/a-guide-to-mlops.png)
 
-Use AI-assisted labeling to add new data, then retrain and improve the model.
+Add data with AI assistance and improve iteratively.
 
 ## What you need
 
