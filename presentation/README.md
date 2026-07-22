@@ -347,29 +347,15 @@ Observe the model predictions for data drift.
 
 Add new data to close the loop and improve the model.
 
-## Prerequisites
+## What you need
 
-♿ Accessible to everyone!
-
-🧠 Basic knowledge of Python and terminal is sufficient
-
-💳 A valid credit card for cloud deployment
-
-🤝 You will be accompanied throughout the guide!
+-   Basic Python and terminal knowledge
+-   macOS, Linux, or Windows with WSL2
+-   Python 3.13, pip, git, unzip, Docker
+-   Valid credit card, GitHub account, and Google Cloud account
+-   Terminal and Editor (VS Code recommended)
 
 ![bg right:40% 70%](./images/python-logo.svg)
-
-## Technical checks
-
-Before we start:
-
-💻 macOS, Linux, Windows with WSL2
-
-📝 Editor and Terminal (VS Code recommended)
-
-🛠️ Python 3.13, pip, git, unzip, docker
-
-☁️ GitHub account, Google Cloud account
 
 ## Access the guide
 
