@@ -301,26 +301,22 @@ For **small teams and SMEs** moving ML from notebooks to production.
 -   **Data scientists** ready to leave ad-hoc notebooks and scripts behind
 -   **Software engineers** extending DevOps practices to ML
 
-![bg right:40% 80%](./assets/images/portals/rocket-to-planet.svg)
+![bg right:40% 80%](./images/portals/rocket-to-planet.svg)
 
-## A guide to MLOps
+## The guide
 
 <!-- _class: lead -->
 
-A quick presentation of the guide
+## Welcome to the team
 
-### _"Welcome to the team!"_
+You just joined a team of data scientists and ML engineers.
 
-You just have joined a team of data scientists and machine learning (ML)
-engineers (_welcome!_).
+Their mission: build a model that visually identifies planets or moons from
+images.
 
-The team is working on a model capable of visually identifying planets or moons
-within our solar system from images in a Jupyter Notebook.
+Their problem: the model lives in a Jupyter Notebook, and they cannot ship it.
 
-The team is facing difficulties to move the model to production.
-
-Your mission is to help the team to improve the model and deploy it to the cloud
-using MLOps best practices.
+**Your mission: help them improve the model and deploy it to the cloud.**
 
 ### The big picture
 
