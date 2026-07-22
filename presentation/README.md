@@ -117,9 +117,11 @@ _class: lead stars-bg
 _paginate: false
 -->
 
-[Website][website] · [GitHub][github]
+<small>Bertil Chapuis · Ludovic Delafontaine · Rémy Marquis · Leonard Cseres</small>
 
-<small>Swiss AI Center contributors</small>
+**Swiss AI Center**
+
+<small>[Website][website] · [GitHub][github]</small>
 
 ![bg right:35% w:70%](./images/portals/hero-rocket.svg)
 
@@ -481,4 +483,3 @@ Labeling — what we improve:
 -   Built iteratively from your feedback
 
 ![bg right:40% w:60%][website-qrcode]
-
