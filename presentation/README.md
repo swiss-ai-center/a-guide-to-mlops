@@ -239,21 +239,17 @@ can afford.
 
 <!-- _class: lead -->
 
-## What this guide is / is not
+## What this guide is not
 
-**This guide is**
-
--   lightweight and composable
--   a path from notebook to production
--   incremental, one step at a time
--   built for small teams and SMEs
-
-**This guide is not**
-
--   a heavy all-in-one MLOps platform
+-   a course on LLMs or agentic AI
 -   a course on machine learning theory
 -   a big-bang transformation
--   enterprise infrastructure advice
+
+## What this guide is
+
+-   a path from notebook to production
+-   one possible way of building an ML system
+-   the intuition to build an adequate system for your needs
 
 ## The path
 
@@ -273,14 +269,13 @@ can afford.
 
 ## Our proposal
 
-**A guide to MLOps**
+**A hands-on guide**
 
-🛠️ Switch from a Jupyter Notebook to production using state-of-the-art MLOps
-tools
+🛠️ A reproducible planet/moon classifier workflow
 
-🚀 Go from experience to production on the Cloud
+🚀 Deployed and monitored on the cloud
 
-📖 Use the best practices for ML
+📖 Transferable to your own experiment and context
 
 ![bg right:40% 90%](./images/a-guide-to-mlops.png)
 
