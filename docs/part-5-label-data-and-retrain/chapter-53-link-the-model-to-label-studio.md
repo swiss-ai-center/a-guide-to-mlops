@@ -5,7 +5,7 @@
 In this chapter, you will begin by creating an API for the model. Next, you will
 link the model you trained in the previous chapters to Label Studio using this
 API. This integration will enable the model to make predictions on the unlabeled
-data within Label Studio, rendering the labeling process "AI assisted" and thus
+data within Label Studio, rendering the labeling process "AI-assisted" and thus
 making it significantly more efficient.
 
 The following diagram illustrates the control flow of the experiment at the end
@@ -333,6 +333,13 @@ active-learning strategy.
 3. Go to **Settings > Annotation Settings**, and in the **Prelabeling** section,
    select the **predictions** set created by the batch (by default
    `v0.0.1 (1000 predictions)`) as opposed to the connected model.
+
+    !!! info
+
+        The prediction count in the dropdown can take a few minutes to update while
+        Label Studio processes the batch. Wait until the number reflects all remaining
+        tasks before continuing.
+
 4. Once the predictions have been fetched, click on **Columns** and add the
    **Prediction Score** column to the view.
 5. Sort the tasks by **Prediction Score** in ascending order so the

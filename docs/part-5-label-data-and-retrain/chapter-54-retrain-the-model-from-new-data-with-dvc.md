@@ -66,17 +66,19 @@ Make sure Label Studio is running at <http://localhost:8080>.
 
 4. Move the file under the `extra-data/` folder.
 
-    ```yaml hl_lines="3"
+    ```yaml hl_lines="4"
     .
     ├── extra-data/
-    │   ├── annotations.json # (1)!
+    │   ├── .gitignore # (1)!
+    │   ├── annotations.json # (2)!
     │   ├── extra/
     │   ├── extra-classes/
     │   └── README.md
     └── ...
     ```
 
-    1. This is the annotations file we downloaded from Label Studio.
+    1. This file keeps downloaded images and annotations out of Git.
+    2. This is the annotations file we downloaded from Label Studio.
 
 ### Parse the annotations
 
@@ -109,6 +111,7 @@ for annotation in annotations:
     # Note: Here we use the choice as the folder name, as
     #       this is how we organised the data
     dest_path = NEW_DATA_FOLDER_PATH / choice / filename
+    dest_path.parent.mkdir(parents=True, exist_ok=True)
 
     print(f"Copying {source_path} -> {dest_path}")
     shutil.copy(source_path, dest_path)
@@ -185,6 +188,28 @@ dvc plots diff --open
 The plot shows the performance of the old (right) and new model (left). You can
 see if the new model has improved.
 
+### Check the changes
+
+Check the changes with Git to ensure that all the necessary files are tracked:
+
+```sh title="Execute the following command(s) in a terminal"
+# Add all the files
+git add .
+
+# Check the changes
+git status
+```
+
+The output should look similar to this:
+
+```text
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   data/raw.dvc
+        modified:   dvc.lock
+```
+
 ### Commit and push the updated data
 
 Once you want to share the new data, commit the changes and push to DVC and Git:
@@ -192,9 +217,6 @@ Once you want to share the new data, commit the changes and push to DVC and Git:
 ```sh title="Execute the following command(s) in a terminal"
 # Upload the experiment data, model and cache to the remote bucket
 dvc push
-
-# Add all the files
-git add .
 
 # Commit the changes
 git commit -m "Update the experiment data"

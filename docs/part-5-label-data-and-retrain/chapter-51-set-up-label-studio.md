@@ -187,7 +187,7 @@ git commit -m "Add Label Studio"
 
 ### Start Label Studio
 
-You can now start label studio with the following command:
+You can now start Label Studio with the following command:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Start Label Studio
