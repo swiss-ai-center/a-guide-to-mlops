@@ -131,8 +131,9 @@ _paginate: false
 
 ## A promise
 
-By the end of this workshop, you will know how to turn a **messy notebook**
-into a **reproducible, cloud-deployed, monitored ML system**.
+By the end of this workshop, you will know how to move an ordinary ML project
+from a **messy notebook** to a **reproducible, cloud-deployed, monitored ML
+system**.
 
 ## About us
 
