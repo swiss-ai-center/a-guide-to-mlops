@@ -254,19 +254,6 @@
   .chapter-card:hover {
     border-color: #555555;
   }
-  .landing-rocket {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1.75rem 2rem;
-  }
-  .landing-rocket img,
-  .landing-rocket svg {
-    width: 100%;
-    max-width: 220px;
-    height: auto;
-    opacity: 0.9;
-  }
   .chapter-label {
     display: inline-block;
     padding: 0.25rem 0.6rem;
@@ -621,11 +608,6 @@
   <div class="chapter-grid">
     {% if home.chapters %}
       {% for chapter in home.chapters %}
-        {% if loop.last %}
-          <div class="landing-rocket" aria-hidden="true">
-            <img src="{{ 'assets/images/portals/reentry-capsule.svg' | url }}" alt="">
-          </div>
-        {% endif %}
         {{ chapter_card(chapter) }}
       {% endfor %}
     {% endif %}
