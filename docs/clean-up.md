@@ -205,10 +205,6 @@ or leave any security vulnerabilities.
 
 Here is a checklist of all the resources and environments you created.
 
-!!! tip
-
-    You can click on the list items to mark them as completed if needed.
-
 - [ ] The cloud provider Kubernetes cluster
 - [ ] The cloud provider container registry
 - [ ] The cloud provider S3 bucket
