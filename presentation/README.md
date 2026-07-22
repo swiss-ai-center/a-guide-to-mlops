@@ -356,23 +356,13 @@ Add data with AI assistance and improve iteratively.
 
 ![bg right:40% 70%](./images/python-logo.svg)
 
-## Access the guide
+## Your next step
 
 -   Open [mlops.swiss-ai-center.ch][website]
--   Feedback and contributions on [GitHub][github]
--   Even minor feedback improves the guide
--   [Leave a star ⭐][github]
+-   Contributions and stars on [GitHub][github]
+-   Built iteratively from your feedback
 
 ![bg right:40% w:60%][website-qrcode]
-
-## Contributions
-
-1. **A mental model** — an ML system is mostly surrounding infrastructure, not
-   just model code.
-2. **A reproducible path** — from notebook to cloud using DVC, CML, BentoML,
-   Kubernetes, Evidently AI, and Label Studio.
-3. **A pragmatic method** — version-controlled, composable, incremental, and
-   adequate for your context.
 
 ## Bonus slides
 
