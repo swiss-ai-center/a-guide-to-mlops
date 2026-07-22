@@ -54,7 +54,7 @@ flowchart TB
       the tutorial simple. In production, push only the new labeled data with
       `dvc add data/raw` and `dvc push`, then let your CI/CD pipeline retrain the
       model on the Kubernetes cluster
-      ([Part 3 - Serve and deploy](./part-3-serve-and-deploy/introduction.md)).
+      ([Part 3 - Serve and deploy](../part-3-serve-and-deploy/introduction.md)).
     - **Scale annotation to the cloud**: Deploy Label Studio on a shared server,
       in a container. The XML labeling interface, export format, and DVC retraining
       steps stay the same.

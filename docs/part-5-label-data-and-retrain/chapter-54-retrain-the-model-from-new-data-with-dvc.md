@@ -179,7 +179,7 @@ Now that we have the new data, we can retrain the model.
     extra cloud costs. In production, push the new labeled data (`dvc add data/raw`
     and `dvc push`) to a branch and let your CI/CD pipeline retrain the model on the
     Kubernetes cluster, as set up in
-    [Part 3 - Serve and deploy](./part-3-serve-and-deploy/introduction.md).
+    [Part 3 - Serve and deploy](../part-3-serve-and-deploy/introduction.md).
 
 We will use DVC:
 

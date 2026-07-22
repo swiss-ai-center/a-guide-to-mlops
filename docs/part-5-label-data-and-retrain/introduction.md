@@ -41,4 +41,4 @@ In this part, you will address the following issues:
 
     In a production setup, you should push the new labeled data to a branch and let
     your CI/CD pipeline retrain the model on the Kubernetes cluster, as set up in
-    [Part 3 - Serve and deploy](./part-3-serve-and-deploy/introduction.md).
+    [Part 3 - Serve and deploy](../part-3-serve-and-deploy/introduction.md).
