@@ -7,8 +7,6 @@ hide:
   - toc
 home:
   hero:
-    badge:
-      text: Hands-on tutorial
     title: A Guide to MLOps
     subtitle: |
       Classify celestial bodies with MLOps best practices:
