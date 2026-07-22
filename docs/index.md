@@ -146,9 +146,10 @@ home:
       title_highlight: conclude
       planet: capsule
       body: |
-        Delete cloud resources, remove the GitHub repository and access tokens, and wipe
-        the local environment. A proper cleanup avoids unexpected costs and is the final
-        stage of a successful mission.
+        Wrap up by deleting the cloud provider resources, GitHub repository, Personal
+        Access Token, and local project directories. Cleaning up is part of shipping
+        responsibly: it prevents surprise bills, removes exposed credentials, and
+        leaves you with a reusable workflow instead of lingering infrastructure.
       actions:
         - type: primary
           text: Clean up
