@@ -137,24 +137,12 @@ system**.
 
 ## About us
 
-<!-- _class: lead -->
-
-## Swiss AI Center
-
-**Five HES from the HES-SO** (HEIG-VD, HEIA-FR, HE-Arc, HEVS and HEPIA) work on
-a project called **Swiss AI Center**.
-
-Its mission is to **accelerate the adoption of artificial intelligence in the
-digital transition of Swiss SMEs**.
-
-**HEIG-VD** is responsible for **setting up tools to manage ML experiments from
-code to production**.
-
-## Our team
-
 <!--
 _paginate: false
 -->
+
+**Swiss AI Center:** accelerates AI adoption in SMEs digital transition.
+**HEIG-VD:** tools to manage ML experiments from code to production.
 
 <div class="four-columns">
 
@@ -163,9 +151,7 @@ _paginate: false
 **Bertil<br>Chapuis**<br>
 <small>Professor</small>
 
-![w:200](./images/bertil-chapuis.png)
-
-[Mail](mailto:bertil.chapuis@heig-vd.ch)
+![w:180](./images/bertil-chapuis.png)
 
 </div>
 <div class="center">
@@ -173,9 +159,7 @@ _paginate: false
 **Ludovic<br>Delafontaine**<br>
 <small>Lecturer</small>
 
-![w:200](./images/ludovic-delafontaine.png)
-
-[Mail](mailto:ludovic.delafontaine@heig-vd.ch)
+![w:180](./images/ludovic-delafontaine.png)
 
 </div>
 <div class="center">
@@ -183,9 +167,7 @@ _paginate: false
 **Rémy<br>Marquis**<br>
 <small>aR&D Associate</small>
 
-![w:200](./images/remy-marquis.png)
-
-[Mail](mailto:remy.marquis@heig-vd.ch)
+![w:180](./images/remy-marquis.png)
 
 </div>
 <div class="center">
@@ -193,12 +175,20 @@ _paginate: false
 **Leonard<br>Cseres**<br>
 <small>Assistant</small>
 
-![w:200](./images/leonard-cseres.png)
-
-[Mail](mailto:leonard.cseres@heig-vd.ch)
+![w:180](./images/leonard-cseres.png)
 
 </div>
 </div>
+
+<!--
+Speaker notes:
+
+Five HES from the HES-SO (HEIG-VD, HEIA-FR, HE-Arc, HEVS and HEPIA) work on a
+project called Swiss AI Center.
+
+HEIG-VD is responsible for setting up tools to manage ML experiments from code
+to production.
+-->
 
 ## The trap -> problem
 
