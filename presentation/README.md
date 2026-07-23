@@ -125,7 +125,7 @@ _paginate: false
 
 ![bg right:35% w:70%](./images/portals/hero-rocket.svg)
 
-## The promise
+## The promise -> empowerment promise
 
 <!-- _class: lead -->
 
@@ -200,7 +200,7 @@ _paginate: false
 </div>
 </div>
 
-## The trap
+## The trap -> problem
 
 <!-- _class: lead -->
 
@@ -258,7 +258,7 @@ We can do better.
 **Small teams** and **SMEs** without the dedicated MLOps teams that big tech
 can afford.
 
-## The fence
+## The fence -> boundary
 
 <!-- _class: lead -->
 
@@ -274,7 +274,7 @@ can afford.
 -   one possible way of building an ML system
 -   the intuition to build an adequate system for your needs
 
-## The path
+## The path -> solution
 
 <!-- _class: lead -->
 
@@ -321,7 +321,7 @@ For **small teams and SMEs** moving ML from notebooks to production.
 
 ![bg right:40% 80%](./images/portals/rocket-to-planet.svg)
 
-## The guide
+## The guide -> hands-on mission
 
 <!-- _class: lead -->
 
