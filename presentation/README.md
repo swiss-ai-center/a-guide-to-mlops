@@ -117,9 +117,9 @@ _class: lead stars-bg
 _paginate: false
 -->
 
-<small>Bertil Chapuis · Ludovic Delafontaine · Rémy Marquis · Leonard Cseres</small>
-
 **Swiss AI Center**
+
+<small>Bertil Chapuis · Ludovic Delafontaine · Rémy Marquis · Leonard Cseres</small>
 
 <small>[Website][website] · [GitHub][github]</small>
 
@@ -132,7 +132,7 @@ _paginate: false
 ## A promise
 
 By the end of this workshop, you will know how to move an ordinary ML project
-from a **messy notebook** to a **reproducible, cloud-deployed, monitored ML
+from a messy **Jupyter notebook** to a **reproducible, cloud-deployed, monitored ML
 system**.
 
 ## About us
@@ -470,10 +470,13 @@ Labeling — what we improve:
 
 ## What you need
 
--   Basic Python and terminal knowledge
--   macOS, Linux, or Windows with WSL2
--   Valid credit card, GitHub account, and Google Cloud account
--   Python 3.13, pip, git, unzip, Docker
+**Knowledge:** Basic Python and terminal use
+
+**OS:** macOS, Linux, or Windows with WSL2
+
+**Accounts:** GitHub, Google Cloud with valid credit card
+
+**Tools:** Python 3.13, pip or uv, git, unzip, Docker, editor
 
 ![bg right:40% 70%](./images/python-logo.svg)
 
