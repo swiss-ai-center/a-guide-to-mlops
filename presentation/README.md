@@ -129,8 +129,6 @@ _paginate: false
 
 <!-- _class: lead -->
 
-## A promise
-
 By the end of this workshop, you will know how to move an ordinary ML project
 from a messy **Jupyter notebook** to a **reproducible, cloud-deployed, monitored ML
 system**.
@@ -204,7 +202,7 @@ _paginate: false
 
 <!-- _class: lead -->
 
-## LLMs and agentic AI are everywhere
+## LLM hype is everywhere
 
 But most companies have **ordinary data problems**
 
@@ -258,21 +256,23 @@ We can do better.
 **Small teams** and **SMEs** without the dedicated MLOps teams that big tech
 can afford.
 
+-   **Data scientists** ready to leave ad-hoc notebooks and scripts behind
+-   **Software engineers** extending DevOps practices to ML
+
 ## The fence -> boundary
 
 <!-- _class: lead -->
 
-## What this guide is not
+**This is not:**
 
--   a course on LLMs or agentic AI
+-   a heavy all-in-one MLOps platform
 -   a course on machine learning theory
--   a big-bang transformation
 
-## What this guide is
+**This is:**
 
--   a path from notebook to production
--   one possible way of building an ML system
--   the intuition to build an adequate system for your needs
+-   a lightweight, composable stack
+-   for small teams moving from notebook to production
+-   one step at a time
 
 ## The path -> solution
 
@@ -301,25 +301,6 @@ can afford.
 📖 Transferable to your own experiment and context
 
 ![bg right:40% 90%](./images/a-guide-to-mlops.png)
-
-## Our principles
-
-**Version-controlled.** Track code, data, and experiments together.
-
-**Composable.** Use the best open-source tool for each job.
-
-**Incremental.** Adopt one practice at a time.
-
-**Pragmatic.** Reproducibility first, then automation, deployment, monitoring, and feedback loops.
-
-## Our audience
-
-For **small teams and SMEs** moving ML from notebooks to production.
-
--   **Data scientists** ready to leave ad-hoc notebooks and scripts behind
--   **Software engineers** extending DevOps practices to ML
-
-![bg right:40% 80%](./images/portals/rocket-to-planet.svg)
 
 ## The guide -> hands-on mission
 
@@ -468,6 +449,16 @@ Labeling — what we improve:
 - Make use of AI inference to speed up the labeling process.
 -->
 
+## Our principles
+
+**Version-controlled.** Track code, data, and experiments together.
+
+**Composable.** Use the best open-source tool for each job.
+
+**Incremental.** Adopt one practice at a time.
+
+**Pragmatic.** Reproducibility first, then automation, deployment, monitoring, and feedback loops.
+
 ## What you need
 
 **Knowledge:** Basic Python and terminal use
@@ -480,7 +471,7 @@ Labeling — what we improve:
 
 ![bg right:40% 70%](./images/python-logo.svg)
 
-## Your next step
+## Access the guide
 
 -   Open [mlops.swiss-ai-center.ch][website]
 -   Contributions and stars on [GitHub][github]
