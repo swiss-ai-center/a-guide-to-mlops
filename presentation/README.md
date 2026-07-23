@@ -129,6 +129,8 @@ _paginate: false
 
 <!-- _class: lead -->
 
+<!-- Speaker note: This is the empowerment promise. -->
+
 By the end of this workshop, you will know how to move an ordinary ML project
 from a messy **Jupyter notebook** to a **reproducible, cloud-deployed, monitored ML
 system**.
@@ -213,6 +215,8 @@ But most companies have **ordinary data problems**
 
 ## ML code vs ML system
 
+<!-- Speaker note: This is the surprise. -->
+
 ![bg right:35% w:90%](./images/ml_system.svg)
 
 Only a **small fraction** of real-world ML systems is composed of the ML code.
@@ -220,6 +224,8 @@ Only a **small fraction** of real-world ML systems is composed of the ML code.
 The required surrounding infrastructure is vast and complex.
 
 ## Difficulties with ML projects
+
+<!-- Speaker note: Pause after the question. -->
 
 Have you ever heard or said any of these?
 
@@ -263,6 +269,8 @@ can afford.
 
 <!-- _class: lead -->
 
+<!-- Speaker note: This is the fence. -->
+
 **This is not:**
 
 -   a heavy all-in-one MLOps platform
@@ -277,6 +285,8 @@ can afford.
 ## The path -> solution
 
 <!-- _class: lead -->
+
+<!-- Speaker note: This is the path from notebook to production. -->
 
 ## A solution
 
@@ -305,6 +315,8 @@ can afford.
 ## The guide -> hands-on mission
 
 <!-- _class: lead -->
+
+<!-- Speaker note: This is the story. -->
 
 ## Welcome to the team
 
@@ -450,6 +462,8 @@ Labeling — what we improve:
 -->
 
 ## Our principles
+
+<!-- Speaker note: Deliver on the opening promise. -->
 
 **Version-controlled.** Track code, data, and experiments together.
 
