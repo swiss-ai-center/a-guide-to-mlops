@@ -8,6 +8,7 @@ hide:
 home:
   hero:
     title: A Guide to MLOps
+    image: assets/images/portals/hero-rocket.svg
     subtitle: |
       Classify celestial bodies with MLOps best practices:
       a journey through local training, the cloud, serving, monitoring, labeling, and retraining.
@@ -44,7 +45,7 @@ home:
     - id: intro
       label: Mission briefing
       prefix: Introduction
-      icon: assets/images/portals/icon-mission-briefing.svg
+      icon: assets/images/portals/icon-briefing.svg
       title: Why this
       title_highlight: "guide?"
       planet: moon
@@ -60,7 +61,7 @@ home:
     - id: part-1
       label: Lift-off
       prefix: Part 1
-      icon: assets/images/portals/icon-local-training.svg
+      icon: assets/images/portals/icon-training.svg
       title: Local training &
       title_highlight: model evaluation
       planet: earth
@@ -160,6 +161,7 @@ home:
   finale:
     title: Ready for
     title_highlight: launch?
+    image: assets/images/portals/launchpad.svg
     subtitle: |
       The guide is open source and designed to be followed hands-on.
       Pick a part, open your terminal, and ship a complete ML system.
