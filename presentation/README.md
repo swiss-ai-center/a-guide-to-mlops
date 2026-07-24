@@ -317,22 +317,27 @@ The solution is **MLOps**: Software and DevOps practices adapted to machine lear
 
 </div>
 
-## The fence -> boundary
+## The fence
 
-<!-- _class: lead -->
+<!--
+Speaker notes:
 
-<!-- Speaker note: This is the fence. -->
+This is the fence.
+This is the boundary.
 
-**This is not:**
+This guide is not:
+- a heavy, all-in-one MLOps platform
+- a course on LLMs, machine learning, or deep learning
 
--   a heavy all-in-one MLOps platform
--   a course on machine learning theory
+This guide is:
+- a lightweight, composable path
+- for small teams who already use Git
+- from notebook to production, one step at a time
+-->
 
-**This is:**
+**This is not** an all-in-one MLOps platform or a machine learning course.
 
--   a lightweight, composable stack
--   for small teams moving from notebook to production
--   one step at a time
+**This is** a step-by-step path for small teams who want to go from notebook to production.
 
 ## Our proposal
 
