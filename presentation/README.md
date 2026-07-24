@@ -114,13 +114,24 @@ _class: lead stars-bg
 _paginate: false
 -->
 
-**Swiss AI Center**
+Bertil Chapuis · Ludovic Delafontaine · Rémy Marquis · Leonard Cseres
 
-<small>Bertil Chapuis · Ludovic Delafontaine · Rémy Marquis · Leonard Cseres</small>
+**Swiss AI Center · HEIG-VD**
 
 <small>CC BY-SA 4.0</small>
 
 ![bg right:35% w:70%](./images/portals/hero-rocket.svg)
+
+<!--
+Speaker notes:
+
+Five HES from the HES-SO (HEIG-VD, HEIA-FR, HE-Arc, HEVS and HEPIA) work on a
+project called Swiss AI Center, which accelerates AI adoption in SMEs digital
+transition.
+
+HEIG-VD is responsible for setting up tools to manage ML experiments from code
+to production.
+-->
 
 ## The promise
 
@@ -139,61 +150,6 @@ You will know how to turn a messy **Jupyter notebook** into a **reproducible,
 cloud-deployed ML system**.
 
 ![bg right:40% 80%](./images/portals/rocket-to-planet.svg)
-
-## About us
-
-<!--
-_paginate: false
--->
-
-**Swiss AI Center:** accelerates AI adoption in SMEs digital transition.
-**HEIG-VD:** tools to manage ML experiments from code to production.
-
-<div class="four-columns">
-
-<div class="center">
-
-**Bertil<br>Chapuis**<br>
-<small>Professor</small>
-
-![w:180](./images/bertil-chapuis.png)
-
-</div>
-<div class="center">
-
-**Ludovic<br>Delafontaine**<br>
-<small>Lecturer</small>
-
-![w:180](./images/ludovic-delafontaine.png)
-
-</div>
-<div class="center">
-
-**Rémy<br>Marquis**<br>
-<small>aR&D Associate</small>
-
-![w:180](./images/remy-marquis.png)
-
-</div>
-<div class="center">
-
-**Leonard<br>Cseres**<br>
-<small>Assistant</small>
-
-![w:180](./images/leonard-cseres.png)
-
-</div>
-</div>
-
-<!--
-Speaker notes:
-
-Five HES from the HES-SO (HEIG-VD, HEIA-FR, HE-Arc, HEVS and HEPIA) work on a
-project called Swiss AI Center.
-
-HEIG-VD is responsible for setting up tools to manage ML experiments from code
-to production.
--->
 
 ## The trap
 
