@@ -300,13 +300,14 @@ engineering.
 Speaker notes:
 
 This is the path from notebook to production.
+The solution is MLOps.
 
 MLOps draws inspiration from software and DevOps best practices.
 It adapts these practices to the world of machine learning.
 It improves the management and quality of machine learning projects.
 -->
 
-The solution is **MLOps**: Software and DevOps practices adapted to machine learning.
+**MLOps**: Software and DevOps practices adapted to machine learning.
 
 <div class="center">
 
@@ -314,13 +315,13 @@ The solution is **MLOps**: Software and DevOps practices adapted to machine lear
 
 </div>
 
-## The fence
+## Our scope
 
 <!--
 Speaker notes:
 
 This is the fence.
-This is the boundary.
+This is our scope — what we cover and what we do not cover.
 
 This guide is not:
 - a heavy, all-in-one MLOps platform
@@ -386,11 +387,15 @@ from notebooks to production while you stay in control of your tooling.
 
 <!-- _class: lead -->
 
+**From notebook to production**
+
 <!--
 Speaker notes:
 
 This is the story.
 This is the hands-on mission.
+
+From notebook to production — this is the recurring slogan of the guide.
 -->
 
 ## Welcome to the team!
