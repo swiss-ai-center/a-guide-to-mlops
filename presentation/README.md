@@ -240,11 +240,11 @@ Only a **small fraction** of real-world ML systems is composed of the ML code.
 
 </div>
 
-## Difficulties with ML projects
+## Why ML projects get stuck
 
 <!-- Speaker note: Pause after the question. -->
 
-Have you ever heard or said any of these?
+Have you ever **heard** or **said** any of these?
 
 > I ran the experiment but didn't get the same results
 
@@ -257,7 +257,7 @@ Have you ever heard or said any of these?
 <!--
 Speaker notes — Bonus slide content:
 
-Usual ML workflow:
+Difficulties:
 - Each member of the team manages their own codebase, their own dataset and their
   own models.
 - The reproducibility of the model creation is difficult and cannot be guaranteed
