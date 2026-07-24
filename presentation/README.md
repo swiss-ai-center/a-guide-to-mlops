@@ -297,15 +297,15 @@ Software engineers already know DevOps practices but are moving to ML
 engineering.
 -->
 
-## The path -> solution
+## The Path
 
-<!-- _class: lead -->
+<!--
+Speaker notes:
 
-<!-- Speaker note: This is the path from notebook to production. -->
+This is the path from notebook to production.
+-->
 
-## A solution
-
-**MLOps**
+The solution: **MLOps**
 
 ➡️ Draw inspiration from Software and DevOps best practices
 
