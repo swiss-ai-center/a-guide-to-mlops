@@ -246,16 +246,18 @@ Only a **small fraction** of real-world ML systems is composed of the ML code.
 
 Have you ever **heard** or **said** any of these?
 
-> I ran the experiment but didn't get the same results
+> <small>I ran the experiment but didn't get the same results.</small>
 
-> I tried to build the model on my machine but it doesn't work...
+> <small>I hope my changes help... and that it still works in production.</small>
 
-> The model worked fine before, but not anymore. Did the data change?
+> <small>Can I use your model with my mobile app?</small>
 
-> Can I use your model with my mobile app/website?
+> <small>The model worked fine before, but not anymore. Did the data change?</small>
 
 <!--
 Speaker notes — Bonus slide content:
+
+When reading the mobile app example, also mention website orally.
 
 Difficulties:
 - Each member of the team manages their own codebase, their own dataset and their
@@ -271,7 +273,11 @@ High flexibility for the team, but:
 - hard to reproduce in the future,
 - time consuming.
 
-We can do better.
+We can do better:
+- Get out of the context of the experience.
+- Make sure you can build the model at all times.
+- Monitor the evolution of the model over time.
+- Move to production quickly, efficiently and in a semi-automated way.
 -->
 
 ## Who faces these problems?
