@@ -279,10 +279,11 @@ We can do better:
 
 ## Who faces these problems?
 
-**Small teams** and **SMEs** without dedicated MLOps teams.
+**Data scientists** who train models in notebooks.
 
--   **Data scientists** who train models in notebooks
--   **Software engineers** moving to ML engineering
+**Software engineers** moving to ML engineering.
+
+**Small teams** and **SMEs** without dedicated MLOps teams.
 
 <!--
 Speaker notes:
