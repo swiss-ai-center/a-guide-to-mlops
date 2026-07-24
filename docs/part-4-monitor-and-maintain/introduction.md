@@ -4,6 +4,10 @@ title: "Part 4 - Introduction"
 
 # Introduction
 
+<figure markdown="span">
+  ![Part 4 mission patch](../assets/images/portals/patch-monitor.svg){ width="200" }
+</figure>
+
 Learn how to monitor and maintain the model using
 [:simple-fluentbit: Fluent Bit](../tools.md) and [Evidently AI](../tools.md).
 

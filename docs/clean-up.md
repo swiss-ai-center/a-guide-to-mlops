@@ -1,5 +1,9 @@
 # Clean up
 
+<figure markdown="span">
+  ![Clean-up mission patch](assets/images/portals/patch-cleanup.svg){ width="200" }
+</figure>
+
 Now that you have completed the guide, it is crucial to properly manage and
 remove the resources and environments you have created. This is necessary to
 avoid unnecessary incurring costs and potential security concerns.

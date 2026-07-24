@@ -1,5 +1,9 @@
 # Conclusion
 
+<figure markdown="span">
+  ![Conclusion mission patch](assets/images/portals/patch-mission.svg){ width="200" }
+</figure>
+
 Congratulations on completing the guide. You started with a notebook experiment
 and built a complete MLOps workflow: reproducible training, automated
 deployment, production monitoring, and iterative retraining with high-quality

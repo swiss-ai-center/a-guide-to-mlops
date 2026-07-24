@@ -4,6 +4,10 @@ title: "Part 5 - Introduction"
 
 # Introduction
 
+<figure markdown="span">
+  ![Part 5 mission patch](../assets/images/portals/patch-retrain.svg){ width="200" }
+</figure>
+
 Learn how to use the model to label new data using Label Studio and retrain the
 model iteratively.
 

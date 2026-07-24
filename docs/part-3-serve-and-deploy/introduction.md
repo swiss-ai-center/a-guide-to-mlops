@@ -4,6 +4,10 @@ title: "Part 3 - Introduction"
 
 # Introduction
 
+<figure markdown="span">
+  ![Part 3 mission patch](../assets/images/portals/patch-deploy.svg){ width="200" }
+</figure>
+
 Learn how to serve and deploy the model using
 [:simple-bentoml: BentoML](../tools.md) and
 [:simple-docker: Docker](../tools.md).
