@@ -553,15 +553,15 @@ Labeling — what we improve:
 
 ## What you need
 
-**Knowledge:** Basic Python and terminal use
+**Knowledge:** Python & terminal basics
 
-**OS:** macOS, Linux, or Windows with WSL2
+**System:** macOS, Linux, or WSL2
 
 **Accounts:** GitHub, Google Cloud with valid credit card
 
-**Tools:** Python 3.13, pip or uv, git, unzip, Docker, editor
+**Tools:** Python 3.13, git, unzip, Docker, an editor
 
-![bg right:40% 70%](./images/python-logo.svg)
+![bg right:40% 70%](./images/portals/briefing.svg)
 
 ## Access the guide
 
