@@ -355,11 +355,16 @@ the cloud.
 
 ![bg right:50% w:85%](./images/a-guide-to-mlops.png)
 
-## The guide -> hands-on mission
+## The guide
 
 <!-- _class: lead -->
 
-<!-- Speaker note: This is the story. -->
+<!--
+Speaker notes:
+
+This is the story.
+This is the hands-on mission.
+-->
 
 ## Welcome to the team
 
