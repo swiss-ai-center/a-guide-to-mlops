@@ -129,11 +129,17 @@ _paginate: false
 
 <!-- _class: lead -->
 
-<!-- Speaker note: This is the empowerment promise. -->
+<!--
+Speaker notes:
 
-By the end of this workshop, you will know how to move an ordinary ML project
-from a messy **Jupyter notebook** to a **reproducible, cloud-deployed, monitored ML
-system**.
+By the end of this workshop, you will know how to turn a messy notebook into a
+reproducible, cloud-deployed ML system.
+
+This is the empowerment promise.
+-->
+
+You will know how to turn a messy **Jupyter notebook** into a **reproducible,
+cloud-deployed ML system**.
 
 ![bg right:40% 80%](./images/portals/rocket-to-planet.svg)
 
