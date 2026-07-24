@@ -550,3 +550,25 @@ Beware the costs.
 Open **mlops.swiss-ai-center.ch**
 
 ![bg right:40% 70%](./images/portals/launchpad.svg)
+
+## Contributions
+
+<!--
+Speaker notes:
+
+This is the contributions slide.
+
+Mirror the job-talk sandwich:
+- Vision: ordinary ML projects get stuck in notebooks.
+- Done something: a hands-on five-step path from notebook to production.
+- Contributions: a pragmatic guide, upstream improvements, and a reusable
+  workshop.
+
+Do not end with "thank you."
+-->
+
+A pragmatic MLOps guide for small teams and SMEs.
+
+Upstream improvements to the open-source tools you will use.
+
+A hands-on workshop you can replay with your own model.
