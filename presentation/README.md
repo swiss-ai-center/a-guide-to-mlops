@@ -282,13 +282,20 @@ We can do better:
 
 ## Who faces these problems?
 
-**Small teams** and **SMEs** without the dedicated MLOps teams that big tech
-can afford.
+**Small teams** and **SMEs** without dedicated MLOps teams.
 
--   **Data scientists** who train models in notebooks, save artifacts manually,
-    and deploy with ad-hoc scripts.
--   **Software engineers** who already know DevOps practices but are moving to
-    ML Engineering.
+-   **Data scientists** who train models in notebooks
+-   **Software engineers** moving to ML engineering
+
+<!--
+Speaker notes:
+
+Data scientists train models in notebooks, save artifacts manually, and deploy
+with ad-hoc scripts.
+
+Software engineers already know DevOps practices but are moving to ML
+engineering.
+-->
 
 ## The fence -> boundary
 
