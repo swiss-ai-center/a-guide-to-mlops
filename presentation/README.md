@@ -310,7 +310,7 @@ It adapts these practices to the world of machine learning.
 It improves the management and quality of machine learning projects.
 -->
 
-**MLOps**: Software and DevOps practices adapted to machine learning.
+**MLOps** adapts software and DevOps practices to machine learning.
 
 <div class="center">
 
