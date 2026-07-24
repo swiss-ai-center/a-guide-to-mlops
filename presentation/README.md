@@ -125,7 +125,7 @@ _paginate: false
 
 ![bg right:35% w:70%](./images/portals/hero-rocket.svg)
 
-## The promise -> empowerment promise
+## The promise
 
 <!-- _class: lead -->
 
@@ -134,6 +134,8 @@ _paginate: false
 By the end of this workshop, you will know how to move an ordinary ML project
 from a messy **Jupyter notebook** to a **reproducible, cloud-deployed, monitored ML
 system**.
+
+![bg right:40% 80%](./images/portals/rocket-to-planet.svg)
 
 ## About us
 
