@@ -309,13 +309,13 @@ It adapts these practices to the world of machine learning.
 It improves the management and quality of machine learning projects.
 -->
 
-The solution: **MLOps**
+The solution is **MLOps**: Software and DevOps practices adapted to machine learning.
 
--   Software and DevOps best practices
--   Adapted to machine learning
--   Improves management and quality
+<div class="center">
 
-![bg right:40% 110%](./images/mlops-venn-diagram.svg)
+<img src="./images/mlops-venn-diagram.svg" style="width: 50%;">
+
+</div>
 
 ## The fence -> boundary
 
