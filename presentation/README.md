@@ -366,7 +366,10 @@ This is the story.
 This is the hands-on mission.
 -->
 
-## Welcome to the team
+## Welcome to the team!
+
+<!--
+Speaker notes:
 
 You just joined a team of data scientists and ML engineers.
 
@@ -375,7 +378,16 @@ images.
 
 Their problem: the model lives in a Jupyter Notebook, and they cannot ship it.
 
-**Your mission: help them improve the model and deploy it to the cloud.**
+Your mission: help them improve the model and deploy it to the cloud.
+-->
+
+You just joined a team of data scientists and ML engineers.
+
+**Their mission:** identify planets or moons from images.
+
+**Their problem:** the model is stuck in a Jupyter Notebook.
+
+**Your mission:** help them improve and deploy in production.
 
 ### The big picture
 
