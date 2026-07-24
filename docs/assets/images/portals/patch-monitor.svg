@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Neutral backing so the patch reads on both dark and light themes -->
+  <circle cx="200" cy="200" r="190" fill="#333333" opacity="0.65"/>
+
+  <!-- Monitor patch: satellite monitoring a planet, small rocket in the lower part -->
+  <g transform="translate(200, 200)">
+    <!-- Planet being monitored -->
+    <circle cx="-100" cy="20" r="75" fill="#06b6d4" stroke="#0891b2" stroke-width="4"/>
+    <g fill="none" stroke="#22d3ee" stroke-width="5" opacity="0.4">
+      <ellipse cx="-100" cy="20" rx="60" ry="15"/>
+      <ellipse cx="-100" cy="20" rx="60" ry="30"/>
+      <ellipse cx="-100" cy="20" rx="55" ry="45" transform="rotate(-15 -100 20)"/>
+      <ellipse cx="-100" cy="20" rx="6" ry="110" transform="rotate(10 -100 20)" stroke-width="3" opacity="0.5"/>
+    </g>
+    <path d="M -135 -5 Q -100 35 -60 0" fill="none" stroke="#0891b2" stroke-width="5" stroke-linecap="round" opacity="0.6"/>
+
+    <!-- Satellite in the foreground, collecting data -->
+    <g transform="translate(120, -10)">
+      <!-- Solar panels -->
+      <rect x="-95" y="-20" width="70" height="40" rx="4" fill="#334155" stroke="#475569" stroke-width="4"/>
+      <rect x="25" y="-20" width="70" height="40" rx="4" fill="#334155" stroke="#475569" stroke-width="4"/>
+
+      <!-- Panel grid lines -->
+      <g stroke="#475569" stroke-width="2" opacity="0.6">
+        <line x1="-85" y1="-20" x2="-85" y2="20"/>
+        <line x1="-70" y1="-20" x2="-70" y2="20"/>
+        <line x1="-55" y1="-20" x2="-55" y2="20"/>
+        <line x1="-40" y1="-20" x2="-40" y2="20"/>
+        <line x1="40" y1="-20" x2="40" y2="20"/>
+        <line x1="55" y1="-20" x2="55" y2="20"/>
+        <line x1="70" y1="-20" x2="70" y2="20"/>
+        <line x1="85" y1="-20" x2="85" y2="20"/>
+      </g>
+
+      <!-- Body -->
+      <rect x="-22" y="-30" width="44" height="60" rx="8" fill="#f8fafc" stroke="#e5e5e5" stroke-width="4"/>
+      <circle cx="0" cy="0" r="12" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+      <circle cx="4" cy="-4" r="4" fill="#ffffff" opacity="0.2"/>
+
+      <!-- Sensor dish on vertical arm above the satellite, pointing toward the planet -->
+      <line x1="0" y1="-30" x2="0" y2="-75" stroke="#94a3b8" stroke-width="4"/>
+      <g transform="translate(-20, -75) rotate(60)">
+        <path d="M -28 0 Q 0 -34 28 0 Q 0 -20 -28 0 Z" fill="#f8fafc" stroke="#e5e5e5" stroke-width="2"/>
+        <circle cx="0" cy="-8" r="5" fill="#f59e0b"/>
+      </g>
+    </g>
+
+    <!-- Wi-Fi / signal waves rotated toward the planet -->
+    <g stroke="#f59e0b" stroke-width="5" stroke-linecap="round" fill="none" transform="translate(60, 10) rotate(60, 0, -45)">
+      <path d="M 5 -65 Q -25 -90 -55 -65" opacity="0.95"/>
+      <path d="M 15 -35 Q -25 -55 -65 -35" opacity="0.8"/>
+      <path d="M 25 -5 Q -25 -25 -75 -5" opacity="0.65"/>
+    </g>
+
+    <!-- Small rocket in the lower part of the patch -->
+    <g transform="translate(70, 150) rotate(210) scale(0.75)">
+      <polygon points="-24,20 -52,-8 -24,-2" fill="#a3a3a3"/>
+      <polygon points="24,20 52,-8 24,-2" fill="#a3a3a3"/>
+      <path d="M 0,105 L 26,-4 Q 0,-18 -26,-4 Z" fill="#f8fafc" stroke="#e5e5e5" stroke-width="3"/>
+      <circle cx="0" cy="50" r="12" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+      <path d="M -13,-6 Q -7,-28 0,-36 Q 7,-28 13,-6 Q 0,-14 -13,-6" fill="#f59e0b" opacity="0.7"/>
+    </g>
+  </g>
+</svg>

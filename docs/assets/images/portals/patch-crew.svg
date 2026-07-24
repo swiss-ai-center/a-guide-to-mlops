@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Neutral backing so the patch reads on both dark and light themes -->
+  <circle cx="200" cy="200" r="190" fill="#333333" opacity="0.65"/>
+
+  <!-- Reusable astronaut figure -->
+  <defs>
+    <g id="astronaut">
+      <!-- Helmet dome -->
+      <circle cx="0" cy="-30" r="105" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="6"/>
+
+      <!-- Visor -->
+      <rect x="-75" y="-45" width="150" height="80" rx="36" fill="#0f172a" stroke="#475569" stroke-width="4"/>
+      <ellipse cx="-35" cy="-15" rx="20" ry="12" fill="#ffffff" opacity="0.15"/>
+
+      <!-- Neck ring -->
+      <rect x="-65" y="65" width="130" height="26" rx="6" fill="#94a3b8"/>
+
+      <!-- Shoulders -->
+      <path d="M -100 125 Q -100 90 -55 95 L 55 95 Q 100 90 100 125 L 100 155 L -100 155 Z" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="6"/>
+
+      <!-- Swiss flag mission insignia on the left side of the chest -->
+      <g transform="translate(-45, 128)">
+        <rect x="-18" y="-12" width="36" height="36" rx="2" fill="#da291c" stroke="#b91c1c" stroke-width="2"/>
+        <rect x="-4" y="-7" width="8" height="26" fill="#ffffff"/>
+        <rect x="-13" y="2" width="26" height="8" fill="#ffffff"/>
+      </g>
+    </g>
+  </defs>
+
+  <!-- Side astronauts (drawn first, behind center) -->
+  <use href="#astronaut" transform="translate(90, 210) scale(0.7)"/>
+  <use href="#astronaut" transform="translate(310, 210) scale(0.7)"/>
+
+  <!-- Center astronaut (foreground) -->
+  <use href="#astronaut" transform="translate(200, 200) scale(0.85)"/>
+</svg>

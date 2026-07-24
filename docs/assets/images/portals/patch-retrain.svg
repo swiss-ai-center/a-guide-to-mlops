@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Neutral backing so the patch reads on both dark and light themes -->
+  <circle cx="200" cy="200" r="190" fill="#333333" opacity="0.65"/>
+
+  <!-- Dotted spiral loop from the rocket to Neptune -->
+  <path d="M 160 140
+           C 90 140, 90 280, 160 280
+           C 210 280, 210 220, 160 220
+           C 135 220, 135 260, 160 260"
+        fill="none" stroke="#f59e0b" stroke-width="6" stroke-dasharray="12 8" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+
+  <!-- Rocket in the upper left, matching icon-retrain.svg -->
+  <g transform="translate(160, 140) rotate(60)">
+    <polygon points="-20,18 -44,-8 -20,-2" fill="#a3a3a3"/>
+    <polygon points="20,18 44,-8 20,-2" fill="#a3a3a3"/>
+    <path d="M 0,90 L 24,-4 Q 0,-14 -24,-4 Z" fill="#f8fafc" stroke="#e5e5e5" stroke-width="3"/>
+    <circle cx="0" cy="45" r="10" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+    <path d="M -11,-6 Q -6,-26 0,-34 Q 6,-26 11,-6 Q 0,-12 -11,-6" fill="#f59e0b"/>
+  </g>
+
+  <!-- Neptune planet in the lower right -->
+  <g transform="translate(310, 270)">
+    <circle cx="0" cy="0" r="75" fill="#1d4ed8" stroke="#3b82f6" stroke-width="3"/>
+    <g fill="none" stroke="#3b82f6" stroke-width="5" opacity="0.5">
+      <ellipse cx="0" cy="0" rx="60" ry="15"/>
+      <ellipse cx="0" cy="0" rx="60" ry="30"/>
+    </g>
+    <path d="M -45 -25 Q 0 30 52 -28" fill="none" stroke="#1e40af" stroke-width="5" stroke-linecap="round" opacity="0.6"/>
+  </g>
+</svg>
