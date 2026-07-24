@@ -357,15 +357,33 @@ the cloud.
 
 ## Our principles
 
-<!-- Speaker note: Deliver on the opening promise. -->
+<!--
+Speaker notes:
 
-**Version-controlled.** Track code, data, and experiments together.
+Deliver on the opening promise.
 
-**Composable.** Use the best open-source tool for each job.
+Our principles:
+- Version-controlled — track code, parameters, and deployments in Git, and keep
+  data versions linked to them, so every model can be reproduced.
+- Composable — use best-of-breed open-source tools that each solve one problem
+  well.
+- Incremental — adopt one practice at a time, not all at once.
+- Pragmatic — prioritize reproducibility first, then automation, then
+  deployment, then monitoring, then feedback loops. In this guide, that loop
+  means using AI-assisted labeling to add data and retrain iteratively.
 
-**Incremental.** Adopt one practice at a time.
+That is why we avoid all-in-one MLOps platforms that need dedicated
+infrastructure or databases. A lightweight, Git-native stack is a pragmatic path
+from notebooks to production while you stay in control of your tooling.
+-->
 
-**Pragmatic.** Reproducibility first, then automation, deployment, monitoring, and feedback loops.
+**Version-controlled**
+
+**Composable**
+
+**Incremental**
+
+**Pragmatic**
 
 ## The guide
 
