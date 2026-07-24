@@ -198,11 +198,9 @@ HEIG-VD is responsible for setting up tools to manage ML experiments from code
 to production.
 -->
 
-## The trap: LLM hype is everywhere
+## The trap
 
 <!-- _class: lead -->
-
-But most companies have **ordinary ML problems**.
 
 <!--
 Speaker notes:
@@ -215,6 +213,14 @@ Ordinary ML problems:
 - Classifiers trained on years of messy history.
 - Anomaly detection on manufacturing or server metrics.
 -->
+
+<div class="center">
+
+LLM hype is everywhere.
+
+But most companies have **ordinary ML problems**.
+
+</div>
 
 ## ML code vs ML system
 
