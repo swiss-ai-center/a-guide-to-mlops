@@ -283,7 +283,7 @@ We can do better:
 
 **Software engineers** moving to ML engineering.
 
-**Small teams** and **SMEs** without dedicated MLOps teams.
+**Small teams** and **SMEs** without a team to deploy and maintain models.
 
 <!--
 Speaker notes:
@@ -293,6 +293,8 @@ with ad-hoc scripts.
 
 Software engineers already know DevOps practices but are moving to ML
 engineering.
+
+Small teams and SMEs where the same people build and run models.
 -->
 
 ## The Path
