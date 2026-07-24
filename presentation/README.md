@@ -355,6 +355,18 @@ the cloud.
 
 ![bg right:50% w:85%](./images/a-guide-to-mlops.png)
 
+## Our principles
+
+<!-- Speaker note: Deliver on the opening promise. -->
+
+**Version-controlled.** Track code, data, and experiments together.
+
+**Composable.** Use the best open-source tool for each job.
+
+**Incremental.** Adopt one practice at a time.
+
+**Pragmatic.** Reproducibility first, then automation, deployment, monitoring, and feedback loops.
+
 ## The guide
 
 <!-- _class: lead -->
@@ -520,18 +532,6 @@ Labeling — what we improve:
 - Use new data to retrain and improve the model.
 - Make use of AI inference to speed up the labeling process.
 -->
-
-## Our principles
-
-<!-- Speaker note: Deliver on the opening promise. -->
-
-**Version-controlled.** Track code, data, and experiments together.
-
-**Composable.** Use the best open-source tool for each job.
-
-**Incremental.** Adopt one practice at a time.
-
-**Pragmatic.** Reproducibility first, then automation, deployment, monitoring, and feedback loops.
 
 ## What you need
 
