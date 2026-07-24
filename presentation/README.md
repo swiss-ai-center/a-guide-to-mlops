@@ -573,10 +573,17 @@ It is built iteratively from your feedback.
 Each detail or pain point you encounter is useful to us.
 
 Do not hesitate to share!
+
+If you launch the cluster during the workshop, beware the costs.
+Do not wrap up the workshop without shutting down the cluster!
 -->
 
--   Open **mlops.swiss-ai-center.ch**
--   Contributions and **stars** on GitHub
--   Your feedback is important
+Open **mlops.swiss-ai-center.ch**
+
+Contributions and **stars** on GitHub.
+
+Your feedback is important.
+
+Beware the costs.
 
 ![bg right:40% 70%](./images/portals/launchpad.svg)
