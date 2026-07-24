@@ -1,7 +1,5 @@
 # Syllabus
 
-What you will learn.
-
 <figure markdown="span">
   ![Syllabus mission patch](assets/images/portals/patch-briefing.svg){ width="200" }
 </figure>

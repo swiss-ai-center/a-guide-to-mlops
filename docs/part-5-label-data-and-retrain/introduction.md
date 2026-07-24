@@ -8,8 +8,8 @@ title: "Part 5 - Introduction"
   ![Part 5 mission patch](../assets/images/portals/patch-retrain.svg){ width="200" }
 </figure>
 
-Learn how to use the model to label new data using Label Studio and retrain the
-model iteratively.
+Learn how to use the model to label new data using [Label Studio](../tools.md)
+and retrain the model iteratively.
 
 ## Environment
 
