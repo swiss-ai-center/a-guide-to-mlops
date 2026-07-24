@@ -393,7 +393,7 @@ You just joined a team of data scientists and ML engineers.
 
 ![bg](./images/the-big-picture.svg)
 
-## 1. Track experiments with DVC
+## 1. Track experiments
 
 ![bg right:55% w:95%](./images/a-guide-to-mlops.png)
 
@@ -431,7 +431,7 @@ Reproduce — what we improve:
 - DVC can improve time efficiency.
 -->
 
-## 2. Review results with CML
+## 2. Review results
 
 ![bg right:55% w:95%](./images/a-guide-to-mlops.png)
 
@@ -450,7 +450,7 @@ Tracking — what we improve:
 - Errors and anomalies are easily identified.
 -->
 
-## 3. Serve and deploy the model
+## 3. Serve and deploy
 
 ![bg right:55% w:95%](./images/a-guide-to-mlops.png)
 
@@ -481,7 +481,7 @@ Deployment — what we improve:
 - Automate the process.
 -->
 
-## 4. Monitor and maintain the model
+## 4. Monitor and maintain
 
 ![bg right:55% w:95%](./images/a-guide-to-mlops.png)
 
