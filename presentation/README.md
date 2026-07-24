@@ -297,23 +297,6 @@ Software engineers already know DevOps practices but are moving to ML
 engineering.
 -->
 
-## The fence -> boundary
-
-<!-- _class: lead -->
-
-<!-- Speaker note: This is the fence. -->
-
-**This is not:**
-
--   a heavy all-in-one MLOps platform
--   a course on machine learning theory
-
-**This is:**
-
--   a lightweight, composable stack
--   for small teams moving from notebook to production
--   one step at a time
-
 ## The path -> solution
 
 <!-- _class: lead -->
@@ -331,6 +314,23 @@ engineering.
 ➡️ Improve the management and quality of machine learning projects
 
 ![bg right:40% 110%](./images/mlops-venn-diagram.svg)
+
+## The fence -> boundary
+
+<!-- _class: lead -->
+
+<!-- Speaker note: This is the fence. -->
+
+**This is not:**
+
+-   a heavy all-in-one MLOps platform
+-   a course on machine learning theory
+
+**This is:**
+
+-   a lightweight, composable stack
+-   for small teams moving from notebook to production
+-   one step at a time
 
 ## Our proposal
 
