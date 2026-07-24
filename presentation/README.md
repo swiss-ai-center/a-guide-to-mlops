@@ -285,8 +285,10 @@ We can do better:
 **Small teams** and **SMEs** without the dedicated MLOps teams that big tech
 can afford.
 
--   **Data scientists** ready to leave ad-hoc notebooks and scripts behind
--   **Software engineers** extending DevOps practices to ML
+-   **Data scientists** who train models in notebooks, save artifacts manually,
+    and deploy with ad-hoc scripts.
+-   **Software engineers** who already know DevOps practices but are moving to
+    ML Engineering.
 
 ## The fence -> boundary
 
