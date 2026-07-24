@@ -106,8 +106,6 @@ headingDivider: 4
 
 [license]: https://github.com/swiss-ai-center/a-guide-to-mlops/blob/main/LICENSE
 [website]: https://mlops.swiss-ai-center.ch
-[website-qrcode]:
-    https://quickchart.io/qr?format=png&ecLevel=Q&size=400&margin=1&text=https://mlops.swiss-ai-center.ch
 [github]: https://github.com/swiss-ai-center/a-guide-to-mlops
 
 # A guide to MLOps
@@ -563,10 +561,22 @@ Labeling — what we improve:
 
 ![bg right:40% 70%](./images/portals/briefing.svg)
 
-## Access the guide
+## Get started
 
--   Open [mlops.swiss-ai-center.ch][website]
--   Contributions and stars on [GitHub][github]
--   Built iteratively from your feedback
+<!--
+Speaker notes:
 
-![bg right:40% w:60%][website-qrcode]
+The guide is open source, and contributions are welcome.
+
+It is built iteratively from your feedback.
+
+Each detail or pain point you encounter is useful to us.
+
+Do not hesitate to share!
+-->
+
+-   Open **mlops.swiss-ai-center.ch**
+-   Contributions and **stars** on GitHub
+-   Your feedback is important
+
+![bg right:40% 70%](./images/portals/launchpad.svg)
