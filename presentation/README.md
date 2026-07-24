@@ -198,28 +198,41 @@ HEIG-VD is responsible for setting up tools to manage ML experiments from code
 to production.
 -->
 
-## The trap -> problem
+## The trap: LLM hype is everywhere
 
 <!-- _class: lead -->
 
-## LLM hype is everywhere
+But most companies have **ordinary ML problems**.
 
-But most companies have **ordinary data problems**
+<!--
+Speaker notes:
 
-- Data trapped in spreadsheets, logs, and sensors.
+This is the trap.
+
+Ordinary ML problems:
+- Models trained on data trapped in spreadsheets, logs, and sensors.
 - Forecasts built on fragile business systems.
 - Classifiers trained on years of messy history.
 - Anomaly detection on manufacturing or server metrics.
+-->
 
 ## ML code vs ML system
 
-<!-- Speaker note: This is the surprise. -->
+<!--
+Speaker notes:
 
-![bg right:35% w:90%](./images/ml_system.svg)
+This is the surprise.
+
+The required surrounding infrastructure is vast and complex.
+-->
 
 Only a **small fraction** of real-world ML systems is composed of the ML code.
 
-The required surrounding infrastructure is vast and complex.
+<div class="center">
+
+![w:70%](./images/ml_system.svg)
+
+</div>
 
 ## Difficulties with ML projects
 
