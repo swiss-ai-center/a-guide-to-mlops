@@ -341,15 +341,19 @@ This guide is:
 
 ## Our proposal
 
-**A hands-on guide**
+<!--
+Speaker notes:
 
-🛠️ A reproducible planet/moon classifier workflow
+Our proposal:
+- A hands-on guide built around a reproducible workflow
+- Deployed and monitored on the cloud
+- Transferable to your own experiment and context
+-->
 
-🚀 Deployed and monitored on the cloud
+A **hands-on guide** built around a reproducible workflow, deployed and monitored on
+the cloud.
 
-📖 Transferable to your own experiment and context
-
-![bg right:40% 90%](./images/a-guide-to-mlops.png)
+![bg right:50% w:85%](./images/a-guide-to-mlops.png)
 
 ## The guide -> hands-on mission
 
