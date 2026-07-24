@@ -10,7 +10,7 @@ author: Swiss AI Center contributors
 title: 'A guide to MLOps - Presentation'
 description: 'Presentation of the MLOps guide'
 url: https://mlops.swiss-ai-center.ch/presentation/
-footer: '**Swiss AI Center** - A guide to MLOps 2026 - CC BY-SA 4.0'
+footer: '**Swiss AI Center** - A guide to MLOps 2026'
 style: |
     :root {
         --color-background: #f7f8fc;
@@ -121,7 +121,7 @@ _paginate: false
 
 <small>Bertil Chapuis · Ludovic Delafontaine · Rémy Marquis · Leonard Cseres</small>
 
-<small>[Website][website] · [GitHub][github]</small>
+<small>CC BY-SA 4.0</small>
 
 ![bg right:35% w:70%](./images/portals/hero-rocket.svg)
 
