@@ -303,15 +303,17 @@ engineering.
 Speaker notes:
 
 This is the path from notebook to production.
+
+MLOps draws inspiration from software and DevOps best practices.
+It adapts these practices to the world of machine learning.
+It improves the management and quality of machine learning projects.
 -->
 
 The solution: **MLOps**
 
-➡️ Draw inspiration from Software and DevOps best practices
-
-➡️ Adapting these practices to the world of machine learning
-
-➡️ Improve the management and quality of machine learning projects
+-   Software and DevOps best practices
+-   Adapted to machine learning
+-   Improves management and quality
 
 ![bg right:40% 110%](./images/mlops-venn-diagram.svg)
 
