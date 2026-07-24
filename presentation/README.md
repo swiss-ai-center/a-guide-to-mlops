@@ -577,12 +577,12 @@ If you launch the cluster during the workshop, beware the costs.
 Do not wrap up the workshop without shutting down the cluster!
 -->
 
-Open **mlops.swiss-ai-center.ch**
+Your feedback is important.
 
 Contributions and **stars** on GitHub.
 
-Your feedback is important.
-
 Beware the costs.
+
+Open **mlops.swiss-ai-center.ch**
 
 ![bg right:40% 70%](./images/portals/launchpad.svg)
