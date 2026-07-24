@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Neutral backing so the patch reads on both dark and light themes -->
+  <circle cx="200" cy="200" r="190" fill="#333333" opacity="0.65"/>
+
+  <!-- Lift-off patch: rocket leaving Earth/local launchpad -->
+  <g transform="translate(200, 210)">
+    <!-- Earth horizon below -->
+    <path d="M -170 60 Q 0 -10 170 60 L 170 110 L -170 110 Z" fill="#1d4ed8" stroke="#3b82f6" stroke-width="4"/>
+
+    <!-- Continents -->
+    <g fill="#16a34a" opacity="0.85">
+      <path d="M -165 60 Q -120 35 -50 42 Q -25 55 -55 85 Q -120 95 -165 60"/>
+      <path d="M -20 45 Q 20 30 55 45 Q 65 70 20 88 Q -25 75 -20 45"/>
+      <path d="M 70 35 Q 120 30 170 62 Q 170 105 120 108 Q 70 105 70 35"/>
+    </g>
+
+    <!-- Launch tower silhouette -->
+    <g stroke="#525252" stroke-width="3" fill="none" opacity="0.9">
+      <line x1="-85" y1="60" x2="-85" y2="-45"/>
+      <line x1="-55" y1="60" x2="-55" y2="-45"/>
+      <line x1="-85" y1="35" x2="-55" y2="20"/>
+      <line x1="-85" y1="20" x2="-55" y2="35"/>
+      <line x1="-85" y1="0" x2="-55" y2="-15"/>
+      <line x1="-85" y1="-15" x2="-55" y2="0"/>
+      <line x1="-90" y1="-45" x2="-50" y2="-45"/>
+    </g>
+
+    <!-- Rocket lifting off -->
+    <g transform="translate(0, -35)">
+      <!-- Fins -->
+      <path d="M -28 -20 L -61 15 L -28 5 Z" fill="#a3a3a3"/>
+      <path d="M 28 -20 L 61 15 L 28 5 Z" fill="#a3a3a3"/>
+
+      <!-- Main hull -->
+      <path d="M 0 -125 L 32 5 Q 0 22 -32 5 Z" fill="#f8fafc" stroke="#e5e5e5" stroke-width="2"/>
+
+      <!-- Window -->
+      <circle cx="0" cy="-65" r="14" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+      <circle cx="4" cy="-69" r="4" fill="#ffffff" opacity="0.2"/>
+
+      <!-- Body detail -->
+      <line x1="0" y1="-30" x2="0" y2="-5" stroke="#94a3b8" stroke-width="2" opacity="0.5"/>
+      <rect x="-11" y="-42" width="22" height="6" rx="2" fill="#94a3b8" opacity="0.5"/>
+
+      <!-- Exhaust plume -->
+      <path d="M -18 12 Q -10 48 0 62 Q 10 48 18 12 Q 0 32 -18 12" fill="#f59e0b"/>
+      <path d="M -10 12 Q -5 38 0 48 Q 5 38 10 12 Q 0 26 -10 12" fill="#fbbf24" opacity="0.7"/>
+    </g>
+    <!-- Moon in the sky -->
+    <g transform="translate(130, -130)">
+      <circle cx="0" cy="0" r="28" fill="#e5e5e5" opacity="0.9"/>
+      <circle cx="-8" cy="-6" r="6" fill="#a3a3a3" opacity="0.4"/>
+      <circle cx="10" cy="4" r="5" fill="#a3a3a3" opacity="0.4"/>
+      <circle cx="-2" cy="12" r="4" fill="#a3a3a3" opacity="0.4"/>
+    </g>
+  </g>
+</svg>

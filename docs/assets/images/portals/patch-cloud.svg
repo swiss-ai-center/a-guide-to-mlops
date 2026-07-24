@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Neutral backing so the patch reads on both dark and light themes -->
+  <circle cx="200" cy="200" r="190" fill="#333333" opacity="0.65"/>
+
+  <!-- Escape velocity patch: rocket heading toward Jupiter -->
+  <g transform="translate(200, 200)">
+    <!-- Dotted escape trajectory from outside the patch toward Jupiter -->
+    <path d="M -230 180 C -140 230, -60 20, 20 -120" transform="rotate(20) translate(0, 70)" fill="none" stroke="#f59e0b" stroke-width="5" stroke-dasharray="10 10" stroke-linecap="round" opacity="0.8"/>
+
+    <!-- Jupiter -->
+    <circle cx="85" cy="-75" r="95" fill="#d97706" stroke="#b45309" stroke-width="4"/>
+    <g fill="none" stroke="#92400e" stroke-width="8" opacity="0.45">
+      <ellipse cx="85" cy="-100" rx="82" ry="16"/>
+      <ellipse cx="85" cy="-65" rx="90" ry="20"/>
+      <ellipse cx="85" cy="-25" rx="78" ry="17"/>
+    </g>
+    <!-- Great Red Spot cyclone -->
+    <g transform="translate(60, -35)">
+      <!-- Outer oval storm -->
+      <ellipse cx="0" cy="0" rx="34" ry="19" fill="#92400e" opacity="0.85"/>
+      <ellipse cx="0" cy="0" rx="34" ry="19" fill="none" stroke="#78350f" stroke-width="2"/>
+
+      <!-- Swirl layers -->
+      <path d="M -24 -5 Q -8 -15 11 -8 T 24 2" fill="none" stroke="#b45309" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+      <path d="M -19 5 Q -2 13 17 6 T 21 -4" fill="none" stroke="#b45309" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+      <path d="M -13 -10 Q 0 -17 15 -10" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+
+      <!-- Central eye -->
+      <ellipse cx="4" cy="-1" rx="8" ry="4" fill="#78350f" opacity="0.9"/>
+      <ellipse cx="5" cy="-2" rx="3" ry="1.5" fill="#fbbf24" opacity="0.25"/>
+    </g>
+
+    <!-- Rocket heading toward Jupiter, nose first (foreground) -->
+    <g transform="translate(-95, 90) rotate(220)">
+      <polygon points="-24,20 -52,-8 -24,-2" fill="#a3a3a3"/>
+      <polygon points="24,20 52,-8 24,-2" fill="#a3a3a3"/>
+      <path d="M 0,105 L 26,-4 Q 0,-18 -26,-4 Z" fill="#f8fafc" stroke="#e5e5e5" stroke-width="3"/>
+      <circle cx="0" cy="50" r="12" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+      <path d="M -13,-6 Q -7,-28 0,-36 Q 7,-28 13,-6 Q 0,-14 -13,-6" fill="#f59e0b"/>
+    </g>
+  </g>
+</svg>

@@ -4,6 +4,10 @@ title: "Part 2 - Introduction"
 
 # Introduction
 
+<figure markdown="span">
+  ![Part 2 mission patch](../assets/images/portals/patch-cloud.svg){ width="200" }
+</figure>
+
 Learn how to collaborate online using [:simple-git: Git](../tools.md), enable
 seamless integration with a CI/CD pipeline and visualize reports with
 [CML](../tools.md).

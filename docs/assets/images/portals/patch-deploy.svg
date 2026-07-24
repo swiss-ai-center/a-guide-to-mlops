@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Neutral backing so the patch reads on both dark and light themes -->
+  <circle cx="200" cy="200" r="190" fill="#333333" opacity="0.65"/>
+
+  <!-- Deploy patch: rocket with open payload bay and robotic arm deploying a satellite -->
+  <g transform="translate(200, 200)">
+    <!-- Saturn-like rings around the target planet -->
+    <ellipse cx="60" cy="80" rx="128" ry="54" fill="none" stroke="#94a3b8" stroke-width="8" stroke-linecap="round" opacity="0.7" transform="rotate(-15 60 80)"/>
+    <ellipse cx="60" cy="80" rx="105" ry="42" fill="none" stroke="#cbd5e1" stroke-width="4" stroke-linecap="round" opacity="0.6" transform="rotate(-15 60 80)"/>
+    <ellipse cx="60" cy="80" rx="142" ry="60" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round" opacity="0.4" transform="rotate(-15 60 80)"/>
+
+    <!-- Target planet -->
+    <circle cx="60" cy="80" r="55" fill="#d4b996" stroke="#a89f81" stroke-width="4"/>
+    <path d="M 25 60 Q 60 95 95 55" fill="none" stroke="#a89f81" stroke-width="4" stroke-linecap="round" opacity="0.5"/>
+    <path d="M 30 95 Q 60 115 90 90" fill="none" stroke="#a89f81" stroke-width="3" stroke-linecap="round" opacity="0.4"/>
+
+    <!-- Satellite being deployed -->
+    <g transform="translate(-5, -75) rotate(-15)">
+      <!-- Solar panels -->
+      <rect x="-58" y="-12" width="46" height="24" rx="3" fill="#334155" stroke="#475569" stroke-width="3"/>
+      <rect x="12" y="-12" width="46" height="24" rx="3" fill="#334155" stroke="#475569" stroke-width="3"/>
+
+      <!-- Body -->
+      <rect x="-12" y="-18" width="24" height="36" rx="5" fill="#f8fafc" stroke="#e5e5e5" stroke-width="3"/>
+      <circle cx="0" cy="0" r="8" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+      <circle cx="2" cy="-2" r="2" fill="#ffffff" opacity="0.2"/>
+
+      <!-- Antenna -->
+      <line x1="0" y1="-18" x2="0" y2="-42" stroke="#94a3b8" stroke-width="3"/>
+      <circle cx="0" cy="-46" r="5" fill="#f59e0b"/>
+    </g>
+
+    <!-- Rocket, main vehicle -->
+    <g transform="translate(-100, 5) rotate(-35)">
+      <!-- Fins -->
+      <polygon points="-24,20 -52,-8 -24,-2" fill="#a3a3a3"/>
+      <polygon points="24,20 52,-8 24,-2" fill="#a3a3a3"/>
+
+      <!-- Main hull -->
+      <path d="M 0,105 L 26,-4 Q 0,-18 -26,-4 Z" fill="#f8fafc" stroke="#e5e5e5" stroke-width="3"/>
+
+      <!-- Window -->
+      <circle cx="0" cy="50" r="12" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+
+      <!-- Payload bay opening near the top of the hull -->
+      <path d="M -4,2 L 8,0 L 9,26 L -4,24 Z" fill="#1f1f1f" stroke="#525252" stroke-width="2"/>
+      <!-- Bay interior glow -->
+      <rect x="-2" y="4" width="9" height="18" fill="#0f172a" opacity="0.6"/>
+
+      <!-- Open bay door hinged outward to the left -->
+      <polygon points="-4,2 -15,-2 -14,26 -4,24" fill="#e2e8f0" stroke="#94a3b8" stroke-width="2" opacity="0.9"/>
+      <line x1="-7" y1="3" x2="-6" y2="23" stroke="#94a3b8" stroke-width="1.5" opacity="0.5"/>
+
+      <!-- Exhaust plume -->
+      <path d="M -13,-6 Q -7,-28 0,-36 Q 7,-28 13,-6 Q 0,-14 -13,-6" fill="#f59e0b"/>
+    </g>
+
+    <!-- Articulated robotic arm in global patch coordinates (foreground) -->
+    <g stroke="#94a3b8" stroke-width="5" stroke-linecap="round" fill="none">
+      <!-- Shoulder segment from rocket bay to elbow -->
+      <line x1="-90" y1="15" x2="-75" y2="-25"/>
+      <!-- Elbow joint -->
+      <circle cx="-75" cy="-25" r="6" fill="#cbd5e1" stroke="#94a3b8" stroke-width="2"/>
+
+      <!-- Forearm segment to wrist -->
+      <line x1="-75" y1="-25" x2="-25" y2="-60"/>
+      <!-- Wrist joint -->
+      <circle cx="-25" cy="-60" r="5" fill="#cbd5e1" stroke="#94a3b8" stroke-width="2"/>
+
+      <!-- Gripper fingers -->
+      <line x1="-25" y1="-60" x2="-12" y2="-72"/>
+      <line x1="-25" y1="-60" x2="-10" y2="-56"/>
+    </g>
+  </g>
+</svg>

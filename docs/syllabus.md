@@ -1,6 +1,8 @@
 # Syllabus
 
-What you will learn.
+<figure markdown="span">
+  ![Syllabus mission patch](assets/images/portals/patch-briefing.svg){ width="200" }
+</figure>
 
 This hands-on tutorial walks through the full MLOps lifecycle: from a local
 Jupyter notebook experiment to a reproducible pipeline, then to automated

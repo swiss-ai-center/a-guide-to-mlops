@@ -1,5 +1,9 @@
 # Philosophy
 
+<figure markdown="span">
+  ![Crew mission patch](assets/images/portals/patch-crew.svg){ width="200" }
+</figure>
+
 Who this guide is for, and how we chose the tools.
 
 ## Target audience

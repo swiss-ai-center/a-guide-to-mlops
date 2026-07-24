@@ -4,6 +4,10 @@ title: "Part 1 - Introduction"
 
 # Introduction
 
+<figure markdown="span">
+  ![Part 1 mission patch](../assets/images/portals/patch-training.svg){ width="200" }
+</figure>
+
 Learn how to train a model locally and evaluate it using
 [:simple-dvc: DVC](../tools.md).
 
