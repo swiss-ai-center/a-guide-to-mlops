@@ -317,15 +317,21 @@ the cloud.
 <!--
 Speaker notes:
 
-Deliver on the opening promise.
+This is the salient idea.
 
-Our principles:
-- Version-controlled — track code, parameters, and deployments in Git, and keep
-  data versions linked to them, so every model can be reproduced.
-- Composable — use best-of-breed open-source tools that each solve one problem
-  well.
-- Incremental — adopt one practice at a time, not all at once.
-- Pragmatic — prioritize reproducibility first, then automation, then
+Say each principle as a contrast pair:
+- Version-controlled: from scattered files to one source of truth.
+- Composable: from monolithic platforms to best-of-breed tools.
+- Incremental: from big bang to one step at a time.
+- Pragmatic: from perfect theory to working production.
+
+Then expand:
+- Version-controlled means tracking code, parameters, and deployments in Git,
+  with data versions linked to them, so every model can be reproduced.
+- Composable means using best-of-breed open-source tools that each solve one
+  problem well.
+- Incremental means adopting one practice at a time, not all at once.
+- Pragmatic means prioritizing reproducibility first, then automation,
   deployment, then monitoring, then feedback loops. In this guide, that loop
   means using AI-assisted labeling to add data and retrain iteratively.
 
@@ -334,13 +340,17 @@ infrastructure or databases. A lightweight, Git-native stack is a pragmatic path
 from notebooks to production while you stay in control of your tooling.
 -->
 
-**Version-controlled**
+**Version-controlled:**
+track code, data, and experiments together.
 
-**Composable**
+**Composable:**
+pick the best open-source tool for each job.
 
-**Incremental**
+**Incremental:**
+adopt one practice at a time.
 
-**Pragmatic**
+**Pragmatic:**
+start with reproducibility, then automate, deploy, monitor, and retrain.
 
 ## The guide
 
