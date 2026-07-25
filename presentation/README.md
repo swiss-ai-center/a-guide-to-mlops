@@ -77,14 +77,6 @@ style: |
     .center {
         text-align: center;
     }
-    .stars-bg {
-        background-color: var(--color-background);
-        background-image:
-            radial-gradient(circle, var(--color-border) 1.5px, transparent 2px),
-            radial-gradient(circle, var(--color-highlight) 1px, transparent 1.5px);
-        background-size: 120px 120px, 180px 180px;
-        background-position: 0 0, 60px 60px;
-    }
     /* Tighten split-background layouts: Gaia's 70px section padding wastes
        space beside background images, so reduce the inner padding on the
        content side and align the background image toward the content. */
@@ -110,7 +102,7 @@ headingDivider: 4
 # A guide to MLOps
 
 <!--
-_class: lead stars-bg
+_class: lead
 _paginate: false
 -->
 
