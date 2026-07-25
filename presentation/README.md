@@ -531,25 +531,23 @@ Labeling — what we improve:
 <!--
 Speaker notes:
 
-The guide is open source, and contributions are welcome.
+Launch the workshop.
 
-It is built iteratively from your feedback.
+Open mlops.swiss-ai-center.ch and start with the first chapter.
 
-Each detail or pain point you encounter is useful to us.
+The guide is open source and built iteratively from feedback. If you hit a pain
+point, a confusing step, or a typo, open an issue on GitHub or tell us during
+the workshop. That is when the feedback is most useful.
 
-Do not hesitate to share!
-
-If you launch the cluster during the workshop, beware the costs.
-Do not wrap up the workshop without shutting down the cluster!
+If you launch the cluster during the workshop, beware the costs. We will come
+back to cleanup at the end.
 -->
 
-Your feedback is important.
+Open **mlops.swiss-ai-center.ch**.
 
-Contributions and **stars** on GitHub.
+Start with the hands-on guide.
 
-Beware the costs.
-
-Open **mlops.swiss-ai-center.ch**
+Share feedback as you go.
 
 ![bg right:40% 70%](./images/portals/launchpad.svg)
 
@@ -574,9 +572,8 @@ Three things to leave them with:
    Studio. The value is not the tools; it is the workflow they can reuse on
    their own experiment.
 
-3. Contribute — the guide is open source. Stars, issues, and pull requests on
-   github.com/swiss-ai-center/a-guide-to-mlops help us improve it. If they hit
-   a pain point during the workshop, that is exactly the feedback we need.
+3. Star — if the guide was useful, star the repository on GitHub. This helps
+   others find it and gives us a signal that the work is valuable.
 
 Cycle back to the promise: "You started with a notebook stuck on one machine.
 Now you know how to take a model to production — and keep it healthy."
@@ -594,6 +591,6 @@ Deliver on the opening promise.
 
 **Clean up** your cloud resources.
 
-**Contribute** feedback and stars on GitHub.
+**Star** the repository on GitHub.
 
 **Apply** the workflow to your own model.
