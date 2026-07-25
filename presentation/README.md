@@ -310,7 +310,7 @@ Our proposal:
 A **hands-on guide** built around a reproducible workflow, deployed and monitored on
 the cloud.
 
-![bg right:50% w:85%](./images/a-guide-to-mlops.png)
+![bg right:55% 85%](./images/mlops-guide.png)
 
 ## Our principles
 
@@ -386,7 +386,7 @@ You just joined a team of data scientists and ML engineers.
 
 ## 1. Track experiments
 
-![bg right:55% w:95%](./images/a-guide-to-mlops.png)
+![bg right:55% 85%](./images/mlops-guide-part1.png)
 
 Every run is versioned and reproducible.
 
@@ -424,7 +424,7 @@ Reproduce — what we improve:
 
 ## 2. Review results
 
-![bg right:55% w:95%](./images/a-guide-to-mlops.png)
+![bg right:55% 85%](./images/mlops-guide-part2.png)
 
 Metrics and plots arrive directly in the pull request.
 
@@ -443,7 +443,7 @@ Tracking — what we improve:
 
 ## 3. Serve and deploy
 
-![bg right:55% w:95%](./images/a-guide-to-mlops.png)
+![bg right:55% 85%](./images/mlops-guide-part3.png)
 
 The model becomes an API that any application can call.
 
@@ -474,7 +474,7 @@ Deployment — what we improve:
 
 ## 4. Monitor and maintain
 
-![bg right:55% w:95%](./images/a-guide-to-mlops.png)
+![bg right:55% 85%](./images/mlops-guide-part4.png)
 
 Observe the model predictions for data drift.
 
@@ -494,7 +494,7 @@ Monitoring — what we improve:
 
 ## 5. Label and retrain
 
-![bg right:55% w:95%](./images/a-guide-to-mlops.png)
+![bg right:55% 85%](./images/mlops-guide-part5.png)
 
 Add data with AI assistance and improve iteratively.
 
