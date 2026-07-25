@@ -295,7 +295,7 @@ your own experiment.
 A **hands-on guide** built around a reproducible workflow, deployed and monitored on
 the cloud.
 
-![bg right:55% 85%](./images/mlops-guide.png)
+![bg right:60% 90%](./images/a-guide-to-mlops.png)
 
 ## Our principles
 
@@ -526,6 +526,8 @@ Final words options — pick one, do not say "thank you":
 
 Deliver on the opening promise.
 -->
+
+![bg right:40% 70%](./images/portals/mission.svg)
 
 **Clean up** your cloud resources.
 
