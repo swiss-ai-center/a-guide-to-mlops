@@ -117,6 +117,8 @@ Bertil Chapuis · Ludovic Delafontaine · Rémy Marquis · Leonard Cseres
 <!--
 Speaker notes:
 
+Open with the promise. Introduce yourself and the Swiss AI Center briefly.
+
 Five HES from the HES-SO (HEIG-VD, HEIA-FR, HE-Arc, HEVS and HEPIA) work on a
 project called Swiss AI Center, which accelerates AI adoption in SMEs digital
 transition.
@@ -236,13 +238,9 @@ We can do better:
 <!--
 Speaker notes:
 
-Data scientists train models in notebooks, save artifacts manually, and deploy
-with ad-hoc scripts.
-
-Software engineers already know DevOps practices but are moving to ML
-engineering.
-
-Small teams and SMEs where the same people build and run models.
+These are the people who build and run models, often without a dedicated MLOps
+team: data scientists in notebooks, software engineers moving to ML, and small
+teams in SMEs where the same people both build and operate models.
 -->
 
 ## The Path
@@ -250,12 +248,9 @@ Small teams and SMEs where the same people build and run models.
 <!--
 Speaker notes:
 
-This is the path from notebook to production.
-The solution is MLOps.
-
-MLOps draws inspiration from software and DevOps best practices.
-It adapts these practices to the world of machine learning.
-It improves the management and quality of machine learning projects.
+This is the path from notebook to production. MLOps adapts software and DevOps
+practices to machine learning, improving the management and quality of ML
+projects.
 -->
 
 **MLOps** adapts software and DevOps practices to machine learning.
@@ -293,10 +288,8 @@ This guide is:
 <!--
 Speaker notes:
 
-Our proposal:
-- A hands-on guide built around a reproducible workflow
-- Deployed and monitored on the cloud
-- Transferable to your own experiment and context
+Our proposal: a hands-on, cloud-deployed, monitored workflow you can transfer to
+your own experiment.
 -->
 
 A **hands-on guide** built around a reproducible workflow, deployed and monitored on
@@ -353,10 +346,10 @@ start with reproducibility, then automate, deploy, monitor, and retrain.
 <!--
 Speaker notes:
 
-This is the story.
-This is the hands-on mission.
+This is the story. This is the hands-on mission.
 
-From notebook to production — this is the recurring slogan of the guide.
+This is also the cycle. "From notebook to production" is the recurring slogan;
+return to it during the talk.
 -->
 
 ## Welcome to the team!
@@ -364,14 +357,11 @@ From notebook to production — this is the recurring slogan of the guide.
 <!--
 Speaker notes:
 
-You just joined a team of data scientists and ML engineers.
+This is the protagonist. Put the audience in the role.
 
-Their mission: build a model that visually identifies planets or moons from
-images.
-
-Their problem: the model lives in a Jupyter Notebook, and they cannot ship it.
-
-Your mission: help them improve the model and deploy it to the cloud.
+They just joined a team of data scientists and ML engineers. The team's mission
+is to identify planets or moons from images, but the model is stuck in a
+Jupyter Notebook. The audience's mission: help improve and deploy it.
 -->
 
 You just joined a team of data scientists and ML engineers.
@@ -395,33 +385,11 @@ Every run is versioned and reproducible.
 <!--
 Speaker notes — Bonus slide content:
 
-Codebase — current situation:
-- Each developer has their own codebase.
-- Sharing the code with peers is difficult.
+Without version control, code, data, and hyperparameters are scattered across
+individual machines and reproducing a result is hard.
 
-Codebase — what we improve:
-- Allow each developer to improve a common codebase.
-- Quickly benefit from the work of others.
-
-Data — current situation:
-- The dataset must be manually downloaded and put in the right place.
-- Different datasets are being used at the same time.
-- Datasets are hard to improve.
-
-Data — what we improve:
-- Allow the usage of a common and up-to-date dataset.
-- Efficiently share new revisions to train the model.
-- Datasets can be stored anywhere.
-
-Reproduce — current situation:
-- Steps to create the model can be complex.
-- Intermediate commands should not be skipped.
-- Hyperparameters are hard to track from one run to another.
-
-Reproduce — what we improve:
-- Document the steps to reproduce the experiment.
-- Ensure it can be run anytime in the future.
-- DVC can improve time efficiency.
+What changes: a shared codebase with Git, a common versioned dataset with DVC,
+and documented, reproducible steps that anyone can rerun.
 -->
 
 ## 2. Review results
@@ -433,14 +401,10 @@ Metrics and plots arrive directly in the pull request.
 <!--
 Speaker notes — Bonus slide content:
 
-Tracking — current situation:
-- Changes to a model are difficult to track.
-- Visualizing the differences is hard.
-- Cannot guarantee the changes are beneficial.
+Today, model changes are hard to track and it is hard to know if they help.
 
-Tracking — what we improve:
-- Have a visual way to identify the consequences of the changes made to a model.
-- Errors and anomalies are easily identified.
+What changes: metrics and plots arrive in the pull request, so the team can
+review changes before merging.
 -->
 
 ## 3. Serve and deploy
@@ -452,26 +416,10 @@ The model becomes an API that any application can call.
 <!--
 Speaker notes — Bonus slide content:
 
-Serving and publishing — current situation:
-- The model is hard to use outside the experiment context.
-- The model is hard to deploy in production.
-- The model is hard to share with others.
+Today, models are hard to use outside the notebook and deployments are fragile.
 
-Serving and publishing — what we improve:
-- The model can be used outside the experiment context.
-- The model can be deployed in production.
-- The model can be shared with others.
-
-Deployment — current situation:
-- An experiment can run on one machine but can fail on another.
-- Models must be prepared to be run outside their experiment context.
-- Exposing the model to the outside world is hard.
-
-Deployment — what we improve:
-- Run the experiment in a clean state to ensure it works everywhere.
-- Package the model with all its dependencies.
-- The model can be used over the Internet by other applications.
-- Automate the process.
+What changes: package the model with BentoML and Docker, expose it as an API,
+and deploy it on Kubernetes so other applications can call it.
 -->
 
 ## 4. Monitor and maintain
@@ -483,15 +431,10 @@ Observe the model predictions for data drift.
 <!--
 Speaker notes — Bonus slide content:
 
-Monitoring — current situation:
-- The model's behavior can drift over time.
-- Degradation in performance is hard to detect.
-- Issues are often discovered too late, after users are impacted.
+Today, model drift and degradation are often discovered too late.
 
-Monitoring — what we improve:
-- Track model performance and data drift continuously.
-- Detect anomalies and regressions early.
-- Alert the team when the model needs attention.
+What changes: continuously log predictions, detect drift with Evidently AI, and
+alert the team when the model needs attention.
 -->
 
 ## 5. Label and retrain
@@ -503,15 +446,10 @@ Add data with AI assistance and improve iteratively.
 <!--
 Speaker notes — Bonus slide content:
 
-Labeling — current situation:
-- Model code and parameters are optimized.
-- Model performance is only as good as the quality of the current data.
-- We need new data to improve the model's performance.
+A model is only as good as its data, and data ages.
 
-Labeling — what we improve:
-- Label new data to further improve the model's performance.
-- Use new data to retrain and improve the model.
-- Make use of AI inference to speed up the labeling process.
+What changes: collect new data with Label Studio, use the model's own
+predictions to speed up labeling, and feed the new data back into training.
 -->
 
 ## What you need
