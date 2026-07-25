@@ -553,24 +553,47 @@ Open **mlops.swiss-ai-center.ch**
 
 ![bg right:40% 70%](./images/portals/launchpad.svg)
 
-## Contributions
+## Before you go
 
 <!--
 Speaker notes:
 
-This is the contributions slide.
+This is the close. Deliver on the opening promise.
 
-Mirror the job-talk sandwich:
-- Vision: ordinary ML projects get stuck in notebooks.
-- Done something: a hands-on five-step path from notebook to production.
-- Contributions: a pragmatic guide, upstream improvements, and a reusable
-  workshop.
+Three things to leave them with:
 
-Do not end with "thank you."
+1. Clean up — open docs/clean-up.md. Stress that every cloud resource they
+   created is still costing money. Walk through the checklist: delete the
+   Kubernetes cluster, Artifact Registry, Storage bucket, service account, and
+   finally the project. Unlink billing and remove the payment method if they
+   created a fresh account.
+
+2. Apply — they now have a closed loop: version control with Git and DVC,
+   automated training and review with CI/CD and CML, serving with BentoML,
+   monitoring with Fluent Bit and Evidently AI, and retraining with Label
+   Studio. The value is not the tools; it is the workflow they can reuse on
+   their own experiment.
+
+3. Contribute — the guide is open source. Stars, issues, and pull requests on
+   github.com/swiss-ai-center/a-guide-to-mlops help us improve it. If they hit
+   a pain point during the workshop, that is exactly the feedback we need.
+
+Cycle back to the promise: "You started with a notebook stuck on one machine.
+Now you know how to take a model to production — and keep it healthy."
+
+Final words options — pick one, do not say "thank you":
+- Salute the venue: "Enjoy the rest of the conference."
+- Salute the audience: "Good luck with your models."
+- Congratulate them: "You now have a roadmap from notebook to production. The
+  next step is yours."
+- Call to action: "Go clean up your resources, then go build something."
+- Convention: simply gesture toward the slide and step back.
+
+Deliver on the opening promise.
 -->
 
-A pragmatic MLOps guide for small teams and SMEs.
+**Clean up** your cloud resources.
 
-Upstream improvements to the open-source tools you will use.
+**Contribute** feedback and stars on GitHub.
 
-A hands-on workshop you can replay with your own model.
+**Apply** the workflow to your own model.
