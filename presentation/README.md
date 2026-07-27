@@ -183,7 +183,7 @@ Only a **small fraction** of real-world ML systems is composed of the ML code.
 
 <div class="center">
 
-![w:70%](./images/ml_system.svg)
+![w:800px](./images/ml_system.svg)
 
 </div>
 
@@ -257,7 +257,7 @@ projects.
 
 <div class="center">
 
-![w:50%](./images/mlops-venn-diagram.svg)
+![w:570px](./images/mlops-venn-diagram.svg)
 
 </div>
 
