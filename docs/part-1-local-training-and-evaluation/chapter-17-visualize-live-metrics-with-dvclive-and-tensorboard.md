@@ -19,9 +19,19 @@ In this chapter, you will learn how to:
 2. Modify `src/train.py` to log metrics with DVClive
 3. Run an experiment and view its metrics in TensorBoard
 4. Compare multiple experiments in the same TensorBoard dashboard
-5. Keep DVClive logs out of Git
+5. Keep training logs out of Git
 
 Let's get started!
+
+!!! note
+
+    If you are still on the `tune-lr` branch from the previous chapter, switch back
+    to `main` before continuing:
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Switch back to the main branch
+    git checkout main
+    ```
 
 ## Steps
 
@@ -84,10 +94,17 @@ Install the dependencies and update the freeze file:
 
 ### Modify the training script
 
-Open `src/train.py` and update it to log metrics with DVClive. The easiest way
-is to train one epoch at a time and log the results after each epoch.
+Open `src/train.py` and update it to log metrics during training. Two changes
+make this work:
 
-Replace the `model.fit(...)` call in `src/train.py` with the following loop:
+- A `Live` session wraps the training code, and `DVCLiveCallback` logs the
+  metrics to DVC after every epoch.
+- A Keras `TensorBoard` callback writes the curves to a per-experiment
+  directory. `dvc exp run` sets the `DVC_EXP_NAME` environment variable on every
+  run, and the script uses it as the directory name. This is what lets TensorBoard
+  display many experiments side by side on the same plots.
+
+Update `src/train.py` with the following content:
 
 ```py title="src/train.py" hl_lines="1 10 12 62-64 84-87 93-96 103-105"
 import os
@@ -208,8 +225,8 @@ if __name__ == "__main__":
 
 !!! tip
 
-    DVClive accepts any metric name. Using a slash like `train/loss` lets
-    TensorBoard group related metrics in the UI.
+    `DVCLiveCallback` prefixes training metrics with `train/` and validation metrics
+    with `eval/`. The slash lets TensorBoard group related metrics in the UI.
 
 Check the differences with Git to validate the changes:
 
@@ -241,9 +258,23 @@ The output should look similar to this:
 metrics.json  params.yaml  plots
 ```
 
+The Keras `TensorBoard` callback also wrote the curves to a directory named
+after the experiment:
+
+```sh title="Execute the following command(s) in a terminal"
+# List TensorBoard run directories
+ls logs/tensorboard
+```
+
+The output should look similar to this:
+
+```text
+exp-abc12
+```
+
 ### Launch TensorBoard
 
-Start TensorBoard and point it at the `dvclive` directory:
+Start TensorBoard and point it at the `logs/tensorboard` directory:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Launch TensorBoard
@@ -267,14 +298,16 @@ Leave TensorBoard running and start a second experiment in another terminal:
 dvc exp run -S train.lr=0.001 -S train.epochs=10
 ```
 
-Switch back to the TensorBoard tab. The new experiment appears as a second curve
-on the same plots, making it easy to compare learning rates visually.
+DVC sets `DVC_EXP_NAME` to a new value for this run, so the script writes its
+logs to a new subdirectory of `logs/tensorboard`. Switch back to the TensorBoard
+tab: the new experiment appears as a second curve on the same plots, making it
+easy to compare learning rates visually.
 
-### Ignore DVClive logs in Git
+### Ignore training logs in Git
 
-DVClive logs are only useful for live visualization. The authoritative metrics
-and reproduction state are already tracked in `metrics.json`, `dvc.lock`, and
-Git. Add `dvclive/` to `.gitignore`:
+The TensorBoard run logs are only useful for live visualization. The
+authoritative metrics and reproduction state are already tracked in
+`metrics.json`, `dvc.lock`, and Git. Add `/logs` to `.gitignore`:
 
 ```sh title=".gitignore" hl_lines="9-10"
 ## Python
@@ -366,7 +399,7 @@ In this chapter, you have successfully:
 2. Modified `src/train.py` to log metrics per epoch
 3. Launched TensorBoard and viewed live metrics
 4. Compared two experiments in the same dashboard
-5. Kept DVClive logs out of Git
+5. Kept training logs out of Git
 
 You fixed some of the previous issues:
 
@@ -380,10 +413,11 @@ You fixed some of the previous issues:
     - **DVClive is a file-based logger**: It writes metrics to local files, so
       it works offline and integrates with any storage backend. No tracking server is
       required.
-    - **TensorBoard reads DVClive output directly**: Because DVClive uses the
-      same summary format as TensorBoard, you can launch TensorBoard against the
-      `dvclive/` directory without extra conversion.
-    - **Visualization logs are ephemeral**: `dvclive/` is ignored by Git. The
+    - **One directory per experiment enables comparison**: The training script
+      names each TensorBoard run directory after `DVC_EXP_NAME`, so TensorBoard
+      overlays every experiment's curves on the same plots without extra
+      configuration.
+    - **Visualization logs are ephemeral**: `logs/` is ignored by Git. The
       authoritative experiment record remains `metrics.json`, `dvc.lock`, and the Git
       history.
 
