@@ -35,7 +35,7 @@ scikit-learn==1.9.0
 tensorflow==2.21.0
 pyyaml==6.0.3
 dvc==3.67.1
-dvclive==3.48.1
+dvclive==3.49.1
 tensorboard==2.21.0
 ```
 
@@ -56,7 +56,7 @@ index 116c388..9f2a1b3 100644
 @@ -4,3 +4,5 @@ tensorflow==2.21.0
  pyyaml==6.0.3
  dvc==3.67.1
-+dvclive==3.48.1
++dvclive==3.49.1
 +tensorboard==2.21.0
 ```
 
@@ -89,16 +89,19 @@ is to train one epoch at a time and log the results after each epoch.
 
 Replace the `model.fit(...)` call in `src/train.py` with the following loop:
 
-```py title="src/train.py" hl_lines="1 5 38-52"
-from dvclive import Live
-import numpy as np
+```py title="src/train.py" hl_lines="1 10 12 62-64 84-87 93-96 103-105"
+import os
 import sys
 from pathlib import Path
 from typing import Tuple
 
+import keras
+import numpy as np
 import tensorflow as tf
 import yaml
+from dvclive.keras import DVCLiveCallback
 
+from dvclive import Live
 from utils.seed import set_seed
 
 
@@ -107,89 +110,96 @@ def get_model(
     conv_size: int,
     dense_size: int,
     output_classes: int,
-) -> tf.keras.Model:
+) -> keras.Model:
     """Create a simple CNN model"""
-    model = tf.keras.models.Sequential(
+    model = keras.models.Sequential(
         [
-            tf.keras.layers.Input(shape=image_shape),
-            tf.keras.layers.Conv2D(conv_size, (3, 3), activation="relu"),
-            tf.keras.layers.MaxPooling2D((3, 3)),
-            tf.keras.layers.Flatten(),
-            tf.keras.layers.Dense(dense_size, activation="relu"),
-            tf.keras.layers.Dense(output_classes),
+            keras.layers.Input(shape=image_shape),
+            keras.layers.Conv2D(conv_size, (3, 3), activation="relu"),
+            keras.layers.MaxPooling2D((3, 3)),
+            keras.layers.Flatten(),
+            keras.layers.Dense(dense_size, activation="relu"),
+            keras.layers.Dense(output_classes),
         ]
     )
     return model
 
 
 def main() -> None:
-    if len(sys.argv) != 3:
-        print("Arguments error. Usage:\n")
-        print("\tpython3 train.py <prepared-dataset-folder> <model-folder>\n")
-        exit(1)
+    with Live() as live:
+        if len(sys.argv) != 3:
+            print("Arguments error. Usage:\n")
+            print("\tpython3 train.py <prepared-dataset-folder> <model-folder>\n")
+            exit(1)
 
-    # Load parameters
-    params = yaml.safe_load(open("params.yaml"))
-    prepare_params = params["prepare"]
-    train_params = params["train"]
+        # Load parameters
+        params = yaml.safe_load(open("params.yaml"))
+        prepare_params = params["prepare"]
+        train_params = params["train"]
 
-    prepared_dataset_folder = Path(sys.argv[1])
-    model_folder = Path(sys.argv[2])
+        prepared_dataset_folder = Path(sys.argv[1])
+        model_folder = Path(sys.argv[2])
 
-    image_size = prepare_params["image_size"]
-    grayscale = prepare_params["grayscale"]
-    image_shape = (*image_size, 1 if grayscale else 3)
+        image_size = prepare_params["image_size"]
+        grayscale = prepare_params["grayscale"]
+        image_shape = (*image_size, 1 if grayscale else 3)
 
-    seed = train_params["seed"]
-    lr = train_params["lr"]
-    epochs = train_params["epochs"]
-    conv_size = train_params["conv_size"]
-    dense_size = train_params["dense_size"]
-    output_classes = train_params["output_classes"]
+        seed = train_params["seed"]
+        lr = train_params["lr"]
+        epochs = train_params["epochs"]
+        conv_size = train_params["conv_size"]
+        dense_size = train_params["dense_size"]
+        output_classes = train_params["output_classes"]
 
-    # Set seed for reproducibility
-    set_seed(seed)
+        # Log the parameters for experiment tracking
+        live.log_params(params)
 
-    # Load data
-    ds_train = tf.data.Dataset.load(str(prepared_dataset_folder / "train"))
-    ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "val"))
+        # Set seed for reproducibility
+        set_seed(seed)
 
-    # Define the model
-    model = get_model(image_shape, conv_size, dense_size, output_classes)
-    model.compile(
-        optimizer=tf.keras.optimizers.Adam(lr),
-        loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-        metrics=[tf.keras.metrics.SparseCategoricalAccuracy()],
-    )
-    model.summary()
-
-    # Initialize DVClive
-    live = Live(dir="dvclive")
-
-    # Train the model epoch by epoch and log metrics
-    for epoch in range(epochs):
-        history = model.fit(
-            ds_train,
-            epochs=epoch + 1,
-            initial_epoch=epoch,
-            validation_data=ds_val,
-            verbose=0,
+        # Load the prepared datasets and shuffle the training set at each epoch
+        ds_train = tf.data.Dataset.load(str(prepared_dataset_folder / "train"))
+        ds_train = ds_train.shuffle(
+            buffer_size=ds_train.cardinality(), seed=seed, reshuffle_each_iteration=True
         )
-        live.log_metric("train/loss", history.history["loss"][-1], step=epoch)
-        live.log_metric("train/acc", history.history["sparse_categorical_accuracy"][-1], step=epoch)
-        live.log_metric("val/loss", history.history["val_loss"][-1], step=epoch)
-        live.log_metric("val/acc", history.history["val_sparse_categorical_accuracy"][-1], step=epoch)
-        live.next_step()
+        ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "val"))
 
-    # Save the model
-    model_folder.mkdir(parents=True, exist_ok=True)
-    model_path = model_folder.absolute() / "model.keras"
-    model.save(model_path)
+        # Define the model
+        model = get_model(image_shape, conv_size, dense_size, output_classes)
+        model.compile(
+            optimizer=keras.optimizers.Adam(lr),
+            loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+            metrics=[keras.metrics.SparseCategoricalAccuracy()],
+        )
+        model.summary()
 
-    # Save the model history
-    np.save(model_folder.absolute() / "history.npy", model.history.history)
+        # Log each experiment to its own TensorBoard run directory for side by side comparison
+        run_name = os.environ.get("DVC_EXP_NAME", "run")
+        tensorboard_log_dir = Path("logs") / "tensorboard" / run_name
 
-    print(f"\nModel saved at {model_folder.absolute()}")
+        # Train the model
+        model.fit(
+            ds_train,
+            epochs=epochs,
+            validation_data=ds_val,
+            callbacks=[
+                DVCLiveCallback(live=live),
+                keras.callbacks.TensorBoard(log_dir=str(tensorboard_log_dir)),
+            ],
+        )
+
+        # Save the model
+        model_folder.mkdir(parents=True, exist_ok=True)
+        model_path = model_folder.absolute() / "model.keras"
+        model.save(model_path)
+        live.log_artifact(
+            str(model_path), type="model", name="celestial-body-classifier"
+        )
+
+        # Save the model history
+        np.save(model_folder.absolute() / "history.npy", model.history.history)
+
+        print(f"\nModel saved at {model_folder.absolute()}")
 
 
 if __name__ == "__main__":
@@ -237,7 +247,7 @@ Start TensorBoard and point it at the `dvclive` directory:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Launch TensorBoard
-tensorboard --logdir dvclive
+tensorboard --logdir logs/tensorboard
 ```
 
 Open the URL printed in the terminal (usually `http://localhost:6006/`). You
@@ -275,11 +285,11 @@ __pycache__/
 
 ## DVC
 
-# DVC live logs
-dvclive/
-
 # DVC plots
 dvc_plots
+
+# Local TensorBoard run logs
+/logs
 
 # DVC will add new files after this line
 /model
@@ -296,18 +306,18 @@ The output should be similar to this:
 
 ```diff
 diff --git a/.gitignore b/.gitignore
-index cbfa93b..8a2668e 100644
+index cbfa93b..4f22e8e 100644
 --- a/.gitignore
 +++ b/.gitignore
-@@ -6,5 +6,8 @@ __pycache__/
-
- ## DVC
-
-+# DVC live logs
-+dvclive/
-+
+@@ -9,5 +9,8 @@ __pycache__/
  # DVC plots
  dvc_plots
+
++# Local TensorBoard run logs
++/logs
++
+ # DVC will add new files after this line
+ /model
 ```
 
 ### Check the changes
