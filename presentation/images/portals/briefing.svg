@@ -1,7 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
-  <!-- Neutral backing so the patch reads on both dark and light themes -->
-  <circle cx="200" cy="200" r="190" fill="#333333" opacity="0.65"/>
-
   <!-- Mission briefing patch: compass + todo list -->
   <g transform="translate(200, 200)">
     <!-- Compass rose -->
