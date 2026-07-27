@@ -240,8 +240,8 @@ git diff src/train.py
 Run a single experiment with DVClive logging enabled:
 
 ```sh title="Execute the following command(s) in a terminal"
-# Run an experiment
-dvc exp run -S train.epochs=10
+# Run an experiment with a larger learning rate
+dvc exp run -S train.lr=0.001
 ```
 
 DVClive writes logs to a `dvclive/` directory in your workspace. You can list
@@ -294,8 +294,8 @@ should see the training and validation metrics plotted against epochs.
 Leave TensorBoard running and start a second experiment in another terminal:
 
 ```sh title="Execute the following command(s) in a terminal"
-# Run another experiment with a different learning rate
-dvc exp run -S train.lr=0.001 -S train.epochs=10
+# Run another experiment with an even larger learning rate
+dvc exp run -S train.lr=0.01
 ```
 
 DVC sets `DVC_EXP_NAME` to a new value for this run, so the script writes its

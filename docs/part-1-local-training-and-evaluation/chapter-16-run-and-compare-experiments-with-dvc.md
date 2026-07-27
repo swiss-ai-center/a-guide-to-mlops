@@ -27,11 +27,14 @@ Let's get started!
 
 ### Run a single experiment override
 
-Update the number of epochs temporarily without editing `params.yaml`:
+In the previous chapter, you increased the number of epochs to improve the
+metrics. The learning rate is another lever: `params.yaml` currently uses
+`train.lr=0.0001`. Try a larger learning rate temporarily without editing
+`params.yaml`:
 
 ```sh title="Execute the following command(s) in a terminal"
-# Run an experiment with 10 epochs instead of the value in params.yaml
-dvc exp run -S train.epochs=10
+# Run an experiment with lr=0.0005 instead of the value in params.yaml
+dvc exp run -S train.lr=0.0005
 ```
 
 The `-S` flag (short for `--set-param`) overrides a parameter for this run only.
@@ -39,7 +42,7 @@ DVC records the override, runs the pipeline, and saves the result as an
 experiment.
 
 When the command finishes, your `params.yaml` still contains the original value,
-but DVC knows this run used `train.epochs=10`.
+but DVC knows this run used `train.lr=0.0005`.
 
 ### List experiments
 
@@ -56,9 +59,9 @@ The output should look similar to this:
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━┓
 ┃ Experiment                ┃ Created  ┃ epochs  ┃ lr     ┃ f1_score ┃
 ┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━┩
-│ workspace                 │ -        │ 5       │ 0.0001 │ 0.44005  │
-│ main                      │ 04:20 PM │ 5       │ 0.0001 │ 0.44005  │
-│ └── exp-abc12             │ 04:35 PM │ 10      │ 0.0001 │ 0.64049  │
+│ workspace                 │ -        │ 10      │ 0.0001 │ 0.45354  │
+│ main                      │ 04:20 PM │ 10      │ 0.0001 │ 0.45354  │
+│ └── exp-abc12             │ 04:35 PM │ 10      │ 0.0005 │ 0.47612  │
 └───────────────────────────┴──────────┴─────────┴────────┴──────────┘
 ```
 
@@ -71,17 +74,17 @@ The table shows:
 
 ### Run multiple experiments
 
-Experimentation usually means trying more than one value. Run three different
-learning rates:
+Experimentation usually means trying more than one value. Run three variations
+around the learning rate:
 
 ```sh title="Execute the following command(s) in a terminal"
-# Try a smaller learning rate
-dvc exp run -S train.lr=0.0001
-
-# Try the current learning rate with more epochs
-dvc exp run -S train.lr=0.001 -S train.epochs=10
-
 # Try a larger learning rate
+dvc exp run -S train.lr=0.001
+
+# Try an even larger learning rate
+dvc exp run -S train.lr=0.005
+
+# Try a much larger learning rate
 dvc exp run -S train.lr=0.01
 ```
 
@@ -95,7 +98,7 @@ but each has its own parameter set and metrics.
 
     ```sh title="Execute the following command(s) in a terminal"
     # Define the values to try
-    LEARNING_RATES=(0.0001 0.001 0.01)
+    LEARNING_RATES=(0.0005 0.001 0.01)
 
     # Queue one experiment per value
     for lr in "${LEARNING_RATES[@]}"; do
@@ -122,41 +125,40 @@ The output should now contain several experiment rows:
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━┓
 ┃ Experiment                ┃ Created  ┃ epochs  ┃ lr     ┃ f1_score ┃
 ┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━┩
-│ workspace                 │ -        │ 5       │ 0.0001 │ 0.44005  │
-│ main                      │ 04:20 PM │ 5       │ 0.0001 │ 0.44005  │
-│ ├── exp-abc12             │ 04:35 PM │ 10      │ 0.0001 │ 0.64049  │
-│ ├── exp-def34             │ 04:40 PM │ 5       │ 0.0001 │ 0.64512  │
-│ ├── exp-ghi56             │ 04:45 PM │ 10      │ 0.001  │ 0.68234  │
-│ └── exp-jkl78             │ 04:50 PM │ 5       │ 0.01   │ 0.51234  │
+│ workspace                 │ -        │ 10      │ 0.0001 │ 0.45354  │
+│ main                      │ 04:20 PM │ 10      │ 0.0001 │ 0.45354  │
+│ ├── exp-abc12             │ 04:35 PM │ 10      │ 0.0005 │ 0.47612  │
+│ ├── exp-def34             │ 04:40 PM │ 10      │ 0.001  │ 0.50231  │
+│ ├── exp-ghi56             │ 04:45 PM │ 10      │ 0.005  │ 0.48103  │
+│ └── exp-jkl78             │ 04:50 PM │ 10      │ 0.01   │ 0.40218  │
 └────────────────────────────────────────────────────────────────────┘
 ```
 
 ### Compare experiments
 
 Pick the experiment with the best metric and compare it to another one. For
-example, if `exp-ghi56` looks best, compare it to the baseline `main`:
+example, if `exp-def34` looks best, compare it to the baseline `main`:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Compare an experiment to the parent commit
-dvc exp diff exp-ghi56
+dvc exp diff exp-def34
 ```
 
 The output should look similar to this:
 
 ```text
-Path         Param         HEAD    exp-ghi56    Change
-params.yaml  train.epochs  5       10           5
-params.yaml  train.lr      0.0001  0.001        0.0009
+Path         Param    HEAD    exp-def34    Change
+params.yaml  train.lr 0.0001  0.001        0.0009
 
-Path                     Metric     HEAD     exp-ghi56    Change
-evaluation/metrics.json  f1_score   0.44005  0.68234      0.24229
+Path                     Metric     HEAD     exp-def34    Change
+evaluation/metrics.json  f1_score   0.45354  0.50231      0.04877
 ```
 
 You can also compare two experiments directly:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Compare two experiments
-dvc exp diff exp-abc12 exp-ghi56
+dvc exp diff exp-abc12 exp-def34
 ```
 
 ### Promote the best experiment
@@ -166,7 +168,7 @@ so it can be reviewed, merged, or pushed:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Create a branch from the best experiment
-dvc exp branch exp-ghi56 tune-lr
+dvc exp branch exp-def34 tune-lr
 
 # Switch to the new branch
 git checkout tune-lr
@@ -183,19 +185,17 @@ The output should look similar to this:
 
 ```diff
 diff --git a/params.yaml b/params.yaml
-index 5bb698e..a6ff45 100644
+index 511198f..8c3a2e1 100644
 --- a/params.yaml
 +++ b/params.yaml
-@@ -7,7 +7,7 @@ prepare:
+@@ -8,6 +8,6 @@ prepare:
  train:
-   seed: 77
+   seed: 5241
 -  lr: 0.0001
 +  lr: 0.001
--  epochs: 5
-+  epochs: 10
+   epochs: 10
    conv_size: 32
    dense_size: 64
-   output_classes: 11
 ```
 
 The new branch contains the exact parameter values that produced the best
@@ -208,7 +208,7 @@ exploration but can be removed once you have promoted the winner:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Remove experiments you no longer need
-dvc exp remove exp-abc12 exp-def34 exp-jkl78
+dvc exp remove exp-abc12 exp-ghi56 exp-jkl78
 ```
 
 !!! warning
