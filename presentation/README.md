@@ -292,10 +292,10 @@ Our proposal: a hands-on, cloud-deployed, monitored workflow you can transfer to
 your own experiment.
 -->
 
-A **hands-on guide** built around a reproducible workflow, deployed and monitored on
-the cloud.
+A **hands-on guide** that takes a Jupyter notebook to a reproducible workflow,
+deployed and monitored on the cloud.
 
-![bg right:60% 90%](./images/a-guide-to-mlops.png)
+![bg right:55% 90%](./images/mlops-guide.png)
 
 ## Our principles
 
