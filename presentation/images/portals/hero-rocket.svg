@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Neutral backing so the icon reads on both dark and light themes -->
+  <circle cx="200" cy="200" r="190" fill="#333333" opacity="0.65"/>
+
+  <!-- Rocket above a horizontal MLOps infinity loop -->
+  <g transform="translate(200, 200)">
+    <!-- Rocket fins -->
+    <path d="M -28 -20 L -61 15 L -28 5 Z" fill="#a3a3a3"/>
+    <path d="M 28 -20 L 61 15 L 28 5 Z" fill="#a3a3a3"/>
+
+    <!-- Main hull -->
+    <path d="M 0 -125 L 32 5 Q 0 22 -32 5 Z" fill="#f8fafc" stroke="#e5e5e5" stroke-width="2"/>
+
+    <!-- Window -->
+    <circle cx="0" cy="-65" r="14" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+    <circle cx="4" cy="-69" r="4" fill="#ffffff" opacity="0.2"/>
+
+    <!-- Body detail -->
+    <line x1="0" y1="-30" x2="0" y2="-5" stroke="#94a3b8" stroke-width="2" opacity="0.5"/>
+    <rect x="-11" y="-42" width="22" height="6" rx="2" fill="#94a3b8" opacity="0.5"/>
+
+    <!-- Exhaust plume connecting to the loop -->
+    <path d="M -15 8 Q -8 34 0 44 Q 8 34 15 8 Q 0 22 -15 8" fill="#f59e0b"/>
+
+    <!-- Horizontal infinity / MLOps loop -->
+    <path d="M -75 85
+             C -75 55, -35 55, 0 85
+             C 35 115, 75 115, 75 85
+             C 75 55, 35 55, 0 85
+             C -35 115, -75 115, -75 85 Z"
+          fill="none" stroke="#f59e0b" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

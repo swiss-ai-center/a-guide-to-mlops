@@ -10,7 +10,6 @@ author: Swiss AI Center contributors
 title: 'A guide to MLOps - Presentation'
 description: 'Presentation of the MLOps guide'
 url: https://mlops.swiss-ai-center.ch/presentation/
-footer: '**Swiss AI Center** - A guide to MLOps 2026 - CC BY-SA 4.0'
 style: |
     :root {
         --color-background: #f7f8fc;
@@ -78,14 +77,6 @@ style: |
     .center {
         text-align: center;
     }
-    .stars-bg {
-        background-color: var(--color-background);
-        background-image:
-            radial-gradient(circle, var(--color-border) 1.5px, transparent 2px),
-            radial-gradient(circle, var(--color-highlight) 1px, transparent 1.5px);
-        background-size: 120px 120px, 180px 180px;
-        background-position: 0 0, 60px 60px;
-    }
     /* Tighten split-background layouts: Gaia's 70px section padding wastes
        space beside background images, so reduce the inner padding on the
        content side and align the background image toward the content. */
@@ -106,503 +97,440 @@ headingDivider: 4
 
 [license]: https://github.com/swiss-ai-center/a-guide-to-mlops/blob/main/LICENSE
 [website]: https://mlops.swiss-ai-center.ch
-[website-qrcode]:
-    https://quickchart.io/qr?format=png&ecLevel=Q&size=400&margin=1&text=https://mlops.swiss-ai-center.ch
 [github]: https://github.com/swiss-ai-center/a-guide-to-mlops
 
 # A guide to MLOps
 
 <!--
-_class: lead stars-bg
+_class: lead
 _paginate: false
 -->
 
-[Website][website] · [GitHub][github]
+Bertil Chapuis · Ludovic Delafontaine · Rémy Marquis · Leonard Cseres
 
-<small>Swiss AI Center contributors</small>
+**Swiss AI Center · HEIG-VD**
 
-![bg right:35% w:70%](../docs/assets/images/hero-rocket.svg)
+<small>CC BY-SA 4.0</small>
 
-## About us
-
-<!-- _class: lead -->
-
-## Swiss AI Center
-
-**Five HES from the HES-SO** (HEIG-VD, HEIA-FR, HE-Arc, HEVS and HEPIA) work on
-a project called **Swiss AI Center**.
-
-Its mission is to **accelerate the adoption of artificial intelligence in the
-digital transition of Swiss SMEs**.
-
-**HEIG-VD** is responsible for **setting up tools to manage ML experiments from
-code to production**.
-
-## Our team
+![bg right:35% w:70%](./images/portals/hero-rocket.svg)
 
 <!--
-_paginate: false
+Speaker notes:
+
+Open with the promise. Introduce yourself and the Swiss AI Center briefly.
+
+Five HES from the HES-SO (HEIG-VD, HEIA-FR, HE-Arc, HEVS and HEPIA) work on a
+project called Swiss AI Center, which accelerates AI adoption in SMEs digital
+transition.
+
+HEIG-VD is responsible for setting up tools to manage ML experiments from code
+to production.
 -->
 
-<div class="four-columns">
-
-<div class="center">
-
-**Bertil<br>Chapuis**<br>
-<small>Professor</small>
-
-![w:200](./images/bertil-chapuis.png)
-
-[Mail](mailto:bertil.chapuis@heig-vd.ch)
-
-</div>
-<div class="center">
-
-**Ludovic<br>Delafontaine**<br>
-<small>Lecturer</small>
-
-![w:200](./images/ludovic-delafontaine.png)
-
-[Mail](mailto:ludovic.delafontaine@heig-vd.ch)
-
-</div>
-<div class="center">
-
-**Rémy<br>Marquis**<br>
-<small>aR&D Associate</small>
-
-![w:200](./images/remy-marquis.png)
-
-[Mail](mailto:remy.marquis@heig-vd.ch)
-
-</div>
-<div class="center">
-
-**Leonard<br>Cseres**<br>
-<small>Assistant</small>
-
-![w:200](./images/leonard-cseres.png)
-
-[Mail](mailto:leonard.cseres@heig-vd.ch)
-
-</div>
-</div>
-
-## Introduction
+## The promise
 
 <!-- _class: lead -->
 
-## LLMs and agentic AI are everywhere
+<!--
+Speaker notes:
 
-**But most companies have ordinary data problems**
+By the end of this workshop, you will know how to turn a messy notebook into a
+reproducible, cloud-deployed ML system.
 
-- Data trapped in spreadsheets, logs, and sensors.
+This is the empowerment promise.
+-->
+
+You will know how to turn a messy **Jupyter notebook** into a **reproducible,
+cloud-deployed ML system**.
+
+![bg right:40% 80%](./images/portals/rocket-to-planet.svg)
+
+## The trap
+
+<!-- _class: lead -->
+
+<!--
+Speaker notes:
+
+This is the trap.
+
+Ordinary ML problems:
+- Models trained on data trapped in spreadsheets, logs, and sensors.
 - Forecasts built on fragile business systems.
 - Classifiers trained on years of messy history.
 - Anomaly detection on manufacturing or server metrics.
+-->
+
+<div class="center">
+
+LLM hype is everywhere.
+
+But most companies have **ordinary ML problems**.
+
+</div>
 
 ## ML code vs ML system
 
-![bg right:35% w:90%](../docs/assets/images/ml_system.svg)
+<!--
+Speaker notes:
 
-Only a small fraction of real-world ML systems is composed of the ML code.
+This is the surprise.
 
 The required surrounding infrastructure is vast and complex.
+-->
 
-## Difficulties with ML projects
+Only a **small fraction** of real-world ML systems is composed of the ML code.
 
-**Get out of the context of the experience**
+<div class="center">
 
-> I ran the experiment but didn’t get the same results, can you check my way of
-> running the experiment?
+![w:800px](./images/ml_system.svg)
 
-<hr>
+</div>
 
-**Make sure you can build the model at all times**
+## Why ML projects get stuck
 
-> I tried to build the model on my machine but it doesn’t work... Are you sure
-> it builds on yours?
+<!-- Speaker note: Pause after the question. -->
 
----
+Have you ever **heard** or **said** any of these?
 
-**Monitor the evolution of the model over time**
+> <small>I ran the experiment but didn't get the same results.</small>
 
-> I’m not sure my changes really help the model’s performances… I hope it still
-> works in production.
+> <small>I hope my changes help... and that it still works in production.</small>
 
-> The model worked fine before, but its predictions look off lately. I have no
-> idea if the data changed or how to check it.
+> <small>Can I use your model with my mobile app?</small>
 
-<hr>
+> <small>The model worked fine before, but not anymore. Did the data change?</small>
 
-**Move to production efficiently and in a semi-automated way**
+<!--
+Speaker notes — Bonus slide content:
 
-> Is your model available in production? Can I use it with my mobile
-> app/website? How can I do so?
+When reading the mobile app example, also mention website orally.
 
-## Small and medium-sized enterprises (SMEs) face the same problems
+Difficulties:
+- Each member of the team manages their own codebase, their own dataset and their
+  own models.
+- The reproducibility of the model creation is difficult and cannot be guaranteed
+  over time.
+- Improvements made to the model are hard to track.
+- Models are hard to share and deploy in production.
+- Model drift and degradation go unnoticed.
 
-<!-- _class: lead -->
+High flexibility for the team, but:
+- hard to maintain,
+- hard to reproduce in the future,
+- time consuming.
 
-## A solution
+We can do better:
+- Get out of the context of the experience.
+- Make sure you can build the model at all times.
+- Monitor the evolution of the model over time.
+- Move to production quickly, efficiently and in a semi-automated way.
+-->
 
-**MLOps**
+## Who faces these problems?
 
-➡️ Draw inspiration from Software and DevOps best practices
+**Data scientists** who train models in notebooks.
 
-➡️ Adapting these practices to the world of machine learning
+**Software engineers** moving to ML engineering.
 
-➡️ Improve the management and quality of machine learning projects
+**Small teams** and **SMEs** without a team to deploy and maintain models.
 
-![bg right:40% 110%](./images/mlops-venn-diagram.svg)
+<!--
+Speaker notes:
+
+These are the people who build and run models, often without a dedicated MLOps
+team: data scientists in notebooks, software engineers moving to ML, and small
+teams in SMEs where the same people both build and operate models.
+-->
+
+## The Path
+
+<!--
+Speaker notes:
+
+This is the path from notebook to production. MLOps adapts software and DevOps
+practices to machine learning, improving the management and quality of ML
+projects.
+-->
+
+**MLOps** adapts software and DevOps practices to machine learning.
+
+<div class="center">
+
+![w:570px](./images/mlops-venn-diagram.svg)
+
+</div>
+
+## Our scope
+
+<!--
+Speaker notes:
+
+This is the fence.
+This is our scope — what we cover and what we do not cover.
+
+This guide is not:
+- a heavy, all-in-one MLOps platform
+- a course on LLMs, machine learning, or deep learning
+
+This guide is:
+- a lightweight, composable path
+- for small teams who already use Git
+- from notebook to production, one step at a time
+-->
+
+**This is not** an all-in-one MLOps platform or a machine learning course.
+
+**This is** a step-by-step path for small teams who want to go to production.
 
 ## Our proposal
 
-**A guide to MLOps**
-
-🛠️ Switch from a Jupyter Notebook to production using state-of-the-art MLOps
-tools
-
-🚀 Go from experience to production on the Cloud
-
-📖 Use the best practices for ML
-
-![bg right:40% 90%](./images/a-guide-to-mlops.png)
-
-## Our approach
-
-**Version-controlled.** Track code, data, and experiments together.
-
-**Composable.** Use the best open-source tool for each job.
-
-**Incremental.** Adopt one practice at a time.
-
-**Pragmatic.** Reproducibility first, then automation, deployment, monitoring, and feedback loops.
-
 <!--
-This is the fence: we explicitly distinguish our lightweight, composable approach from heavy all-in-one platforms.
+Speaker notes:
+
+Our proposal: a hands-on, cloud-deployed, monitored workflow you can transfer to
+your own experiment.
 -->
 
-## Target audience
+A **hands-on guide** that takes a Jupyter notebook to a reproducible workflow,
+deployed and monitored on the cloud.
 
-For **small teams and SMEs** who want to move ML from notebooks to production without a heavy, monolithic platform.
+![bg right:55% 90%](./images/mlops-guide.png)
 
-If you use Git and want practical, incremental steps, this is for you.
+## Our principles
 
-![bg right:40% 80%](../docs/assets/images/rocket-to-planet.svg)
+<!--
+Speaker notes:
 
-## A guide to MLOps
+This is the salient idea.
+
+Say each principle as a contrast pair:
+- Version-controlled: from scattered files to one source of truth.
+- Composable: from monolithic platforms to best-of-breed tools.
+- Incremental: from big bang to one step at a time.
+- Pragmatic: from perfect theory to working production.
+
+Then expand:
+- Version-controlled means tracking code, parameters, and deployments in Git,
+  with data versions linked to them, so every model can be reproduced.
+- Composable means using best-of-breed open-source tools that each solve one
+  problem well.
+- Incremental means adopting one practice at a time, not all at once.
+- Pragmatic means prioritizing reproducibility first, then automation,
+  deployment, then monitoring, then feedback loops. In this guide, that loop
+  means using AI-assisted labeling to add data and retrain iteratively.
+
+That is why we avoid all-in-one MLOps platforms that need dedicated
+infrastructure or databases. A lightweight, Git-native stack is a pragmatic path
+from notebooks to production while you stay in control of your tooling.
+-->
+
+**Version-controlled:**
+track code, data, and experiments together.
+
+**Composable:**
+pick the best open-source tool for each job.
+
+**Incremental:**
+adopt one practice at a time.
+
+**Pragmatic:**
+start with reproducibility, then automate, deploy, monitor, and retrain.
+
+## The guide
 
 <!-- _class: lead -->
 
-A quick presentation of the guide
+**From notebook to production**
 
-### _"Welcome to the team!"_
+<!--
+Speaker notes:
 
-You just have joined a team of data scientists and machine learning (ML)
-engineers (_welcome!_).
+This is the story. This is the hands-on mission.
 
-The team is working on a model capable of visually identifying planets or moons
-within our solar system from images in a Jupyter Notebook.
+This is also the cycle. "From notebook to production" is the recurring slogan;
+return to it during the talk.
+-->
 
-The team is facing difficulties to move the model to production.
+## Welcome to the team!
 
-Your mission is to help the team to improve the model and deploy it to the cloud
-using MLOps best practices.
+<!--
+Speaker notes:
+
+This is the protagonist. Put the audience in the role.
+
+They just joined a team of data scientists and ML engineers. The team's mission
+is to identify planets or moons from images, but the model is stuck in a
+Jupyter Notebook. The audience's mission: help improve and deploy it.
+-->
+
+You just joined a team of data scientists and ML engineers.
+
+**Their mission:** identify planets or moons from images.
+
+**Their problem:** the model is stuck in a Jupyter Notebook.
+
+**Your mission:** help them improve and deploy in production.
 
 ### The big picture
 
 ![bg](./images/the-big-picture.svg)
 
----
+## 1. Track experiments
 
-![bg w:90%](./images/guide-demo-01.png) ![bg w:90%](./images/guide-demo-02.png)
+![bg right:55% 85%](./images/mlops-guide-part1.png)
 
----
+Every run is versioned and reproducible.
 
-![bg w:90%](./images/guide-demo-03.png) ![bg w:90%](./images/guide-demo-04.png)
+<!--
+Speaker notes — Bonus slide content:
 
----
+Without version control, code, data, and hyperparameters are scattered across
+individual machines and reproducing a result is hard.
 
-![bg w:90%](./images/guide-demo-05.png) ![bg w:90%](./images/guide-demo-06.png)
+What changes: a shared codebase with Git, a common versioned dataset with DVC,
+and documented, reproducible steps that anyone can rerun.
+-->
 
----
+## 2. Review results
 
-![bg w:90%](./images/guide-demo-07.png) ![bg w:90%](./images/guide-demo-08.png)
+![bg right:55% 85%](./images/mlops-guide-part2.png)
 
----
+Metrics and plots arrive directly in the pull request.
 
-![bg w:90%](./images/guide-demo-09.png) ![bg w:90%](./images/guide-demo-10.png)
+<!--
+Speaker notes — Bonus slide content:
 
----
+Today, model changes are hard to track and it is hard to know if they help.
 
-![bg w:90%](./images/guide-demo-11.png) ![bg w:90%](./images/guide-demo-12.png)
+What changes: metrics and plots arrive in the pull request, so the team can
+review changes before merging.
+-->
 
----
+## 3. Serve and deploy
 
-![bg w:90%](./images/guide-demo-13.png) ![bg w:90%](./images/guide-demo-14.png)
+![bg right:55% 85%](./images/mlops-guide-part3.png)
 
----
+The model becomes an API that any application can call.
 
-![bg w:90%](./images/guide-demo-15.png) ![bg w:90%](./images/guide-demo-16.png)
+<!--
+Speaker notes — Bonus slide content:
 
----
+Today, models are hard to use outside the notebook and deployments are fragile.
 
-![bg w:90%](./images/guide-demo-17.png) ![bg w:90%](./images/guide-demo-18.png)
+What changes: package the model with BentoML and Docker, expose it as an API,
+and deploy it on Kubernetes so other applications can call it.
+-->
 
-## Prerequisites
+## 4. Monitor and maintain
 
-♿ Accessible to everyone!
+![bg right:55% 85%](./images/mlops-guide-part4.png)
 
-🧠 Basic knowledge of Python and terminal is sufficient
+Observe the model predictions for data drift.
 
-💳 A valid credit card for cloud deployment
+<!--
+Speaker notes — Bonus slide content:
 
-🤝 You will be accompanied throughout the guide!
+Today, model drift and degradation are often discovered too late.
 
-![bg right:40% 70%](./images/python-logo.svg)
+What changes: continuously log predictions, detect drift with Evidently AI, and
+alert the team when the model needs attention.
+-->
 
-## Technical checks
+## 5. Label and retrain
 
-Before we start:
+![bg right:55% 85%](./images/mlops-guide-part5.png)
 
-💻 macOS, Linux, Windows with WSL2
+Add data with AI assistance and improve iteratively.
 
-📝 Editor and Terminal (VS Code recommended)
+<!--
+Speaker notes — Bonus slide content:
 
-🛠️ Python 3.13, pip, git, unzip, docker
+A model is only as good as its data, and data ages.
 
-☁️ GitHub account, Google Cloud account
+What changes: collect new data with Label Studio, use the model's own
+predictions to speed up labeling, and feed the new data back into training.
+-->
 
-## Access the guide
+## What you need
 
-👉 Access the guide at [mlops.swiss-ai-center.ch][website].
+**Knowledge:** Python & terminal basics
 
-💪 Feel free to open an issue on [GitHub][github] if you encounter any
-difficulties or want to contribute.
+**System:** macOS, Linux, or WSL2
 
-🙏 Leave us a star if you like the guide!
+**Accounts:** GitHub, Google Cloud with valid credit card
 
-![bg right:40% w:60%][website-qrcode]
+**Tools:** Python 3.13, git, unzip, Docker, an editor
 
-## Now it's your turn!
+![bg right:40% 70%](./images/portals/briefing.svg)
 
-<!-- _class: lead -->
+## Get started
 
-Feel free to ask questions, share your feedback and contribute to the guide!
+<!--
+Speaker notes:
 
-We are here to help.
+Launch the workshop.
 
-## Clean up
+Open mlops.swiss-ai-center.ch and start with the first chapter.
 
-Now that you have completed the guide, it is important to properly manage and
-remove the resources and environments you have created.
+The guide is open source and built iteratively from feedback. If you hit a pain
+point, a confusing step, or a typo, open an issue on GitHub or tell us during
+the workshop. That is when the feedback is most useful.
 
-This is necessary to avoid:
+If you launch the cluster during the workshop, beware the costs. We will come
+back to cleanup at the end.
+-->
 
-* unnecessary incurring costs
-* potential security concerns
+Open **mlops.swiss-ai-center.ch**.
 
-## Conclusion
+Start with the hands-on guide.
 
-You have completed the guide to MLOps!
+Share feedback as you go.
 
-You can now move from experiments to production on the Cloud using MLOps best
-practices. 🚀
+![bg right:40% 70%](./images/portals/launchpad.svg)
 
-![bg right:35% w:60%](../docs/assets/images/launchpad.svg)
+## Before you go
 
-## Feedback
+<!--
+Speaker notes:
 
-Your feedback helps us improve! 🙏
+This is the close. Deliver on the opening promise.
 
-💬 Share your thoughts on what worked well and what could be better.
+Three things to leave them with:
 
-🐛 Report issues or suggest improvements on [GitHub][github].
+1. Clean up — open docs/clean-up.md. Stress that every cloud resource they
+   created is still costing money. Walk through the checklist: delete the
+   Kubernetes cluster, Artifact Registry, Storage bucket, service account, and
+   finally the project. Unlink billing and remove the payment method if they
+   created a fresh account.
 
-⭐ Leave us a star if you found this guide helpful!
+2. Apply — they now have a closed loop: version control with Git and DVC,
+   automated training and review with CI/CD and CML, serving with BentoML,
+   monitoring with Fluent Bit and Evidently AI, and retraining with Label
+   Studio. The value is not the tools; it is the workflow they can reuse on
+   their own experiment.
 
-🤝 Your input directly shapes future versions of this workshop.
+3. Star — if the guide was useful, star the repository on GitHub. This helps
+   others find it and gives us a signal that the work is valuable.
 
-## Bonus slides
+Cycle back to the promise: "You started with a notebook stuck on one machine.
+Now you know how to take a model to production — and keep it healthy."
 
-<!-- _class: lead -->
+Final words options — pick one, do not say "thank you":
+- Salute the venue: "Enjoy the rest of the conference."
+- Salute the audience: "Good luck with your models."
+- Congratulate them: "You now have a roadmap from notebook to production. The
+  next step is yours."
+- Call to action: "Go clean up your resources, then go build something."
+- Convention: simply gesture toward the slide and step back.
 
-### Usual ML workflow
+Deliver on the opening promise.
+-->
 
-Each member of the team manages their own codebase, their own dataset and their
-own models.
+![bg right:40% 70%](./images/portals/mission.svg)
 
-The reproducibility of the model creation is difficult and cannot be guaranteed
-over time.
+**Clean up** your cloud resources.
 
-Improvements made to the model are hard to track.
+**Star** the repository on GitHub.
 
-Models are hard to share and deploy in production.
-
-Model drift and degradation go unnoticed.
-
-### High flexibility for the team...
-
-<!-- _class: lead -->
-
-...but hard to maintain.
-
-...hard to reproduce in the future.
-
-...time consuming.
-
-**We can do better.**
-
-### Codebase (1/2)
-
-**Current situation**
-
--   Each developer has its own codebase
--   Sharing the code with peers is difficult
-
-### Codebase (2/2)
-
-**What we are trying to improve**
-
--   Allow each developer to improve a common codebase
--   Quickly benefit of the work from others
-
-![bg right:40% w:60%](./images/git-logo.svg)
-
-### Data (1/2)
-
-**Current situation**
-
--   The dataset must be manually downloaded and put in the right place
--   Different datasets are being used at the same time
--   Datasets are hard to improve
-
-### Data (2/2)
-
-**What we are trying to improve**
-
--   Allow the usage of a common and up-to-date dataset
--   Efficiently share new revisions to train the model
--   Datasets can be stored anywhere
-
-![bg right:40% w:60%](./images/dvc-logo.svg)
-
-### Reproduce (1/2)
-
-**Current situation**
-
--   Steps to create the model can be complex
--   Intermediate commands should not be skipped
--   Hyperparameters are hard to track from one run to another
-
-### Reproduce (2/2)
-
-**What we are trying to improve**
-
--   Document the steps to reproduce the experiment
--   Ensure it can be run anytime in the future
--   DVC can improve time efficiency
-
-![bg right:40% w:60%](./images/dvc-logo.svg)
-
-### Tracking (1/2)
-
-**Current situation**
-
--   Changes to a model are difficult to track
--   Visualize the differences are hard
--   Cannot guarantee the changes are beneficial
-
-### Tracking (2/2)
-
-**What we are trying to improve**
-
--   Have a visual way to identify the consequences of the changes made to a
-    model
--   Errors/anomalies are easily identified
-
-![bg right:40% w:40% vertical](./images/dvc-logo.svg)
-![bg right:40% w:40% vertical](./images/cml-logo.svg)
-
-### Serving and publishing (1/2)
-
-**Current situation**
-
--   The model is hard to use outside the experiment context
--   The model is hard to deploy in production
--   The model is hard to share with others
-
-### Serving and publishing (2/2)
-
-**What we are trying to improve**
-
--   The model can be used outside the experiment context
--   The model can be deployed in production
--   The model can be shared with others
-
-![bg right:40% w:40% vertical](./images/bentoml-logo.svg)
-![bg right:40% w:40% vertical](./images/docker-logo.svg)
-
-### Deployment (1/2)
-
-**Current situation**
-
--   An experiment can run on one machine but can fail on another
--   Models must be prepared to be run outside its experiment context
--   Exposing the model to the outside world is hard
-
-### Deployment (2/2)
-
-**What we are trying to improve**
-
--   Run the experiment in a clean state to ensure it works everywhere
--   Package the model with all its dependencies
--   The model can be used over the Internet by other applications
--   Automate the process
-
-![bg right:40% w:60%](./images/kubernetes-logo.svg)
-
-### Monitoring (1/2)
-
-**Current situation**
-
--   The model's behavior can drift over time
--   Degradation in performance is hard to detect
--   Issues are often discovered too late, after users are impacted
-
-### Monitoring (2/2)
-
-**What we are trying to improve**
-
--   Track model performance and data drift continuously
--   Detect anomalies and regressions early
--   Alert the team when the model needs attention
-
-![bg right:40% w:60%](./images/evidently.svg)
-
-### Labeling (1/2)
-
-**Current situation**
-
--   Model code and parameters are optimized
--   Model's performances is as good as the quality of the current data
--   We need new data to improve the model's performances
-
-![bg right:40%](#)
-
-### Labeling (2/2)
-
-**What we are trying to improve**
-
--   Labeling new data to further improve the model's performance
--   Use new data to retrain and improve the model
--   Make use of AI inference to speed up the labeling process
-
-![bg right:40% w:60%](./images/label-studio-logo.svg)
-
-## Sources
-
--   MLOps Venn diagram by Cmbreuel on
-    [Wikipedia](https://commons.wikimedia.org/wiki/File:ML_Ops_Venn_Diagram.svg)
--   ML system diagram by [D. Sculley et. al. NIPS 2015: Hidden technical debt in Machine learning systems](https://dl.acm.org/doi/10.5555/2969442.2969519)
+**Apply** the workflow to your own model.

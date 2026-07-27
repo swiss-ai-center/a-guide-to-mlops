@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Neutral backing so the patch reads on both dark and light themes -->
+  <circle cx="200" cy="200" r="190" fill="#333333" opacity="0.65"/>
+
+  <!-- Subtle outer ring -->
+  <circle cx="200" cy="200" r="175" fill="none" stroke="#f59e0b" stroke-width="3" opacity="0.6"/>
+
+  <!-- Five guide-part stars in an arc across the top sky -->
+  <g fill="#fbbf24">
+    <!-- small left -->
+    <path d="M 100.0 107.0 L 102.1 112.2 L 107.6 112.5 L 103.3 116.1 L 104.7 121.5 L 100.0 118.5 L 95.3 121.5 L 96.7 116.1 L 92.4 112.5 L 97.9 112.2 Z"/>
+    <!-- medium left -->
+    <path d="M 145.0 76.0 L 147.9 84.0 L 156.4 84.3 L 149.8 89.5 L 152.1 97.7 L 145.0 93.0 L 137.9 97.7 L 140.2 89.5 L 133.6 84.3 L 142.1 84.0 Z"/>
+    <!-- big center -->
+    <path d="M 200.0 52.0 L 204.7 63.5 L 217.1 64.4 L 207.6 72.5 L 210.6 84.6 L 200.0 78.0 L 189.4 84.6 L 192.4 72.5 L 182.9 64.4 L 195.3 63.5 Z"/>
+    <!-- medium right -->
+    <path d="M 255.0 76.0 L 257.9 84.0 L 266.4 84.3 L 259.8 89.5 L 262.1 97.7 L 255.0 93.0 L 247.9 97.7 L 250.2 89.5 L 243.6 84.3 L 252.1 84.0 Z"/>
+    <!-- small right -->
+    <path d="M 300.0 107.0 L 302.1 112.2 L 307.6 112.5 L 303.3 116.1 L 304.7 121.5 L 300.0 118.5 L 295.3 121.5 L 296.7 116.1 L 292.4 112.5 L 297.9 112.2 Z"/>
+  </g>
+
+  <!-- Laurel bouquet: two branches crossing at the bottom and extending into short stems -->
+  <g fill="none" stroke="#65a30d" stroke-width="4" stroke-linecap="round">
+    <!-- Left branch: gentler start, bowed outward, then crossing to short right stem -->
+    <path d="M 80 195 C 72 265, 135 320, 200 330 C 208 335, 214 355, 220 370"/>
+    <!-- Right branch: gentler start, bowed outward, then crossing to short left stem -->
+    <path d="M 320 195 C 328 265, 265 320, 200 330 C 192 335, 186 355, 180 370"/>
+  </g>
+
+  <!-- Laurel leaves along the upper/leafy parts of the branches -->
+  <g>
+    <!-- Left branch leaves: bend upward 30° from perpendicular toward reverse stem direction -->
+    <g transform="translate(79.3,205.4) rotate(210.9)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(79.8,217.5) rotate(-35.8)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(81.7,229.3) rotate(197.5)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(84.9,240.6) rotate(-48.9)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(89.3,251.4) rotate(185.0)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(94.7,261.7) rotate(-60.8)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(101.2,271.5) rotate(173.7)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(108.6,280.6) rotate(-71.4)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(116.8,289.2) rotate(163.6)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(125.8,297.1) rotate(-81.0)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(135.4,304.2) rotate(154.4)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(145.6,310.7) rotate(-89.9)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(156.3,316.3) rotate(145.7)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(167.4,321.1) rotate(-98.6)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(178.7,325.1) rotate(137.0)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(190.3,328.2) rotate(-107.4)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+
+    <!-- Right branch leaves: bend upward 30° from perpendicular toward reverse stem direction -->
+    <g transform="translate(320.7,205.4) rotate(209.1)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(320.2,217.5) rotate(-24.2)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(318.3,229.3) rotate(222.5)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(315.1,240.6) rotate(-11.1)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(310.7,251.4) rotate(235.0)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(305.3,261.7) rotate(0.8)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(298.8,271.5) rotate(246.3)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(291.4,280.6) rotate(11.4)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(283.2,289.2) rotate(256.4)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(274.2,297.1) rotate(21.0)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(264.6,304.2) rotate(265.6)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(254.4,310.7) rotate(29.9)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(243.7,316.3) rotate(274.3)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(232.6,321.1) rotate(38.6)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(221.3,325.1) rotate(283.0)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(209.7,328.2) rotate(47.4)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+
+    <!-- Terminal leaves at branch tops, pointing upward -->
+    <g transform="translate(80, 195) rotate(270)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+    <g transform="translate(320, 195) rotate(270)"><path d="M 0 0 Q 11.0 -8 22 0 Q 11.0 8 0 0" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/></g>
+  </g>
+
+  <!-- MLOps logo (rocket + infinity loop) in the foreground, above the wreath -->
+  <g transform="translate(200, 220) scale(0.65)">
+    <!-- Rocket fins -->
+    <path d="M -28 -20 L -61 15 L -28 5 Z" fill="#a3a3a3"/>
+    <path d="M 28 -20 L 61 15 L 28 5 Z" fill="#a3a3a3"/>
+
+    <!-- Main hull -->
+    <path d="M 0 -125 L 32 5 Q 0 22 -32 5 Z" fill="#f8fafc" stroke="#e5e5e5" stroke-width="2"/>
+
+    <!-- Window -->
+    <circle cx="0" cy="-65" r="14" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+    <circle cx="4" cy="-69" r="4" fill="#ffffff" opacity="0.2"/>
+
+    <!-- Body detail -->
+    <line x1="0" y1="-30" x2="0" y2="-5" stroke="#94a3b8" stroke-width="2" opacity="0.5"/>
+    <rect x="-11" y="-42" width="22" height="6" rx="2" fill="#94a3b8" opacity="0.5"/>
+
+    <!-- Exhaust plume connecting to the loop -->
+    <path d="M -15 8 Q -8 34 0 44 Q 8 34 15 8 Q 0 22 -15 8" fill="#f59e0b"/>
+
+    <!-- Horizontal infinity / MLOps loop -->
+    <path d="M -75 85
+             C -75 55, -35 55, 0 85
+             C 35 115, 75 115, 75 85
+             C 75 55, 35 55, 0 85
+             C -35 115, -75 115, -75 85 Z"
+          fill="none" stroke="#f59e0b" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+</svg>
