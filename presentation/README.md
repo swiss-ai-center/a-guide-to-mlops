@@ -281,7 +281,7 @@ This guide is:
 
 **This is not** an all-in-one MLOps platform or a machine learning course.
 
-**This is** a step-by-step path for small teams who want to go from notebook to production.
+**This is** a step-by-step path for small teams who want to go to production.
 
 ## Our proposal
 
