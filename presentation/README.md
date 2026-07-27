@@ -257,7 +257,7 @@ projects.
 
 <div class="center">
 
-<img src="./images/mlops-venn-diagram.svg" style="width: 50%;">
+![w:50%](./images/mlops-venn-diagram.svg)
 
 </div>
 
