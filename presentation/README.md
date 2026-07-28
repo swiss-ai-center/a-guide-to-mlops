@@ -324,7 +324,7 @@ pick the best open-source tool for each job.
 adopt one practice at a time, with minimal friction.
 
 **Pragmatic:**
-start with reproducibility, then automate, deploy, monitor, and retrain.
+reproducibility first, then automate, deploy, monitor, and retrain.
 
 ## The guide
 
