@@ -117,7 +117,7 @@ Bertil Chapuis · Ludovic Delafontaine · Rémy Marquis · Leonard Cseres
 <!--
 Speaker notes:
 
-Open with the promise. Introduce yourself and the Swiss AI Center briefly.
+Open with the objective. Introduce yourself and the Swiss AI Center briefly.
 
 Five HES from the HES-SO (HEIG-VD, HEIA-FR, HE-Arc, HEVS and HEPIA) work on a
 project called Swiss AI Center, which accelerates AI adoption in SMEs digital
@@ -127,7 +127,7 @@ HEIG-VD is responsible for setting up tools to manage ML experiments from code
 to production.
 -->
 
-## The promise
+## The objective
 
 <!-- _class: lead -->
 
@@ -137,7 +137,7 @@ Speaker notes:
 By the end of this workshop, you will know how to turn a messy notebook into a
 reproducible, cloud-deployed ML system.
 
-This is the empowerment promise.
+This is the workshop objective.
 -->
 
 You will know how to turn a messy **Jupyter notebook** into a **reproducible,
@@ -145,14 +145,14 @@ cloud-deployed ML system**.
 
 ![bg right:40% 80%](./images/portals/rocket-to-planet.svg)
 
-## The trap
+## The reality
 
 <!-- _class: lead -->
 
 <!--
 Speaker notes:
 
-This is the trap.
+This is the reality.
 
 Ordinary ML problems:
 - Models trained on data trapped in spreadsheets, logs, and sensors.
@@ -195,36 +195,24 @@ Have you ever **heard** or **said** any of these?
 
 > <small>I ran the experiment but didn't get the same results.</small>
 
-> <small>I hope my changes help... and that it still works in production.</small>
+> <small>I tweaked the model all week... no idea which change helped.</small>
 
 > <small>Can I use your model with my mobile app?</small>
 
 > <small>The model worked fine before, but not anymore. Did the data change?</small>
 
 <!--
-Speaker notes — Bonus slide content:
+Speaker notes:
 
-When reading the mobile app example, also mention website orally.
+When reading the mobile app example, also mention websites orally.
 
-Difficulties:
-- Each member of the team manages their own codebase, their own dataset and their
-  own models.
-- The reproducibility of the model creation is difficult and cannot be guaranteed
-  over time.
-- Improvements made to the model are hard to track.
-- Models are hard to share and deploy in production.
-- Model drift and degradation go unnoticed.
+Root cause: everyone manages their own code, data, and models.
 
-High flexibility for the team, but:
-- hard to maintain,
-- hard to reproduce in the future,
-- time consuming.
-
-We can do better:
-- Get out of the context of the experience.
-- Make sure you can build the model at all times.
-- Monitor the evolution of the model over time.
-- Move to production quickly, efficiently and in a semi-automated way.
+Each quote is a pain point the workshop addresses:
+- Not the same results → experiments are not reproducible (Part 1).
+- No idea which change helped → improvements are hard to track (Part 2).
+- Use my model in an app → models are hard to share and deploy (Part 3).
+- Did the data change? → drift and degradation go unnoticed (Part 4).
 -->
 
 ## Who faces these problems?
@@ -243,7 +231,7 @@ team: data scientists in notebooks, software engineers moving to ML, and small
 teams in SMEs where the same people both build and operate models.
 -->
 
-## The Path
+## The solution
 
 <!--
 Speaker notes:
@@ -315,7 +303,8 @@ Then expand:
   with data versions linked to them, so every model can be reproduced.
 - Composable means using best-of-breed open-source tools that each solve one
   problem well.
-- Incremental means adopting one practice at a time, not all at once.
+- Incremental means adopting one practice at a time, not all at once, with
+  each step fitting into the existing workflow with minimal friction.
 - Pragmatic means prioritizing reproducibility first, then automation,
   deployment, then monitoring, then feedback loops. In this guide, that loop
   means using AI-assisted labeling to add data and retrain iteratively.
@@ -332,10 +321,10 @@ track code, data, and experiments together.
 pick the best open-source tool for each job.
 
 **Incremental:**
-adopt one practice at a time.
+adopt one practice at a time, with minimal friction.
 
 **Pragmatic:**
-start with reproducibility, then automate, deploy, monitor, and retrain.
+reproducibility first, then automate, deploy, monitor, and retrain.
 
 ## The guide
 
@@ -494,7 +483,7 @@ Share feedback as you go.
 <!--
 Speaker notes:
 
-This is the close. Deliver on the opening promise.
+This is the close. Deliver on the opening objective.
 
 Three things to leave them with:
 
@@ -513,7 +502,7 @@ Three things to leave them with:
 3. Star — if the guide was useful, star the repository on GitHub. This helps
    others find it and gives us a signal that the work is valuable.
 
-Cycle back to the promise: "You started with a notebook stuck on one machine.
+Cycle back to the objective: "You started with a notebook stuck on one machine.
 Now you know how to take a model to production — and keep it healthy."
 
 Final words options — pick one, do not say "thank you":
@@ -524,7 +513,7 @@ Final words options — pick one, do not say "thank you":
 - Call to action: "Go clean up your resources, then go build something."
 - Convention: simply gesture toward the slide and step back.
 
-Deliver on the opening promise.
+Deliver on the opening objective.
 -->
 
 ![bg right:40% 70%](./images/portals/mission.svg)
