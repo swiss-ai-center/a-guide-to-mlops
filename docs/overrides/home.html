@@ -105,19 +105,6 @@
     background: #0a0a0a;
     overflow: hidden;
   }
-  .starfield::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(255, 255, 255, 0.03) 2px,
-      rgba(255, 255, 255, 0.03) 3px
-    );
-    pointer-events: none;
-  }
   .starfield::after {
     content: "";
     position: absolute;
@@ -437,15 +424,6 @@
   }
   body[data-md-color-scheme="default"] .starfield {
     background: #f7f8fc;
-  }
-  body[data-md-color-scheme="default"] .starfield::before {
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(0, 0, 0, 0.03) 2px,
-      rgba(0, 0, 0, 0.03) 3px
-    );
   }
   body[data-md-color-scheme="default"] .starfield::after {
     opacity: 0.15;
