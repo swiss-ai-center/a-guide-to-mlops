@@ -201,6 +201,23 @@ DATA_UPLOAD_MAX_NUMBER_FILES=1000 label-studio
     the number of images in this chapter, which would force you to upload them in
     multiple batches.
 
+!!! warning "macOS: raise the open-file limit"
+
+    macOS shells typically allow a process to open only 256 files at once. Label
+    Studio opens a temporary file for every uploaded image, so importing all 1,000
+    images can fail with `[Errno 24] Too many open files` even after setting
+    `DATA_UPLOAD_MAX_NUMBER_FILES`.
+
+    Raise the soft limit in the same terminal before starting Label Studio:
+
+    ```sh title="Execute the following command(s) in a terminal"
+    ulimit -n 4096
+    DATA_UPLOAD_MAX_NUMBER_FILES=1000 label-studio
+    ```
+
+    The higher limit applies only to the current shell and the processes started
+    from it.
+
 Label Studio will start on <http://localhost:8080>. Open the URL in your browser
 and sign up for an account.
 
