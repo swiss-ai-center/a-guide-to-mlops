@@ -202,29 +202,17 @@ Have you ever **heard** or **said** any of these?
 > <small>The model worked fine before, but not anymore. Did the data change?</small>
 
 <!--
-Speaker notes — Bonus slide content:
+Speaker notes:
 
-When reading the mobile app example, also mention website orally.
+When reading the mobile app example, also mention websites orally.
 
-Difficulties:
-- Each member of the team manages their own codebase, their own dataset and their
-  own models.
-- The reproducibility of the model creation is difficult and cannot be guaranteed
-  over time.
-- Improvements made to the model are hard to track.
-- Models are hard to share and deploy in production.
-- Model drift and degradation go unnoticed.
+Root cause: everyone manages their own code, data, and models.
 
-High flexibility for the team, but:
-- hard to maintain,
-- hard to reproduce in the future,
-- time consuming.
-
-We can do better:
-- Get out of the context of the experience.
-- Make sure you can build the model at all times.
-- Monitor the evolution of the model over time.
-- Move to production quickly, efficiently and in a semi-automated way.
+Each quote is a pain point the workshop addresses:
+- Not the same results → experiments are not reproducible (Part 1).
+- No idea which change helped → improvements are hard to track (Part 2).
+- Use my model in an app → models are hard to share and deploy (Part 3).
+- Did the data change? → drift and degradation go unnoticed (Part 4).
 -->
 
 ## Who faces these problems?
