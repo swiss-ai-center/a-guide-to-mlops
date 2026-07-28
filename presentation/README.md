@@ -117,7 +117,7 @@ Bertil Chapuis · Ludovic Delafontaine · Rémy Marquis · Leonard Cseres
 <!--
 Speaker notes:
 
-Open with the promise. Introduce yourself and the Swiss AI Center briefly.
+Open with the objective. Introduce yourself and the Swiss AI Center briefly.
 
 Five HES from the HES-SO (HEIG-VD, HEIA-FR, HE-Arc, HEVS and HEPIA) work on a
 project called Swiss AI Center, which accelerates AI adoption in SMEs digital
@@ -127,7 +127,7 @@ HEIG-VD is responsible for setting up tools to manage ML experiments from code
 to production.
 -->
 
-## The promise
+## The objective
 
 <!-- _class: lead -->
 
@@ -137,7 +137,7 @@ Speaker notes:
 By the end of this workshop, you will know how to turn a messy notebook into a
 reproducible, cloud-deployed ML system.
 
-This is the empowerment promise.
+This is the workshop objective.
 -->
 
 You will know how to turn a messy **Jupyter notebook** into a **reproducible,
@@ -145,14 +145,14 @@ cloud-deployed ML system**.
 
 ![bg right:40% 80%](./images/portals/rocket-to-planet.svg)
 
-## The trap
+## The reality
 
 <!-- _class: lead -->
 
 <!--
 Speaker notes:
 
-This is the trap.
+This is the reality.
 
 Ordinary ML problems:
 - Models trained on data trapped in spreadsheets, logs, and sensors.
@@ -243,7 +243,7 @@ team: data scientists in notebooks, software engineers moving to ML, and small
 teams in SMEs where the same people both build and operate models.
 -->
 
-## The Path
+## The solution
 
 <!--
 Speaker notes:
@@ -494,7 +494,7 @@ Share feedback as you go.
 <!--
 Speaker notes:
 
-This is the close. Deliver on the opening promise.
+This is the close. Deliver on the opening objective.
 
 Three things to leave them with:
 
@@ -513,7 +513,7 @@ Three things to leave them with:
 3. Star — if the guide was useful, star the repository on GitHub. This helps
    others find it and gives us a signal that the work is valuable.
 
-Cycle back to the promise: "You started with a notebook stuck on one machine.
+Cycle back to the objective: "You started with a notebook stuck on one machine.
 Now you know how to take a model to production — and keep it healthy."
 
 Final words options — pick one, do not say "thank you":
@@ -524,7 +524,7 @@ Final words options — pick one, do not say "thank you":
 - Call to action: "Go clean up your resources, then go build something."
 - Convention: simply gesture toward the slide and step back.
 
-Deliver on the opening promise.
+Deliver on the opening objective.
 -->
 
 ![bg right:40% 70%](./images/portals/mission.svg)
