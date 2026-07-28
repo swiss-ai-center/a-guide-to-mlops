@@ -303,7 +303,8 @@ Then expand:
   with data versions linked to them, so every model can be reproduced.
 - Composable means using best-of-breed open-source tools that each solve one
   problem well.
-- Incremental means adopting one practice at a time, not all at once.
+- Incremental means adopting one practice at a time, not all at once, with
+  each step fitting into the existing workflow with minimal friction.
 - Pragmatic means prioritizing reproducibility first, then automation,
   deployment, then monitoring, then feedback loops. In this guide, that loop
   means using AI-assisted labeling to add data and retrain iteratively.
@@ -320,7 +321,7 @@ track code, data, and experiments together.
 pick the best open-source tool for each job.
 
 **Incremental:**
-adopt one practice at a time.
+adopt one practice at a time, with minimal friction.
 
 **Pragmatic:**
 start with reproducibility, then automate, deploy, monitor, and retrain.
