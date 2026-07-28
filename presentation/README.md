@@ -195,7 +195,7 @@ Have you ever **heard** or **said** any of these?
 
 > <small>I ran the experiment but didn't get the same results.</small>
 
-> <small>I hope my changes help... and that it still works in production.</small>
+> <small>I tweaked the model all week... no idea which change helped.</small>
 
 > <small>Can I use your model with my mobile app?</small>
 
