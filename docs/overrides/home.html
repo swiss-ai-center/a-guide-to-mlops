@@ -105,19 +105,6 @@
     background: #0a0a0a;
     overflow: hidden;
   }
-  .starfield::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(255, 255, 255, 0.03) 2px,
-      rgba(255, 255, 255, 0.03) 3px
-    );
-    pointer-events: none;
-  }
   .starfield::after {
     content: "";
     position: absolute;
@@ -174,12 +161,9 @@
     background: var(--accent);
     color: #0a0a0a;
     border: 1px solid var(--accent);
-    font-family: var(--tech-mono);
     font-weight: 700;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
     transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   }
   .hero-cta:hover {
@@ -263,18 +247,12 @@
     border-color: #555555;
   }
   .chapter-label {
-    display: inline-block;
-    padding: 0.25rem 0.6rem;
-    border-radius: 0;
-    background: transparent;
-    border: 1px solid var(--accent);
-    color: var(--accent);
-    font-family: var(--tech-mono);
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    margin-bottom: 1rem;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
   }
   .chapter-icon {
     margin-bottom: 0.75rem;
@@ -286,22 +264,19 @@
     height: auto;
   }
   .chapter-title {
-    font-size: clamp(1.8rem, 3.6vw, 2.6rem);
-    font-weight: 800;
-    margin: 0 0 1rem;
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin: 0 0 0.75rem;
     color: #e5e5e5;
     text-transform: uppercase;
-    letter-spacing: -0.01em;
   }
   .chapter-prefix {
     display: block;
-    font-family: var(--tech-mono);
-    font-size: 0.45em;
-    letter-spacing: 0.12em;
+    font-size: 0.8rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: #a3a3a3;
     margin-bottom: 0.35rem;
-  }
-  .chapter-prefix::after {
-    content: " —";
   }
 
   .chapter-title span {
@@ -325,12 +300,9 @@
     gap: 0.4rem;
     padding: 0.55rem 1rem;
     border-radius: 0;
-    font-family: var(--tech-mono);
     font-weight: 700;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
     transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   }
   .chapter-link.primary {
@@ -350,26 +322,6 @@
   .chapter-link.secondary:hover {
     border-color: #555555;
     color: #e5e5e5;
-  }
-  .chapter-scroll {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2rem;
-    height: 2rem;
-    margin-left: auto;
-    border: 1px solid transparent;
-    color: #a3a3a3;
-    background: transparent;
-    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-  }
-  .chapter-scroll:hover {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: #0a0a0a;
-  }
-  .chapter-scroll .twemoji {
-    --md-icon-size: 1em;
   }
   .pdf-link {
     display: inline-flex;
@@ -402,7 +354,6 @@
     justify-content: center;
     text-align: left;
     padding: 5rem 6vw 2rem;
-    border-top: 1px solid #333333;
   }
   .finale-title {
     font-size: clamp(2rem, 5vw, 3.2rem);
@@ -473,15 +424,6 @@
   body[data-md-color-scheme="default"] .starfield {
     background: #f7f8fc;
   }
-  body[data-md-color-scheme="default"] .starfield::before {
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(0, 0, 0, 0.03) 2px,
-      rgba(0, 0, 0, 0.03) 3px
-    );
-  }
   body[data-md-color-scheme="default"] .starfield::after {
     opacity: 0.15;
   }
@@ -542,15 +484,6 @@
     border-color: #a3a3a3;
     color: #0a0a0a;
   }
-  body[data-md-color-scheme="default"] .chapter-scroll {
-    color: #525252;
-    border-color: transparent;
-  }
-  body[data-md-color-scheme="default"] .chapter-scroll:hover {
-    background: #d97706;
-    border-color: #d97706;
-    color: #0a0a0a;
-  }
   body[data-md-color-scheme="default"] .crew-link {
     color: #b45309;
   }
@@ -569,9 +502,6 @@
     background: #b45309;
     border-color: #b45309;
     color: #ffffff;
-  }
-  body[data-md-color-scheme="default"] .story-finale {
-    border-top-color: #d4d4d4;
   }
   body[data-md-color-scheme="default"] .story-finale .finale-title {
     color: #0a0a0a;
@@ -621,14 +551,14 @@
 
 <!-- Story chapters -->
 <main class="story-main" id="story-start">
-  {%- macro chapter_card(chapter, next_href) -%}
+  {%- macro chapter_card(chapter) -%}
   <article class="chapter-card" id="section-{{ chapter.id }}">
+    <div class="chapter-label">{{ chapter.label }}</div>
     {% if chapter.icon %}
     <div class="chapter-icon">
       <img src="{{ chapter.icon | url }}" alt="">
     </div>
     {% endif %}
-    <div class="chapter-label">{{ chapter.label }}</div>
     <h2 class="chapter-title">{% if chapter.prefix %}<span class="chapter-prefix">{{ chapter.prefix }}</span>{% endif %}{{ chapter.title }}{% if chapter.title_highlight %} <span>{{ chapter.title_highlight }}</span>{% endif %}</h2>
     <p>
       {{- chapter.body | safe -}}
@@ -648,11 +578,6 @@
         {{ action.text }}
       </a>
       {% endfor %}
-      {% if next_href %}
-      <a href="{{ next_href }}" class="chapter-scroll" aria-label="Next after {{ chapter.label }}">
-        <span class="twemoji" aria-hidden="true">{% include ".icons/lucide/chevron-down.svg" %}</span>
-      </a>
-      {% endif %}
     </div>
   </article>
   {%- endmacro -%}
@@ -660,7 +585,7 @@
   <div class="chapter-grid">
     {% if home.chapters %}
       {% for chapter in home.chapters %}
-        {{ chapter_card(chapter, ('#section-' ~ loop.nextitem.id) if not loop.last else '#story-finale') }}
+        {{ chapter_card(chapter) }}
       {% endfor %}
     {% endif %}
   </div>
