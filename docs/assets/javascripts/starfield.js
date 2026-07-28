@@ -71,9 +71,7 @@
                         y: Math.random() * docHeight,
                         speed: cfg.speed,
                         size: cfg.sizeMin + Math.random() * (cfg.sizeMax - cfg.sizeMin),
-                        opacity: cfg.opacity * (0.5 + Math.random() * 0.5),
-                        twinklePhase: Math.random() * Math.PI * 2,
-                        twinkleSpeed: 0.002 + Math.random() * 0.003
+                        opacity: cfg.opacity * (0.5 + Math.random() * 0.5)
                     });
                 }
             });
@@ -83,27 +81,23 @@
             const scroll = window.scrollY;
             ctx.clearRect(0, 0, width, height);
 
-            const now = Date.now();
             stars.forEach(star => {
                 const visibleY = star.y - scroll * star.speed;
                 // Allow a little overscan so stars can enter/leave smoothly.
                 if (visibleY < -10 || visibleY > height + 10) return;
 
-                const twinkle = 0.7 + 0.3 * Math.sin(now * star.twinkleSpeed + star.twinklePhase);
-                const alpha = star.opacity * twinkle;
-
                 const radius = Math.max(star.size / 2, 0.8);
                 const rgb = starColor();
                 ctx.beginPath();
                 ctx.arc(star.x, visibleY, radius, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(' + rgb + ', ' + alpha + ')';
+                ctx.fillStyle = 'rgba(' + rgb + ', ' + star.opacity + ')';
                 ctx.fill();
 
                 // Soft glow for larger stars.
                 if (star.size > 1.6) {
                     ctx.beginPath();
                     ctx.arc(star.x, visibleY, star.size * 2.2, 0, Math.PI * 2);
-                    ctx.fillStyle = 'rgba(' + rgb + ', ' + (alpha * 0.22) + ')';
+                    ctx.fillStyle = 'rgba(' + rgb + ', ' + (star.opacity * 0.22) + ')';
                     ctx.fill();
                 }
             });
