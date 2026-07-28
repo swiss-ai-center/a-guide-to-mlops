@@ -126,7 +126,7 @@ extra_css = ["assets/stylesheets/extra.css"]
 # The path provided should be relative to the "docs_dir".
 #
 # Read more: https://zensical.org/docs/customization/#additional-javascript
-extra_javascript = ["assets/javascripts/starfield.js", "assets/javascripts/scrollAnimations.js"]
+extra_javascript = ["assets/javascripts/starfield.js"]
 
 # ----------------------------------------------------------------------------
 # Section for configuring theme options
