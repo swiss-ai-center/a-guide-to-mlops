@@ -36,8 +36,8 @@ flowchart TB
     issue[Drift-alert issue] -->|review| decision{Decision}
     decision -->|false positive| tune[Adjust thresholds]
     decision -->|model degraded| rollback[Roll back with Git and DVC]
-    rollback -->|checkout| git_rollback[Checkout previous commit]
-    git_rollback -->|dvc checkout| old_model[Previous model artifact]
+    rollback -->|revert| git_rollback[Revert commits on main]
+    git_rollback -->|dvc pull| old_model[Previous model artifact]
     old_model -->|CI/CD| redeploy[Redeploy via pipeline]
     decision -->|new distribution| label[Label new data]
     label --> retrain[Retrain with DVC]
@@ -208,45 +208,21 @@ The canonical rollback restores the exact code, model artifact, and data that
 produced the previous version. It is slower than the Kubernetes rollback, but it
 keeps the repository consistent and lets the CI/CD pipeline redeploy cleanly.
 
-Using the same commit SHA as the previous step:
-
-```sh title="Execute the following command(s) in a terminal"
-# Checkout the previous known-good version
-git checkout $PREVIOUS_SHA
-
-# Restore the exact model artifact and data from DVC
-dvc checkout
-```
-
-At this point your workspace contains the old model and data. You now have two
-options to put that state back on `main`:
-
-**Option A: revert commit (safest)**
-
 Create a new commit on `main` that reverts the bad commits since the last
-known-good version. This preserves history and works well when the problematic
-change is contained in a small number of recent commits.
+known-good version, using the same commit SHA as the previous step. This
+preserves history — the bad deployment stays visible in the Git log, which keeps
+the deployed state traceable. The revert also restores the DVC pointer files, so
+the pipeline pulls the previous model artifact and data:
 
 ```sh title="Execute the following command(s) in a terminal"
-git checkout main
+# Revert the commits since the last known-good version
 git revert --no-commit $PREVIOUS_SHA..
 git commit -m "Rollback to $PREVIOUS_SHA"
 git push origin main
 ```
 
-**Option B: reset main to the known-good commit**
-
-Use this only if the bad deployment has not been pulled by other team members
-and you are comfortable rewriting public history.
-
-```sh title="Execute the following command(s) in a terminal"
-git checkout main
-git reset --hard $PREVIOUS_SHA
-git push --force-with-lease origin main
-```
-
 After the push, the CI/CD pipeline will build and deploy the rolled-back version
-automatically, bringing the container registry back into sync with Git.
+automatically, bringing the container registry back into sync with Git and DVC.
 
 After the rollback succeeds, close the drift-alert issue from the GitHub
 interface and add a comment that records the action taken, for example "Rolled
@@ -368,7 +344,6 @@ Continue to the conclusion to review what you have learned.
 
 ## Sources
 
-- [_DVC Checkout_ - dvc.org](https://dvc.org/doc/command-reference/checkout)
 - [_Kubernetes Rollout Undo_ - kubernetes.io](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-a-deployment)
 - [_Artifact Registry: List images_ - cloud.google.com](https://cloud.google.com/artifact-registry/docs/docker/store-docker-container-images)
 - [_GitHub CLI: gh issue_](https://cli.github.com/manual/gh_issue)
