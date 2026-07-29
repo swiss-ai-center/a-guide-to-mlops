@@ -327,7 +327,7 @@ dvc add data/raw/
 When executing this command, the following output occurs:
 
 ```text
-ERROR: bad DVC file name 'data/data.raw.dvc' is git-ignored.
+ERROR: bad DVC file name 'data/raw.dvc' is git-ignored.
 ```
 
 You will have to update the gitignore file so that DVC can create files in the
@@ -403,8 +403,8 @@ To enable auto staging, run:
     dvc config core.autostage true
 ```
 
-The effect of the `dvc add` command is to create a `data/data.raw.dvc` file and
-a `data/.gitignore`. The `.dvc` file contains the metadata of the file that is
+The effect of the `dvc add` command is to create a `data/raw.dvc` file and a
+`data/.gitignore`. The `.dvc` file contains the metadata of the file that is
 used by DVC to download and check the integrity of the files. The gitignore file
 is created to add the files in `data/raw` to be ignored by Git. The `.dvc` files
 must be added to Git.
