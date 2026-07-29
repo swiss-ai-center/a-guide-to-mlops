@@ -179,7 +179,7 @@ git revert --no-commit $PREVIOUS_SHA..
 git commit -m "Rollback to $PREVIOUS_SHA"
 
 # Push the rollback to trigger the CI/CD pipeline
-git push origin main
+git push
 ```
 
 After the push, the CI/CD pipeline will build and deploy the rolled-back version
