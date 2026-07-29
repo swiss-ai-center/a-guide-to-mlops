@@ -169,7 +169,8 @@ previous version on `main`, so the source of truth stays consistent and the
 CI/CD pipeline redeploys cleanly.
 
 Create a new commit on `main` that reverts the bad commits since the last
-known-good version, using the same commit SHA as the previous step. This
+known-good version, using the same commit SHA as the previous step.
+`--no-commit` reverts them all at once, into a single rollback commit. This
 preserves history — the bad deployment stays visible in the Git log, which keeps
 the deployed state traceable. The revert also restores the DVC pointer files, so
 the pipeline pulls the previous model artifact and data:
@@ -177,29 +178,16 @@ the pipeline pulls the previous model artifact and data:
 ```sh title="Execute the following command(s) in a terminal"
 # Revert the commits since the last known-good version
 git revert --no-commit $PREVIOUS_SHA..
+
+# Commit the rollback
 git commit -m "Rollback to $PREVIOUS_SHA"
+
+# Push the rollback to trigger the CI/CD pipeline
 git push origin main
 ```
 
 After the push, the CI/CD pipeline will build and deploy the rolled-back version
 automatically, bringing the container registry back into sync with Git and DVC.
-
-!!! info "Fast rollback for live incidents"
-
-    If production is down and you must restore service immediately,
-    `kubectl rollout undo` reverts the deployment to the previous ReplicaSet:
-
-    ```sh title="Execute the following command(s) in a terminal"
-    # Roll back the deployment one revision
-    kubectl rollout undo deployment/celestial-bodies-classifier-deployment
-
-    # Verify the rollback
-    kubectl rollout status deployment/celestial-bodies-classifier-deployment
-    ```
-
-    This does not change Git or DVC, and the previous ReplicaSet is not necessarily
-    the known-good version you picked. Use it only to stop an incident, then follow
-    with the Git/DVC rollback above to keep the source of truth consistent.
 
 After the rollback succeeds, close the drift-alert issue from the GitHub
 interface and add a comment that records the action taken, for example "Rolled
@@ -299,9 +287,6 @@ All the items of the MLOps process for this part are now addressed.
       tracks every deployable image.
     - **The Git/DVC rollback is the canonical recovery**: it restores the source
       of truth and lets the CI/CD pipeline redeploy the old version cleanly.
-    - **Kubernetes rollout undo is an incident-response shortcut**: it restores
-      service immediately but does not change Git or DVC, so it does not replace the
-      Git/DVC rollback.
     - **Real new distributions need retraining, not rollback**: Part 5 covers
       the labeling workflow.
     - **Close the issue when the decision is executed**: the alerting script
@@ -320,6 +305,5 @@ Continue to the conclusion to review what you have learned.
 
 ## Sources
 
-- [_Kubernetes Rollout Undo_ - kubernetes.io](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-a-deployment)
 - [_Artifact Registry: List images_ - cloud.google.com](https://cloud.google.com/artifact-registry/docs/docker/store-docker-container-images)
 - [_GitHub CLI: gh issue_](https://cli.github.com/manual/gh_issue)
