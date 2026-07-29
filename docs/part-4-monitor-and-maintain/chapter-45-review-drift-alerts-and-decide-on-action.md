@@ -35,10 +35,8 @@ The following diagram illustrates the decision flow at the end of this chapter:
 flowchart TB
     issue[Drift-alert issue] -->|review| decision{Decision}
     decision -->|false positive| tune[Adjust thresholds]
-    decision -->|model degraded| rollback[Roll back with Git and DVC]
-    rollback -->|revert| git_rollback[Revert commits on main]
-    git_rollback -->|dvc pull| old_model[Previous model artifact]
-    old_model -->|CI/CD| redeploy[Redeploy via pipeline]
+    decision -->|model degraded| rollback[Revert commits on main]
+    rollback -->|CI/CD| redeploy[Redeploy via pipeline]
     decision -->|new distribution| label[Label new data]
     label --> retrain[Retrain with DVC]
     retrain --> new_reference[Rebuild reference dataset]
@@ -47,8 +45,6 @@ flowchart TB
     style decision opacity:0.4,color:#7f7f7f80
     style tune opacity:0.4,color:#7f7f7f80
     style rollback opacity:0.4,color:#7f7f7f80
-    style git_rollback opacity:0.4,color:#7f7f7f80
-    style old_model opacity:0.4,color:#7f7f7f80
     style redeploy opacity:0.4,color:#7f7f7f80
     style label opacity:0.4,color:#7f7f7f80
     style retrain opacity:0.4,color:#7f7f7f80
