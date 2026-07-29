@@ -292,6 +292,10 @@ model before merging them into the codebase.
 
     These settings ensure that all changes pass the CI/CD pipeline before merging.
 
+    Note that branch protection rules are available for free on public repositories.
+    On private repositories, they require a GitHub Pro plan for personal accounts or
+    a GitHub Team plan for organizations.
+
 ### Switch back to the main branch and pull latest changes
 
 Now that the merge is done, you can get the changes on the main branch.
@@ -365,3 +369,4 @@ Highly inspired by:
 
 - [_Creating an issue_ - docs.github.com](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue)
 - [_Creating a branch to work on an issue_ - docs.github.com](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-a-branch-for-an-issue)
+- [_About protected branches_ - docs.github.com](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)
