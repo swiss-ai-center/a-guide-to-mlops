@@ -4,9 +4,8 @@
 
 Now that the drift alert system is in place, the monitoring workflow opens a
 GitHub issue whenever drift exceeds the thresholds defined in `src/monitor.py`.
-The issue records the drift score, links to the Evidently dashboard, and lists
-the next steps. It flags that something changed but the team still has to decide
-what to do about it.
+The issue records the drift score and links to the Evidently dashboard. It flags
+that something changed, but the team still has to decide what to do about it.
 
 This chapter shows how to review that issue and choose one of three actions:
 
@@ -27,7 +26,7 @@ In this chapter, you will learn how to:
 1. Open and read the drift-alert issue created by the monitoring workflow
 2. Decide whether to tune thresholds, roll back, or label new data and retrain
 3. Adjust drift thresholds quickly in `src/monitor.py`
-4. Roll back the Kubernetes deployment and restore the canonical source of truth
+4. Roll back to the last known-good version with Git and DVC
 5. Verify the chosen action and close the issue
 
 The following diagram illustrates the decision flow at the end of this chapter:
@@ -36,10 +35,8 @@ The following diagram illustrates the decision flow at the end of this chapter:
 flowchart TB
     issue[Drift-alert issue] -->|review| decision{Decision}
     decision -->|false positive| tune[Adjust thresholds]
-    decision -->|model degraded| rollback[Roll back with Git and DVC]
-    rollback -->|checkout| git_rollback[Checkout previous Git tag]
-    git_rollback -->|dvc checkout| old_model[Previous model artifact]
-    old_model -->|CI/CD| redeploy[Redeploy via pipeline]
+    decision -->|model degraded| rollback[Revert commits on main]
+    rollback -->|CI/CD| redeploy[Redeploy via pipeline]
     decision -->|new distribution| label[Label new data]
     label --> retrain[Retrain with DVC]
     retrain --> new_reference[Rebuild reference dataset]
@@ -48,8 +45,6 @@ flowchart TB
     style decision opacity:0.4,color:#7f7f7f80
     style tune opacity:0.4,color:#7f7f7f80
     style rollback opacity:0.4,color:#7f7f7f80
-    style git_rollback opacity:0.4,color:#7f7f7f80
-    style old_model opacity:0.4,color:#7f7f7f80
     style redeploy opacity:0.4,color:#7f7f7f80
     style label opacity:0.4,color:#7f7f7f80
     style retrain opacity:0.4,color:#7f7f7f80
@@ -60,9 +55,9 @@ flowchart TB
 
 ### Open the drift-alert issue
 
-The monitoring workflow labels every drift alert with `drift-alert`. Open your
-repository in the GitHub interface, go to the **Issues** tab, and filter by the
-`drift-alert` label to find the open alert.
+The monitoring workflow labels the alert with `drift-alert`. Open your
+repository in the GitHub interface and go to the **Issues** tab. If other issues
+are open, filter by the `drift-alert` label to find the alert.
 
 Click the issue to open it. The issue body contains:
 
@@ -76,9 +71,9 @@ If this was a test alert or the drift has already been handled, click the
 
 ### Review the evidence
 
-The issue links to the Evidently dashboard and to `monitoring/report.json`. You
-already inspected both in the previous chapter, so use that review to decide
-which branch of the decision tree applies:
+The issue shows the drift scores extracted from `monitoring/report.json` and
+links to the Evidently dashboard. You already inspected both in the previous
+chapter, so use that review to decide which branch of the decision tree applies:
 
 * **Noise or expected variation**: tune the thresholds.
 * **Real degradation of the deployed model**: roll back.
@@ -114,15 +109,10 @@ thresholds and only open a new issue if drift still exceeds them.
 
 ### Option 2: Roll back the deployment
 
-If the deployed model is clearly worse than the previous version, roll back.
-There are two rollback paths:
-
-* **Fast rollback with Kubernetes** — revert the running deployment immediately.
-  Use this first to stop the incident, but remember that it does not change Git or
-  DVC.
-* **Canonical rollback with Git and DVC** — restore the exact code, model
-  artifact, and data that produced the previous version on `main`. Use this to
-  make the source of truth consistent and let the CI/CD pipeline redeploy cleanly.
+If the deployed model is clearly worse than the previous version, roll back to
+the last known-good version. Every commit to `main` produces a deployable image
+and the DVC pointer files track the model artifact and data, so reverting `main`
+and letting the CI/CD pipeline redeploy is all it takes.
 
 #### Find the previous known-good version
 
@@ -161,14 +151,6 @@ You can also find the same SHA in Git:
 git log --oneline -10 main
 ```
 
-If your team creates Git tags for releases, use those instead. A tag such as
-`model-v1.2.2` is easier to communicate than a commit SHA:
-
-```sh title="Execute the following command(s) in a terminal"
-# List release tags
-git tag --sort=-creatordate | head -10
-```
-
 Set the rollback target once so the following commands can reuse it:
 
 ```sh title="Execute the following command(s) in a terminal"
@@ -176,86 +158,32 @@ Set the rollback target once so the following commands can reuse it:
 export PREVIOUS_SHA=a1b2c3d4e5f6789012345678901234567890abcd
 ```
 
-#### Fast rollback with Kubernetes
+#### Roll back with Git and DVC
 
-If the previous pod revision is still available in Kubernetes,
-`kubectl rollout undo` is the fastest operational shortcut. It reverts the
-deployment to the previous ReplicaSet, which usually points to the image just
-before the last update.
-
-```sh title="Execute the following command(s) in a terminal"
-# Roll back the deployment one revision
-kubectl rollout undo deployment/celestial-bodies-classifier-deployment
-
-# Verify the rollback
-kubectl rollout status deployment/celestial-bodies-classifier-deployment
-```
-
-Check the rollout history to see which revision is active:
-
-```sh title="Execute the following command(s) in a terminal"
-kubectl rollout history deployment/celestial-bodies-classifier-deployment
-```
-
-This is the fastest way to recover, but it does not change Git or DVC. Use it
-for immediate incident response, then follow with the Git/DVC rollback below to
-keep the source of truth consistent.
-
-If the previous ReplicaSet is no longer available, you can still redeploy a
-specific image from the registry with `kubectl set image`:
-
-```sh title="Execute the following command(s) in a terminal"
-kubectl set image deployment/celestial-bodies-classifier-deployment \
-  celestial-bodies-classifier=$GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:$PREVIOUS_SHA
-
-kubectl rollout status deployment/celestial-bodies-classifier-deployment
-```
-
-#### Canonical rollback with Git and DVC
-
-The canonical rollback restores the exact code, model artifact, and data that
-produced the previous version. It is slower than the Kubernetes rollback, but it
-keeps the repository consistent and lets the CI/CD pipeline redeploy cleanly.
-
-Using the same commit SHA as the previous step:
-
-```sh title="Execute the following command(s) in a terminal"
-# Checkout the previous known-good version
-git checkout $PREVIOUS_SHA
-
-# Restore the exact model artifact and data from DVC
-dvc checkout
-```
-
-At this point your workspace contains the old model and data. You now have two
-options to put that state back on `main`:
-
-**Option A: revert commit (safest)**
+The rollback restores the exact code, model artifact, and data that produced the
+previous version on `main`, so the source of truth stays consistent and the
+CI/CD pipeline redeploys cleanly.
 
 Create a new commit on `main` that reverts the bad commits since the last
-known-good version. This preserves history and works well when the problematic
-change is contained in a small number of recent commits.
+known-good version, using the same commit SHA as the previous step.
+`--no-commit` reverts them all at once, into a single rollback commit. This
+preserves history: the bad deployment stays visible in the Git log, which keeps
+the deployed state traceable. The revert also restores the DVC pointer files, so
+the pipeline pulls the previous model artifact and data:
 
 ```sh title="Execute the following command(s) in a terminal"
-git checkout main
+# Revert the commits since the last known-good version
 git revert --no-commit $PREVIOUS_SHA..
+
+# Commit the rollback
 git commit -m "Rollback to $PREVIOUS_SHA"
-git push origin main
-```
 
-**Option B: reset main to the known-good commit**
-
-Use this only if the bad deployment has not been pulled by other team members
-and you are comfortable rewriting public history.
-
-```sh title="Execute the following command(s) in a terminal"
-git checkout main
-git reset --hard $PREVIOUS_SHA
-git push --force-with-lease origin main
+# Push the rollback to trigger the CI/CD pipeline
+git push
 ```
 
 After the push, the CI/CD pipeline will build and deploy the rolled-back version
-automatically, bringing the container registry back into sync with Git.
+automatically, bringing the container registry back into sync with Git and DVC.
 
 After the rollback succeeds, close the drift-alert issue from the GitHub
 interface and add a comment that records the action taken, for example "Rolled
@@ -333,8 +261,7 @@ In this chapter, you have successfully:
 2. Chose between tuning thresholds, rolling back, or labeling new data and
    retraining
 3. Adjusted drift thresholds in `src/monitor.py`
-4. Rolled back the Kubernetes deployment and restored the canonical source of
-   truth with Git and DVC
+4. Rolled back to the last known-good version with Git and DVC
 5. Verified the chosen action and closed the issue
 
 You fixed some of the previous issues:
@@ -354,9 +281,6 @@ All the items of the MLOps process for this part are now addressed.
     - **Rollback is only possible because every artifact is versioned**: Git
       tracks the code, DVC tracks the model and data, and the container registry
       tracks every deployable image.
-    - **Kubernetes rollout undo is the fastest operational shortcut**: use it
-      first to stop an incident, then follow with the canonical Git/DVC rollback to
-      keep the source of truth consistent.
     - **The Git/DVC rollback is the canonical recovery**: it restores the source
       of truth and lets the CI/CD pipeline redeploy the old version cleanly.
     - **Real new distributions need retraining, not rollback**: Part 5 covers
@@ -377,8 +301,5 @@ Continue to the conclusion to review what you have learned.
 
 ## Sources
 
-- [_Git Tags_ - git-scm.com](https://git-scm.com/book/en/v2/Git-Basics-Tagging)
-- [_DVC Checkout_ - dvc.org](https://dvc.org/doc/command-reference/checkout)
-- [_Kubernetes Rollout Undo_ - kubernetes.io](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-a-deployment)
 - [_Artifact Registry: List images_ - cloud.google.com](https://cloud.google.com/artifact-registry/docs/docker/store-docker-container-images)
 - [_GitHub CLI: gh issue_](https://cli.github.com/manual/gh_issue)
