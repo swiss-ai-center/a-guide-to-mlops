@@ -103,7 +103,7 @@ On your machine, check out the new branch. Replace
 # Get the latest updates from the remote origin
 git fetch origin
 
-# Check to the new branch
+# Check out the new branch
 git checkout <the_name_of_the_new_branch>
 ```
 
@@ -239,7 +239,7 @@ Once the workflow has successfully been executed, the
 **Some checks haven't completed yet** section should become
 **All checks have passed**.
 
-Additionally, you may notice that GitHub CopilotAI provides a review of your
+Additionally, you may notice that GitHub Copilot AI provides a review of your
 changes in a comment on the pull request. This is different from the CML report
 that will be discussed in the next section.
 
@@ -270,7 +270,7 @@ Congratulations! You can now iterate on your model while keeping a trace of the
 improvements made to it. You can visualize and discuss the changes made to a
 model before merging them into the codebase.
 
-!!! tip "Protecing the codebase"
+!!! tip "Protecting the codebase"
 
     To ensure reliability and continuous improvement, the `main` branch should only
     include thoroughly reviewed and validated changes that benefit the model and can
@@ -292,6 +292,10 @@ model before merging them into the codebase.
 
     These settings ensure that all changes pass the CI/CD pipeline before merging.
 
+    Note that branch protection rules are available for free on public repositories.
+    On private repositories, they require a GitHub Pro plan for personal accounts or
+    a GitHub Team plan for organizations.
+
 ### Switch back to the main branch and pull latest changes
 
 Now that the merge is done, you can get the changes on the main branch.
@@ -300,7 +304,7 @@ Now that the merge is done, you can get the changes on the main branch.
 # Get the latest updates from the remote origin
 git fetch origin
 
-# Check to the main branch
+# Check out the main branch
 git checkout main
 
 # Pull the changes made by the pull request
@@ -318,7 +322,7 @@ In this chapter, you have successfully:
 3. Opened an issue in your issue tracker
 4. Created a new branch to add your changes
 5. Checked out the new branch
-6. Commit and pushed experiment changes
+6. Committed and pushed experiment changes
 7. Created a pull request
 8. Visualized the execution of the CI/CD pipeline
 9. Visualized the CML report that is added to your pull request
@@ -365,3 +369,4 @@ Highly inspired by:
 
 - [_Creating an issue_ - docs.github.com](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue)
 - [_Creating a branch to work on an issue_ - docs.github.com](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-a-branch-for-an-issue)
+- [_About protected branches_ - docs.github.com](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)
