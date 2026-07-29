@@ -4,9 +4,8 @@
 
 Now that the drift alert system is in place, the monitoring workflow opens a
 GitHub issue whenever drift exceeds the thresholds defined in `src/monitor.py`.
-The issue records the drift score, links to the Evidently dashboard, and lists
-the next steps. It flags that something changed but the team still has to decide
-what to do about it.
+The issue records the drift score and links to the Evidently dashboard. It flags
+that something changed, but the team still has to decide what to do about it.
 
 This chapter shows how to review that issue and choose one of three actions:
 
@@ -37,7 +36,7 @@ flowchart TB
     issue[Drift-alert issue] -->|review| decision{Decision}
     decision -->|false positive| tune[Adjust thresholds]
     decision -->|model degraded| rollback[Roll back with Git and DVC]
-    rollback -->|checkout| git_rollback[Checkout previous Git tag]
+    rollback -->|checkout| git_rollback[Checkout previous commit]
     git_rollback -->|dvc checkout| old_model[Previous model artifact]
     old_model -->|CI/CD| redeploy[Redeploy via pipeline]
     decision -->|new distribution| label[Label new data]
@@ -60,9 +59,9 @@ flowchart TB
 
 ### Open the drift-alert issue
 
-The monitoring workflow labels every drift alert with `drift-alert`. Open your
-repository in the GitHub interface, go to the **Issues** tab, and filter by the
-`drift-alert` label to find the open alert.
+The monitoring workflow labels the alert with `drift-alert`. Open your
+repository in the GitHub interface and go to the **Issues** tab — the open alert
+is at the top of the list.
 
 Click the issue to open it. The issue body contains:
 
@@ -76,9 +75,9 @@ If this was a test alert or the drift has already been handled, click the
 
 ### Review the evidence
 
-The issue links to the Evidently dashboard and to `monitoring/report.json`. You
-already inspected both in the previous chapter, so use that review to decide
-which branch of the decision tree applies:
+The issue shows the drift scores extracted from `monitoring/report.json` and
+links to the Evidently dashboard. You already inspected both in the previous
+chapter, so use that review to decide which branch of the decision tree applies:
 
 * **Noise or expected variation**: tune the thresholds.
 * **Real degradation of the deployed model**: roll back.
@@ -159,14 +158,6 @@ You can also find the same SHA in Git:
 ```sh title="Execute the following command(s) in a terminal"
 # Show recent commits on main
 git log --oneline -10 main
-```
-
-If your team creates Git tags for releases, use those instead. A tag such as
-`model-v1.2.2` is easier to communicate than a commit SHA:
-
-```sh title="Execute the following command(s) in a terminal"
-# List release tags
-git tag --sort=-creatordate | head -10
 ```
 
 Set the rollback target once so the following commands can reuse it:
@@ -377,7 +368,6 @@ Continue to the conclusion to review what you have learned.
 
 ## Sources
 
-- [_Git Tags_ - git-scm.com](https://git-scm.com/book/en/v2/Git-Basics-Tagging)
 - [_DVC Checkout_ - dvc.org](https://dvc.org/doc/command-reference/checkout)
 - [_Kubernetes Rollout Undo_ - kubernetes.io](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-a-deployment)
 - [_Artifact Registry: List images_ - cloud.google.com](https://cloud.google.com/artifact-registry/docs/docker/store-docker-container-images)
