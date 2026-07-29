@@ -163,11 +163,11 @@ jobs:
           echo "# Experiment Report (${{ github.sha }})" >> report.md
 
           # Compare parameters to main branch
-          echo "## Params workflow vs. main" >> report.md
+          echo "## Params workspace vs. main" >> report.md
           dvc params diff main --md >> report.md
 
           # Compare metrics to main branch
-          echo "## Metrics workflow vs. main" >> report.md
+          echo "## Metrics workspace vs. main" >> report.md
           dvc metrics diff main --md >> report.md
 
           # Compare plots (images) to main branch
@@ -258,11 +258,11 @@ index 5aae2a1..1fa989b 100644
 +          echo "# Experiment Report (${{ github.sha }})" >> report.md
 +
 +          # Compare parameters to main branch
-+          echo "## Params workflow vs. main" >> report.md
++          echo "## Params workspace vs. main" >> report.md
 +          dvc params diff main --md >> report.md
 +
 +          # Compare metrics to main branch
-+          echo "## Metrics workflow vs. main" >> report.md
++          echo "## Metrics workspace vs. main" >> report.md
 +          dvc metrics diff main --md >> report.md
 +
 +          # Compare plots (images) to main branch
