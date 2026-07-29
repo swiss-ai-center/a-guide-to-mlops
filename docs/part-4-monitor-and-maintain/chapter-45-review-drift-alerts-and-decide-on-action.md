@@ -56,8 +56,8 @@ flowchart TB
 ### Open the drift-alert issue
 
 The monitoring workflow labels the alert with `drift-alert`. Open your
-repository in the GitHub interface and go to the **Issues** tab — the open alert
-is at the top of the list.
+repository in the GitHub interface and go to the **Issues** tab. If other issues
+are open, filter by the `drift-alert` label to find the alert.
 
 Click the issue to open it. The issue body contains:
 
@@ -167,7 +167,7 @@ CI/CD pipeline redeploys cleanly.
 Create a new commit on `main` that reverts the bad commits since the last
 known-good version, using the same commit SHA as the previous step.
 `--no-commit` reverts them all at once, into a single rollback commit. This
-preserves history — the bad deployment stays visible in the Git log, which keeps
+preserves history: the bad deployment stays visible in the Git log, which keeps
 the deployed state traceable. The revert also restores the DVC pointer files, so
 the pipeline pulls the previous model artifact and data:
 
