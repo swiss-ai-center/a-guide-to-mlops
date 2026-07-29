@@ -26,7 +26,7 @@ In this chapter, you will learn how to:
 1. Open and read the drift-alert issue created by the monitoring workflow
 2. Decide whether to tune thresholds, roll back, or label new data and retrain
 3. Adjust drift thresholds quickly in `src/monitor.py`
-4. Roll back the Kubernetes deployment and restore the canonical source of truth
+4. Roll back to the last known-good version with Git and DVC
 5. Verify the chosen action and close the issue
 
 The following diagram illustrates the decision flow at the end of this chapter:
@@ -113,15 +113,10 @@ thresholds and only open a new issue if drift still exceeds them.
 
 ### Option 2: Roll back the deployment
 
-If the deployed model is clearly worse than the previous version, roll back.
-There are two rollback paths:
-
-* **Fast rollback with Kubernetes** — revert the running deployment immediately.
-  Use this first to stop the incident, but remember that it does not change Git or
-  DVC.
-* **Canonical rollback with Git and DVC** — restore the exact code, model
-  artifact, and data that produced the previous version on `main`. Use this to
-  make the source of truth consistent and let the CI/CD pipeline redeploy cleanly.
+If the deployed model is clearly worse than the previous version, roll back to
+the last known-good version. Every commit to `main` produces a deployable image
+and the DVC pointer files track the model artifact and data, so reverting `main`
+and letting the CI/CD pipeline redeploy is all it takes.
 
 #### Find the previous known-good version
 
@@ -167,46 +162,11 @@ Set the rollback target once so the following commands can reuse it:
 export PREVIOUS_SHA=a1b2c3d4e5f6789012345678901234567890abcd
 ```
 
-#### Fast rollback with Kubernetes
+#### Roll back with Git and DVC
 
-If the previous pod revision is still available in Kubernetes,
-`kubectl rollout undo` is the fastest operational shortcut. It reverts the
-deployment to the previous ReplicaSet, which usually points to the image just
-before the last update.
-
-```sh title="Execute the following command(s) in a terminal"
-# Roll back the deployment one revision
-kubectl rollout undo deployment/celestial-bodies-classifier-deployment
-
-# Verify the rollback
-kubectl rollout status deployment/celestial-bodies-classifier-deployment
-```
-
-Check the rollout history to see which revision is active:
-
-```sh title="Execute the following command(s) in a terminal"
-kubectl rollout history deployment/celestial-bodies-classifier-deployment
-```
-
-This is the fastest way to recover, but it does not change Git or DVC. Use it
-for immediate incident response, then follow with the Git/DVC rollback below to
-keep the source of truth consistent.
-
-If the previous ReplicaSet is no longer available, you can still redeploy a
-specific image from the registry with `kubectl set image`:
-
-```sh title="Execute the following command(s) in a terminal"
-kubectl set image deployment/celestial-bodies-classifier-deployment \
-  celestial-bodies-classifier=$GCP_CONTAINER_REGISTRY_HOST/celestial-bodies-classifier:$PREVIOUS_SHA
-
-kubectl rollout status deployment/celestial-bodies-classifier-deployment
-```
-
-#### Canonical rollback with Git and DVC
-
-The canonical rollback restores the exact code, model artifact, and data that
-produced the previous version. It is slower than the Kubernetes rollback, but it
-keeps the repository consistent and lets the CI/CD pipeline redeploy cleanly.
+The rollback restores the exact code, model artifact, and data that produced the
+previous version on `main`, so the source of truth stays consistent and the
+CI/CD pipeline redeploys cleanly.
 
 Create a new commit on `main` that reverts the bad commits since the last
 known-good version, using the same commit SHA as the previous step. This
@@ -223,6 +183,23 @@ git push origin main
 
 After the push, the CI/CD pipeline will build and deploy the rolled-back version
 automatically, bringing the container registry back into sync with Git and DVC.
+
+!!! info "Fast rollback for live incidents"
+
+    If production is down and you must restore service immediately,
+    `kubectl rollout undo` reverts the deployment to the previous ReplicaSet:
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Roll back the deployment one revision
+    kubectl rollout undo deployment/celestial-bodies-classifier-deployment
+
+    # Verify the rollback
+    kubectl rollout status deployment/celestial-bodies-classifier-deployment
+    ```
+
+    This does not change Git or DVC, and the previous ReplicaSet is not necessarily
+    the known-good version you picked. Use it only to stop an incident, then follow
+    with the Git/DVC rollback above to keep the source of truth consistent.
 
 After the rollback succeeds, close the drift-alert issue from the GitHub
 interface and add a comment that records the action taken, for example "Rolled
@@ -300,8 +277,7 @@ In this chapter, you have successfully:
 2. Chose between tuning thresholds, rolling back, or labeling new data and
    retraining
 3. Adjusted drift thresholds in `src/monitor.py`
-4. Rolled back the Kubernetes deployment and restored the canonical source of
-   truth with Git and DVC
+4. Rolled back to the last known-good version with Git and DVC
 5. Verified the chosen action and closed the issue
 
 You fixed some of the previous issues:
@@ -321,11 +297,11 @@ All the items of the MLOps process for this part are now addressed.
     - **Rollback is only possible because every artifact is versioned**: Git
       tracks the code, DVC tracks the model and data, and the container registry
       tracks every deployable image.
-    - **Kubernetes rollout undo is the fastest operational shortcut**: use it
-      first to stop an incident, then follow with the canonical Git/DVC rollback to
-      keep the source of truth consistent.
     - **The Git/DVC rollback is the canonical recovery**: it restores the source
       of truth and lets the CI/CD pipeline redeploy the old version cleanly.
+    - **Kubernetes rollout undo is an incident-response shortcut**: it restores
+      service immediately but does not change Git or DVC, so it does not replace the
+      Git/DVC rollback.
     - **Real new distributions need retraining, not rollback**: Part 5 covers
       the labeling workflow.
     - **Close the issue when the decision is executed**: the alerting script
