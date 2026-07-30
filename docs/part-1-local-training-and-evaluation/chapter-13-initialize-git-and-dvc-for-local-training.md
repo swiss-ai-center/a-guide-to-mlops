@@ -310,9 +310,6 @@ which serves as the configuration directory for DVC.
     dvc config core.analytics false
     ```
 
-    For more information, see the
-    [DVC Analytics documentation](https://dvc.org/doc/user-guide/analytics).
-
 #### Update the .gitignore file and add the experiment data to DVC
 
 With DVC now set up, you can begin adding files to it.
@@ -513,3 +510,4 @@ Highly inspired by:
 
 - [_Get Started_ - dvc.org](https://dvc.org/doc/start)
 - [_Get Started: Data Versioning_ - dvc.org](https://dvc.org/doc/start/data-management)
+- [_Anonymized Usage Analytics_ - dvc.org](https://dvc.org/doc/user-guide/analytics)
