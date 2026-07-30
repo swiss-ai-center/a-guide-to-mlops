@@ -446,6 +446,8 @@ spec:
             secretKeyRef:
               name: github-runner-pat
               key: token
+        - name: DVC_NO_ANALYTICS
+          value: "true"
       securityContext:
         runAsUser: 1000
       resources:
@@ -456,6 +458,12 @@ spec:
           cpu: "1"
           memory: "4Gi"
 ```
+
+!!! note "DVC analytics in CI/CD"
+
+    The `DVC_NO_ANALYTICS` environment variable disables DVC's anonymized usage
+    analytics. On every DVC command, analytics requests are sent over the network,
+    which can consume resources or stall the job in a restricted CI/CD environment.
 
 #### Add Kubeconfig secret
 
@@ -1017,3 +1025,4 @@ Highly inspired by:
 - [_Security for self-managed runners_ - GitLab docs](https://docs.gitlab.com/runner/security/)
 - [_Install kubectl and configure cluster access_ - cloud.google.com](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl)
 - [_Deploying to Google Kubernetes Engine_ - GitHub docs](https://docs.github.com/en/actions/use-cases-and-examples/deploying/deploying-to-google-kubernetes-engine)
+- [_Anonymized Usage Analytics_ - dvc.org](https://dvc.org/doc/user-guide/analytics)

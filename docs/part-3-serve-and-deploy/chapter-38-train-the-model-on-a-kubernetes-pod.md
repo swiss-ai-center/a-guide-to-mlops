@@ -200,7 +200,7 @@ username and repository name.
     have uppercase letters in your username or repository name, simply convert them
     to lowercase.
 
-```txt title="kubernetes/runner.yaml" hl_lines="12 30-31"
+```txt title="kubernetes/runner.yaml" hl_lines="12 32-33"
 apiVersion: v1
 kind: Pod
 metadata:
@@ -221,6 +221,8 @@ spec:
             secretKeyRef:
               name: github-runner-pat
               key: token
+        - name: DVC_NO_ANALYTICS
+          value: "true"
       securityContext:
         runAsUser: 1000
       resources:
@@ -248,7 +250,7 @@ diff --git a/kubernetes/runner.yaml b/kubernetes/runner.yaml
 index 5a8dbb6..59b79f1 100644
 --- a/kubernetes/runner.yaml
 +++ b/kubernetes/runner.yaml
-@@ -25,3 +25,5 @@ spec:
+@@ -29,3 +29,5 @@ spec:
          requests:
            cpu: "1"
            memory: "4Gi"
@@ -319,6 +321,8 @@ spec:
             secretKeyRef:
               name: github-runner-pat
               key: token
+        - name: DVC_NO_ANALYTICS
+          value: "true"
       securityContext:
         runAsUser: 1000
       resources:
