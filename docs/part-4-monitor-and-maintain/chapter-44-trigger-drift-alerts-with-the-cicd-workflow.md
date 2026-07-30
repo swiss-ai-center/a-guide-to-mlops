@@ -329,9 +329,9 @@ GitHub issues:
 * Add a step that creates the `drift-alert` label if it does not exist yet.
   `gh issue create --label` fails when the label is missing, so the workflow
   creates it idempotently before the alert step.
-* Add the existing step that runs `src/drift_alert.py`. The script uses the
-  pre-installed `gh` CLI to open a GitHub issue when drift exceeds a threshold,
-  and it skips creation if an open drift-alert issue already exists.
+* Add a step that runs `src/drift_alert.py`. The script uses the pre-installed
+  `gh` CLI to open a GitHub issue when drift exceeds a threshold, and it skips
+  creation if an open drift-alert issue already exists.
 
 ```yaml title=".github/workflows/monitor.yaml" hl_lines="13-15 48-59"
 name: Monitor drift

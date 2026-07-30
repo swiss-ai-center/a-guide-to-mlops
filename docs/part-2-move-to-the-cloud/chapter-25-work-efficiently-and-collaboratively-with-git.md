@@ -92,12 +92,12 @@ issue by selecting **Create**.
 In the newly created issue, select
 **Create a branch for this issue or link a pull request** from the right
 sidebar. Create the branch by selecting **Create branch**. A new pop-up opens
-with the name of the branch you want to checkout to.
+with the name of the branch you want to check out.
 
-### Checkout the new branch
+### Check out the new branch
 
 On your machine, check out the new branch. Replace
-`<the_name_of_the_new_branch>` with the name of the branch to checkout to:
+`<the_name_of_the_new_branch>` with the name of the branch to check out:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Get the latest updates from the remote origin

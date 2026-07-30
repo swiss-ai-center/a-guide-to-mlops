@@ -131,7 +131,7 @@ services.
 Tools that cover the whole ML lifecycle in one platform. They are often
 opinionated, so this guide prefers composable tools.
 
-- [MLFlow](https://mlflow.org/) - Open-source platform for the machine learning
+- [MLflow](https://mlflow.org/) - Open-source platform for the machine learning
   lifecycle
 - [MLRun](https://www.mlrun.org/) - Open-source framework to orchestrate MLOps
   from research to production

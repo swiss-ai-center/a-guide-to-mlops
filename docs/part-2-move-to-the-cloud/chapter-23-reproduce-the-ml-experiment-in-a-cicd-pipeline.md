@@ -7,9 +7,9 @@ with [:simple-git: Git](../tools.md) and [:simple-dvc: DVC](../tools.md).
 
 Now, it's time to enhance your workflow further by incorporating a CI/CD
 (Continuous Integration/Continuous Deployment) pipeline. This addition will
-enable you to execute your ML experiments remotely and reproduce it, ensuring
+enable you to execute your ML experiments remotely and reproduce them, ensuring
 that any changes made to the project won't inadvertently break. This helps
-eliminate the notorious "but it works on my machine" effect, where code behave
+eliminate the notorious "but it works on my machine" effect, where code behaves
 differently across different environments.
 
 In this chapter, you will learn how to:
@@ -104,7 +104,7 @@ The key will be stored in your `~/.config/gcloud` directory under the name
 
 !!! danger
 
-    You must **never** add and commit this file to your working directory. It is a
+    You must **never** add and commit this file to your working directory. It is
     sensitive data that you must keep safe.
 
 ```sh title="Execute the following command(s) in a terminal"

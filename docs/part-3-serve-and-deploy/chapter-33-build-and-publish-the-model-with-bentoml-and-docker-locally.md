@@ -314,7 +314,7 @@ gcloud services enable artifactregistry.googleapis.com
 **Create the Google Container Registry**
 
 Export the repository name as an environment variable. Replace
-`<my_repository_name>` with a registy name of your choice. It has to be
+`<my_repository_name>` with a registry name of your choice. It has to be
 lowercase and words separated by hyphens.
 
 !!! warning
@@ -435,7 +435,7 @@ Open the container registry interface on the cloud provider and check that the
 artifact files have been uploaded.
 
 Open the [Artifact Registry](https://console.cloud.google.com/artifacts) on the
-Google cloud interface and click on your registry to access the details.
+Google Cloud interface and click on your registry to access the details.
 
 ### Check the changes
 

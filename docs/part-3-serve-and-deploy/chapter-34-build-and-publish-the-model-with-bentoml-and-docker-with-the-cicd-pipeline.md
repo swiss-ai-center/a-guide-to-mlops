@@ -137,8 +137,8 @@ Save the variables by selecting **Add secret**.
 
 ### Update the CI/CD pipeline configuration file
 
-You will adjust the pipeline to build and push the the docker image to the
-container registry. The following steps will be performed:
+You will adjust the pipeline to build and push the Docker image to the container
+registry. The following steps will be performed:
 
 1. Detect a new commit on the `main` branch
 2. Authenticate to the cloud provider

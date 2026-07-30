@@ -80,10 +80,10 @@ Create a new GitHub repository for this chapter by accessing
 ## Configure Git for the remote branch
 
 Using the SSH protocol, you can connect and authenticate to your Git service
-provider without supplying your username and personal access token each time
-your want to share your changes.
+provider without supplying your username and personal access token each time you
+want to share your changes.
 
-Generate a SSH key pair and configure your SSH access using
+Generate an SSH key pair and configure your SSH access using
 [Connecting to GitHub with SSH](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/about-ssh).
 
 Add the remote origin to your Git repository using SSH. For example, replace
@@ -124,7 +124,7 @@ team.
 In this chapter, you have successfully:
 
 1. Set up a remote Git repository
-2. Added the remote to your local git repository
+2. Added the remote to your local Git repository
 3. Pushed your changes to the remote Git repository
 
 You fixed some of the previous issues:

@@ -74,8 +74,8 @@ created:
 - CI/CD pipeline configurations
 - Remote Git repository resources
 
-This is necessary to return to a clean state on your computer, avoid unnecessary
-incurring costs, and address potential security concerns when using cloud
+This is necessary to return to a clean state on your computer, avoid incurring
+unnecessary costs, and address potential security concerns when using cloud
 services.
 
 !!! note

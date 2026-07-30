@@ -62,7 +62,7 @@ Make sure Label Studio is running at <http://localhost:8080>.
 
 2. Click on the **Export** button to download the annotations.
 
-3. Rename the downloaded json file to `annotations.json`.
+3. Rename the downloaded JSON file to `annotations.json`.
 
 4. Move the file under the `extra-data/` folder.
 

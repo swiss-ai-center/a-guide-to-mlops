@@ -5,7 +5,7 @@
 Jupyter Notebooks provide an interactive environment where code can be executed
 and results can be visualized. They combine code, text explanations,
 visualizations, and media in a single document, making it a flexible tool to
-document a ML experiment.
+document an ML experiment.
 
 However, they have severe limitations, such as challenges with reproducibility,
 scalability, experiment tracking, and standardization. Integrating Jupyter
@@ -210,7 +210,7 @@ transitive dependencies are also listed. This will help with reproducibility:
 ### Split the Jupyter Notebook into scripts
 
 You will split the Jupyter Notebook in a codebase made of separate Python
-scripts with well defined role. These scripts will be able to be called on the
+scripts with a well-defined role. These scripts will be able to be called on the
 command line, making it ideal for automation tasks.
 
 The following table describes the files that you will create in this codebase:
@@ -226,7 +226,7 @@ The following table describes the files that you will create in this codebase:
 We will refactor the notebook code into modular functions as we move each step
 to its own script.
 
-#### Move the parameters to its own file
+#### Move the parameters to their own file
 
 Let's split the parameters to run the ML experiment with in a distinct file:
 
@@ -617,7 +617,7 @@ touch src/utils/__init__.py
 ```
 
 In this module, include `src/utils/seed.py` to handle the fixing of the seed
-parameters. This ensure the results are reproducible:
+parameters. This ensures the results are reproducible:
 
 ```py title="src/utils/seed.py"
 import os
@@ -651,8 +651,8 @@ def set_seed(seed: int) -> None:
 ### Create a `README.md` file
 
 Finally, create a `README.md` file at the root of the project to describe the
-repository. Feel free to use the following template. As you progress though this
-guide, you can add your notes in the `## Notes` section:
+repository. Feel free to use the following template. As you progress through
+this guide, you can add your notes in the `## Notes` section:
 
 ```md title="README.md"
 # MLOps - Celestial Body Classification
@@ -691,7 +691,7 @@ Your working directory should now look like this:
 2. This is new.
 3. This is new.
 4. This is new.
-5. This, and all its sub-directory, is new.
+5. This, and all its sub-directories, is new.
 
 ### Run the experiment
 
@@ -754,8 +754,8 @@ Your working directory should now be similar to this:
         └── seed.py
 ```
 
-1. This, and all its sub-directory, is new.
-2. This, and all its sub-directory, is new.
+1. This, and all its sub-directories, is new.
+2. This, and all its sub-directories, is new.
 3. This is new.
 
 Here, the following should be noted:

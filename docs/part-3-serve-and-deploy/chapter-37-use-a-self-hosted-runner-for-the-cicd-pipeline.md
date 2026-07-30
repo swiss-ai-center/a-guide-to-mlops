@@ -254,8 +254,8 @@ Follow the
 guide to create a personal access token (classic) named `GHCR_PAT` with the
 `write:package` scope.
 
-Export your token in as a variable. Replace`<my_personal_access_token>` with
-your own token.
+Export your token as a variable. Replace `<my_personal_access_token>` with your
+own token.
 
 ```sh title="Execute the following command(s) in a terminal"
 export GHCR_PAT=<my_personal_access_token>
@@ -268,15 +268,15 @@ username.
 echo $GHCR_PAT | docker login -u <my_username> ghcr.io --password-stdin
 ```
 
-#### Build and push the image to the container regsitry
+#### Build and push the image to the container registry
 
 With the entrypoint script ready, we can now build the Docker image before
 pushing it to the Container Registry.
 
-To build the docker image, navigate to the `docker` folder and run the following
+To build the Docker image, navigate to the `docker` folder and run the following
 command. Make sure to adjust the `my_username` and `my_repository_name`
-variables in the tag of the Docker image to match your own your own GitHub
-username and repository name.
+variables in the tag of the Docker image to match your own GitHub username and
+repository name.
 
 ??? warning "Using uppercase letters in your username or repository name? Read this!"
 
@@ -332,7 +332,7 @@ The output should be similar to this:
  => => naming to ghcr.io/username/a-guide-to-mlops/github-runner:latest                                            0.0s
 ```
 
-Push the docker image to the GitHub Container Registry:
+Push the Docker image to the GitHub Container Registry:
 
 ??? warning "Using uppercase letters in your username or repository name? Read this!"
 
@@ -478,8 +478,8 @@ Follow the
 guide to create a personal access token (classic) named `GH_RUNNER_PAT` with the
 `repo` and `read:org` scopes
 
-Export your token in as a variable. Replace `<my_repository_token>` with your
-own token.
+Export your token as a variable. Replace `<my_repository_token>` with your own
+token.
 
 ```
 export GH_RUNNER_PAT=<my_repository_token>
@@ -575,7 +575,7 @@ Current runner version: '2.334.0'
 Exit the process by pressing ++ctrl+c++ in the terminal, then exit the pod by
 entering `exit`.
 
-In addtion, in **Settings** > **Actions** > **Runners**, you should now be able
+In addition, in **Settings** > **Actions** > **Runners**, you should now be able
 to see the `github-runner` runner listed with the *Idle* status.
 
 !!! note
@@ -619,7 +619,7 @@ remote storage using DVC and to commit the updated lock file to the repository
 automatically.
 
 As a result, when proposing changes to the model files in a branch, you no
-longer need to run`dvc repro` locally before pushing the changes with
+longer need to run `dvc repro` locally before pushing the changes with
 `git push`. After proposed changes are integrated into the main branch, you can
 obtain the updated `dvc.lock` file and model by using `git pull` and `dvc pull`.
 

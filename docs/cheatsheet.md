@@ -1,6 +1,6 @@
-#  Cheatsheet
+# Cheatsheet
 
-Here is a summary of the most useful commands and shortcut to know when you use
+Here is a summary of the most useful commands and shortcuts to know when you use
 the terminal.
 
 ## Common commands
@@ -45,9 +45,9 @@ cat <file>
 less <file>
 ```
 
-## Common terminal shortcut
+## Common terminal shortcuts
 
-Some of the most useful shortcut to know:
+Some of the most useful shortcuts to know:
 
 ### History
 

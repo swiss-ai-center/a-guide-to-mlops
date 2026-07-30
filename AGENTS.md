@@ -51,7 +51,6 @@ dependencies are listed in `requirements.txt`.
 │   ├── philosophy.md
 │   ├── concept.md
 │   ├── references.md
-│   ├── glossary.md
 │   ├── clean-up.md
 │   ├── conclusion.md
 │   ├── part-1-local-training-and-evaluation/

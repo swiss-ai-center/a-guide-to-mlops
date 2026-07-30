@@ -314,7 +314,7 @@ if __name__ == "__main__":
 BentoML can save the model with custom objects.
 
 These custom objects can be used to save the model with arbitrary data that can
-be used afterword when loading back the model. In this case, the following
+be used afterward when loading back the model. In this case, the following
 objects are saved with the model:
 
 - `preprocess` is used to preprocess the input data before feeding it to the

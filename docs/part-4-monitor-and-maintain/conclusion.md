@@ -151,8 +151,8 @@ gcloud container clusters delete --zone $GCP_K8S_CLUSTER_ZONE $GCP_K8S_CLUSTER_N
     Refer to the previous chapters for the specific commands. Additionally, ensure
     that all necessary environment variables are correctly defined.
 
-This is necessary to return to a clean state on your computer, avoid unnecessary
-incurring costs, and address potential security concerns when using cloud
+This is necessary to return to a clean state on your computer, avoid incurring
+unnecessary costs, and address potential security concerns when using cloud
 services.
 
 !!! note

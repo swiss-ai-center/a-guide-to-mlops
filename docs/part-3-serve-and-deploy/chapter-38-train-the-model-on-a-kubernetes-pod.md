@@ -648,8 +648,8 @@ When creating pull requests:
 * the `train-and-report` job runs on the self-hosted GPU runner. It trains the
   model and pushes the trained model to the remote bucket with DVC.
 * the `cleanup-runner` job destroys the self-hosted GPU runner that was created.
-  It also guarantees that the GPU runner pod is removed, even when if the previous
-  step failed or was manually cancelled.
+  It also guarantees that the GPU runner pod is removed, even if the previous step
+  failed or was manually cancelled.
 
 When merging pull requests:
 
@@ -791,11 +791,11 @@ git push
 ### Try it out one final time
 
 Finally, try to update some parameters of your model to test the training on the
-kubernetes specilized pod.
+specialized Kubernetes pod.
 
 Similarly to what you have done in
 [Chapter 2.5: Work efficiently and collaboratively with Git](../part-2-move-to-the-cloud/chapter-25-work-efficiently-and-collaboratively-with-git.md),
-create an issue **Demonstrate model training on kubernetes pod** and a new
+create an issue **Demonstrate model training on Kubernetes pod** and a new
 branch for the issue.
 
 On your machine, check out the new branch.
@@ -846,7 +846,7 @@ Go back to your GitHub repository.
 
 * Create a pull request and visualize the execution of the CI/CD pipeline on the
   **Actions** page. The `train-and-report` job will run on a pod created by the
-  self-hosted runner on the Kubernetes Cluster. It trains the model and DVC pushes
+  self-hosted runner on the Kubernetes cluster. It trains the model and DVC pushes
   the trained model to the remote bucket.
 * Merge the pull request, and switch back to the main branch and pull the latest
   changes. The `publish-and-deploy` will run on the main runner. It retrieves the

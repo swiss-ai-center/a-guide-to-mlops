@@ -381,7 +381,7 @@ index dc17ed7..1c13140 100644
  evaluation/
 ```
 
-You can now add the experiment data to DVC without complain:
+You can now add the experiment data to DVC without complaint:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Add the experiment data to DVC
@@ -465,12 +465,12 @@ In this chapter, you have successfully:
 3. Verified Git tracking for your files
 4. Excluded experiment results, data, models and Python environment files from
    Git commits
-4. Commited your changes to the Git repository
-5. Installed DVC
-6. Initialized DVC
-7. Updated the gitignore file and adding the experiment data to DVC
-8. Commited the data files to DVC
-9. Commited your changes to the Git repository
+5. Committed your changes to the Git repository
+6. Installed DVC
+7. Initialized DVC
+8. Updated the gitignore file and added the experiment data to DVC
+9. Committed the data files to DVC
+10. Committed your changes to the Git repository
 
 You fixed some of the previous issues:
 

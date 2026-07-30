@@ -452,7 +452,7 @@ The output should be similar to:
 ```
 
 Open the [Cloud Storage](https://console.cloud.google.com/storage/browser) on
-the Google cloud interface and click on your bucket to check the logs are indeed
+the Google Cloud interface and click on your bucket to check the logs are indeed
 uploaded after a few minutes.
 
 ### Deploy the Evidently UI service
@@ -587,7 +587,7 @@ spec:
 The Evidently UI service uses the Service Account to access Google Cloud
 Storage. The `roles/storage.admin` role granted in
 [Chapter 3.4](../part-3-serve-and-deploy/chapter-34-build-and-publish-the-model-with-bentoml-and-docker-with-the-cicd-pipeline.md#set-up-access-to-the-container-registry-of-the-cloud-provider)
-there is sufficient for the monitoring bucket as well.
+is sufficient for the monitoring bucket as well.
 
 The Evidently UI service only needs read access to the workspace, because it
 reads snapshots and workspace metadata for display.
@@ -981,7 +981,7 @@ workflow restarts the Evidently UI deployment after each run so that new
 snapshots are loaded automatically.
 
 Open the [Cloud Storage](https://console.cloud.google.com/storage/browser) on
-the Google cloud interface and click on your bucket to view the generated
+the Google Cloud interface and click on your bucket to view the generated
 `monitoring/report.html` and `monitoring/report.json` files.
 
 You should see the same drift metrics as in the local report from the previous

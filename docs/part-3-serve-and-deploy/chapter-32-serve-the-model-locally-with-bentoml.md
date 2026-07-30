@@ -154,7 +154,7 @@ The following endpoint has been created:
 
 - `/predict`: Upload a `png` or `jpg` image and get a prediction from the model.
 
-You can try out predictions by inputing some images to the model through the
+You can try out predictions by inputting some images to the model through the
 REST API!
 
 ### Try out the prediction endpoint

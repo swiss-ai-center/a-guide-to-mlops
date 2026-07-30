@@ -134,8 +134,8 @@ Your working directory should now look like this:
 └── requirements.txt
 ```
 
-1. This, and all its sub-directory, is new.
-2. The `raw` directory include the unprocessed dataset images.
+1. This, and all its sub-directories, is new.
+2. The `raw` directory includes the unprocessed dataset images.
 
 ### Create the virtual environment
 
