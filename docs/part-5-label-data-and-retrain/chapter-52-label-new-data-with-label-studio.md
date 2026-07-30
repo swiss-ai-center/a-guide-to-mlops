@@ -39,7 +39,7 @@ Make sure Label Studio is running at <http://localhost:8080>.
 Click on the **Label All Tasks** button to start labeling the images. The images
 will be displayed one by one in sequential order.
 
-### Label an image
+### Label a few images
 
 You will be presented with the image and the choices you defined earlier.
 
@@ -54,12 +54,13 @@ You will be presented with the image and the choices you defined earlier.
 1. Select the correct label for the image. In this case, the image is of the
    planet Earth.
 2. Click **Submit** to save the label.
-3. We will stop at the next displayed image for labeling.
+3. Repeat these steps for the next images to label a few of them, then stop.
+   Labeling five to ten images is enough.
 
 !!! warning
 
-    We will not be labeling more images, as we need to keep some unlabeled data for
-    the next chapter. You can go back to the project view by
+    Do not label all the images: we need to keep some unlabeled data for the next
+    chapter. You can go back to the project view by
     **clicking on your project name** on the top navigation bar.
 
 ### Track the progress
