@@ -384,13 +384,13 @@ users:
       provideClusterInfo: true
 ```
 
-!!! info
+!!! warning "macOS: fix the gke-gcloud-auth-plugin path"
 
-    If using macOS, make sure the `users.user.exec.command` parameter is set to
-    `gke-gcloud-auth-plugin`. The kubeconfig file is generated locally and may point
-    to the Homebrew installation path. However, this configuration will be used in a
-    standard Linux environment when accessing the Kubernetes cluster from the CI/CD
-    pipeline.
+    The locally generated kubeconfig file may point to the Homebrew installation
+    path of `gke-gcloud-auth-plugin`. Make sure the `users.user.exec.command`
+    parameter is set to `gke-gcloud-auth-plugin`, as this configuration will be used
+    in a standard Linux environment when accessing the Kubernetes cluster from the
+    CI/CD pipeline.
 
 #### Add Kubernetes CI/CD secrets
 
