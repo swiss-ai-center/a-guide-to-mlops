@@ -317,11 +317,18 @@ spec:
     app: celestial-bodies-classifier
 ```
 
-* The `deployment.yaml` file describes the deployment of the model. It contains
-  the number of replicas, the image to use, and the labels to use.
+* The `deployment.yaml` file describes the **Deployment**: the desired state of
+  the pods running the model, such as the number of replicas and the container
+  image to use. Kubernetes keeps that many pods alive and replaces them if they
+  fail.
 
-* The `service.yaml` file describes the service of the model. It contains the
-  type of service, the ports to use, and the labels to use.
+* The `service.yaml` file describes the **Service**: a stable entry point that
+  routes traffic to the pods selected by their `app` label. Pods are ephemeral and
+  their IP addresses change, so the Service abstracts them away. With
+  `type: LoadBalancer`, the cloud provider also provisions an external load
+  balancer with a public IP address.
+
+In short, the deployment runs the workloads while the service exposes them.
 
 ### Deploy the containerised model on Kubernetes
 
