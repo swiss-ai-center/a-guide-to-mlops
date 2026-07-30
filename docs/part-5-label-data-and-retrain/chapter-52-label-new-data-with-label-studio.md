@@ -76,8 +76,8 @@ In the project view, you can see the progress of the labeling task.
 
 Note that you can also import additional data and export the labels.
 
-Currently, we have labeled one image but in the next chapter, we will learn how
-to use the model we trained earlier to label the images automatically.
+Currently, we have labeled a few images but in the next chapter, we will learn
+how to use the model we trained earlier to label all the images automatically.
 
 ## Summary
 
