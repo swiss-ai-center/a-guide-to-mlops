@@ -218,14 +218,15 @@ This file is structured in 3 parts:
 1. Definition of some useful constants.
 2. Creation of the FastAPI app and loads the model similarly to BentoML
     `src/serve.py`.
-3. Definition the API endpoints required by Label Studio.
+3. Definition of the API endpoints required by Label Studio.
 
 !!! note
 
     We do nothing with the `/setup` and `/webhook` endpoints as we do not need the
     functionality they offer. However, they are still required to exist for the
     model to work with Label Studio. If you would like to go further, please refer
-    the [Label Studio ML integration documentation](https://labelstud.io/guide/ml).
+    to the
+    [Label Studio ML integration documentation](https://labelstud.io/guide/ml).
 
 ### Check the changes
 

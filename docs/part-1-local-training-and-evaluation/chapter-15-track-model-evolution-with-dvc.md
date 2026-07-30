@@ -5,7 +5,7 @@
 In the previous chapter, you did set up a [:simple-dvc: DVC](../tools.md)
 pipeline to reproduce your experiment.
 
-Once this stage is created, you will be able to change our model's
+Once this stage is created, you will be able to change your model's
 configuration, evaluate the new configuration and compare its performance with
 the last committed ones.
 
@@ -278,7 +278,7 @@ In this chapter, you have successfully:
 1. Updated the experiment parameters
 2. Reproduced the experiment
 3. Visualized the changes made to the experiment
-4. Commited the changes
+4. Committed the changes
 
 You fixed some of the previous issues:
 
@@ -286,7 +286,7 @@ You fixed some of the previous issues:
       plots to identify differences between iterations
 
 You have solid metrics to evaluate the changes before integrating your work in
-the code codebase.
+the codebase.
 
 !!! abstract "Take away"
 

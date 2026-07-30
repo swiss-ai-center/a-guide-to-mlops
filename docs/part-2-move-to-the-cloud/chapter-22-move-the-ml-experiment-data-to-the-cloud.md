@@ -5,7 +5,7 @@
 At this point, the codebase is made available to team members using
 [:simple-git: Git](../tools.md), but the experiment data itself is not.
 
-Similarly to other version control system, [:simple-dvc: DVC](../tools.md)
+Similarly to other version control systems, [:simple-dvc: DVC](../tools.md)
 allows for storing the dataset in a remote storage, typically a cloud storage
 provider, ensuring effective tracking of modifications and smooth maintenance
 workflow.
@@ -158,8 +158,7 @@ gcloud auth application-default login
 
 ### Link a billing account to the project
 
-Link a billing account to the project to be able to create to create cloud
-resources:
+Link a billing account to the project to be able to create cloud resources:
 
 List the billing accounts with the following command:
 
@@ -371,7 +370,7 @@ Open the Bucket Storage on the cloud provider and check that the files were
 hashed and have been uploaded.
 
 Open the [Cloud Storage](https://console.cloud.google.com/storage/browser) on
-the Google cloud interface and click on your bucket to access the details.
+the Google Cloud interface and click on your bucket to access the details.
 
 !!! tip
 
@@ -390,9 +389,9 @@ In this chapter, you have successfully:
 3. Created the Storage Bucket on the cloud provider
 4. Installed the DVC Storage plugin
 5. Configured DVC to use the Storage Bucket
-6. Updated the gitignore file and adding the experiment data to DVC
+6. Updated the gitignore file and added the experiment data to DVC
 7. Pushed the data files to DVC
-8. Commit the changes to Git
+8. Committed the changes to Git
 
 You fixed some of the previous issues:
 

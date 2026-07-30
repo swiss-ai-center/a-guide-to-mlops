@@ -10,7 +10,7 @@ re-running unnecessary steps.
 
 By using DVC stages to create a pipeline, you can execute all of your
 experiment's steps by simply running the `dvc repro` command. As a result, DVC
-will only execute stages that must be ran, making it easy to reproduce the
+will only execute stages that must be run, making it easy to reproduce the
 experiment and track the effects of changes.
 
 In this chapter, you will learn how to:
@@ -56,7 +56,7 @@ flowchart TB
     linkStyle 1 opacity:0.4,color:#7f7f7f80
 ```
 
-As a reminder, the current steps to run the experiment are as follow:
+As a reminder, the current steps to run the experiment are as follows:
 
 ```sh title="Execute the following command(s) in a terminal"
 # Prepare the dataset
@@ -181,7 +181,7 @@ dvc stage add -n prepare \
     python3.13 src/prepare.py data/raw data/prepared
 ```
 
-The values of the parameters is `prepare` which includes all the `prepare`
+The values of the parameters are `prepare` which includes all the `prepare`
 parameters referenced in the `params.yaml` file.
 
 This stage has the `src/prepare.py`, the `src/utils/seed.py` and `data/raw`
@@ -206,7 +206,7 @@ dvc stage add -n train \
     python3.13 src/train.py data/prepared model
 ```
 
-The values of the parameters is `train` which includes all the `train`
+The values of the parameters are `train` which includes all the `train`
 parameters referenced in the `params.yaml` file.
 
 This stage has the `src/train.py`, the `src/utils/seed.py` and `data/prepared`
@@ -232,7 +232,7 @@ dvc stage add -n evaluate \
     python3.13 src/evaluate.py model data/prepared
 ```
 
-This stage has the `src/evaluate.py` file and then `model` folder as
+This stage has the `src/evaluate.py` file and the `model` folder as
 dependencies. If any of these files change, DVC will run the command
 `python3.13 src/evaluate.py model data/prepared` when using `dvc repro`.
 

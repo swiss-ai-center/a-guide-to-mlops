@@ -356,7 +356,7 @@ Open the cluster interface on the cloud provider and check that the model has
 been deployed.
 
 Open the [Kubernetes Engine](https://console.cloud.google.com/kubernetes) on the
-Google cloud interface and click on your cluster to access the details.
+Google Cloud interface and click on your cluster to access the details.
 
 ### Access the model
 

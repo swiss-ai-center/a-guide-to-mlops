@@ -881,7 +881,7 @@ Extract the archive and rename the folder:
 # Extract the dataset
 unzip extra-data.zip
 
-# Rename to the folder to `extra-data`
+# Rename the folder to `extra-data`
 mv a-guide-to-mlops-extra-data/ extra-data/
 
 # Remove the archive and the directory

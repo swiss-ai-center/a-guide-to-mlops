@@ -75,8 +75,8 @@ for comprehensive instructions on removing all resources you created:
 - Self-hosted runners
 - Label Studio installation and data
 
-This is necessary to return to a clean state on your computer, avoid unnecessary
-incurring costs, and address potential security concerns.
+This is necessary to return to a clean state on your computer, avoid incurring
+unnecessary costs, and address potential security concerns.
 
 !!! warning
 

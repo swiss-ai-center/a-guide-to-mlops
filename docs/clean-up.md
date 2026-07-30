@@ -6,7 +6,7 @@
 
 Now that you have completed the guide, it is crucial to properly manage and
 remove the resources and environments you have created. This is necessary to
-avoid unnecessary incurring costs and potential security concerns.
+avoid incurring unnecessary costs and potential security concerns.
 
 Here's a step-by-step guide to help you do that.
 
@@ -227,7 +227,7 @@ Here is a checklist of all the resources and environments you created.
 - [ ] The GitHub Personal Access Tokens
 - [ ] The GitHub repository
 - [ ] The BentoML model store
-- [ ] The projects directories
+- [ ] The project directories
     - [ ] The `mlops-guide-notebook` directory
     - [ ] The `mlops-guide` directory
 

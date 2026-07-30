@@ -22,8 +22,8 @@ The five parts are:
     - [Chapter 1.5 - Track model evolution with DVC](./part-1-local-training-and-evaluation/chapter-15-track-model-evolution-with-dvc.md)
 - [Part 2 - Move to the cloud](./part-2-move-to-the-cloud/introduction.md) -
   Learn how to collaborate online using Git, a CI/CD pipeline and CML.
-    - [Chapter 2.1 - Move the ML experiment data to the cloud](./part-2-move-to-the-cloud/chapter-21-move-the-ml-experiment-code-to-the-cloud.md)
-    - [Chapter 2.2 - Move the ML experiment code to the cloud](./part-2-move-to-the-cloud/chapter-22-move-the-ml-experiment-data-to-the-cloud.md)
+    - [Chapter 2.1 - Move the ML experiment code to the cloud](./part-2-move-to-the-cloud/chapter-21-move-the-ml-experiment-code-to-the-cloud.md)
+    - [Chapter 2.2 - Move the ML experiment data to the cloud](./part-2-move-to-the-cloud/chapter-22-move-the-ml-experiment-data-to-the-cloud.md)
     - [Chapter 2.3 - Reproduce the ML experiment in a CI/CD pipeline](./part-2-move-to-the-cloud/chapter-23-reproduce-the-ml-experiment-in-a-cicd-pipeline.md)
     - [Chapter 2.4 - Track model evolution in the CI/CD pipeline with CML](./part-2-move-to-the-cloud/chapter-24-track-model-evolution-in-the-cicd-pipeline-with-cml.md)
     - [Chapter 2.5 - Work efficiently and collaboratively with Git](./part-2-move-to-the-cloud/chapter-25-work-efficiently-and-collaboratively-with-git.md)

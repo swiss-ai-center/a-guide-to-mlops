@@ -72,7 +72,7 @@ In the project view, you can see the progress of the labeling task.
 !!! info
 
     Label Studio provides a lot of information such as the date and annotation
-    author. This allows to have multiple annotations for the same data, which is a
+    author. This allows having multiple annotations for the same data, which is a
     must for larger datasets as it helps to reduce bias.
 
 Note that you can also import additional data and export the labels.
