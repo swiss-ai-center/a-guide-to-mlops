@@ -214,8 +214,8 @@ Here is a checklist of all the resources and environments you created.
 - [ ] The cloud provider S3 bucket
 - [ ] The cloud provider credentials
 - [ ] The cloud provider project
-- [ ] The GitHub or GitLab Personal Access Tokens
-- [ ] The GitHub or GitLab repository
+- [ ] The GitHub Personal Access Tokens
+- [ ] The GitHub repository
 - [ ] The projects directories
     - [ ] The `mlops-guide-notebook` directory
     - [ ] The `mlops-guide` directory
