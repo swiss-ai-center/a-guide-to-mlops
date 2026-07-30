@@ -52,7 +52,7 @@ You will be presented with the image and the choices you defined earlier.
 ![Label Studio Label Image](../assets/images/label-studio-label-image.png)
 
 1. Select the correct label for the image. In this case, the image is of the
-   planet Uranus.
+   planet Earth.
 2. Click **Submit** to save the label.
 3. We will stop at the next displayed image for labeling.
 
