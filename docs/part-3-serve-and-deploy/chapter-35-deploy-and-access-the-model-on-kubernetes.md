@@ -401,6 +401,16 @@ service. You should be able to access the FastAPI documentation page at
 `http://<load balancer ingress ip>:80`. In this case, it is
 `http://34.65.255.92:80`.
 
+!!! warning "Plain HTTP only"
+
+    The load balancer exposes the service on port 80 over plain HTTP, without TLS.
+    Make sure to use `http://` and not `https://` when accessing it. Most browsers
+    default to HTTPS, which will fail to connect.
+
+    A production deployment should expose the service through a domain name,
+    terminate TLS with an Ingress and a certificate, and restrict access to the
+    endpoint.
+
 ### Check the changes
 
 Check the changes with Git to ensure that all the necessary files are tracked:
