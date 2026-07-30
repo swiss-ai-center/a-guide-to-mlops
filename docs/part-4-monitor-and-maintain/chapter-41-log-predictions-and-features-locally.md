@@ -436,7 +436,7 @@ logs/
 dvc_plots
 
 # DVC will add new files after this line
-/mode
+/model
 ```
 
 ### Run the experiment
