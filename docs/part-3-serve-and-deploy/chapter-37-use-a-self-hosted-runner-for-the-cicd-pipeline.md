@@ -419,6 +419,12 @@ Create a new file called `runner.yaml` in the `kubernetes` directory with the
 following content. Replace also `<my_username>` and `<my_repository_name>` with
 your own GitHub username and repository name.
 
+??? warning "Using uppercase letters in your username or repository name? Read this!"
+
+    Docker requires the use of only lowercase characters for the image tag. If you
+    have uppercase letters in your username or repository name, simply convert them
+    to lowercase.
+
 ```txt title="kubernetes/runner.yaml" hl_lines="12"
 apiVersion: v1
 kind: Pod
