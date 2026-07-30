@@ -181,7 +181,7 @@ dvc stage add -n prepare \
     python3.13 src/prepare.py data/raw data/prepared
 ```
 
-The values of the parameters are `prepare` which includes all the `prepare`
+The parameter group used is `prepare`, which includes all the `prepare`
 parameters referenced in the `params.yaml` file.
 
 This stage has the `src/prepare.py`, the `src/utils/seed.py` and `data/raw`
@@ -206,8 +206,8 @@ dvc stage add -n train \
     python3.13 src/train.py data/prepared model
 ```
 
-The values of the parameters are `train` which includes all the `train`
-parameters referenced in the `params.yaml` file.
+The parameter group used is `train`, which includes all the `train` parameters
+referenced in the `params.yaml` file.
 
 This stage has the `src/train.py`, the `src/utils/seed.py` and `data/prepared`
 files as dependencies. If any of these files change, DVC will run the command
