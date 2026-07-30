@@ -493,6 +493,12 @@ Build and publish the UI image to the GitHub Container Registry. Since we use
 the GitHub Container Registry, replace `<my_username>` and
 `<my_repository_name>` with your own GitHub username and repository name.
 
+??? warning "Using uppercase letters in your username or repository name? Read this!"
+
+    Docker requires the use of only lowercase characters for the image name. If you
+    have uppercase letters in your username or repository name, simply convert them
+    to lowercase.
+
 ```sh title="Execute the following command(s) in a terminal"
 # Build the UI image
 docker build --platform=linux/amd64 -f docker/ui.Dockerfile --tag ghcr.io/<my_username>/<my_repository_name>/celestial-bodies-evidently-ui:latest .
@@ -543,6 +549,12 @@ spec:
 
 Replace the placeholders in the Kubernetes manifest with the GitHub Container
 Registry path and the bucket name:
+
+??? warning "Using uppercase letters in your username or repository name? Read this!"
+
+    Docker requires the use of only lowercase characters for the image name. If you
+    have uppercase letters in your username or repository name, simply convert them
+    to lowercase.
 
 ```sh title="Execute the following command(s) in a terminal"
 export EVIDENTLY_UI_IMAGE=ghcr.io/<my_username>/<my_repository_name>/celestial-bodies-evidently-ui:latest

@@ -907,6 +907,16 @@ obvious outliers, making them a realistic drift scenario.
 The folder also contains its own `.gitignore`, so its content is ignored
 automatically.
 
+#### Start from clean logs
+
+The test requests sent in the previous chapter are still in `logs/`. Remove them
+so the drift report only reflects the images sent in this chapter.
+
+```sh title="Execute the following command(s) in a terminal"
+# Remove previous monitoring logs
+rm -rf logs
+```
+
 #### Start the local service
 
 Start the BentoML service locally. It will serve the `/predict` endpoint and

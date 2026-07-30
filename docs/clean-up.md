@@ -175,6 +175,16 @@ To delete the GitHub Personal Access Token you created:
 5. Click on the **Delete** button next to it.
 6. Follow the instructions to delete the token.
 
+### Clean up the BentoML model store
+
+BentoML stores the models you saved during the guide in its model store at
+`~/bentoml`. Delete it to free the disk space.
+
+```sh title="Execute the following command(s) in a terminal"
+# Delete the BentoML model store
+rm -rf ~/bentoml
+```
+
 ### Clean up your local environment
 
 In this section, you will delete the local environment you created for this
@@ -214,8 +224,9 @@ Here is a checklist of all the resources and environments you created.
 - [ ] The cloud provider S3 bucket
 - [ ] The cloud provider credentials
 - [ ] The cloud provider project
-- [ ] The GitHub or GitLab Personal Access Tokens
-- [ ] The GitHub or GitLab repository
+- [ ] The GitHub Personal Access Tokens
+- [ ] The GitHub repository
+- [ ] The BentoML model store
 - [ ] The projects directories
     - [ ] The `mlops-guide-notebook` directory
     - [ ] The `mlops-guide` directory

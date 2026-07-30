@@ -699,6 +699,14 @@ You fixed some of the previous issues:
       and imported in CI/CD pipelines, bridging the gap between local development and
       automated deployment.
 
+!!! question "Why BentoML instead of Docker directly?"
+
+    Docker packages any application but knows nothing about machine learning: the
+    serving API, model versioning, and the Dockerfile itself would all be
+    handwritten and maintained by you. BentoML provides them out of the box and
+    still produces a standard Docker image in the end, as you will see in the next
+    chapters. The two tools are complementary, not alternatives.
+
 ## State of the MLOps process
 
 - [x] Model can be saved and loaded with all required artifacts for future usage

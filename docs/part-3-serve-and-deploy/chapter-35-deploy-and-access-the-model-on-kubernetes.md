@@ -317,11 +317,18 @@ spec:
     app: celestial-bodies-classifier
 ```
 
-* The `deployment.yaml` file describes the deployment of the model. It contains
-  the number of replicas, the image to use, and the labels to use.
+* The `deployment.yaml` file describes the **Deployment**: the desired state of
+  the pods running the model, such as the number of replicas and the container
+  image to use. Kubernetes keeps that many pods alive and replaces them if they
+  fail.
 
-* The `service.yaml` file describes the service of the model. It contains the
-  type of service, the ports to use, and the labels to use.
+* The `service.yaml` file describes the **Service**: a stable entry point that
+  routes traffic to the pods selected by their `app` label. Pods are ephemeral and
+  their IP addresses change, so the Service abstracts them away. With
+  `type: LoadBalancer`, the cloud provider also provisions an external load
+  balancer with a public IP address.
+
+In short, the deployment runs the workloads while the service exposes them.
 
 ### Deploy the containerised model on Kubernetes
 
@@ -401,6 +408,16 @@ service. You should be able to access the FastAPI documentation page at
 `http://<load balancer ingress ip>:80`. In this case, it is
 `http://34.65.255.92:80`.
 
+!!! warning "Plain HTTP only"
+
+    The load balancer exposes the service on port 80 over plain HTTP, without TLS.
+    Make sure to use `http://` and not `https://` when accessing it. Most browsers
+    default to HTTPS, which will fail to connect.
+
+    A production deployment should expose the service through a domain name,
+    terminate TLS with an Ingress and a certificate, and restrict access to the
+    endpoint.
+
 ### Check the changes
 
 Check the changes with Git to ensure that all the necessary files are tracked:
@@ -472,6 +489,15 @@ You fixed some of the previous issues:
       deployment configuration (how many pods, which image) separate from service
       configuration (how to route traffic) allows you to update the model version
       without changing how clients access it.
+
+!!! question "Why Kubernetes instead of a simple VM?"
+
+    For a single model, a virtual machine would indeed be simpler. But Kubernetes is
+    the de facto standard for running containers in production: the same declarative
+    configuration deploys on a Raspberry Pi cluster or a large cloud cluster, and is
+    understood by any engineer. It also provides self-healing, scaling, and load
+    balancing that you would script by hand on a VM, and the same manifests are
+    reused for CI/CD, training, and monitoring in the next chapters.
 
 ## State of the MLOps process
 

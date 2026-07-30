@@ -196,11 +196,11 @@ username and repository name.
 
 ??? warning "Using uppercase letters in your username or repository name? Read this!"
 
-    Docker requires the use of only lowercase characters for the image tag. If you
+    Docker requires the use of only lowercase characters for the image name. If you
     have uppercase letters in your username or repository name, simply convert them
     to lowercase.
 
-```txt title="kubernetes/runner.yaml" hl_lines="12 30-31"
+```txt title="kubernetes/runner.yaml" hl_lines="12 32-33"
 apiVersion: v1
 kind: Pod
 metadata:
@@ -221,6 +221,8 @@ spec:
             secretKeyRef:
               name: github-runner-pat
               key: token
+        - name: DVC_NO_ANALYTICS
+          value: "true"
       securityContext:
         runAsUser: 1000
       resources:
@@ -248,7 +250,7 @@ diff --git a/kubernetes/runner.yaml b/kubernetes/runner.yaml
 index 5a8dbb6..59b79f1 100644
 --- a/kubernetes/runner.yaml
 +++ b/kubernetes/runner.yaml
-@@ -25,3 +25,5 @@ spec:
+@@ -29,3 +29,5 @@ spec:
          requests:
            cpu: "1"
            memory: "4Gi"
@@ -285,7 +287,7 @@ your own GitHub username and repository name.
 
 ??? warning "Using uppercase letters in your username or repository name? Read this!"
 
-    Docker requires the use of only lowercase characters for the image tag. If you
+    Docker requires the use of only lowercase characters for the image name. If you
     have uppercase letters in your username or repository name, simply convert them
     to lowercase.
 
@@ -319,6 +321,8 @@ spec:
             secretKeyRef:
               name: github-runner-pat
               key: token
+        - name: DVC_NO_ANALYTICS
+          value: "true"
       securityContext:
         runAsUser: 1000
       resources:
@@ -384,13 +388,13 @@ users:
       provideClusterInfo: true
 ```
 
-!!! info
+!!! warning "macOS: fix the gke-gcloud-auth-plugin path"
 
-    If using macOS, make sure the `users.user.exec.command` parameter is set to
-    `gke-gcloud-auth-plugin`. The kubeconfig file is generated locally and may point
-    to the Homebrew installation path. However, this configuration will be used in a
-    standard Linux environment when accessing the Kubernetes cluster from the CI/CD
-    pipeline.
+    The locally generated kubeconfig file may point to the Homebrew installation
+    path of `gke-gcloud-auth-plugin`. Make sure the `users.user.exec.command`
+    parameter is set to `gke-gcloud-auth-plugin`, as this configuration will be used
+    in a standard Linux environment when accessing the Kubernetes cluster from the
+    CI/CD pipeline.
 
 #### Add Kubernetes CI/CD secrets
 
