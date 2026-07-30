@@ -495,7 +495,7 @@ the GitHub Container Registry, replace `<my_username>` and
 
 ??? warning "Using uppercase letters in your username or repository name? Read this!"
 
-    Docker requires the use of only lowercase characters for the image tag. If you
+    Docker requires the use of only lowercase characters for the image name. If you
     have uppercase letters in your username or repository name, simply convert them
     to lowercase.
 
@@ -552,7 +552,7 @@ Registry path and the bucket name:
 
 ??? warning "Using uppercase letters in your username or repository name? Read this!"
 
-    Docker requires the use of only lowercase characters for the image tag. If you
+    Docker requires the use of only lowercase characters for the image name. If you
     have uppercase letters in your username or repository name, simply convert them
     to lowercase.
 
