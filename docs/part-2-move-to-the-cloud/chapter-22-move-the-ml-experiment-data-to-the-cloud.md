@@ -16,7 +16,7 @@ dataset.
 In this chapter, you will learn how to:
 
 1. Create a project on the cloud provider
-2. Create a storage bucket on the cloud provider
+2. Create a Storage Bucket on the cloud provider
 3. Configure DVC for remote storage
 4. Push the data files to DVC
 5. Commit the metadata files to Git
@@ -145,7 +145,7 @@ gcloud config set project $GCP_PROJECT_ID
 ```
 
 Then run the following command to authenticate to Google Cloud with the
-Application Default. It will create a credentials file in
+Application Default Credentials. It will create a credentials file in
 `~/.config/gcloud/application_default_credentials.json`. This file must not be
 shared and will be used by DVC to authenticate to Google Cloud Storage.
 
@@ -366,7 +366,7 @@ git push
 
 ### Check the results
 
-Open the Bucket Storage on the cloud provider and check that the files were
+Open the Storage Bucket on the cloud provider and check that the files were
 hashed and have been uploaded.
 
 Open the [Cloud Storage](https://console.cloud.google.com/storage/browser) on

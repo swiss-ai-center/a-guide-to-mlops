@@ -202,9 +202,6 @@ drift-alert issue once you have decided to send the new samples there.
 
 Each decision has its own verification step.
 
-The next scheduled monitoring workflow (or manual trigger) will use the new
-thresholds and only open a new issue if drift still exceeds them.
-
 For a **threshold tune**, wait for the next scheduled monitoring workflow or
 trigger the workflow manually to confirm the alert no longer triggers.
 

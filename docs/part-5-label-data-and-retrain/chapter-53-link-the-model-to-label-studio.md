@@ -216,7 +216,7 @@ async def predict(data: Dict):
 This file is structured in 3 parts:
 
 1. Definition of some useful constants.
-2. Creation of the FastAPI app and loads the model similarly to BentoML
+2. Creation of the FastAPI app and loading of the model similarly to BentoML
     `src/serve.py`.
 3. Definition of the API endpoints required by Label Studio.
 
