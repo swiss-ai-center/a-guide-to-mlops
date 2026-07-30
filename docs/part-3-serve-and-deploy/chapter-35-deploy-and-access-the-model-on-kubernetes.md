@@ -490,6 +490,15 @@ You fixed some of the previous issues:
       configuration (how to route traffic) allows you to update the model version
       without changing how clients access it.
 
+!!! question "Why Kubernetes instead of a simple VM?"
+
+    For a single model, a virtual machine would indeed be simpler. But Kubernetes is
+    the de facto standard for running containers in production: the same declarative
+    configuration deploys on a Raspberry Pi cluster or a large cloud cluster, and is
+    understood by any engineer. It also provides self-healing, scaling, and load
+    balancing that you would script by hand on a VM, and the same manifests are
+    reused for CI/CD, training, and monitoring in the next chapters.
+
 ## State of the MLOps process
 
 - [x] Model can be saved and loaded with all required artifacts for future usage
