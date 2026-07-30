@@ -56,7 +56,7 @@ flowchart TB
 
 Make sure Label Studio is running at <http://localhost:8080>.
 
-1. In the project view, click on the **Export** button and select `JSON-MINI`.
+1. In the project view, click on the **Export** button and select `JSON-MIN`.
 
     ![Label Studio Export Annotations](../assets/images/label-studio-export-annotations.png)
 
