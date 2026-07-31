@@ -154,8 +154,6 @@ git config --global core.autocrlf input
 
 ## Docker
 
-Docker is used later in the guide to package and serve the model.
-
 === ":fontawesome-brands-windows: :simple-apple: :simple-linux: Using Docker Desktop"
 
     Install [Docker Desktop](https://www.docker.com/products/docker-desktop/),
