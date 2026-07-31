@@ -175,10 +175,10 @@ Docker is used later in the guide to package and serve the model.
       **Settings → General**. The guide builds Docker images for the `linux/amd64`
       architecture, and the build can fail under Rosetta emulation.
 
-=== ":simple-ubuntu: Using Docker CLI (Linux only)"
+=== ":simple-linux: :simple-ubuntu: Using Docker CLI"
 
     On :simple-linux: Linux, install the Docker engine and CLI directly in the Linux
-    environment:
+    environment, without the Docker Desktop client:
 
     ```sh
     # Install Docker and the Buildx plugin
