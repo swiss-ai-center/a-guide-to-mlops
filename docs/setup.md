@@ -28,7 +28,7 @@ from the Microsoft Store for a modern terminal experience.
 
 From a PowerShell with administrator rights:
 
-```sh
+```powershell
 # Update WSL
 wsl --update
 
@@ -61,13 +61,19 @@ account has `sudo` rights inside the Linux environment.
 
 === ":simple-apple: macOS"
 
-    ```sh
-    # Install the available macOS updates
-    sudo softwareupdate --install --all
-    ```
+    !!! note
+
+        No specific macOS version is required for this guide. If you wish to update your
+        system, use **System Settings → General → Software Update**, keeping in mind
+        this can take a while.
 
     Install [Homebrew](https://brew.sh/) if it is not already installed. It is used
-    in the following sections.
+    in the following sections:
+
+    ```sh
+    # Install Homebrew
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    ```
 
 ## Python
 
@@ -91,7 +97,14 @@ The guide requires Python 3.13.
         [deadsnakes PPA](https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa):
 
         ```sh
+        # Install add-apt-repository if needed
+        sudo apt install software-properties-common
+
+        # Add the deadsnakes PPA and update the package lists
         sudo add-apt-repository ppa:deadsnakes/ppa -y
+        sudo apt update
+
+        # Install Python 3.13 and venv support
         sudo apt install python3.13 python3.13-venv
         ```
 

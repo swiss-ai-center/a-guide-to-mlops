@@ -20,7 +20,7 @@ might encounter issues. Please use the
 (WSL 2) for optimal results.
 
 See the [Setup](../setup.md) page for step-by-step instructions to prepare a WSL
-2 or Ubuntu environment.
+2, Ubuntu or macOS environment.
 
 ## Requirements
 
