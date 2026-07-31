@@ -47,6 +47,7 @@ dependencies are listed in `requirements.txt`.
 │   ├── index.md                  # Story landing page
 │   ├── syllabus.md               # Tutorial overview
 │   ├── tools.md                  # Tooling overview
+│   ├── setup.md                  # Machine setup (WSL 2 / Ubuntu / macOS)
 │   ├── cheatsheet.md             # Terminal/command reference
 │   ├── philosophy.md
 │   ├── concept.md

@@ -54,6 +54,7 @@ nav = [
       { "Concept" = "concept.md" },
       { "Philosophy" = "philosophy.md" },
       { "Tools" = "tools.md" },
+      { "Setup" = "setup.md" },
       { "References" = "references.md" },
       { "Cheatsheet" = "cheatsheet.md" },
     ] },

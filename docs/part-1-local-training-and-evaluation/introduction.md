@@ -19,6 +19,9 @@ might encounter issues. Please use the
 [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/)
 (WSL 2) for optimal results.
 
+See the [Setup](../setup.md) page for step-by-step instructions to prepare a WSL
+2 or Ubuntu environment.
+
 ## Requirements
 
 The following requirements are necessary to follow this part:
