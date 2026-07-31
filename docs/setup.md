@@ -63,7 +63,8 @@ account has `sudo` rights inside the Linux environment.
 
 ## Python
 
-The guide requires Python 3.13.
+The guide requires Python 3.13 for framework compatibility, even though recent
+systems ship a newer version by default.
 
 === ":simple-linux: :simple-ubuntu: Linux (Ubuntu)"
 
@@ -75,11 +76,9 @@ The guide requires Python 3.13.
     sudo apt install python3.13 python3.13-venv unzip
     ```
 
-    !!! tip "Why Python 3.13?"
+    !!! tip "Python 3.13 not available?"
 
-        Recent Ubuntu releases ship a newer Python version (3.14) by default, but this
-        guide explicitly requires Python 3.13 for framework compatibility. If
-        `python3.13` is not packaged for your Ubuntu release, use the
+        If `python3.13` is not packaged for your Ubuntu release, use the
         [deadsnakes PPA](https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa):
 
         ```sh
@@ -165,9 +164,11 @@ Docker is used later in the guide to package and serve the model.
 
     Then check the following settings:
 
-    - :fontawesome-brands-windows: **Windows**: make sure the WSL integration is
-      enabled in **Settings → Resources → WSL Integration** so Docker Desktop
-      integrates with your Ubuntu distribution.
+    - :fontawesome-brands-windows: **Windows (including WSL 2)**: install the
+      Windows version of Docker Desktop, not the Linux version inside WSL. Then make
+      sure the WSL integration is enabled in
+      **Settings → Resources → WSL Integration** so Docker Desktop integrates with
+      your Ubuntu distribution.
     - :simple-apple: **macOS**: in case of troubles when building Docker images
       on Apple Silicon, consider disabling
       **Use Rosetta for x86_64/amd64 emulation on Apple Silicon** in
