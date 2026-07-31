@@ -168,7 +168,7 @@ Fluent Bit tails the local log files, buffers them in memory and on disk, and
 uploads them to the storage bucket when a batch reaches a configured size or
 age.
 
-!!! note "Why a sidecar?"
+!!! question "Why a sidecar?"
 
     A sidecar is a helper container that runs alongside the main application
     container in the same pod. It keeps the model service unchanged, moves network
