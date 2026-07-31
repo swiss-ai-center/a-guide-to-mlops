@@ -16,6 +16,15 @@ In this chapter, you will learn how to:
 4. Deploy the Docker image on Kubernetes
 5. Access the model
 
+??? question "Why Kubernetes instead of a simple VM?"
+
+    For a single model, a virtual machine would indeed be simpler. But Kubernetes is
+    the de facto standard for running containers in production: the same declarative
+    configuration deploys on a Raspberry Pi cluster or a large cloud cluster, and is
+    understood by any engineer. It also provides self-healing, scaling, and load
+    balancing that you would script by hand on a VM, and the same manifests are
+    reused for CI/CD, training, and monitoring in the next chapters.
+
 !!! danger
 
     The following steps will create resources on the cloud provider. These resources
@@ -489,15 +498,6 @@ You fixed some of the previous issues:
       deployment configuration (how many pods, which image) separate from service
       configuration (how to route traffic) allows you to update the model version
       without changing how clients access it.
-
-!!! question "Why Kubernetes instead of a simple VM?"
-
-    For a single model, a virtual machine would indeed be simpler. But Kubernetes is
-    the de facto standard for running containers in production: the same declarative
-    configuration deploys on a Raspberry Pi cluster or a large cloud cluster, and is
-    understood by any engineer. It also provides self-healing, scaling, and load
-    balancing that you would script by hand on a VM, and the same manifests are
-    reused for CI/CD, training, and monitoring in the next chapters.
 
 ## State of the MLOps process
 

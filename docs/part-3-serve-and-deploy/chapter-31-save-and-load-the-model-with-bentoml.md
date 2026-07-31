@@ -19,6 +19,14 @@ In this chapter, you will learn how to:
 3. Update and run the experiment to use BentoML to save and load the model to
    and from the model's store
 
+??? question "Why BentoML instead of Docker directly?"
+
+    Docker packages any application but knows nothing about machine learning: the
+    serving API, model versioning, and the Dockerfile itself would all be
+    handwritten and maintained by you. BentoML provides them out of the box and
+    still produces a standard Docker image in the end, as you will see in the next
+    chapters. The two tools are complementary, not alternatives.
+
 The following diagram illustrates the control flow of the experiment at the end
 of this chapter:
 
@@ -698,14 +706,6 @@ You fixed some of the previous issues:
       `.bentomodel` files allows them to be tracked by DVC, shared with team members,
       and imported in CI/CD pipelines, bridging the gap between local development and
       automated deployment.
-
-!!! question "Why BentoML instead of Docker directly?"
-
-    Docker packages any application but knows nothing about machine learning: the
-    serving API, model versioning, and the Dockerfile itself would all be
-    handwritten and maintained by you. BentoML provides them out of the box and
-    still produces a standard Docker image in the end, as you will see in the next
-    chapters. The two tools are complementary, not alternatives.
 
 ## State of the MLOps process
 

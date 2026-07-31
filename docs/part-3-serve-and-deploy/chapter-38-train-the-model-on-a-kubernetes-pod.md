@@ -794,51 +794,69 @@ Finally, try to update some parameters of your model to test the training on the
 specialized Kubernetes pod.
 
 Similarly to what you have done in
-[Chapter 2.5: Work efficiently and collaboratively with Git](../part-2-move-to-the-cloud/chapter-25-work-efficiently-and-collaboratively-with-git.md),
-create an issue **Demonstrate model training on Kubernetes pod** and a new
-branch for the issue.
+[Chapter 2.5: Work efficiently and collaboratively with Git](../part-2-move-to-the-cloud/chapter-25-work-efficiently-and-collaboratively-with-git.md):
 
-On your machine, check out the new branch.
+- **Open an issue**: create a new issue named
+  _Demonstrate model training on Kubernetes pod_ by going to the **Issues**
+  section from the top header of your GitHub repository. Select **New issue** and
+  create the issue by selecting **Create**.
+- **Create a branch for the issue**: in the newly created issue, select
+  **Create a branch for this issue or link a pull request** from the right
+  sidebar. Create the branch by selecting **Create branch**. A new pop-up opens
+  with the name of the branch you want to check out.
+- **Check out the new branch** on your machine. Replace
+  `<the_name_of_the_new_branch>` with the name of the branch to check out:
 
-Update your experiment by editing for example the `params.yaml` file with the
-following parameters:
+    ```sh title="Execute the following command(s) in a terminal"
+    # Get the latest updates from the remote origin
+    git fetch origin
 
-```yaml title="params.yaml" hl_lines="11"
-prepare:
-  seed: 5241
-  split: 0.2
-  image_size: [32, 32]
-  grayscale: True
-  batch_size: 32
+    # Check out the new branch
+    git checkout <the_name_of_the_new_branch>
+    ```
 
-train:
-  seed: 5241
-  lr: 0.001
-  epochs: 20
-  conv_size: 64
-  dense_size: 128
-  output_classes: 10
-```
+- **Update the parameters of the experiment** by editing for example the
+  `params.yaml` file with the following parameters:
 
-You can now commit and push the above changes to trigger a change on the remote
-repository.
+    ```yaml title="params.yaml" hl_lines="11"
+    prepare:
+      seed: 5241
+      split: 0.2
+      image_size: [32, 32]
+      grayscale: True
+      batch_size: 32
 
-This time, **do not** execute `dvc repro` locally but let the cluster pod handle
-the job for you. Push the changes to the remote repository.
+    train:
+      seed: 5241
+      lr: 0.001
+      epochs: 20
+      conv_size: 64
+      dense_size: 128
+      output_classes: 10
+    ```
 
-```sh title="Execute the following command(s) in a terminal"
-# Add all the files
-git add .
+- **Commit and push the experiment changes** to trigger a change on the remote
+  repository.
 
-# Check the status
-git status
+    !!! warning
 
-# Commit the changes
-git commit -m "Make some changes to the model"
+        This time, **do not** execute `dvc repro` nor `dvc push` locally. Let the
+        specialized pod on the Kubernetes cluster handle the training and the push to
+        the remote storage for you.
 
-# Push the changes
-git push
-```
+    ```sh title="Execute the following command(s) in a terminal"
+    # Add all the files
+    git add .
+
+    # Check the status
+    git status
+
+    # Commit the changes
+    git commit -m "Make some changes to the model"
+
+    # Push the changes
+    git push
+    ```
 
 ### Check the results
 
@@ -848,9 +866,22 @@ Go back to your GitHub repository.
   **Actions** page. The `train-and-report` job will run on a pod created by the
   self-hosted runner on the Kubernetes cluster. It trains the model and DVC pushes
   the trained model to the remote bucket.
-* Merge the pull request, and switch back to the main branch and pull the latest
-  changes. The `publish-and-deploy` will run on the main runner. It retrieves the
-  model with DVC, containerizes then deploys the model artifact.
+* Merge the pull request. The `publish-and-deploy` will run on the main runner.
+  It retrieves the model with DVC, containerizes then deploys the model artifact.
+
+Once the merge is done, switch back to the main branch and pull the latest
+changes:
+
+```sh title="Execute the following command(s) in a terminal"
+# Get the latest updates from the remote origin
+git fetch origin
+
+# Check out the main branch
+git checkout main
+
+# Pull the changes made by the pull request
+git pull
+```
 
 On Google Cloud Console, you can see the pod that has been created on the
 [Kubernetes Engine Workloads](https://console.cloud.google.com/kubernetes/workload/)
