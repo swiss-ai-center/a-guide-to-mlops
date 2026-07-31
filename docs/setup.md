@@ -138,7 +138,7 @@ Then configure your identity:
 
 ```sh
 # Configure your identity (replace with your own information)
-git config --global user.email "your@email"
+git config --global user.email "your.email@example.com"
 git config --global user.name "Your Name"
 
 # Configure line endings
