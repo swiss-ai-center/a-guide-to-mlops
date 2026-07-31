@@ -105,8 +105,8 @@ The guide requires Python 3.13.
 
 === ":simple-linux: :simple-apple: Using uv"
 
-    Install [:simple-uv: uv](https://docs.astral.sh/uv/), which can also install and
-    manage Python versions by itself:
+    Alternatively to the system package manager, install
+    [:simple-uv: uv](https://docs.astral.sh/uv/) and use it to install Python 3.13:
 
     ```sh
     # Install uv
@@ -114,10 +114,10 @@ The guide requires Python 3.13.
 
     # Make uv available in the current shell
     source $HOME/.local/bin/env
-    ```
 
-    Python 3.13 is then installed automatically when creating a virtual environment
-    with `uv venv --python 3.13`.
+    # Install Python 3.13
+    uv python install 3.13
+    ```
 
 ## Git
 
@@ -163,9 +163,16 @@ Docker is used later in the guide to package and serve the model.
     available for :fontawesome-brands-windows: Windows, :simple-apple: macOS and
     :simple-linux: Linux.
 
-    On Windows, Docker Desktop uses the WSL 2 backend and integrates with your
-    Ubuntu distribution. Make sure the integration is enabled in
-    **Settings → Resources → WSL Integration**.
+    Then check the following settings:
+
+    - :fontawesome-brands-windows: **Windows**: make sure the WSL integration is
+      enabled in **Settings → Resources → WSL Integration** so Docker Desktop
+      integrates with your Ubuntu distribution.
+    - :simple-apple: **macOS**: in case of troubles when building Docker images
+      on Apple Silicon, consider disabling
+      **Use Rosetta for x86_64/amd64 emulation on Apple Silicon** in
+      **Settings → General**. The guide builds Docker images for the `linux/amd64`
+      architecture, and the build can fail under Rosetta emulation.
 
 === ":simple-ubuntu: Using Docker CLI (Linux only)"
 
