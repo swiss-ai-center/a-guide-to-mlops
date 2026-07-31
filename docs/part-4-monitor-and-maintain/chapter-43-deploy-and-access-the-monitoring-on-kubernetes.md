@@ -22,6 +22,14 @@ In this chapter, you will learn how to:
 5. Access the cloud-hosted dashboard and the drift reports
 6. Commit the changes to Git
 
+??? question "Why a sidecar?"
+
+    A sidecar is a helper container that runs alongside the main application
+    container in the same pod. It keeps the model service unchanged, moves network
+    I/O out of the inference path, and shares a local volume with the model
+    container. Fluent Bit also batches small records into larger objects, which is
+    cheaper and faster than per-request uploads.
+
 The following diagram illustrates the control flow at the end of this chapter:
 
 ```mermaid
@@ -167,14 +175,6 @@ To make those logs durable, you will add a Fluent Bit sidecar to the model pod.
 Fluent Bit tails the local log files, buffers them in memory and on disk, and
 uploads them to the storage bucket when a batch reaches a configured size or
 age.
-
-!!! question "Why a sidecar?"
-
-    A sidecar is a helper container that runs alongside the main application
-    container in the same pod. It keeps the model service unchanged, moves network
-    I/O out of the inference path, and shares a local volume with the model
-    container. Fluent Bit also batches small records into larger objects, which is
-    cheaper and faster than per-request uploads.
 
 #### Create the Fluent Bit configuration
 
