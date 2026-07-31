@@ -12,8 +12,6 @@ The following steps prepare a :fontawesome-brands-windows: Windows machine with
 WSL 2. Skip this section if you already use a native :simple-linux: Linux
 installation or :simple-apple: macOS.
 
-### WSL 2
-
 From a PowerShell with administrator rights:
 
 ```powershell
