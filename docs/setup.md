@@ -145,7 +145,7 @@ git config --global user.name "Your Name"
 git config --global core.autocrlf input
 ```
 
-!!! tip "For WSL 2 users"
+??? tip "For WSL 2 users"
 
     On native Windows, Git is usually configured with `core.autocrlf true` to
     convert line endings between Windows files (CRLF) and the repository (LF).
