@@ -6,23 +6,11 @@ use :fontawesome-brands-windows: Windows with
 (WSL 2), a native :simple-linux: Linux (Ubuntu) installation or :simple-apple:
 macOS.
 
-!!! note
-
-    Unless stated otherwise, all commands on this page are meant to be run in your
-    terminal (the WSL terminal on Windows). Only the WSL 2 installation itself is
-    done from Windows PowerShell.
-
 ## Windows only
 
 The following steps prepare a :fontawesome-brands-windows: Windows machine with
 WSL 2. Skip this section if you already use a native :simple-linux: Linux
 installation or :simple-apple: macOS.
-
-### Terminal
-
-Install
-[Windows Terminal](https://learn.microsoft.com/en-us/windows/terminal/install)
-from the Microsoft Store for a modern terminal experience.
 
 ### WSL 2
 
@@ -204,23 +192,3 @@ Docker is used later in the guide to package and serve the model.
 
         If `systemctl` reports that systemd is not running, start the Docker service
         manually with `sudo service docker start`.
-
-## Kubernetes tools
-
-The deployment chapters require `kubectl` and the `gke-gcloud-auth-plugin`
-authentication plugin. Both are installed later in the guide with the
-[Google Cloud CLI](./part-3-serve-and-deploy/chapter-35-deploy-and-access-the-model-on-kubernetes.md):
-
-```sh
-# Install kubectl and the GKE authentication plugin with gcloud
-gcloud components install kubectl gke-gcloud-auth-plugin
-```
-
-If `kubectl` fails with an error about a missing client-go credential plugin,
-the `gke-gcloud-auth-plugin` is not installed. Alternatively, on Ubuntu both are
-available as packages once the Google Cloud apt repository is configured:
-
-```sh
-# Install the GKE authentication plugin with apt
-sudo apt install kubectl google-cloud-cli-gke-gcloud-auth-plugin
-```

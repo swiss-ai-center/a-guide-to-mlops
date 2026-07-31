@@ -11,14 +11,6 @@ title: "Part 5 - Introduction"
 Learn how to use the model to label new data using [Label Studio](../tools.md)
 and retrain the model iteratively.
 
-## Environment
-
-This guide has been written with :simple-apple: macOS and :simple-linux: Linux
-operating systems in mind. If you use :fontawesome-brands-windows: Windows, you
-might encounter issues. Please use the
-[Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/)
-(WSL 2) for optimal results.
-
 ## Requirements
 
 The following requirements are necessary to follow this part in addition to
