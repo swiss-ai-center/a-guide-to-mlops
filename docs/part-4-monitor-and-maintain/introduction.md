@@ -11,14 +11,6 @@ title: "Part 4 - Introduction"
 Learn how to monitor and maintain the model using
 [:simple-fluentbit: Fluent Bit](../tools.md) and [Evidently AI](../tools.md).
 
-## Environment
-
-This guide has been written with :simple-apple: macOS and :simple-linux: Linux
-operating systems in mind. If you use :fontawesome-brands-windows: Windows, you
-might encounter issues. Please use the
-[Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/)
-(WSL 2) for optimal results.
-
 ## Requirements
 
 The following requirements are the same as those described in the

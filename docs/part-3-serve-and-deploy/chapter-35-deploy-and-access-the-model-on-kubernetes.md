@@ -127,6 +127,17 @@ gcloud components install kubectl
 As per the instructions, you will need to install the `gke-gcloud-auth-plugin`
 authentication plugin as well.
 
+!!! tip "kubectl fails with a client-go credential plugin error?"
+
+    If `kubectl` fails with an error about a missing client-go credential plugin,
+    the `gke-gcloud-auth-plugin` is not installed. Install it with the following
+    command:
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Install the GKE authentication plugin
+    gcloud components install gke-gcloud-auth-plugin
+    ```
+
 ### Create the Kubernetes cluster
 
 In order to deploy the model on Kubernetes, you will need a Kubernetes cluster.

@@ -54,8 +54,9 @@ nav = [
       { "Concept" = "concept.md" },
       { "Philosophy" = "philosophy.md" },
       { "Tools" = "tools.md" },
-      { "References" = "references.md" },
+      { "Setup" = "setup.md" },
       { "Cheatsheet" = "cheatsheet.md" },
+      { "References" = "references.md" },
     ] },
   { "🧪 Local training and evaluation" = [
       { "Introduction" = "part-1-local-training-and-evaluation/introduction.md" },
