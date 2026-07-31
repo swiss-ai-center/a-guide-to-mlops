@@ -51,7 +51,7 @@ You now have a reusable workflow you can apply to your own projects. The same
 patterns (version control, automated pipelines, monitored serving, and iterative
 retraining) scale from a single experiment to a team-wide MLOps practice.
 
-Explore the additional [resources](references.md) to go further, and reach out
+Explore the additional [references](references.md) to go further, and reach out
 on [GitHub](https://github.com/swiss-ai-center/a-guide-to-mlops) if you have
 questions. If you found this guide valuable, please consider starring the
 repository. Your support helps us improve it.
