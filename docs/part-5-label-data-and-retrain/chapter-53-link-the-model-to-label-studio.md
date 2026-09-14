@@ -55,7 +55,7 @@ pyyaml==6.0.3
 dvc[gs]==3.67.1
 bentoml==1.4.39
 pillow==12.3.0
-evidently==0.7.21
+evidently==0.7.23
 label-studio==1.23.0
 fastapi[standard]==0.139.2
 ```
@@ -76,7 +76,7 @@ index e5f490c..5735e62 100644
 +++ b/requirements.txt
 @@ -7,3 +7,4 @@ bentoml==1.4.39
  pillow==12.3.0
- evidently==0.7.21
+ evidently==0.7.23
  label-studio==1.23.0
 +fastapi[standard]==0.139.2
 ```
