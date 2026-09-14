@@ -97,7 +97,7 @@ pyyaml==6.0.3
 dvc[gs]==3.67.1
 bentoml==1.4.39
 pillow==12.3.0
-evidently==0.7.21
+evidently==0.7.23
 label-studio==1.23.0
 ```
 
@@ -118,7 +118,7 @@ index 6501b50..e5f490c 100644
 @@ -6,3 +6,4 @@ dvc[gs]==3.67.1
  bentoml==1.4.39
  pillow==12.3.0
- evidently==0.7.21
+ evidently==0.7.23
 +label-studio==1.23.0
 ```
 

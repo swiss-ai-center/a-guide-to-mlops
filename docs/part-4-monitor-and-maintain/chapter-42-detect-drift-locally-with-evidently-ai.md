@@ -153,7 +153,7 @@ pyyaml==6.0.3
 dvc[gs]==3.67.1
 bentoml==1.4.39
 pillow==12.3.0
-evidently==0.7.21
+evidently==0.7.23
 ```
 
 Check the differences with Git to validate the changes:
@@ -174,7 +174,7 @@ index 71d9e04..6501b50 100644
  dvc[gs]==3.67.1
  bentoml==1.4.39
  pillow==12.3.0
-+evidently==0.7.21
++evidently==0.7.23
 ```
 
 Install the package and update the freeze file.
