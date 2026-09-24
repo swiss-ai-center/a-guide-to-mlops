@@ -83,8 +83,8 @@ for you. At the end of this chapter, DVC should have updated all the gitignore
 files.
 
 Replace all the actual content of the gitignore file with the following to
-remove your experiment data. The required files to be ignored will then be added
-by DVC:
+remove the remaining custom rules. The required files to be ignored will then be
+added by DVC:
 
 ```sh title=".gitignore"
 ## Python
@@ -117,9 +117,8 @@ diff --git a/.gitignore b/.gitignore
 index 1c13140..2492093 100644
 --- a/.gitignore
 +++ b/.gitignore
-@@ -1,15 +1,9 @@
+@@ -1,14 +1,9 @@
 -# Data used to train the models
--data/raw/
 -data/prepared/
 -
 -# Evaluation results

@@ -312,7 +312,10 @@ which serves as the configuration directory for DVC.
 
 #### Update the .gitignore file and add the experiment data to DVC
 
-With DVC now set up, you can begin adding files to it.
+With DVC now set up, you can begin adding files to it. The `dvc add` command
+creates a `data/raw.dvc` file and a `data/.gitignore`. The `.dvc` file contains
+the metadata DVC uses to download the files and check their integrity. The
+`.gitignore` file tells Git to ignore the files in `data/raw`.
 
 Try to add the experiment data. Spoiler, it will fail:
 
@@ -327,16 +330,12 @@ When executing this command, the following output occurs:
 ERROR: bad DVC file name 'data/raw.dvc' is git-ignored.
 ```
 
-You will have to update the gitignore file so that DVC can create files in the
-`data` directory. However, you still don't want the directories `data/raw` and
-`data/prepared` to be added to Git.
+DVC tried to create `data/raw.dvc`, but the `data/` rule blocks it. That rule
+also keeps `data/prepared` out of Git, and you still want that: you are only
+handing `data/raw` to DVC for now. Replace `data/` with `data/prepared/`:
 
-Update the gitignore file by changing `data/` to `data/raw/` and
-`data/prepared/`:
-
-```sh title=".gitignore" hl_lines="2-3"
+```sh title=".gitignore" hl_lines="2"
 # Data used to train the models
-data/raw/
 data/prepared/
 
 # Evaluation results
@@ -371,10 +370,9 @@ diff --git a/.gitignore b/.gitignore
 index dc17ed7..1c13140 100644
 --- a/.gitignore
 +++ b/.gitignore
-@@ -1,5 +1,6 @@
+@@ -1,5 +1,5 @@
  # Data used to train the models
 -data/
-+data/raw/
 +data/prepared/
 
  # Evaluation results
@@ -400,15 +398,14 @@ To enable auto staging, run:
     dvc config core.autostage true
 ```
 
-The effect of the `dvc add` command is to create a `data/raw.dvc` file and a
-`data/.gitignore`. The `.dvc` file contains the metadata of the file that is
-used by DVC to download and check the integrity of the files. The gitignore file
-is created to add the files in `data/raw` to be ignored by Git. The `.dvc` files
-must be added to Git.
+As expected, DVC created `data/raw.dvc` and `data/.gitignore`. Both must be
+added to Git.
 
 Various DVC commands will automatically try to update the gitignore files. If a
 gitignore file is already present, it will be updated to include the newly
-ignored files. You might need to update existing `.gitignore` files accordingly.
+ignored files. As you hand more files and directories to DVC, it will extend
+these gitignore files for you. You might need to update existing `.gitignore`
+files accordingly.
 
 #### Check the changes
 
@@ -488,9 +485,9 @@ You fixed some of the previous issues:
       creates a small `.dvc` metadata file that gets committed to Git, while the
       actual data is stored in the DVC cache. This separation keeps repositories
       lightweight.
-    - **Smart `.gitignore` configuration is essential**: Configure `.gitignore` to
-      exclude raw data and model directories while allowing DVC metadata files (`.dvc`
-      files and DVC-generated `.gitignore` files) to be tracked by Git.
+    - **Smart `.gitignore` configuration is essential**: Configure the main
+      `.gitignore` to exclude only what DVC does not manage yet, and let DVC maintain
+      its own `.gitignore` files for the paths it tracks.
     - **Local versioning enables future collaboration**: Setting up Git and DVC
       locally is the foundation. In later chapters, you'll push to remote repositories
       to enable team collaboration and experiment tracking.
