@@ -249,15 +249,17 @@ kubectl get namespaces
 The output should be similar to this:
 
 ```text
-NAME                 STATUS   AGE
-default              Active   2m45s
-gke-managed-cim      Active   2m15s
-gke-managed-system   Active   2m4s
-gmp-public           Active   109s
-gmp-system           Active   109s
-kube-node-lease      Active   2m45s
-kube-public          Active   2m45s
-kube-system          Active   2m45s
+NAME                                STATUS   AGE
+default                             Active   2m11s
+gke-managed-cim                     Active   96s
+gke-managed-networking-dra-driver   Active   36s
+gke-managed-system                  Active   77s
+gke-managed-volumepopulator         Active   72s
+gmp-public                          Active   52s
+gmp-system                          Active   52s
+kube-node-lease                     Active   2m11s
+kube-public                         Active   2m11s
+kube-system                         Active   2m11s
 ```
 
 !!! tip

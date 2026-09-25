@@ -568,8 +568,8 @@ The output should be similar to this:
 ```
 √ Connected to GitHub
 
-Current runner version: '2.334.0'
-2026-06-04 14:34:34Z: Listening for Jobs
+Current runner version: '2.337.0'
+2026-09-25 09:08:35Z: Listening for Jobs
 ```
 
 Exit the process by pressing ++ctrl+c++ in the terminal, then exit the pod by

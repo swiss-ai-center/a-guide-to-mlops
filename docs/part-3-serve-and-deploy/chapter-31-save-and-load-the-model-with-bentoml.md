@@ -342,6 +342,30 @@ git diff src/train.py
 The output should be similar to this:
 
 ```diff
+diff --git a/src/train.py b/src/train.py
+index 5972b3d..dc36c70 100644
+--- a/src/train.py
++++ b/src/train.py
+@@ -1,11 +1,14 @@
++import json
+ import sys
+ from pathlib import Path
+ from typing import Tuple
+
++import bentoml
+ import keras
+ import numpy as np
+ import tensorflow as tf
+ import yaml
++from PIL.Image import Image
+
+ from utils.seed import set_seed
+
+@@ -65,6 +68,9 @@ def main() -> None:
+     )
+     ds_val = tf.data.Dataset.load(str(prepared_dataset_folder / "val"))
+
++    with open(prepared_dataset_folder / "labels.json") as f:
 +        labels = json.load(f)
 +
      # Define the model
