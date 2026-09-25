@@ -498,8 +498,8 @@ Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
         modified:   .gitignore
         modified:   src/bentofile.yaml
-        modified:   src/serve.py
         new file:   src/features.py
+        modified:   src/serve.py
 ```
 
 ### Commit the changes to Git

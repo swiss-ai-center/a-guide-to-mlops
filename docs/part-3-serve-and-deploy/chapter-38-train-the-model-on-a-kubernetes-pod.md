@@ -850,7 +850,20 @@ Similarly to what you have done in
 
     # Check the status
     git status
+    ```
 
+    The output of the `git status` command should be similar to this.
+
+    ```text
+    On branch 3-demonstrate-model-training-on-kubernetes-pod
+    Your branch is up to date with 'origin/3-demonstrate-model-training-on-kubernetes-pod'.
+
+    Changes to be committed:
+    (use "git restore --staged <file>..." to unstage)
+        modified:   params.yaml
+    ```
+
+    ```sh title="Execute the following command(s) in a terminal"
     # Commit the changes
     git commit -m "Make some changes to the model"
 
