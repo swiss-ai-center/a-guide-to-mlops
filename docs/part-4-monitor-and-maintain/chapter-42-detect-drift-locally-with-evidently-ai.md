@@ -862,9 +862,9 @@ git push
 
 ### Run the experiment
 
-Generate production logs by running the service and sending images in two
-phases. The first phase uses in-distribution images; the second phase uses
-images from classes the model has never seen.
+You will now generate production logs by running the service and sending images
+in two phases. The first phase uses in-distribution images, while the second
+phase uses images from classes the model has never seen.
 
 #### Download additional inference data
 

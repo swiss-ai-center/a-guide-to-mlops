@@ -437,6 +437,15 @@ for img in extra-data/extra/*.jpg; do
 done
 ```
 
+!!! tip "Inspecting inference live logs"
+
+    You can stream the model inference logs to inspect them with:
+
+    ```sh title="Execute the following command(s) in a terminal"
+    # Stream the logs of the service
+    kubectl logs -l app=celestial-bodies-classifier -c celestial-bodies-classifier -f
+    ```
+
 Check the Fluent Bit sidecar logs to confirm it started tailing the files and is
 uploading to the storage bucket:
 
@@ -447,9 +456,14 @@ kubectl logs -l app=celestial-bodies-classifier -c fluent-bit
 The output should be similar to:
 
 ```text
-[2026/07/07 12:38:03.131] [ info] [input:tail:tail.0] inotify_fs_add(): inode=924127 watch_fd=1 name=/home/bentoml/bento/logs/celestial_bodies_classifier/data/data.1.log
-[2026/07/07 12:39:04.130] [ info] [output:s3:s3.0] Running upload timer callback (cb_s3_upload)..
+[2026/09/25 10:59:05.248] [error] [input:tail:tail.0] read error, check permissions: /home/bentoml/bento/logs/celestial_bodies_classifier/data/*.log
+[2026/09/25 10:59:05.248] [ warn] [input:tail:tail.0] error scanning path: /home/bentoml/bento/logs/celestial_bodies_classifier/data/*.log
+[2026/09/25 10:59:10.255] [ info] [input:tail:tail.0] inotify_fs_add(): inode=536420 watch_fd=1 name=/home/bentoml/bento/logs/celestial_bodies_classifier/data/data.1.log
+[2026/09/25 11:00:11.248] [ info] [output:s3:s3.0] Running upload timer callback (cb_s3_upload)..
 ```
+
+Note that some errors may appear until the first prediction is logged, but this
+is only harmless noise.
 
 Open the [Cloud Storage](https://console.cloud.google.com/storage/browser) on
 the Google Cloud interface and click on your bucket to check the logs are indeed
@@ -559,11 +573,9 @@ Registry path and the bucket name:
 ```sh title="Execute the following command(s) in a terminal"
 export EVIDENTLY_UI_IMAGE=ghcr.io/<my_username>/<my_repository_name>/celestial-bodies-evidently-ui:latest
 
-sed -i "s|<evidently_ui_image>|$EVIDENTLY_UI_IMAGE|g" \
-  kubernetes/evidently-ui-deployment.yaml
+sed -i "s|<evidently_ui_image>|$EVIDENTLY_UI_IMAGE|g" kubernetes/evidently-ui-deployment.yaml
 
-sed -i "s|<gcp_bucket_name>|$GCP_BUCKET_NAME|g" \
-  kubernetes/evidently-ui-deployment.yaml
+sed -i "s|<gcp_bucket_name>|$GCP_BUCKET_NAME|g" kubernetes/evidently-ui-deployment.yaml
 ```
 
 Then create the service that exposes the UI:
