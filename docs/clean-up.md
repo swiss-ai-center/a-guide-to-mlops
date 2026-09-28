@@ -175,6 +175,11 @@ To delete the GitHub Personal Access Token you created:
 5. Click on the **Delete** button next to it.
 6. Follow the instructions to delete the token.
 
+In case you want to keep your repository but disabled the Google Cloud project,
+you can disable the recurrent monitoring workflow in **Actions** >
+**Monitoring drift** > **...** > **Disable workflow** as it will otherwise
+continue to run.
+
 ### Clean up the BentoML model store
 
 BentoML stores the models you saved during the guide in its model store at
