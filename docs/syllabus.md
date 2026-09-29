@@ -9,12 +9,15 @@ Jupyter notebook experiment to a reproducible pipeline, then to automated
 collaboration in the cloud, and finally to a deployed, monitored, and
 retrainable system.
 
-The five parts are:
+The syllabus is organized into an introduction, five hands-on parts, and a
+conclusion:
 
 - Introduction - Learn about the [concept](./concept.md) behind MLOps, the
   [philosophy](./philosophy.md), and the [tools](./tools.md) used throughout, then
-  [set up](./setup.md) your machine. A [cheatsheet](./cheatsheet.md) of useful
-  terminal commands is available throughout the guide.
+  [set up](./setup.md) your machine. A companion
+  [presentation](https://mlops.swiss-ai-center.ch/presentation/) gives an overview
+  of the guide. A [cheatsheet](./cheatsheet.md) of useful terminal commands is
+  available throughout the guide.
 - [Part 1 - Local training and evaluation](./part-1-local-training-and-evaluation/introduction.md) -
   Learn how to train a model locally and evaluate it using DVC.
     - [Chapter 1.1 - Run a simple ML experiment with Jupyter Notebook](./part-1-local-training-and-evaluation/chapter-11-run-a-simple-ml-experiment-with-jupyter-notebook.md)
@@ -52,5 +55,6 @@ The five parts are:
     - [Chapter 5.2 - Label new data with Label Studio](./part-5-label-data-and-retrain/chapter-52-label-new-data-with-label-studio.md)
     - [Chapter 5.3 - Link the model to Label Studio](./part-5-label-data-and-retrain/chapter-53-link-the-model-to-label-studio.md)
     - [Chapter 5.4 - Retrain the model from new data with DVC](./part-5-label-data-and-retrain/chapter-54-retrain-the-model-from-new-data-with-dvc.md)
-- [Conclusion](./conclusion.md) - Summary of what you have done and what is left
-  to be done.
+- Conclusion - [Clean up](./clean-up.md) the resources you created along the
+  way, then read the [conclusion](./conclusion.md) for a summary of what you have
+  done.
